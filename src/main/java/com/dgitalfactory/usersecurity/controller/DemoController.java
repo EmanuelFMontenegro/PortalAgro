@@ -11,10 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/public")
 public class DemoController {
 
-    @GetMapping("/public")
-    @PermitAll
+    @GetMapping("")
+    @PreAuthorize("hasAnyRole('ADMIN','OPERATOR','VISIT')")
     public String getDemo(){
         return "I'm space public...";
     }
