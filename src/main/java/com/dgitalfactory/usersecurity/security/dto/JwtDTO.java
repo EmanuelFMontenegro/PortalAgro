@@ -12,7 +12,4 @@ import java.util.Collection;
 public class JwtDTO {
 
 	private String token;
-	private final String type = "Bearer";
-	private String userName;
-	private Collection<? extends GrantedAuthority> roles;
 }

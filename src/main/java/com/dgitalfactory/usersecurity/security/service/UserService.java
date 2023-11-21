@@ -1,4 +1,4 @@
-package com.dgitalfactory.usersecurity.service;
+package com.dgitalfactory.usersecurity.security.service;
 
 import com.dgitalfactory.usersecurity.security.dto.UserDTO;
 import com.dgitalfactory.usersecurity.security.entity.Role;

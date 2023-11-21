@@ -7,7 +7,7 @@ import com.dgitalfactory.usersecurity.emailpassword.dto.EmailValuesDTO;
 import com.dgitalfactory.usersecurity.security.entity.User;
 import com.dgitalfactory.usersecurity.exception.GlobalAppException;
 import com.dgitalfactory.usersecurity.security.service.JwtTokenService;
-import com.dgitalfactory.usersecurity.service.UserService;
+import com.dgitalfactory.usersecurity.security.service.UserService;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;

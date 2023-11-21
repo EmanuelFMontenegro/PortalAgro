@@ -1,7 +1,12 @@
 package com.dgitalfactory.usersecurity.security.service;
 
+import com.dgitalfactory.usersecurity.exception.GlobalAppException;
+import com.dgitalfactory.usersecurity.security.dto.JwtDTO;
 import com.dgitalfactory.usersecurity.security.jwt.JWTAuthenticationFilter;
 import com.dgitalfactory.usersecurity.service.EncoderDecorderBase64Service;
+import com.nimbusds.jwt.JWT;
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.JWTParser;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
@@ -9,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,6 +23,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.text.ParseException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -204,6 +211,63 @@ public class JwtTokenService {
 				.setExpiration(expirationDate)
 				.signWith(this.getSecretKey(), SignatureAlgorithm.HS512)
 				.compact();
+	}
+
+	/**
+	 *Refresh token
+	 *
+	 * @param jwtDTO: tipe @JwtDTO
+	 * @return @JwtDTO
+	 */
+	public JwtDTO getRefreshToken(JwtDTO jwtDTO){
+		String jwt = this.refreshToken(jwtDTO);
+		return JwtDTO
+				.builder()
+				.token(jwt)
+				.build();
+	}
+
+	/**
+	 * Security token update
+	 *
+	 * @param jwtDTO: tipe @JwtDTO
+	 * @return String: string with JWT
+	 * @throws ParseException
+	 */
+	public String refreshToken(JwtDTO jwtDTO) {
+		/**
+		 * Verificamos firma
+		 */
+		try{
+			Jwts.parserBuilder()
+					//Se le pasa la firma en base 64 y en bytes
+					.setSigningKey(this.getSecretBase64().getBytes())
+					.build()
+					.parseClaimsJws(jwtDTO.getToken())
+					.getBody();
+		} catch (ExpiredJwtException e) {
+			try {
+				JWT jwt = JWTParser.parse(jwtDTO.getToken());
+				JWTClaimsSet claims = jwt.getJWTClaimsSet();
+				String username = claims.getSubject();
+				String roles = (String) claims.getClaim(AUTHORITIES_KEY);
+				Date currentDate = new Date();
+				Date expirationDate = new Date(currentDate.getTime() + this.JWT_EXPIRATION_IN_MS);
+
+				return Jwts.builder()
+						.setSubject(username)
+						.claim(AUTHORITIES_KEY, roles)
+						.setIssuedAt(currentDate)
+						.setExpiration(expirationDate)
+						.signWith(this.getSecretKey(), SignatureAlgorithm.HS512)
+						.compact();
+
+			} catch (ParseException ex) {
+				log.error("Refresh token error: {}", ex.getMessage());
+				throw new GlobalAppException(HttpStatus.BAD_REQUEST, "Refresh token error....", "codigo diccionario");
+			}
+		}
+		return null;
 	}
 
 

@@ -1,12 +1,10 @@
-package com.dgitalfactory.usersecurity.service;
+package com.dgitalfactory.usersecurity.security.service;
 
 import com.dgitalfactory.usersecurity.exception.GlobalAppException;
 import com.dgitalfactory.usersecurity.security.dto.JwtDTO;
 import com.dgitalfactory.usersecurity.security.dto.LoginDTO;
 import com.dgitalfactory.usersecurity.security.dto.UserDTO;
-import com.dgitalfactory.usersecurity.security.entity.SecurityUser;
 import com.dgitalfactory.usersecurity.security.entity.User;
-import com.dgitalfactory.usersecurity.security.service.JwtTokenService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,8 +51,6 @@ public class AuthService {
         return JwtDTO
                 .builder()
                 .token(jwt)
-                .userName(us.getUsername())
-                .roles(us.getAuthorities())
                 .build();
     }
 
