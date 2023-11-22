@@ -3,6 +3,7 @@ package com.dgitalfactory.usersecurity.emailpassword.controller;
 import com.dgitalfactory.usersecurity.emailpassword.dto.ChangePasswordDTO;
 import com.dgitalfactory.usersecurity.emailpassword.dto.EmailValuesDTO;
 import com.dgitalfactory.usersecurity.emailpassword.service.EmailServide;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,16 +14,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/email")
 //@CrossOrigin
+@Tag(name = "Email Send", description = "Email password recovery and change pass, email activate account")
 public class EmailController {
 
     @Autowired
     EmailServide emailServide;
-
-//    @GetMapping("/demo")
-//    public ResponseEntity<?> sendEmail(){
-//        emailServide.sendEmail();
-//        return new ResponseEntity("Correo enviado con éxito", HttpStatus.OK);
-//    }
 
     @PostMapping("/recovery")
     public ResponseEntity<?> sendEmailTemplate(@RequestBody @Valid EmailValuesDTO emailValuesDTO){

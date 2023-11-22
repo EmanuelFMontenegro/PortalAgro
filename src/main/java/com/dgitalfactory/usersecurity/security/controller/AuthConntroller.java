@@ -6,6 +6,7 @@ import com.dgitalfactory.usersecurity.security.dto.UserDTO;
 import com.dgitalfactory.usersecurity.security.service.AuthService;
 import com.dgitalfactory.usersecurity.security.service.JwtTokenService;
 import com.dgitalfactory.usersecurity.security.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin
+@Tag(name = "Authentication", description = "Login, register user, refresh token")
 public class AuthConntroller {
 
 	@Autowired

@@ -7,6 +7,9 @@
       user(Visita): user02@gmail.com
       passGlobal: 12345 
 
+## Swagger Access
+* http://localhost:8095/swagger-ui
+
 ## Instalación Base de datos desde Docker Compose 
 ### Pasos:
    1. Habilitar Virtualización de hardware en la BIOS 

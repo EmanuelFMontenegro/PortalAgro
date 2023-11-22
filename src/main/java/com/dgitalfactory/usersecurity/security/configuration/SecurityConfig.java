@@ -35,20 +35,6 @@ public class SecurityConfig {
     @Autowired
     private CustomAccessDeniedHandler accessDeniedHandler;
 
-    //Endpoint level authorization
-    // ---- Matcher
-    // 1. AnyRequest
-    // 2. RequestMatchers
-    // 3. RequestMatchers with HttpMethod
-
-    // ---- Authorization rule
-    // 1. PermitAll
-    // 2. DenyAll
-    // 3. Authenticated
-    // 4. HasRole
-    // 5. HasAuthority
-    // 6. Access (SpEL) - Spring Expression Language
-
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http
@@ -71,22 +57,20 @@ public class SecurityConfig {
     @NotNull
     private static Customizer<AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry> builderRequestMatchers() {
         return authorize -> authorize
-//                .requestMatchers("/v2/api-docs",
-//                        "/swagger-resources",
-//                        "/swagger-resources/**",
-//                        "/configuration/ui",
-//                        "/configuration/security",
-//                        "/swagger-ui/**",
-//                        "/webjars/**").permitAll()
+                .requestMatchers(
+                        "/api-docs.yml",
+                        "/api-docs/**",
+                        "/swagger-ui.html",
+                        "/swagger-ui/**",
+                        "/swagger-ui/index.html",
+                        "/configuration/ui",
+                        "/configuration/**",
+                        "/swagger-resources/**",
+                        "/webjars/**"
+                ).permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/email/recovery").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/email/change-pass").permitAll()
-                .anyRequest().authenticated()
-//              .requestMatchers(HttpMethod.POST,"/add").hasRole("ADMIN")
-//              .requestMatchers(HttpMethod.GET,"/add").authenticated()
-//              .requestMatchers("/public").permitAll()
-//              .requestMatchers("/admin").hasRole("ADMIN")
-//              .requestMatchers("/operator").hasAnyRole("OPERATOR","ADMIN")
-                ;
+                .anyRequest().authenticated();
     }
 }
