@@ -1,12 +1,12 @@
 package com.dgitalfactory.usersecurity.security.controller;
 
+import com.dgitalfactory.usersecurity.DTO.MessageDTO;
 import com.dgitalfactory.usersecurity.security.dto.JwtDTO;
 import com.dgitalfactory.usersecurity.security.dto.LoginDTO;
 import com.dgitalfactory.usersecurity.security.dto.UserDTO;
 import com.dgitalfactory.usersecurity.security.service.AuthService;
 import com.dgitalfactory.usersecurity.security.service.JwtTokenService;
 import com.dgitalfactory.usersecurity.security.service.UserService;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin
-@Tag(name = "Authentication", description = "Login, register user, refresh token")
 public class AuthConntroller {
 
 	@Autowired
@@ -58,10 +57,11 @@ public class AuthConntroller {
 	 * @return JwtAuthResponseDTO: String token
 	 */
 	@PostMapping("/register")
-	public ResponseEntity<?> registerUser(@Valid @RequestBody UserDTO registerDTO) {
+	public ResponseEntity<MessageDTO> registerUser(@Valid @RequestBody UserDTO registerDTO) {
 		this.authSVC.register(registerDTO);
-//		return new ResponseEntity<>(authDTO, HttpStatus.CREATED);
-		return new ResponseEntity<>("Registered user", HttpStatus.CREATED);
+		return ResponseEntity.ok(
+				MessageDTO.builder().code(HttpStatus.OK.toString()).message("Registered user").build()
+		);
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class AuthConntroller {
 	 * </ul>
 	 */
 	@PostMapping("/refresh")
-	public ResponseEntity<?> refreshToken(@RequestBody JwtDTO jwtDTO) {
+	public ResponseEntity<JwtDTO> refreshToken(@Valid @RequestBody JwtDTO jwtDTO) {
 		return new ResponseEntity<>(this.jwtSVC.getRefreshToken(jwtDTO), HttpStatus.OK);
 	}
 }

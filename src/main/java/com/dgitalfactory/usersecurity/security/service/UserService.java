@@ -7,6 +7,7 @@ import com.dgitalfactory.usersecurity.exception.GlobalAppException;
 import com.dgitalfactory.usersecurity.security.repository.RoleRepository;
 import com.dgitalfactory.usersecurity.security.repository.UserRepository;
 import com.dgitalfactory.usersecurity.utils.RoleName;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 
 @Service
+@Transactional
 public class UserService {
 
     @Autowired
@@ -62,15 +64,16 @@ public class UserService {
      * @param userDTO: UserDTO (username, password)
      * @return user: tipe User
      */
-    public User saveUser(UserDTO userDTO) {
+    public User saveUser(UserDTO userDTO, String token) {
             Role roles = this.roleRepo.findByName(RoleName.ROLE_VISIT).get();
             User newUser = User.builder()
                     .username(userDTO.getUsername())
                     .password(this.passwordEncoder.encode(userDTO.getPassword()))
                     .roles(Collections.singleton(roles))
+                    .tokenPassword(token)
                     .build();
-            this.userRepo.save(newUser);
-            return this.findUser(userDTO.getUsername());
+            User us = this.userRepo.save(newUser);
+            return this.findUser(us.getUsername());
     }
 
     /**
@@ -79,7 +82,7 @@ public class UserService {
      * @param user: type @{{@link User}}
      */
     public void saveUser(User user){
-        this.userRepo.save(user);
+            this.userRepo.save(user);
     }
 
     /**

@@ -27,6 +27,8 @@ public class User {
     @Column(nullable = true)
     private String tokenPassword;
 
+    private boolean account_Active=false;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),

@@ -5,7 +5,7 @@
       user(Admin): orozcocristian860@gmail.com
       user(Operador): user01@gmail.com
       user(Visita): user02@gmail.com
-      passGlobal: 12345 
+      passGlobal: 12345678 
 
 ## Swagger Access
 * http://localhost:8095/swagger-ui

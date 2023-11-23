@@ -39,9 +39,6 @@ public class JwtTokenService {
 	@Value("${app.jwt-expiration-milliseconds}")
 	private int JWT_EXPIRATION_IN_MS;
 
-	@Value("${email.tokenexpiration}")
-	private int EMAIL_RECOVERY_EXPIRATION_IN_MS;
-
 	@Value("${jwt.authorities.key}")
 	public String AUTHORITIES_KEY;
 
@@ -198,12 +195,13 @@ public class JwtTokenService {
 	 * Generates TOKEN to validate the user's password change with email
 	 *
 	 * @param emial: type String
+	 * @param expiration: type int
 	 * @return token: type String
 	 */
-	public String generatedToken(String emial){
+	public String generatedToken(String emial, int expiration){
 
 		Date currentDate = new Date();
-		Date expirationDate = new Date(currentDate.getTime() + this.EMAIL_RECOVERY_EXPIRATION_IN_MS);
+		Date expirationDate = new Date(currentDate.getTime() + expiration);
 
 		return Jwts.builder()
 				.setSubject(emial)
@@ -269,4 +267,6 @@ public class JwtTokenService {
 		}
 		return null;
 	}
+
+
 }

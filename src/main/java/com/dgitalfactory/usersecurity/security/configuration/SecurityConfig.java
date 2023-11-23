@@ -39,6 +39,7 @@ public class SecurityConfig {
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http
                 .csrf(csrf -> csrf.disable())
+                .cors(Customizer.withDefaults())
                 //No utilizamos sessiones porque vamos a usar autenticcion por token
                 .sessionManagement(sessionManager ->
                         sessionManager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -69,8 +70,10 @@ public class SecurityConfig {
                         "/webjars/**"
                 ).permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/email/activate-account/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/email/recovery").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/email/change-pass").permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().authenticated()
+                ;
     }
 }

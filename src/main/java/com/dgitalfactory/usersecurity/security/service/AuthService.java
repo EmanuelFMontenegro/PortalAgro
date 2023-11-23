@@ -1,12 +1,15 @@
 package com.dgitalfactory.usersecurity.security.service;
 
+import com.dgitalfactory.usersecurity.emailpassword.service.EmailServide;
 import com.dgitalfactory.usersecurity.exception.GlobalAppException;
 import com.dgitalfactory.usersecurity.security.dto.JwtDTO;
 import com.dgitalfactory.usersecurity.security.dto.LoginDTO;
 import com.dgitalfactory.usersecurity.security.dto.UserDTO;
 import com.dgitalfactory.usersecurity.security.entity.User;
+import jakarta.transaction.Transactional;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,11 +20,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 public class AuthService {
 
     @Autowired
     private UserService userSVC;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
@@ -29,9 +32,18 @@ public class AuthService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private EmailServide emailServide;
+
+
+    @Value("${email.tokenaccountexpiration}")
+    private int EMAIL_ACCOUNT_EXPIRATION_IN_MS;
+
     public JwtDTO login(@NotNull LoginDTO loginDTO) {
         User user = this.userSVC.findUser(loginDTO.getUsername());
-
+        if(!user.isAccount_Active()){
+            throw new GlobalAppException(HttpStatus.UNAUTHORIZED,"El usuario debe validar su email","diccionario codigo");
+        }
         Authentication authentication = this.authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginDTO.getUsername(), loginDTO.getPassword()));
@@ -61,21 +73,13 @@ public class AuthService {
      * @param userDTO: UserDTO (username, password)
      * @return JwtAuthResponseDTO (String tokenAccess, String tokenType)
      */
-    public JwtDTO register(@NotNull UserDTO userDTO) {
-
+    public void register(@NotNull UserDTO userDTO) {
         if (this.userSVC.existsUser(userDTO.getUsername())) {
             throw new GlobalAppException(HttpStatus.BAD_REQUEST, "User already exists.", "");
         }
-        this.userSVC.saveUser(userDTO);
-
-        Authentication authentication = this.authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        userDTO.getUsername(), userDTO.getPassword()));
-
-        return JwtDTO
-                .builder()
-                .token(this.jwtSVC.generatedToken(authentication))
-                .build();
+        String token= this.jwtSVC.generatedToken(userDTO.getUsername(), EMAIL_ACCOUNT_EXPIRATION_IN_MS);
+        User us = this.userSVC.saveUser(userDTO, token);
+        this.emailServide.senEmailActivateAccount(us);
     }
 
 }

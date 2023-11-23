@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
-@Configuration
+ @Configuration
 public class OpenAPIConfig {
     public static final String SCHEME_NAME = "BearerScheme";
     public static final String SCHEME = "Bearer";

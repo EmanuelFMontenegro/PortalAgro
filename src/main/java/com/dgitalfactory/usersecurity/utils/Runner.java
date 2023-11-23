@@ -46,9 +46,9 @@ public class Runner implements CommandLineRunner {
 
             this.userRepo.saveAll(
                     List.of(
-                            User.builder().username("orozcocristian860@gmail.com").password(this.passwordEncoder.encode("12345")).roles(Set.of(visit,operator, admin)).build(),
-                            User.builder().username("user01@gmail.com").password(this.passwordEncoder.encode("12345")).roles(Collections.singleton(operator)).build(),
-                            User.builder().username("user02@gmail.com").password(this.passwordEncoder.encode("12345")).roles(Collections.singleton(visit)).build()
+                            User.builder().username("orozcocristian860@gmail.com").password(this.passwordEncoder.encode("12345678")).account_Active(true).roles(Set.of(visit,operator, admin)).build(),
+                            User.builder().username("user01@gmail.com").password(this.passwordEncoder.encode("12345678")).account_Active(true).roles(Collections.singleton(operator)).build(),
+                            User.builder().username("user02@gmail.com").password(this.passwordEncoder.encode("12345678")).account_Active(true).roles(Collections.singleton(visit)).build()
                     )
             );
         }
