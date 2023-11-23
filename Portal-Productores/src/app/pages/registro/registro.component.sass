@@ -5,53 +5,73 @@
   height: 100vh
   background-color: #3CA749
 
-.register-card
+  .register-card
+    width: 500px
+    max-width: 95%
+    padding: 20px 40px 40px 40px
+    color: #495057
+    background-color: #ffffff
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1)
+    border-radius: 10px
+    font-family: 'Montserrat', sans-serif
+    text-align: center
 
-  width: 500px
-  padding: 20px 40px 40px 40px // Añadido padding superior y reducido el padding inferior
-  color: #495057
-  background-color: #ffffff
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1)
-  border-radius: 10px
-  font-family: 'Montserrat', sans-serif
-  text-align: center
+    @media (max-width: 600px)
+      padding: 20px
+      width: 100%
 
-.logo-container
-  margin-bottom: 20px
+    .logo-container
+      margin-bottom: 20px
 
-h1
-  font-size: 24px
-  font-weight: 700
+    h1
+      font-size: 24px
+      font-weight: 700
 
-.mat-form-field
+    .mat-form-field
+      width: 100%
+      margin-bottom: 20px
 
-  width: 100%
-  margin-bottom: 20px // Hacer que los inputs ocupen el 100% del ancho del contenedor
+      .mat-input-element
+        font-size: 16px
 
-.mat-input-element
-  font-size: 16px // Ajustar el tamaño de la fuente de los inputs
+    .invalid-feedback
+      color: #dc3545
+      font-size: 14px
+      margin-top: 4px
 
-.invalid-feedback
-  color: #dc3545
-  font-size: 14px
-  margin-top: 4px
+    .btn-block
+      display: block
+      width: 60%
+      margin: 0 auto
+      margin-top: 20px
+      font-size: 16px
+      background-color: #3CA749
+      color: white
+      border: none
+      padding: 10px 0
+      border-radius: 4px
+      cursor: pointer
+      transition: background-color 0.3s ease
 
-.btn-block
-  width: 60%
+      &.invalid
+        background-color: #8FCA8F
 
-.login-links
-  width: 100%
-  display: flex
-  justify-content: center
-  align-items: center
-  flex-direction: column
-  margin-top: 20px
+      &:hover
+        background-color: darken(#3CA749, 10%)
 
-.login-prompt
-  font-size: 14px
+    .login-links
+      width: 100%
+      display: flex
+      justify-content: center
+      align-items: center
+      flex-direction: column
+      margin-top: 20px
 
-.login-link
-  color: #3CA749
-  text-decoration: none
-  font-weight: 700
-  margin-left: 4px
+      .login-prompt
+        font-size: 14px
+
+      .login-link
+        color: #3CA749
+        text-decoration: none
+        font-weight: 700
+        margin-left: 4px

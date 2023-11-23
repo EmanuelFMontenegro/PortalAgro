@@ -1,24 +1,24 @@
-
 .login-container
   display: flex
   justify-content: center
   align-items: center
   height: 100vh
-  // background-color: #3CA749
   background-color: #495057
+
 .login-card
   width: 500px
   max-width: 100%
-  padding: 20px 40px 40px 40px
+  padding: 20px 40px
   color: #495057
-  border: 2px solid#ffff
+  border: 2px solid #fff
   border-radius: 17px
   font-family: 'Montserrat', sans-serif
   text-align: center
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1))
-
-  // Add box-shadow to the entire card
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1)
+
+  @media (max-width: 600px)
+    width: 90%
+    padding: 20px
 
 .logo-container
   margin-bottom: 20px
@@ -26,6 +26,9 @@
 h1
   font-size: 26px
   font-weight: 700
+
+  @media (max-width: 600px)
+    font-size: 22px
 
 .mb-3
   label
@@ -41,11 +44,10 @@ h1
       border-radius: 8px
       border: 1px solid #ced4da
       padding: 0.375rem 0.75rem
-      transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out
 
       &:focus
         border-color: #3CA749
-        box-shadow: 0 0 8px rgba(60, 167, 73, 0.4) // Add box-shadow on focus
+        box-shadow: 0 0 8px rgba(60, 167, 73, 0.4)
 
   .invalid-feedback
     color: #dc3545
@@ -57,6 +59,16 @@ h1
   margin: 0 auto
   margin-top: 20px
   font-size: 16px
+  background-color: #3CA749
+  color: white
+  border: none
+  padding: 10px 0
+  border-radius: 4px
+  cursor: pointer
+  transition: background-color 0.3s ease
+
+  @media (max-width: 600px)
+    width: 80%
 
 .text-success
   color: #3CA749
@@ -75,7 +87,6 @@ h1
 
 .login-prompt
   font-size: 14px
-  // padding-top: 20px
 
 .login-link
   color: #3CA749
@@ -86,12 +97,11 @@ h1
 .forgot-password
   font-size: 14px
 
-/* Toast Center */
 .toast-center
   position: fixed
   top: 50%
   left: 50%
   transform: translate(-50%, -50%)
 
-  .active-link
-    font-weight: bold
+.active-link
+  font-weight: bold

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { ApiFakeService } from 'src/app/core/services/api-fake.service';
+import { ToastrService } from 'ngx-toastr';
+import { ApiService } from 'src/app/services/ApiService';
 import { Router } from '@angular/router';
 
 @Component({
@@ -12,30 +12,25 @@ import { Router } from '@angular/router';
 export class RegistrateComponent {
   hidePassword: boolean = true;
   registro: FormGroup;
-  emailControl: FormControl;
+  usernameControl: FormControl;
   passwordControl: FormControl;
   confirmPasswordControl: FormControl;
   cargandoValidacion: boolean = false;
-  mostrarRegistro: boolean = false;
 
   constructor(
-    private snackBar: MatSnackBar,
-    private apiFakeService: ApiFakeService,
+    private toastr: ToastrService,
+    private apiService: ApiService,
     private router: Router
   ) {
-    this.emailControl = new FormControl('', [Validators.required, Validators.email]);
+    this.usernameControl = new FormControl('', [Validators.required, Validators.email]);
     this.passwordControl = new FormControl('', [Validators.required, Validators.minLength(8)]);
     this.confirmPasswordControl = new FormControl('', [Validators.required, Validators.minLength(8)]);
 
     this.registro = new FormGroup({
-      email: this.emailControl,
+      username: this.usernameControl,
       password: this.passwordControl,
       confirmPassword: this.confirmPasswordControl
     });
-  }
-
-  toggleMostrarRegistro(): void {
-    this.mostrarRegistro = !this.mostrarRegistro;
   }
 
   togglePasswordVisibility(): void {
@@ -44,32 +39,41 @@ export class RegistrateComponent {
 
   enviarFormulario() {
     if (this.registro.valid) {
-      this.cargandoValidacion = true;
-
-      const email = this.registro.get('email')?.value;
+      const username = this.registro.get('username')?.value;
       const password = this.registro.get('password')?.value;
 
-      this.apiFakeService.registrarUsuario(email, password).subscribe((isRegistered) => {
-        this.cargandoValidacion = false;
+      console.log('Enviando formulario de registro con:', { username, password });
 
-        if (isRegistered) {
+      this.apiService.registrarUsuario(username, password).subscribe({
+        next: (response) => {
+          // Procesamiento en caso de éxito
+          this.cargandoValidacion = false;
+          console.log('Registro exitoso:', response);
+          this.toastr.success('Registro exitoso. Por favor, inicie sesión.', 'Éxito');
           this.irAInicioSesion();
-        } else {
-          this.mostrarMensajeExitoso('Registro fallido. El usuario ya está registrado.');
+        },
+        error: (err) => {
+          // Procesamiento en caso de error
+          this.cargandoValidacion = false;
+          console.log('Error en el registro:', err);
+          this.manejarErrorRegistro(err);
         }
       });
+    } else {
+      console.log('Formulario de registro no válido:', this.registro.value);
+    }
+  }
+
+  manejarErrorRegistro(err:any) {
+    console.log('Manejando error de registro:', err);
+    if (err.status === 400 && err.error?.message === 'User already exists.') {
+      this.toastr.error('El usuario ya está registrado. Por favor, intente con otro username.', 'Usuario Existente');
+    } else {
+      this.toastr.error('Ocurrió un error durante el registro. Por favor, inténtelo de nuevo.', 'Error');
     }
   }
 
   irAInicioSesion(): void {
     this.router.navigate(['/login']);
-  }
-
-  mostrarMensajeExitoso(mensaje: string): void {
-    this.snackBar.open(mensaje, 'Cerrar', {
-      duration: 2000,
-      horizontalPosition: 'center',
-      verticalPosition: 'top',
-    });
   }
 }

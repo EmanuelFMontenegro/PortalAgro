@@ -1,5 +1,5 @@
 <!-- registro.component.html -->
-<div class="register-container" *ngIf="mostrarRegistro">
+<div class="register-container">
   <mat-card class="register-card">
     <div class="logo-container">
       <img src="../../../assets/img/log_sustentable.png" alt="Logo">
@@ -7,12 +7,11 @@
 
     <h1 class="mb-4">Regístrate</h1>
 
-    <form [formGroup]="registro" (ngSubmit)="enviarFormulario()" class="text-start">
+    <form [formGroup]="registro" (ngSubmit)="enviarFormulario()" style="display: contents" class="text-start">
       <mat-form-field class="mb-3">
-        <input matInput type="email" id="email" [formControl]="emailControl" placeholder="Email">
-        <mat-error *ngIf="emailControl.invalid && emailControl.touched">
-          <span *ngIf="emailControl.hasError('required')">El email es requerido.</span>
-          <span *ngIf="emailControl.hasError('email')">Ingresa un email válido.</span>
+        <input matInput type="text" id="username" [formControl]="usernameControl" placeholder="Nombre de Usuario">
+        <mat-error *ngIf="usernameControl.invalid && usernameControl.touched">
+          <span *ngIf="usernameControl.hasError('required')">El nombre de usuario es requerido.</span>
         </mat-error>
       </mat-form-field>
 
@@ -43,16 +42,14 @@
         </mat-error>
       </mat-form-field>
 
-      <!-- Este botón debería estar dentro del formulario -->
       <button mat-raised-button type="submit" class="btn-block mt-3"
-        [ngStyle]="{'background-color': (registro.valid && !cargandoValidacion) ? '#3CA749' : '#8FCA8F', 'color': 'white'}"
-        (click)="enviarFormulario()">
+        [ngStyle]="{'background-color': (registro.valid && !cargandoValidacion) ? '#3CA749' : '#8FCA8F', 'color': 'white'}">
         Registrarse
       </button>
 
       <div class="login-links mt-3">
         <div class="login-prompt">
-          ¿Ya tienes cuenta? <a href="#" class="login-link" (click)="irAInicioSesion()">Iniciar Sesión</a>
+          ¿Ya tienes cuenta? <a routerLink="/login" class="login-link" (click)="irAInicioSesion()">Iniciar Sesión</a>
         </div>
       </div>
     </form>

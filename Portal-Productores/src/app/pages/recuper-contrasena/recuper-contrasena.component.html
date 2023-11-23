@@ -1,0 +1,29 @@
+<div class="recuper-contrasena-container">
+  <mat-card class="login-card">
+    <div class="logo-container">
+      <img src="../../../assets/img/log_sustentable.png" alt="Logo">
+    </div>
+
+    <h1 class="mb-4">Recuperar Contraseña</h1>
+
+    <form (ngSubmit)="onSubmit()" class="text-start">
+      <mat-form-field class="mb-3">
+        <input matInput type="text" id="username" [formControl]="usernameControl" placeholder="Nombre de usuario">
+        <mat-error *ngIf="usernameControl.invalid && usernameControl.touched">
+          <span *ngIf="usernameControl.hasError('required')">El nombre de usuario es requerido.</span>
+        </mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button type="submit" class="btn btn-block mt-3"
+        [ngStyle]="{'background-color': '#3CA749', 'color': 'white'}">
+        Enviar
+      </button>
+
+      <div class="login-links mt-3">
+        <a routerLink="/login" class="forgot-password-link" style="color: #3CA749; font-size: 14px;">
+          Volver a Inicio de Sesión
+        </a>
+      </div>
+    </form>
+  </mat-card>
+</div>

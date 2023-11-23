@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ApiFakeService } from 'src/app/core/services/api-fake.service';
+import { ApiService } from 'src/app/services/ApiService';
 import { ToastrService } from 'ngx-toastr';
+
 
 
 
@@ -21,9 +22,10 @@ export class LoginComponent {
   mostrarRegistro: boolean = false;
 
   constructor(
-    private apiFakeService: ApiFakeService,
+    private apiService: ApiService,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+
   ) {
     this.emailControl = new FormControl('', [Validators.required, Validators.email]);
     this.passwordControl = new FormControl('', [Validators.required, Validators.minLength(8)]);
@@ -45,7 +47,7 @@ export class LoginComponent {
       const email = this.login.get('email')?.value;
       const password = this.login.get('password')?.value;
 
-      this.apiFakeService.validarCredenciales(email, password).subscribe({
+      this.apiService.validarCredenciales(email, password).subscribe({
         next: (valido) => {
           this.cargandoValidacion = false;
           if (valido) {
@@ -86,7 +88,7 @@ export class LoginComponent {
   }
 
   mostrarMensajeError() {
-    this.toastr.error('Error de correo electrónico o contraseña.', 'Atencion', {
+    this.toastr.error('Error de correo electrónico o contraseña / email no registrado.', 'Atencion', {
       timeOut: 2000,
     });
   }
