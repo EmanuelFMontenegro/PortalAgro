@@ -1,6 +1,21 @@
 package com.dgitalfactory.usersecurity.utils;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class UtilsCommons {
+    public static final int dniMaxima = 10;
+    public static final int dniMin = 7;
+    public static final int cuitCuilMaxima = 10 + 3;
+    public static final int cuitCuilMin = 7 + 3;
+    public static final int telefonoMaximo = 15;
+    public static final int telefonoMinimo = 6;
+    private static final String dniNumeroRepetido = "(\\d)\\1{" + dniMin + "," + dniMaxima + "}";
+    private static final String cuitCuilRepetido = "(\\d)\\1{" + cuitCuilMin + "," + cuitCuilMaxima + "}";
+    private static final String numeroTelefonicoRepetido = "(\\d)\\1{" + telefonoMinimo + "," + telefonoMaximo + "}";
+
+
+
     /**
      * Verifica que el pasword contenga los minimos valores requeridos
      * <ul>
@@ -38,5 +53,32 @@ public class UtilsCommons {
             }
         }
         return false;
+    }
+
+    /**
+     * Comprueba que no se repitan numeros
+     *
+     * @param numero es numero a verificar
+     * @param tipo tipo de patron a evaluar (dni,cuitCuil, telefono)
+     * @return
+     */
+    public static boolean validarNumerosRepetidos(String numero, String tipo) {
+        // Cargamos el patron de expresion a comprara .
+        String patron = "";
+        if (tipo.equals("dni")) {
+            patron = dniNumeroRepetido;
+        } else {
+            if (tipo.equals("telefono")) {
+                patron = numeroTelefonicoRepetido;
+            } else {
+                if (tipo.equals("cuitCuil")) {
+                    patron = cuitCuilRepetido;
+                }
+            }
+        }
+        Pattern pattern1 = Pattern.compile(patron, Pattern.MULTILINE);
+        //verificar si pertence al patron
+        Matcher matcher1 = pattern1.matcher(numero);
+        return matcher1.matches();
     }
 }

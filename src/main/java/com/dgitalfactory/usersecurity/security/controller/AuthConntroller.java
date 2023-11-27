@@ -45,7 +45,7 @@ public class AuthConntroller {
 	 *     del HEADER "AUTHORIZATION"</li>
 	 * </ul>
 	 */
-	public ResponseEntity<JwtDTO> authenticateUser(@Valid @RequestBody LoginDTO loginDTO, BindingResult bindingResult) {
+	public ResponseEntity<JwtDTO> authenticateUser(@Valid @RequestBody LoginDTO loginDTO) {
 		 return new ResponseEntity<>(this.authSVC.login(loginDTO), HttpStatus.OK);
 	}
 
@@ -60,7 +60,7 @@ public class AuthConntroller {
 	public ResponseEntity<MessageDTO> registerUser(@Valid @RequestBody UserDTO registerDTO) {
 		this.authSVC.register(registerDTO);
 		return ResponseEntity.ok(
-				MessageDTO.builder().code(HttpStatus.OK.toString()).message("Registered user").build()
+				MessageDTO.builder().code(HttpStatus.CREATED.toString()).message("Registered user").build()
 		);
 	}
 

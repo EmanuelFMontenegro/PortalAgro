@@ -1,19 +1,26 @@
 package com.dgitalfactory.usersecurity.security.service;
 
+import com.dgitalfactory.usersecurity.DTO.PersonDTO;
+import com.dgitalfactory.usersecurity.entity.Person;
 import com.dgitalfactory.usersecurity.security.dto.UserDTO;
+import com.dgitalfactory.usersecurity.security.dto.UserResponseDTO;
 import com.dgitalfactory.usersecurity.security.entity.Role;
 import com.dgitalfactory.usersecurity.security.entity.User;
 import com.dgitalfactory.usersecurity.exception.GlobalAppException;
 import com.dgitalfactory.usersecurity.security.repository.RoleRepository;
 import com.dgitalfactory.usersecurity.security.repository.UserRepository;
 import com.dgitalfactory.usersecurity.utils.RoleName;
+import com.dgitalfactory.usersecurity.utils.UtilsCommons;
 import jakarta.transaction.Transactional;
+import jdk.jshell.execution.Util;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.List;
 
 @Service
 @Transactional
@@ -27,6 +34,11 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+
 
     /**
      * Verifies if the user exists
@@ -55,6 +67,25 @@ public class UserService {
     public User findUser(String username){
         User newUs = this.userRepo.findByUsername(username)
                 .orElseThrow(()-> new GlobalAppException(HttpStatus.BAD_REQUEST, "Username does not exist.", "P-400"));
+        return newUs;
+    }
+
+    public UserResponseDTO findUserDTO(Long userid){
+        User newUs = this.findUser(userid);
+        return this.convertEntityToResponseDTO(newUs);
+    }
+
+    public List<UserResponseDTO> findAllUserDTO(){
+        List<UserResponseDTO> listUsers = this.userRepo.findAll().stream().map(
+            user -> this.convertEntityToResponseDTO(user)
+        ).toList();
+        return listUsers;
+    }
+
+    public User findUser(Long userid){
+        User newUs = this.userRepo.findById(userid)
+                .orElseThrow(()-> new GlobalAppException(HttpStatus.BAD_REQUEST, "Username does not exist.", "P-400"));
+
         return newUs;
     }
 
@@ -109,5 +140,17 @@ public class UserService {
     public void setPassword(User us, String password){
         us.setPassword(this.passwordEncoder.encode(password));
         this.userRepo.save(us);
+    }
+
+    private UserDTO convertEntityToDTO(User user){
+        return this.modelMapper.map(user, UserDTO.class);
+    }
+
+    private UserResponseDTO convertEntityToResponseDTO(User user){
+        return this.modelMapper.map(user, UserResponseDTO.class);
+    }
+
+    private User convertDTOToEntity(UserDTO userDTO){
+        return this.modelMapper.map(userDTO,User.class);
     }
 }
