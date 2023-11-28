@@ -2,7 +2,6 @@ package com.dgitalfactory.usersecurity.emailpassword.service;
 
 
 
-import com.dgitalfactory.usersecurity.emailpassword.dto.AccountActivateDTO;
 import com.dgitalfactory.usersecurity.emailpassword.dto.ChangePasswordDTO;
 import com.dgitalfactory.usersecurity.emailpassword.dto.EmailValuesDTO;
 import com.dgitalfactory.usersecurity.security.entity.User;
@@ -12,7 +11,6 @@ import com.dgitalfactory.usersecurity.security.service.UserService;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +28,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-@Transactional
 public class EmailServide {
 
     private static final Logger log = LoggerFactory.getLogger(EmailServide.class);
@@ -44,24 +41,25 @@ public class EmailServide {
     @Autowired
     private UserService userSVC;
 
-    @Value("${server.url}")
-    private String URL_SERVER;
+//    @Value("${server.url}")
+//    private String URL_SERVER;
+//
+//    @Value("${server.port}")
+//    private String PORT_SERVER;
 
-    @Value("${server.port}")
-    private String PORT_SERVER;
-
-    @Value("${email.urlrecoverpass}")
-    private String URL_EMAI_RECOVER_PASS;
+    @Value("${front.url.recoverpass}")
+    private String FRONT_RECOVER_PASS;
 
     @Value("${spring.mail.username}")
     private String EMAIL_FROM;
-    @Value("${email.subject}")
-    private String EMAIL_SUBJECT;
+    private String EMAIL_SUBJECT_RECOVERI_PASS="Cambio de Contarseña";
+    private String EMAIL_SUBJECT_ACTIVATE_ACCOUNT="Activar Cuenta";
 
-    @Value("${email.tokenpassexpiration}")
+
+    @Value("${email.token.pass.expiration}")
     private int EMAIL_RECOVERY_EXPIRATION_IN_MS;
 
-    @Value("${email.urlactiveaccount}")
+    @Value("${email.url.active.account}")
     private String URL_ACTIVATE_ACCOUNT;
 
     @Autowired
@@ -77,7 +75,7 @@ public class EmailServide {
 
     public void senEmailRecoveryPassword(String username){
         User us = this.userSVC.findUser(username);
-        if(!us.isAccount_Active()){
+        if(!us.isAccount_active()){
             throw new GlobalAppException(HttpStatus.UNAUTHORIZED,"El usuario debe validar su email","diccionario codigo");
         }
         String templateEmail = "email-recovery-pass-template";
@@ -93,7 +91,7 @@ public class EmailServide {
         EmailValuesDTO emailValuesDTO = new EmailValuesDTO();
         User us = this.userSVC.findUser(username);
         emailValuesDTO.setMailFrom(EMAIL_FROM);
-        emailValuesDTO.setSubject(EMAIL_SUBJECT);
+        emailValuesDTO.setSubject(EMAIL_SUBJECT_RECOVERI_PASS);
         //Cambiar por nombre de la persona
         emailValuesDTO.setUserName(us.getUsername());
         emailValuesDTO.setMailTo(us.getUsername());
@@ -108,7 +106,7 @@ public class EmailServide {
             //Generamos un token
             emailValuesDTO.setToken(token);
 
-            model.put("url", URL_EMAI_RECOVER_PASS + emailValuesDTO.getToken());
+            model.put("url", FRONT_RECOVER_PASS + emailValuesDTO.getToken());
             context.setVariables(model);
             String htmlText = templateEngine.process(emailTemplate, context);
 
@@ -154,7 +152,7 @@ public class EmailServide {
     public void sendEmailTemplateActivateAccount(User us, String emailTemplate){
         EmailValuesDTO emailValuesDTO = new EmailValuesDTO();
         emailValuesDTO.setMailFrom(EMAIL_FROM);
-        emailValuesDTO.setSubject(EMAIL_SUBJECT);
+        emailValuesDTO.setSubject(EMAIL_SUBJECT_ACTIVATE_ACCOUNT);
         //Cambiar por nombre de la persona
         emailValuesDTO.setUserName(us.getUsername());
         emailValuesDTO.setMailTo(us.getUsername());
@@ -185,7 +183,9 @@ public class EmailServide {
         }
     }
 
+//    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public void activateAccount(String token){
+//        log.info("entro");
         try{
             this.jwtTokenService.isTokenExpired(token);
         }catch (Exception ex){
@@ -194,7 +194,7 @@ public class EmailServide {
 
         User us = this.userSVC.getUserByTokenPassword(token);
         us.setTokenPassword(null);
-        us.setAccount_Active(true);
+        us.setAccount_active(true);
         this.userSVC.saveUser(us);
     }
 }

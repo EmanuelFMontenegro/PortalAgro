@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @Component
 public class JwtTokenService {
 
-	private static final Logger log = LoggerFactory.getLogger(JWTAuthenticationFilter.class);
+	private static final Logger log = LoggerFactory.getLogger(JwtTokenService.class);
 
 	@Value("${app.jwt-secret}")
 	private String SIGNING_KEY;

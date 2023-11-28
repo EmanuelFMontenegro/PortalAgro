@@ -35,16 +35,16 @@ public class AuthConntroller {
 //	private JwtTokenProvider jwtTokenProvider;
 
 
-	@PostMapping("/login")
 	/**
 	 *
-	 * @param logionDTO: parametros que recibirémos del login
+	 * @param @{@link LoginDTO}: parametros que recibirémos del login
 	 * @return ResponseEntity<JwtAuthResponseDTO>:
 	 * <ul>
 	 *     <li>JwtAuthResponseDTO: es una clase que tiene los elementos token y el tipo de encabezado
 	 *     del HEADER "AUTHORIZATION"</li>
 	 * </ul>
 	 */
+	@PostMapping("/login")
 	public ResponseEntity<JwtDTO> authenticateUser(@Valid @RequestBody LoginDTO loginDTO) {
 		 return new ResponseEntity<>(this.authSVC.login(loginDTO), HttpStatus.OK);
 	}

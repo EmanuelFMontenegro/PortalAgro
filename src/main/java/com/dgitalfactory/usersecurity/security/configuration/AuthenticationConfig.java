@@ -37,11 +37,4 @@ public class AuthenticationConfig {
         return authenticationProvider;
     }
 
-//    @Bean
-//    public LocaleResolver localeResolver() {
-//        AcceptHeaderLocaleResolver ahlr = new AcceptHeaderLocaleResolver();
-//        ahlr.setDefaultLocale(Locale.US);
-//        return ahlr;
-//    }
-
 }

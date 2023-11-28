@@ -1,17 +1,20 @@
 package com.dgitalfactory.usersecurity.controller;
 
 import com.dgitalfactory.usersecurity.DTO.ErrorDTO;
+import com.dgitalfactory.usersecurity.emailpassword.exception.EmailExecption;
 import com.dgitalfactory.usersecurity.exception.GlobalAppException;
 import com.dgitalfactory.usersecurity.exception.ResourceNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
+import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -85,5 +88,32 @@ public class ControllerAdvice {
                 .build();
         return new ResponseEntity<>(errorDTO, HttpStatus.BAD_REQUEST);
     }
-
+    @ExceptionHandler(UnknownHostException.class)
+    protected ResponseEntity<Object> handleMailException(UnknownHostException ex) {
+//    MailPreparationException- en caso de fallo al preparar un mensaje
+//    MailParseException- en caso de fallo al analizar un mensaje
+//    MailAuthenticationException- en caso de fallo de autenticación
+//    MailSendException- en caso de fallo al enviar un mensaje
+//    MailException
+        ErrorDTO errorDTO = ErrorDTO.builder()
+                .date_error(new Date())
+                .code(HttpStatus.INTERNAL_SERVER_ERROR.toString())
+                .message("Mail server connection failed")
+                .build();
+        return new ResponseEntity<>(errorDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    @ExceptionHandler(EmailExecption.class)
+    protected ResponseEntity<Object> handleMailException(EmailExecption ex) {
+//    MailPreparationException- en caso de fallo al preparar un mensaje
+//    MailParseException- en caso de fallo al analizar un mensaje
+//    MailAuthenticationException- en caso de fallo de autenticación
+//    MailSendException- en caso de fallo al enviar un mensaje
+//    MailException
+        ErrorDTO errorDTO = ErrorDTO.builder()
+                .date_error(new Date())
+                .code(ex.getCode())
+                .message("Error email send.")
+                .build();
+        return new ResponseEntity<>(errorDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

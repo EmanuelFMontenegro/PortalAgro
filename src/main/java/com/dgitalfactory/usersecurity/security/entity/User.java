@@ -4,6 +4,7 @@ package com.dgitalfactory.usersecurity.security.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Data
@@ -27,7 +28,13 @@ public class User {
     @Column(nullable = true)
     private String tokenPassword;
 
-    private boolean account_Active=false;
+    private boolean account_active =false;
+    /**
+     * blocking due to bad credentials
+     */
+    private boolean account_block=false;
+    private int failed_attemps=0;
+    private LocalDateTime locke_time;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",

@@ -5,21 +5,19 @@ import com.dgitalfactory.usersecurity.entity.Person;
 import com.dgitalfactory.usersecurity.exception.GlobalAppException;
 import com.dgitalfactory.usersecurity.exception.ResourceNotFoundException;
 import com.dgitalfactory.usersecurity.repository.PersonRepository;
-import com.dgitalfactory.usersecurity.security.jwt.JWTAuthenticationFilter;
-import com.dgitalfactory.usersecurity.security.repository.UserRepository;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
-import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-@Transactional
 public class PersonService {
     private static final Logger log = LoggerFactory.getLogger(PersonService.class);
 
@@ -64,6 +62,7 @@ public class PersonService {
     }
 
 
+    @Transactional(propagation = Propagation.SUPPORTS)
     public PersonDTO addPerson(Long userid, PersonDTO personDTO){
         //validar datos
         if(this.personRepo.existsByUserid(userid)){
@@ -79,6 +78,7 @@ public class PersonService {
         return newPersonDTO;
     }
 
+//    @Transactional(propagation = Propagation.SUPPORTS)
     public PersonDTO updatePerson(Long userid, PersonDTO personDTO){
         //validar datos
         this.validatePerson(personDTO);
@@ -101,6 +101,7 @@ public class PersonService {
         return upPersonDTO;
     }
 
+//    @Transactional(propagation = Propagation.SUPPORTS)
     public void deletePersonById(Long id){
         Person person =this.personRepo.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Person","id",id));

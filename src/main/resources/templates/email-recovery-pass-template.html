@@ -11,10 +11,16 @@
 <body>
     <h2>Recuperar Contraseña</h2>
     <h3><span>Hola </span><span th:text="${userName}"></span></h3>
-    <h4>Hola estas recibiendo este correo porque hiciste una solicitud de recuperación de contraseña para tu cuenta.</h4>
+    <h4>Recibimos su solicitud para reestablecer la contraseña de su cuenta. Por favor, presione el botón “Reestablecer Contraseña” para continuar con el proceso.</h4>
     <h4>Da clic en el siguiente botón para recuperarla.</h4>
-    <a th:href="@{${url}}"><button>Ir a la cuenta</button></a>
+    <a th:href="@{${url}}"><button>Reestablecer Contraseña</button></a>
     <hr>
-    <h4>Si no realizaste esta solicitud, desestimá este mensaje. Saludos, Portal Productores.</h4>
+    <h4>Por favor, tenga en cuenta que este enlace para restablecer su contraseña tiene una validez limitada por razones de seguridad. Si no puede completar el proceso dentro de 24 horas, deberá solicitar un nuevo enlace siguiendo el mismo procedimiento.
+
+        Si tiene alguna pregunta o encuentra algún problema durante este proceso, no dude en contactar a nuestro equipo de soporte al cliente a través de esta dirección de correo y estaremos encantados de ayudarle.
+
+        Atentamente,
+        Soporte Portal Productores.
+        [email soporte]</h4>
 </body>
 </html>

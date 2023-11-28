@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.validation.annotation.Validated;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Getter
@@ -20,5 +21,8 @@ public class UserResponseDTO {
 	@NotEmpty
 	@Email
 	private String username;
+	private boolean account_active;
+	private boolean account_block;
+	private LocalDateTime locke_time;
 	private Set<Role> roles;
 }

@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class CustomAccessDeniedHandler implements AccessDeniedHandler {
+public class CustomAccessDeniedHandler extends Throwable implements AccessDeniedHandler {
 
     private static final Logger log = LoggerFactory.getLogger(CustomAccessDeniedHandler.class);
 
