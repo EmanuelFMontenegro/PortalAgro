@@ -1,0 +1,67 @@
+<div class="register-container">
+  <mat-card class="register-card">
+    <div class="logo-container">
+      <img src="../../../assets/img/log_sustentable.png" alt="Logo">
+    </div>
+    <h1 class="mb-4">Regístrate</h1>
+
+    <form [formGroup]="registro" (ngSubmit)="enviarFormulario()" class="text-start">
+      <!-- Campo de Correo Electrónico -->
+      <div class="form-field-container">
+        <input matInput type="text" id="username" [formControl]="usernameControl" placeholder="Correo electrónico"
+          class="input-style">
+        <mat-error *ngIf="usernameControl.invalid && usernameControl.touched">
+          <span *ngIf="usernameControl.hasError('required')">El correo electrónico es requerido.</span>
+          <span *ngIf="usernameControl.hasError('email')">Ingrese un correo electrónico válido.</span>
+        </mat-error>
+      </div>
+
+      <!-- Campo de Contraseña primer input -->
+      <div class="form-field-container">
+        <input matInput type="password" id="password" [formControl]="passwordControl" placeholder="Contraseña"
+          class="input-style">
+        <!-- <mat-icon matSuffix (click)="togglePasswordVisibility()"
+          [style.color]="(registro.valid && !cargandoValidacion) ? '#3CA749' : '#8FCA8F'">
+          {{ hidePassword ? 'visibility_off' : 'visibility' }}
+        </mat-icon> -->
+        <mat-error *ngIf="passwordControl.invalid && passwordControl.touched">
+          <span *ngIf="passwordControl.hasError('required')">La contraseña es requerida.</span>
+          <span *ngIf="passwordControl.hasError('minlength')">La contraseña debe tener al menos 8 caracteres.</span>
+        </mat-error>
+      </div>
+
+
+      <!-- Campo de Contraseña segundo input -->
+      <div class="form-field-container">
+        <input matInput type="password" id="confirmPassword" [formControl]="confirmPasswordControl"
+          placeholder="Confirmar Contraseña" class="input-style">
+        <mat-icon style="width: auto; height:auto;" class="toggle-password" (click)="togglePasswordVisibility()">
+          {{ passwordVisible ? 'visibility':'visibility_off' }}
+        </mat-icon>
+        <mat-error *ngIf="confirmPasswordControl.invalid && confirmPasswordControl.touched">
+          <span *ngIf="confirmPasswordControl.errors?.['passwordsNotMatch']">Las contraseñas no coinciden.</span>
+          <span
+            *ngIf="confirmPasswordControl.hasError('required') && !confirmPasswordControl.errors?.['passwordsNotMatch']">La
+            contraseña es requerida.</span>
+          <span
+            *ngIf="confirmPasswordControl.hasError('minlength') && !confirmPasswordControl.errors?.['passwordsNotMatch']">La
+            contraseña debe tener al menos 8 caracteres.</span>
+        </mat-error>
+      </div>
+
+      <!-- Botón de Registro -->
+      <button mat-raised-button type="submit" class="btn-block mt-3"
+        [ngStyle]="{'background-color': (registro.valid && !cargandoValidacion) ? '#3CA749' : '#8FCA8F', 'color': 'white'}"
+        [disabled]="registro.invalid">
+        Registrarse
+      </button>
+
+      <!-- Enlaces de Inicio de Sesión -->
+      <div class="login-links mt-3">
+        <div class="login-prompt">
+          ¿Ya tienes cuenta? <a routerLink="/login" class="login-link" (click)="irAInicioSesion()">Iniciar Sesión</a>
+        </div>
+      </div>
+    </form>
+  </mat-card>
+</div>
