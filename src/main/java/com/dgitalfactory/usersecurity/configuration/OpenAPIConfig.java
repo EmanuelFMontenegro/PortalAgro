@@ -13,7 +13,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
-
+/**
+ * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
+ * @created 30/11/2023 - 08:54
+ */
  @Configuration
 public class OpenAPIConfig {
     public static final String SCHEME_NAME = "BearerScheme";

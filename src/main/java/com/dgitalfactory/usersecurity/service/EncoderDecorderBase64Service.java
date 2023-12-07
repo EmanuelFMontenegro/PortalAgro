@@ -5,6 +5,10 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
+/**
+ * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
+ * @created 30/11/2023 - 08:54
+ */
 @Service
 public class EncoderDecorderBase64Service {
 

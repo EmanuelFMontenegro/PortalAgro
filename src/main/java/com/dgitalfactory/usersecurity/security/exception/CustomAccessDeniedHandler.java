@@ -1,6 +1,9 @@
 package com.dgitalfactory.usersecurity.security.exception;
 
+import com.dgitalfactory.usersecurity.DTO.ErrorDTO;
 import com.dgitalfactory.usersecurity.security.jwt.JwtEntryPoint;
+import com.dgitalfactory.usersecurity.utils.ResponseConstants;
+import com.dgitalfactory.usersecurity.utils.UtilsCommons;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,10 +17,15 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
+ * @created 30/11/2023 - 08:54
+ */
 @Component
 public class CustomAccessDeniedHandler extends Throwable implements AccessDeniedHandler {
 
@@ -29,19 +37,21 @@ public class CustomAccessDeniedHandler extends Throwable implements AccessDenied
                        AccessDeniedException accessDeniedException) throws IOException, ServletException {
 
         log.error("Unauthorized error (entry point): {}", accessDeniedException.getMessage());
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
         response.setStatus(HttpStatus.FORBIDDEN.value());
         response.setContentType("application/json");
-        Map<String, Object> data = new HashMap<>();
-        data.put("timestamp", new Date());
-        data.put("status",HttpStatus.FORBIDDEN.value());
-        data.put("message", "Access Denied, login again!");
-        data.put("path", request.getRequestURL().toString());
-//        data.put("pd", "Have a good day :)");
+        ErrorDTO errorDTO = ErrorDTO.builder()
+                .code(403)
+                .message(UtilsCommons.getResponseConstants(403))
+                .date(UtilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
+                .path(request.getRequestURL().toString().replace("url=",""))
+                .details(accessDeniedException.getMessage())
+                .build();
 
         OutputStream out = response.getOutputStream();
         ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(out, data);
+        mapper.writeValue(out, errorDTO);
         out.flush();
 
 

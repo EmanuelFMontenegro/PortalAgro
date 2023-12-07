@@ -1,10 +1,12 @@
 package com.dgitalfactory.usersecurity.service;
 
 import com.dgitalfactory.usersecurity.DTO.PersonDTO;
+import com.dgitalfactory.usersecurity.DTO.PersonResponseDTO;
 import com.dgitalfactory.usersecurity.entity.Person;
 import com.dgitalfactory.usersecurity.exception.GlobalAppException;
 import com.dgitalfactory.usersecurity.exception.ResourceNotFoundException;
 import com.dgitalfactory.usersecurity.repository.PersonRepository;
+import com.dgitalfactory.usersecurity.utils.AppConstants;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -16,7 +18,10 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
+/**
+ * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
+ * @created 30/11/2023 - 08:54
+ */
 @Service
 public class PersonService {
     private static final Logger log = LoggerFactory.getLogger(PersonService.class);
@@ -27,69 +32,97 @@ public class PersonService {
     @Autowired
     private PersonRepository personRepo;
 
-    @Autowired
-    private UtilsCommons utilsComm;
-
     /**
-     * Return Information Person
+     * Return Information of the Person searching bt id person
      *
-     * @param id
-     * @return
+     * @param id: type {@link Long}
+     * @return personDTO: type @{@link PersonDTO}
      */
-    public PersonDTO getPersonById(Long id){
+    public PersonDTO getPersonDtoById(Long id){
         Person person =this.personRepo.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Person","id",id));
-        return this.convertEntityToDTO(person);
+        return UtilsCommons.convertEntityToDTO(person,PersonDTO.class);
     }
 
+    /**
+     * Fiind person by user id
+     * @param id: type @{@link Long}
+     * @return person: type @{@link Person}
+     */
+    public Person getPersonById(Long id){
+       return this.personRepo.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Person","id",id));
+    }
+
+    /**
+     * Return information of the Person searching by DNI
+     * @param dni: Type String
+     * @return @{@link PersonDTO}
+     */
     public PersonDTO getPersonDTOByDni(String dni){
         Person person =this.personRepo.findByDni(dni)
                 .orElseThrow(()-> new ResourceNotFoundException("Person","DNI",dni));
-        return this.convertEntityToDTO(person);
+        return UtilsCommons.convertEntityToDTO(person,PersonDTO.class);
     }
 
+    /**
+     * return information of the person searching by DNI
+     * @param dni: String DNI
+     * @return @{@link Person}
+     */
     public Person getPersonByDni(String dni){
         Person person =this.personRepo.findByDni(dni)
                 .orElseThrow(()-> new ResourceNotFoundException("Person","DNI",dni));
         return person;
     }
 
+    /**
+     * Return a list of all people
+     * @return @{@link List<@PersonDTO>}
+     */
     public List<PersonDTO> getPeopleDTO(){
         List<PersonDTO> peopleDTO = this.personRepo.findAll().stream().map(
-                person -> this.convertEntityToDTO(person)
+                person -> UtilsCommons.convertEntityToDTO(person,PersonDTO.class)
         ).toList();
         return peopleDTO;
     }
 
 
+    /**
+     * Create person record
+     * @param userid: Long userid
+     * @param personResponseDTO: @{@link PersonResponseDTO}
+     */
     @Transactional(propagation = Propagation.SUPPORTS)
-    public PersonDTO addPerson(Long userid, PersonDTO personDTO){
+    public void addPerson(Long userid, PersonResponseDTO personResponseDTO){
         //validar datos
-        if(this.personRepo.existsByUserid(userid)){
-            throw new GlobalAppException(HttpStatus.BAD_REQUEST, "The user ID has a person entity","dic code..");
+        if(this.personRepo.existsById(userid)){
+            throw new GlobalAppException(HttpStatus.BAD_REQUEST, 4021,"");
         }
-        this.validatePerson(personDTO);
+//        this.validatePerson(personDTO);
+        log.info("ESTA DESHABILITADA LA VALIDACION DE LOS CAMPOS DE PERSONA PORQUE AUN NO LLEGAMOS A CARGAR EL PERFIL");
 
-        Person person = this.convertDTOToEntity(personDTO);
-        person.setUserid(userid);
+        Person person = UtilsCommons.convertDTOToEntity(personResponseDTO,Person.class);
+        person.setId(userid);
         this.personRepo.save(person);
-        PersonDTO newPersonDTO = this.getPersonDTOByDni(personDTO.getDni());
-        log.info("New person: ", newPersonDTO);
-        return newPersonDTO;
     }
 
+    /**
+     * Update person records
+     * @param userid: String userid
+     * @param personDTO: @{@link PersonDTO}
+     * @return @{@link PersonDTO}
+     */
 //    @Transactional(propagation = Propagation.SUPPORTS)
     public PersonDTO updatePerson(Long userid, PersonDTO personDTO){
         //validar datos
         this.validatePerson(personDTO);
-        Person person = this.personRepo.findByUserid(userid).orElseThrow(()->
-                new GlobalAppException(HttpStatus.BAD_REQUEST,
-                        "The user ID does not have a registered person entity","dic code..")
+        Person person = this.personRepo.findById(userid).orElseThrow(()->
+                new GlobalAppException(HttpStatus.BAD_REQUEST, 4022,"")
         );
         if(person.getDni()!=person.getDni()){
             if(this.personRepo.existsByDni(personDTO.getDni())){
-                throw new GlobalAppException(HttpStatus.BAD_REQUEST,
-                        "The new ID belongs to another registered user ","dic code..");
+                throw new GlobalAppException(HttpStatus.BAD_REQUEST, 4023,"");
             }
         }
         person.setName(personDTO.getName());
@@ -101,6 +134,10 @@ public class PersonService {
         return upPersonDTO;
     }
 
+    /**
+     * Delete person
+     * @param id: Long personid
+     */
 //    @Transactional(propagation = Propagation.SUPPORTS)
     public void deletePersonById(Long id){
         Person person =this.personRepo.findById(id)
@@ -108,25 +145,47 @@ public class PersonService {
         this.personRepo.deleteById(id);
     }
 
+    /**
+     * Verify person fields
+     *
+     * @param person: @{@link PersonDTO}
+     * @return @{@link Boolean}
+     */
     private boolean validatePerson(PersonDTO person){
-        if((person.getDni().length() < this.utilsComm.dniMin) ||
-                (person.getDni().length() > this.utilsComm.dniMaxima)){
-            throw new GlobalAppException(HttpStatus.BAD_REQUEST,
-                    "The person DNI is not valid (size from "+this.utilsComm.dniMin
-                            +" to "+this.utilsComm.dniMaxima+")","dic code..");
+        if((person.getDni().length() < AppConstants.DNI_MIN) ||
+                (person.getDni().length() > AppConstants.DNI_MAX)){
+            throw new GlobalAppException(HttpStatus.NOT_FOUND, 4012,"El DNI debe tener una longitud mínima de "+AppConstants.DNI_MIN
+                    +" y maxima de "+AppConstants.DNI_MAX +")");
         }
-        if(this.utilsComm.validarNumerosRepetidos(person.getDni(),"dni")){
-            throw new GlobalAppException(HttpStatus.BAD_REQUEST,
-                    "The DNI cannot be made up of repeated characters","dic code..");
+        if(UtilsCommons.validarNumerosRepetidos(person.getDni(),"dni")){
+            throw new GlobalAppException(HttpStatus.NOT_FOUND,2024,"");
         }
         return true;
     }
 
-    private PersonDTO convertEntityToDTO(Person person){
-        return this.modelMapper.map(person, PersonDTO.class);
-    }
-
-    private Person convertDTOToEntity(PersonDTO personDTO){
-        return this.modelMapper.map(personDTO,Person.class);
-    }
+//    /**
+//     * Convert @{@link Person} to @{@link PersonDTO}
+//     * @param person: @{@link Person}
+//     * @return @{@link PersonDTO}
+//     */
+//    private PersonDTO convertEntityToDTO(Person person){
+//        return this.modelMapper.map(person, PersonDTO.class);
+//    }
+//
+//    /**
+//     * Convert @{@link PersonDTO} to @{@link Person}
+//     * @param personDTO
+//     * @return
+//     */
+//    private Person convertDTOToEntity(PersonDTO personDTO){
+//        return this.modelMapper.map(personDTO,Person.class);
+//    }
+//    /**
+//     * Convert @{@link PersonResponseDTO} to @{@link Person}
+//     * @param personResponseDTO
+//     * @return
+//     */
+//    private Person convertDTOToEntity(PersonResponseDTO personResponseDTO){
+//        return this.modelMapper.map(personResponseDTO,Person.class);
+//    }
 }

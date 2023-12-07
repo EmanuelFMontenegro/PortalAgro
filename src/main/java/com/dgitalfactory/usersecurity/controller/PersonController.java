@@ -2,7 +2,10 @@ package com.dgitalfactory.usersecurity.controller;
 
 import com.dgitalfactory.usersecurity.DTO.MessageDTO;
 import com.dgitalfactory.usersecurity.DTO.PersonDTO;
+import com.dgitalfactory.usersecurity.DTO.PersonResponseDTO;
 import com.dgitalfactory.usersecurity.service.PersonService;
+import com.dgitalfactory.usersecurity.utils.UtilsCommons;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,9 +15,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
+ * @created 30/11/2023 - 08:54
+ */
 @RestController
 @RequestMapping("/api/person")
 @CrossOrigin
+@Tag(name = "Person", description = "Person Services. Additional user information.")
 public class PersonController {
 
     @Autowired
@@ -23,7 +31,7 @@ public class PersonController {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<PersonDTO> getPersonById(@PathVariable("id") Long id){
-        PersonDTO personDTO = this.personSVC.getPersonById(id);
+        PersonDTO personDTO = this.personSVC.getPersonDtoById(id);
         return ResponseEntity.ok(personDTO);
     }
 
@@ -36,10 +44,10 @@ public class PersonController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{userid}")
-    public ResponseEntity<MessageDTO> addPerson(@PathVariable Long userid, @RequestBody @Valid PersonDTO personDTO){
-        PersonDTO newPersonDTO = this.personSVC.addPerson(userid,personDTO);
+    public ResponseEntity<MessageDTO> addPerson(@PathVariable Long userid, @RequestBody @Valid PersonResponseDTO personResponseDTO){
+        this.personSVC.addPerson(userid,personResponseDTO);
         return ResponseEntity.ok(
-                MessageDTO.builder().code(HttpStatus.CREATED.toString()).message("Registered person").build()
+                MessageDTO.builder().code(2001).message(UtilsCommons.getResponseConstants(2001)).build()
         );
     }
 
@@ -48,7 +56,7 @@ public class PersonController {
     public ResponseEntity<MessageDTO> updatePerson(@PathVariable Long userid, @RequestBody @Valid PersonDTO personDTO){
         PersonDTO newPersonDTO = this.personSVC.updatePerson(userid,personDTO);
         return ResponseEntity.ok(
-                MessageDTO.builder().code(HttpStatus.OK.toString()).message("Update person").build()
+                MessageDTO.builder().code(2002).message(UtilsCommons.getResponseConstants(2002)).build()
         );
     }
 
@@ -56,7 +64,7 @@ public class PersonController {
     @DeleteMapping("/{id}")
     public ResponseEntity<MessageDTO> deletePersonById(@PathVariable("id") Long id){
         this.personSVC.deletePersonById(id);
-        return ResponseEntity.ok(MessageDTO.builder().code(HttpStatus.OK.toString()).message("Person delete").build());
+        return ResponseEntity.ok(MessageDTO.builder().code(2003).message(UtilsCommons.getResponseConstants(2003)).build());
     }
 
 

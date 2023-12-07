@@ -1,10 +1,12 @@
-package com.dgitalfactory.usersecurity.emailpassword.controller;
+package com.dgitalfactory.usersecurity.email.controller;
 
 import com.dgitalfactory.usersecurity.DTO.MessageDTO;
-import com.dgitalfactory.usersecurity.emailpassword.dto.ChangePasswordDTO;
-import com.dgitalfactory.usersecurity.emailpassword.dto.EmailValuesDTO;
-import com.dgitalfactory.usersecurity.emailpassword.service.EmailServide;
+import com.dgitalfactory.usersecurity.email.dto.ChangePasswordDTO;
+import com.dgitalfactory.usersecurity.email.dto.EmailValuesDTO;
+import com.dgitalfactory.usersecurity.email.service.EmailServide;
 import com.dgitalfactory.usersecurity.service.UtilService;
+import com.dgitalfactory.usersecurity.utils.UtilsCommons;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,10 +15,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
-
+/**
+ * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
+ * @created 30/11/2023 - 08:54
+ */
 @RestController
 @RequestMapping("/api/email")
 //@CrossOrigin
+@Tag(name = "Email Send", description = "Email Services")
 public class EmailController {
 
     @Autowired
@@ -36,7 +42,7 @@ public class EmailController {
     public ResponseEntity<MessageDTO> sendEmailTemplate(@RequestBody @Valid EmailValuesDTO emailValuesDTO){
         this.emailServide.senEmailRecoveryPassword(emailValuesDTO.getMailTo());
         return ResponseEntity.ok(
-                MessageDTO.builder().code(HttpStatus.OK.toString()).message("Correo con template enviado con éxito").build()
+                MessageDTO.builder().code(2004).message(UtilsCommons.getResponseConstants(2004)).build()
         );
     }
 
@@ -44,7 +50,7 @@ public class EmailController {
     public ResponseEntity<?> change(@RequestBody @Valid ChangePasswordDTO passwordDTO, BindingResult bindingResult){
         this.emailServide.changePassword(passwordDTO, bindingResult);
         return ResponseEntity.ok(
-                MessageDTO.builder().code(HttpStatus.OK.toString()).message("Password Change").build()
+                MessageDTO.builder().code(2005).message(UtilsCommons.getResponseConstants(2005)).build()
         );
     }
 }

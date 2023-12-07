@@ -4,12 +4,15 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+/**
+ * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
+ * @created 30/11/2023 - 08:54
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "contact")
+@Table(name = "contacts")
 public class Contact {
 
     @Id
@@ -21,7 +24,4 @@ public class Contact {
 
     @Column(nullable = true, length = 12)
     private String telephone;
-
-    @OneToOne(mappedBy = "contact")
-    private Person person;
 }

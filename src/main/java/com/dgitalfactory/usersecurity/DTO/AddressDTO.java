@@ -1,28 +1,34 @@
 package com.dgitalfactory.usersecurity.DTO;
 
+import com.dgitalfactory.usersecurity.utils.UtilsCommons;
 import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.validation.annotation.Validated;
 
-@Getter
-@Setter
+/**
+ * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
+ * @created 30/11/2023 - 08:54
+ */
+@Data
+@AllArgsConstructor
 @NoArgsConstructor
 public class AddressDTO {
+//    private Long id;
+    @Size(min=3,max = 255)
+    @NotBlank
+    private String address;
 
     @Size(min=3,max = 60)
-    private String streetName;
-    @Size(min=1,max = 60)
-    private String number;
-    @Size(min=3,max = 60)
-    private String getStreetName2;
-
-    @Size(min=3,max = 60)
-    private String province;
-    @Size(min=3,max = 60)
+    @NotBlank
     private String location;
 
-    @Size(min=3,max = 255)
-    private String observations;
+    public void setAddress(String address) {
+        this.address = UtilsCommons.capitalize(address);
+    }
+
+    public void setLocation(String location) {
+        this.location = UtilsCommons.capitalize(location);
+    }
 }

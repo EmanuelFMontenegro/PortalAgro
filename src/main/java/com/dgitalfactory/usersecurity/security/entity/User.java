@@ -6,12 +6,15 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Set;
-
+/**
+ * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
+ * @created 30/11/2023 - 08:54
+ */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "users")
+@Entity
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
 public class User {
 
@@ -32,9 +35,9 @@ public class User {
     /**
      * blocking due to bad credentials
      */
-    private boolean account_block=false;
-    private int failed_attemps=0;
-    private LocalDateTime locke_time;
+    private boolean accountNonLocked;
+    private int failedAttempts;
+    private LocalDateTime lockeTime;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",

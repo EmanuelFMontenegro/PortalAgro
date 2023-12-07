@@ -1,10 +1,13 @@
-package com.dgitalfactory.usersecurity.emailpassword.configuration;
+package com.dgitalfactory.usersecurity.email.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
-
+/**
+ * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
+ * @created 30/11/2023 - 08:54
+ */
 @Configuration
 public class ThymeleafTemplateConfig {
 

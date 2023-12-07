@@ -1,17 +1,21 @@
 package com.dgitalfactory.usersecurity.security.entity;
 
-import com.dgitalfactory.usersecurity.security.entity.Role;
-import com.dgitalfactory.usersecurity.security.entity.User;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Set;
-
+/**
+ * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
+ * @created 30/11/2023 - 08:54
+ */
+@Getter
 @AllArgsConstructor
-public class SecurityUser implements UserDetails {
+public class CustomeUserDetails implements UserDetails {
     private final User user;
 
     @Override

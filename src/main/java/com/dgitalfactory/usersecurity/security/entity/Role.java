@@ -3,7 +3,10 @@ package com.dgitalfactory.usersecurity.security.entity;
 import com.dgitalfactory.usersecurity.utils.RoleName;
 import jakarta.persistence.*;
 import lombok.*;
-
+/**
+ * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
+ * @created 30/11/2023 - 08:54
+ */
 @Data
 @Builder
 @NoArgsConstructor

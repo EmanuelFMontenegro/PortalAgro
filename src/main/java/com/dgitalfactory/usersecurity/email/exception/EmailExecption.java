@@ -1,15 +1,12 @@
-package com.dgitalfactory.usersecurity.emailpassword.exception;
+package com.dgitalfactory.usersecurity.email.exception;
 
-import lombok.Data;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailException;
-import org.springframework.mail.MailPreparationException;
-import org.springframework.validation.FieldError;
-
-import java.util.HashMap;
-import java.util.Map;
-
+/**
+ * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
+ * @created 30/11/2023 - 08:54
+ */
 @Getter
 public class EmailExecption extends MailException {
     private String code = HttpStatus.INTERNAL_SERVER_ERROR.toString();

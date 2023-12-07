@@ -5,7 +5,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
+/**
+ * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
+ * @created 30/11/2023 - 08:54
+ */
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
 @Getter
 @Setter
@@ -28,7 +31,7 @@ public class ResourceNotFoundException extends RuntimeException {
 	 * @param fieldValue: elemento que se utilizó para la búsqueda
 	 */
 	public ResourceNotFoundException(String nameResource, String fieldName, Object fieldValue) {
-		super(String.format("%s no encontrada con : %s : '%s'", nameResource, fieldName, fieldValue));
+		super(nameResource+" no encontrada con : "+fieldName+" : \'"+fieldName+"\'");
 		this.nameResource = nameResource;
 		this.fieldName = fieldName;
 		this.fieldValue = fieldValue;

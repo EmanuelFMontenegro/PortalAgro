@@ -1,13 +1,12 @@
-package com.dgitalfactory.usersecurity.emailpassword.service;
+package com.dgitalfactory.usersecurity.email.service;
 
-
-
-import com.dgitalfactory.usersecurity.emailpassword.dto.ChangePasswordDTO;
-import com.dgitalfactory.usersecurity.emailpassword.dto.EmailValuesDTO;
+import com.dgitalfactory.usersecurity.email.dto.ChangePasswordDTO;
+import com.dgitalfactory.usersecurity.email.dto.EmailValuesDTO;
 import com.dgitalfactory.usersecurity.security.entity.User;
 import com.dgitalfactory.usersecurity.exception.GlobalAppException;
 import com.dgitalfactory.usersecurity.security.service.JwtTokenService;
 import com.dgitalfactory.usersecurity.security.service.UserService;
+import com.dgitalfactory.usersecurity.utils.AppConstants;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -26,7 +25,10 @@ import org.thymeleaf.context.Context;
 
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
+ * @created 30/11/2023 - 08:54
+ */
 @Service
 public class EmailServide {
 
@@ -65,9 +67,6 @@ public class EmailServide {
     @Autowired
     private JwtTokenService jwtTokenService;
 
-    @Autowired
-    private UtilsCommons utilService;
-
     public void senEmailActivateAccount(User us){
         String templateEmail = "email-activate-account-template";
         this.sendEmailTemplateActivateAccount(us,templateEmail);
@@ -76,7 +75,7 @@ public class EmailServide {
     public void senEmailRecoveryPassword(String username){
         User us = this.userSVC.findUser(username);
         if(!us.isAccount_active()){
-            throw new GlobalAppException(HttpStatus.UNAUTHORIZED,"El usuario debe validar su email","diccionario codigo");
+            throw new GlobalAppException(HttpStatus.UNAUTHORIZED,4001,"");
         }
         String templateEmail = "email-recovery-pass-template";
         String token= this.jwtTokenService.generatedToken(username, EMAIL_RECOVERY_EXPIRATION_IN_MS);
@@ -120,7 +119,7 @@ public class EmailServide {
             javaMailSender.send(message);
         }catch (MessagingException ex){
             log.error("Send email error", ex.getMessage());
-            throw new GlobalAppException(HttpStatus.BAD_REQUEST, "Error al enviar el email", "code..");
+            throw new GlobalAppException(HttpStatus.BAD_REQUEST, 4003,ex.getMessage());
         }
     }
 
@@ -134,15 +133,17 @@ public class EmailServide {
         try{
             this.jwtTokenService.isTokenExpired(passwordDTO.getToken());
         }catch (Exception ex){
-            throw new GlobalAppException(HttpStatus.UNAUTHORIZED, "La solicitud a expirado...","code...");
+            throw new GlobalAppException(HttpStatus.UNAUTHORIZED, 4004, ex.getMessage());
         }
         if(bindingResult.hasErrors())
-            throw  new GlobalAppException(HttpStatus.BAD_REQUEST, "Verificar Campos", "code..");
+            throw  new GlobalAppException(HttpStatus.BAD_REQUEST, 4012,"");
         if(!passwordDTO.getPassword().equals(passwordDTO.getConfirmPassword()))
-            throw  new GlobalAppException(HttpStatus.BAD_REQUEST, "Las contraseñas no coinciden", "code..");
+            throw  new GlobalAppException(HttpStatus.NOT_FOUND, 4018,"");
 
-        if(this.utilService.validPassword(passwordDTO.getPassword()))
-            throw  new GlobalAppException(HttpStatus.BAD_REQUEST, "El password debe tener longitud minima de 8 carcateres, al menos una minuscula y una mayuscula", "code..");
+        if(UtilsCommons.validPassword(passwordDTO.getPassword())) {
+            log.info("cambiar validación desde dto para evitar hacer estas validaiones y delegar la resposabilidad");
+            throw new GlobalAppException(HttpStatus.NOT_FOUND, 4012, "El password debe tener longitud minima de" + AppConstants.PASSWORD_MIN+ " y como máximo "+AppConstants.PASSWORD_MIN+" carcateres, al menos una minuscula y una mayuscula");
+        }
 
         User us = this.userSVC.getUserByTokenPassword(passwordDTO.getToken());
         us.setTokenPassword(null);
@@ -179,7 +180,7 @@ public class EmailServide {
             javaMailSender.send(message);
         }catch (MessagingException ex){
             log.error("Send email error", ex.getMessage());
-            throw new GlobalAppException(HttpStatus.BAD_REQUEST, "Error al enviar el email", "code..");
+            throw new GlobalAppException(HttpStatus.INTERNAL_SERVER_ERROR, 4003, ex.getMessage());
         }
     }
 
@@ -189,7 +190,7 @@ public class EmailServide {
         try{
             this.jwtTokenService.isTokenExpired(token);
         }catch (Exception ex){
-            throw new GlobalAppException(HttpStatus.UNAUTHORIZED, "La solicitud a expirado...","code...");
+            throw new GlobalAppException(HttpStatus.UNAUTHORIZED, 4004,ex.getMessage());
         }
 
         User us = this.userSVC.getUserByTokenPassword(token);

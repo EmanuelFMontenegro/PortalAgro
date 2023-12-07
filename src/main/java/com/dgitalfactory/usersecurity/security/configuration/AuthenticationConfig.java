@@ -10,31 +10,15 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
+/**
+ * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
+ * @created 30/11/2023 - 08:54
+ */
 @Configuration
 public class AuthenticationConfig {
-
-    //Creamos este servicio para utlizar nuestro propio proveedor de usuario
-    // sacarlos de alguna base de datos por ejemplo
-    @Autowired
-    private SecurityUserDetailsService userDetailsSerice;
-
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-
-    @Bean
-    public AuthenticationProvider authenticationProvider(){
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(this.userDetailsSerice);
-        authenticationProvider.setPasswordEncoder(this.passwordEncoder());
-        return authenticationProvider;
-    }
-
 }
