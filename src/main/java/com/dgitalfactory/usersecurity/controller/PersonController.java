@@ -1,19 +1,18 @@
 package com.dgitalfactory.usersecurity.controller;
 
 import com.dgitalfactory.usersecurity.DTO.MessageDTO;
-import com.dgitalfactory.usersecurity.DTO.PersonDTO;
-import com.dgitalfactory.usersecurity.DTO.PersonResponseDTO;
+import com.dgitalfactory.usersecurity.DTO.Person.PersonDTO;
+import com.dgitalfactory.usersecurity.DTO.Person.PersonResponseDTO;
+import com.dgitalfactory.usersecurity.DTO.ResponsePaginationDTO;
 import com.dgitalfactory.usersecurity.service.PersonService;
+import com.dgitalfactory.usersecurity.utils.AppConstants;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
@@ -37,24 +36,29 @@ public class PersonController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("")
-    public ResponseEntity<List<PersonDTO>> getPeople(){
-        List<PersonDTO> listPersonDTO = this.personSVC.getPeopleDTO();
+    public ResponseEntity<ResponsePaginationDTO> getPeople(
+            @RequestParam(value = "pageNo", defaultValue = AppConstants.PAGE_NUMBER_DEFAULT, required = false) int pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE_DEFAULT, required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = AppConstants.ORDER_BY_DEFAULT, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = AppConstants.ORDER_DIR_DEFAULT, required = false) String sortDir
+    ){
+        ResponsePaginationDTO listPersonDTO = this.personSVC.getPeoplePagination(pageNumber, pageSize, sortBy, sortDir);
         return ResponseEntity.ok(listPersonDTO);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or @conditionEvaluatorService.canPreAuthAdmin(#user_id)")
     @PostMapping("/{userid}")
-    public ResponseEntity<MessageDTO> addPerson(@PathVariable Long userid, @RequestBody @Valid PersonResponseDTO personResponseDTO){
-        this.personSVC.addPerson(userid,personResponseDTO);
+    public ResponseEntity<MessageDTO> addPerson(@PathVariable Long user_id, @RequestBody @Valid PersonResponseDTO personResponseDTO){
+        this.personSVC.addPerson(user_id,personResponseDTO);
         return ResponseEntity.ok(
                 MessageDTO.builder().code(2001).message(UtilsCommons.getResponseConstants(2001)).build()
         );
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or @conditionEvaluatorService.canPreAuthAdmin(#user_id)")
     @PutMapping("/{userid}")
-    public ResponseEntity<MessageDTO> updatePerson(@PathVariable Long userid, @RequestBody @Valid PersonDTO personDTO){
-        PersonDTO newPersonDTO = this.personSVC.updatePerson(userid,personDTO);
+    public ResponseEntity<MessageDTO> updatePerson(@PathVariable Long user_id, @RequestBody @Valid PersonDTO personDTO){
+        PersonDTO newPersonDTO = this.personSVC.updatePerson(user_id,personDTO);
         return ResponseEntity.ok(
                 MessageDTO.builder().code(2002).message(UtilsCommons.getResponseConstants(2002)).build()
         );

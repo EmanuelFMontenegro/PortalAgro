@@ -1,7 +1,8 @@
 package com.dgitalfactory.usersecurity.service;
 
-import com.dgitalfactory.usersecurity.DTO.PersonDTO;
-import com.dgitalfactory.usersecurity.DTO.PersonResponseDTO;
+import com.dgitalfactory.usersecurity.DTO.Person.PersonDTO;
+import com.dgitalfactory.usersecurity.DTO.Person.PersonResponseDTO;
+import com.dgitalfactory.usersecurity.DTO.ResponsePaginationDTO;
 import com.dgitalfactory.usersecurity.entity.Person;
 import com.dgitalfactory.usersecurity.exception.GlobalAppException;
 import com.dgitalfactory.usersecurity.exception.ResourceNotFoundException;
@@ -12,11 +13,16 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 /**
  * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
@@ -85,6 +91,25 @@ public class PersonService {
                 person -> UtilsCommons.convertEntityToDTO(person,PersonDTO.class)
         ).toList();
         return peopleDTO;
+    }
+
+    public ResponsePaginationDTO getPeoplePagination(int pageNo, int pageSize, String sortBy, String sortDir){
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+
+        Page<Person> listField = this.personRepo.findAllByOrderByLastnameAscNameAsc(pageable);
+        List<Person> list = listField.getContent();
+        List<PersonDTO> listDTO = UtilsCommons.mapListEntityDTO(list, PersonDTO.class);
+        return ResponsePaginationDTO.builder()
+                .list(Collections.singletonList(listDTO))
+                .pageNo(listField.getNumber())
+                .pageSize(listField.getSize())
+                .pageTotal(listField.getTotalPages())
+                .itemsTotal(listField.getTotalPages())
+                .pageLast(listField.isLast())
+                .build();
     }
 
 

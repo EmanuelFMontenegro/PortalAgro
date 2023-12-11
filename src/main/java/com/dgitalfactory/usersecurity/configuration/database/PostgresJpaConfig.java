@@ -1,6 +1,9 @@
 package com.dgitalfactory.usersecurity.configuration.database;
 
+import com.dgitalfactory.usersecurity.service.FieldService;
 import jakarta.persistence.EntityManagerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,6 +41,9 @@ import java.util.Properties;
 @EnableTransactionManagement
 public class PostgresJpaConfig {
 
+    private static final Logger log = LoggerFactory.getLogger(PostgresJpaConfig.class);
+
+
 /*    @Value("${postgres.db.jpa.database-platform}")
     private String DIALECT;*/
 
@@ -54,22 +60,26 @@ public class PostgresJpaConfig {
     @Bean(name = "postgresEMF")
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean(
             @Qualifier("postgresDataSource") DataSource posgresDS, EntityManagerFactoryBuilder builder) {
+        try {
+            Map<String, Object> additionalProps = new HashMap<>();
+            //        additionalProps.put("hibernate.dialect", DIALECT);
+            additionalProps.put("hibernate.ddl-auto", AUTO_DDL);
+            additionalProps.put("hibernate.hbm2ddl.auto", AUTO_DDL);
+            additionalProps.put("hibernate.show_sql", SHOW_SQL);
+            additionalProps.put("hibernate.format_sql", FORMAT_SQL);
 
-        Map<String, Object> additionalProps = new HashMap<>();
-//        additionalProps.put("hibernate.dialect", DIALECT);
-        additionalProps.put("hibernate.ddl-auto", AUTO_DDL);
-        additionalProps.put("hibernate.hbm2ddl.auto", AUTO_DDL);
-        additionalProps.put("hibernate.show_sql", SHOW_SQL);
-        additionalProps.put("hibernate.format_sql", FORMAT_SQL);
-
-        return builder
-                .dataSource(posgresDS)
-                .persistenceUnit("postgres")
-                .properties(additionalProps)
-                .packages(
-                        "com.dgitalfactory.usersecurity.entity",
-                        "com.dgitalfactory.usersecurity.security.entity")
-                .build();
+            return builder
+                    .dataSource(posgresDS)
+                    .persistenceUnit("postgres")
+                    .properties(additionalProps)
+                    .packages(
+                            "com.dgitalfactory.usersecurity.entity",
+                            "com.dgitalfactory.usersecurity.security.entity")
+                    .build();
+        }catch (Exception ex){
+            log.error("Error de conexion en postgres: "+ex.getMessage());
+            return null;
+        }
     }
 
     @Primary

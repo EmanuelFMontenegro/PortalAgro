@@ -1,6 +1,6 @@
 package com.dgitalfactory.usersecurity.security.service;
 
-import com.dgitalfactory.usersecurity.DTO.PersonResponseDTO;
+import com.dgitalfactory.usersecurity.DTO.Person.PersonResponseDTO;
 import com.dgitalfactory.usersecurity.email.service.EmailServide;
 import com.dgitalfactory.usersecurity.exception.GlobalAppException;
 import com.dgitalfactory.usersecurity.security.dto.JwtDTO;
@@ -63,9 +63,12 @@ public class AuthService {
                 this.userSVC.resetFailedAttempts(user.getUsername());
             }
         }
-        if (!user.isAccount_active()) {
+        if (!user.isAccount_active() && user.getTokenPassword()!=null) {
             throw new GlobalAppException(HttpStatus.UNAUTHORIZED, 4001,"");
+        } else if (!user.isAccount_active()){
+                throw new GlobalAppException(HttpStatus.UNAUTHORIZED, 4030,"");
         }
+
 
         /**
          * 		Se le pasa el estado de la autenticación con los valores recibidos de la

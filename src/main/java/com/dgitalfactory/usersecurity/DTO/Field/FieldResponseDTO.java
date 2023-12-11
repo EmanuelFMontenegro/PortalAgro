@@ -1,5 +1,6 @@
-package com.dgitalfactory.usersecurity.DTO;
+package com.dgitalfactory.usersecurity.DTO.Field;
 
+import com.dgitalfactory.usersecurity.DTO.AddressDTO;
 import com.dgitalfactory.usersecurity.DTO.custom_validator.IsFloatValid;
 import com.dgitalfactory.usersecurity.utils.NumberUtils;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;

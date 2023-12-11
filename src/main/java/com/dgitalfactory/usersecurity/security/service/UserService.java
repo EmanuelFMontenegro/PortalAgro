@@ -1,5 +1,6 @@
 package com.dgitalfactory.usersecurity.security.service;
 
+import com.dgitalfactory.usersecurity.DTO.ResponsePaginationDTO;
 import com.dgitalfactory.usersecurity.exception.ResourceNotFoundException;
 import com.dgitalfactory.usersecurity.security.dto.UserResponseDTO;
 import com.dgitalfactory.usersecurity.security.dto.UserDTO;
@@ -14,6 +15,10 @@ import com.dgitalfactory.usersecurity.utils.UtilsCommons;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -97,6 +102,33 @@ public class UserService {
     }
 
     /**
+     * Find all Users with pagination
+     * @param pageNo
+     * @param pageSize
+     * @param sortBy
+     * @param sortDir
+     * @return @{@link ResponsePaginationDTO}
+     */
+    public ResponsePaginationDTO getAllUsers(int pageNo, int pageSize, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+
+        Page<User> listField = this.userRepo.findAll(pageable);
+        List<User> list = listField.getContent();
+        List<UserDTO> listDTO = UtilsCommons.mapListEntityDTO(list, UserDTO.class);
+        return ResponsePaginationDTO.builder()
+                .list(Collections.singletonList(listDTO))
+                .pageNo(listField.getNumber())
+                .pageSize(listField.getSize())
+                .pageTotal(listField.getTotalPages())
+                .itemsTotal(listField.getTotalPages())
+                .pageLast(listField.isLast())
+                .build();
+    }
+
+    /**
      * Find user by id
      * @param userid
      * @return @{@link User}
@@ -109,11 +141,21 @@ public class UserService {
     }
 
     /**
+     * Delete loical user, status inactive
+     * @param userid: type Long
+     */
+    @Transactional
+    public void deleteLogicalUserById(Long userid){
+        Optional<User> userOpt = this.userRepo.findById(userid);
+        this.userRepo.editStatusUser(false,userOpt.get().getId());
+    }
+
+    /**
      * Delete user and their relationships
      * @param userid: type Long
      */
     @Transactional
-    public void deleteUserById(Long userid){
+    public void deleteDefinitiveUserById(Long userid){
         Optional<User> userOpt = this.userRepo.findById(userid);
         this.userRepo.delete(userOpt.get());
         this.personrSVC.deletePersonById(userid);

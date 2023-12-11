@@ -1,5 +1,7 @@
-package com.dgitalfactory.usersecurity.DTO;
+package com.dgitalfactory.usersecurity.DTO.Field;
 
+import com.dgitalfactory.usersecurity.DTO.AddressDTO;
+import com.dgitalfactory.usersecurity.DTO.ContactDTO;
 import lombok.*;
 
 /**
@@ -11,6 +13,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class FieldDTO {
+    private Long id;
     private String name;
     private float dimensions;
     private String description;

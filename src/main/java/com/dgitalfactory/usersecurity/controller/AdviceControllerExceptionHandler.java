@@ -6,6 +6,7 @@ import com.dgitalfactory.usersecurity.exception.GlobalAppException;
 import com.dgitalfactory.usersecurity.exception.ResourceConstantsDefoultException;
 import com.dgitalfactory.usersecurity.exception.ResourceNotFoundException;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
+import org.hibernate.exception.SQLGrammarException;
 import org.modelmapper.MappingException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
@@ -33,10 +34,6 @@ import java.util.Map;
  */
 @RestControllerAdvice
 public class AdviceControllerExceptionHandler {
-
-//    @Autowired
-//    private UtilsCommons utils;
-
 
 
     /**
@@ -98,7 +95,7 @@ public class AdviceControllerExceptionHandler {
                 .message(UtilsCommons.getResponseConstants(4026))
                 .date(UtilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .path(request.getDescription(false).replace("uri=",""))
-                .details(ex.getCause().getLocalizedMessage())
+                .details(ex.getMessage())
                 .build();
         return new ResponseEntity<>(errorDTO, HttpStatus.NOT_FOUND);
     }
@@ -305,6 +302,20 @@ public class AdviceControllerExceptionHandler {
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(997)
                 .message(UtilsCommons.getResponseConstants(997))
+                .date(UtilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
+                .path(request.getDescription(false).replace("uri=",""))
+                .details(ex.getMessage())
+                .build();
+        return new ResponseEntity<>(errorDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+
+    @ExceptionHandler(SQLGrammarException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<ErrorDTO> getSqlExceptionHelper(SQLGrammarException ex, WebRequest request) {
+        ErrorDTO errorDTO = ErrorDTO.builder()
+                .code(994)
+                .message(UtilsCommons.getResponseConstants(994))
                 .date(UtilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .path(request.getDescription(false).replace("uri=",""))
                 .details(ex.getMessage())

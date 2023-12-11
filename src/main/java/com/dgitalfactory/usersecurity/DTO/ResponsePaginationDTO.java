@@ -15,9 +15,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FieldsResPaginationDTO {
+public class ResponsePaginationDTO<T> {
 
-    private List<FieldDTO> fieldDTOList;
+    private List<T> list;
     private int pageNo;
     private int pageSize;
     private int pageTotal;

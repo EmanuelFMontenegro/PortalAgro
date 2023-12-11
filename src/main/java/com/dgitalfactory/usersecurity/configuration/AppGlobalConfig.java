@@ -13,11 +13,6 @@ import org.springframework.core.env.Environment;
 @Configuration
 public class AppGlobalConfig {
 
-//    @Bean
-//    public UtilsCommons utilsCommons(){
-//        return new UtilsCommons();
-//    };
-
     @Bean
     public ResponseConstants responseConstants(){
         return new ResponseConstants();

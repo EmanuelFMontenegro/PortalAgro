@@ -1,9 +1,9 @@
 package com.dgitalfactory.usersecurity.service;
 
-import com.dgitalfactory.usersecurity.DTO.FieldDTO;
-import com.dgitalfactory.usersecurity.DTO.FieldResponseDTO;
-import com.dgitalfactory.usersecurity.DTO.FieldsResPaginationDTO;
-import com.dgitalfactory.usersecurity.entity.Address;
+import com.dgitalfactory.usersecurity.DTO.Field.FieldDTO;
+import com.dgitalfactory.usersecurity.DTO.Field.FieldResponseDTO;
+import com.dgitalfactory.usersecurity.DTO.Field.GeolocationDTO;
+import com.dgitalfactory.usersecurity.DTO.ResponsePaginationDTO;
 import com.dgitalfactory.usersecurity.entity.Field;
 import com.dgitalfactory.usersecurity.exception.GlobalAppException;
 import com.dgitalfactory.usersecurity.exception.ResourceNotFoundException;
@@ -20,11 +20,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
@@ -52,6 +50,16 @@ public class FieldService {
     public Field getFieldById(Long field_id){
         return this.fieldRepo.findById(field_id)
                 .orElseThrow(()-> new ResourceNotFoundException("Field","field_id", field_id));
+    }
+
+    /**
+     * Find a field with name
+     * @param name: type {@link String}
+     * @return @{@link Field}
+     */
+    public Field getFieldByName(String name){
+        return this.fieldRepo.findByName(name)
+                .orElseThrow(()-> new ResourceNotFoundException("Field","name", name));
     }
 
     /**
@@ -84,7 +92,15 @@ public class FieldService {
                 .orElseThrow(()-> new ResourceNotFoundException("All Fields","Person_id", person_id));
     }
 
-    public FieldsResPaginationDTO getAllFieldsUsers(int pageNo, int pageSize, String sortBy, String sortDir) {
+    /**
+     * Find all fiels with pagination
+     * @param pageNo
+     * @param pageSize
+     * @param sortBy
+     * @param sortDir
+     * @return @{@link ResponsePaginationDTO}
+     */
+    public ResponsePaginationDTO getAllFieldsUsers(int pageNo, int pageSize, String sortBy, String sortDir) {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
                 ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
@@ -93,8 +109,8 @@ public class FieldService {
         Page<Field> listField = this.fieldRepo.findAll(pageable);
         List<Field> list = listField.getContent();
         List<FieldDTO> listDTO = UtilsCommons.mapListEntityDTO(list, FieldDTO.class);
-        return FieldsResPaginationDTO.builder()
-                .fieldDTOList(listDTO)
+        return ResponsePaginationDTO.builder()
+                .list(Collections.singletonList(listDTO))
                 .pageNo(listField.getNumber())
                 .pageSize(listField.getSize())
                 .pageTotal(listField.getTotalPages())
@@ -150,6 +166,11 @@ public class FieldService {
     public FieldDTO updateField(Long person_id, Long field_id,FieldResponseDTO fieldResponseDTO){
 //        Capitalizer fields
         Field field = this.getFieldById(field_id);
+        if(!field.getName().equals(fieldResponseDTO.getName())){
+            if(this.fieldRepo.findByName(fieldResponseDTO.getName()).isPresent()){
+                throw new GlobalAppException(HttpStatus.NOT_FOUND,4029,"Nombre del campo: "+fieldResponseDTO.getName());
+            }
+        }
         //ADDRESSS
         field.getAddress().setAddress(fieldResponseDTO.getAddress().getAddress());
         field.getAddress().setLocation(fieldResponseDTO.getAddress().getLocation());
@@ -163,6 +184,27 @@ public class FieldService {
         log.info("FieldDTO: "+fieldResponseDTO.toString());
         log.info("Field update: "+field.toString());
         return UtilsCommons.convertEntityToDTO(newField,FieldDTO.class);
+    }
+
+    /**
+     * Find geolocation to field
+     * @param field_id: type {@link Long}
+     * @return @{@link GeolocationDTO}
+     */
+    public GeolocationDTO getGeolocationDTOByFieldId(Long field_id){
+        String geolocation  = this.fieldRepo.getGeolocationByFieldId(field_id);
+        return GeolocationDTO.builder().geolocation(geolocation).build();
+    }
+
+    /**
+     * Add geolocation to field
+     * @param field_id: type {@link Long}
+     * @return @{@link GeolocationDTO}
+     */
+    @Transactional
+    public void updateGeolocationDTOByFieldId(Long field_id, GeolocationDTO geolocationDTO){
+        this.getFieldById(field_id);
+        this.fieldRepo.updateGeolocationByFieldId(field_id, geolocationDTO.getGeolocation());
     }
 
 }

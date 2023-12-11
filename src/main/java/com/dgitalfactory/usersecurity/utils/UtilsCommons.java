@@ -1,14 +1,9 @@
 package com.dgitalfactory.usersecurity.utils;
 
-import com.dgitalfactory.usersecurity.DTO.FieldDTO;
-import com.dgitalfactory.usersecurity.DTO.FieldResponseDTO;
-import com.dgitalfactory.usersecurity.entity.Field;
 import jakarta.annotation.Nullable;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-import java.text.DecimalFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

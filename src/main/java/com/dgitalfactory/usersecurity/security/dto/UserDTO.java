@@ -19,7 +19,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Validated
 public class UserDTO {
-
+	private Long id;
 	@NotEmpty
 	@Email
 	private String username;
