@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators,AbstractControl } from '@angular/for
 import { Router } from '@angular/router';
 import { ApiService } from 'src/app/services/ApiService';
 import { ToastrService } from 'ngx-toastr';
+import { DashboardComponent } from 'src/app/pages/dashboard/dashboard.component';
 
 export function usernameValidator(control: FormControl): { [key: string]: any } | null {
   const validUsername = /^[a-zA-Z0-9_]+$/;

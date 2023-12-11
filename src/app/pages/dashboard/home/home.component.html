@@ -1,14 +1,12 @@
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav #sidenav mode="side" opened="true" class="sidenav">
     <div class="logo-container">
-      <img src="assets/img/logo_sidebar.png" alt="Logo" class="dashboard-logo">
+      <img src="assets/img/logo_sidebar.png" alt="Logo" class="logo">
     </div>
-    <mat-nav-list class="btn_nav">
-      <a mat-list-item routerLink="/dashboard/inicio" class="nav-item">Inicio</a>
-      <a mat-list-item routerLink="/dashboard/servicios" class="nav-item">Servicios</a>
-      <a mat-list-item routerLink="/dashboard/productos" class="nav-item">Productos</a>
-      <a mat-list-item routerLink="/dashboard/configuracion" class="nav-item">Configuracion</a>
-      <a mat-list-item routerLink="/dashboard/perfil" class="nav-item">Perfil</a>
+    <mat-nav-list>
+      <a mat-list-item routerLink="/inicio" class="nav-item">Inicio</a>
+      <a mat-list-item routerLink="/servicios" class="nav-item">Servicios</a>
+      <a mat-list-item routerLink="/campos" class="nav-item">Campos</a>
       <!-- Más elementos si es necesario -->
     </mat-nav-list>
   </mat-sidenav>
@@ -30,7 +28,7 @@
       </mat-menu>
     </mat-toolbar>
 
-    <!-- Aquí se renderizarán los componentes de las rutas -->
+    <!-- Aquí se insertará el contenido de las rutas como Inicio, Servicios, Campos, etc. -->
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

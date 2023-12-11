@@ -1,1 +1,67 @@
-<p>inicio works!</p>
+<div class="inicio-container">
+  <mat-card class="user-card">
+    <mat-card-header>
+      <div mat-card-avatar class="user-avatar"></div>
+      <mat-card-title>Bienvenido</mat-card-title>
+      <mat-card-subtitle>Nombre Apellido</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p>Ocupación: [Ocupación]</p>
+      <p>Provincia: [Provincia]</p>
+      <p>Localidad: [Localidad]</p>
+    </mat-card-content>
+  </mat-card>
+
+  <h1>Campos</h1>
+  <div class="campo-info">
+    <h2>Nombre del Campo</h2>
+    <mat-tab-group (selectedTabChange)="onTabChange($event)">
+      <mat-tab label="Servicios">
+        <div class="servicios-container">
+          <div>
+            <input type="checkbox" id="aplicacion" (change)="cambiarEstadoServicio('Aplicación', $event)">
+            <label for="aplicacion">Aplicación</label>
+          </div>
+          <div>
+            <input type="checkbox" id="servicioTopografico"
+              (change)="cambiarEstadoServicio('Servicio Topográfico', $event)">
+            <label for="servicioTopografico">Servicio Topográfico</label>
+          </div>
+          <!-- Añade más checkboxes para otros servicios si es necesario -->
+        </div>
+      </mat-tab>
+      <mat-tab label="Detalles">
+        <div class="geolocalizacion-container"
+          style="display: flex; justify-content: space-between; align-items: flex-start;">
+          <!-- Mapa a la izquierda -->
+          <div class="mapa-container" style="flex-grow: 1;">
+            <div style="display: flex; align-items: center; margin-bottom: 16px;">
+              <h3 style="margin-right: 8px;">Localización</h3>
+              <input matInput type="text" [formControl]="searchControl" placeholder="Buscar..."
+                style="box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+            </div>
+            <div id="mapa" style="height: 350px; border: 3px solid green;"></div>
+          </div>
+          <!-- Inputs a la derecha -->
+          <div class="inputs-container"
+            style="flex-grow: 1; max-width: 400px; padding-left: 20px; display: flex; flex-direction: column; justify-content: flex-start;">
+            <div style="display: flex; align-items: center; margin-bottom: 16px;">
+              <label for="direccion" style="margin-right: 8px;">Dirección:</label>
+              <input matInput type="text" id="direccion" style="flex: 1;">
+            </div>
+            <div style="display: flex; align-items: center; margin-bottom: 16px;">
+              <label for="cultivo" style="margin-right: 8px;">Cultivo:</label>
+              <input matInput type="text" id="cultivo" style="flex: 1;">
+            </div>
+            <div style="display: flex; align-items: center; margin-bottom: 16px;">
+              <label for="fecha-plantacion" style="margin-right: 8px;">Fecha de plantación:</label>
+              <input matInput type="text" id="fecha-plantacion" [matDatepicker]="plantacionPicker">
+              <mat-datepicker-toggle matSuffix [for]="plantacionPicker"></mat-datepicker-toggle>
+              <mat-datepicker #plantacionPicker></mat-datepicker>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

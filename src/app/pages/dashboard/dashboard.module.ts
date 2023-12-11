@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { DashboardRoutingModule } from './dashboard-routing.module';
@@ -25,6 +24,16 @@ import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
 import { ToastrModule } from 'ngx-toastr';
+import { ProductosComponent } from './productos/productos.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
+import { HomeComponent } from './home/home.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+
+
+
 
 
 @NgModule({
@@ -35,12 +44,13 @@ import { ToastrModule } from 'ngx-toastr';
     CamposComponent,
     ConfiguracionComponent,
     PerfilComponent,
-    ReportesComponent
+    ReportesComponent,
+    ProductosComponent,
+    HomeComponent,
   ],
   imports: [
     CommonModule,
     DashboardRoutingModule,
-    // BrowserAnimationsModule,
     ReactiveFormsModule,
     HttpClientModule,
     MatCardModule,
@@ -54,8 +64,14 @@ import { ToastrModule } from 'ngx-toastr';
     MatListModule,
     MatToolbarModule,
     MatButtonModule,
+    MatTabsModule,
     MatIconModule,
     MatMenuModule,
+    MatDatepickerModule,
+    MatSelectModule,
+    MatNativeDateModule,
+    MatSlideToggleModule,
+    ReactiveFormsModule,
     RouterModule
   ]
 })

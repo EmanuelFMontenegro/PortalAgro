@@ -1,0 +1,106 @@
+$primary-color: #3CA749
+$secondary-color: #8FCA8F
+$hover-color: #32963f
+$error-color: #d9534f
+$light-grey: #f4f4f4
+$dark-grey: #454545
+$medium-grey: #666
+$border-color: #ddd
+$font-family: 'Montserrat', sans-serif
+
+.body
+  font-family: $font-family
+
+.inicio-container
+  padding: 20px
+
+  .campo-info
+    margin-top: 20px
+
+    .servicios-container
+      display: flex
+      flex-direction: column
+      padding-top: 5%
+
+    .solicitud-servicio-form
+      display: flex
+      flex-direction: column
+
+      mat-form-field
+      margin: 10px 0
+
+.mat-tab-group
+  background-color: #f0f0f0
+  border-radius: 4px
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
+  .mat-tab-label
+    background-color: #e0e0e0
+    border: 1px solid #c0c0c0
+    border-bottom: none
+    margin-right: 4px
+    border-radius: 4px 4px 0 0
+
+  .mat-tab-label-active
+    background-color: white
+    font-weight: bold
+    z-index: 1
+
+  .servicio-seleccionado
+    background-color: #32963f
+    color: white
+.servicios-container
+  font-family: 'Montserrat', sans-serif
+
+.servicios-container
+  div
+    display: flex
+    align-items: center
+    margin-bottom: 10px
+
+    input[type="checkbox"]
+      width: 17px
+      height: 25px
+      cursor: pointer
+      margin-right: 5px
+
+    label
+      font-size: 16px
+      cursor: pointer
+.solicitud-servicio-form
+  display: flex
+  justify-content: flex-end
+  font-family: 'Montserrat', sans-serif
+
+  .boton-servicio
+    mat-raised-button
+
+    margin-left: 88%
+
+  .geolocalizacion-container
+    display: flex
+    justify-content: space-between
+
+.mapa-container
+  width: 70%
+  height: 400px
+
+#mapa
+  height: 400px
+  width: 100%
+
+.inputs-container
+  width: 25%
+  display: flex
+  flex-direction: column
+  justify-content: space-around
+
+.input-group
+  margin-bottom: 10px
+
+  & label
+    display: block
+    margin-bottom: 5px
+
+  & input
+    width: 100%
+    padding: 5px
