@@ -4,103 +4,159 @@ $hover-color: #32963f
 $error-color: #d9534f
 $light-grey: #f4f4f4
 $dark-grey: #454545
-$medium-grey: #666
+$medium-grey: #808080
 $border-color: #ddd
 $font-family: 'Montserrat', sans-serif
 
-.body
+body
   font-family: $font-family
 
-.inicio-container
+.titulo-bienvenida h2
+  color: $dark-grey
+  font-size: 1.5em
+  font-weight: bold
+  font-family: 'Montserrat', sans-serif
   padding: 20px
 
-  .campo-info
-    margin-top: 20px
-
-    .servicios-container
-      display: flex
-      flex-direction: column
-      padding-top: 5%
-
-    .solicitud-servicio-form
-      display: flex
-      flex-direction: column
-
-      mat-form-field
-      margin: 10px 0
-
-.mat-tab-group
-  background-color: #f0f0f0
-  border-radius: 4px
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
-  .mat-tab-label
-    background-color: #e0e0e0
-    border: 1px solid #c0c0c0
-    border-bottom: none
-    margin-right: 4px
-    border-radius: 4px 4px 0 0
-
-  .mat-tab-label-active
-    background-color: white
-    font-weight: bold
-    z-index: 1
-
-  .servicio-seleccionado
-    background-color: #32963f
-    color: white
-.servicios-container
-  font-family: 'Montserrat', sans-serif
-
-.servicios-container
-  div
-    display: flex
-    align-items: center
-    margin-bottom: 10px
-
-    input[type="checkbox"]
-      width: 17px
-      height: 25px
-      cursor: pointer
-      margin-right: 5px
-
-    label
-      font-size: 16px
-      cursor: pointer
-.solicitud-servicio-form
-  display: flex
-  justify-content: flex-end
-  font-family: 'Montserrat', sans-serif
-
-  .boton-servicio
-    mat-raised-button
-
-    margin-left: 88%
-
-  .geolocalizacion-container
-    display: flex
-    justify-content: space-between
-
-.mapa-container
-  width: 70%
-  height: 400px
-
-#mapa
-  height: 400px
-  width: 100%
-
-.inputs-container
-  width: 25%
+.container
   display: flex
   flex-direction: column
-  justify-content: space-around
+  justify-content: center
+  // align-items: center
+  height: 100vh
 
-.input-group
-  margin-bottom: 10px
+  .card
+    background-color: $light-grey
+    padding: 20px
+    border-radius: 10px
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3)
+    margin: 20px
+    width: 90%
+    margin-top: -10px
 
-  & label
-    display: block
-    margin-bottom: 5px
+    &.user-card
+      display: flex
+      justify-content: center
+      flex-direction: column
+      align-items: flex-start
+      margin-top: 8px
+      .avatar
+        align-items: center
+        flex-direction: column
+        margin-bottom: 20px
+        border-radius: 50%
+        overflow: hidden
+        border: 3px solid $primary-color
+        width: 100px
+        height: 100px
 
-  & input
-    width: 100%
-    padding: 5px
+        img
+          width: 100%
+          height: 100%
+          border-radius: 50%
+          margin-bottom: 10px
+
+        p
+          font-size: 1.2em
+          color: $dark-grey
+
+    .titulo-registrar-campo
+      color: $primary-color
+      font-family: 'Montserrat', sans-serif
+      font-size: 1.5em
+      font-weight: bold
+      margin-bottom: 20px
+
+    .solicitud-servicio-form
+      .campos-formulario
+        display: flex
+        justify-content: space-between
+
+        .grupo-campos
+          width: 50%
+
+          .field-container
+            margin-bottom: 10px
+
+            .field-label
+              display: block
+              margin-bottom: 5px
+              font-size: 0.9em
+              color: $medium-grey
+              font-weight: bold
+
+            .field-input
+              width: 90%
+              border: 1px solid $border-color
+              border-radius: 4px
+              padding: 8px
+              background-color: white
+              font-size: 0.9em
+              box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2)
+              &:focus
+                outline: none
+                border-color: $primary-color
+                box-shadow: 0 0 5px $primary-color
+
+        .field-container-observaciones
+          width: 50%
+          display: flex
+          flex-direction: column
+
+          .field-label
+            margin-bottom: 6px
+            font-size: 0.9em
+            color: $medium-grey
+            font-weight: bold
+
+          .field-input-obs
+            height: 30%
+            border: 1px solid $border-color
+            border-radius: 4px
+            padding: 8px
+            background-color: white
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3)
+            font-size: 0.9em
+            color: $medium-grey
+            font-family: $font-family
+            &:focus
+              outline: none
+              border-color: $primary-color
+              box-shadow: 0 0 5px $primary-color
+
+    .botones-servicio
+      display: flex
+      justify-content: flex-end
+      margin-top: 10px
+
+  .botones-servicio
+    display: flex
+    justify-content: flex-end
+    margin-top: 10px
+
+  button
+    padding: 8px 18px
+    border: 1px solid transparent
+    border-radius: 5px
+    cursor: pointer
+    transition: background-color 0.3s, border-color 0.3s
+    font-size: 0.85em
+    font-family: 'Montserrat', sans-serif
+    font-weight: bold
+    margin-left: 10px
+
+    &.cancel-button
+      background-color: white
+      color: $primary-color
+      border-color: $primary-color
+
+      &:hover
+        background-color: #f8f8f8
+        border-color: darken($primary-color, 10%)
+
+    &.register-button
+      background-color: $secondary-color
+      color: white
+
+      &:hover
+        background-color: $primary-color

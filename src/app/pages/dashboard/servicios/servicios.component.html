@@ -1,10 +1,13 @@
+<div class="titulo-servicios">
+  <h2>Servicios</h2>
+</div>
 <form class="solicitud-servicio-form">
   <div class="card">
     <h2 class="card-title">Campos</h2>
 
     <div class="field-container">
       <mat-label class="field-label">Tipo de Servicio</mat-label>
-      <mat-select class="field-input" placeholder="Selecciona un servicio">
+      <mat-select class="field-input" placeholder="Servicios">
         <mat-option value="servicio1">Aplicación</mat-option>
         <mat-option value="servicio2">Servicio Topográfico</mat-option>
         <!-- Añade más opciones de servicio aquí -->
@@ -13,20 +16,18 @@
 
     <div class="field-container-fecha">
       <label class="field-label-fecha">Fecha</label>
-      <input class="field-input-fecha" [matDatepicker]="picker" placeholder="Selecciona una fecha">
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <input class="field-input-fecha" placeholder="Fecha de solicitud" [matDatepicker]="picker">
+      <mat-datepicker-toggle style="color:#3CA749" matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </div>
 
-
     <div class="field-container">
       <mat-label class="field-label">Observaciones</mat-label>
-      <textarea class="field-input"></textarea>
+      <textarea class="field-input-obs"></textarea>
     </div>
 
     <div class="field-container boton-servicio">
-      <button mat-raised-button #solicitarBtn style="font-size:14px;">Solicitar
-        Servicio</button>
+      <button mat-raised-button #solicitarBtn style="font-size:14px;">Solicitar Servicio</button>
     </div>
   </div>
 </form>

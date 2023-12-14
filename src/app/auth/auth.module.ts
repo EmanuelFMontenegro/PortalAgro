@@ -15,6 +15,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RecuperContrasenaComponent } from './recuper-contrasena/recuper-contrasena.component';
 import { MatIconModule } from '@angular/material/icon';
 import { NuevaContrasenaComponent } from './nueva-contrasena/nueva-contrasena.component';
+import { BienvenidaComponent } from './bienvenida/bienvenida.component';
 
 
 
@@ -25,12 +26,12 @@ import { NuevaContrasenaComponent } from './nueva-contrasena/nueva-contrasena.co
     RegistrateComponent,
     RecuperContrasenaComponent,
     NuevaContrasenaComponent,
+    BienvenidaComponent,
   ],
   imports: [
     AuthRoutingModule,
     RouterModule,
     CommonModule,
-    // BrowserAnimationsModule,
     MatCardModule,
     ReactiveFormsModule,
     MatFormFieldModule,

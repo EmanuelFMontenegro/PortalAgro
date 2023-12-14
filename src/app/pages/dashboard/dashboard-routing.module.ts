@@ -7,6 +7,7 @@ import { CamposComponent } from './campos/campos.component';
 import { ConfiguracionComponent } from './configuracion/configuracion.component';
 import { PerfilComponent } from './perfil/perfil.component';
 import { DashboardComponent } from './dashboard.component';
+import { BienvenidaComponent } from 'src/app/auth/bienvenida/bienvenida.component';
 
 
 
@@ -15,6 +16,7 @@ const routes: Routes = [
     path: 'dashboard',
     component: DashboardComponent,
     children: [
+      { path: 'bienvenida', component:BienvenidaComponent },
       { path: 'inicio', component: InicioComponent },
       { path: 'servicios', component: ServiciosComponent },
       { path: 'productos', component: ProductosComponent },

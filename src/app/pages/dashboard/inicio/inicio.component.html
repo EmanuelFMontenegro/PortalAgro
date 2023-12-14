@@ -1,67 +1,51 @@
-<div class="inicio-container">
-  <mat-card class="user-card">
-    <mat-card-header>
-      <div mat-card-avatar class="user-avatar"></div>
-      <mat-card-title>Bienvenido</mat-card-title>
-      <mat-card-subtitle>Nombre Apellido</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-      <p>Ocupación: [Ocupación]</p>
-      <p>Provincia: [Provincia]</p>
-      <p>Localidad: [Localidad]</p>
-    </mat-card-content>
-  </mat-card>
+<div class="container">
+  <div class="titulo-bienvenida">
+    <h2>¡Bienvenido!</h2>
+  </div>
 
-  <h1>Campos</h1>
-  <div class="campo-info">
-    <h2>Nombre del Campo</h2>
-    <mat-tab-group (selectedTabChange)="onTabChange($event)">
-      <mat-tab label="Servicios">
-        <div class="servicios-container">
-          <div>
-            <input type="checkbox" id="aplicacion" (change)="cambiarEstadoServicio('Aplicación', $event)">
-            <label for="aplicacion">Aplicación</label>
+  <div class="card user-card">
+    <div class="avatar">
+      <img src="/assets/img/foto.jpg" alt="Avatar">
+      <p>{{ userEmail }}</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="titulo-registrar-campo">Registrar Campo</h2>
+    <form class="solicitud-servicio-form">
+      <div class="campos-formulario">
+        <div class="grupo-campos">
+          <div class="field-container">
+            <label class="field-label">Dirección</label>
+            <input matInput class="field-input" placeholder="Dirección">
           </div>
-          <div>
-            <input type="checkbox" id="servicioTopografico"
-              (change)="cambiarEstadoServicio('Servicio Topográfico', $event)">
-            <label for="servicioTopografico">Servicio Topográfico</label>
+
+          <div class="field-container">
+            <label class="field-label">Localidad</label>
+            <input matInput class="field-input" placeholder="Localidad">
           </div>
-          <!-- Añade más checkboxes para otros servicios si es necesario -->
-        </div>
-      </mat-tab>
-      <mat-tab label="Detalles">
-        <div class="geolocalizacion-container"
-          style="display: flex; justify-content: space-between; align-items: flex-start;">
-          <!-- Mapa a la izquierda -->
-          <div class="mapa-container" style="flex-grow: 1;">
-            <div style="display: flex; align-items: center; margin-bottom: 16px;">
-              <h3 style="margin-right: 8px;">Localización</h3>
-              <input matInput type="text" [formControl]="searchControl" placeholder="Buscar..."
-                style="box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
-            </div>
-            <div id="mapa" style="height: 350px; border: 3px solid green;"></div>
+
+          <div class="field-container">
+            <label class="field-label">Nombre</label>
+            <input matInput class="field-input" placeholder="Nombre">
           </div>
-          <!-- Inputs a la derecha -->
-          <div class="inputs-container"
-            style="flex-grow: 1; max-width: 400px; padding-left: 20px; display: flex; flex-direction: column; justify-content: flex-start;">
-            <div style="display: flex; align-items: center; margin-bottom: 16px;">
-              <label for="direccion" style="margin-right: 8px;">Dirección:</label>
-              <input matInput type="text" id="direccion" style="flex: 1;">
-            </div>
-            <div style="display: flex; align-items: center; margin-bottom: 16px;">
-              <label for="cultivo" style="margin-right: 8px;">Cultivo:</label>
-              <input matInput type="text" id="cultivo" style="flex: 1;">
-            </div>
-            <div style="display: flex; align-items: center; margin-bottom: 16px;">
-              <label for="fecha-plantacion" style="margin-right: 8px;">Fecha de plantación:</label>
-              <input matInput type="text" id="fecha-plantacion" [matDatepicker]="plantacionPicker">
-              <mat-datepicker-toggle matSuffix [for]="plantacionPicker"></mat-datepicker-toggle>
-              <mat-datepicker #plantacionPicker></mat-datepicker>
-            </div>
+
+          <div class="field-container">
+            <label class="field-label">Dimensiones (Hectáreas)</label>
+            <input matInput class="field-input" placeholder="Dimensiones (Hectáreas)">
           </div>
         </div>
-      </mat-tab>
-    </mat-tab-group>
+
+        <div class="field-container-observaciones">
+          <label class="field-label">Observaciones</label>
+          <textarea matInput class="field-input-obs"></textarea>
+        </div>
+      </div>
+
+      <div class="botones-servicio">
+        <button mat-raised-button class="cancel-button">Cancelar</button>
+        <button mat-raised-button class="register-button">Registrar Campo</button>
+      </div>
+    </form>
   </div>
 </div>

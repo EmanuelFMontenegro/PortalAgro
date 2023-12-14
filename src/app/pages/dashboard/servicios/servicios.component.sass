@@ -4,12 +4,20 @@ $hover-color: #32963f
 $error-color: #d9534f
 $light-grey: #f4f4f4
 $dark-grey: #454545
-$medium-grey: #666
+$medium-grey: #808080
 $border-color: #ddd
 $font-family: 'Montserrat', sans-serif
 
 .body
   font-family: $font-family
+
+.titulo-servicios h2
+  color: $dark-grey
+  font-size: 1.5em
+  font-weight: bold
+  font-family: 'Montserrat', sans-serif
+  padding: 20px
+  margin-left: 10px
 
 .solicitud-servicio-form
   display: flex
@@ -31,7 +39,7 @@ $font-family: 'Montserrat', sans-serif
   box-sizing: border-box
 
 .card-title
-  color: #3CA749
+  color: $primary-color
   margin-bottom: 20px
 
 .field-container
@@ -52,16 +60,17 @@ $font-family: 'Montserrat', sans-serif
   display: flex
   align-items: center
   margin-right: 20px
-  font-size: 0.84em
+  font-size: 0.9em
+  font-weight: bold
+  color: $medium-grey
 
 .field-label-fecha
   display: flex
   align-items: center
   margin-right: 20px
-  font-size: 0.84em
-
-.mat-datepicker-toggle
-  margin-left: 5%
+  font-size: 0.9em
+  font-weight: bold
+  color: $medium-grey
 
 .field-input
   width: 40%
@@ -71,6 +80,10 @@ $font-family: 'Montserrat', sans-serif
   padding: 8px
   background-color: white
   font-size: 0.9em
+  &:focus
+    outline: none
+    border-color: $primary-color
+    box-shadow: 0 0 5px $primary-color
 
 .field-input-fecha
   width: 40%
@@ -79,9 +92,29 @@ $font-family: 'Montserrat', sans-serif
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3)
   padding: 8px
   background-color: white
-  // font-size: 0.9em
-  margin-left: 67px
+  font-size: 14px
+  margin-left: 72px
+  color: $medium-grey
+  font-family: $font-family
+  &:focus
+    outline: none
+    border-color: $primary-color
+    box-shadow: 0 0 5px $primary-color
 
+.field-input-obs
+  width: 40%
+  border: 1px solid #ddd
+  border-radius: 4px
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3)
+  padding: 8px
+  background-color: white
+  font-size: 14px
+  margin-left: 7px
+  height: 60px
+  &:focus
+    outline: none
+    border-color: $primary-color
+    box-shadow: 0 0 5px $primary-color
 .boton-servicio
   display: flex
   padding-left: 85.5%

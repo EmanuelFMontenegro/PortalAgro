@@ -74,18 +74,34 @@ export class LoginComponent {
           }
         },
         error: (err) => {
-          // Verificación adicional para errores de red o servidor inactivo
           if (err.status === 0) {
             this.toastr.error('No se puede conectar al servidor. Por favor verifica tu conexión a internet.', 'Error de Conexión');
-          } else if (err.error.message === 'Username does not exist.') {
+          } else if (err.status === 404) {
             this.toastr.info('El usuario no está registrado. Por favor regístrese', 'Atención');
             this.login.reset();
-          } else if (err.error.message === 'El usuario debe validar su email') {
-            this.toastr.warning('Por favor revisa tu casilla de E-mail.', 'Advertencia');
+          } else if (err.status === 401 && err.error.code === 4011) {
+            const errorMessage = err.error.message || 'Error de autenticación';
+            const details = err.error.details || 'Detalles del error no disponibles';
+
+            if (details.includes('Email not found')) {
+              this.toastr.info('El usuario no está registrado. Por favor regístrese', 'Atención');
+              this.login.reset();
+            } else {
+              // Manejar otros posibles detalles específicos aquí
+              this.toastr.error(errorMessage, 'Error');
+            }
+          } else if (err.status === 401 && err.error.code === 4001) {
+            this.toastr.warning('Por favor revisa tu casilla de E-mail para activar tu cuenta.', 'Advertencia', { closeButton: true });
           } else {
-            this.toastr.error('La contraseña ingresada es incorrecta.', 'Error');
+            const errorMessage = err.error.message || 'Error desconocido';
+            this.toastr.error(errorMessage, 'Error');
           }
         }
+
+
+
+
+
       });
     } else {
       console.log('Formulario de inicio de sesión no válido:', this.login.value);
