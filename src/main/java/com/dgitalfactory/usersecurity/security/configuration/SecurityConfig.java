@@ -72,6 +72,7 @@ public class SecurityConfig {
                         "/swagger-resources/**",
                         "/webjars/**"
                 ).permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/img/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/email/activate-account/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/email/recovery").permitAll()

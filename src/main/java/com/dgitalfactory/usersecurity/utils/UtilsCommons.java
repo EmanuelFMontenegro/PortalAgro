@@ -3,11 +3,13 @@ package com.dgitalfactory.usersecurity.utils;
 import jakarta.annotation.Nullable;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -16,10 +18,18 @@ import java.util.stream.Collectors;
  * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
  * @created 30/11/2023 - 08:54
  */
+@Component
 public class UtilsCommons {
 
+
     @Autowired
-    private static ModelMapper modelMapper = new ModelMapper();
+    private ModelMapper modelMapper;
+
+    @Autowired
+    private ResponseStatusMessages msgSource;
+//
+//    @Autowired
+//    private static ModelMapper modelMapper = new ModelMapper();
 
     private static final String DNI_REPEATED_REGEX = "(\\d)\\1{" + AppConstants.DNI_MIN + "," + AppConstants.DNI_MAX + "}";
     private static final String CUITCUIL_REPEATED_REGEX = "(\\d)\\1{" + AppConstants.CUIT_CUIL_MIN + "," + AppConstants.CUIT_CUIL_MAX + "}";
@@ -30,9 +40,25 @@ public class UtilsCommons {
      * @param code: type int (code message)
      * @return String
      */
-    public static String getResponseConstants(int code){
-        return ResponseConstants.responseCodeMap.getOrDefault(code
-                ,ResponseConstants.responseCodeMap.get(999));
+    public String getErrorMessage(int code){
+        return msgSource.getMessage("response.code."+String.valueOf(code));
+    }
+    public String getErrorMessage(int code, Locale locale){
+        return msgSource.getMessage("response.code."+String.valueOf(code), locale);
+    }
+
+
+    /**
+     * Searches for the code and returns the message if it is not found it returns a message by default
+     * @param message: type @{@link String} (message)
+     * @return String
+     */
+    public String getMessage(String message){
+        return msgSource.getMessage(message);
+    }
+
+    public String getMessage(String message, Locale locale){
+        return msgSource.getMessage(message, locale);
     }
 
 
@@ -44,14 +70,14 @@ public class UtilsCommons {
      * @param <T> entityclass
      * @param <U> entityDTOclass
      */
-    public static <T, U> U convertEntityToDTO(T entity, Class<U> dtoClass) {
+    public <T, U> U convertEntityToDTO(T entity, Class<U> dtoClass) {
         return modelMapper.map(entity, dtoClass);
     }
 
-    public static <T, U> T convertDTOToEntity(U dto, Class<T> entityClass) {
+    public <T, U> T convertDTOToEntity(U dto, Class<T> entityClass) {
         return modelMapper.map(dto, entityClass);
     }
-    public static <S, T> List<T> mapListEntityDTO(List<S> source, Class<T> targetClass) {
+    public <S, T> List<T> mapListEntityDTO(List<S> source, Class<T> targetClass) {
         return source
                 .stream()
                 .map(element -> modelMapper.map(element, targetClass))
@@ -124,7 +150,7 @@ public class UtilsCommons {
     }
 
     /**
-     * Diferencia entre dos @{@link java.time.LocalDateTime} en minutos
+     * Diferencia entre dos @{@link LocalDateTime} en minutos
      * @param start
      * @param end
      * @return lonf

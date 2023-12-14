@@ -7,7 +7,6 @@ import com.dgitalfactory.usersecurity.security.dto.UserResponseDTO;
 import com.dgitalfactory.usersecurity.security.service.AuthService;
 import com.dgitalfactory.usersecurity.security.service.JwtTokenService;
 import com.dgitalfactory.usersecurity.security.service.UserService;
-import com.dgitalfactory.usersecurity.utils.ResponseConstants;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -36,10 +35,9 @@ public class AuthConntroller {
 	private JwtTokenService jwtSVC;
 	@Autowired
 	private AuthenticationManager authenticationManager;
-	
-//	@Autowired
-//	private JwtTokenProvider jwtTokenProvider;
 
+	@Autowired
+	private UtilsCommons utilsCommons;
 
 	/**
 	 *
@@ -66,7 +64,11 @@ public class AuthConntroller {
 	public ResponseEntity<MessageDTO> registerUser(@Valid @RequestBody UserResponseDTO registerDTO) {
 		this.authSVC.register(registerDTO);
 		return ResponseEntity.ok(
-				MessageDTO.builder().code(2001).message(UtilsCommons.getResponseConstants(2001)).build()
+				MessageDTO.builder()
+						.code(2001)
+						.message(utilsCommons.getErrorMessage(2001))
+						.details(utilsCommons.getMessage("field.name.user"))
+						.build()
 		);
 	}
 

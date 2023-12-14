@@ -30,8 +30,8 @@ public class ResourceNotFoundException extends RuntimeException {
 	 * @param fieldName: campo que se utilizó para la búsqueda
 	 * @param fieldValue: elemento que se utilizó para la búsqueda
 	 */
-	public ResourceNotFoundException(String nameResource, String fieldName, Object fieldValue) {
-		super(nameResource+" no encontrada con : "+fieldName+" : \'"+fieldName+"\'");
+	public ResourceNotFoundException(String formatString,String nameResource, String fieldName, Object fieldValue) {
+		super(String.format(formatString, nameResource,fieldName, fieldValue));
 		this.nameResource = nameResource;
 		this.fieldName = fieldName;
 		this.fieldValue = fieldValue;

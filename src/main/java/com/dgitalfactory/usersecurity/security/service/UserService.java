@@ -9,6 +9,7 @@ import com.dgitalfactory.usersecurity.security.entity.User;
 import com.dgitalfactory.usersecurity.exception.GlobalAppException;
 import com.dgitalfactory.usersecurity.security.repository.RoleRepository;
 import com.dgitalfactory.usersecurity.security.repository.UserRepository;
+import com.dgitalfactory.usersecurity.service.CustomeErrorService;
 import com.dgitalfactory.usersecurity.service.PersonService;
 import com.dgitalfactory.usersecurity.utils.RoleName;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
@@ -47,6 +48,12 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UtilsCommons utilsCommons;
+
+    @Autowired
+    private CustomeErrorService errorSVC;
 
     /**
      * Verifies if the user exists
@@ -87,7 +94,7 @@ public class UserService {
      */
     public UserDTO findUserDTO(Long userid){
         User newUs = this.findUser(userid);
-        return UtilsCommons.convertDTOToEntity(newUs,UserDTO.class);
+        return utilsCommons.convertDTOToEntity(newUs,UserDTO.class);
     }
 
     /**
@@ -96,7 +103,7 @@ public class UserService {
      */
     public List<UserDTO> findAllUserDTO(){
         List<UserDTO> listUsers = this.userRepo.findAll().stream().map(
-            user -> UtilsCommons.convertEntityToDTO(user,UserDTO.class)
+            user -> utilsCommons.convertEntityToDTO(user,UserDTO.class)
         ).toList();
         return listUsers;
     }
@@ -117,7 +124,7 @@ public class UserService {
 
         Page<User> listField = this.userRepo.findAll(pageable);
         List<User> list = listField.getContent();
-        List<UserDTO> listDTO = UtilsCommons.mapListEntityDTO(list, UserDTO.class);
+        List<UserDTO> listDTO = utilsCommons.mapListEntityDTO(list, UserDTO.class);
         return ResponsePaginationDTO.builder()
                 .list(Collections.singletonList(listDTO))
                 .pageNo(listField.getNumber())
@@ -135,7 +142,7 @@ public class UserService {
      */
     public User findUser(Long userid){
         User newUs = this.userRepo.findById(userid)
-                .orElseThrow(()-> new ResourceNotFoundException("User", "id",userid));
+                .orElseThrow(()-> errorSVC.getResourceNotFoundException("User", "id",userid));
 
         return newUs;
     }
@@ -146,8 +153,8 @@ public class UserService {
      */
     @Transactional
     public void deleteLogicalUserById(Long userid){
-        Optional<User> userOpt = this.userRepo.findById(userid);
-        this.userRepo.editStatusUser(false,userOpt.get().getId());
+        User user = this.findUser(userid);
+        this.userRepo.editStatusUser(false,user.getId());
     }
 
     /**
@@ -156,8 +163,8 @@ public class UserService {
      */
     @Transactional
     public void deleteDefinitiveUserById(Long userid){
-        Optional<User> userOpt = this.userRepo.findById(userid);
-        this.userRepo.delete(userOpt.get());
+        User user = this.findUser(userid);
+        this.userRepo.delete(user);
         this.personrSVC.deletePersonById(userid);
     }
 
@@ -169,7 +176,7 @@ public class UserService {
      */
 //    @Transactional(propagation = Propagation.SUPPORTS)
     public User saveUser(UserResponseDTO userDTO, String token) {
-            Role roles = this.roleRepo.findByName(RoleName.ROLE_VISIT).get();
+            Role roles = this.roleRepo.findByName(RoleName.ROLE_OPERATOR).get();
             User newUser = User.builder()
                     .username(userDTO.getUsername().toLowerCase())
                     .password(this.passwordEncoder.encode(userDTO.getPassword()))

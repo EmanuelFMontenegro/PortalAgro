@@ -25,6 +25,9 @@ public class UserConntroller {
     @Autowired
     private UserService userSVC;
 
+    @Autowired
+    private UtilsCommons utilsCommons;
+
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDTO> getUserById(@PathVariable("id") Long id) {
@@ -49,8 +52,21 @@ public class UserConntroller {
         return ResponseEntity.ok(
                 MessageDTO.builder()
                         .code(2003)
-                        .message(UtilsCommons.getResponseConstants(2003))
-                        .details("User")
+                        .message(utilsCommons.getErrorMessage(2003))
+                        .details(utilsCommons.getMessage("field.name.user"))
+                        .build()
+        );
+    }
+
+    @DeleteMapping("/{id}/admin")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<MessageDTO> deleteUserByIdADMIN(@PathVariable("id") Long id) {
+        this.userSVC.deleteDefinitiveUserById(id);
+        return ResponseEntity.ok(
+                MessageDTO.builder()
+                        .code(2003)
+                        .message(utilsCommons.getErrorMessage(2003))
+                        .details(utilsCommons.getMessage("field.name.user"))
                         .build()
         );
     }

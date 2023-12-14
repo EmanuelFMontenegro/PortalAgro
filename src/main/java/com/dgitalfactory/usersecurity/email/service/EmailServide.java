@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+import org.thymeleaf.exceptions.TemplateProcessingException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,26 +44,28 @@ public class EmailServide {
     @Autowired
     private UserService userSVC;
 
-//    @Value("${server.url}")
-//    private String URL_SERVER;
-//
-//    @Value("${server.port}")
-//    private String PORT_SERVER;
+    @Autowired
+    private UtilsCommons utilsCommons;
 
     @Value("${front.url.recoverpass}")
     private String FRONT_RECOVER_PASS;
 
     @Value("${spring.mail.username}")
     private String EMAIL_FROM;
-    private String EMAIL_SUBJECT_RECOVERI_PASS="Cambio de Contarseña";
-    private String EMAIL_SUBJECT_ACTIVATE_ACCOUNT="Activar Cuenta";
-
 
     @Value("${email.token.pass.expiration}")
     private int EMAIL_RECOVERY_EXPIRATION_IN_MS;
 
     @Value("${email.url.active.account}")
     private String URL_ACTIVATE_ACCOUNT;
+
+    @Value("${agro.email.support}")
+    private String EMAIL_AGRO_SUPPORT;
+    @Value("${commons.publc.img.portal}")
+    private String URL_IMG_PORTAL;
+
+    @Value("${commons.publc.img.silicon}")
+    private String URL_IMG_SILICON;
 
     @Autowired
     private JwtTokenService jwtTokenService;
@@ -90,7 +93,7 @@ public class EmailServide {
         EmailValuesDTO emailValuesDTO = new EmailValuesDTO();
         User us = this.userSVC.findUser(username);
         emailValuesDTO.setMailFrom(EMAIL_FROM);
-        emailValuesDTO.setSubject(EMAIL_SUBJECT_RECOVERI_PASS);
+        emailValuesDTO.setSubject(utilsCommons.getMessage("email.send.recovery.pass.subject"));
         //Cambiar por nombre de la persona
         emailValuesDTO.setUserName(us.getUsername());
         emailValuesDTO.setMailTo(us.getUsername());
@@ -153,7 +156,7 @@ public class EmailServide {
     public void sendEmailTemplateActivateAccount(User us, String emailTemplate){
         EmailValuesDTO emailValuesDTO = new EmailValuesDTO();
         emailValuesDTO.setMailFrom(EMAIL_FROM);
-        emailValuesDTO.setSubject(EMAIL_SUBJECT_ACTIVATE_ACCOUNT);
+        emailValuesDTO.setSubject(utilsCommons.getMessage("email.send.activate.account.subject"));
         //Cambiar por nombre de la persona
         emailValuesDTO.setUserName(us.getUsername());
         emailValuesDTO.setMailTo(us.getUsername());
@@ -169,6 +172,27 @@ public class EmailServide {
             emailValuesDTO.setToken(us.getTokenPassword());
 
             model.put("url", URL_ACTIVATE_ACCOUNT + emailValuesDTO.getToken());
+            model.put("emailGreeting", utilsCommons.getMessage("email.send.activate.account.greeting"));
+            model.put("emailGreetingMsn", utilsCommons.getMessage("email.send.activate.account.greeting.msn"));
+            model.put("emailGreetingInstruction", utilsCommons.getMessage("email.send.activate.account.greeting.instruction"));
+
+            model.put("emailGreetingBtnActivate", utilsCommons.getMessage("email.send.activate.account.btn.activate"));
+
+            model.put("emailGreetingImportant", utilsCommons.getMessage("email.send.activate.account.important"));
+            model.put("emailGreetingNoRequest", utilsCommons.getMessage("email.send.activate.account.noRequest"));
+            model.put("emailGreetingContact", utilsCommons.getMessage("email.send.activate.account.contact"));
+            model.put("emailSupport", EMAIL_AGRO_SUPPORT);
+
+            model.put("emailGreetingThanks", utilsCommons.getMessage("email.send.activate.account.thanks"));
+            model.put("emailGreetingGreetingEnd", utilsCommons.getMessage("email.send.activate.account.greeting.end"));
+            model.put("emailGreetingSignature", utilsCommons.getMessage("email.send.activate.account.signature"));
+
+            model.put("rutaImagenPortal", URL_IMG_PORTAL);
+            model.put("rutaImagenSilicon", URL_IMG_SILICON);
+            model.put("rutaImagenDemo", "/img/SiliconM.png");
+
+
+
             context.setVariables(model);
             String htmlText = templateEngine.process(emailTemplate, context);
 
@@ -181,6 +205,9 @@ public class EmailServide {
         }catch (MessagingException ex){
             log.error("Send email error", ex.getMessage());
             throw new GlobalAppException(HttpStatus.INTERNAL_SERVER_ERROR, 4003, ex.getMessage());
+        }catch (TemplateProcessingException ex){
+            log.error("Create templates with thymeleaf error", ex.getMessage());
+            throw new GlobalAppException(HttpStatus.INTERNAL_SERVER_ERROR, 4032, ex.getMessage());
         }
     }
 

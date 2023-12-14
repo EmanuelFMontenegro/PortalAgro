@@ -5,10 +5,12 @@ import com.dgitalfactory.usersecurity.security.entity.CustomeUserDetails;
 import com.dgitalfactory.usersecurity.security.entity.User;
 import com.dgitalfactory.usersecurity.exception.ResourceNotFoundException;
 import com.dgitalfactory.usersecurity.security.repository.UserRepository;
+import com.dgitalfactory.usersecurity.service.CustomeErrorService;
 import com.dgitalfactory.usersecurity.utils.AppConstants;
 import com.dgitalfactory.usersecurity.utils.NumberUtils;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.LockedException;
@@ -34,10 +36,16 @@ public class SecurityUserDetailsService implements UserDetailsService {
     @Autowired
     private UserRepository userRepo;
 
+    @Autowired
+    private MessageSource msgSource;
+
+    @Autowired
+    private CustomeErrorService errorSVC;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User optUser = this.userRepo.findByUsername(username)
-                .orElseThrow(()-> new ResourceNotFoundException("Email not found", "email/username", username));
+                .orElseThrow(()-> errorSVC.getResourceNotFoundException("Email not found", "email/username", username));
 
         return new CustomeUserDetails(optUser);
     }
@@ -58,7 +66,7 @@ public class SecurityUserDetailsService implements UserDetailsService {
         if (user.isAccount_active() && user.isAccountNonLocked()) {
             if (user.getFailedAttempts() < AppConstants.MAX_LOGIN_ATTEMPTS) {
                 this.increaseFaildAttemps(user);
-                throw new BadCredentialsException("");
+                throw new GlobalAppException(HttpStatus.UNAUTHORIZED,4016, "");
             } else {
                 this.lockUser(user);
                 throw new GlobalAppException(HttpStatus.UNAUTHORIZED,4015, "");

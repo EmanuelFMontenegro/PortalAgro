@@ -41,6 +41,12 @@ public class FieldService {
     @Autowired
     private PersonService personSVC;
 
+    @Autowired
+    private UtilsCommons utilsCommons;
+
+    @Autowired
+    private CustomeErrorService errorSVC;
+
 
     /**
      * Find a field with id
@@ -49,7 +55,7 @@ public class FieldService {
      */
     public Field getFieldById(Long field_id){
         return this.fieldRepo.findById(field_id)
-                .orElseThrow(()-> new ResourceNotFoundException("Field","field_id", field_id));
+                .orElseThrow(()-> errorSVC.getResourceNotFoundException("Field","field_id", field_id));
     }
 
     /**
@@ -59,7 +65,7 @@ public class FieldService {
      */
     public Field getFieldByName(String name){
         return this.fieldRepo.findByName(name)
-                .orElseThrow(()-> new ResourceNotFoundException("Field","name", name));
+                .orElseThrow(()-> errorSVC.getResourceNotFoundException("Field","name", name));
     }
 
     /**
@@ -69,7 +75,7 @@ public class FieldService {
      */
     public FieldDTO getFieldDTOById(Long field_id){
         Field field = this.getFieldById(field_id);
-        return UtilsCommons.convertEntityToDTO(field, FieldDTO.class);
+        return utilsCommons.convertEntityToDTO(field, FieldDTO.class);
     }
 
     /**
@@ -89,7 +95,7 @@ public class FieldService {
      */
     public List<Field> getAllFieldByPersonId(Long person_id){
         return this.fieldRepo.findByPersonId(person_id)
-                .orElseThrow(()-> new ResourceNotFoundException("All Fields","Person_id", person_id));
+                .orElseThrow(()->errorSVC.getResourceNotFoundException("All Fields","Person_id", person_id));
     }
 
     /**
@@ -108,7 +114,7 @@ public class FieldService {
 
         Page<Field> listField = this.fieldRepo.findAll(pageable);
         List<Field> list = listField.getContent();
-        List<FieldDTO> listDTO = UtilsCommons.mapListEntityDTO(list, FieldDTO.class);
+        List<FieldDTO> listDTO = utilsCommons.mapListEntityDTO(list, FieldDTO.class);
         return ResponsePaginationDTO.builder()
                 .list(Collections.singletonList(listDTO))
                 .pageNo(listField.getNumber())
@@ -127,9 +133,9 @@ public class FieldService {
     public List<FieldDTO> getAllFielDTOdsByUserId(Long person_id){
         List<Field> listField = this.fieldRepo.findByPersonId(person_id)
                 .orElseThrow(
-                        ()-> new ResourceNotFoundException("Id person", "person_id", person_id));
+                        ()-> errorSVC.getResourceNotFoundException("Id person", "person_id", person_id));
 
-        List<FieldDTO> listFieldDTO =UtilsCommons.mapListEntityDTO(listField, FieldDTO.class);
+        List<FieldDTO> listFieldDTO =utilsCommons.mapListEntityDTO(listField, FieldDTO.class);
 //        List<FieldDTO> listField = this.fieldRepo.findByPersonId(person_id)
 //                .orElseThrow(
 //                        ()-> new ResourceNotFoundException("Id person", "person_id", person_id))
@@ -151,7 +157,7 @@ public class FieldService {
     @Transactional()
     public void addField(Long person_id, FieldResponseDTO fieldResponseDTO){
 //        Capitalizer fields
-        Field field = UtilsCommons.convertDTOToEntity(fieldResponseDTO, Field.class);
+        Field field = utilsCommons.convertDTOToEntity(fieldResponseDTO, Field.class);
         field.setPerson(this.personSVC.getPersonById(person_id));
         Field newField = this.fieldRepo.save(field);
         log.info("Field create: "+field.toString());
@@ -183,7 +189,7 @@ public class FieldService {
         Field newField = this.fieldRepo.save(field);
         log.info("FieldDTO: "+fieldResponseDTO.toString());
         log.info("Field update: "+field.toString());
-        return UtilsCommons.convertEntityToDTO(newField,FieldDTO.class);
+        return utilsCommons.convertEntityToDTO(newField,FieldDTO.class);
     }
 
     /**

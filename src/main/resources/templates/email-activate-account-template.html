@@ -8,13 +8,68 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Activación de Cuenta</title>
 </head>
-<body>
-    <h2>Activar Cuenta</h2>
-    <h3><span>Hola </span><span th:text="${userName}"></span></h3>
-    <h4>Hola estas recibiendo este correo porque hiciste una solicitud de registro en la pagina de Agro Sustentable.</h4>
-    <h4>Dar clic al siguiente enlace para activar la cuenta.</h4>
-    <a th:href="@{${url}}"><button>Activar Cuenta</button></a>
-    <hr>
-    <h4>Si no realizaste esta solicitud, desestimá este mensaje. Saludos, Agro Sustentable.</h4>
+<body style="font-family: 'Montserrat', sans-serif;
+             font-size: 16px;
+             line-height: 1.6;
+             color: #333;
+             margin: 0;
+             padding: 0;">
+<div class="container">
+    <h2 th:text="${emailGreeting}">Estimado/a</h2>
+
+    <p th:text="${emailGreetingMsn}">¡Bienvenido/a al Portal del Productor! Estamos encantados de que se haya
+        registrado en nuestra plataforma.</p>
+
+    <p style="display: inline;" th:text="${emailGreetingInstruction}">Para completar el proceso de registro y activar tu cuenta, por favor
+        presione el botón de abajo o ingrese al link a continuación: </p><a th:href="${url}" style="display: inline;">Link</a>
+
+    <div style="text-align: center; padding-top: 15px;">
+        <div style="display: inline-block;
+                padding: 5px 40px;
+                border-radius: 4px;
+                box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+                border: 1px solid #65B438;
+                text-align: center;">
+            <a th:href="${url}" style="text-decoration: none;
+                                           font-family: 'Montserrat', sans-serif;
+                                           font-size: 14px;
+                                           font-weight: 600;
+                                           color: #65B438;
+                                           display: block;
+                                           padding: 8px 20px;
+                                           border-radius: 4px;
+                                           background-color: #fff;">
+                <span th:text="${emailGreetingBtnActivate}">Activar Cuenta</span>
+            </a>
+        </div>
+    </div>
+
+    <p th:text="${emailGreetingImportant}">Es importante destacar que este enlace de activación caducará en 24 horas.
+        Si no activas tu cuenta dentro de  este período, deberás seguir los pasos en preguntas frecuentes.</p>
+
+    <p th:text="${emailGreetingNoRequest}">Si no ha sido usted quien ha solicitado esta cuenta en Portal de
+        Productores, te rogamos que ignores este correo electrónico.</p>
+
+    <p style="display: inline;" th:text="${emailGreetingContact}">Si necesita ayuda o tiene alguna pregunta, no dude en ponerse en contacto con
+        nuestro equipo de soporte a través de </p><span style="display: inline;" th:text="${emailSupport}">"email-defoult@agro.com"</span>
+
+    <p th:text="${emailGreetingThanks}">Gracias por unirte al Portal de Productores. ¡Esperamos que tengas una gran experiencia!</p>
+
+    <div>
+        <h4 style="margin: 5px 0;" th:text="${emailGreetingGreetingEnd}">Saludos cordiales,</h4>
+        <h4 style="margin: 5px 0;" th:text="${emailGreetingSignature}">Portal de Productores</h4>
+    </div>
+    <hr style="border: none;
+           height: 2px;
+           background-color: #333;
+           width: 35%;
+           margin: 0;">
+    <div style=" display: flex; align-items: center; gap: 10px;">
+        <img style=" width: 200px; height: auto;" th:src="${rutaImagenPortal}" alt="Logo portal productores">
+        <img style=" width: 200px; height: auto;" th:src="${rutaImagenSilicon}" alt="Logo silicon">
+        <img style=" width: 200px; height: auto;" th:src="@{rutaImagenDemo}" alt="Logo silicon">
+
+    </div>
+</div>
 </body>
 </html>

@@ -11,17 +11,19 @@ import org.springframework.http.HttpStatus;
  * @created 30/11/2023 - 08:54
  */
 @Data
-public class ResourceConstantsDefoultException extends RuntimeException {
+public class ExplicitErrorAppException extends RuntimeException {
     @Getter(value = AccessLevel.NONE)
     @Setter(value = AccessLevel.NONE)
     private static final long serialVersionUID = 1L;
 
     private int code;
+    private String message;
     private HttpStatus status;
     private String details;
 
-    public ResourceConstantsDefoultException(HttpStatus status, int code, String details) {
+    public ExplicitErrorAppException(HttpStatus status, int code, String message, String details) {
         this.code = code;
+        this.message = message;
         this.status = status;
         this.details= details;
     }

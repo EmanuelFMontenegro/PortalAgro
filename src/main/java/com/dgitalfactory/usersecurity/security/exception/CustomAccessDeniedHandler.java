@@ -1,8 +1,6 @@
 package com.dgitalfactory.usersecurity.security.exception;
 
 import com.dgitalfactory.usersecurity.DTO.ErrorDTO;
-import com.dgitalfactory.usersecurity.security.jwt.JwtEntryPoint;
-import com.dgitalfactory.usersecurity.utils.ResponseConstants;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
@@ -10,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -18,10 +17,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+
 /**
  * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
  * @created 30/11/2023 - 08:54
@@ -30,6 +26,9 @@ import java.util.Map;
 public class CustomAccessDeniedHandler extends Throwable implements AccessDeniedHandler {
 
     private static final Logger log = LoggerFactory.getLogger(CustomAccessDeniedHandler.class);
+
+    @Autowired
+    private UtilsCommons utilsCommons;
 
     @Override
     public void handle(HttpServletRequest request,
@@ -43,8 +42,8 @@ public class CustomAccessDeniedHandler extends Throwable implements AccessDenied
         response.setContentType("application/json");
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(403)
-                .message(UtilsCommons.getResponseConstants(403))
-                .date(UtilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
+                .message(utilsCommons.getErrorMessage(403))
+                .date(utilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .path(request.getRequestURL().toString().replace("url=",""))
                 .details(accessDeniedException.getMessage())
                 .build();
@@ -53,7 +52,5 @@ public class CustomAccessDeniedHandler extends Throwable implements AccessDenied
         ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(out, errorDTO);
         out.flush();
-
-
     }
 }

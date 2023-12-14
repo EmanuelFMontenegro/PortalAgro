@@ -6,8 +6,10 @@ import com.dgitalfactory.usersecurity.DTO.Person.PersonResponseDTO;
 import com.dgitalfactory.usersecurity.DTO.ResponsePaginationDTO;
 import com.dgitalfactory.usersecurity.service.PersonService;
 import com.dgitalfactory.usersecurity.utils.AppConstants;
+import com.dgitalfactory.usersecurity.utils.ResponseStatusMessages;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +29,24 @@ public class PersonController {
     @Autowired
     private PersonService personSVC;
 
+//    @Autowired
+//    private ResponseStatusMessages msgSource;
+
+    @Autowired
+    private UtilsCommons utilsCommons;
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/demo")
+    public ResponseEntity<MessageDTO> getDemo(HttpServletRequest request) {
+        return ResponseEntity.ok(MessageDTO.builder()
+                .code(1001)
+                .message(utilsCommons.getErrorMessage(1001))
+                .build());
+    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
-    public ResponseEntity<PersonDTO> getPersonById(@PathVariable("id") Long id){
+    public ResponseEntity<PersonDTO> getPersonById(@PathVariable("id") Long id) {
         PersonDTO personDTO = this.personSVC.getPersonDtoById(id);
         return ResponseEntity.ok(personDTO);
     }
@@ -41,34 +58,46 @@ public class PersonController {
             @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE_DEFAULT, required = false) int pageSize,
             @RequestParam(value = "sortBy", defaultValue = AppConstants.ORDER_BY_DEFAULT, required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = AppConstants.ORDER_DIR_DEFAULT, required = false) String sortDir
-    ){
+    ) {
         ResponsePaginationDTO listPersonDTO = this.personSVC.getPeoplePagination(pageNumber, pageSize, sortBy, sortDir);
         return ResponseEntity.ok(listPersonDTO);
     }
 
     @PreAuthorize("hasRole('ADMIN') or @conditionEvaluatorService.canPreAuthAdmin(#user_id)")
     @PostMapping("/{userid}")
-    public ResponseEntity<MessageDTO> addPerson(@PathVariable Long user_id, @RequestBody @Valid PersonResponseDTO personResponseDTO){
-        this.personSVC.addPerson(user_id,personResponseDTO);
+    public ResponseEntity<MessageDTO> addPerson(@PathVariable Long user_id, @RequestBody @Valid PersonResponseDTO personResponseDTO) {
+        this.personSVC.addPerson(user_id, personResponseDTO);
         return ResponseEntity.ok(
-                MessageDTO.builder().code(2001).message(UtilsCommons.getResponseConstants(2001)).build()
+                MessageDTO.builder()
+                        .code(2001)
+                        .message(utilsCommons.getErrorMessage(2001))
+                        .details("Person")
+                        .build()
         );
     }
 
     @PreAuthorize("hasRole('ADMIN') or @conditionEvaluatorService.canPreAuthAdmin(#user_id)")
     @PutMapping("/{userid}")
-    public ResponseEntity<MessageDTO> updatePerson(@PathVariable Long user_id, @RequestBody @Valid PersonDTO personDTO){
-        PersonDTO newPersonDTO = this.personSVC.updatePerson(user_id,personDTO);
+    public ResponseEntity<MessageDTO> updatePerson(@PathVariable Long user_id, @RequestBody @Valid PersonDTO personDTO) {
+        PersonDTO newPersonDTO = this.personSVC.updatePerson(user_id, personDTO);
         return ResponseEntity.ok(
-                MessageDTO.builder().code(2002).message(UtilsCommons.getResponseConstants(2002)).build()
+                MessageDTO.builder()
+                        .code(2002)
+                        .message(utilsCommons.getErrorMessage(2002))
+                        .details("Person")
+                        .build()
         );
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<MessageDTO> deletePersonById(@PathVariable("id") Long id){
+    public ResponseEntity<MessageDTO> deletePersonById(@PathVariable("id") Long id) {
         this.personSVC.deletePersonById(id);
-        return ResponseEntity.ok(MessageDTO.builder().code(2003).message(UtilsCommons.getResponseConstants(2003)).build());
+        return ResponseEntity.ok(MessageDTO.builder()
+                .code(2003)
+                .message(utilsCommons.getErrorMessage(2003))
+                .details("Person")
+                .build());
     }
 
 

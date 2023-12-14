@@ -1,6 +1,6 @@
 package com.dgitalfactory.usersecurity.configuration;
 
-import com.dgitalfactory.usersecurity.utils.ResponseConstants;
+import com.dgitalfactory.usersecurity.utils.ResponseStatusMessages;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,11 +12,6 @@ import org.springframework.core.env.Environment;
  */
 @Configuration
 public class AppGlobalConfig {
-
-    @Bean
-    public ResponseConstants responseConstants(){
-        return new ResponseConstants();
-    }
 
     @Bean
     public ModelMapper modoelMapper() {

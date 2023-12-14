@@ -13,7 +13,14 @@
     <h3><span>Hola </span><span th:text="${userName}"></span></h3>
     <h4>Recibimos su solicitud para reestablecer la contraseña de su cuenta. Por favor, presione el botón “Reestablecer Contraseña” para continuar con el proceso.</h4>
     <h4>Da clic en el siguiente botón para recuperarla.</h4>
-    <a th:href="@{${url}}"><button>Reestablecer Contraseña</button></a>
+    <div style="display: flex;flex-direction: row;align-content: center;justify-content: center;">
+        <div style="padding: 10px 40px; box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.50); border-radius: 2px; border: 1px #65B438 solid; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+            <div style="color: #65B438; font-size: 12px; font-family: Montserrat; font-weight: 600; word-wrap: break-word">
+                <a th:href="@{${url}}">Reestablecer Contraseña</a>
+            </div>
+        </div>
+    </div>
+
     <hr>
     <h4>Por favor, tenga en cuenta que este enlace para restablecer su contraseña tiene una validez limitada por razones de seguridad. Si no puede completar el proceso dentro de 24 horas, deberá solicitar un nuevo enlace siguiendo el mismo procedimiento.
 

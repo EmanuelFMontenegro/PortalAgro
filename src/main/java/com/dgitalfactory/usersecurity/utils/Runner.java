@@ -1,7 +1,11 @@
 package com.dgitalfactory.usersecurity.utils;
 
 import com.dgitalfactory.usersecurity.entity.Person;
+import com.dgitalfactory.usersecurity.entity.Services.Images;
+import com.dgitalfactory.usersecurity.entity.Services.ProductAplication;
+import com.dgitalfactory.usersecurity.repository.ImagesRepository;
 import com.dgitalfactory.usersecurity.repository.PersonRepository;
+import com.dgitalfactory.usersecurity.repository.ProductAplicacionRepository;
 import com.dgitalfactory.usersecurity.security.entity.Role;
 import com.dgitalfactory.usersecurity.security.entity.User;
 import com.dgitalfactory.usersecurity.security.repository.RoleRepository;
@@ -27,14 +31,21 @@ public class Runner implements CommandLineRunner {
     @Autowired
     private final RoleRepository roleRepo;
     @Autowired
+    private final ImagesRepository imgRepo;
+
+    @Autowired
+    private final ProductAplicacionRepository prodAppRepo;
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
     private PersonRepository personRepo;
 
-    public Runner(UserRepository userrepo, RoleRepository authrepo) {
+    public Runner(UserRepository userrepo, RoleRepository authrepo, ImagesRepository imgRepo, ProductAplicacionRepository prodAppRepo) {
         this.userRepo = userrepo;
         this.roleRepo = authrepo;
+        this.imgRepo = imgRepo;
+        this.prodAppRepo = prodAppRepo;
     }
 
     public void createdRoles() {
@@ -98,6 +109,28 @@ public class Runner implements CommandLineRunner {
         );
     }
 
+    private void createdImagesService(){
+        this.imgRepo.save(Images.builder()
+                .name("Imagenes Satelitales")
+                .description("Captura de dron")
+                .build());
+    }
+
+    private void createdProductAPPService(){
+        this.prodAppRepo.saveAll(
+                List.of(
+                        ProductAplication.builder()
+                                .name("Pesticidas")
+                                .description("Rocio de pesticiadas con dron")
+                                .build(),
+                        ProductAplication.builder()
+                                .name("Riego")
+                                .description("Riego con estimulantes con dron")
+                                .build()
+                )
+        );
+    }
+
     @Override
     public void run(String... args) throws Exception {
         if (this.roleRepo.count() == 0) {
@@ -108,6 +141,12 @@ public class Runner implements CommandLineRunner {
         }
         if(this.personRepo.count()==0){
             this.createdPerson();
+        }
+        if(this.prodAppRepo.count()==0){
+            this.createdProductAPPService();
+        }
+        if(this.imgRepo.count()==0){
+            this.createdImagesService();
         }
     }
 }

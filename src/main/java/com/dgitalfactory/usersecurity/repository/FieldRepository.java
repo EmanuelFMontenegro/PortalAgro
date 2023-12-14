@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +18,7 @@ import java.util.Optional;
  * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
  * @created 04/12/2023 - 16:12
  */
+@Repository
 public interface FieldRepository extends JpaRepository<Field,Long> {
 
     public Optional<Field> findById(Long id);

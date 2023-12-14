@@ -38,6 +38,12 @@ public class PersonService {
     @Autowired
     private PersonRepository personRepo;
 
+    @Autowired
+    private UtilsCommons utilsCommons;
+
+    @Autowired
+    private CustomeErrorService errorSVC;
+
     /**
      * Return Information of the Person searching bt id person
      *
@@ -46,8 +52,8 @@ public class PersonService {
      */
     public PersonDTO getPersonDtoById(Long id){
         Person person =this.personRepo.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Person","id",id));
-        return UtilsCommons.convertEntityToDTO(person,PersonDTO.class);
+                .orElseThrow(()-> errorSVC.getResourceNotFoundException("Person","id",id));
+        return utilsCommons.convertEntityToDTO(person,PersonDTO.class);
     }
 
     /**
@@ -57,7 +63,7 @@ public class PersonService {
      */
     public Person getPersonById(Long id){
        return this.personRepo.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Person","id",id));
+                .orElseThrow(()-> errorSVC.getResourceNotFoundException("Person","id",id));
     }
 
     /**
@@ -67,8 +73,8 @@ public class PersonService {
      */
     public PersonDTO getPersonDTOByDni(String dni){
         Person person =this.personRepo.findByDni(dni)
-                .orElseThrow(()-> new ResourceNotFoundException("Person","DNI",dni));
-        return UtilsCommons.convertEntityToDTO(person,PersonDTO.class);
+                .orElseThrow(()-> errorSVC.getResourceNotFoundException("Person","DNI",dni));
+        return utilsCommons.convertEntityToDTO(person,PersonDTO.class);
     }
 
     /**
@@ -78,7 +84,7 @@ public class PersonService {
      */
     public Person getPersonByDni(String dni){
         Person person =this.personRepo.findByDni(dni)
-                .orElseThrow(()-> new ResourceNotFoundException("Person","DNI",dni));
+                .orElseThrow(()-> errorSVC.getResourceNotFoundException("Person","DNI",dni));
         return person;
     }
 
@@ -88,7 +94,7 @@ public class PersonService {
      */
     public List<PersonDTO> getPeopleDTO(){
         List<PersonDTO> peopleDTO = this.personRepo.findAll().stream().map(
-                person -> UtilsCommons.convertEntityToDTO(person,PersonDTO.class)
+                person -> utilsCommons.convertEntityToDTO(person,PersonDTO.class)
         ).toList();
         return peopleDTO;
     }
@@ -101,7 +107,7 @@ public class PersonService {
 
         Page<Person> listField = this.personRepo.findAllByOrderByLastnameAscNameAsc(pageable);
         List<Person> list = listField.getContent();
-        List<PersonDTO> listDTO = UtilsCommons.mapListEntityDTO(list, PersonDTO.class);
+        List<PersonDTO> listDTO = utilsCommons.mapListEntityDTO(list, PersonDTO.class);
         return ResponsePaginationDTO.builder()
                 .list(Collections.singletonList(listDTO))
                 .pageNo(listField.getNumber())
@@ -127,7 +133,7 @@ public class PersonService {
 //        this.validatePerson(personDTO);
         log.info("ESTA DESHABILITADA LA VALIDACION DE LOS CAMPOS DE PERSONA PORQUE AUN NO LLEGAMOS A CARGAR EL PERFIL");
 
-        Person person = UtilsCommons.convertDTOToEntity(personResponseDTO,Person.class);
+        Person person = utilsCommons.convertDTOToEntity(personResponseDTO,Person.class);
         person.setId(userid);
         this.personRepo.save(person);
     }
@@ -166,7 +172,7 @@ public class PersonService {
 //    @Transactional(propagation = Propagation.SUPPORTS)
     public void deletePersonById(Long id){
         Person person =this.personRepo.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Person","id",id));
+                .orElseThrow(()-> errorSVC.getResourceNotFoundException("Person","id",id));
         this.personRepo.deleteById(id);
     }
 
