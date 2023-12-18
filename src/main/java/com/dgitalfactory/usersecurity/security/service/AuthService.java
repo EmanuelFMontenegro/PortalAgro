@@ -9,6 +9,7 @@ import com.dgitalfactory.usersecurity.security.dto.UserResponseDTO;
 import com.dgitalfactory.usersecurity.security.entity.CustomeUserDetails;
 import com.dgitalfactory.usersecurity.security.entity.User;
 import com.dgitalfactory.usersecurity.service.PersonService;
+import com.dgitalfactory.usersecurity.utils.UtilsCommons;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,14 +45,13 @@ public class AuthService {
     private AuthenticationManager authenticationManager;
     @Autowired
     private EmailServide emailServide;
+
+    @Autowired
+    private UtilsCommons utilsCommons;
     @Value("${email.tokenaccountexpiration}")
     private int EMAIL_ACCOUNT_EXPIRATION_IN_MS;
 
     public JwtDTO login(@NotNull LoginDTO loginDTO) {
-//        User user = this.userSVC.findUser(loginDTO.getUsername());
-//        if (!user.isAccount_active()) {
-//            throw new GlobalAppException(HttpStatus.UNAUTHORIZED, "El usuario debe validar su email", "diccionario codigo");
-//        }
         Authentication authentication = this.authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginDTO.getUsername(), loginDTO.getPassword()));
@@ -64,9 +64,9 @@ public class AuthService {
             }
         }
         if (!user.isAccount_active() && user.getTokenPassword()!=null) {
-            throw new GlobalAppException(HttpStatus.UNAUTHORIZED, 4001,"");
+            throw new GlobalAppException(HttpStatus.UNAUTHORIZED, 4001,utilsCommons.getMessage("field.name.user"));
         } else if (!user.isAccount_active()){
-                throw new GlobalAppException(HttpStatus.UNAUTHORIZED, 4030,"");
+                throw new GlobalAppException(HttpStatus.UNAUTHORIZED, 4030,utilsCommons.getMessage("field.name.user"));
         }
 
 
@@ -77,7 +77,7 @@ public class AuthService {
          * 		Si no esta autorizado lo pasa al AuthenticationEntryPoint
          */
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        final String jwt = this.jwtSVC.generatedToken(authentication);
+        final String jwt = this.jwtSVC.generatedToken(authentication, user.getId());
 
         //get Token del JwtTokenProvider
         return JwtDTO
@@ -96,7 +96,7 @@ public class AuthService {
     @Transactional()
     public void register(@NotNull UserResponseDTO userResponseDTO) {
         if (this.userSVC.existsUser(userResponseDTO.getUsername())) {
-            throw new GlobalAppException(HttpStatus.BAD_REQUEST, 4002,"");
+            throw new GlobalAppException(HttpStatus.BAD_REQUEST, 4002,utilsCommons.getMessage("field.name.user"));
         }
         String token = this.jwtSVC.generatedToken(userResponseDTO.getUsername(), EMAIL_ACCOUNT_EXPIRATION_IN_MS);
         User us = this.userSVC.saveUser(userResponseDTO, token);

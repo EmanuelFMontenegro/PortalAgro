@@ -1,6 +1,6 @@
 package com.dgitalfactory.usersecurity.repository;
 
-import com.dgitalfactory.usersecurity.entity.Services.Images;
+import com.dgitalfactory.usersecurity.entity.AppServices.ImagesSvr;
 import jdk.jfr.Registered;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -9,5 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @created 14/12/2023 - 13:09
  */
 @Registered
-public interface ImagesRepository extends JpaRepository<Images, Long> {
+public interface ImagesSvrRepository extends JpaRepository<ImagesSvr, Long> {
 }

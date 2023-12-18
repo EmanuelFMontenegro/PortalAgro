@@ -1,6 +1,6 @@
 package com.dgitalfactory.usersecurity.entity;
 
-import com.dgitalfactory.usersecurity.entity.Services.Service;
+import com.dgitalfactory.usersecurity.entity.AppServices.ServiceType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -51,5 +51,5 @@ public class Field {
     private Person person;
 
     @OneToMany(mappedBy = "field", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Service> services = new HashSet<>();
+    private Set<ServiceType> services = new HashSet<>();
 }

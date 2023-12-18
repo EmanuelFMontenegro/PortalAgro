@@ -65,7 +65,7 @@ public class JwtTokenService {
 	 * @param authentication: usuario autenticado o registrado
 	 * @return: Jwts: cargado con el total de los elementos del token
 	 */
-	public String generatedToken(Authentication authentication){
+	public String generatedToken(Authentication authentication, Long idUser){
 		//Saca los roles y los separa por comas
 		String authorities = authentication.getAuthorities().stream()
 				.map(GrantedAuthority::getAuthority)
@@ -77,6 +77,7 @@ public class JwtTokenService {
 		return Jwts.builder()
 				.setSubject(authentication.getName())
 				.claim(AUTHORITIES_KEY,authorities)
+				.claim("userId", idUser)
 				.setIssuedAt(currentDate)
 				.setExpiration(expirationDate)
 				.signWith(this.getSecretKey(), SignatureAlgorithm.HS512)
@@ -238,7 +239,7 @@ public class JwtTokenService {
 	 * @return String: string with JWT
 	 * @throws ParseException
 	 */
-	public String refreshToken(JwtDTO jwtDTO) {
+	private String refreshToken(JwtDTO jwtDTO) {
 		/**
 		 * Verificamos firma
 		 */
@@ -255,12 +256,14 @@ public class JwtTokenService {
 				JWTClaimsSet claims = jwt.getJWTClaimsSet();
 				String username = claims.getSubject();
 				String roles = (String) claims.getClaim(AUTHORITIES_KEY);
+				String userId= (String) claims.getClaim("userId");
 				Date currentDate = new Date();
 				Date expirationDate = new Date(currentDate.getTime() + this.JWT_EXPIRATION_IN_MS);
 
 				return Jwts.builder()
 						.setSubject(username)
 						.claim(AUTHORITIES_KEY, roles)
+						.claim("userId",userId)
 						.setIssuedAt(currentDate)
 						.setExpiration(expirationDate)
 						.signWith(this.getSecretKey(), SignatureAlgorithm.HS512)

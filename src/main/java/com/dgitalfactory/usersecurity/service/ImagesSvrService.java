@@ -1,6 +1,6 @@
 package com.dgitalfactory.usersecurity.service;
 
-import com.dgitalfactory.usersecurity.repository.ImagesRepository;
+import com.dgitalfactory.usersecurity.repository.ImagesSvrRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
  * @created 14/12/2023 - 13:13
  */
 @Service
-public class ImagesService {
+public class ImagesSvrService {
 
     @Autowired
-    private ImagesRepository imgRepo;
+    private ImagesSvrRepository imgRepo;
 }

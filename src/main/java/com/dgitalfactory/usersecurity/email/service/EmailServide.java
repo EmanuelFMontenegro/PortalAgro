@@ -83,7 +83,7 @@ public class EmailServide {
     public void senEmailRecoveryPassword(String username){
         User us = this.userSVC.findUser(username);
         if(!us.isAccount_active()){
-            throw new GlobalAppException(HttpStatus.UNAUTHORIZED,4001,"");
+            throw new GlobalAppException(HttpStatus.UNAUTHORIZED,4001,"field.name.email");
         }
         String templateEmail = "email-recovery-pass-template";
         String token= this.jwtTokenService.generatedToken(username, EMAIL_RECOVERY_EXPIRATION_IN_MS);
@@ -166,9 +166,9 @@ public class EmailServide {
             throw new GlobalAppException(HttpStatus.UNAUTHORIZED, 4004, ex.getMessage());
         }
         if(bindingResult.hasErrors())
-            throw  new GlobalAppException(HttpStatus.BAD_REQUEST, 4012,"");
+            throw  new GlobalAppException(HttpStatus.BAD_REQUEST, 4012,"field.name.email");
         if(!passwordDTO.getPassword().equals(passwordDTO.getConfirmPassword()))
-            throw  new GlobalAppException(HttpStatus.NOT_FOUND, 4018,"");
+            throw  new GlobalAppException(HttpStatus.NOT_FOUND, 4018,"field.name.email");
 
         if(UtilsCommons.validPassword(passwordDTO.getPassword())) {
             log.info("cambiar validación desde dto para evitar hacer estas validaiones y delegar la resposabilidad");
@@ -245,9 +245,10 @@ public class EmailServide {
 
 //    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public void activateAccount(String token){
-//        log.info("entro");
         try{
-            this.jwtTokenService.isTokenExpired(token);
+            if(!this.jwtTokenService.isTokenExpired(token)){
+                throw new GlobalAppException(HttpStatus.UNAUTHORIZED, 4004,"field.name.email");
+            }
         }catch (Exception ex){
             throw new GlobalAppException(HttpStatus.UNAUTHORIZED, 4004,ex.getMessage());
         }

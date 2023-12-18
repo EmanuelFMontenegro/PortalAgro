@@ -1,12 +1,13 @@
-package com.dgitalfactory.usersecurity.entity.Services;
+package com.dgitalfactory.usersecurity.entity.AppServices;
 
 import com.dgitalfactory.usersecurity.entity.Field;
-import com.dgitalfactory.usersecurity.entity.Person;
+import com.dgitalfactory.usersecurity.utils.StatusService;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 /**
  * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
@@ -14,28 +15,29 @@ import lombok.NoArgsConstructor;
  */
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "services")
-public class Service {
+@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class ServiceType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinColumn(name = "type_service_id", referencedColumnName = "id")
-    private ServiceType serviceType;
+    @Column(nullable = false)
+    private LocalDateTime dateOfService;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = true, length = 255)
     private String observations;
 
     @Column(nullable = false)
-    private int status;
+    @Enumerated(EnumType.STRING)
+    private StatusService status = StatusService.PENDIENTE;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "field_id", nullable = false)
     private Field field;
 
 }
+
+

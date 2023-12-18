@@ -82,7 +82,7 @@ public class UserService {
     public User findUser(String username){
         User newUs = this.userRepo.findByUsername(username)
                 .orElseThrow(()->
-                    new GlobalAppException(HttpStatus.BAD_REQUEST, 4019,"")
+                    new GlobalAppException(HttpStatus.BAD_REQUEST, 4019, utilsCommons.getMessage("field.name.user"))
                 );
         return newUs;
     }
@@ -217,7 +217,7 @@ public class UserService {
      */
     public User getUserByTokenPassword(String tokenPassword){
         User us= this.userRepo.findByTokenPassword(tokenPassword)
-                .orElseThrow(()-> new GlobalAppException(HttpStatus.BAD_REQUEST, 4020,""));
+                .orElseThrow(()-> new GlobalAppException(HttpStatus.BAD_REQUEST, 4020,utilsCommons.getMessage("field.name.user")));
         return us;
     }
 
