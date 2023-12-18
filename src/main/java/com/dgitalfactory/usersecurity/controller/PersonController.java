@@ -6,7 +6,6 @@ import com.dgitalfactory.usersecurity.DTO.Person.PersonResponseDTO;
 import com.dgitalfactory.usersecurity.DTO.ResponsePaginationDTO;
 import com.dgitalfactory.usersecurity.service.PersonService;
 import com.dgitalfactory.usersecurity.utils.AppConstants;
-import com.dgitalfactory.usersecurity.utils.ResponseStatusMessages;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,7 +39,7 @@ public class PersonController {
     public ResponseEntity<MessageDTO> getDemo(HttpServletRequest request) {
         return ResponseEntity.ok(MessageDTO.builder()
                 .code(1001)
-                .message(utilsCommons.getErrorMessage(1001))
+                .message(utilsCommons.getStatusMessage(1001))
                 .build());
     }
 
@@ -70,7 +69,7 @@ public class PersonController {
         return ResponseEntity.ok(
                 MessageDTO.builder()
                         .code(2001)
-                        .message(utilsCommons.getErrorMessage(2001))
+                        .message(utilsCommons.getStatusMessage(2001))
                         .details("Person")
                         .build()
         );
@@ -83,7 +82,7 @@ public class PersonController {
         return ResponseEntity.ok(
                 MessageDTO.builder()
                         .code(2002)
-                        .message(utilsCommons.getErrorMessage(2002))
+                        .message(utilsCommons.getStatusMessage(2002))
                         .details("Person")
                         .build()
         );
@@ -95,7 +94,7 @@ public class PersonController {
         this.personSVC.deletePersonById(id);
         return ResponseEntity.ok(MessageDTO.builder()
                 .code(2003)
-                .message(utilsCommons.getErrorMessage(2003))
+                .message(utilsCommons.getStatusMessage(2003))
                 .details("Person")
                 .build());
     }

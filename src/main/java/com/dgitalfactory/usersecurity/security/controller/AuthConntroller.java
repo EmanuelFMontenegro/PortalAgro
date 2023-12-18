@@ -66,7 +66,7 @@ public class AuthConntroller {
 		return ResponseEntity.ok(
 				MessageDTO.builder()
 						.code(2001)
-						.message(utilsCommons.getErrorMessage(2001))
+						.message(utilsCommons.getStatusMessage(2001))
 						.details(utilsCommons.getMessage("field.name.user"))
 						.build()
 		);

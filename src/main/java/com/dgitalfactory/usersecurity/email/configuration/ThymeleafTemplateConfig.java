@@ -4,6 +4,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+
+import java.nio.charset.StandardCharsets;
+
 /**
  * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
  * @created 30/11/2023 - 08:54
@@ -17,7 +20,7 @@ public class ThymeleafTemplateConfig {
         resolver.setPrefix("templates/");
         resolver.setSuffix(".html");
         resolver.setTemplateMode(TemplateMode.HTML);
-        resolver.setCharacterEncoding("UTF-8");
+        resolver.setCharacterEncoding(StandardCharsets.UTF_8.name());
         resolver.setOrder(1);
         resolver.setCheckExistence(true);
 

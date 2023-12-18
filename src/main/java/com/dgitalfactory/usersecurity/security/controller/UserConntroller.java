@@ -52,7 +52,7 @@ public class UserConntroller {
         return ResponseEntity.ok(
                 MessageDTO.builder()
                         .code(2003)
-                        .message(utilsCommons.getErrorMessage(2003))
+                        .message(utilsCommons.getStatusMessage(2003))
                         .details(utilsCommons.getMessage("field.name.user"))
                         .build()
         );
@@ -65,7 +65,7 @@ public class UserConntroller {
         return ResponseEntity.ok(
                 MessageDTO.builder()
                         .code(2003)
-                        .message(utilsCommons.getErrorMessage(2003))
+                        .message(utilsCommons.getStatusMessage(2003))
                         .details(utilsCommons.getMessage("field.name.user"))
                         .build()
         );

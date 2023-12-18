@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-import org.thymeleaf.exceptions.TemplateEngineException;
 import org.thymeleaf.exceptions.TemplateProcessingException;
 
 import java.io.IOException;
@@ -64,7 +63,7 @@ public class AdviceControllerExceptionHandler {
 //        }
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(4011)
-                .message(utilsCommons.getErrorMessage(4011, locale))
+                .message(utilsCommons.getStatusMessage(4011, locale))
                 .date(utilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .path(request.getDescription(false).replace("uri=", ""))
                 .details(ex.getMessage())
@@ -79,7 +78,7 @@ public class AdviceControllerExceptionHandler {
                                                         WebRequest request) {
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(4028)
-                .message(utilsCommons.getErrorMessage(4028, request.getLocale()))
+                .message(utilsCommons.getStatusMessage(4028, request.getLocale()))
 //                .message(UtilsCommons.getResponseConstants(4028))
                 .date(utilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .path(request.getDescription(false).replace("uri=", ""))
@@ -94,7 +93,7 @@ public class AdviceControllerExceptionHandler {
                                                                               WebRequest request) {
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(4027)
-                .message(utilsCommons.getErrorMessage(4027, request.getLocale()))
+                .message(utilsCommons.getStatusMessage(4027, request.getLocale()))
 //                .message(UtilsCommons.getResponseConstants(4027))
                 .date(utilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .path(request.getDescription(false).replace("uri=", ""))
@@ -109,7 +108,7 @@ public class AdviceControllerExceptionHandler {
                                                                        WebRequest request) {
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(4026)
-                .message(utilsCommons.getErrorMessage(4026, request.getLocale()))
+                .message(utilsCommons.getStatusMessage(4026, request.getLocale()))
 //                .message(UtilsCommons.getResponseConstants(4026))
                 .date(utilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .path(request.getDescription(false).replace("uri=", ""))
@@ -129,7 +128,7 @@ public class AdviceControllerExceptionHandler {
     public ResponseEntity<ErrorDTO> getGlobalErrorHandler(GlobalAppException ex, WebRequest request) {
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(ex.getCode())
-                .message(utilsCommons.getErrorMessage(ex.getCode(), request.getLocale()))
+                .message(utilsCommons.getStatusMessage(ex.getCode(), request.getLocale()))
 //                .message(UtilsCommons.getResponseConstants(ex.getCode()))
                 .date(utilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .details(ex.getDetails())
@@ -149,7 +148,7 @@ public class AdviceControllerExceptionHandler {
         });
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(4012)
-                .message(utilsCommons.getErrorMessage(4012, request.getLocale()))
+                .message(utilsCommons.getStatusMessage(4012, request.getLocale()))
 //                .message(UtilsCommons.getResponseConstants(4012))
                 .listDetails(errors)
                 .date(utilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
@@ -170,7 +169,7 @@ public class AdviceControllerExceptionHandler {
     protected ResponseEntity<Object> getLockedException(LockedException ex, WebRequest request) {
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(4017)
-                .message(utilsCommons.getErrorMessage(4017, request.getLocale()))
+                .message(utilsCommons.getStatusMessage(4017, request.getLocale()))
 //                .message(UtilsCommons.getResponseConstants(4017))
                 .date(utilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .path(request.getDescription(false).replace("uri=", ""))
@@ -190,7 +189,7 @@ public class AdviceControllerExceptionHandler {
     protected ResponseEntity<Object> getInvalidDataAccessApiUsageException(InvalidDataAccessApiUsageException ex, WebRequest request) {
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(5001)
-                .message(utilsCommons.getErrorMessage(5001, request.getLocale()))
+                .message(utilsCommons.getStatusMessage(5001, request.getLocale()))
 //                .message(UtilsCommons.getResponseConstants(5001))
                 .date(utilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .path(request.getDescription(false).replace("uri=", ""))
@@ -210,7 +209,7 @@ public class AdviceControllerExceptionHandler {
     protected ResponseEntity<Object> getBadCredentialsException(AccessDeniedException error, WebRequest request) {
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(403)
-                .message(utilsCommons.getErrorMessage(403, request.getLocale()))
+                .message(utilsCommons.getStatusMessage(403, request.getLocale()))
 //                .message(UtilsCommons.getResponseConstants(403))
                 .date(utilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .path(request.getDescription(false).replace("uri=", ""))
@@ -230,7 +229,7 @@ public class AdviceControllerExceptionHandler {
     protected ResponseEntity<Object> getBadCredentialsException(BadCredentialsException error, WebRequest request) {
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(4016)
-                .message(utilsCommons.getErrorMessage(4016, request.getLocale()))
+                .message(utilsCommons.getStatusMessage(4016, request.getLocale()))
 //                .message(UtilsCommons.getResponseConstants(4016))
                 .date(utilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .path(request.getDescription(false).replace("uri=", ""))
@@ -251,7 +250,7 @@ public class AdviceControllerExceptionHandler {
     public ResponseEntity<Object> handleIOException(IOException ex, WebRequest request) {
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(995)
-                .message(utilsCommons.getErrorMessage(995, request.getLocale()))
+                .message(utilsCommons.getStatusMessage(995, request.getLocale()))
 //                .message(UtilsCommons.getResponseConstants(995))
                 .date(utilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .path(request.getDescription(false).replace("uri=", ""))
@@ -270,7 +269,7 @@ public class AdviceControllerExceptionHandler {
 //    MailException
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(4003)
-                .message(utilsCommons.getErrorMessage(4003, request.getLocale()))
+                .message(utilsCommons.getStatusMessage(4003, request.getLocale()))
 //                .message(UtilsCommons.getResponseConstants(4003))
                 .date(utilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .path(request.getDescription(false).replace("uri=", ""))
@@ -289,7 +288,7 @@ public class AdviceControllerExceptionHandler {
 //    MailException
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(4003)
-                .message(utilsCommons.getErrorMessage(4003, request.getLocale()))
+                .message(utilsCommons.getStatusMessage(4003, request.getLocale()))
 //                .message(UtilsCommons.getResponseConstants(4003))
                 .date(utilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .path(request.getDescription(false).replace("uri=", ""))
@@ -310,7 +309,7 @@ public class AdviceControllerExceptionHandler {
     public ResponseEntity<ErrorDTO> getResourceConstantsDefoultException(NoSuchMessageException ex, WebRequest request) {
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(999)
-                .message(utilsCommons.getErrorMessage(999,request.getLocale()))
+                .message(utilsCommons.getStatusMessage(999,request.getLocale()))
                 .date(utilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .details(ex.getMessage())
                 .path(request.getDescription(false).replace("uri=", ""))
@@ -329,7 +328,7 @@ public class AdviceControllerExceptionHandler {
         public ResponseEntity<ErrorDTO> getResourceConstantsDefoultException(TemplateProcessingException ex, WebRequest request) {
             ErrorDTO errorDTO = ErrorDTO.builder()
                     .code(4032)
-                    .message(utilsCommons.getErrorMessage(4032))
+                    .message(utilsCommons.getStatusMessage(4032))
                     .date(utilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                     .details(ex.getMessage())
                     .path(request.getDescription(false).replace("uri=", ""))
@@ -361,7 +360,7 @@ public class AdviceControllerExceptionHandler {
     public ResponseEntity<ErrorDTO> getRuntimeExceptionHandler(RuntimeException ex, WebRequest request) {
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(998)
-                .message(utilsCommons.getErrorMessage(998, request.getLocale()))
+                .message(utilsCommons.getStatusMessage(998, request.getLocale()))
 //                .message(UtilsCommons.getResponseConstants(998))
                 .date(utilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .path(request.getDescription(false).replace("uri=", ""))
@@ -375,7 +374,7 @@ public class AdviceControllerExceptionHandler {
     public ResponseEntity<ErrorDTO> getGobalException(Exception ex, WebRequest request) {
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(997)
-                .message(utilsCommons.getErrorMessage(997, request.getLocale()))
+                .message(utilsCommons.getStatusMessage(997, request.getLocale()))
 //                .message(UtilsCommons.getResponseConstants(997))
                 .date(utilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .path(request.getDescription(false).replace("uri=", ""))
@@ -390,7 +389,7 @@ public class AdviceControllerExceptionHandler {
     public ResponseEntity<ErrorDTO> getSqlExceptionHelper(SQLGrammarException ex, WebRequest request) {
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(994)
-                .message(utilsCommons.getErrorMessage(994, request.getLocale()))
+                .message(utilsCommons.getStatusMessage(994, request.getLocale()))
 //                .message(UtilsCommons.getResponseConstants(994))
                 .date(utilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .path(request.getDescription(false).replace("uri=", ""))

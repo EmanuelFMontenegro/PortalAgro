@@ -45,7 +45,11 @@ public class EmailController {
     public ResponseEntity<MessageDTO> sendEmailTemplate(@RequestBody @Valid EmailValuesDTO emailValuesDTO){
         this.emailServide.senEmailRecoveryPassword(emailValuesDTO.getMailTo());
         return ResponseEntity.ok(
-                MessageDTO.builder().code(2004).message(utilsCommons.getErrorMessage(2004)).build()
+                MessageDTO.builder()
+                        .code(2007)
+                        .message(utilsCommons.getStatusMessage(2007))
+                        .details(utilsCommons.getMessage("field.name.email"))
+                        .build()
         );
     }
 
@@ -53,7 +57,11 @@ public class EmailController {
     public ResponseEntity<?> change(@RequestBody @Valid ChangePasswordDTO passwordDTO, BindingResult bindingResult){
         this.emailServide.changePassword(passwordDTO, bindingResult);
         return ResponseEntity.ok(
-                MessageDTO.builder().code(2005).message(utilsCommons.getErrorMessage(2005)).build()
+                MessageDTO.builder()
+                        .code(2005)
+                        .message(utilsCommons.getStatusMessage(2005))
+                        .details(utilsCommons.getMessage("field.name.email"))
+                        .build()
         );
     }
 }

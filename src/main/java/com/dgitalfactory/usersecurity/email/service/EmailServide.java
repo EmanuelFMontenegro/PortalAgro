@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -24,6 +25,7 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.exceptions.TemplateProcessingException;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 /**
@@ -67,6 +69,9 @@ public class EmailServide {
     @Value("${commons.publc.img.silicon}")
     private String URL_IMG_SILICON;
 
+    private ClassPathResource portal2 = new ClassPathResource("static/public/img/portal-del-productor-2.png");
+    private ClassPathResource silicon = new ClassPathResource("static/public/img/SiliconM.png");
+
     @Autowired
     private JwtTokenService jwtTokenService;
 
@@ -100,15 +105,34 @@ public class EmailServide {
 
         MimeMessage message = javaMailSender.createMimeMessage();
         try{
-            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            MimeMessageHelper helper = new MimeMessageHelper(
+                    message,
+                    MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+                    StandardCharsets.UTF_8.name());
             Context context = new Context();
             Map<String, Object> model = new HashMap<>();
             model.put("userName",emailValuesDTO.getUserName());
 
             //Generamos un token
             emailValuesDTO.setToken(token);
-
             model.put("url", FRONT_RECOVER_PASS + emailValuesDTO.getToken());
+
+            model.put("emailRecoveryTitle", utilsCommons.getMessage("email.send.recovery.pass.title"));
+
+            model.put("emailRecoveryGreeting", utilsCommons.getMessage("email.send.recovery.pass.greeting"));
+            model.put("emailRecoveryMsn", utilsCommons.getMessage("email.send.recovery.pass.greeting.msn"));
+            model.put("emailRecoveryInstruction", utilsCommons.getMessage("email.send.recovery.pass.greeting.instruction"));
+
+            model.put("emailRecoveryBtnRecovery", utilsCommons.getMessage("email.send.recovery.pass.btn.activate"));
+
+            model.put("emailRecoveryImportant", utilsCommons.getMessage("email.send.recovery.pass.important"));
+            model.put("emailRecoveryNoRequest", utilsCommons.getMessage("email.send.recovery.pass.noRequest"));
+            model.put("emailRecoveryContact", utilsCommons.getMessage("email.send.recovery.pass.contact"));
+            model.put("emailSupport", EMAIL_AGRO_SUPPORT);
+
+            model.put("emailRecoveryGreetingEnd", utilsCommons.getMessage("email.send.recovery.pass.greeting.end"));
+            model.put("emailRecoverySignature", utilsCommons.getMessage("email.send.recovery.pass.signature"));
+
             context.setVariables(model);
             String htmlText = templateEngine.process(emailTemplate, context);
 
@@ -116,6 +140,9 @@ public class EmailServide {
             helper.setTo(emailValuesDTO.getMailTo());
             helper.setSubject(emailValuesDTO.getSubject());
             helper.setText(htmlText,true);
+
+            helper.addInline("portal2", portal2);
+            helper.addInline("silicon", silicon);
 
             us.setTokenPassword(emailValuesDTO.getToken());
             this.userSVC.saveUser(us);
@@ -163,7 +190,11 @@ public class EmailServide {
 
         MimeMessage message = javaMailSender.createMimeMessage();
         try{
-            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            MimeMessageHelper helper = new MimeMessageHelper(
+                    message,
+                    MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+                    StandardCharsets.UTF_8.name());
+
             Context context = new Context();
             Map<String, Object> model = new HashMap<>();
             model.put("userName",emailValuesDTO.getUserName());
@@ -172,6 +203,8 @@ public class EmailServide {
             emailValuesDTO.setToken(us.getTokenPassword());
 
             model.put("url", URL_ACTIVATE_ACCOUNT + emailValuesDTO.getToken());
+            model.put("emailActivateTitle", utilsCommons.getMessage("email.send.activate.account.title"));
+
             model.put("emailGreeting", utilsCommons.getMessage("email.send.activate.account.greeting"));
             model.put("emailGreetingMsn", utilsCommons.getMessage("email.send.activate.account.greeting.msn"));
             model.put("emailGreetingInstruction", utilsCommons.getMessage("email.send.activate.account.greeting.instruction"));
@@ -187,11 +220,8 @@ public class EmailServide {
             model.put("emailGreetingGreetingEnd", utilsCommons.getMessage("email.send.activate.account.greeting.end"));
             model.put("emailGreetingSignature", utilsCommons.getMessage("email.send.activate.account.signature"));
 
-            model.put("rutaImagenPortal", URL_IMG_PORTAL);
-            model.put("rutaImagenSilicon", URL_IMG_SILICON);
-            model.put("rutaImagenDemo", "/img/SiliconM.png");
-
-
+//            model.put("rutaImagenPortal", URL_IMG_PORTAL);
+//            model.put("rutaImagenSilicon", URL_IMG_SILICON);
 
             context.setVariables(model);
             String htmlText = templateEngine.process(emailTemplate, context);
@@ -200,6 +230,8 @@ public class EmailServide {
             helper.setTo(emailValuesDTO.getMailTo());
             helper.setSubject(emailValuesDTO.getSubject());
             helper.setText(htmlText,true);
+            helper.addInline("portal2", portal2);
+            helper.addInline("silicon", silicon);
 
             javaMailSender.send(message);
         }catch (MessagingException ex){

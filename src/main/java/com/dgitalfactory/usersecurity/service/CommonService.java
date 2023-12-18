@@ -1,15 +1,10 @@
 package com.dgitalfactory.usersecurity.service;
 
 import com.dgitalfactory.usersecurity.exception.ExplicitErrorAppException;
-import com.dgitalfactory.usersecurity.exception.GlobalAppException;
-import com.dgitalfactory.usersecurity.exception.ResourceNotFoundException;
-import com.dgitalfactory.usersecurity.security.service.UserService;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
-import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -17,8 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 /**
  * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
@@ -50,7 +43,7 @@ public class CommonService {
             InputStreamResource imgInputStreamResource =new InputStreamResource(imgFile.getInputStream());
             return imgInputStreamResource;
         } catch (IOException ex) {
-            String msgCodeErrror = String.format(utilsCommons.getErrorMessage(4031),utilsCommons.getMessage("field.name.image"),imageName);
+            String msgCodeErrror = String.format(utilsCommons.getStatusMessage(4031),utilsCommons.getMessage("field.name.image"),imageName);
             throw new ExplicitErrorAppException(HttpStatus.BAD_REQUEST,4031,msgCodeErrror,ex.getMessage());
         }
     }

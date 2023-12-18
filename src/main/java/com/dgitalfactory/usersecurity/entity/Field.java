@@ -1,11 +1,14 @@
 package com.dgitalfactory.usersecurity.entity;
 
+import com.dgitalfactory.usersecurity.entity.Services.Service;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.Length;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
@@ -46,4 +49,7 @@ public class Field {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "person_id", nullable = false)
     private Person person;
+
+    @OneToMany(mappedBy = "field", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Service> services = new HashSet<>();
 }

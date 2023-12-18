@@ -68,7 +68,7 @@ public class FieldController {
         this.fieldSVC.addField(user_id, field);
         return ResponseEntity.ok(
                 MessageDTO.builder().code(2001)
-                        .message(utilsCommons.getErrorMessage(2001))
+                        .message(utilsCommons.getStatusMessage(2001))
                         .details("Campo")
                         .build()
         );
@@ -79,7 +79,7 @@ public class FieldController {
     public ResponseEntity<MessageDTO> updateField(@PathVariable("user_id") Long user_id, @PathVariable("field_id") Long field_id, @RequestBody @Valid FieldResponseDTO fieldResponseDTO) {
         FieldDTO newFieldDTO = this.fieldSVC.updateField(user_id, field_id, fieldResponseDTO);
         return ResponseEntity.ok(
-                MessageDTO.builder().code(2002).message(utilsCommons.getErrorMessage(2002))
+                MessageDTO.builder().code(2002).message(utilsCommons.getStatusMessage(2002))
                         .details("Campo")
                         .build()
         );
@@ -89,7 +89,7 @@ public class FieldController {
     @DeleteMapping("/user/{user_id}/field/{field_id}")
     public ResponseEntity<MessageDTO> deleteField(@PathVariable("user_id") Long user_id, @PathVariable("field_id") Long field_id) {
         this.fieldSVC.deleteFieldById(field_id);
-        return new ResponseEntity<>(MessageDTO.builder().code(2003).message(utilsCommons.getErrorMessage(2003))
+        return new ResponseEntity<>(MessageDTO.builder().code(2003).message(utilsCommons.getStatusMessage(2003))
                 .details("Campo")
                 .build(), HttpStatus.OK);
     }
@@ -108,7 +108,7 @@ public class FieldController {
                                                         @PathVariable("field_id") Long field_id,
                                                         @Valid @RequestBody GeolocationDTO geolocationDTO) {
         this.fieldSVC.updateGeolocationDTOByFieldId(field_id, geolocationDTO);
-        return new ResponseEntity<>(MessageDTO.builder().code(2002).message(utilsCommons.getErrorMessage(2002))
+        return new ResponseEntity<>(MessageDTO.builder().code(2002).message(utilsCommons.getStatusMessage(2002))
                 .details("Geolocalización")
                 .build(), HttpStatus.OK);
     }

@@ -1,5 +1,7 @@
 package com.dgitalfactory.usersecurity.entity.Services;
 
+import com.dgitalfactory.usersecurity.entity.Field;
+import com.dgitalfactory.usersecurity.entity.Person;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,10 +25,17 @@ public class Service {
     private Long id;
 
     @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinColumn(name = "tipo_servicio_id", referencedColumnName = "id")
+    @JoinColumn(name = "type_service_id", referencedColumnName = "id")
     private ServiceType serviceType;
 
     @Column(nullable = false, length = 255)
     private String observations;
+
+    @Column(nullable = false)
+    private int status;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "field_id", nullable = false)
+    private Field field;
 
 }

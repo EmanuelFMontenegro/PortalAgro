@@ -40,10 +40,10 @@ public class UtilsCommons {
      * @param code: type int (code message)
      * @return String
      */
-    public String getErrorMessage(int code){
+    public String getStatusMessage(int code){
         return msgSource.getMessage("response.code."+String.valueOf(code));
     }
-    public String getErrorMessage(int code, Locale locale){
+    public String getStatusMessage(int code, Locale locale){
         return msgSource.getMessage("response.code."+String.valueOf(code), locale);
     }
 

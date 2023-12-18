@@ -42,7 +42,7 @@ public class CustomAccessDeniedHandler extends Throwable implements AccessDenied
         response.setContentType("application/json");
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(403)
-                .message(utilsCommons.getErrorMessage(403))
+                .message(utilsCommons.getStatusMessage(403))
                 .date(utilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .path(request.getRequestURL().toString().replace("url=",""))
                 .details(accessDeniedException.getMessage())

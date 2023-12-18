@@ -1,33 +1,61 @@
 <!doctype html>
 <html lang="es">
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Recuperar Contraseña</title>
+    <title th:text="${emailRecoveryTitle}">Recuperación de Contraseña</title>
 </head>
-<body>
-    <h2>Recuperar Contraseña</h2>
-    <h3><span>Hola </span><span th:text="${userName}"></span></h3>
-    <h4>Recibimos su solicitud para reestablecer la contraseña de su cuenta. Por favor, presione el botón “Reestablecer Contraseña” para continuar con el proceso.</h4>
-    <h4>Da clic en el siguiente botón para recuperarla.</h4>
-    <div style="display: flex;flex-direction: row;align-content: center;justify-content: center;">
-        <div style="padding: 10px 40px; box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.50); border-radius: 2px; border: 1px #65B438 solid; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
-            <div style="color: #65B438; font-size: 12px; font-family: Montserrat; font-weight: 600; word-wrap: break-word">
-                <a th:href="@{${url}}">Reestablecer Contraseña</a>
-            </div>
+<body style="font-family: 'Montserrat', sans-serif;
+             font-size: 16px;
+             line-height: 1.6;
+             color: #333;
+             margin: 0;
+             padding: 0;">
+<h2><span th:text="${emailRecoveryGreeting}">Estimado/a</span> <span th:text="${userName}">usuario</span></h2>
+    <p th:text="${emailRecoveryMsn}">Recibimos su solicitud para reestablecer la contraseña de su cuenta. Por favor, presione el botón “Reestablecer Contraseña” para continuar con el proceso.</p>
+    <p th:text="${emailRecoveryInstruction}">Da clic en el siguiente botón para recuperarla:</p>
+    <div style="text-align: center; padding-top: 15px;">
+        <div style="display: inline-block;
+                    padding: 5px 40px;
+                    border-radius: 4px;
+                    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+                    border: 1px solid #65B438;
+                    text-align: center;">
+            <a th:href="${url}" style="text-decoration: none;
+                                               font-family: 'Montserrat', sans-serif;
+                                               font-size: 14px;
+                                               font-weight: 600;
+                                               color: #65B438;
+                                               display: block;
+                                               padding: 8px 20px;
+                                               border-radius: 4px;
+                                               background-color: #fff;">
+                <span th:text="${emailRecoveryBtnRecovery}">Reestablecer Contraseña</span>
+            </a>
         </div>
     </div>
 
-    <hr>
-    <h4>Por favor, tenga en cuenta que este enlace para restablecer su contraseña tiene una validez limitada por razones de seguridad. Si no puede completar el proceso dentro de 24 horas, deberá solicitar un nuevo enlace siguiendo el mismo procedimiento.
+    <p th:text="${emailRecoveryImportant}">Por favor, tenga en cuenta que este enlace para restablecer su contraseña tiene una validez limitada por razones de seguridad. Si no puede completar el proceso dentro de 24 horas, deberá solicitar un nuevo enlace siguiendo el mismo procedimiento.</p>
+    <p th:text="${emailRecoveryNoRequest}">Si no ha sido usted quien ha solicitado esta cuenta en Portal de
+    Productores, te rogamos que ignores este correo electrónico.</p>
+    <p style="display: inline;" th:text="${emailRecoveryContact}">Si necesita ayuda o tiene alguna pregunta, no dude en ponerse en contacto con
+    nuestro equipo de soporte a través de </p><span style="display: inline;" th:text="${emailSupport}">"email-defoult@agro.com"</span>
 
-        Si tiene alguna pregunta o encuentra algún problema durante este proceso, no dude en contactar a nuestro equipo de soporte al cliente a través de esta dirección de correo y estaremos encantados de ayudarle.
-
-        Atentamente,
-        Soporte Portal Productores.
-        [email soporte]</h4>
+    <div>
+        <h4 style="margin: 5px 0;" th:text="${emailRecoveryGreetingEnd}">Saludos cordiales,</h4>
+        <h4 style="margin: 5px 0;" th:text="${emailRecoverySignature}">Portal de Productores</h4>
+    </div>
+    <hr style="border: none;
+               height: 2px;
+               background-color: #333;
+               width: 35%;
+               margin: 0;">
+    <div style=" display: flex; align-items: center; gap: 10px;">
+        <img style=" width: 200px; height: auto;" src="cid:portal2" alt="Logo portal productores">
+        <img style=" width: 200px; height: auto;" src="cid:silicon" alt="Logo silicon">
+    </div>
 </body>
 </html>

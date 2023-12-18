@@ -38,7 +38,7 @@ public class JwtEntryPoint implements AuthenticationEntryPoint {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(4025)
-                .message(utilsCommons.getErrorMessage(4025))
+                .message(utilsCommons.getStatusMessage(4025))
                 .date(utilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .path( request.getServletPath())
                 .details(authException.getMessage())
