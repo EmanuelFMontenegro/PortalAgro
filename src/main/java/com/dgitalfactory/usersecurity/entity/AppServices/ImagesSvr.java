@@ -1,7 +1,6 @@
 package com.dgitalfactory.usersecurity.entity.AppServices;
 
 import com.dgitalfactory.usersecurity.entity.Field;
-import com.dgitalfactory.usersecurity.utils.StatusService;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -17,15 +16,14 @@ import java.time.LocalDateTime;
  */
 @Data
 @NoArgsConstructor
-@Entity
-@Table
-public class ImagesSvr extends ServiceType{
+@Entity(name = "image_services")
+public class ImagesSvr extends ServiceReport{
 
     @Column(nullable = true, length = 60)
     private String name;
     @Builder
-    public ImagesSvr(Long id, LocalDateTime dateOfService, String observations, StatusService status, Field field, String name) {
-        super(id, dateOfService, observations, status, field);
+    public ImagesSvr(Long id, ServiceApp service, String name) {
+        super(id, service);
         this.name = name;
     }
 }

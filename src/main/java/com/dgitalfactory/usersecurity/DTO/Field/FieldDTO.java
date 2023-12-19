@@ -16,7 +16,7 @@ public class FieldDTO {
     private Long id;
     private String name;
     private float dimensions;
-    private String description;
+    private String observation;
     private String geolocation;
     private AddressDTO address;
     private ContactDTO contact;

@@ -2,7 +2,6 @@ package com.dgitalfactory.usersecurity.DTO.Field;
 
 import com.dgitalfactory.usersecurity.DTO.AddressDTO;
 import com.dgitalfactory.usersecurity.DTO.custom_validator.IsFloatValid;
-import com.dgitalfactory.usersecurity.utils.NumberUtils;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -28,7 +27,7 @@ public class FieldResponseDTO {
     private float dimensions;
 
     @Size(min = 0, max = 255)
-    private String description;
+    private String observation;
 
     @Size(min = 0, max = 255)
     private String geolocation;
@@ -39,8 +38,8 @@ public class FieldResponseDTO {
     public void setName(@NotNull String name) {
         this.name = UtilsCommons.capitalizeAllFirstLetters(name);
     }
-    public void setDescription(@NotNull String description) {
-        this.description = UtilsCommons.capitalize(description);
+    public void setObservation(@NotNull String observation) {
+        this.observation = UtilsCommons.capitalize(observation);
     }
 
 }

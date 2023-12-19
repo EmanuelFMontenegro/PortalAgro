@@ -6,11 +6,11 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
- * @created 18/12/2023 - 09:45
+ * @created 19/12/2023 - 09:41
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ImagesSvrDTO extends ServiceTypeDTO{
+public class ImagenSvrDTO {
     private String name;
 }

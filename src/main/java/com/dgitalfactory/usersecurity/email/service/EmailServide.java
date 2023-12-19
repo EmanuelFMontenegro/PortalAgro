@@ -246,7 +246,7 @@ public class EmailServide {
 //    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public void activateAccount(String token){
         try{
-            if(!this.jwtTokenService.isTokenExpired(token)){
+            if(this.jwtTokenService.isTokenExpired(token)){
                 throw new GlobalAppException(HttpStatus.UNAUTHORIZED, 4004,"field.name.email");
             }
         }catch (Exception ex){

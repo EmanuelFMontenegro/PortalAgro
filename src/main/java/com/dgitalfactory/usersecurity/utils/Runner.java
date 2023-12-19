@@ -1,7 +1,9 @@
 package com.dgitalfactory.usersecurity.utils;
 
+import com.dgitalfactory.usersecurity.entity.AppServices.TypeService;
 import com.dgitalfactory.usersecurity.entity.Person;
 import com.dgitalfactory.usersecurity.repository.PersonRepository;
+import com.dgitalfactory.usersecurity.repository.TypeServiceRepository;
 import com.dgitalfactory.usersecurity.security.entity.Role;
 import com.dgitalfactory.usersecurity.security.entity.User;
 import com.dgitalfactory.usersecurity.security.repository.RoleRepository;
@@ -26,16 +28,18 @@ public class Runner implements CommandLineRunner {
     private final UserRepository userRepo;
     @Autowired
     private final RoleRepository roleRepo;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
-
     @Autowired
     private PersonRepository personRepo;
 
-    public Runner(UserRepository userrepo, RoleRepository authrepo) {
+    @Autowired
+    private TypeServiceRepository typeServiceRepo;
+
+    public Runner(UserRepository userrepo, RoleRepository authrepo, TypeServiceRepository typeServiceRepo) {
         this.userRepo = userrepo;
         this.roleRepo = authrepo;
+        this.typeServiceRepo= typeServiceRepo;
     }
 
     public void createdRoles() {
@@ -99,6 +103,21 @@ public class Runner implements CommandLineRunner {
         );
     }
 
+    private void createdTypeService(){
+        this.typeServiceRepo.saveAll(
+                List.of(
+                        TypeService.builder()
+                                .name("Aplicación de Productos")
+                                .description("Uso de dron para realizar la aplicación de un producto determinado, según area y tipo de plantación")
+                                .build(),
+                        TypeService.builder()
+                                .name("Imagenes")
+                                .description("Servicio de control de estado de plantación por imágenes")
+                                .build()
+                )
+        );
+    }
+
     @Override
     public void run(String... args) throws Exception {
         if (this.roleRepo.count() == 0) {
@@ -109,6 +128,9 @@ public class Runner implements CommandLineRunner {
         }
         if(this.personRepo.count()==0){
             this.createdPerson();
+        }
+        if(this.typeServiceRepo.count()==0){
+            this.createdTypeService();
         }
     }
 }

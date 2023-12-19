@@ -2,12 +2,15 @@ package com.dgitalfactory.usersecurity.entity.AppServices;
 
 import com.dgitalfactory.usersecurity.entity.Field;
 import com.dgitalfactory.usersecurity.utils.StatusService;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
@@ -15,11 +18,11 @@ import java.time.LocalDateTime;
  */
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-public abstract class ServiceType {
+@Entity(name = "services")
+public class ServiceApp {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,7 +39,17 @@ public abstract class ServiceType {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "field_id", nullable = false)
+    @JsonIgnoreProperties("Service")
     private Field field;
+
+    @Column(nullable = true)
+    @OneToMany(mappedBy = "service", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<ServiceReport> listServiceReport;
+
+//    @Column(name = false)
+//    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+//    private Type
+
 
 }
 

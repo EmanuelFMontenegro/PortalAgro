@@ -17,9 +17,8 @@ import java.time.LocalDateTime;
  */
 @Data
 @NoArgsConstructor
-@Entity
-@Table
-public class ProductApSvr extends ServiceType {
+@Entity(name = "product_applications")
+public class ProductApSvr extends ServiceReport {
 
     @Column(nullable = true, length = 60)
     private String productName;
@@ -33,8 +32,8 @@ public class ProductApSvr extends ServiceType {
     private String idDrone;
 
     @Builder
-    public ProductApSvr(Long id, LocalDateTime dateOfService, String observations, StatusService status, Field field, String productName, LocalDateTime flightTime, float sprayArea, String pilotName, String idDrone) {
-        super(id, dateOfService, observations, status, field);
+    public ProductApSvr(Long id, ServiceApp service, String productName, LocalDateTime flightTime, float sprayArea, String pilotName, String idDrone) {
+        super(id, service);
         this.productName = productName;
         this.flightTime = flightTime;
         this.sprayArea = sprayArea;

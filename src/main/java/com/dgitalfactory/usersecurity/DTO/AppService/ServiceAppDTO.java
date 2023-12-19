@@ -7,23 +7,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-
+import java.util.List;
 
 /**
  * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
- * @created 18/12/2023 - 09:34
+ * @created 19/12/2023 - 09:15
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ServiceTypeDTO {
+public class ServiceAppDTO {
     private Long id;
-
     private LocalDateTime dateOfService;
-
     private String observations;
-
     private StatusService status;
-
     private FieldDTO field;
+    private List<ServiceReportDTO> listServiceReport;
 }

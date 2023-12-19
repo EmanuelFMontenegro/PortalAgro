@@ -6,7 +6,6 @@ import com.dgitalfactory.usersecurity.DTO.Field.GeolocationDTO;
 import com.dgitalfactory.usersecurity.DTO.ResponsePaginationDTO;
 import com.dgitalfactory.usersecurity.entity.Field;
 import com.dgitalfactory.usersecurity.exception.GlobalAppException;
-import com.dgitalfactory.usersecurity.exception.ResourceNotFoundException;
 import com.dgitalfactory.usersecurity.repository.FieldRepository;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
 import org.modelmapper.ModelMapper;
@@ -182,7 +181,7 @@ public class FieldService {
         field.getAddress().setLocation(fieldResponseDTO.getAddress().getLocation());
         //FIELD
         field.setName(fieldResponseDTO.getName());
-        field.setDescription(fieldResponseDTO.getDescription());
+        field.setObservation(fieldResponseDTO.getObservation());
         field.setDimensions(fieldResponseDTO.getDimensions());
         field.setGeolocation(fieldResponseDTO.getGeolocation());
 

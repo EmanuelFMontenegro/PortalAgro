@@ -1,6 +1,6 @@
 package com.dgitalfactory.usersecurity.entity;
 
-import com.dgitalfactory.usersecurity.entity.AppServices.ServiceType;
+import com.dgitalfactory.usersecurity.entity.AppServices.ServiceApp;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,7 +33,7 @@ public class Field {
     private float dimensions;
 
     @Column(nullable = false)
-    private String description;
+    private String observation;
 
     @Column(nullable = true)
     private String geolocation;
@@ -51,5 +51,5 @@ public class Field {
     private Person person;
 
     @OneToMany(mappedBy = "field", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<ServiceType> services = new HashSet<>();
+    private Set<ServiceApp> services = new HashSet<>();
 }
