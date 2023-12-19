@@ -42,8 +42,8 @@ export class AuthService {
   }
 
   getToken(): string | null {
-    return localStorage.getItem('token'); // Asegúrate de que esta es la forma en que almacenas y accedes al token
+    return localStorage.getItem('token');
   }
 
-  // ... cualquier otro método necesario para tu servicio ...
+  
 }

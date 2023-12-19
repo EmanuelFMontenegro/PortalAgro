@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 
 interface CustomJwtPayload {
-  userId: number; // Asegúrate de que el nombre del campo coincida con el de tu token
+  userId: number;
 }
 
 @Component({
@@ -48,10 +48,10 @@ export class InicioComponent implements OnInit {
   }
 
   decodeToken(): void {
-    const token = this.authService.getToken(); // Asume que tienes un método para obtener el token
+    const token = this.authService.getToken();
     if (token) {
       const decoded = jwtDecode<CustomJwtPayload>(token);
-      this.userId = decoded.userId; // Asegúrate de que el nombre del campo coincida con el de tu token
+      this.userId = decoded.userId;
     }
   }
 
