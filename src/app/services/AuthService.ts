@@ -17,11 +17,11 @@ export class AuthService {
   login(username: string, password: string): Observable<any> {
     return this.http.post<any>(this.loginUrl, { username, password }).pipe(
       map(response => {
-        const token = response.token; // Asegúrate de que el token se recibe aquí
-        console.log("JWT Token:", token); // Para depuración
+        const token = response.token;
+        console.log("JWT Token:", token);
 
         const decodedToken = jwtDecode<{ email: string, userId: number }>(token);
-        console.log("Decoded Token:", decodedToken); // Para depuración
+        console.log("Decoded Token:", decodedToken);
 
         this.userEmail = decodedToken.email;
         this.userId = decodedToken.userId;
@@ -45,5 +45,5 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
-  
+
 }
