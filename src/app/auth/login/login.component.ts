@@ -90,17 +90,15 @@ export class LoginComponent {
               // Manejar otros posibles detalles específicos aquí
               this.toastr.error(errorMessage, 'Error');
             }
+          } else if (err.status === 400 && err.error.code === 4016) {
+            this.toastr.error('Error de contraseña. Por favor intenta de nuevo.','Atencion');
           } else if (err.status === 401 && err.error.code === 4001) {
-            this.toastr.warning('Por favor revisa tu casilla de E-mail para activar tu cuenta.', 'Advertencia', { closeButton: true });
+            this.toastr.warning('Por favor revisa tu casilla de correo electrónico para activar tu cuenta.', 'Advertencia', { closeButton: true });
           } else {
             const errorMessage = err.error.message || 'Error desconocido';
             this.toastr.error(errorMessage, 'Error');
           }
         }
-
-
-
-
 
       });
     } else {

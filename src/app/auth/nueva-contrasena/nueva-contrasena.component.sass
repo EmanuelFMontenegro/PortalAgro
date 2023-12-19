@@ -110,16 +110,28 @@ button[type="submit"]
   @media (max-width: 600px)
     width: 80%
 
+.btn-submit
+  background-color: #8FCA8F
+  color: white
+
+.btn-submit.enabled
+  background-color: #3CA749
+
 .login-links
-  text-align: center
   margin-top: 20px
+  text-align: center
 
 .login-prompt
   font-size: 14px
+  margin-bottom: 10px
 
 .login-link
+  font-size: 14px
   color: $primary-color
   text-decoration: none
   margin-left: 5px
+  // border-bottom: 2px solid $primary-color
+  padding-bottom: 1px
+
   &:hover
     text-decoration: underline

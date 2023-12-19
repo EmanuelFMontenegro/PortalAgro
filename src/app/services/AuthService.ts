@@ -1,39 +1,49 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from './ApiService';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private userEmail: string = ''; // Inicializa como una cadena vacía
+  private userEmail: string = '';
+  private userId: number | null = null;
+  private loginUrl = 'http://localhost:8095/api/auth/login';
 
-  constructor(private apiService: ApiService) {}
+  constructor(private http: HttpClient) {}
 
-  // Método para validar credenciales y obtener el email del usuario
-  validarCredenciales(username: string, password: string) {
-    this.apiService.validarCredenciales(username, password).subscribe(response => {
-      console.log('Respuesta completa del servidor:', response); // Ver la respuesta completa
+  login(username: string, password: string): Observable<any> {
+    return this.http.post<any>(this.loginUrl, { username, password }).pipe(
+      map(response => {
+        const token = response.token; // Asegúrate de que el token se recibe aquí
+        console.log("JWT Token:", token); // Para depuración
 
-      if (response.status === 200) {
-        console.log('Cuerpo de la respuesta:', response.body); // Inspeccionar el cuerpo de la respuesta
-        if (response.body && response.body.email) {
-          this.userEmail = response.body.email;
-          console.log('Email obtenido:', this.userEmail);
-        } else {
-          console.error('Email no presente en la respuesta');
-        }
-      }
-    }, error => {
-      console.error('Error en la solicitud:', error);
-    });
+        const decodedToken = jwtDecode<{ email: string, userId: number }>(token);
+        console.log("Decoded Token:", decodedToken); // Para depuración
+
+        this.userEmail = decodedToken.email;
+        this.userId = decodedToken.userId;
+
+        console.log('token',this.userId)
+
+        return { email: decodedToken.email, id: decodedToken.userId };
+      })
+    );
   }
 
-
-
   getUserEmail(): string {
-    console.log('Email solicitado desde el servicio:', this.userEmail); // Log cada vez que se accede al email
     return this.userEmail;
   }
 
-  // ... otros métodos relacionados con la autenticación ...
+  getUserId(): number | null {
+    return this.userId;
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('token'); // Asegúrate de que esta es la forma en que almacenas y accedes al token
+  }
+
+  // ... cualquier otro método necesario para tu servicio ...
 }

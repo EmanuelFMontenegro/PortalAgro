@@ -2,7 +2,6 @@
   <div class="titulo-bienvenida">
     <h2>¡Bienvenido!</h2>
   </div>
-
   <div class="card user-card">
     <div class="avatar">
       <img src="/assets/img/foto.jpg" alt="Avatar">
@@ -12,27 +11,42 @@
 
   <div class="card">
     <h2 class="titulo-registrar-campo">Registrar Campo</h2>
-    <form class="solicitud-servicio-form">
+    <form class="solicitud-servicio-form" (ngSubmit)="registrarCampo()">
       <div class="campos-formulario">
         <div class="grupo-campos">
+          <!-- Dirección -->
           <div class="field-container">
             <label class="field-label">Dirección</label>
-            <input matInput class="field-input" placeholder="Dirección">
+            <input matInput [(ngModel)]="campoData.address.address" name="address" class="field-input"
+              placeholder="dirección del campo" required (blur)="addressTouched = true">
+            <span *ngIf="campoData.address.address === '' && addressTouched" class="error-message">Este campo es
+              requerido</span>
           </div>
 
+          <!-- Localidad -->
           <div class="field-container">
             <label class="field-label">Localidad</label>
-            <input matInput class="field-input" placeholder="Localidad">
+            <input matInput [(ngModel)]="campoData.address.location" name="location" class="field-input"
+              placeholder="localidad" required (blur)="locationTouched = true">
+            <span *ngIf="campoData.address.location === '' && locationTouched" class="error-message">Este campo es
+              requerido</span>
           </div>
 
+          <!-- Nombre -->
           <div class="field-container">
             <label class="field-label">Nombre</label>
-            <input matInput class="field-input" placeholder="Nombre">
+            <input matInput [(ngModel)]="campoData.name" name="name" class="field-input" placeholder="nombre del campo"
+              required (blur)="nameTouched = true">
+            <span *ngIf="campoData.name === '' && nameTouched" class="error-message">Este campo es requerido</span>
           </div>
 
+          <!-- Dimensiones -->
           <div class="field-container">
             <label class="field-label">Dimensiones (Hectáreas)</label>
-            <input matInput class="field-input" placeholder="Dimensiones (Hectáreas)">
+            <input matInput [(ngModel)]="campoData.dimensions" name="dimensions" class="field-input" type="number"
+              placeholder="ingresar valores en hectáreas" required (blur)="dimensionsTouched = true">
+            <span *ngIf="campoData.dimensions === '' && dimensionsTouched" class="error-message">Este campo es
+              requerido</span>
           </div>
         </div>
 
@@ -43,8 +57,9 @@
       </div>
 
       <div class="botones-servicio">
-        <button mat-raised-button class="cancel-button">Cancelar</button>
-        <button mat-raised-button class="register-button">Registrar Campo</button>
+        <button mat-raised-button class="cancel-button" type="button">Cancelar</button>
+        <button mat-raised-button class="register-button" type="submit" [disabled]="!isValidForm()">Registrar
+          Campo</button>
       </div>
     </form>
   </div>

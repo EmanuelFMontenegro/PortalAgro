@@ -55,9 +55,13 @@
       <!-- Enlace para regresar al inicio de sesión -->
       <div class="login-links mt-3">
         <div class="login-prompt">
-          ¿Ya tienes cuenta? <a href="javascript:void(0)" (click)="navigateAndClose()">Iniciar Sesión</a>
+          ¿Ya tienes cuenta? <a routerLink="/registro" class="login-link">Iniciar Sesión</a>
         </div>
       </div>
     </form>
   </mat-card>
 </div>
+
+<!--METODO PARA CERRAR VENTANA
+metodo para cerrar la venta de nueva contraseña
+<a href="javascript:void(0)" (click)="navigateAndClose()"</a> -->

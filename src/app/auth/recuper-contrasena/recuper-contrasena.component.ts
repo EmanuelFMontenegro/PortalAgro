@@ -40,7 +40,7 @@ export class RecuperContrasenaComponent {
           }
         },
         error: (error) => {
-          this.toastr.error('Error al enviar el correo de recuperación.');
+          this.toastr.error('El correo electrónico ingresado no se encuentra registrado.','Atencion');
           console.error('Error al enviar el correo de recuperación:', error);
         }
       });

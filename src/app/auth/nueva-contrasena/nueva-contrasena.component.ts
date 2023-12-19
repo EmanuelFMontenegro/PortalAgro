@@ -82,13 +82,13 @@ export class NuevaContrasenaComponent implements OnInit {
         this.apiService.cambiarContrasena(newPassword, confirmPassword, this.token).subscribe({
           next: () => {
             this.toastr.info('Contraseña cambiada con éxito');
-            this.navigateAndClose();
+            // this.navigateAndClose(); metodo desactivado hasta tanto sea validado
           },
           error: (error) => {
             if (error.status === 401) {
               this.toastr.error('La solicitud de cambio de contraseña ha expirado...');
             } else {
-              this.toastr.error('Ocurrió un error al cambiar la contraseña');
+              this.toastr.error('Ya se realizo el cambio de contraseña recientemente','Atencion');
             }
           }
         });

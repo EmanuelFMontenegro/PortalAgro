@@ -1,5 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/services/AuthService'; // Asegúrate de que la ruta sea correcta
+import { HttpClient } from '@angular/common/http';
+import { ApiService } from 'src/app/services/ApiService';
+import { ToastrService } from 'ngx-toastr';
+import { AuthService } from 'src/app/services/AuthService';
+import { Router } from '@angular/router';
+import { jwtDecode } from 'jwt-decode';
+
+interface CustomJwtPayload {
+  userId: number; // Asegúrate de que el nombre del campo coincida con el de tu token
+}
 
 @Component({
   selector: 'app-inicio',
@@ -7,14 +16,75 @@ import { AuthService } from 'src/app/services/AuthService'; // Asegúrate de que
   styleUrls: ['./inicio.component.sass']
 })
 export class InicioComponent implements OnInit {
-  userEmail: string = ''; // Inicializa la variable para almacenar el email
+  userEmail: string = '';
+  userId: number | null = null;
+  campoData = {
+    name: '',
+    dimensions: '',
+    description: '',
+    address: {
+      address: '',
+      location: ''
+    }
+  };
 
-  constructor(private authService: AuthService) {}
+  addressTouched = false;
+  locationTouched = false;
+  nameTouched = false;
+  dimensionsTouched = false;
+
+  constructor(
+    private authService: AuthService,
+    private apiService: ApiService,
+    private toastr: ToastrService,
+    private http: HttpClient,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    // Obtiene el email del usuario cuando el componente se inicializa
     this.userEmail = this.authService.getUserEmail();
+    this.decodeToken();
+    console.log('numero de usuario', this.userId);
   }
 
-  // ... Resto de tu código ...
+  decodeToken(): void {
+    const token = this.authService.getToken(); // Asume que tienes un método para obtener el token
+    if (token) {
+      const decoded = jwtDecode<CustomJwtPayload>(token);
+      this.userId = decoded.userId; // Asegúrate de que el nombre del campo coincida con el de tu token
+    }
+  }
+
+  registrarCampo(): void {
+    if (!this.userId) {
+      this.toastr.error('Error: No se ha identificado al usuario.', 'Error');
+      return;
+    }
+
+    if (this.isValidForm()) {
+      this.apiService.addField(this.userId, this.campoData).subscribe(
+        () => {
+          this.toastr.success('Campo registrado con éxito', 'Éxito');
+          this.router.navigate(['/geolocalizacion']);
+        },
+        error => {
+          console.error('Error al registrar el campo:', error);
+          this.toastr.error('Error al registrar el campo. Detalles: ' + error.message, 'Error');
+        }
+      );
+    } else {
+      this.toastr.error('Por favor, completa todos los campos requeridos', 'Error');
+    }
+  }
+
+  isValidForm(): boolean {
+    const dimensions = Number(this.campoData.dimensions);
+
+    const isAddressValid = this.campoData.address.address.trim() !== '';
+    const isLocationValid = this.campoData.address.location.trim() !== '';
+    const isNameValid = this.campoData.name.trim() !== '';
+    const areDimensionsValid = !isNaN(dimensions) && dimensions > 0;
+
+    return isAddressValid && isLocationValid && isNameValid && areDimensionsValid;
+  }
 }

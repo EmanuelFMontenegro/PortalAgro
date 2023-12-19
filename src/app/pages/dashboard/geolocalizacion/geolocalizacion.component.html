@@ -1,0 +1,19 @@
+<p>campos works!</p>
+<!-- Ventana de Geolocalizacion -->
+
+<div class="container">
+  <!-- Sección para la Geolocalización -->
+  <div class="card">
+    <h2 class="titulo-registrar-campo">Geolocalización</h2>
+    <div class="geo-container">
+      <!-- Buscador de lugares -->
+      <div #map style="height: 400px;"></div>
+      <input type="text" id="search-input" placeholder="Buscar lugares..." />
+      <button (click)="onSearch()">Buscar</button>
+
+
+      <!-- Mapa -->
+      <div id="map" style="height: 400px;"></div>
+    </div>
+  </div>
+</div>

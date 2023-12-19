@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { InicioComponent } from './inicio/inicio.component';
 import { ServiciosComponent } from './servicios/servicios.component';
 import { ProductosComponent } from './productos/productos.component';
-import { CamposComponent } from './campos/campos.component';
+import { GeolocalizacionComponent } from './geolocalizacion/geolocalizacion.component';
 import { ConfiguracionComponent } from './configuracion/configuracion.component';
 import { PerfilComponent } from './perfil/perfil.component';
 import { DashboardComponent } from './dashboard.component';
@@ -17,6 +17,7 @@ const routes: Routes = [
     component: DashboardComponent,
     children: [
       { path: 'bienvenida', component:BienvenidaComponent },
+      { path: 'geolocalizacion', component:GeolocalizacionComponent },
       { path: 'inicio', component: InicioComponent },
       { path: 'servicios', component: ServiciosComponent },
       { path: 'productos', component: ProductosComponent },

@@ -7,6 +7,8 @@ import { AuthModule } from './auth/auth.module';
 import { DashboardModule } from './pages/dashboard/dashboard.module';
 import { AppComponent } from './app.component';
 import { ToastrModule } from 'ngx-toastr';
+// import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { JwtInterceptor } from './services/JwtInterceptor';
 const routes: Routes = [];
 
 @NgModule({
@@ -20,7 +22,9 @@ const routes: Routes = [];
     AuthModule,
     DashboardModule,
   ],
-  providers: [],
+  // providers: [
+  //   { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
+  // ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -4,23 +4,27 @@
       <img src="assets/img/logo_sidebar.png" alt="Logo" class="dashboard-logo">
     </div>
     <mat-nav-list class="btn_nav">
-      <a mat-list-item routerLink="/dashboard/inicio" class="nav-item">Inicio</a>
-      <a mat-list-item routerLink="/dashboard/servicios" class="nav-item">Servicios</a>
-      <a mat-list-item routerLink="/dashboard/productos" class="nav-item">Productos</a>
-      <a mat-list-item routerLink="/dashboard/configuracion" class="nav-item">Configuracion</a>
-      <a mat-list-item routerLink="/dashboard/perfil" class="nav-item">Perfil</a>
-      <!-- Más elementos si es necesario -->
+      <a mat-list-item routerLink="/dashboard/inicio" class="nav-item" (click)="closeSidenavIfSmall()">Inicio</a>
+      <a mat-list-item routerLink="/dashboard/servicios" class="nav-item" (click)="closeSidenavIfSmall()">Servicios</a>
+      <a mat-list-item routerLink="/dashboard/productos" class="nav-item" (click)="closeSidenavIfSmall()">Productos</a>
+      <a mat-list-item routerLink="/dashboard/configuracion" class="nav-item"
+        (click)="closeSidenavIfSmall()">Configuracion</a>
+      <a mat-list-item routerLink="/dashboard/perfil" class="nav-item" (click)="closeSidenavIfSmall()">Perfil</a>
     </mat-nav-list>
   </mat-sidenav>
 
   <mat-sidenav-content class="sidenav-content">
+    <button mat-icon-button (click)="sidenav.open()" *ngIf="isScreenSmall" class="open-sidebar-btn">
+      <mat-icon style="color: white;">arrow_back</mat-icon>
+    </button>
+
     <mat-toolbar color="primary" class="toolbar-green">
       <mat-form-field class="search-field">
         <mat-label>Buscar</mat-label>
         <input matInput placeholder="Escribe aquí...">
       </mat-form-field>
       <span class="toolbar-spacer"></span>
-      <!-- Icono de perfil y menú -->
+
       <button mat-icon-button [matMenuTriggerFor]="menu" class="profile-menu">
         <mat-icon>account_circle</mat-icon>
       </button>
@@ -30,7 +34,6 @@
       </mat-menu>
     </mat-toolbar>
 
-    <!-- Aquí se renderizarán los componentes de las rutas -->
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>
