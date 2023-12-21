@@ -2,6 +2,7 @@ package com.dgitalfactory.usersecurity.entity.AppServices;
 
 import com.dgitalfactory.usersecurity.entity.Field;
 import com.dgitalfactory.usersecurity.utils.StatusService;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,7 +28,6 @@ public abstract class ServiceReport {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "service_id", nullable = false)
-    @JsonIgnoreProperties("ServiceReport")
     private ServiceApp service;
 
 }

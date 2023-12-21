@@ -1,5 +1,7 @@
 package com.dgitalfactory.usersecurity.controller.service_app;
 
+import com.dgitalfactory.usersecurity.DTO.AppService.ServiceAppDTO;
+import com.dgitalfactory.usersecurity.DTO.AppService.ServiceAppResponseDTO;
 import com.dgitalfactory.usersecurity.DTO.AppService.TypeServiceDTO;
 import com.dgitalfactory.usersecurity.DTO.AppService.TypeServiceResponseDTO;
 import com.dgitalfactory.usersecurity.DTO.MessageDTO;
@@ -48,16 +50,28 @@ public class ServiceAppController {
                 this.serviceAppSVR.getAllServiceUsers(pageNumber, pageSize, sortBy, sortDir), HttpStatus.OK);
     }
 
-//    @PreAuthorize("hasRole('ADMIN') or @conditionEvaluatorService.canPreAuthAdmin(#user_id)")
-//    @PostMapping("/user/{user_id}/field/{field_id}/service")
-//    public ResponseEntity<MessageDTO> addServiceType(@RequestBody @Valid Ser ){
-//        this.serviceAppSVR.addServiceApp(typeServiceResponseDTO);
-//        return new ResponseEntity<MessageDTO>(
-//                MessageDTO.builder()
-//                        .code(2001)
-//                        .message(utilsCommons.getStatusMessage(2001))
-//                        .details(utilsCommons.getMessage("field.name.service.type"))
-//                        .build()
-//                , HttpStatus.OK);
-//    }
+    @PreAuthorize("hasRole('ADMIN') or @conditionEvaluatorService.canPreAuthAdmin(#user_id)")
+    @PostMapping("/user/{user_id}/field/{field_id}/service")
+    public ResponseEntity<MessageDTO> addServiceApp(@PathVariable("user_id") Long user_id,
+                                                     @PathVariable("field_id") Long field_id,
+                                                     @RequestBody @Valid ServiceAppResponseDTO serviceResponseDTO) {
+        this.serviceAppSVR.addServiceApp(field_id, serviceResponseDTO);
+        return new ResponseEntity<MessageDTO>(
+                MessageDTO.builder()
+                        .code(2001)
+                        .message(utilsCommons.getStatusMessage(2001))
+                        .details(utilsCommons.getMessage("field.name.service.order"))
+                        .build()
+                , HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ADMIN') or @conditionEvaluatorService.canPreAuthAdmin(#user_id)")
+    @PostMapping("/user/{user_id}/field/{field_id}/service/{service_id}")
+    public ResponseEntity<ServiceAppDTO> getServiceById(@PathVariable("user_id") Long user_id,
+                                                     @PathVariable("field_id") Long field_id,
+                                                     @PathVariable("service_id") Long service_id) {
+        return new ResponseEntity<ServiceAppDTO>(
+                this.serviceAppSVR.getServiceAppDTO(field_id, service_id),
+                HttpStatus.OK);
+    }
 }

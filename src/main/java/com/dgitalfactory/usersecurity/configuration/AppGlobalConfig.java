@@ -1,5 +1,6 @@
 package com.dgitalfactory.usersecurity.configuration;
 
+import com.dgitalfactory.usersecurity.DTO.AppService.ServiceAppDTOMap;
 import com.dgitalfactory.usersecurity.utils.ResponseStatusMessages;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +16,8 @@ public class AppGlobalConfig {
 
     @Bean
     public ModelMapper modoelMapper() {
-        return new ModelMapper();
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.addMappings(new ServiceAppDTOMap());
+        return modelMapper;
     }
-
 }

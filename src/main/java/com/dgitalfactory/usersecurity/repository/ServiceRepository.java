@@ -4,10 +4,15 @@ import com.dgitalfactory.usersecurity.entity.AppServices.ServiceApp;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /**
  * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
  * @created 19/12/2023 - 09:11
  */
 @Repository
 public interface ServiceRepository extends JpaRepository<ServiceApp, Long> {
+
+    public Optional<ServiceApp> findById(Long id);
+
 }

@@ -71,7 +71,7 @@ public class TypeSvcService {
      * @param idTypeService: type @{@link Long}
      * @return @{@link TypeService}
      */
-    private TypeService getTypeService(Long idTypeService) {
+    public TypeService getTypeService(Long idTypeService) {
         return this.typeSvcREPO.findById(idTypeService)
                 .orElseThrow(
                         () -> errorSVC.getResourceNotFoundException("Id Type of Service", "idTypeService", idTypeService)

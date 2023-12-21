@@ -4,8 +4,10 @@ import com.dgitalfactory.usersecurity.DTO.Field.FieldDTO;
 import com.dgitalfactory.usersecurity.DTO.Field.FieldResponseDTO;
 import com.dgitalfactory.usersecurity.DTO.Field.GeolocationDTO;
 import com.dgitalfactory.usersecurity.DTO.ResponsePaginationDTO;
+import com.dgitalfactory.usersecurity.entity.Contact;
 import com.dgitalfactory.usersecurity.entity.Field;
 import com.dgitalfactory.usersecurity.exception.GlobalAppException;
+import com.dgitalfactory.usersecurity.exception.GlobalMessageException;
 import com.dgitalfactory.usersecurity.repository.FieldRepository;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
 import org.modelmapper.ModelMapper;
@@ -54,7 +56,37 @@ public class FieldService {
      */
     public Field getFieldById(Long field_id){
         return this.fieldRepo.findById(field_id)
-                .orElseThrow(()-> errorSVC.getResourceNotFoundException("Field","field_id", field_id));
+                .orElseThrow(()-> errorSVC.getResourceNotFoundException("Field ID","field_id", field_id));
+    }
+
+    /**
+     * Find a field with id
+     * @param field_id: type {@link Long}
+     * @return @{@link FieldDTO}
+     */
+    public FieldDTO getFielDTOdById(Long field_id){
+        return this.fieldRepo.findFieldDTOById(field_id)
+                .orElseThrow(()-> errorSVC.getResourceNotFoundException("Field ID","field_id", field_id));
+    }
+
+    /**
+     * Check if field with that name exists for that user ID
+     * @param name: : type {@link String} name field
+     * @param userid: type {@link Long} user ID
+     * @return @{@link Boolean}
+     */
+    public boolean existsFieldByName(String name, Long userid){
+        return this.fieldRepo.existsByFieldNameAndUserId(name, userid);
+    }
+
+    /**
+     * Check if field with that ID exists for that user ID
+     * @param fieldId: : type {@link Long} field ID
+     * @param userId: type {@link Long} user ID
+     * @return @{@link Boolean}
+     */
+    public boolean existsFieldIdByUserId(Long fieldId, Long userId){
+        return this.fieldRepo.existsByFieldIdAndUserId(fieldId, userId);
     }
 
     /**
@@ -68,23 +100,23 @@ public class FieldService {
     }
 
     /**
-     * Find a field with id
-     * @param field_id: type {@link Long}
-     * @return @{@link FieldDTO}
-     */
-    public FieldDTO getFieldDTOById(Long field_id){
-        Field field = this.getFieldById(field_id);
-        return utilsCommons.convertEntityToDTO(field, FieldDTO.class);
-    }
-
-    /**
      * Delte a field with id
      * @param field_id: type {@link Long}
      * @return Field
      */
-    public void deleteFieldById(Long field_id){
-        this.getFieldById(field_id);
-        this.fieldRepo.deleteById(field_id);
+    public void deleteFieldById(Long field_id, Long user_Id){
+        if(this.existsFieldIdByUserId(field_id,user_Id)){
+            this.fieldRepo.deleteById(field_id);
+            return;
+        }
+        throw new GlobalMessageException(
+                HttpStatus.NOT_FOUND,4033,
+                utilsCommons.getFormatMessage(
+                        utilsCommons.getStatusMessage(4033),
+                        utilsCommons.getMessage("field.name.field"),
+                        utilsCommons.getMessage("field.name.user")
+                        ),
+                utilsCommons.getMessage("field.name.field"));
     }
 
     /**
@@ -111,11 +143,11 @@ public class FieldService {
                 : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
 
-        Page<Field> listField = this.fieldRepo.findAll(pageable);
-        List<Field> list = listField.getContent();
-        List<FieldDTO> listDTO = utilsCommons.mapListEntityDTO(list, FieldDTO.class);
+        Page<FieldDTO> listField = this.fieldRepo.findAllFieldsDTO(pageable);
+        List<FieldDTO> list = listField.getContent();
+//        List<FieldDTO> listDTO = utilsCommons.mapListEntityDTO(list, FieldDTO.class);
         return ResponsePaginationDTO.builder()
-                .list(Collections.singletonList(listDTO))
+                .list(Collections.singletonList(list))
                 .pageNo(listField.getNumber())
                 .pageSize(listField.getSize())
                 .pageTotal(listField.getTotalPages())
@@ -126,25 +158,33 @@ public class FieldService {
 
     /**
      * Find all fields by person/user id
-     * @param person_id
-     * @return
+     * @param pageNo
+     * @param pageSize
+     * @param sortBy
+     * @param sortDir
+     * @param user_id: Type {@link Long}
+     * @return @{@link ResponsePaginationDTO}
      */
-    public List<FieldDTO> getAllFielDTOdsByUserId(Long person_id){
-        List<Field> listField = this.fieldRepo.findByPersonId(person_id)
-                .orElseThrow(
-                        ()-> errorSVC.getResourceNotFoundException("Id person", "person_id", person_id));
+    public ResponsePaginationDTO getAllFieldDTOdsByUserId(int pageNo, int pageSize, String sortBy, String sortDir,
+                                                          Long user_id){
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
 
-        List<FieldDTO> listFieldDTO =utilsCommons.mapListEntityDTO(listField, FieldDTO.class);
-//        List<FieldDTO> listField = this.fieldRepo.findByPersonId(person_id)
-//                .orElseThrow(
-//                        ()-> new ResourceNotFoundException("Id person", "person_id", person_id))
-//                .stream().map(
-//                        field -> UtilsCommons.convertEntityToDTO(field,FieldDTO.class)
-//                ).collect(Collectors.toList());
-        if(listField.isEmpty()){
-            throw new GlobalAppException(HttpStatus.NO_CONTENT,2006,"Campos asociados con id "+person_id);
+        Page<FieldDTO> listObject = this.fieldRepo.findAllFieldsDTOByUserId(user_id, pageable);
+        List<FieldDTO> list = listObject.getContent();
+        if(list.isEmpty()){
+            throw new GlobalAppException(HttpStatus.OK,2006,utilsCommons.getMessage(""));
         }
-        return listFieldDTO;
+        return ResponsePaginationDTO.builder()
+                .list(Collections.singletonList(list))
+                .pageNo(listObject.getNumber())
+                .pageSize(listObject.getSize())
+                .pageTotal(listObject.getTotalPages())
+                .itemsTotal(listObject.getTotalPages())
+                .pageLast(listObject.isLast())
+                .build();
     }
 
 
@@ -155,8 +195,14 @@ public class FieldService {
      */
     @Transactional()
     public void addField(Long person_id, FieldResponseDTO fieldResponseDTO){
-//        Capitalizer fields
+        if(this.fieldRepo.existsByFieldNameAndUserId(fieldResponseDTO.getName(), person_id)){
+            throw new GlobalAppException(HttpStatus.NOT_FOUND,4029,utilsCommons.getMessage("field.name.field"));
+        }
         Field field = utilsCommons.convertDTOToEntity(fieldResponseDTO, Field.class);
+        if(field.getContact()==null){
+            Contact contact = new Contact();
+            field.setContact(contact);
+        }
         field.setPerson(this.personSVC.getPersonById(person_id));
         Field newField = this.fieldRepo.save(field);
         log.info("Field create: "+field.toString());
@@ -173,7 +219,7 @@ public class FieldService {
         Field field = this.getFieldById(field_id);
         if(!field.getName().equals(fieldResponseDTO.getName())){
             if(this.fieldRepo.findByName(fieldResponseDTO.getName()).isPresent()){
-                throw new GlobalAppException(HttpStatus.NOT_FOUND,4029,"Nombre del campo: "+fieldResponseDTO.getName());
+                throw new GlobalAppException(HttpStatus.NOT_FOUND,4029,utilsCommons.getMessage("field.name.field"));
             }
         }
         //ADDRESSS
@@ -198,6 +244,8 @@ public class FieldService {
      */
     public GeolocationDTO getGeolocationDTOByFieldId(Long field_id){
         String geolocation  = this.fieldRepo.getGeolocationByFieldId(field_id);
+        if(geolocation == null) throw errorSVC.getResourceNotFoundException(
+                utilsCommons.getMessage("field.name.field.geolocation"),"field_id",field_id);
         return GeolocationDTO.builder().geolocation(geolocation).build();
     }
 
@@ -210,6 +258,15 @@ public class FieldService {
     public void updateGeolocationDTOByFieldId(Long field_id, GeolocationDTO geolocationDTO){
         this.getFieldById(field_id);
         this.fieldRepo.updateGeolocationByFieldId(field_id, geolocationDTO.getGeolocation());
+    }
+
+    /**
+     * Verify if exists field with id field
+     * @param field_id: type {@link Long}
+     * @return @{@link Boolean}
+     */
+    public boolean existsField(Long field_id){
+        return  this.fieldRepo.existsById(field_id);
     }
 
 }

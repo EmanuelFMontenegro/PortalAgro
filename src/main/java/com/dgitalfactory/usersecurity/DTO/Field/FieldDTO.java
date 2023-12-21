@@ -1,7 +1,7 @@
 package com.dgitalfactory.usersecurity.DTO.Field;
 
-import com.dgitalfactory.usersecurity.DTO.AddressDTO;
-import com.dgitalfactory.usersecurity.DTO.ContactDTO;
+import com.dgitalfactory.usersecurity.entity.Address;
+import com.dgitalfactory.usersecurity.entity.Contact;
 import lombok.*;
 
 /**
@@ -10,7 +10,6 @@ import lombok.*;
  */
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Builder
 public class FieldDTO {
     private Long id;
@@ -18,7 +17,18 @@ public class FieldDTO {
     private float dimensions;
     private String observation;
     private String geolocation;
-    private AddressDTO address;
-    private ContactDTO contact;
-//    private PersonDTO person;
+    private Address address;
+    private Contact contact;
+    private Long person_id;
+
+    public FieldDTO(Long id, String name, float dimensions, String observation, String geolocation, Address address, Contact contact, Long person_id) {
+        this.id = id;
+        this.name = name;
+        this.dimensions = dimensions;
+        this.observation = observation;
+        this.geolocation = geolocation;
+        this.address = address;
+        this.contact=contact;
+        this.person_id = person_id;
+    }
 }

@@ -16,8 +16,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 /**
  * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
  * @created 30/11/2023 - 08:54
@@ -50,15 +48,21 @@ public class FieldController {
     @PreAuthorize("hasRole('ADMIN') or @conditionEvaluatorService.canPreAuthAdmin(#user_id)")
     @GetMapping("/user/{user_id}/field/{field_id}")
     public ResponseEntity<FieldDTO> getFieldById(@PathVariable("user_id") Long user_id, @PathVariable("field_id") Long field_id) {
-        FieldDTO fieldDTO = this.fieldSVC.getFieldDTOById(field_id);
+        FieldDTO fieldDTO = this.fieldSVC.getFielDTOdById(field_id);
         return ResponseEntity.ok(fieldDTO);
     }
 
     @PreAuthorize("hasRole('ADMIN') or @conditionEvaluatorService.canPreAuthAdmin(#user_id)")
     @GetMapping("/user/{user_id}/field")
-    public ResponseEntity<List<FieldDTO>> getFieldById(@PathVariable("user_id") Long user_id) {
-        List<FieldDTO> listPersonDTO = this.fieldSVC.getAllFielDTOdsByUserId(user_id);
-        return ResponseEntity.ok(listPersonDTO);
+    public ResponseEntity<ResponsePaginationDTO> getFieldById(
+            @RequestParam(value = "pageNo", defaultValue = AppConstants.PAGE_NUMBER_DEFAULT, required = false) int pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE_DEFAULT, required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = AppConstants.ORDER_BY_DEFAULT, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = AppConstants.ORDER_DIR_DEFAULT, required = false) String sortDir,
+            @PathVariable("user_id") Long user_id) {
+        ResponsePaginationDTO listFieldDTO = this.fieldSVC.getAllFieldDTOdsByUserId(pageNumber, pageSize, sortBy, sortDir,
+                user_id);
+        return ResponseEntity.ok(listFieldDTO);
     }
 
     @PreAuthorize("hasRole('ADMIN') or @conditionEvaluatorService.canPreAuthAdmin(#user_id)")
@@ -88,7 +92,7 @@ public class FieldController {
     @PreAuthorize("hasRole('ADMIN') or @conditionEvaluatorService.canPreAuthAdmin(#user_id)")
     @DeleteMapping("/user/{user_id}/field/{field_id}")
     public ResponseEntity<MessageDTO> deleteField(@PathVariable("user_id") Long user_id, @PathVariable("field_id") Long field_id) {
-        this.fieldSVC.deleteFieldById(field_id);
+        this.fieldSVC.deleteFieldById(field_id, user_id);
         return new ResponseEntity<>(MessageDTO.builder().code(2003).message(utilsCommons.getStatusMessage(2003))
                 .details("Campo")
                 .build(), HttpStatus.OK);

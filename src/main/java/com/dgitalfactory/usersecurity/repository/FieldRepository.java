@@ -1,8 +1,8 @@
 package com.dgitalfactory.usersecurity.repository;
 
+import com.dgitalfactory.usersecurity.DTO.Field.FieldDTO;
 import com.dgitalfactory.usersecurity.entity.Field;
 import com.dgitalfactory.usersecurity.entity.Person;
-import com.dgitalfactory.usersecurity.security.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,9 +21,34 @@ import java.util.Optional;
 @Repository
 public interface FieldRepository extends JpaRepository<Field,Long> {
 
+    @Query("SELECT NEW com.dgitalfactory.usersecurity.DTO.Field.FieldDTO(" +
+            "f.id, f.name, f.dimensions, f.observation, f.geolocation,f.address, f.contact, f.person.id) " +
+            "FROM Field f WHERE f.person.id = :userid")
+    Page<FieldDTO> findAllFieldsDTOByUserId(@Param("userid") Long userid, Pageable pageable);
+
+    @Query("SELECT NEW com.dgitalfactory.usersecurity.DTO.Field.FieldDTO(" +
+            "f.id, f.name, f.dimensions, f.observation, f.geolocation,f.address, f.contact, f.person.id) " +
+            "FROM Field f")
+    Page<FieldDTO> findAllFieldsDTO(Pageable pageable);
+
+
+    @Query("SELECT NEW com.dgitalfactory.usersecurity.DTO.Field.FieldDTO(" +
+            "f.id, f.name, f.dimensions, f.observation, f.geolocation,f.address, f.contact, f.person.id) " +
+            "FROM Field f WHERE f.id = :id")
+    Optional<FieldDTO> findFieldDTOById(@Param("id") Long id);
     public Optional<Field> findById(Long id);
 
     public Optional<Field> findByName(String name);
+
+    public boolean existsByName(String name);
+
+    @Query("SELECT CASE WHEN COUNT(f) > 0 THEN TRUE ELSE FALSE END " +
+            "FROM Field f WHERE f.name = :fieldName AND f.person.id = :userId")
+    boolean existsByFieldNameAndUserId(@Param("fieldName") String fieldName, @Param("userId") Long userId);
+
+    @Query("SELECT CASE WHEN COUNT(f) > 0 THEN TRUE ELSE FALSE END " +
+            "FROM Field f WHERE f.id = :fieldId AND f.person.id = :userId")
+    boolean existsByFieldIdAndUserId(@Param("fieldId") Long fieldId, @Param("userId") Long userId);
 
     public Optional<List<Field>> findByPersonId(Long personid);
 

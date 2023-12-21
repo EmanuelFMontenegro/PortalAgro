@@ -1,12 +1,17 @@
 package com.dgitalfactory.usersecurity.DTO.AppService;
 
 import com.dgitalfactory.usersecurity.DTO.Field.FieldDTO;
+import com.dgitalfactory.usersecurity.entity.AppServices.TypeService;
 import com.dgitalfactory.usersecurity.utils.StatusService;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,9 +23,12 @@ import java.util.List;
 @NoArgsConstructor
 public class ServiceAppDTO {
     private Long id;
-    private LocalDateTime dateOfService;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate dateOfService;
     private String observations;
     private StatusService status;
-    private FieldDTO field;
-    private List<ServiceReportDTO> listServiceReport;
+    private Long typeService_id;
+    private Long field_id;
+    private List<ServiceReportDTO> listServiceReport = new ArrayList<>();
 }

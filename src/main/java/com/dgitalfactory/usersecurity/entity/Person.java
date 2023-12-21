@@ -1,5 +1,7 @@
 package com.dgitalfactory.usersecurity.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +24,6 @@ import java.util.Set;
 @Table(name = "people")
 public class Person {
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(length = 60, nullable = true)
     private String name;
@@ -39,7 +40,7 @@ public class Person {
     @JoinColumn(name = "contact_id", referencedColumnName = "id", nullable = true)
     private Contact contact;
 
-    @OneToMany(mappedBy = "person")
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Field> fields = new HashSet<>();
 
 }

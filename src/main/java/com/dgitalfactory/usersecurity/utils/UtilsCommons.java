@@ -21,15 +21,11 @@ import java.util.stream.Collectors;
 @Component
 public class UtilsCommons {
 
-
     @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
     private ResponseStatusMessages msgSource;
-//
-//    @Autowired
-//    private static ModelMapper modelMapper = new ModelMapper();
 
     private static final String DNI_REPEATED_REGEX = "(\\d)\\1{" + AppConstants.DNI_MIN + "," + AppConstants.DNI_MAX + "}";
     private static final String CUITCUIL_REPEATED_REGEX = "(\\d)\\1{" + AppConstants.CUIT_CUIL_MIN + "," + AppConstants.CUIT_CUIL_MAX + "}";
@@ -61,6 +57,16 @@ public class UtilsCommons {
         return msgSource.getMessage(message, locale);
     }
 
+    /**
+     * Searching for the message and formats with the object received by parameter
+     * @param msgCode: type @{@link String} code message in message.properties
+     * @param dynamicValues: all object needed to use with
+     * @return
+     */
+    public String getFormatMessage(String msgCode, String... dynamicValues){
+        String formatString = this.getMessage(msgCode);
+        return String.format(formatString, (Object[]) dynamicValues);
+    }
 
     /**
      * Convert class entity to entityDTO

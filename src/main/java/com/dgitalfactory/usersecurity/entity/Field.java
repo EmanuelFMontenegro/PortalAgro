@@ -1,6 +1,8 @@
 package com.dgitalfactory.usersecurity.entity;
 
 import com.dgitalfactory.usersecurity.entity.AppServices.ServiceApp;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +21,6 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-//@Table(name = "person", uniqueConstraints = {@UniqueConstraint(columnNames = {"dni"})})
 @Table(name = "fields")
 public class Field {
     @Id

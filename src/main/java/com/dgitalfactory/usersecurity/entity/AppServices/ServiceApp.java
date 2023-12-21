@@ -2,6 +2,7 @@ package com.dgitalfactory.usersecurity.entity.AppServices;
 
 import com.dgitalfactory.usersecurity.entity.Field;
 import com.dgitalfactory.usersecurity.utils.StatusService;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,7 +10,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,29 +31,26 @@ public class ServiceApp {
     private Long id;
 
     @Column(nullable = false)
-    private LocalDateTime dateOfService;
+    private LocalDate dateOfService;
 
     @Column(nullable = true, length = 255)
     private String observations;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private StatusService status = StatusService.PENDIENTE;
+    private StatusService status;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "field_id", nullable = false)
-    @JsonIgnoreProperties("Service")
     private Field field;
 
     @Column(nullable = true)
-    @OneToMany(mappedBy = "service", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<ServiceReport> listServiceReport;
+    @OneToMany(mappedBy = "service", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ServiceReport> listServiceReport = new ArrayList<>();
 
-//    @Column(name = false)
-//    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-//    private Type
-
-
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JoinColumn(name = "typeService_id", referencedColumnName = "id", nullable = true)
+    private TypeService typeService;
 }
 
 

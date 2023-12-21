@@ -2,10 +2,16 @@ package com.dgitalfactory.usersecurity.DTO.AppService;
 
 import com.dgitalfactory.usersecurity.DTO.Field.FieldDTO;
 import com.dgitalfactory.usersecurity.utils.StatusService;
+import com.dgitalfactory.usersecurity.utils.UtilsCommons;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -17,6 +23,24 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ServiceAppResponseDTO {
-    private LocalDateTime dateOfService;
+    @NotNull
+    @Future(message = "{entity.type.service.dateOfService.future}")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate dateOfService;
+
+    @NotNull
+    @Size(max = 255)
     private String observations;
+
+    @NotNull
+    @Min(value=1, message = "{entity.type.service.idTypeService.min}")
+    private Long idTypeService;
+
+    public void setObservations(@NotNull String observations) {
+        if(!observations.isEmpty()) {
+            this.observations = UtilsCommons.capitalize(observations);
+        }
+    }
+
 }

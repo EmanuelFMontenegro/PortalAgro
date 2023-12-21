@@ -28,9 +28,6 @@ public class PersonController {
     @Autowired
     private PersonService personSVC;
 
-//    @Autowired
-//    private ResponseStatusMessages msgSource;
-
     @Autowired
     private UtilsCommons utilsCommons;
 
