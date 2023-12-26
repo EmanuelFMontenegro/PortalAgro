@@ -40,13 +40,13 @@ public class ServiceAppController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/user/field/service")
-    public ResponseEntity<ResponsePaginationDTO> getAllServiceAppUsers(
+    public ResponseEntity<ResponsePaginationDTO<Object>> getAllServiceAppUsers(
             @RequestParam(value = "pageNo", defaultValue = AppConstants.PAGE_NUMBER_DEFAULT, required = false) int pageNumber,
             @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE_DEFAULT, required = false) int pageSize,
             @RequestParam(value = "sortBy", defaultValue = AppConstants.ORDER_BY_DEFAULT, required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = AppConstants.ORDER_DIR_DEFAULT, required = false) String sortDir) {
 
-        return new ResponseEntity<ResponsePaginationDTO>(
+        return new ResponseEntity<ResponsePaginationDTO<Object>>(
                 this.serviceAppSVR.getAllServiceUsers(pageNumber, pageSize, sortBy, sortDir), HttpStatus.OK);
     }
 
@@ -66,7 +66,7 @@ public class ServiceAppController {
     }
 
     @PreAuthorize("hasRole('ADMIN') or @conditionEvaluatorService.canPreAuthAdmin(#user_id)")
-    @PostMapping("/user/{user_id}/field/{field_id}/service/{service_id}")
+    @GetMapping("/user/{user_id}/field/{field_id}/service/{service_id}")
     public ResponseEntity<ServiceAppDTO> getServiceById(@PathVariable("user_id") Long user_id,
                                                      @PathVariable("field_id") Long field_id,
                                                      @PathVariable("service_id") Long service_id) {

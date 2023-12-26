@@ -131,13 +131,13 @@ public class FieldService {
 
     /**
      * Find all fiels with pagination
-     * @param pageNo
-     * @param pageSize
-     * @param sortBy
-     * @param sortDir
+     * @param pageNo: type {@link Integer}
+     * @param pageSize: type {@link Integer}
+     * @param sortBy: type {@link String}
+     * @param sortDir: type {@link String}
      * @return @{@link ResponsePaginationDTO}
      */
-    public ResponsePaginationDTO getAllFieldsUsers(int pageNo, int pageSize, String sortBy, String sortDir) {
+    public ResponsePaginationDTO<Object> getAllFieldsUsers(int pageNo, int pageSize, String sortBy, String sortDir) {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
                 ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
@@ -145,7 +145,9 @@ public class FieldService {
 
         Page<FieldDTO> listField = this.fieldRepo.findAllFieldsDTO(pageable);
         List<FieldDTO> list = listField.getContent();
-//        List<FieldDTO> listDTO = utilsCommons.mapListEntityDTO(list, FieldDTO.class);
+        if(list.isEmpty()){
+            throw new GlobalAppException(HttpStatus.OK,2006,utilsCommons.getMessage("field.name.field"));
+        }
         return ResponsePaginationDTO.builder()
                 .list(Collections.singletonList(list))
                 .pageNo(listField.getNumber())
@@ -158,15 +160,15 @@ public class FieldService {
 
     /**
      * Find all fields by person/user id
-     * @param pageNo
-     * @param pageSize
-     * @param sortBy
-     * @param sortDir
+     * @param pageNo: type {@link Integer}
+     * @param pageSize: type {@link Integer}
+     * @param sortBy: type {@link String}
+     * @param sortDir: type {@link String}
      * @param user_id: Type {@link Long}
      * @return @{@link ResponsePaginationDTO}
      */
-    public ResponsePaginationDTO getAllFieldDTOdsByUserId(int pageNo, int pageSize, String sortBy, String sortDir,
-                                                          Long user_id){
+    public ResponsePaginationDTO<Object> getAllFieldDTOdsByUserId(int pageNo, int pageSize, String sortBy, String sortDir,
+                                                                  Long user_id){
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
                 ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
@@ -175,7 +177,7 @@ public class FieldService {
         Page<FieldDTO> listObject = this.fieldRepo.findAllFieldsDTOByUserId(user_id, pageable);
         List<FieldDTO> list = listObject.getContent();
         if(list.isEmpty()){
-            throw new GlobalAppException(HttpStatus.OK,2006,utilsCommons.getMessage(""));
+            throw new GlobalAppException(HttpStatus.OK,2006,utilsCommons.getMessage("field.name.field"));
         }
         return ResponsePaginationDTO.builder()
                 .list(Collections.singletonList(list))

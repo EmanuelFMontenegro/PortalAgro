@@ -36,7 +36,7 @@ public class TypeServiceController {
     @Autowired
     private UtilsCommons utilsCommons;
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/user/field/service/type")
     public ResponseEntity<List<TypeServiceDTO>> getAllServiceType(){
         return new ResponseEntity<List<TypeServiceDTO>>(

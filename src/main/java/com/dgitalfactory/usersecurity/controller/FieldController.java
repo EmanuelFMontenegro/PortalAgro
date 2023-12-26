@@ -35,13 +35,13 @@ public class FieldController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/user/field/")
-    public ResponseEntity<ResponsePaginationDTO> getAllFieldsUsers(
+    public ResponseEntity<ResponsePaginationDTO<Object>> getAllFieldsUsers(
             @RequestParam(value = "pageNo", defaultValue = AppConstants.PAGE_NUMBER_DEFAULT, required = false) int pageNumber,
             @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE_DEFAULT, required = false) int pageSize,
             @RequestParam(value = "sortBy", defaultValue = AppConstants.ORDER_BY_DEFAULT, required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = AppConstants.ORDER_DIR_DEFAULT, required = false) String sortDir) {
 
-        return new ResponseEntity<ResponsePaginationDTO>(
+        return new ResponseEntity<ResponsePaginationDTO<Object>>(
                 this.fieldSVC.getAllFieldsUsers(pageNumber, pageSize, sortBy, sortDir), HttpStatus.OK);
     }
 
@@ -54,13 +54,13 @@ public class FieldController {
 
     @PreAuthorize("hasRole('ADMIN') or @conditionEvaluatorService.canPreAuthAdmin(#user_id)")
     @GetMapping("/user/{user_id}/field")
-    public ResponseEntity<ResponsePaginationDTO> getFieldById(
+    public ResponseEntity<ResponsePaginationDTO<Object>> getFieldById(
             @RequestParam(value = "pageNo", defaultValue = AppConstants.PAGE_NUMBER_DEFAULT, required = false) int pageNumber,
             @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE_DEFAULT, required = false) int pageSize,
             @RequestParam(value = "sortBy", defaultValue = AppConstants.ORDER_BY_DEFAULT, required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = AppConstants.ORDER_DIR_DEFAULT, required = false) String sortDir,
             @PathVariable("user_id") Long user_id) {
-        ResponsePaginationDTO listFieldDTO = this.fieldSVC.getAllFieldDTOdsByUserId(pageNumber, pageSize, sortBy, sortDir,
+        ResponsePaginationDTO<Object> listFieldDTO = this.fieldSVC.getAllFieldDTOdsByUserId(pageNumber, pageSize, sortBy, sortDir,
                 user_id);
         return ResponseEntity.ok(listFieldDTO);
     }
@@ -73,7 +73,7 @@ public class FieldController {
         return ResponseEntity.ok(
                 MessageDTO.builder().code(2001)
                         .message(utilsCommons.getStatusMessage(2001))
-                        .details("Campo")
+                        .details(utilsCommons.getMessage("field.name.field"))
                         .build()
         );
     }
@@ -84,7 +84,7 @@ public class FieldController {
         FieldDTO newFieldDTO = this.fieldSVC.updateField(user_id, field_id, fieldResponseDTO);
         return ResponseEntity.ok(
                 MessageDTO.builder().code(2002).message(utilsCommons.getStatusMessage(2002))
-                        .details("Campo")
+                        .details(utilsCommons.getMessage("field.name.field"))
                         .build()
         );
     }
@@ -94,7 +94,7 @@ public class FieldController {
     public ResponseEntity<MessageDTO> deleteField(@PathVariable("user_id") Long user_id, @PathVariable("field_id") Long field_id) {
         this.fieldSVC.deleteFieldById(field_id, user_id);
         return new ResponseEntity<>(MessageDTO.builder().code(2003).message(utilsCommons.getStatusMessage(2003))
-                .details("Campo")
+                .details(utilsCommons.getMessage("field.name.field"))
                 .build(), HttpStatus.OK);
     }
 
@@ -113,7 +113,7 @@ public class FieldController {
                                                         @Valid @RequestBody GeolocationDTO geolocationDTO) {
         this.fieldSVC.updateGeolocationDTOByFieldId(field_id, geolocationDTO);
         return new ResponseEntity<>(MessageDTO.builder().code(2002).message(utilsCommons.getStatusMessage(2002))
-                .details("Geolocalización")
+                .details(utilsCommons.getMessage("field.name.field.geolocation"))
                 .build(), HttpStatus.OK);
     }
 

@@ -16,7 +16,6 @@ public class UtilService {
     private UtilsCommons utilsCommons;
 
     public RedirectView redirectURL(String urlDestination){
-        RedirectView redir = new RedirectView(urlDestination);
-        return redir;
+        return new RedirectView(urlDestination);
     }
 }

@@ -49,13 +49,13 @@ public class PersonController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("")
-    public ResponseEntity<ResponsePaginationDTO> getPeople(
+    public ResponseEntity<ResponsePaginationDTO<Object>> getPeople(
             @RequestParam(value = "pageNo", defaultValue = AppConstants.PAGE_NUMBER_DEFAULT, required = false) int pageNumber,
             @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE_DEFAULT, required = false) int pageSize,
             @RequestParam(value = "sortBy", defaultValue = AppConstants.ORDER_BY_DEFAULT, required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = AppConstants.ORDER_DIR_DEFAULT, required = false) String sortDir
     ) {
-        ResponsePaginationDTO listPersonDTO = this.personSVC.getPeoplePagination(pageNumber, pageSize, sortBy, sortDir);
+        ResponsePaginationDTO<Object> listPersonDTO = this.personSVC.getPeoplePagination(pageNumber, pageSize, sortBy, sortDir);
         return ResponseEntity.ok(listPersonDTO);
     }
 

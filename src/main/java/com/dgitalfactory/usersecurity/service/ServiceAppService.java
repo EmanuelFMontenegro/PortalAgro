@@ -54,7 +54,15 @@ public class ServiceAppService {
         return this.serviceREPO.findAll();
     }
 
-    public ResponsePaginationDTO getAllServiceUsers(int pageNo, int pageSize, String sortBy, String sortDir) {
+    /**
+     *
+     * @param pageNo: type {@link Integer}
+     * @param pageSize: type {@link Integer}
+     * @param sortBy: type {@link String}
+     * @param sortDir: type {@link String}
+     * @return @{@link ResponsePaginationDTO}
+     */
+    public ResponsePaginationDTO<Object> getAllServiceUsers(int pageNo, int pageSize, String sortBy, String sortDir) {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
                 ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
