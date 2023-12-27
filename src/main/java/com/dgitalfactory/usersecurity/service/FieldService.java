@@ -90,6 +90,24 @@ public class FieldService {
     }
 
     /**
+     * Check if field id with user id exists
+     * @param field_id: type {@link Long}
+     * @param user_id: type {@link Long}
+     */
+    public void verifyExistsFieldUser(Long field_id, Long user_id){
+        if(!this.existsFieldIdByUserId(field_id,user_id)){
+            throw new GlobalMessageException(
+                    HttpStatus.NOT_FOUND, 4033,
+                    utilsCommons.getFormatMessage(
+                            utilsCommons.getStatusMessage(4033),
+                            utilsCommons.getMessage("field.name.user"),
+                            utilsCommons.getMessage("field.name.field")
+                    ),
+                    utilsCommons.getMessage("field.name.field.service"));
+        }
+    }
+
+    /**
      * Find a field with name
      * @param name: type {@link String}
      * @return @{@link Field}

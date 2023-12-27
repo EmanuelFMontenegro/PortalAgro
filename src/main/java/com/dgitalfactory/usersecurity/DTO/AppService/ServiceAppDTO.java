@@ -14,7 +14,6 @@ import java.time.LocalDate;
  * @created 19/12/2023 - 09:15
  */
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class ServiceAppDTO {
     private Long id;
@@ -25,4 +24,13 @@ public class ServiceAppDTO {
     private StatusService status;
     private Long typeService_id;
     private Long field_id;
+
+    public ServiceAppDTO(Long id, LocalDate dateOfService, String observations, StatusService status, Long typeService_id, Long field_id) {
+        this.id = id;
+        this.dateOfService = dateOfService;
+        this.observations = observations;
+        this.status = status;
+        this.typeService_id = typeService_id;
+        this.field_id = field_id;
+    }
 }

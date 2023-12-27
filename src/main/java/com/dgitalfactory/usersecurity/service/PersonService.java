@@ -136,7 +136,7 @@ public class PersonService {
     public void addPerson(Long userid, PersonResponseDTO personResponseDTO){
         //validar datos
         if(this.personRepo.existsById(userid)){
-            throw new GlobalAppException(HttpStatus.BAD_REQUEST, 4021,"");
+            throw new GlobalAppException(HttpStatus.BAD_REQUEST, 4021,utilsCommons.getMessage("field.name.person"));
         }
 //        this.validatePerson(personDTO);
         log.info("ESTA DESHABILITADA LA VALIDACION DE LOS CAMPOS DE PERSONA PORQUE AUN NO LLEGAMOS A CARGAR EL PERFIL");
@@ -157,11 +157,11 @@ public class PersonService {
         //validar datos
         this.validatePerson(personDTO);
         Person person = this.personRepo.findById(userid).orElseThrow(()->
-                new GlobalAppException(HttpStatus.BAD_REQUEST, 4022,"")
+                new GlobalAppException(HttpStatus.BAD_REQUEST, 4022,utilsCommons.getMessage("field.name.person"))
         );
         if(person.getDni()!=person.getDni()){
             if(this.personRepo.existsByDni(personDTO.getDni())){
-                throw new GlobalAppException(HttpStatus.BAD_REQUEST, 4023,"");
+                throw new GlobalAppException(HttpStatus.BAD_REQUEST, 4023,utilsCommons.getMessage("field.name.person"));
             }
         }
         person.setName(personDTO.getName());
@@ -197,7 +197,7 @@ public class PersonService {
                     +" y maxima de "+AppConstants.DNI_MAX +")");
         }
         if(UtilsCommons.validarNumerosRepetidos(person.getDni(),"dni")){
-            throw new GlobalAppException(HttpStatus.NOT_FOUND,2024,"");
+            throw new GlobalAppException(HttpStatus.NOT_FOUND,2024,utilsCommons.getMessage("field.name.person"));
         }
         return true;
     }

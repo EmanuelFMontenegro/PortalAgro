@@ -2,12 +2,9 @@ package com.dgitalfactory.usersecurity.controller.service_app;
 
 import com.dgitalfactory.usersecurity.DTO.AppService.ServiceAppDTO;
 import com.dgitalfactory.usersecurity.DTO.AppService.ServiceAppResponseDTO;
-import com.dgitalfactory.usersecurity.DTO.AppService.TypeServiceDTO;
-import com.dgitalfactory.usersecurity.DTO.AppService.TypeServiceResponseDTO;
 import com.dgitalfactory.usersecurity.DTO.MessageDTO;
 import com.dgitalfactory.usersecurity.DTO.ResponsePaginationDTO;
 import com.dgitalfactory.usersecurity.service.ServiceAppService;
-import com.dgitalfactory.usersecurity.service.TypeSvcService;
 import com.dgitalfactory.usersecurity.utils.AppConstants;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -18,8 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
@@ -40,14 +35,28 @@ public class ServiceAppController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/user/field/service")
-    public ResponseEntity<ResponsePaginationDTO<Object>> getAllServiceAppUsers(
+    public ResponseEntity<ResponsePaginationDTO<Object>> getAllServiceApp(
             @RequestParam(value = "pageNo", defaultValue = AppConstants.PAGE_NUMBER_DEFAULT, required = false) int pageNumber,
             @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE_DEFAULT, required = false) int pageSize,
             @RequestParam(value = "sortBy", defaultValue = AppConstants.ORDER_BY_DEFAULT, required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = AppConstants.ORDER_DIR_DEFAULT, required = false) String sortDir) {
 
         return new ResponseEntity<ResponsePaginationDTO<Object>>(
-                this.serviceAppSVR.getAllServiceUsers(pageNumber, pageSize, sortBy, sortDir), HttpStatus.OK);
+                this.serviceAppSVR.getAllService(pageNumber, pageSize, sortBy, sortDir), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ADMIN') or @conditionEvaluatorService.canPreAuthAdmin(#user_id)")
+    @GetMapping("/user/{user_id}/field/{field_id}/service")
+    public ResponseEntity<ResponsePaginationDTO<Object>> getAllServiceAppByUser(
+            @RequestParam(value = "pageNo", defaultValue = AppConstants.PAGE_NUMBER_DEFAULT, required = false) int pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE_DEFAULT, required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = AppConstants.ORDER_BY_DEFAULT, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = AppConstants.ORDER_DIR_DEFAULT, required = false) String sortDir,
+            @PathVariable("user_id") Long user_id,
+            @PathVariable("field_id") Long field_id) {
+
+        return new ResponseEntity<ResponsePaginationDTO<Object>>(
+                this.serviceAppSVR.getAllServiceByUser(pageNumber, pageSize, sortBy, sortDir,field_id, user_id), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN') or @conditionEvaluatorService.canPreAuthAdmin(#user_id)")
@@ -55,7 +64,7 @@ public class ServiceAppController {
     public ResponseEntity<MessageDTO> addServiceApp(@PathVariable("user_id") Long user_id,
                                                      @PathVariable("field_id") Long field_id,
                                                      @RequestBody @Valid ServiceAppResponseDTO serviceResponseDTO) {
-        this.serviceAppSVR.addServiceApp(field_id, serviceResponseDTO);
+        this.serviceAppSVR.addServiceApp(user_id,field_id, serviceResponseDTO);
         return new ResponseEntity<MessageDTO>(
                 MessageDTO.builder()
                         .code(2001)
@@ -71,7 +80,38 @@ public class ServiceAppController {
                                                      @PathVariable("field_id") Long field_id,
                                                      @PathVariable("service_id") Long service_id) {
         return new ResponseEntity<ServiceAppDTO>(
-                this.serviceAppSVR.getServiceAppDTO(field_id, service_id),
+                this.serviceAppSVR.getServiceAppDTO(user_id,field_id, service_id),
+                HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ADMIN') or @conditionEvaluatorService.canPreAuthAdmin(#user_id)")
+    @PutMapping("/user/{user_id}/field/{field_id}/service/{service_id}")
+    public ResponseEntity<MessageDTO> updateServiceById(@PathVariable("user_id") Long user_id,
+                                                        @PathVariable("field_id") Long field_id,
+                                                        @PathVariable("service_id") Long service_id,
+                                                        @RequestBody @Valid ServiceAppResponseDTO serviceResponseDTO) {
+        this.serviceAppSVR.updateService(user_id,field_id, service_id, serviceResponseDTO);
+        return new ResponseEntity<MessageDTO>(
+                MessageDTO.builder()
+                        .code(2002)
+                        .message(utilsCommons.getStatusMessage(2001))
+                        .details(utilsCommons.getMessage("field.name.service.order"))
+                        .build(),
+                HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ADMIN') or @conditionEvaluatorService.canPreAuthAdmin(#user_id)")
+    @DeleteMapping("/user/{user_id}/field/{field_id}/service/{service_id}")
+    public ResponseEntity<MessageDTO> deleteServiceById(@PathVariable("user_id") Long user_id,
+                                                        @PathVariable("field_id") Long field_id,
+                                                        @PathVariable("service_id") Long service_id) {
+        this.serviceAppSVR.deleteServiceAppDTO(user_id,field_id,service_id);
+        return new ResponseEntity<MessageDTO>(
+                MessageDTO.builder()
+                        .code(2003)
+                        .message(utilsCommons.getStatusMessage(2003))
+                        .details(utilsCommons.getMessage("field.name.service.order"))
+                        .build(),
                 HttpStatus.OK);
     }
 }

@@ -24,7 +24,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "services")
+@Entity
 public class ServiceApp {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
