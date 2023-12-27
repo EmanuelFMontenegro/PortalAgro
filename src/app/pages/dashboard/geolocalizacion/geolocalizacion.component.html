@@ -1,19 +1,35 @@
-<p>campos works!</p>
-<!-- Ventana de Geolocalizacion -->
-
 <div class="container">
-  <!-- Sección para la Geolocalización -->
-  <div class="card">
-    <h2 class="titulo-registrar-campo">Geolocalización</h2>
+  <div class="titulo-bienvenida">
+    <h2>¡Bienvenido!</h2>
+  </div>
+  <div class="card-user">
+    <div class="avatar">
+      <mat-icon>person</mat-icon>
+    </div>
+    <div *ngIf="userEmail">
+      <p class="email">{{ userEmail }}</p>
+    </div>
+  </div>
+  <!-- geolocalizacion.component.html -->
+  <div class="cards-container">
+  </div>
+
+  <div class="card-map">
     <div class="geo-container">
-      <!-- Buscador de lugares -->
       <div #map style="height: 400px;"></div>
-      <input type="text" id="search-input" placeholder="Buscar lugares..." />
-      <button (click)="onSearch()">Buscar</button>
+    </div>
+  </div>
+  <div class="card-search">
+    <h2 class="titulo-registrar-campo">Geolocalización</h2>
 
-
-      <!-- Mapa -->
-      <div id="map" style="height: 400px;"></div>
+      <input matInput type="text" id="search-input" placeholder="Buscar lugares...">
+      <button mat-icon-button matSuffix (click)="onSearch()">
+        <mat-icon>search</mat-icon>
+      </button>
+    
+    <div class="botones-servicio">
+      <button mat-raised-button class="cancel-button" type="button">Cancelar</button>
+      <button mat-raised-button class="register-button" type="button" (click)="registerField()">Registrar Campo</button>
     </div>
   </div>
 </div>

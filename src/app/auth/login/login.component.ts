@@ -57,19 +57,20 @@ export class LoginComponent {
 
   enviarFormulario() {
     if (this.login.valid) {
+      // localStorage.removeItem('token');
       const username = this.login.get('username')?.value;
       const password = this.login.get('password')?.value;
 
       this.apiService.validarCredenciales(username, password).subscribe({
         next: (response) => {
-          // Código existente para manejar una respuesta exitosa
+
           if (response.status === 200 && response.body && response.body.token) {
             localStorage.setItem('token', response.body.token);
             this.mostrarMensajeExitoso();
             this.login.reset();
             this.router.navigate(['/dashboard']);
           } else {
-            // Si el estado no es 200 o no hay token, considerar esto como un error de autenticación
+
             this.mostrarMensajeError('Error de autenticación');
           }
         },
@@ -87,7 +88,7 @@ export class LoginComponent {
               this.toastr.info('El usuario no está registrado. Por favor regístrese', 'Atención');
               this.login.reset();
             } else {
-              // Manejar otros posibles detalles específicos aquí
+
               this.toastr.error(errorMessage, 'Error');
             }
           } else if (err.status === 400 && err.error.code === 4016) {

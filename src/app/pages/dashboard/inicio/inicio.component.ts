@@ -8,6 +8,7 @@ import { jwtDecode } from 'jwt-decode';
 
 interface CustomJwtPayload {
   userId: number;
+  sub: string;
 }
 
 @Component({
@@ -15,6 +16,7 @@ interface CustomJwtPayload {
   templateUrl: './inicio.component.html',
   styleUrls: ['./inicio.component.sass']
 })
+
 export class InicioComponent implements OnInit {
   userEmail: string = '';
   userId: number | null = null;
@@ -44,7 +46,8 @@ export class InicioComponent implements OnInit {
   ngOnInit(): void {
     this.userEmail = this.authService.getUserEmail();
     this.decodeToken();
-    console.log('numero de usuario', this.userId);
+    // console.log('El id de usuario es', this.userId);
+    // console.log('El email del usuario es',this.userEmail);
   }
 
   decodeToken(): void {
@@ -52,8 +55,12 @@ export class InicioComponent implements OnInit {
     if (token) {
       const decoded = jwtDecode<CustomJwtPayload>(token);
       this.userId = decoded.userId;
+      this.userEmail = decoded.sub;
+
     }
   }
+
+
 
   registrarCampo(): void {
     if (!this.userId) {

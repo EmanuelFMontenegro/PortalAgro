@@ -31,8 +31,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { JwtInterceptor } from 'src/app/services/JwtInterceptor';
+import { FormatDatePipe } from 'src/app/format-date.pipe';
 
 @NgModule({
   declarations: [
@@ -45,7 +44,9 @@ import { JwtInterceptor } from 'src/app/services/JwtInterceptor';
     ReportesComponent,
     ProductosComponent,
     HomeComponent,
-    
+    FormatDatePipe
+
+
   ],
   imports: [
     CommonModule,
@@ -73,9 +74,7 @@ import { JwtInterceptor } from 'src/app/services/JwtInterceptor';
     ReactiveFormsModule,
     FormsModule,
     RouterModule
+
   ],
-  providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
-  ],
-})
+  })
 export class DashboardModule { }

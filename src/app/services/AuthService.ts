@@ -10,40 +10,62 @@ import { jwtDecode } from 'jwt-decode';
 export class AuthService {
   private userEmail: string = '';
   private userId: number | null = null;
-  private loginUrl = 'http://localhost:8095/api/auth/login';
+  private field: string | null = null; // Campo adicional obtenido del token
+  private loginUrl = 'http://localhost:8095/api/auth/login'; // URL de la API para el login
 
   constructor(private http: HttpClient) {}
 
+  // Método para iniciar sesión
   login(username: string, password: string): Observable<any> {
     return this.http.post<any>(this.loginUrl, { username, password }).pipe(
       map(response => {
-        const token = response.token;
-        console.log("JWT Token:", token);
+        const token = response?.token;
+        if (token) {
+          localStorage.setItem('token', token); // Almacenar el token en localStorage
 
-        const decodedToken = jwtDecode<{ email: string, userId: number }>(token);
-        console.log("Decoded Token:", decodedToken);
+          // Decodificar el token y almacenar los datos
+          const decodedToken = jwtDecode<{ email: string, userId: number, field: string }>(token);
+          this.userEmail = decodedToken.email;
+          console.log('este es el mail',this.userEmail)
+          this.userId = decodedToken.userId;
+          this.field = decodedToken.field; // Almacenar el campo adicional
 
-        this.userEmail = decodedToken.email;
-        this.userId = decodedToken.userId;
-
-        console.log('token',this.userId)
-
-        return { email: decodedToken.email, id: decodedToken.userId };
+          // Devolver los datos relevantes
+          return { email: decodedToken.email, id: decodedToken.userId, field: decodedToken.field };
+        } else {
+          return null;
+        }
       })
     );
   }
 
+  // Método para obtener el email del usuario
   getUserEmail(): string {
-    return this.userEmail;
+     return this.userEmail;
   }
 
-  getUserId(): number | null {
+  // Método para obtener el ID del usuario
+  postUserId(): number | null {
     return this.userId;
   }
 
+  // Método para obtener el campo adicional
+  getField(): string | null {
+    return this.field;
+  }
+
+  // Método para obtener el token almacenado
   getToken(): string | null {
     return localStorage.getItem('token');
   }
 
+  // Método para cerrar la sesión
+  logout(): void {
+    localStorage.removeItem('token');
+    this.userEmail = '';
+    this.userId = null;
+    this.field = null;
+  }
 
+  // Aquí puedes agregar cualquier otro método que necesites
 }

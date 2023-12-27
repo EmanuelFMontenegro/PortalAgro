@@ -1,12 +1,152 @@
-.geo-container
+$primary-color: #3CA749
+$secondary-color: #8FCA8F
+$hover-color: #32963f
+$error-color: #d9534f
+$light-grey: #f4f4f4
+$dark-grey: #454545
+$medium-grey: #808080
+$border-color: #ddd
+$default: #FFFF
+$icon-color: #808080
+$font-family: 'Montserrat', sans-serif
+
+body
+  font-family: $font-family
+
+.titulo-bienvenida h2
+  color: $dark-grey
+  font-size: 1.5em
+  font-weight: bold
+  font-family: 'Montserrat', sans-serif
+  padding: 20px
+  // margin-top: 72px
+
+.container
   display: flex
   flex-direction: column
-  align-items: center
-  margin-top: 20px
+  justify-content: center
+  // height: 100vh
 
-.buscador-lugares
-  margin-bottom: 20px
+  .card-map
+    background-color: $light-grey
+    padding: 20px
+    border-radius: 10px
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3)
+    margin: 20px
+    width: 55%
+    margin-top: -1%
+    margin-left: 36.5%
 
-#map
-  width: 100%
-  height: 400px
+  .card-user
+    background-color: $light-grey
+    padding: 20px
+    border-radius: 10px
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3)
+    margin: 20px
+    width: 90%
+    margin-top: -10px
+    // margin-left: 32%
+    &.user-card
+      display: flex
+      margin-top: 8px
+      flex-direction: row
+      align-items: center
+      gap: 20px
+
+    .avatar
+      display: flex
+      justify-content: center
+      align-items: center
+      border-radius: 50%
+      border: 3px solid $primary-color // Borde verde
+      width: 100px
+      height: 100px
+      background-color: white
+
+      mat-icon
+        display: contents
+        color: $icon-color
+        font-size: 70px
+
+  .geo-container
+    flex-direction: column
+    align-items: center
+    margin-top: 20px
+    width: 100% // Asegurándose de que el contenedor tome todo el ancho disponible
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) // Opcional: agrega una sombra para resaltar el contenedor
+
+  .card-search
+    background-color: $light-grey
+    padding: 20px
+    border-radius: 10px
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3)
+    margin: 20px
+    width: 31%
+    height: 59vh
+    display: flex
+    margin-top: -37.5%
+    flex-direction: column // Asegura una distribución vertical
+    justify-content: space-between // Distribuye los elementos internos uniformemente
+
+  .titulo-registrar-campo
+    color: $primary-color
+    font-family: 'Montserrat', sans-serif
+    font-size: 1.5em
+    font-weight: bold
+    margin-bottom: 20px
+
+  input
+    margin-right: 10px
+    padding: 10px
+    border: 1px solid $border-color
+    background-color: white
+    border-radius: 4px
+    margin-bottom: -2%
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4)
+
+  button
+    padding: 8px 18px
+    border: 1px solid transparent
+    border-radius: 5px
+    cursor: pointer
+    transition: background-color 0.3s, border-color 0.3s
+    font-size: 0.75em
+    font-family: 'Montserrat', sans-serif
+    color: $border-color
+    background-color: $secondary-color
+    font-weight: bold
+    margin-right: 10px
+
+    &:hover
+      background-color: $hover-color
+      display: flex
+  .botones-servicio
+    display: flex
+    margin-bottom: 1%
+    gap: 15px
+    flex-direction: column-reverse
+    align-items: center
+    justify-content: center
+
+    .register-button
+      display: flow
+      background-color: $secondary-color
+      color: $default
+      width: 50%
+      justify-content: space-between
+      // border-color: darken($primary-color, 10%)
+      &:hover
+        background-color: $hover-color
+    .cancel-button
+      display: flow
+      background-color: #f8f8f8
+      // border: 2px solid $primary-color
+      color: $primary-color
+      width: 50%
+      justify-content: space-between
+      border-color: darken($primary-color, 10%)
+
+  #map
+    width: 100% // Asegura que el mapa ocupa todo el ancho del contenedor
+    height: 400px // Altura fija para el mapa
+    border-radius: 4px // Opcional: bordes redondeados para el mapa

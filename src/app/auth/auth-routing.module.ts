@@ -6,8 +6,9 @@ import { RecuperContrasenaComponent } from './recuper-contrasena/recuper-contras
 import { NuevaContrasenaComponent } from './nueva-contrasena/nueva-contrasena.component';
 import { BienvenidaComponent } from './bienvenida/bienvenida.component';
 
+
 const routes: Routes = [
-  { path: 'bienvenida', component:BienvenidaComponent},
+  { path: 'bienvenida', component: BienvenidaComponent},
   { path: 'login', component: LoginComponent },
   { path: 'registro', component: RegistrateComponent },
   { path: 'recuper-contrasena', component: RecuperContrasenaComponent },

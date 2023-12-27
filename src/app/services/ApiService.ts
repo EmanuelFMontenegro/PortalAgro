@@ -45,7 +45,7 @@ export class ApiService {
     return this.http.delete(`${this.baseURL}/user/${id}`);
   }
 
-  // Métodos relacionados con Person
+  // Métodos relacionados con Persona
   getPeople(): Observable<any> {
     return this.http.get(`${this.baseURL}/person`);
   }
@@ -88,7 +88,7 @@ addField(userId: number, fieldData: any, httpOptions?: { headers: HttpHeaders })
     return this.http.delete(`${this.baseURL}/user/${userId}/field/${fieldId}`);
   }
 
-  // Métodos relacionados con Geolocation
+  // Métodos relacionados con Geolocalizacion
   getGeolocationField(userId: number, fieldId: number): Observable<any> {
     return this.http.get(`${this.baseURL}/user/${userId}/field/${fieldId}/geolocation`);
   }

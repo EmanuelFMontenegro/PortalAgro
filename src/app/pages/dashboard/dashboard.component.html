@@ -30,8 +30,9 @@
       </button>
       <mat-menu #menu="matMenu">
         <button mat-menu-item>Perfil</button>
-        <button mat-menu-item>Cerrar Sesión</button>
+        <button mat-menu-item (click)="cerrarSesion()">Cerrar Sesión</button>
       </mat-menu>
+
     </mat-toolbar>
 
     <router-outlet></router-outlet>
