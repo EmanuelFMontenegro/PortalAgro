@@ -2,10 +2,7 @@ package com.dgitalfactory.usersecurity.controller;
 
 import com.dgitalfactory.usersecurity.DTO.ErrorDTO;
 import com.dgitalfactory.usersecurity.email.exception.EmailExecption;
-import com.dgitalfactory.usersecurity.exception.ExplicitErrorAppException;
-import com.dgitalfactory.usersecurity.exception.GlobalAppException;
-import com.dgitalfactory.usersecurity.exception.GlobalMessageException;
-import com.dgitalfactory.usersecurity.exception.ResourceNotFoundException;
+import com.dgitalfactory.usersecurity.exception.*;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
 import org.hibernate.exception.SQLGrammarException;
 import org.modelmapper.MappingException;
@@ -136,6 +133,24 @@ public class AdviceControllerExceptionHandler {
     }
 
     /**
+     * Constructor de errores JWT
+     *
+     * @param ex: tipo JWTAppException(HttpStatus status, String message, String code)
+     * @return: @{@link ResponseEntity<ErrorDTO>}
+     */
+    @ExceptionHandler(value = JWTAppException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorDTO> getJWTErrorHandler(JWTAppException ex, WebRequest request) {
+        ErrorDTO errorDTO = ErrorDTO.builder()
+                .code(ex.getCode())
+                .message(utilsCommons.getStatusMessage(ex.getCode(), request.getLocale()))
+                .date(UtilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
+                .details(ex.getDetails())
+                .build();
+        return new ResponseEntity<>(errorDTO, ex.getStatus());
+    }
+
+    /**
      * Constructor generico para errores pero con mensaje formateado desde el método
      *
      * @param ex: tipo GlobalAppException(HttpStatus status, String message, String code)
@@ -166,7 +181,6 @@ public class AdviceControllerExceptionHandler {
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(4012)
                 .message(utilsCommons.getStatusMessage(4012, request.getLocale()))
-//                .message(UtilsCommons.getResponseConstants(4012))
                 .listDetails(errors)
                 .date(UtilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .path(request.getDescription(false).replace("uri=", ""))
@@ -187,7 +201,6 @@ public class AdviceControllerExceptionHandler {
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(4017)
                 .message(utilsCommons.getStatusMessage(4017, request.getLocale()))
-//                .message(UtilsCommons.getResponseConstants(4017))
                 .date(UtilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .path(request.getDescription(false).replace("uri=", ""))
                 .details(ex.getMessage())
@@ -207,7 +220,6 @@ public class AdviceControllerExceptionHandler {
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(5001)
                 .message(utilsCommons.getStatusMessage(5001, request.getLocale()))
-//                .message(UtilsCommons.getResponseConstants(5001))
                 .date(UtilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .path(request.getDescription(false).replace("uri=", ""))
                 .details(ex.getMessage())
@@ -227,7 +239,6 @@ public class AdviceControllerExceptionHandler {
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(403)
                 .message(utilsCommons.getStatusMessage(403, request.getLocale()))
-//                .message(UtilsCommons.getResponseConstants(403))
                 .date(UtilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .path(request.getDescription(false).replace("uri=", ""))
                 .details("Puede que tu el alcance de tu rol no te de acceso a este recurso. Intenta iniciar sesión nuevamente e intentalo de nuevo, de lo contrario comunicate con tu administrador")
@@ -247,7 +258,6 @@ public class AdviceControllerExceptionHandler {
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(4016)
                 .message(utilsCommons.getStatusMessage(4016, request.getLocale()))
-//                .message(UtilsCommons.getResponseConstants(4016))
                 .date(UtilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .path(request.getDescription(false).replace("uri=", ""))
                 .details(error.getMessage())
@@ -268,7 +278,6 @@ public class AdviceControllerExceptionHandler {
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(995)
                 .message(utilsCommons.getStatusMessage(995, request.getLocale()))
-//                .message(UtilsCommons.getResponseConstants(995))
                 .date(UtilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .path(request.getDescription(false).replace("uri=", ""))
                 .details(ex.getMessage())
@@ -287,7 +296,6 @@ public class AdviceControllerExceptionHandler {
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(4003)
                 .message(utilsCommons.getStatusMessage(4003, request.getLocale()))
-//                .message(UtilsCommons.getResponseConstants(4003))
                 .date(UtilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .path(request.getDescription(false).replace("uri=", ""))
                 .details(ex.getMessage())
@@ -306,7 +314,6 @@ public class AdviceControllerExceptionHandler {
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(4003)
                 .message(utilsCommons.getStatusMessage(4003, request.getLocale()))
-//                .message(UtilsCommons.getResponseConstants(4003))
                 .date(UtilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .path(request.getDescription(false).replace("uri=", ""))
                 .details(ex.getMessage())
@@ -378,7 +385,6 @@ public class AdviceControllerExceptionHandler {
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(998)
                 .message(utilsCommons.getStatusMessage(998, request.getLocale()))
-//                .message(UtilsCommons.getResponseConstants(998))
                 .date(UtilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .path(request.getDescription(false).replace("uri=", ""))
                 .details(ex.getMessage())
@@ -392,7 +398,6 @@ public class AdviceControllerExceptionHandler {
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(997)
                 .message(utilsCommons.getStatusMessage(997, request.getLocale()))
-//                .message(UtilsCommons.getResponseConstants(997))
                 .date(UtilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .path(request.getDescription(false).replace("uri=", ""))
                 .details(ex.getMessage())
@@ -407,7 +412,6 @@ public class AdviceControllerExceptionHandler {
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(994)
                 .message(utilsCommons.getStatusMessage(994, request.getLocale()))
-//                .message(UtilsCommons.getResponseConstants(994))
                 .date(UtilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .path(request.getDescription(false).replace("uri=", ""))
                 .details(ex.getMessage())

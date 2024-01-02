@@ -1,8 +1,8 @@
 package com.dgitalfactory.usersecurity.security.service;
 
 import com.dgitalfactory.usersecurity.exception.GlobalAppException;
+import com.dgitalfactory.usersecurity.exception.JWTAppException;
 import com.dgitalfactory.usersecurity.security.dto.JwtDTO;
-import com.dgitalfactory.usersecurity.security.jwt.JWTAuthenticationFilter;
 import com.dgitalfactory.usersecurity.service.EncoderDecorderBase64Service;
 import com.nimbusds.jwt.JWT;
 import com.nimbusds.jwt.JWTClaimsSet;
@@ -100,19 +100,19 @@ public class JwtTokenService {
 					.getBody();
 		} catch (SecurityException e) {
 			log.error("Invalid JWT signature: {}", e.getMessage());
-			throw  new GlobalAppException(HttpStatus.UNAUTHORIZED, 4005,e.getMessage());
+			throw  new JWTAppException(4005,e.getMessage());
 		} catch (MalformedJwtException e) {
 			log.error("Invalid JWT token: {}", e.getMessage());
-			throw  new GlobalAppException(HttpStatus.UNAUTHORIZED, 4006,e.getMessage());
+			throw  new JWTAppException(4006,e.getMessage());
 		} catch (ExpiredJwtException e) {
 			log.error("JWT token is expired: {}", e.getMessage());
-			throw  new GlobalAppException(HttpStatus.UNAUTHORIZED, 4007,e.getMessage());
+			throw  new JWTAppException(4007,e.getMessage());
 		} catch (UnsupportedJwtException e) {
 			log.error("JWT token is unsupported: {}", e.getMessage());
-			throw  new GlobalAppException(HttpStatus.UNAUTHORIZED, 4008,e.getMessage());
+			throw  new JWTAppException(4008,e.getMessage());
 		} catch (IllegalArgumentException e) {
 			log.error("JWT claims string is empty: {}", e.getMessage());
-			throw  new GlobalAppException(HttpStatus.UNAUTHORIZED, 4009,e.getMessage());
+			throw  new JWTAppException(4009,e.getMessage());
 		}
 	}
 
@@ -137,12 +137,12 @@ public class JwtTokenService {
 	 * @return
 	 */
 	public String getUserNameFromJwtToken(String token) {
-		try {
+//		try {
 			return this.getClaimsFromToken(token, Claims::getSubject);
-		} catch (Exception ex) {
-			log.error("Error when searching subject in token: {}",ex.getMessage() );
-			return null;
-		}
+//		} catch (Exception ex) {
+//			log.error("Error when searching subject in token: {}",ex.getMessage() );
+//			return null;
+//		}
 	}
 
 	/**

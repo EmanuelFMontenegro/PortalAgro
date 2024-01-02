@@ -43,7 +43,7 @@ public class CustomAccessDeniedHandler extends Throwable implements AccessDenied
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(403)
                 .message(utilsCommons.getStatusMessage(403))
-                .date(utilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
+                .date(UtilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .path(request.getRequestURL().toString().replace("url=",""))
                 .details(accessDeniedException.getMessage())
                 .build();

@@ -12,11 +12,15 @@ import org.springframework.web.servlet.ModelAndView;
  * @created 07/12/2023 - 19:43
  */
 @Component
-public class CustomExceptionHandler implements HandlerExceptionResolver {
+public class JWTExceptionHandler implements HandlerExceptionResolver {
     @Override
     public ModelAndView resolveException(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, Object handler, Exception ex) {
-        ModelAndView mav = new ModelAndView("error");
-        mav.addObject("Error", ex.getMessage());
-        return mav;
+        if (ex instanceof JWTAppException appException) {
+            response.setStatus(appException.getStatus().value());
+            ModelAndView mav = new ModelAndView("error");
+            mav.addObject("JWT Error", ex.getMessage());
+            return mav;
+        }
+        return null; // Dejar que otros manejadores de excepciones lo manejen si no es una JWTAppException
     }
 }
