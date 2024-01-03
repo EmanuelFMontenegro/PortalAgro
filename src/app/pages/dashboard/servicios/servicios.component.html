@@ -4,23 +4,24 @@
 <form class="solicitud-servicio-form" (ngSubmit)="onSubmit()">
   <div class="card">
     <h2 class="card-title">Campos</h2>
-
     <div class="field-container">
       <mat-label class="field-label">Tipo de Servicio</mat-label>
       <mat-select class="field-input" placeholder="Servicios" [(ngModel)]="solicitud.tipoServicio" name="tipoServicio">
-        <mat-option value="servicio1">Aplicación</mat-option>
-        <mat-option value="servicio2">Servicio Topográfico</mat-option>
+        <mat-option value="Aplicación">Aplicación</mat-option>
+        <mat-option value="Servicio Topográfico">Servicio Topográfico</mat-option>
         <!-- Añade más opciones de servicio aquí -->
       </mat-select>
     </div>
-
     <div class="field-container-fecha">
       <label class="field-label-fecha">Fecha</label>
-      <input class="field-input-fecha" placeholder="Fecha de solicitud" [value]="solicitud.fecha | formatDate"
-        [matDatepicker]="picker" (dateChange)="onFechaChange($event)">
+      <input class="field-input-fecha" [matDatepicker]="picker" placeholder="Fecha de solicitud"
+        [value]="solicitud.fecha | date:'yyyy-MM-dd'" (dateChange)="onFechaChange($event)">
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </div>
+
+
+
 
 
 
@@ -30,7 +31,7 @@
     </div>
 
     <div class="field-container boton-servicio">
-      <button mat-raised-button type="submit" style="font-size:14px;">Solicitar Servicio</button>
+      <button mat-raised-button  style="font-size:14px;">Solicitar Servicio</button>
     </div>
   </div>
 </form>

@@ -45,7 +45,7 @@ export class AuthService {
   }
 
   // Método para obtener el ID del usuario
-  postUserId(): number | null {
+  getUserId(): number | null {
     return this.userId;
   }
 

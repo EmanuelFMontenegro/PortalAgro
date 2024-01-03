@@ -57,8 +57,9 @@ input[type="email"], input[type="password"]
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3)
 
   &:focus
+    outline: none
     border-color: $primary-color
-    box-shadow: 0 0 12px rgba($primary-color, 0.5)
+    box-shadow: 0 0 5px $primary-color
 
 .password-field-container
   position: relative
@@ -76,9 +77,9 @@ input[type="email"], input[type="password"]
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3)
 
     &:focus
+      outline: none
       border-color: $primary-color
-      box-shadow: 0 0 12px rgba($primary-color, 0.5)
-
+      box-shadow: 0 0 5px $primary-color
   .toggle-password
     position: absolute
     right: 10px

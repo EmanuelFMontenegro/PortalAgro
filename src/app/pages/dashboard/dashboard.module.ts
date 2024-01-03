@@ -28,10 +28,24 @@ import { MatMenuModule } from '@angular/material/menu';
 import { ToastrModule } from 'ngx-toastr';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatDialogModule } from '@angular/material/dialog';
 import { FormatDatePipe } from 'src/app/format-date.pipe';
+
+const CUSTOM_DATE_FORMATS = {
+  parse: {
+    dateInput: 'LL', // 'LL' se usa para mostrar el formato largo de fecha (día de mes, año)
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY', // Formato que muestra el día, mes y año separados por barras
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 
 @NgModule({
   declarations: [
@@ -45,8 +59,6 @@ import { FormatDatePipe } from 'src/app/format-date.pipe';
     ProductosComponent,
     HomeComponent,
     FormatDatePipe
-
-
   ],
   imports: [
     CommonModule,
@@ -70,11 +82,15 @@ import { FormatDatePipe } from 'src/app/format-date.pipe';
     MatDatepickerModule,
     MatSelectModule,
     MatNativeDateModule,
+    MatDialogModule,
     MatSlideToggleModule,
     ReactiveFormsModule,
     FormsModule,
+    MatExpansionModule,
     RouterModule
-
   ],
-  })
+  providers: [
+    { provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS }
+  ],
+})
 export class DashboardModule { }

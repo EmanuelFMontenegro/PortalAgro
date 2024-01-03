@@ -96,4 +96,52 @@ addField(userId: number, fieldData: any, httpOptions?: { headers: HttpHeaders })
   updateGeolocationField(userId: number, fieldId: number, geolocation: string): Observable<any> {
     return this.http.put(`${this.baseURL}/user/${userId}/field/${fieldId}/geolocation`, { geolocation });
   }
+
+  getFieldsPaged(userId: number, pageNo: number, pageSize: number, sortBy: string, sortDir: string): Observable<any> {
+    return this.http.get(`${this.baseURL}/user/${userId}/field?pageNo=${pageNo}&pageSize=${pageSize}&sortBy=${sortBy}&sortDir=${sortDir}`);
+  }
+
+  // Métodos relacionados con Tipos de Servicios
+  getAllTypeServices(): Observable<any> {
+    return this.http.get(`${this.baseURL}/user/field/service/type`);
+  }
+
+  addTypeService(serviceData: any): Observable<any> {
+    return this.http.post(`${this.baseURL}/user/field/service/type`, serviceData);
+  }
+
+  updateTypeService(typeServiceId: number, serviceData: any): Observable<any> {
+    return this.http.put(`${this.baseURL}/user/field/service/type/${typeServiceId}`, serviceData);
+  }
+
+  deleteTypeService(typeServiceId: number): Observable<any> {
+    return this.http.delete(`${this.baseURL}/user/field/service/type/${typeServiceId}`);
+  }
+
+  // Métodos relacionados con AppServices
+  getAllAppServices(fieldId: number): Observable<any> {
+    return this.http.get(`${this.baseURL}/user/field/${fieldId}/service`);
+  }
+
+  addAppService(fieldId: number, serviceData: any): Observable<any> {
+    return this.http.post(`${this.baseURL}/user/field/${fieldId}/service`, serviceData);
+  }
+
+  getAppServiceById(fieldId: number, serviceId: number): Observable<any> {
+    return this.http.get(`${this.baseURL}/user/field/${fieldId}/service/${serviceId}`);
+  }
+
+  updateAppService(fieldId: number, serviceId: number, serviceData: any): Observable<any> {
+    return this.http.put(`${this.baseURL}/user/field/${fieldId}/service/${serviceId}`, serviceData);
+  }
+
+  deleteAppService(fieldId: number, serviceId: number): Observable<any> {
+    return this.http.delete(`${this.baseURL}/user/field/${fieldId}/service/${serviceId}`);
+  }
+
+  // Métodos adicionales
+  getPruebaCambioIdioma(): Observable<any> {
+    return this.http.get(`${this.baseURL}/person/demo`);
+  }
 }
+

@@ -50,11 +50,13 @@
               requerido</span>
           </div>
         </div>
+        
 
         <div class="field-container-observaciones">
           <label class="field-label">Observaciones</label>
-          <textarea matInput class="field-input-obs"></textarea>
+          <textarea matInput [(ngModel)]="campoData.observation" name="observation" class="field-input-obs"></textarea>
         </div>
+
       </div>
 
       <div class="botones-servicio">

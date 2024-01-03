@@ -23,7 +23,8 @@ export class InicioComponent implements OnInit {
   campoData = {
     name: '',
     dimensions: '',
-    description: '',
+    geolocation:'',
+    observation: '',
     address: {
       address: '',
       location: ''
@@ -34,7 +35,8 @@ export class InicioComponent implements OnInit {
   locationTouched = false;
   nameTouched = false;
   dimensionsTouched = false;
-
+  // geolocationTouched = false;
+  observationTouched=false;
   constructor(
     private authService: AuthService,
     private apiService: ApiService,
@@ -46,6 +48,7 @@ export class InicioComponent implements OnInit {
   ngOnInit(): void {
     this.userEmail = this.authService.getUserEmail();
     this.decodeToken();
+    this.campoData.geolocation = '';
     // console.log('El id de usuario es', this.userId);
     // console.log('El email del usuario es',this.userEmail);
   }
@@ -61,7 +64,6 @@ export class InicioComponent implements OnInit {
   }
 
 
-
   registrarCampo(): void {
     if (!this.userId) {
       this.toastr.error('Error: No se ha identificado al usuario.', 'Error');
@@ -72,11 +74,26 @@ export class InicioComponent implements OnInit {
       this.apiService.addField(this.userId, this.campoData).subscribe(
         () => {
           this.toastr.success('Campo registrado con éxito', 'Éxito');
-          this.router.navigate(['/geolocalizacion']);
+          this.campoData = {
+            name: '',
+            dimensions: '',
+            geolocation: '',
+            observation: '',
+            address: {
+              address: '',
+              location: ''
+            }
+          };
+          this.router.navigate(['dashboard/geolocalizacion']);
+
         },
-        error => {
+        (error) => {
           console.error('Error al registrar el campo:', error);
-          this.toastr.error('Error al registrar el campo. Detalles: ' + error.message, 'Error');
+          if (error.error && error.error.message) {
+            this.toastr.error('Ya Existe un campo registrado con este nombre.', 'Atención');
+          } else {
+            this.toastr.error('Error al registrar el campo. Detalles: ' + error.message, 'Error');
+          }
         }
       );
     } else {
@@ -84,14 +101,15 @@ export class InicioComponent implements OnInit {
     }
   }
 
+
   isValidForm(): boolean {
     const dimensions = Number(this.campoData.dimensions);
-
     const isAddressValid = this.campoData.address.address.trim() !== '';
     const isLocationValid = this.campoData.address.location.trim() !== '';
     const isNameValid = this.campoData.name.trim() !== '';
+    const isObservationValid = this.campoData.observation.trim() !== '';
     const areDimensionsValid = !isNaN(dimensions) && dimensions > 0;
 
-    return isAddressValid && isLocationValid && isNameValid && areDimensionsValid;
+    return isAddressValid && isLocationValid && isNameValid && areDimensionsValid && isObservationValid ;
   }
 }
