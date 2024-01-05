@@ -8,6 +8,7 @@ import com.dgitalfactory.usersecurity.service.FieldService;
 import com.dgitalfactory.usersecurity.utils.AppConstants;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,6 +33,15 @@ public class FieldController {
 
     @Autowired
     private UtilsCommons utilsCommons;
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("hola/demo")
+    public ResponseEntity<MessageDTO> getDemo(HttpServletRequest request) {
+        return ResponseEntity.ok(MessageDTO.builder()
+                .code(1001)
+                .message(utilsCommons.getStatusMessage(1001))
+                .build());
+    }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/user/field/")

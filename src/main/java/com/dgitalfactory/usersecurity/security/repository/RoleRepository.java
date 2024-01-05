@@ -1,7 +1,7 @@
 package com.dgitalfactory.usersecurity.security.repository;
 
 import com.dgitalfactory.usersecurity.security.entity.Role;
-import com.dgitalfactory.usersecurity.utils.RoleName;
+import com.dgitalfactory.usersecurity.utils.enums.RoleName;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

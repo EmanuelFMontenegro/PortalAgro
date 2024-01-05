@@ -3,12 +3,12 @@ package com.dgitalfactory.usersecurity.controller;
 import com.dgitalfactory.usersecurity.DTO.MessageDTO;
 import com.dgitalfactory.usersecurity.DTO.Person.PersonDTO;
 import com.dgitalfactory.usersecurity.DTO.Person.PersonResponseDTO;
+import com.dgitalfactory.usersecurity.DTO.Person.PersonRequestDTO;
 import com.dgitalfactory.usersecurity.DTO.ResponsePaginationDTO;
 import com.dgitalfactory.usersecurity.service.PersonService;
 import com.dgitalfactory.usersecurity.utils.AppConstants;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
  * @created 30/11/2023 - 08:54
  */
 @RestController
-@RequestMapping("/api/person")
+@RequestMapping("/api")
 @CrossOrigin
 @Tag(name = "Person", description = "Person Services. Additional user information.")
 public class PersonController {
@@ -32,23 +32,14 @@ public class PersonController {
     private UtilsCommons utilsCommons;
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/demo")
-    public ResponseEntity<MessageDTO> getDemo(HttpServletRequest request) {
-        return ResponseEntity.ok(MessageDTO.builder()
-                .code(1001)
-                .message(utilsCommons.getStatusMessage(1001))
-                .build());
+    @GetMapping("/user/{user_id}/person/{person_id}")
+    public ResponseEntity<PersonResponseDTO> getPersonById(@PathVariable("user_id") Long user_id, @PathVariable("person_id") Long person_id) {
+        PersonResponseDTO personResponseDTO = this.personSVC.getPersonDtoById(user_id, person_id);
+        return ResponseEntity.ok(personResponseDTO);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/{id}")
-    public ResponseEntity<PersonDTO> getPersonById(@PathVariable("id") Long id) {
-        PersonDTO personDTO = this.personSVC.getPersonDtoById(id);
-        return ResponseEntity.ok(personDTO);
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("")
+    @GetMapping("/person")
     public ResponseEntity<ResponsePaginationDTO<Object>> getPeople(
             @RequestParam(value = "pageNo", defaultValue = AppConstants.PAGE_NUMBER_DEFAULT, required = false) int pageNumber,
             @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE_DEFAULT, required = false) int pageSize,
@@ -59,42 +50,45 @@ public class PersonController {
         return ResponseEntity.ok(listPersonDTO);
     }
 
-    @PreAuthorize("hasRole('ADMIN') or @conditionEvaluatorService.canPreAuthAdmin(#user_id)")
-    @PostMapping("/{userid}")
-    public ResponseEntity<MessageDTO> addPerson(@PathVariable Long user_id, @RequestBody @Valid PersonResponseDTO personResponseDTO) {
-        this.personSVC.addPerson(user_id, personResponseDTO);
-        return ResponseEntity.ok(
-                MessageDTO.builder()
-                        .code(2001)
-                        .message(utilsCommons.getStatusMessage(2001))
-                        .details("Person")
-                        .build()
-        );
-    }
+//    @PreAuthorize("hasRole('ADMIN') or @conditionEvaluatorService.canPreAuthAdmin(#user_id)")
+//    @PostMapping("/{user_id}")
+//    public ResponseEntity<MessageDTO> addPerson(@PathVariable Long user_id, @RequestBody @Valid PersonRequestDTO personRequestDTO) {
+//        this.personSVC.addPerson(user_id, personRequestDTO);
+//        return ResponseEntity.ok(
+//                MessageDTO.builder()
+//                        .code(2001)
+//                        .message(utilsCommons.getStatusMessage(2001))
+//                        .details("Person")
+//                        .build()
+//        );
+//    }
 
     @PreAuthorize("hasRole('ADMIN') or @conditionEvaluatorService.canPreAuthAdmin(#user_id)")
-    @PutMapping("/{userid}")
-    public ResponseEntity<MessageDTO> updatePerson(@PathVariable Long user_id, @RequestBody @Valid PersonDTO personDTO) {
-        PersonDTO newPersonDTO = this.personSVC.updatePerson(user_id, personDTO);
+    @PutMapping("/user/{user_id}/person/{person_id}")
+    public ResponseEntity<MessageDTO> updatePersonById(
+            @PathVariable("user_id") Long user_id,
+            @PathVariable("person_id") Long person_id,
+            @RequestBody @Valid PersonRequestDTO personDTO) {
+        this.personSVC.updatePerson(user_id, person_id, personDTO);
         return ResponseEntity.ok(
                 MessageDTO.builder()
                         .code(2002)
                         .message(utilsCommons.getStatusMessage(2002))
-                        .details("Person")
+                        .details(utilsCommons.getMessage("field.name.person"))
                         .build()
         );
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<MessageDTO> deletePersonById(@PathVariable("id") Long id) {
-        this.personSVC.deletePersonById(id);
-        return ResponseEntity.ok(MessageDTO.builder()
-                .code(2003)
-                .message(utilsCommons.getStatusMessage(2003))
-                .details("Person")
-                .build());
-    }
+//    @PreAuthorize("hasRole('ADMIN')")
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<MessageDTO> deletePersonById(@PathVariable("id") Long id) {
+//        this.personSVC.deletePersonById(id);
+//        return ResponseEntity.ok(MessageDTO.builder()
+//                .code(2003)
+//                .message(utilsCommons.getStatusMessage(2003))
+//                .details(utilsCommons.getMessage("field.name.person"))
+//                .build());
+//    }
 
 
 }

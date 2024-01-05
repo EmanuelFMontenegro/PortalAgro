@@ -1,15 +1,9 @@
 package com.dgitalfactory.usersecurity.entity.AppServices;
 
-import com.dgitalfactory.usersecurity.entity.Field;
-import com.dgitalfactory.usersecurity.utils.StatusService;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 /**
  * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com

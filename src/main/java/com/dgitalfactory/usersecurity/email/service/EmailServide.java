@@ -28,6 +28,7 @@ import org.thymeleaf.exceptions.TemplateProcessingException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+
 /**
  * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
  * @created 30/11/2023 - 08:54
@@ -75,26 +76,25 @@ public class EmailServide {
     @Autowired
     private JwtTokenService jwtTokenService;
 
-    public void senEmailActivateAccount(User us){
+    public void senEmailActivateAccount(User us) {
         String templateEmail = "email-activate-account-template";
-        this.sendEmailTemplateActivateAccount(us,templateEmail);
+        this.sendEmailTemplateActivateAccount(us, templateEmail);
     }
 
-    public void senEmailRecoveryPassword(String username){
+    public void senEmailRecoveryPassword(String username) {
         User us = this.userSVC.findUser(username);
-        if(!us.isAccount_active()){
-            throw new GlobalAppException(HttpStatus.UNAUTHORIZED,4001,"field.name.email");
+        if (!us.isAccount_active()) {
+            throw new GlobalAppException(HttpStatus.UNAUTHORIZED, 4001, "field.name.email");
         }
         String templateEmail = "email-recovery-pass-template";
-        String token= this.jwtTokenService.generatedToken(username, EMAIL_RECOVERY_EXPIRATION_IN_MS);
-        this.sendEmailTemplate(us.getUsername(),token,templateEmail);
+        String token = this.jwtTokenService.generatedToken(username, EMAIL_RECOVERY_EXPIRATION_IN_MS);
+        this.sendEmailTemplate(us.getUsername(), token, templateEmail);
     }
 
     /**
      * Password reset request
-     *
      */
-    public void sendEmailTemplate(String username, String token, String emailTemplate){
+    public void sendEmailTemplate(String username, String token, String emailTemplate) {
         EmailValuesDTO emailValuesDTO = new EmailValuesDTO();
         User us = this.userSVC.findUser(username);
         emailValuesDTO.setMailFrom(EMAIL_FROM);
@@ -104,14 +104,14 @@ public class EmailServide {
         emailValuesDTO.setMailTo(us.getUsername());
 
         MimeMessage message = javaMailSender.createMimeMessage();
-        try{
+        try {
             MimeMessageHelper helper = new MimeMessageHelper(
                     message,
                     MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
                     StandardCharsets.UTF_8.name());
             Context context = new Context();
             Map<String, Object> model = new HashMap<>();
-            model.put("userName",emailValuesDTO.getUserName());
+            model.put("userName", emailValuesDTO.getUserName());
 
             //Generamos un token
             emailValuesDTO.setToken(token);
@@ -139,7 +139,7 @@ public class EmailServide {
             helper.setFrom(emailValuesDTO.getMailFrom());
             helper.setTo(emailValuesDTO.getMailTo());
             helper.setSubject(emailValuesDTO.getSubject());
-            helper.setText(htmlText,true);
+            helper.setText(htmlText, true);
 
             helper.addInline("portal2", portal2);
             helper.addInline("silicon", silicon);
@@ -147,32 +147,37 @@ public class EmailServide {
             us.setTokenPassword(emailValuesDTO.getToken());
             this.userSVC.saveUser(us);
             javaMailSender.send(message);
-        }catch (MessagingException ex){
+        } catch (MessagingException ex) {
             log.error("Send email error", ex.getMessage());
-            throw new GlobalAppException(HttpStatus.BAD_REQUEST, 4003,ex.getMessage());
+            throw new GlobalAppException(HttpStatus.BAD_REQUEST, 4003, ex.getMessage());
         }
     }
 
     /**
      * Change user password
      *
-     * @param passwordDTO: type @{{@link ChangePasswordDTO}}
+     * @param passwordDTO:  type @{{@link ChangePasswordDTO}}
      * @param bindingResult type @{{@link BindingResult}}
      */
-    public void changePassword(@Valid ChangePasswordDTO passwordDTO, BindingResult bindingResult){
-        try{
+    public void changePassword(@Valid ChangePasswordDTO passwordDTO, BindingResult bindingResult) {
+        try {
             this.jwtTokenService.isTokenExpired(passwordDTO.getToken());
-        }catch (Exception ex){
+        } catch (Exception ex) {
             throw new GlobalAppException(HttpStatus.UNAUTHORIZED, 4004, ex.getMessage());
         }
-        if(bindingResult.hasErrors())
-            throw  new GlobalAppException(HttpStatus.BAD_REQUEST, 4012,"field.name.email");
-        if(!passwordDTO.getPassword().equals(passwordDTO.getConfirmPassword()))
-            throw  new GlobalAppException(HttpStatus.NOT_FOUND, 4018,"field.name.email");
+        if (bindingResult.hasErrors())
+            throw new GlobalAppException(HttpStatus.BAD_REQUEST, 4012, "field.name.email");
+        if (!passwordDTO.getPassword().equals(passwordDTO.getConfirmPassword()))
+            throw new GlobalAppException(HttpStatus.NOT_FOUND, 4018, "field.name.email");
 
-        if(UtilsCommons.validPassword(passwordDTO.getPassword())) {
-            log.info("cambiar validación desde dto para evitar hacer estas validaiones y delegar la resposabilidad");
-            throw new GlobalAppException(HttpStatus.NOT_FOUND, 4012, "El password debe tener longitud minima de" + AppConstants.PASSWORD_MIN+ " y como máximo "+AppConstants.PASSWORD_MIN+" carcateres, al menos una minuscula y una mayuscula");
+        if (!UtilsCommons.validPassword(passwordDTO.getPassword())) {
+            throw new GlobalAppException(HttpStatus.NOT_FOUND, 4012,
+                    utilsCommons.getFormatMessage(
+                           4034,
+                            String.valueOf(AppConstants.PASSWORD_MIN),
+                            String.valueOf(AppConstants.PASSWORD_MAX)
+                    )
+            );
         }
 
         User us = this.userSVC.getUserByTokenPassword(passwordDTO.getToken());
@@ -180,7 +185,7 @@ public class EmailServide {
         this.userSVC.setPassword(us, passwordDTO.getPassword());
     }
 
-    public void sendEmailTemplateActivateAccount(User us, String emailTemplate){
+    public void sendEmailTemplateActivateAccount(User us, String emailTemplate) {
         EmailValuesDTO emailValuesDTO = new EmailValuesDTO();
         emailValuesDTO.setMailFrom(EMAIL_FROM);
         emailValuesDTO.setSubject(utilsCommons.getMessage("email.send.activate.account.subject"));
@@ -189,7 +194,7 @@ public class EmailServide {
         emailValuesDTO.setMailTo(us.getUsername());
 
         MimeMessage message = javaMailSender.createMimeMessage();
-        try{
+        try {
             MimeMessageHelper helper = new MimeMessageHelper(
                     message,
                     MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
@@ -197,7 +202,7 @@ public class EmailServide {
 
             Context context = new Context();
             Map<String, Object> model = new HashMap<>();
-            model.put("userName",emailValuesDTO.getUserName());
+            model.put("userName", emailValuesDTO.getUserName());
 
             //Generamos un token
             emailValuesDTO.setToken(us.getTokenPassword());
@@ -229,28 +234,28 @@ public class EmailServide {
             helper.setFrom(emailValuesDTO.getMailFrom());
             helper.setTo(emailValuesDTO.getMailTo());
             helper.setSubject(emailValuesDTO.getSubject());
-            helper.setText(htmlText,true);
+            helper.setText(htmlText, true);
             helper.addInline("portal2", portal2);
             helper.addInline("silicon", silicon);
 
             javaMailSender.send(message);
-        }catch (MessagingException ex){
+        } catch (MessagingException ex) {
             log.error("Send email error", ex.getMessage());
             throw new GlobalAppException(HttpStatus.INTERNAL_SERVER_ERROR, 4003, ex.getMessage());
-        }catch (TemplateProcessingException ex){
+        } catch (TemplateProcessingException ex) {
             log.error("Create templates with thymeleaf error", ex.getMessage());
             throw new GlobalAppException(HttpStatus.INTERNAL_SERVER_ERROR, 4032, ex.getMessage());
         }
     }
 
-//    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
-    public void activateAccount(String token){
-        try{
-            if(this.jwtTokenService.isTokenExpired(token)){
-                throw new GlobalAppException(HttpStatus.UNAUTHORIZED, 4004,"field.name.email");
+    //    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
+    public void activateAccount(String token) {
+        try {
+            if (this.jwtTokenService.isTokenExpired(token)) {
+                throw new GlobalAppException(HttpStatus.UNAUTHORIZED, 4004, "field.name.email");
             }
-        }catch (Exception ex){
-            throw new GlobalAppException(HttpStatus.UNAUTHORIZED, 4004,ex.getMessage());
+        } catch (Exception ex) {
+            throw new GlobalAppException(HttpStatus.UNAUTHORIZED, 4004, ex.getMessage());
         }
 
         User us = this.userSVC.getUserByTokenPassword(token);

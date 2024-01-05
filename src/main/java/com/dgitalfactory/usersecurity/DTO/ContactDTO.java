@@ -9,7 +9,6 @@ import lombok.*;
  * @created 30/11/2023 - 08:54
  */
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class ContactDTO {
 //    private Long id;
@@ -18,4 +17,9 @@ public class ContactDTO {
 
     @Size(min=10,max = 12)
     private String telephone;
+
+    public ContactDTO(String movilPhone, String telephone) {
+        this.movilPhone = movilPhone;
+        this.telephone = telephone;
+    }
 }

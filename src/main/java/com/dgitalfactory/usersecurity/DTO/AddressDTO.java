@@ -12,7 +12,6 @@ import org.springframework.validation.annotation.Validated;
  * @created 30/11/2023 - 08:54
  */
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class AddressDTO {
 //    private Long id;
@@ -30,5 +29,10 @@ public class AddressDTO {
 
     public void setLocation(String location) {
         this.location = UtilsCommons.capitalize(location);
+    }
+
+    public AddressDTO(String address, String location) {
+        this.address = address;
+        this.location = location;
     }
 }

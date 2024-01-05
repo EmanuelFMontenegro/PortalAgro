@@ -1,7 +1,6 @@
 package com.dgitalfactory.usersecurity.security.service;
 
 import com.dgitalfactory.usersecurity.DTO.ResponsePaginationDTO;
-import com.dgitalfactory.usersecurity.exception.ResourceNotFoundException;
 import com.dgitalfactory.usersecurity.security.dto.UserResponseDTO;
 import com.dgitalfactory.usersecurity.security.dto.UserDTO;
 import com.dgitalfactory.usersecurity.security.entity.Role;
@@ -11,7 +10,7 @@ import com.dgitalfactory.usersecurity.security.repository.RoleRepository;
 import com.dgitalfactory.usersecurity.security.repository.UserRepository;
 import com.dgitalfactory.usersecurity.service.CustomeErrorService;
 import com.dgitalfactory.usersecurity.service.PersonService;
-import com.dgitalfactory.usersecurity.utils.RoleName;
+import com.dgitalfactory.usersecurity.utils.enums.RoleName;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
@@ -80,11 +78,10 @@ public class UserService {
      * </ul>
      */
     public User findUser(String username){
-        User newUs = this.userRepo.findByUsername(username)
+        return this.userRepo.findByUsername(username)
                 .orElseThrow(()->
                     new GlobalAppException(HttpStatus.BAD_REQUEST, 4019, utilsCommons.getMessage("field.name.user"))
                 );
-        return newUs;
     }
 
     /**
@@ -188,7 +185,7 @@ public class UserService {
                     .lockeTime(null)
                     .build();
             this.userRepo.save(newUser);
-            return this.findUser(userDTO.getUsername());
+            return this.findUser(newUser.getUsername());
     }
 
     /**

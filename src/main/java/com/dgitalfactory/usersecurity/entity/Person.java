@@ -1,8 +1,7 @@
 package com.dgitalfactory.usersecurity.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,17 +19,18 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-//@Table(name = "person", uniqueConstraints = {@UniqueConstraint(columnNames = {"dni"})})
-@Table(name = "people")
+@Table(name = "people", uniqueConstraints = {@UniqueConstraint(columnNames = {"dniCuit"})})
 public class Person {
     @Id
     private Long id;
-    @Column(length = 60, nullable = true)
+    @Column(length = 20, nullable = true)
     private String name;
-    @Column(length = 60, nullable = true)
+    @Column(length = 20, nullable = true)
     private String lastname;
-    @Column(length = 13, nullable = true)
-    private String dni;
+    @Column(length = 11, nullable = true)
+    private String dniCuit;
+    @Column(length = 150, nullable = true)
+    private String descriptions;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "address_id", referencedColumnName = "id", nullable = true)

@@ -1,6 +1,7 @@
 package com.dgitalfactory.usersecurity.security.dto;
 
 import com.dgitalfactory.usersecurity.security.entity.Role;
+import com.dgitalfactory.usersecurity.utils.AppConstants;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +24,7 @@ public class UserResponseDTO {
 	private String username;
 
 	@NotEmpty
-	@Size(min=8, max = 30)
+	@Size(min= AppConstants.PASSWORD_MIN, max = AppConstants.PASSWORD_MAX)
 	private String password;
 	private Set<Role> roles;
 }

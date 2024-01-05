@@ -10,26 +10,36 @@ import lombok.*;
  * @created 30/11/2023 - 08:54
  */
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class PersonDTO {
     private Long id;
-    @Size(min=3,max = 60)
+    @Size(min=3,max = 20)
     @NotBlank
     private String name;
 
-    @Size(min=3,max = 60)
+    @Size(min=3,max = 20)
     @NotBlank
     private String lastname;
 
-    @Size(min=8,max = 13)
+    @Size(min=7,max = 10)
     @NotBlank
-    private String dni;
+    private String dniCuit;
+
+    @Size(max = 150)
+    private String descriptions;
 
     private AddressDTO addressDTO;
 
     private ContactDTO contactDTO;
 
-    private Long userid;
+    public PersonDTO(Long id, String name, String lastname, String dniCuit, String descriptions, AddressDTO addressDTO, ContactDTO contactDTO) {
+        this.id = id;
+        this.name = name;
+        this.lastname = lastname;
+        this.dniCuit = dniCuit;
+        this.descriptions = descriptions;
+        this.addressDTO = addressDTO;
+        this.contactDTO = contactDTO;
+    }
 }

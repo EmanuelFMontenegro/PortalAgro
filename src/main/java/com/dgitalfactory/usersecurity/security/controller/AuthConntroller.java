@@ -84,6 +84,6 @@ public class AuthConntroller {
 	 */
 	@PostMapping("/refresh")
 	public ResponseEntity<JwtDTO> refreshToken(@Valid @RequestBody JwtDTO jwtDTO) {
-		return new ResponseEntity(this.jwtSVC.getRefreshToken(jwtDTO), HttpStatus.OK);
+		return new ResponseEntity<>(this.jwtSVC.getRefreshToken(jwtDTO), HttpStatus.OK);
 	}
 }

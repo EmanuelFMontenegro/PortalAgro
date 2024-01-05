@@ -1,5 +1,6 @@
 package com.dgitalfactory.usersecurity.security.dto;
 
+import com.dgitalfactory.usersecurity.utils.AppConstants;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,6 @@ public class LoginDTO {
 	@Email
 	private String username;
 	@NotBlank
-	@Size(min=8, max = 30)
+	@Size(min= AppConstants.PASSWORD_MIN, max = AppConstants.PASSWORD_MAX)
 	private String password;
 }

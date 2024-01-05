@@ -1,9 +1,7 @@
 package com.dgitalfactory.usersecurity.entity.AppServices;
 
 import com.dgitalfactory.usersecurity.entity.Field;
-import com.dgitalfactory.usersecurity.utils.StatusService;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.dgitalfactory.usersecurity.utils.enums.StatusService;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,29 +1,32 @@
 package com.dgitalfactory.usersecurity.DTO.Person;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
  * @created 30/11/2023 - 08:54
  */
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class PersonResponseDTO {
-
-    @Size(min=3,max = 60)
-    @NotBlank
+    private Long id;
     private String name;
-
-    @Size(min=3,max = 60)
-    @NotBlank
     private String lastname;
+    private String dniCuit;
+    private String descriptions;
+    private String location;
+    private String telephone;
 
-    @Size(min=8,max = 13)
-    @NotBlank
-    private String dni;
-
+    public PersonResponseDTO(Long id, String name, String lastname, String dniCuit, String descriptions, String location, String telephone) {
+        this.id = id;
+        this.name = name;
+        this.lastname = lastname;
+        this.dniCuit = dniCuit;
+        this.descriptions = descriptions;
+        this.location = location;
+        this.telephone = telephone;
+    }
 }

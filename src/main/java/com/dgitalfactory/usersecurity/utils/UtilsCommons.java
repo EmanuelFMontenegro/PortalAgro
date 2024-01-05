@@ -69,6 +69,17 @@ public class UtilsCommons {
     }
 
     /**
+     * Searching for the message and formats with the object received by parameter
+     * @param msgCode: type @{@link Integer} code message in message.properties
+     * @param dynamicValues: all object needed to use with
+     * @return
+     */
+    public String getFormatMessage(int msgCode, String... dynamicValues){
+        String formatString = this.getStatusMessage(msgCode);
+        return String.format(formatString, (Object[]) dynamicValues);
+    }
+
+    /**
      * Convert class entity to entityDTO
      * @param entity
      * @param dtoClass
@@ -105,7 +116,7 @@ public class UtilsCommons {
      * </ul>
      */
     public static boolean validPassword(String password) {
-        if (password.length() < 8) {
+        if (password.length() < AppConstants.PASSWORD_MIN) {
             return false;
         }
         boolean mayuscula = false;
@@ -133,7 +144,7 @@ public class UtilsCommons {
      *
      * @param numero es numero a verificar
      * @param tipo   tipo de patron a evaluar (dni,cuitCuil, telefono)
-     * @return
+     * @return @{@link Boolean}
      */
     public static boolean validarNumerosRepetidos(String numero, String tipo) {
         // Cargamos el patron de expresion a comprara .

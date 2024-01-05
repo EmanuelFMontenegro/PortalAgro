@@ -1,6 +1,6 @@
 package com.dgitalfactory.usersecurity.security.entity;
 
-import com.dgitalfactory.usersecurity.utils.RoleName;
+import com.dgitalfactory.usersecurity.utils.enums.RoleName;
 import jakarta.persistence.*;
 import lombok.*;
 /**

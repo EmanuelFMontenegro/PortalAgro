@@ -9,7 +9,7 @@ import com.dgitalfactory.usersecurity.entity.Field;
 import com.dgitalfactory.usersecurity.exception.GlobalAppException;
 import com.dgitalfactory.usersecurity.exception.GlobalMessageException;
 import com.dgitalfactory.usersecurity.repository.ServiceRepository;
-import com.dgitalfactory.usersecurity.utils.StatusService;
+import com.dgitalfactory.usersecurity.utils.enums.StatusService;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

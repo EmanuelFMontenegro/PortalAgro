@@ -1,9 +1,8 @@
 package com.dgitalfactory.usersecurity.repository;
 
 import com.dgitalfactory.usersecurity.DTO.AppService.ServiceAppDTO;
-import com.dgitalfactory.usersecurity.DTO.Field.FieldDTO;
 import com.dgitalfactory.usersecurity.entity.AppServices.ServiceApp;
-import com.dgitalfactory.usersecurity.utils.StatusService;
+import com.dgitalfactory.usersecurity.utils.enums.StatusService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -1,6 +1,6 @@
 package com.dgitalfactory.usersecurity.security.service;
 
-import com.dgitalfactory.usersecurity.DTO.Person.PersonResponseDTO;
+import com.dgitalfactory.usersecurity.DTO.Person.PersonRequestDTO;
 import com.dgitalfactory.usersecurity.email.service.EmailServide;
 import com.dgitalfactory.usersecurity.exception.GlobalAppException;
 import com.dgitalfactory.usersecurity.security.dto.JwtDTO;
@@ -100,7 +100,7 @@ public class AuthService {
         }
         String token = this.jwtSVC.generatedToken(userResponseDTO.getUsername(), EMAIL_ACCOUNT_EXPIRATION_IN_MS);
         User us = this.userSVC.saveUser(userResponseDTO, token);
-        this.personSVC.addPerson(us.getId(),new PersonResponseDTO().builder().build());
+        this.personSVC.addPerson(us.getId());
         this.emailServide.senEmailActivateAccount(us);
     }
 

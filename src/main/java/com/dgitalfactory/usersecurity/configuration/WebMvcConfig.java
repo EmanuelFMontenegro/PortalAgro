@@ -2,7 +2,6 @@ package com.dgitalfactory.usersecurity.configuration;
 
 import com.dgitalfactory.usersecurity.configuration.messagecustome.CustomLocaleChangeInterceptor;
 import com.dgitalfactory.usersecurity.exception.CustomExceptionHandler;
-import com.dgitalfactory.usersecurity.exception.JWTExceptionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,18 +23,11 @@ import java.util.Locale;
 public class WebMvcConfig implements WebMvcConfigurer {
 
     @Autowired
-    private JWTExceptionHandler jwtExceptionHandler;
-    @Autowired
     private CustomExceptionHandler customExceptionHandler;
 
     @Autowired
     private CustomLocaleChangeInterceptor customLocaleChangeInterceptor;
 
-
-    @Override
-    public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
-        resolvers.add(jwtExceptionHandler);
-    }
 
     @Override
     public void extendHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {

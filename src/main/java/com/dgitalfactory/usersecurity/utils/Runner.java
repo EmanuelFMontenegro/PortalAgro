@@ -1,6 +1,8 @@
 package com.dgitalfactory.usersecurity.utils;
 
+import com.dgitalfactory.usersecurity.entity.Address;
 import com.dgitalfactory.usersecurity.entity.AppServices.TypeService;
+import com.dgitalfactory.usersecurity.entity.Contact;
 import com.dgitalfactory.usersecurity.entity.Person;
 import com.dgitalfactory.usersecurity.repository.PersonRepository;
 import com.dgitalfactory.usersecurity.repository.TypeServiceRepository;
@@ -8,6 +10,7 @@ import com.dgitalfactory.usersecurity.security.entity.Role;
 import com.dgitalfactory.usersecurity.security.entity.User;
 import com.dgitalfactory.usersecurity.security.repository.RoleRepository;
 import com.dgitalfactory.usersecurity.security.repository.UserRepository;
+import com.dgitalfactory.usersecurity.utils.enums.RoleName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -88,16 +91,44 @@ public class Runner implements CommandLineRunner {
     }
 
     private void createdPerson() {
+
         this.personRepo.saveAll(
                 List.of(
                         Person.builder()
                                 .id(1L)
+                                .name("Cristian")
+                                .lastname("Orozco")
+                                .dniCuit("32035722")
+                                .address(Address.builder()
+                                        .location("Posadas")
+                                        .build())
+                                .contact(Contact.builder()
+                                        .telephone("3764373992")
+                                        .build())
                                 .build(),
                         Person.builder()
                                 .id(2L)
+                                .name("user02")
+                                .lastname("user02")
+                                .dniCuit("2222222")
+                                .address(Address.builder()
+                                        .location("2 de Mayo")
+                                        .build())
+                                .contact(Contact.builder()
+                                        .telephone("3764222222")
+                                        .build())
                                 .build(),
                         Person.builder()
                                 .id(3L)
+                                .name("user03")
+                                .lastname("user03")
+                                .dniCuit("3333333")
+                                .address(Address.builder()
+                                        .location("Eldorado")
+                                        .build())
+                                .contact(Contact.builder()
+                                        .telephone("3764333333")
+                                        .build())
                                 .build()
                 )
         );
