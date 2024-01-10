@@ -1,5 +1,6 @@
 package com.dgitalfactory.usersecurity.entity;
 
+import com.dgitalfactory.usersecurity.entity.Location.Location;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,7 +24,8 @@ public class Address {
     @Column(nullable = true, length = 255)
     private String address;
 
-    @Column(nullable = true, length = 30)
-    private String location;
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinColumn(name = "location_id", referencedColumnName = "id", nullable = false)
+    private Location location;
 
 }

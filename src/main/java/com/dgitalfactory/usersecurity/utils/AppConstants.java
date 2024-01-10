@@ -2,6 +2,9 @@ package com.dgitalfactory.usersecurity.utils;
 
 public class AppConstants {
 
+	public static final int LOCATION_NAME_MAX = 60;
+	public static final int LOCATION_NAME_MIN = 3;
+
 	public static final int NAME_LASTNAME_MIN = 3;
 	public static final int NAME_LASTNAME_MAX = 20;
 	public static final int MAX_LOGIN_ATTEMPTS = 5;

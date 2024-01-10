@@ -45,7 +45,7 @@ public class ServiceApp {
     @OneToMany(mappedBy = "service", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ServiceReport> listServiceReport = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
     @JoinColumn(name = "typeService_id", referencedColumnName = "id", nullable = true)
     private TypeService typeService;
 }

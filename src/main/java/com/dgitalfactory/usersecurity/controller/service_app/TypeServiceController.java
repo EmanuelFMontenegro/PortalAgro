@@ -37,14 +37,14 @@ public class TypeServiceController {
     private UtilsCommons utilsCommons;
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/user/field/service/type")
+    @GetMapping("/field/service/type")
     public ResponseEntity<List<TypeServiceDTO>> getAllServiceType(){
         return new ResponseEntity<List<TypeServiceDTO>>(
                 this.typeServiceSVR.getAllTypeServiceDTO(), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/user/field/service/type")
+    @PostMapping("/field/service/type")
     public ResponseEntity<MessageDTO> addServiceType(@RequestBody @Valid TypeServiceResponseDTO typeServiceResponseDTO){
         this.typeServiceSVR.addTypeService(typeServiceResponseDTO);
         return new ResponseEntity<MessageDTO>(
@@ -57,7 +57,7 @@ public class TypeServiceController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/user/field/service/type/{typeService_id}")
+    @PutMapping("/field/service/type/{typeService_id}")
     public ResponseEntity<MessageDTO> updateServiceType(@PathVariable("typeService_id") Long typeService_id,
                                                      @RequestBody @Valid TypeServiceResponseDTO typeServiceResponseDTO){
         this.typeServiceSVR.updateTypeService(typeService_id,typeServiceResponseDTO);
@@ -71,7 +71,7 @@ public class TypeServiceController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/user/field/service/type/{typeService_id}")
+    @DeleteMapping("/field/service/type/{typeService_id}")
     public ResponseEntity<MessageDTO> deleteServiceType(@PathVariable("typeService_id") Long typeService_id){
         this.typeServiceSVR.updateTypeService(typeService_id);
         return new ResponseEntity<MessageDTO>(

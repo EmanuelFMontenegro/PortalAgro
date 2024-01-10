@@ -15,4 +15,5 @@ public class AppGlobalConfig {
     public ModelMapper modoelMapper() {
         return new ModelMapper();
     }
+
 }

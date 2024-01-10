@@ -38,9 +38,6 @@ import java.util.Map;
 @RestControllerAdvice
 public class AdviceControllerExceptionHandler {
 
-//    @Autowired
-//    private ResponseStatusMessages msgSource;
-
     @Autowired
     private UtilsCommons utilsCommons;
 

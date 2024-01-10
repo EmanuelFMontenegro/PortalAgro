@@ -1,7 +1,10 @@
 package com.dgitalfactory.usersecurity.DTO.Person;
 
 import com.dgitalfactory.usersecurity.utils.AppConstants;
+import com.dgitalfactory.usersecurity.utils.UtilsCommons;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -30,12 +33,21 @@ public class PersonRequestDTO {
     @Size(max = 150)
     private String descriptions;
 
-    @Size(min=3,max = 255)
-    @NotBlank
-    private String location;
+    @NotNull
+    @Min(value=1)
+    private Long location_id;
 
     @Size(min=AppConstants.TELEPHONE_MIN,max = AppConstants.TELPHONE_MAX)
     @NotBlank
     private String telephone;
 
+    public void setName(@NotNull String name) {
+        this.name = UtilsCommons.capitalizeAllFirstLetters(name);
+    }
+
+    public void setLastname(String lastname) { this.lastname = UtilsCommons.capitalizeAllFirstLetters(lastname);}
+
+    public void setObservation(@NotNull String descriptions) {
+        this.descriptions = UtilsCommons.capitalize(descriptions);
+    }
 }

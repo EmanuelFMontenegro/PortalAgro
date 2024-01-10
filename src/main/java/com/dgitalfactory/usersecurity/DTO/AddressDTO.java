@@ -1,11 +1,11 @@
 package com.dgitalfactory.usersecurity.DTO;
 
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
-import jakarta.persistence.Column;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.springframework.validation.annotation.Validated;
 
 /**
  * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
@@ -19,20 +19,16 @@ public class AddressDTO {
     @NotBlank
     private String address;
 
-    @Size(min=3,max = 60)
-    @NotBlank
-    private String location;
+    @NotNull
+    @Min(value=1)
+    private Long location_id;
 
     public void setAddress(String address) {
         this.address = UtilsCommons.capitalize(address);
     }
 
-    public void setLocation(String location) {
-        this.location = UtilsCommons.capitalize(location);
-    }
-
-    public AddressDTO(String address, String location) {
+    public AddressDTO(String address, Long location_id) {
         this.address = address;
-        this.location = location;
+        this.location_id = location_id;
     }
 }

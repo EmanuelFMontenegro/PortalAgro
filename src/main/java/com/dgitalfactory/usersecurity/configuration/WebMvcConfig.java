@@ -2,16 +2,23 @@ package com.dgitalfactory.usersecurity.configuration;
 
 import com.dgitalfactory.usersecurity.configuration.messagecustome.CustomLocaleChangeInterceptor;
 import com.dgitalfactory.usersecurity.exception.CustomExceptionHandler;
+import io.netty.channel.ChannelOption;
+import io.netty.handler.timeout.ReadTimeoutHandler;
+import io.netty.handler.timeout.WriteTimeoutHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import reactor.netty.http.client.HttpClient;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Locale;
 
@@ -21,6 +28,27 @@ import java.util.Locale;
  */
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
+
+    @Bean
+    public WebClient webClient() {
+        HttpClient httpClient = HttpClient.create()
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000)                        //Espera de conexión
+                .doOnConnected(conn ->
+                        conn
+                                .addHandlerLast(new ReadTimeoutHandler(10))  //Espera de escritura
+                                .addHandlerLast(new WriteTimeoutHandler(10)) //Espera de lectura
+                )
+                .responseTimeout(Duration.ofSeconds(2))                                     //Espera de respuesta solicitud
+                ;
+
+        return WebClient.builder()
+                .codecs(config ->
+                        config.defaultCodecs().maxInMemorySize(2 * 1024 * 1024)
+                )
+                .clientConnector(new ReactorClientHttpConnector(httpClient))
+                .baseUrl("https://apis.datos.gob.ar/georef/api/")
+                .build();
+    }
 
     @Autowired
     private CustomExceptionHandler customExceptionHandler;
@@ -51,7 +79,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
-        LocaleChangeInterceptor localeChangeInterceptor=new CustomLocaleChangeInterceptor();
+        LocaleChangeInterceptor localeChangeInterceptor = new CustomLocaleChangeInterceptor();
         localeChangeInterceptor.setParamName("lang");// Parámetro que cambiará el idioma
         return localeChangeInterceptor;
     }

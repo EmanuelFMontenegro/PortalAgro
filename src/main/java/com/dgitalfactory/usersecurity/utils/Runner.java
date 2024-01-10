@@ -3,7 +3,9 @@ package com.dgitalfactory.usersecurity.utils;
 import com.dgitalfactory.usersecurity.entity.Address;
 import com.dgitalfactory.usersecurity.entity.AppServices.TypeService;
 import com.dgitalfactory.usersecurity.entity.Contact;
+import com.dgitalfactory.usersecurity.entity.Location.Location;
 import com.dgitalfactory.usersecurity.entity.Person;
+import com.dgitalfactory.usersecurity.repository.LocationRepository;
 import com.dgitalfactory.usersecurity.repository.PersonRepository;
 import com.dgitalfactory.usersecurity.repository.TypeServiceRepository;
 import com.dgitalfactory.usersecurity.security.entity.Role;
@@ -11,6 +13,8 @@ import com.dgitalfactory.usersecurity.security.entity.User;
 import com.dgitalfactory.usersecurity.security.repository.RoleRepository;
 import com.dgitalfactory.usersecurity.security.repository.UserRepository;
 import com.dgitalfactory.usersecurity.utils.enums.RoleName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,6 +31,7 @@ import java.util.Set;
 @Component
 public class Runner implements CommandLineRunner {
 
+    private final static Logger log = LoggerFactory.getLogger(Runner.class);
     @Autowired
     private final UserRepository userRepo;
     @Autowired
@@ -37,12 +42,19 @@ public class Runner implements CommandLineRunner {
     private PersonRepository personRepo;
 
     @Autowired
+    private LocationRepository locationRepo;
+
+    @Autowired
     private TypeServiceRepository typeServiceRepo;
 
-    public Runner(UserRepository userrepo, RoleRepository authrepo, TypeServiceRepository typeServiceRepo) {
+    public Runner(UserRepository userrepo,
+                  RoleRepository authrepo,
+                  TypeServiceRepository typeServiceRepo,
+                  LocationRepository locationRepo) {
         this.userRepo = userrepo;
         this.roleRepo = authrepo;
         this.typeServiceRepo= typeServiceRepo;
+        this.locationRepo = locationRepo;
     }
 
     public void createdRoles() {
@@ -91,7 +103,6 @@ public class Runner implements CommandLineRunner {
     }
 
     private void createdPerson() {
-
         this.personRepo.saveAll(
                 List.of(
                         Person.builder()
@@ -100,7 +111,7 @@ public class Runner implements CommandLineRunner {
                                 .lastname("Orozco")
                                 .dniCuit("32035722")
                                 .address(Address.builder()
-                                        .location("Posadas")
+                                        .location(this.locationRepo.findById(1L).orElseThrow())
                                         .build())
                                 .contact(Contact.builder()
                                         .telephone("3764373992")
@@ -112,7 +123,7 @@ public class Runner implements CommandLineRunner {
                                 .lastname("user02")
                                 .dniCuit("2222222")
                                 .address(Address.builder()
-                                        .location("2 de Mayo")
+                                        .location(this.locationRepo.findById(2L).orElseThrow())
                                         .build())
                                 .contact(Contact.builder()
                                         .telephone("3764222222")
@@ -124,7 +135,7 @@ public class Runner implements CommandLineRunner {
                                 .lastname("user03")
                                 .dniCuit("3333333")
                                 .address(Address.builder()
-                                        .location("Eldorado")
+                                        .location(this.locationRepo.findById(3L).orElseThrow())
                                         .build())
                                 .contact(Contact.builder()
                                         .telephone("3764333333")
@@ -149,8 +160,19 @@ public class Runner implements CommandLineRunner {
         );
     }
 
+    private void createLocations(){
+        if(this.locationRepo.count()==0){
+            this.locationRepo.save(Location.builder().name("Posadas").build());
+            this.locationRepo.save(Location.builder().name("Eldorado").build());
+            this.locationRepo.save(Location.builder().name("Dos de Mayo").build());
+        }
+    }
+
     @Override
     public void run(String... args) throws Exception {
+        if(this.locationRepo.count()==0){
+            this.createLocations();
+        }
         if (this.roleRepo.count() == 0) {
             this.createdRoles();
         }

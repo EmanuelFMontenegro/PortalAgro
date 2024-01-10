@@ -39,7 +39,7 @@ public class JwtEntryPoint implements AuthenticationEntryPoint {
         ErrorDTO errorDTO = ErrorDTO.builder()
                 .code(4025)
                 .message(utilsCommons.getStatusMessage(4025))
-                .date(utilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
+                .date(UtilsCommons.convertLocalDateTimeToString(LocalDateTime.now()))
                 .path( request.getServletPath())
                 .details(authException.getMessage())
                 .build();

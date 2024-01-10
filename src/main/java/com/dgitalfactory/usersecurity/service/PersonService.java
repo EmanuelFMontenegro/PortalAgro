@@ -6,11 +6,11 @@ import com.dgitalfactory.usersecurity.DTO.Person.PersonRequestDTO;
 import com.dgitalfactory.usersecurity.DTO.ResponsePaginationDTO;
 import com.dgitalfactory.usersecurity.entity.Address;
 import com.dgitalfactory.usersecurity.entity.Contact;
+import com.dgitalfactory.usersecurity.entity.Location.Location;
 import com.dgitalfactory.usersecurity.entity.Person;
 import com.dgitalfactory.usersecurity.exception.GlobalAppException;
 import com.dgitalfactory.usersecurity.exception.GlobalMessageException;
 import com.dgitalfactory.usersecurity.repository.PersonRepository;
-import com.dgitalfactory.usersecurity.utils.AppConstants;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -44,6 +44,9 @@ public class PersonService {
     private PersonRepository personRepo;
 
     @Autowired
+    private LocationService locationSVC;
+
+    @Autowired
     private UtilsCommons utilsCommons;
 
     @Autowired
@@ -51,12 +54,13 @@ public class PersonService {
 
     /**
      * Check user and person ID
-     * @param user_id: type @{@link Long}
+     *
+     * @param user_id:   type @{@link Long}
      * @param person_id: type {@link Long}
      * @return @{@link Boolean}
      */
-    private Boolean checkUserIdPersonId(Long user_id, Long person_id ){
-        if(!Objects.equals(user_id, person_id)){
+    private Boolean checkUserIdPersonId(Long user_id, Long person_id) {
+        if (!Objects.equals(user_id, person_id)) {
             throw new GlobalMessageException(
                     HttpStatus.NOT_FOUND,
                     4011,
@@ -74,12 +78,12 @@ public class PersonService {
     /**
      * Return Information of the Person searching bt id person
      *
-     * @param user_id: type {@link Long}
+     * @param user_id:   type {@link Long}
      * @param person_id: type {@link Long}
      * @return personDTO: type @{@link PersonResponseDTO}
      */
     public PersonResponseDTO getPersonDtoById(Long user_id, Long person_id) {
-        this.checkUserIdPersonId(user_id,person_id);
+        this.checkUserIdPersonId(user_id, person_id);
         return this.personRepo.findPersonDTOById(person_id)
                 .orElseThrow(() -> errorSVC.getResourceNotFoundException("Person", "id", person_id));
     }
@@ -98,15 +102,26 @@ public class PersonService {
     /**
      * Return information of the Person searching by DNI
      *
-     * @param dniCuit: Type String
+     * @param dniCuit: Type {@link String}: DNI or CUIT/CUIL by person
      * @return @{@link PersonResponseDTO}
      */
-    public PersonResponseDTO getPersonDTOByDni(String dniCuit) {
+    public PersonResponseDTO getPersonDTOByDniCuit(String dniCuit) {
         return this.personRepo.findPersonResponseDTOByDniCuit(dniCuit)
                 .orElseThrow(() -> errorSVC.getResourceNotFoundException(
                         utilsCommons.getMessage("field.name.person"),
                         utilsCommons.getMessage("field.name.dnicuil"), dniCuit));
     }
+
+    /**
+     * Check if exists person by DNI / CUIT / CUIL
+     *
+     * @param dniCuit: type {@link String}
+     * @return @{@link Boolean}
+     */
+    public boolean existPersonByDniCuit(String dniCuit) {
+        return this.personRepo.existsByDniCuit(dniCuit);
+    }
+
 
     /**
      * return information of the person searching by DNI
@@ -163,7 +178,7 @@ public class PersonService {
     /**
      * Create person for user
      *
-     * @param userid:           Long userid
+     * @param userid: Long userid
      */
     @Transactional(propagation = Propagation.SUPPORTS)
     public void addPerson(Long userid) {
@@ -173,8 +188,6 @@ public class PersonService {
         }
         Person person = Person.builder()
                 .id(userid)
-                .address(Address.builder().build())
-                .contact(Contact.builder().build())
                 .build();
         this.personRepo.save(person);
     }
@@ -182,14 +195,16 @@ public class PersonService {
     /**
      * Update person records
      *
-     * @param user_id: type @{@link Long}
+     * @param user_id:   type @{@link Long}
      * @param person_id: type {@link Long}
      * @param personDTO: @{@link PersonRequestDTO}
      * @return @{@link PersonResponseDTO}
      */
 //    @Transactional(propagation = Propagation.SUPPORTS)
     public PersonResponseDTO updatePerson(Long user_id, Long person_id, PersonRequestDTO personDTO) {
-        this.checkUserIdPersonId(user_id,person_id);
+        this.checkUserIdPersonId(user_id, person_id);
+        Location locationNew = this.locationSVC.getLocationById(personDTO.getLocation_id());
+
         //validar datos
         this.validatePerson(personDTO);
         Person person = this.personRepo.findById(person_id).orElseThrow(() ->
@@ -204,14 +219,19 @@ public class PersonService {
         person.setLastname(personDTO.getLastname());
         person.setDniCuit(personDTO.getDniCuit());
         person.setDescriptions(personDTO.getDescriptions());
-        person.getAddress().setLocation(personDTO.getLocation());
-        person.getContact().setTelephone(personDTO.getTelephone());
+        if (person.getAddress() != null) {
+            person.getAddress().setLocation(locationNew);
+        } else {
+            person.setAddress(Address.builder().location(locationNew).build());
+        }
+        if (person.getContact() != null) {
+            person.getContact().setTelephone(personDTO.getTelephone());
+        } else {
+            person.setContact(Contact.builder().telephone(personDTO.getTelephone()).build());
+        }
         this.personRepo.save(person);
 
-        PersonResponseDTO upPersonDTO = this.getPersonDTOByDni(personDTO.getDniCuit());
-        log.info("Update person: ", upPersonDTO);
-
-        return upPersonDTO;
+        return this.getPersonDTOByDniCuit(personDTO.getDniCuit());
     }
 
     /**

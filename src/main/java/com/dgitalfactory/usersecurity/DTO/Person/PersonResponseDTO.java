@@ -17,16 +17,16 @@ public class PersonResponseDTO {
     private String lastname;
     private String dniCuit;
     private String descriptions;
-    private String location;
+    private Long location_id;
     private String telephone;
 
-    public PersonResponseDTO(Long id, String name, String lastname, String dniCuit, String descriptions, String location, String telephone) {
+    public PersonResponseDTO(Long id, String name, String lastname, String dniCuit, String descriptions, Long location_id, String telephone) {
         this.id = id;
         this.name = name;
         this.lastname = lastname;
         this.dniCuit = dniCuit;
         this.descriptions = descriptions;
-        this.location = location;
+        this.location_id = location_id;
         this.telephone = telephone;
     }
 }

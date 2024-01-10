@@ -21,20 +21,20 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
 
     @Query("SELECT NEW com.dgitalfactory.usersecurity.DTO.Person.PersonResponseDTO(" +
             "p.id, COALESCE(p.name,''), COALESCE(p.lastname,''), COALESCE(p.dniCuit,''), COALESCE(p.descriptions,''), " +
-            "COALESCE(a.location,''), COALESCE(c.telephone,''))" +
-            " FROM Person p JOIN p.address a JOIN p.contact c WHERE p.id= :user_id")
+            " COALESCE(l.id, 0), COALESCE(c.telephone,''))" +
+            " FROM Person p JOIN p.address a JOIN p.contact c JOIN a.location l WHERE p.id= :user_id")
     Optional<PersonResponseDTO> findPersonDTOById(@Param("user_id") Long user_id);
 
     @Query("SELECT NEW com.dgitalfactory.usersecurity.DTO.Person.PersonResponseDTO(" +
             "p.id, COALESCE(p.name,''), COALESCE(p.lastname,''), COALESCE(p.dniCuit,''), COALESCE(p.descriptions,''), " +
-            " COALESCE(a.location,''), COALESCE(c.telephone,''))" +
-            " FROM Person p JOIN p.address a JOIN p.contact c WHERE p.dniCuit= :dniCuit")
+            " COALESCE(l.id, 0), COALESCE(c.telephone,''))" +
+            " FROM Person p JOIN p.address a JOIN p.contact c JOIN a.location l WHERE p.dniCuit= :dniCuit")
     public Optional<PersonResponseDTO> findPersonResponseDTOByDniCuit(@Param("dniCuit") String dniCuit);
 
     @Query("SELECT NEW com.dgitalfactory.usersecurity.DTO.Person.PersonResponseDTO(" +
             "p.id, COALESCE(p.name,''), COALESCE(p.lastname,''), COALESCE(p.dniCuit,''), COALESCE(p.descriptions,''), " +
-            "COALESCE(a.location,''), COALESCE(c.telephone,''))" +
-            " FROM Person p JOIN p.address a JOIN p.contact c")
+            "COALESCE(l.id, 0), COALESCE(c.telephone,''))" +
+            " FROM Person p JOIN p.address a JOIN p.contact c JOIN a.location l")
     Page<PersonResponseDTO> findAllPersonDTOOrderByLastname(Pageable pageable);
 
     public boolean existsByDniCuit(String dniCuit);
