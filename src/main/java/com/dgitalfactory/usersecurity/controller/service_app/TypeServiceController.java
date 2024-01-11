@@ -36,11 +36,20 @@ public class TypeServiceController {
     @Autowired
     private UtilsCommons utilsCommons;
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/field/service/type/all")
+    public ResponseEntity<List<TypeServiceDTO>> getAllServiceType(
+            @RequestParam(value = "isActive", defaultValue = "",required = false) String active
+    ){
+        return new ResponseEntity<List<TypeServiceDTO>>(
+                this.typeServiceSVR.getAllTypeServies(active), HttpStatus.OK);
+    }
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/field/service/type")
-    public ResponseEntity<List<TypeServiceDTO>> getAllServiceType(){
+    public ResponseEntity<List<TypeServiceDTO>> getActiveServiceType(){
         return new ResponseEntity<List<TypeServiceDTO>>(
-                this.typeServiceSVR.getAllTypeServiceDTO(), HttpStatus.OK);
+                this.typeServiceSVR.getTypeServiesIsActive(true), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -73,7 +82,7 @@ public class TypeServiceController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/field/service/type/{typeService_id}")
     public ResponseEntity<MessageDTO> deleteServiceType(@PathVariable("typeService_id") Long typeService_id){
-        this.typeServiceSVR.updateTypeService(typeService_id);
+        this.typeServiceSVR.deleteTypeServiceLogical(typeService_id);
         return new ResponseEntity<MessageDTO>(
                 MessageDTO.builder()
                         .code(2003)
@@ -83,5 +92,17 @@ public class TypeServiceController {
                 , HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/field/service/type/{typeService_id}/active")
+    public ResponseEntity<MessageDTO> activeServiceType(@PathVariable("typeService_id") Long typeService_id){
+        this.typeServiceSVR.activeTypeServiceLogical(typeService_id);
+        return new ResponseEntity<MessageDTO>(
+                MessageDTO.builder()
+                        .code(2003)
+                        .message(utilsCommons.getStatusMessage(2003))
+                        .details(utilsCommons.getMessage("field.name.service.type"))
+                        .build()
+                , HttpStatus.OK);
+    }
 
 }

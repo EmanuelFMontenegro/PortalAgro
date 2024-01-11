@@ -40,6 +40,30 @@ public class TypeSvcService {
     }
 
     /**
+     * Get type service by is activate
+     * @param active: type {@link String}
+     * @return @{@link List<TypeServiceDTO>}
+     */
+    public List<TypeServiceDTO> getAllTypeServies(String active){
+        if(active.isEmpty()){
+            return this.getAllTypeServiceDTO();
+        }
+        if(active.equalsIgnoreCase("true") || active.equalsIgnoreCase("false")){
+            return this.getTypeServiesIsActive(Boolean.parseBoolean(active));
+        }
+        return this.getTypeServiesIsActive(true);
+    }
+
+    /**
+     * Find type service by is active
+     * @param active: type @{@link Boolean} type service by is active
+     * @return @{@link List<TypeServiceDTO>}
+     */
+    public List<TypeServiceDTO> getTypeServiesIsActive(boolean active) {
+        return this.typeSvcREPO.findByIsActive(active);
+    }
+
+    /**
      * Find type service DTO
      *
      * @return @{@link List<TypeServiceDTO>}
@@ -87,7 +111,9 @@ public class TypeSvcService {
         if (this.typeSvcREPO.existsByName(typeServiceResponseDTO.getName())) {
             throw new GlobalAppException(HttpStatus.BAD_REQUEST, 4029, utilsCommons.getMessage("field.name.service.type"));
         }
-        this.typeSvcREPO.save(utilsCommons.convertDTOToEntity(typeServiceResponseDTO, TypeService.class));
+        TypeService typeService = utilsCommons.convertDTOToEntity(typeServiceResponseDTO, TypeService.class);
+        typeService.setActive(true);
+        this.typeSvcREPO.save(typeService);
     }
 
     /**
@@ -114,9 +140,17 @@ public class TypeSvcService {
      * @param idTypeSvr: type @{@link Long}
      */
     @Transactional(propagation = Propagation.SUPPORTS)
-    public void updateTypeService(Long idTypeSvr) {
+    public void deleteTypeServiceLogical(Long idTypeSvr) {
         TypeService typeService = this.getTypeService(idTypeSvr);
-        this.typeSvcREPO.delete(typeService);
+        typeService.setActive(false);
+        this.typeSvcREPO.save(typeService);
+    }
+
+    @Transactional
+    public void activeTypeServiceLogical(Long idTypeSvr) {
+        TypeService typeService = this.getTypeService(idTypeSvr);
+        typeService.setActive(true);
+        this.typeSvcREPO.save(typeService);
     }
 
 }

@@ -156,13 +156,17 @@ public class PersonService {
      * @param sortDir:  type {@link String}
      * @return @{@link ResponsePaginationDTO}
      */
-    public ResponsePaginationDTO<Object> getPeoplePagination(int pageNo, int pageSize, String sortBy, String sortDir) {
+    public ResponsePaginationDTO<Object> getPeoplePagination(int pageNo, int pageSize, String sortBy, String sortDir, String anyNames) {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
                 ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
-
-        Page<PersonResponseDTO> listField = this.personRepo.findAllPersonDTOOrderByLastname(pageable);
+        Page<PersonResponseDTO> listField;
+        if(anyNames.isEmpty()){
+            listField = this.personRepo.findAllPersonDTOOrderByLastname(pageable);
+        }else{
+            listField = this.personRepo.findByNameOrLastNameLike(anyNames,pageable);
+        }
         List<PersonResponseDTO> listDTO = listField.getContent();
         return ResponsePaginationDTO.builder()
                 .list(Collections.singletonList(listDTO))
@@ -188,6 +192,8 @@ public class PersonService {
         }
         Person person = Person.builder()
                 .id(userid)
+                .address(Address.builder().build())
+                .contact(Contact.builder().build())
                 .build();
         this.personRepo.save(person);
     }

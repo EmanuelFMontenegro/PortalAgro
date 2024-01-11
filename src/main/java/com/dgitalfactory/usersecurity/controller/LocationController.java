@@ -88,17 +88,6 @@ public class LocationController {
             @RequestParam(value = "name", defaultValue = "", required = false) String name,
             @RequestParam(value = "sortDir", defaultValue = AppConstants.ORDER_DIR_DEFAULT, required = false) String sortDir
     ) {
-        if (!sortDir.isEmpty()) {
-            if (!sortDir.equalsIgnoreCase("asc") && !sortDir.equalsIgnoreCase("desc")) {
-                return ResponseEntity.badRequest().body(
-                        MessageDTO.builder()
-                                .code(4035)
-                                .message(utilsCommons.getStatusMessage(4035))
-                                .details(utilsCommons.getMessage("field.name.location"))
-                                .build()
-                );
-            }
-        }
         List<LocationRequestDTO> locations = locationSVC.getAllLocationsParams(name, sortDir);
         return ResponseEntity.ok(locations);
     }

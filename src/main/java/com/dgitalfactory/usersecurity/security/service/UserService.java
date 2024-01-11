@@ -113,13 +113,17 @@ public class UserService {
      * @param sortDir
      * @return @{@link ResponsePaginationDTO}
      */
-    public ResponsePaginationDTO getAllUsers(int pageNo, int pageSize, String sortBy, String sortDir) {
+    public ResponsePaginationDTO getAllUsers(int pageNo, int pageSize, String sortBy, String sortDir, String email) {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
                 ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
-
-        Page<User> listField = this.userRepo.findAll(pageable);
+        Page<User> listField;
+        if(email!=""){
+            listField = this.userRepo.findByNameOrLastNameLike(email,pageable);
+        }else{
+            listField = this.userRepo.findAll(pageable);
+        }
         List<User> list = listField.getContent();
         List<UserDTO> listDTO = utilsCommons.mapListEntityDTO(list, UserDTO.class);
         return ResponsePaginationDTO.builder()

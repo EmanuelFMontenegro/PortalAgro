@@ -40,9 +40,11 @@ public class UserConntroller {
             @RequestParam(value = "pageNo", defaultValue = AppConstants.PAGE_NUMBER_DEFAULT, required = false) int pageNumber,
             @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE_DEFAULT, required = false) int pageSize,
             @RequestParam(value = "sortBy", defaultValue = AppConstants.ORDER_BY_DEFAULT, required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = AppConstants.ORDER_DIR_DEFAULT, required = false) String sortDir
+            @RequestParam(value = "sortDir", defaultValue = AppConstants.ORDER_DIR_DEFAULT, required = false) String sortDir,
+            @RequestParam(value = "email", defaultValue = "", required = false) String email
+
     ) {
-        return ResponseEntity.ok(this.userSVC.getAllUsers(pageNumber, pageSize, sortBy, sortDir));
+        return ResponseEntity.ok(this.userSVC.getAllUsers(pageNumber, pageSize, sortBy, sortDir, email));
     }
 
     @DeleteMapping("/{id}")

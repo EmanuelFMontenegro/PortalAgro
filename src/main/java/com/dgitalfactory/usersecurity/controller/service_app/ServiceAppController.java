@@ -64,17 +64,7 @@ public class ServiceAppController {
             @RequestParam(value = "sortDir", defaultValue = AppConstants.ORDER_DIR_DEFAULT, required = false) String sortDir,
             @PathVariable("user_id") Long user_id,
             @PathVariable("field_id") Long field_id) {
-        if (!sortDir.isEmpty()) {
-            if (!sortDir.equalsIgnoreCase("asc") && !sortDir.equalsIgnoreCase("desc")) {
-                return ResponseEntity.badRequest().body(
-                        MessageDTO.builder()
-                                .code(4035)
-                                .message(utilsCommons.getStatusMessage(4035))
-                                .details(utilsCommons.getMessage("field.name.location"))
-                                .build()
-                );
-            }
-        }
+
         return new ResponseEntity<ResponsePaginationDTO<Object>>(
                 this.serviceAppSVR.getAllServiceByUser(pageNumber, pageSize, sortBy, sortDir, field_id, user_id), HttpStatus.OK);
     }
@@ -119,6 +109,21 @@ public class ServiceAppController {
                         .build(),
                 HttpStatus.OK);
     }
+
+//    @PreAuthorize("hasRole('ADMIN') or @conditionEvaluatorService.canPreAuthAdmin(#user_id)")
+//    @PostMapping("/user/{user_id}/field/{field_id}/service/demo")
+//    public ResponseEntity<MessageDTO> demo(@PathVariable("user_id") Long user_id,
+//                                                    @PathVariable("field_id") Long field_id,
+//                                                    @RequestBody @Valid ServiceAppResponseDTO serviceResponseDTO) {
+//        boolean resultado = this.serviceAppSVR.verifi(field_id,serviceResponseDTO.getIdTypeService(), serviceResponseDTO.getDateOfService());
+//        return new ResponseEntity<MessageDTO>(
+//                MessageDTO.builder()
+//                        .code(00000)
+//                        .message(String.valueOf(resultado))
+//                        .details(utilsCommons.getMessage("field.name.service.order"))
+//                        .build(),
+//                HttpStatus.OK);
+//    }
 
     @PreAuthorize("hasRole('ADMIN') or @conditionEvaluatorService.canPreAuthAdmin(#user_id)")
     @DeleteMapping("/user/{user_id}/field/{field_id}/service/{service_id}")

@@ -79,20 +79,10 @@ public class PersonController {
             @RequestParam(value = "pageNo", defaultValue = AppConstants.PAGE_NUMBER_DEFAULT, required = false) int pageNumber,
             @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE_DEFAULT, required = false) int pageSize,
             @RequestParam(value = "sortBy", defaultValue = AppConstants.ORDER_BY_DEFAULT, required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = AppConstants.ORDER_DIR_DEFAULT, required = false) String sortDir
+            @RequestParam(value = "sortDir", defaultValue = AppConstants.ORDER_DIR_DEFAULT, required = false) String sortDir,
+            @RequestParam(value = "anyNames", defaultValue = "", required = false) String anyNames
     ) {
-        if (!sortDir.isEmpty()) {
-            if (!sortDir.equalsIgnoreCase("asc") && !sortDir.equalsIgnoreCase("desc")) {
-                return ResponseEntity.badRequest().body(
-                        MessageDTO.builder()
-                                .code(4035)
-                                .message(utilsCommons.getStatusMessage(4035))
-                                .details(utilsCommons.getMessage("field.name.location"))
-                                .build()
-                );
-            }
-        }
-        ResponsePaginationDTO<Object> listPersonDTO = this.personSVC.getPeoplePagination(pageNumber, pageSize, sortBy, sortDir);
+        ResponsePaginationDTO<Object> listPersonDTO = this.personSVC.getPeoplePagination(pageNumber, pageSize, sortBy, sortDir, anyNames);
         return ResponseEntity.ok(listPersonDTO);
     }
 

@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 /**
@@ -31,6 +32,12 @@ public interface ServiceRepository extends JpaRepository<ServiceApp, Long> {
             "s.id, s.dateOfService, s.observations, s.status, s.typeService.id, s.field.id) " +
             "FROM ServiceApp s WHERE s.status = :status")
     Page<ServiceAppDTO> findAllServiceDTOByStatus(@Param("status") StatusService status, Pageable pageable);
+
+    @Query("SELECT COUNT(s) > 0 FROM ServiceApp s " +
+            " WHERE s.field.id= :field_id " +
+            " AND s.typeService.id= :type_id" +
+            " AND s.dateOfService= :date")
+    boolean checkDataService(@Param("field_id") Long field_id, @Param("type_id") Long type_id, @Param("date") LocalDate date);
 
     @Query("SELECT NEW com.dgitalfactory.usersecurity.DTO.AppService.ServiceAppDTO(" +
             "s.id, s.dateOfService, s.observations, s.status, s.typeService.id, s.field.id) " +

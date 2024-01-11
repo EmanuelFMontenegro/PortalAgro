@@ -24,4 +24,5 @@ public class TypeService {
     private String name;
     @Column(nullable = true, length = 255)
     private String description;
+    private boolean isActive = true;
 }

@@ -10,10 +10,15 @@ import lombok.NoArgsConstructor;
  * @created 19/12/2023 - 10:39
  */
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class TypeServiceDTO {
     private Long id;
     private String name;
     private String description;
+
+    public TypeServiceDTO(Long id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+    }
 }

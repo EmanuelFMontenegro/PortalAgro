@@ -33,11 +33,11 @@ public class Person {
     private String descriptions;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "address_id", referencedColumnName = "id", nullable = true)
+    @JoinColumn(name = "address_id", referencedColumnName = "id", nullable = false)
     private Address address;
 
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    @JoinColumn(name = "contact_id", referencedColumnName = "id", nullable = true)
+    @JoinColumn(name = "contact_id", referencedColumnName = "id", nullable = false)
     private Contact contact;
 
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

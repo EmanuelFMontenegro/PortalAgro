@@ -20,7 +20,7 @@ public class PersonResponseDTO {
     private Long location_id;
     private String telephone;
 
-    public PersonResponseDTO(Long id, String name, String lastname, String dniCuit, String descriptions, Long location_id, String telephone) {
+    public PersonResponseDTO(Long id, String name, String lastname, String dniCuit, String descriptions, Long location_id , String telephone) {
         this.id = id;
         this.name = name;
         this.lastname = lastname;

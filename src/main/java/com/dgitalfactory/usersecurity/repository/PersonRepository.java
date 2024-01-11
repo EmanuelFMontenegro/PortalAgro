@@ -3,6 +3,7 @@ package com.dgitalfactory.usersecurity.repository;
 
 import com.dgitalfactory.usersecurity.DTO.Person.PersonResponseDTO;
 import com.dgitalfactory.usersecurity.entity.Person;
+import com.dgitalfactory.usersecurity.security.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -21,21 +22,42 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
 
     @Query("SELECT NEW com.dgitalfactory.usersecurity.DTO.Person.PersonResponseDTO(" +
             "p.id, COALESCE(p.name,''), COALESCE(p.lastname,''), COALESCE(p.dniCuit,''), COALESCE(p.descriptions,''), " +
-            " COALESCE(l.id, 0), COALESCE(c.telephone,''))" +
-            " FROM Person p JOIN p.address a JOIN p.contact c JOIN a.location l WHERE p.id= :user_id")
+            " COALESCE(p.address.location.id, 0L), COALESCE(p.contact.telephone,''))" +
+            " FROM Person p WHERE p.id= :user_id")
     Optional<PersonResponseDTO> findPersonDTOById(@Param("user_id") Long user_id);
 
     @Query("SELECT NEW com.dgitalfactory.usersecurity.DTO.Person.PersonResponseDTO(" +
             "p.id, COALESCE(p.name,''), COALESCE(p.lastname,''), COALESCE(p.dniCuit,''), COALESCE(p.descriptions,''), " +
-            " COALESCE(l.id, 0), COALESCE(c.telephone,''))" +
-            " FROM Person p JOIN p.address a JOIN p.contact c JOIN a.location l WHERE p.dniCuit= :dniCuit")
+            " COALESCE(p.address.location.id, 0L), COALESCE(p.contact.telephone,''))" +
+            " FROM Person p WHERE p.dniCuit= :dniCuit")
     public Optional<PersonResponseDTO> findPersonResponseDTOByDniCuit(@Param("dniCuit") String dniCuit);
 
     @Query("SELECT NEW com.dgitalfactory.usersecurity.DTO.Person.PersonResponseDTO(" +
-            "p.id, COALESCE(p.name,''), COALESCE(p.lastname,''), COALESCE(p.dniCuit,''), COALESCE(p.descriptions,''), " +
-            "COALESCE(l.id, 0), COALESCE(c.telephone,''))" +
-            " FROM Person p JOIN p.address a JOIN p.contact c JOIN a.location l")
+                "p.id, COALESCE(p.name,''), " +
+                " COALESCE(p.lastname,''), " +
+                " COALESCE(p.dniCuit,''), " +
+                " COALESCE(p.descriptions,''), " +
+                " COALESCE(p.address.location.id, 0L), " +
+                " COALESCE(p.contact.telephone, '') " +
+            ")" +
+            " FROM Person p")
     Page<PersonResponseDTO> findAllPersonDTOOrderByLastname(Pageable pageable);
+
+    @Query("SELECT NEW com.dgitalfactory.usersecurity.DTO.Person." +
+            "PersonResponseDTO(" +
+                "p.id, COALESCE(p.name,''), " +
+                " COALESCE(p.lastname,''), " +
+                " COALESCE(p.dniCuit,''), " +
+                " COALESCE(p.descriptions,''), " +
+                " COALESCE(p.address.location.id, 0L), " +
+                " COALESCE(p.contact.telephone, '') " +
+            ")" +
+            " FROM Person p " +
+            " WHERE LOWER(p.name) " +
+            " LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+            " OR LOWER(p.lastname) " +
+            " LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    Page<PersonResponseDTO> findByNameOrLastNameLike(@Param("keyword") String keyword, Pageable pageable);
 
     public boolean existsByDniCuit(String dniCuit);
     public boolean existsById(Long userid);

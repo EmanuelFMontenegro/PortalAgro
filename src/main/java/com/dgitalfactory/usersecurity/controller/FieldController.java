@@ -50,19 +50,6 @@ public class FieldController {
             @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE_DEFAULT, required = false) int pageSize,
             @RequestParam(value = "sortBy", defaultValue = AppConstants.ORDER_BY_DEFAULT, required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = AppConstants.ORDER_DIR_DEFAULT, required = false) String sortDir) {
-
-        if (!sortDir.isEmpty()) {
-            if (!sortDir.equalsIgnoreCase("asc") && !sortDir.equalsIgnoreCase("desc")) {
-                return ResponseEntity.badRequest().body(
-                        MessageDTO.builder()
-                                .code(4035)
-                                .message(utilsCommons.getStatusMessage(4035))
-                                .details(utilsCommons.getMessage("field.name.location"))
-                                .build()
-                );
-            }
-        }
-
         return new ResponseEntity<ResponsePaginationDTO<Object>>(
                 this.fieldSVC.getAllFieldsUsers(pageNumber, pageSize, sortBy, sortDir), HttpStatus.OK);
     }
@@ -82,17 +69,6 @@ public class FieldController {
             @RequestParam(value = "sortBy", defaultValue = AppConstants.ORDER_BY_DEFAULT, required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = AppConstants.ORDER_DIR_DEFAULT, required = false) String sortDir,
             @PathVariable("user_id") Long user_id) {
-        if (!sortDir.isEmpty()) {
-            if (!sortDir.equalsIgnoreCase("asc") && !sortDir.equalsIgnoreCase("desc")) {
-                return ResponseEntity.badRequest().body(
-                        MessageDTO.builder()
-                                .code(4035)
-                                .message(utilsCommons.getStatusMessage(4035))
-                                .details(utilsCommons.getMessage("field.name.location"))
-                                .build()
-                );
-            }
-        }
         ResponsePaginationDTO<Object> listFieldDTO = this.fieldSVC.getAllFieldDTOdsByUserId(pageNumber, pageSize, sortBy, sortDir,
                 user_id);
         return ResponseEntity.ok(listFieldDTO);

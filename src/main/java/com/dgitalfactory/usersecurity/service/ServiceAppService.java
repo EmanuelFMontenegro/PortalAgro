@@ -22,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
@@ -118,6 +119,21 @@ public class ServiceAppService {
     }
 
     /**
+     * Check if the field service has the same service type on the given date
+     * @param field_id: type {@link Long} id field
+     * @param type_id: typq {@link Long} id type service
+     * @param date: type {@link LocalDate} date of the service
+     * @return @{@link Boolean}
+     */
+    private boolean checkDataService(Long field_id, Long type_id, LocalDate date){
+        return this.serviceREPO.checkDataService(field_id,type_id,date);
+    }
+
+    public boolean verifi(Long field_id, Long type_id, LocalDate date){
+            return this.serviceREPO.checkDataService(field_id,type_id,date);
+    }
+
+    /**
      * Created order service
      *
      * @param field_id:           type {@link Long} field id
@@ -128,6 +144,11 @@ public class ServiceAppService {
     public void addServiceApp(Long user_id, Long field_id, ServiceAppResponseDTO serviceResponseDTO) {
         Field field = this.fieldService.getFieldById(field_id);
         this.fieldService.verifyExistsFieldUser(field_id, user_id);
+        //VERIFICA FECHAS, QUE NO EXISTA SERVICIOS IGUALES EN LA MISMA FECHA
+        if (this.checkDataService(field_id, serviceResponseDTO.getIdTypeService(), serviceResponseDTO.getDateOfService())){
+            throw new GlobalAppException(HttpStatus.NOT_FOUND,4037,
+                    utilsCommons.getMessage("field.name.field.lote"));
+        }
         TypeService typeService = this.typeSvcService.getTypeService(serviceResponseDTO.getIdTypeService());
         ServiceApp serviceApp = ServiceApp.builder()
                 .dateOfService(serviceResponseDTO.getDateOfService())
@@ -227,6 +248,13 @@ public class ServiceAppService {
         this.verifyExistsFieldService(field_id, serviceApp_id);
         this.fieldService.verifyExistsFieldUser(field_id, user_id);
         ServiceApp serviceApp = this.getServiceById(serviceApp_id);
+        //VERIFICA FECHAS, QUE NO EXISTA SERVICIOS IGUALES EN LA MISMA FECHA
+        if(!serviceApp.getDateOfService().equals(serviceAppResponseDTO.getDateOfService())){
+            if (this.checkDataService(field_id, serviceAppResponseDTO.getIdTypeService(), serviceAppResponseDTO.getDateOfService())){
+                throw new GlobalAppException(HttpStatus.NOT_FOUND,4037,
+                        utilsCommons.getMessage("field.name.field.lote"));
+            }
+        }
         serviceApp.setDateOfService(serviceAppResponseDTO.getDateOfService());
         serviceApp.setObservations(serviceAppResponseDTO.getObservations());
         TypeService typeService = this.typeSvcService.getTypeService(serviceAppResponseDTO.getIdTypeService());
