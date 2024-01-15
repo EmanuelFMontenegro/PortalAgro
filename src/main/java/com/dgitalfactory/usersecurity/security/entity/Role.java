@@ -10,7 +10,6 @@ import lombok.*;
 @Data
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "roles", uniqueConstraints = {@UniqueConstraint(columnNames = {"name"})})
 public class Role {
@@ -25,6 +24,11 @@ public class Role {
 
     @Enumerated(EnumType.STRING)
     private RoleName name;
+
+    public Role(Long id, RoleName name) {
+        this.id = id;
+        this.name = name;
+    }
 }
 
 

@@ -1,8 +1,9 @@
 package com.dgitalfactory.usersecurity.security.service;
 
 import com.dgitalfactory.usersecurity.DTO.ResponsePaginationDTO;
+import com.dgitalfactory.usersecurity.security.dto.UserMinResponseDTO;
+import com.dgitalfactory.usersecurity.security.dto.UserRequestDTO;
 import com.dgitalfactory.usersecurity.security.dto.UserResponseDTO;
-import com.dgitalfactory.usersecurity.security.dto.UserDTO;
 import com.dgitalfactory.usersecurity.security.entity.Role;
 import com.dgitalfactory.usersecurity.security.entity.User;
 import com.dgitalfactory.usersecurity.exception.GlobalAppException;
@@ -87,21 +88,26 @@ public class UserService {
     /**
      * Find user by Id
      * @param userid: type @{@link Long}
-     * @return @{@link UserDTO}
+     * @return @{@link UserResponseDTO}
      */
-    public UserDTO findUserDTO(Long userid){
+    public UserResponseDTO findUserDTO(Long userid){
         User newUs = this.findUser(userid);
-        return utilsCommons.convertDTOToEntity(newUs,UserDTO.class);
+        return utilsCommons.convertDTOToEntity(newUs, UserResponseDTO.class);
     }
 
     /**
      * Find all users
-     * @return @{@link UserDTO}
+     * @return @{@link UserResponseDTO}
      */
-    public List<UserDTO> findAllUserDTO(){
-        List<UserDTO> listUsers = this.userRepo.findAll().stream().map(
-            user -> utilsCommons.convertEntityToDTO(user,UserDTO.class)
+    public List<UserResponseDTO> findAllUserDTO(){
+        List<UserResponseDTO> listUsers = this.userRepo.findAll().stream().map(
+            user -> utilsCommons.convertEntityToDTO(user, UserResponseDTO.class)
         ).toList();
+        return listUsers;
+    }
+
+    public List<Role> findAllUserMinResponseDTO(){
+        List<Role> listUsers = this.userRepo.findAllRolesByUser();
         return listUsers;
     }
 
@@ -125,7 +131,7 @@ public class UserService {
             listField = this.userRepo.findAll(pageable);
         }
         List<User> list = listField.getContent();
-        List<UserDTO> listDTO = utilsCommons.mapListEntityDTO(list, UserDTO.class);
+        List<UserResponseDTO> listDTO = utilsCommons.mapListEntityDTO(list, UserResponseDTO.class);
         return ResponsePaginationDTO.builder()
                 .list(Collections.singletonList(listDTO))
                 .pageNo(listField.getNumber())
@@ -176,7 +182,7 @@ public class UserService {
      * @return user: tipe User
      */
 //    @Transactional(propagation = Propagation.SUPPORTS)
-    public User saveUser(UserResponseDTO userDTO, String token) {
+    public User saveUser(UserRequestDTO userDTO, String token) {
             Role roles = this.roleRepo.findByName(RoleName.ROLE_OPERATOR).get();
             User newUser = User.builder()
                     .username(userDTO.getUsername().toLowerCase())

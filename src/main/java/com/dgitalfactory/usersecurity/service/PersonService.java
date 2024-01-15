@@ -1,8 +1,6 @@
 package com.dgitalfactory.usersecurity.service;
 
-import com.dgitalfactory.usersecurity.DTO.Person.PersonDTO;
-import com.dgitalfactory.usersecurity.DTO.Person.PersonResponseDTO;
-import com.dgitalfactory.usersecurity.DTO.Person.PersonRequestDTO;
+import com.dgitalfactory.usersecurity.DTO.Person.*;
 import com.dgitalfactory.usersecurity.DTO.ResponsePaginationDTO;
 import com.dgitalfactory.usersecurity.entity.Address;
 import com.dgitalfactory.usersecurity.entity.Contact;
@@ -11,7 +9,11 @@ import com.dgitalfactory.usersecurity.entity.Person;
 import com.dgitalfactory.usersecurity.exception.GlobalAppException;
 import com.dgitalfactory.usersecurity.exception.GlobalMessageException;
 import com.dgitalfactory.usersecurity.repository.PersonRepository;
+import com.dgitalfactory.usersecurity.security.dto.RoleResponseDTO;
+import com.dgitalfactory.usersecurity.security.dto.UserResponseDTO;
+import com.dgitalfactory.usersecurity.security.entity.Role;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
+import com.dgitalfactory.usersecurity.utils.enums.RoleName;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,9 +27,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
@@ -138,6 +140,25 @@ public class PersonService {
     }
 
     /**
+     * Find data for profile user
+     * @param user_id: type {@link Long}
+     * @param person_id: type {@link Long}
+     * @return @{@link PersonUserProfile}
+     */
+    public PersonUserProfile getPersonUserProfileById(Long user_id, Long person_id){
+        this.checkUserIdPersonId(user_id,person_id);
+        return this.personRepo.findPersonUserProfile(user_id)
+                .orElseThrow(()->errorSVC.getResourceNotFoundException("Person", "id", user_id));
+//        return PersonUserProfile.builder()
+//                .id((Long)data[0])
+//                .name((String) data[1])
+//                .lastname((String) data[2])
+//                .username((String) data[3])
+//                .avatar("url://")
+//                .build();
+    }
+
+    /**
      * Return a list of all people
      *
      * @return @{@link List<@PersonDTO>}
@@ -163,11 +184,41 @@ public class PersonService {
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
         Page<PersonResponseDTO> listField;
         if(anyNames.isEmpty()){
-            listField = this.personRepo.findAllPersonDTOOrderByLastname(pageable);
+            listField = this.personRepo.findAllPersonDTOPageable(pageable);
         }else{
             listField = this.personRepo.findByNameOrLastNameLike(anyNames,pageable);
         }
         List<PersonResponseDTO> listDTO = listField.getContent();
+        return ResponsePaginationDTO.builder()
+                .list(Collections.singletonList(listDTO))
+                .pageNo(listField.getNumber())
+                .pageSize(listField.getSize())
+                .pageTotal(listField.getTotalPages())
+                .itemsTotal(listField.getTotalPages())
+                .pageLast(listField.isLast())
+                .build();
+    }
+
+    /**
+     * @param pageNo:   type {@link Integer}
+     * @param pageSize: type {@link Integer}
+     * @param sortBy:   type {@link String}
+     * @param sortDir:  type {@link String}
+     * @return @{@link ResponsePaginationDTO}
+     */
+    public ResponsePaginationDTO<Object> getPeopleUserPagination(int pageNo, int pageSize, String sortBy, String sortDir, String anyNames) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+        Page<Object[]> listField;
+        if(anyNames.isEmpty()){
+            listField = this.personRepo.findAllPersonUserPageable(pageable);
+        }else{
+            listField = this.personRepo.findAllPersonUserByNamesPageable(anyNames,pageable);
+        }
+        List<PersonUserResponseDTO> listDTO= listField.getContent().stream()
+                .map(this::mapPersonUserToObjetArray).toList();
         return ResponsePaginationDTO.builder()
                 .list(Collections.singletonList(listDTO))
                 .pageNo(listField.getNumber())
@@ -280,29 +331,51 @@ public class PersonService {
         return true;
     }
 
-//    /**
-//     * Convert @{@link Person} to @{@link PersonDTO}
-//     * @param person: @{@link Person}
-//     * @return @{@link PersonDTO}
-//     */
-//    private PersonDTO convertEntityToDTO(Person person){
-//        return this.modelMapper.map(person, PersonDTO.class);
-//    }
-//
-//    /**
-//     * Convert @{@link PersonDTO} to @{@link Person}
-//     * @param personDTO
-//     * @return
-//     */
-//    private Person convertDTOToEntity(PersonDTO personDTO){
-//        return this.modelMapper.map(personDTO,Person.class);
-//    }
-//    /**
-//     * Convert @{@link PersonResponseDTO} to @{@link Person}
-//     * @param personResponseDTO
-//     * @return
-//     */
-//    private Person convertDTOToEntity(PersonResponseDTO personResponseDTO){
-//        return this.modelMapper.map(personResponseDTO,Person.class);
-//    }
+    /**
+     * Mapping Objets[] and building classes person and user data with their roles
+     * @param objectArray: type @{@link Object[]}
+     * @return @{@link PersonUserResponseDTO}
+     */
+    private PersonUserResponseDTO mapPersonUserToObjetArray(Object[] objectArray) {
+        PersonUserResponseDTO personUserResDTO = new PersonUserResponseDTO();
+        UserResponseDTO userDto = new UserResponseDTO();
+
+        personUserResDTO.setId((Long) objectArray[0]);
+        userDto.setId((Long) objectArray[0]);
+        userDto.setUsername((String) objectArray[1]);
+        userDto.setAccount_active((Boolean) objectArray[2]);
+        userDto.setAccountNonLocked((Boolean) objectArray[3]);
+        userDto.setFailedAttempts((Integer) objectArray[4]);
+        userDto.setLockeTime((LocalDateTime) objectArray[5]);
+        // Manejo específico para roles
+        Object rolesObject = objectArray[6];
+        if (rolesObject instanceof Object[] rolesArray) {
+            Set<RoleResponseDTO> rolesSet = Arrays.stream(rolesArray)
+                    .map(roleData -> {
+                        String rolesString = (String) roleData;
+                        String[] arrDataRole = rolesString.split(",");
+                        if (arrDataRole.length == 2) {
+                            return RoleResponseDTO.builder()
+                                    .id(Long.parseLong(arrDataRole[0]))
+                                    .name(arrDataRole[1].replaceAll("^ROLE_", ""))
+                                    .build();
+                        }
+                        return null;
+                    })
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toSet());
+
+            userDto.setRoles(rolesSet);
+        }
+        personUserResDTO.setUserResponseDTO(userDto);
+        personUserResDTO.setName((String) objectArray[7]);
+        personUserResDTO.setLastname((String) objectArray[8]);
+        personUserResDTO.setDniCuit((String) objectArray[9]);
+        personUserResDTO.setDescriptions((String) objectArray[10]);
+        personUserResDTO.setLocation_id((Long) objectArray[11]);
+        personUserResDTO.setTelephone((String) objectArray[12]);
+
+        return personUserResDTO;
+    }
+
 }

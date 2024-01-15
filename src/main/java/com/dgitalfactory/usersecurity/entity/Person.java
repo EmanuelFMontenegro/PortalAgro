@@ -42,5 +42,4 @@ public class Person {
 
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Field> fields = new HashSet<>();
-
 }

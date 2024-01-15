@@ -1,15 +1,13 @@
 package com.dgitalfactory.usersecurity.security.dto;
 
 import com.dgitalfactory.usersecurity.security.entity.Role;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.validation.annotation.Validated;
 
-import java.time.LocalDateTime;
 import java.util.Set;
+
 /**
  * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
  * @created 30/11/2023 - 08:54
@@ -18,22 +16,16 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Validated
-public class UserResponseDTO {
+public class UserMinResponseDTO {
 	private Long id;
 	private String username;
 	private boolean account_active;
-	private boolean accountNonLocked;
-	private int failedAttempts;
-	private LocalDateTime lockeTime;
-	private Set<RoleResponseDTO> roles;
+	private Set<Role> roles;
 
-	public UserResponseDTO(Long id, String username, boolean account_active, boolean accountNonLocked, int failedAttempts, LocalDateTime lockeTime, Set<RoleResponseDTO> roles) {
+	public UserMinResponseDTO(Long id, String username, boolean account_active, Set<Role> roles) {
 		this.id = id;
 		this.username = username;
 		this.account_active = account_active;
-		this.accountNonLocked = accountNonLocked;
-		this.failedAttempts = failedAttempts;
-		this.lockeTime = lockeTime;
 		this.roles = roles;
 	}
 }

@@ -1,11 +1,10 @@
 package com.dgitalfactory.usersecurity.security.service;
 
-import com.dgitalfactory.usersecurity.DTO.Person.PersonRequestDTO;
 import com.dgitalfactory.usersecurity.email.service.EmailServide;
 import com.dgitalfactory.usersecurity.exception.GlobalAppException;
 import com.dgitalfactory.usersecurity.security.dto.JwtDTO;
 import com.dgitalfactory.usersecurity.security.dto.LoginDTO;
-import com.dgitalfactory.usersecurity.security.dto.UserResponseDTO;
+import com.dgitalfactory.usersecurity.security.dto.UserRequestDTO;
 import com.dgitalfactory.usersecurity.security.entity.CustomeUserDetails;
 import com.dgitalfactory.usersecurity.security.entity.User;
 import com.dgitalfactory.usersecurity.service.PersonService;
@@ -90,16 +89,16 @@ public class AuthService {
      * Rester user and generate token
      * By default your role is "visitor"
      *
-     * @param userResponseDTO: UserDTO (username, password)
+     * @param userRequestDTO: UserDTO (username, password)
      * @return JwtAuthResponseDTO (String tokenAccess, String tokenType)
      */
     @Transactional()
-    public void register(@NotNull UserResponseDTO userResponseDTO) {
-        if (this.userSVC.existsUser(userResponseDTO.getUsername())) {
+    public void register(@NotNull UserRequestDTO userRequestDTO) {
+        if (this.userSVC.existsUser(userRequestDTO.getUsername())) {
             throw new GlobalAppException(HttpStatus.BAD_REQUEST, 4002,utilsCommons.getMessage("field.name.user"));
         }
-        String token = this.jwtSVC.generatedToken(userResponseDTO.getUsername(), EMAIL_ACCOUNT_EXPIRATION_IN_MS);
-        User us = this.userSVC.saveUser(userResponseDTO, token);
+        String token = this.jwtSVC.generatedToken(userRequestDTO.getUsername(), EMAIL_ACCOUNT_EXPIRATION_IN_MS);
+        User us = this.userSVC.saveUser(userRequestDTO, token);
         this.personSVC.addPerson(us.getId());
         this.emailServide.senEmailActivateAccount(us);
     }

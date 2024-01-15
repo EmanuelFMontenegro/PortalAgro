@@ -1,6 +1,7 @@
 package com.dgitalfactory.usersecurity.security.repository;
 
-import com.dgitalfactory.usersecurity.entity.Person;
+import com.dgitalfactory.usersecurity.security.dto.UserMinResponseDTO;
+import com.dgitalfactory.usersecurity.security.entity.Role;
 import com.dgitalfactory.usersecurity.security.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -45,5 +46,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying
     @Query("Update User u Set u.account_active = :account_active  Where u.id =:userid")
     void editStatusUser(@Param("account_active") boolean account_active,@Param("userid") Long userid);
+
+    @Query("SELECT r " +
+            "FROM User u JOIN u.roles r")
+    List<Role> findAllRolesByUser();
 
 }

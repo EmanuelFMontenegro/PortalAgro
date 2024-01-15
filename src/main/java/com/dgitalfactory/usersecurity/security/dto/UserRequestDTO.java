@@ -1,14 +1,13 @@
 package com.dgitalfactory.usersecurity.security.dto;
 
 import com.dgitalfactory.usersecurity.security.entity.Role;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
+import com.dgitalfactory.usersecurity.utils.AppConstants;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.validation.annotation.Validated;
 
-import java.time.LocalDateTime;
 import java.util.Set;
 /**
  * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
@@ -18,14 +17,16 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Validated
-public class UserDTO {
-	private Long id;
+public class UserRequestDTO {
+
 	@NotEmpty
 	@Email
 	private String username;
-	private boolean account_active;
-	private boolean accountNonLocked;
-	private int failedAttempts;
-	private LocalDateTime lockeTime;
+
+	@NotEmpty
+	@Size(min= AppConstants.PASSWORD_MIN, max = AppConstants.PASSWORD_MAX)
+	private String password;
 	private Set<Role> roles;
+
+
 }

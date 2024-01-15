@@ -3,7 +3,7 @@ package com.dgitalfactory.usersecurity.security.controller;
 import com.dgitalfactory.usersecurity.DTO.MessageDTO;
 import com.dgitalfactory.usersecurity.security.dto.JwtDTO;
 import com.dgitalfactory.usersecurity.security.dto.LoginDTO;
-import com.dgitalfactory.usersecurity.security.dto.UserResponseDTO;
+import com.dgitalfactory.usersecurity.security.dto.UserRequestDTO;
 import com.dgitalfactory.usersecurity.security.service.AuthService;
 import com.dgitalfactory.usersecurity.security.service.JwtTokenService;
 import com.dgitalfactory.usersecurity.security.service.UserService;
@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 /**
  * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin
+@Validated
 @Tag(name = "Authentication", description = "Authentication Services")
 public class AuthConntroller {
 
@@ -61,7 +63,7 @@ public class AuthConntroller {
 	 * @return JwtAuthResponseDTO: String token
 	 */
 	@PostMapping("/register")
-	public ResponseEntity<MessageDTO> registerUser(@Valid @RequestBody UserResponseDTO registerDTO) {
+	public ResponseEntity<MessageDTO> registerUser(@Valid @RequestBody UserRequestDTO registerDTO) {
 		this.authSVC.register(registerDTO);
 		return ResponseEntity.ok(
 				MessageDTO.builder()
