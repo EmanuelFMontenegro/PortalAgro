@@ -1,6 +1,7 @@
 package com.dgitalfactory.usersecurity.entity.AppServices;
 
-import com.dgitalfactory.usersecurity.entity.Field;
+import com.dgitalfactory.usersecurity.entity.Fields.Field;
+import com.dgitalfactory.usersecurity.entity.Fields.Plot;
 import com.dgitalfactory.usersecurity.utils.enums.StatusService;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,7 +23,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class ServiceApp {
+public class RequestService {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,8 +39,8 @@ public class ServiceApp {
     private StatusService status;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "field_id", nullable = false)
-    private Field field;
+    @JoinColumn(name = "plot_id", nullable = false)
+    private Plot plot;
 
     @Column(nullable = true)
     @OneToMany(mappedBy = "service", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

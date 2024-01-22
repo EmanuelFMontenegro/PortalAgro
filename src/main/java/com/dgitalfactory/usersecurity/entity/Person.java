@@ -1,7 +1,7 @@
 package com.dgitalfactory.usersecurity.entity;
 
+import com.dgitalfactory.usersecurity.entity.Fields.Field;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +19,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "people", uniqueConstraints = {@UniqueConstraint(columnNames = {"dniCuit"})})
+@Table(name = "people", uniqueConstraints = {@UniqueConstraint(columnNames = {"dni"})})
 public class Person {
     @Id
     private Long id;
@@ -27,8 +27,8 @@ public class Person {
     private String name;
     @Column(length = 20, nullable = true)
     private String lastname;
-    @Column(length = 11, nullable = true)
-    private String dniCuit;
+    @Column(length = 8, nullable = true)
+    private String dni;
     @Column(length = 150, nullable = true)
     private String descriptions;
 

@@ -1,12 +1,9 @@
-package com.dgitalfactory.usersecurity.controller.service_app;
+package com.dgitalfactory.usersecurity.controller.ServiceApp;
 
 import com.dgitalfactory.usersecurity.DTO.AppService.TypeServiceDTO;
 import com.dgitalfactory.usersecurity.DTO.AppService.TypeServiceResponseDTO;
 import com.dgitalfactory.usersecurity.DTO.MessageDTO;
-import com.dgitalfactory.usersecurity.DTO.ResponsePaginationDTO;
-import com.dgitalfactory.usersecurity.service.ServiceAppService;
-import com.dgitalfactory.usersecurity.service.TypeSvcService;
-import com.dgitalfactory.usersecurity.utils.AppConstants;
+import com.dgitalfactory.usersecurity.service.RequestServiceRelated.TypeSvcService;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -49,7 +46,7 @@ public class TypeServiceController {
     @GetMapping("/field/service/type")
     public ResponseEntity<List<TypeServiceDTO>> getActiveServiceType(){
         return new ResponseEntity<List<TypeServiceDTO>>(
-                this.typeServiceSVR.getTypeServiesIsActive(true), HttpStatus.OK);
+                this.typeServiceSVR.getTypeServiesActive(true), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -98,8 +95,8 @@ public class TypeServiceController {
         this.typeServiceSVR.activeTypeServiceLogical(typeService_id);
         return new ResponseEntity<MessageDTO>(
                 MessageDTO.builder()
-                        .code(2003)
-                        .message(utilsCommons.getStatusMessage(2003))
+                        .code(2009)
+                        .message(utilsCommons.getStatusMessage(2009))
                         .details(utilsCommons.getMessage("field.name.service.type"))
                         .build()
                 , HttpStatus.OK);

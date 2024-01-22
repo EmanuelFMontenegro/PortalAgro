@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -117,12 +116,22 @@ public class UtilsCommons {
      * </ul>
      */
     public static boolean validPassword(String password) {
+        // Verificar la longitud mínima
         if (password.length() < AppConstants.PASSWORD_MIN) {
             return false;
         }
+
+        // Verificar la presencia de al menos una letra mayúscula, una letra minúscula y un número
         boolean mayuscula = false;
         boolean minuscula = false;
         boolean numero = false;
+
+        // Verificar que no haya caracteres especiales
+        boolean noCaracterEspecial = Pattern.matches("[a-zA-Z0-9]+", password);
+
+        if (!noCaracterEspecial) {
+            return false;
+        }
 
         for (byte i = 0; i < password.length(); i++) {
             if (mayuscula && minuscula && numero) {
@@ -165,6 +174,38 @@ public class UtilsCommons {
         //verificar si pertence al patron
         Matcher matcher1 = pattern1.matcher(numero);
         return matcher1.matches();
+    }
+
+    /**
+     * Comprueba que no se repitan numeros en una cadena que acepta dni y cuit/cuil
+     *
+     * @param numero es numero a verificar
+     * @return @{@link Boolean}
+     */
+    public static boolean validarNumerosRepetidosDni(String numero) {
+        String patron = "";
+        patron = DNI_REPEATED_REGEX;
+        Pattern pattern1 = Pattern.compile(patron, Pattern.MULTILINE);
+        Matcher matcher1 = pattern1.matcher(numero);
+        return matcher1.matches();
+    }
+
+    /**
+     * Valid if is dni number by size
+     * @param number: type {@link String}
+     * @return @{@link Boolean}
+     */
+    public static boolean validateDNIBySize(String number) {
+        return number.length() > (AppConstants.DNI_MIN - 1) && number.length() < (AppConstants.DNI_MAX + 1);
+    }
+
+    /**
+     * Valid if is CUIT/CUIL number by size
+     * @param number: type {@link String}
+     * @return @{@link Boolean}
+     */
+    public static boolean validateCUITCUILBySize(String number) {
+        return number.length() > (AppConstants.CUIT_CUIL_MIN - 1) && number.length() < (AppConstants.CUIT_CUIL_MAX + 1);
     }
 
     /**

@@ -1,10 +1,10 @@
-package com.dgitalfactory.usersecurity.controller;
+package com.dgitalfactory.usersecurity.controller.Fields;
 
 import com.dgitalfactory.usersecurity.DTO.*;
 import com.dgitalfactory.usersecurity.DTO.Field.FieldDTO;
 import com.dgitalfactory.usersecurity.DTO.Field.FieldResponseDTO;
 import com.dgitalfactory.usersecurity.DTO.Field.GeolocationDTO;
-import com.dgitalfactory.usersecurity.service.FieldService;
+import com.dgitalfactory.usersecurity.service.FieldRelated.FieldService;
 import com.dgitalfactory.usersecurity.utils.AppConstants;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -49,9 +49,12 @@ public class FieldController {
             @RequestParam(value = "pageNo", defaultValue = AppConstants.PAGE_NUMBER_DEFAULT, required = false) int pageNumber,
             @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE_DEFAULT, required = false) int pageSize,
             @RequestParam(value = "sortBy", defaultValue = AppConstants.ORDER_BY_DEFAULT, required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = AppConstants.ORDER_DIR_DEFAULT, required = false) String sortDir) {
+            @RequestParam(value = "sortDir", defaultValue = AppConstants.ORDER_DIR_DEFAULT, required = false) String sortDir,
+            @RequestParam(value = "isActive", defaultValue = "", required = false) String active
+
+    ) {
         return new ResponseEntity<ResponsePaginationDTO<Object>>(
-                this.fieldSVC.getAllFieldsUsers(pageNumber, pageSize, sortBy, sortDir), HttpStatus.OK);
+                this.fieldSVC.getAllFieldsUsersByActive(pageNumber, pageSize, sortBy, sortDir, active), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN') or @conditionEvaluatorService.canPreAuthAdmin(#user_id)")
@@ -99,11 +102,33 @@ public class FieldController {
         );
     }
 
-    @PreAuthorize("hasRole('ADMIN') or @conditionEvaluatorService.canPreAuthAdmin(#user_id)")
-    @DeleteMapping("/user/{user_id}/field/{field_id}")
-    public ResponseEntity<MessageDTO> deleteField(@PathVariable("user_id") Long user_id, @PathVariable("field_id") Long field_id) {
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/user/{user_id}/field/{field_id}/admin")
+    public ResponseEntity<MessageDTO> deleteDefinitiveField(@PathVariable("user_id") Long user_id, @PathVariable("field_id") Long field_id) {
         this.fieldSVC.deleteFieldById(field_id, user_id);
         return new ResponseEntity<>(MessageDTO.builder().code(2003).message(utilsCommons.getStatusMessage(2003))
+                .details(utilsCommons.getMessage("field.name.field"))
+                .build(), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ADMIN') or @conditionEvaluatorService.canPreAuthAdmin(#user_id)")
+    @DeleteMapping("/user/{user_id}/field/{field_id}")
+    public ResponseEntity<MessageDTO> deleteLogicalField(
+            @PathVariable("user_id") Long user_id,
+            @PathVariable("field_id") Long field_id) {
+        this.fieldSVC.deleteLogicalFieldById(field_id, user_id,false);
+        return new ResponseEntity<>(MessageDTO.builder().code(2003).message(utilsCommons.getStatusMessage(2003))
+                .details(utilsCommons.getMessage("field.name.field"))
+                .build(), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ADMIN') or @conditionEvaluatorService.canPreAuthAdmin(#user_id)")
+    @PutMapping("/user/{user_id}/field/{field_id}/active")
+    public ResponseEntity<MessageDTO> activeLogicalField(
+            @PathVariable("user_id") Long user_id,
+            @PathVariable("field_id") Long field_id) {
+        this.fieldSVC.deleteLogicalFieldById(field_id, user_id,true);
+        return new ResponseEntity<>(MessageDTO.builder().code(2009).message(utilsCommons.getStatusMessage(2009))
                 .details(utilsCommons.getMessage("field.name.field"))
                 .build(), HttpStatus.OK);
     }

@@ -1,10 +1,11 @@
-package com.dgitalfactory.usersecurity.service;
+package com.dgitalfactory.usersecurity.service.RequestServiceRelated;
 
 import com.dgitalfactory.usersecurity.DTO.AppService.TypeServiceDTO;
 import com.dgitalfactory.usersecurity.DTO.AppService.TypeServiceResponseDTO;
 import com.dgitalfactory.usersecurity.entity.AppServices.TypeService;
 import com.dgitalfactory.usersecurity.exception.GlobalAppException;
-import com.dgitalfactory.usersecurity.repository.TypeServiceRepository;
+import com.dgitalfactory.usersecurity.repository.RequestServices.TypeServiceRepository;
+import com.dgitalfactory.usersecurity.service.CustomeErrorService;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -49,9 +50,9 @@ public class TypeSvcService {
             return this.getAllTypeServiceDTO();
         }
         if(active.equalsIgnoreCase("true") || active.equalsIgnoreCase("false")){
-            return this.getTypeServiesIsActive(Boolean.parseBoolean(active));
+            return this.getTypeServiesActive(Boolean.parseBoolean(active));
         }
-        return this.getTypeServiesIsActive(true);
+        return this.getTypeServiesActive(true);
     }
 
     /**
@@ -59,7 +60,7 @@ public class TypeSvcService {
      * @param active: type @{@link Boolean} type service by is active
      * @return @{@link List<TypeServiceDTO>}
      */
-    public List<TypeServiceDTO> getTypeServiesIsActive(boolean active) {
+    public List<TypeServiceDTO> getTypeServiesActive(boolean active) {
         return this.typeSvcREPO.findByIsActive(active);
     }
 
@@ -85,7 +86,7 @@ public class TypeSvcService {
     private TypeService getTypeService(String name) {
         return this.typeSvcREPO.findByName(name)
                 .orElseThrow(
-                        () -> errorSVC.getResourceNotFoundException("Name Service", "name", name)
+                        () -> errorSVC.getResourceNotFoundException(utilsCommons.getMessage("field.name.service.type"), "name", name)
                 );
     }
 
@@ -98,7 +99,7 @@ public class TypeSvcService {
     public TypeService getTypeService(Long idTypeService) {
         return this.typeSvcREPO.findById(idTypeService)
                 .orElseThrow(
-                        () -> errorSVC.getResourceNotFoundException("Id Type of Service", "idTypeService", idTypeService)
+                        () -> errorSVC.getResourceNotFoundException(utilsCommons.getMessage("field.name.service.type"), "idTypeService", idTypeService)
                 );
     }
 
@@ -124,7 +125,7 @@ public class TypeSvcService {
     @Transactional(propagation = Propagation.SUPPORTS)
     public void updateTypeService(Long idTypeSvr, TypeServiceResponseDTO typeServiceResponseDTO) {
         TypeService typeService = this.getTypeService(idTypeSvr);
-        if (typeService.getName() != typeServiceResponseDTO.getName()) {
+        if (!typeService.getName().equals(typeServiceResponseDTO.getName())) {
             if (this.typeSvcREPO.existsByName(typeServiceResponseDTO.getName())) {
                 throw new GlobalAppException(HttpStatus.BAD_REQUEST, 4029, utilsCommons.getMessage("field.name.service.type"));
             }
@@ -146,6 +147,10 @@ public class TypeSvcService {
         this.typeSvcREPO.save(typeService);
     }
 
+    /**
+     * Activate type service by id
+     * @param idTypeSvr: type {@link Long}
+     */
     @Transactional
     public void activeTypeServiceLogical(Long idTypeSvr) {
         TypeService typeService = this.getTypeService(idTypeSvr);

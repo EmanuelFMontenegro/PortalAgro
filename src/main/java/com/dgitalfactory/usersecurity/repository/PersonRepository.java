@@ -20,16 +20,16 @@ import java.util.Optional;
 public interface PersonRepository extends JpaRepository<Person, Long> {
 
     @Query("SELECT NEW com.dgitalfactory.usersecurity.DTO.Person.PersonResponseDTO(" +
-            "p.id, COALESCE(p.name,''), COALESCE(p.lastname,''), COALESCE(p.dniCuit,''), COALESCE(p.descriptions,''), " +
+            "p.id, COALESCE(p.name,''), COALESCE(p.lastname,''), COALESCE(p.dni,''), COALESCE(p.descriptions,''), " +
             " COALESCE(p.address.location.id, 0L), COALESCE(p.contact.telephone,''))" +
             " FROM Person p WHERE p.id= :user_id")
     Optional<PersonResponseDTO> findPersonDTOById(@Param("user_id") Long user_id);
 
     @Query("SELECT NEW com.dgitalfactory.usersecurity.DTO.Person.PersonResponseDTO(" +
-            "p.id, COALESCE(p.name,''), COALESCE(p.lastname,''), COALESCE(p.dniCuit,''), COALESCE(p.descriptions,''), " +
+            "p.id, COALESCE(p.name,''), COALESCE(p.lastname,''), COALESCE(p.dni,''), COALESCE(p.descriptions,''), " +
             " COALESCE(p.address.location.id, 0L), COALESCE(p.contact.telephone,''))" +
-            " FROM Person p WHERE p.dniCuit= :dniCuit")
-    public Optional<PersonResponseDTO> findPersonResponseDTOByDniCuit(@Param("dniCuit") String dniCuit);
+            " FROM Person p WHERE p.dni= :dni")
+    public Optional<PersonResponseDTO> findPersonResponseDTOByDni(@Param("dni") String dni);
 
     @Query("SELECT NEW com.dgitalfactory.usersecurity.DTO.Person.PersonUserProfile(" +
                 "u.id as id, " +
@@ -54,7 +54,7 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
             "WHERE ur.user_id = u.id) as roles, " +
             "p.name as name, " +
             "p.lastname as lastName," +
-            "p.dniCuit as dniCuit," +
+            "p.dni as dni," +
             "p.descriptions as descriptions," +
             "l.id as location_id," +
             "c.telephone as telephone " +
@@ -77,7 +77,7 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
             "WHERE ur.user_id = u.id) as roles, " +
             "p.name as name, " +
             "p.lastname as lastName," +
-            "p.dniCuit as dniCuit," +
+            "p.dni as dni," +
             "p.descriptions as descriptions," +
             "l.id as location_id," +
             "c.telephone as telephone " +
@@ -96,7 +96,7 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
     @Query("SELECT NEW com.dgitalfactory.usersecurity.DTO.Person.PersonResponseDTO(" +
                 "p.id, COALESCE(p.name,''), " +
                 " COALESCE(p.lastname,''), " +
-                " COALESCE(p.dniCuit,''), " +
+                " COALESCE(p.dni,''), " +
                 " COALESCE(p.descriptions,''), " +
                 " COALESCE(p.address.location.id, 0L), " +
                 " COALESCE(p.contact.telephone, '') " +
@@ -108,7 +108,7 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
             "PersonResponseDTO(" +
                 "p.id, COALESCE(p.name,''), " +
                 " COALESCE(p.lastname,''), " +
-                " COALESCE(p.dniCuit,''), " +
+                " COALESCE(p.dni,''), " +
                 " COALESCE(p.descriptions,''), " +
                 " COALESCE(p.address.location.id, 0L), " +
                 " COALESCE(p.contact.telephone, '') " +
@@ -120,10 +120,14 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
             " LIKE LOWER(CONCAT('%', :keyword, '%'))")
     Page<PersonResponseDTO> findByNameOrLastNameLike(@Param("keyword") String keyword, Pageable pageable);
 
-    public boolean existsByDniCuit(String dniCuit);
+    @Query("SELECT CASE WHEN COUNT(p) > 0 THEN TRUE ELSE FALSE END " +
+            " FROM Person p " +
+            " WHERE p.dni LIKE CONTACT('%', :dni, '%') ")
+    public boolean existsByDniLike(@Param("dni") String dni);
+
+    public boolean existsByDni(String dni);
     public boolean existsById(Long userid);
-    public Optional<Person> findById(Long id);
-    public Optional<Person> findByDniCuit(String dniCuit);
+    public Optional<Person> findByDni(String dni);
     Page<Person> findAllByOrderByLastnameAscNameAsc(Pageable pageable);
 
 }

@@ -40,12 +40,6 @@ public class UserConntroller {
         return ResponseEntity.ok(this.userSVC.findUserDTO(id));
     }
 
-    @GetMapping("/demo")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Role>> getUsersDTO() {
-        return ResponseEntity.ok(this.userSVC.findAllUserMinResponseDTO());
-    }
-
     @GetMapping("")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponsePaginationDTO> getAllUsers(

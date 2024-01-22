@@ -1,7 +1,7 @@
-package com.dgitalfactory.usersecurity.repository;
+package com.dgitalfactory.usersecurity.repository.Fields;
 
 import com.dgitalfactory.usersecurity.DTO.Field.FieldDTO;
-import com.dgitalfactory.usersecurity.entity.Field;
+import com.dgitalfactory.usersecurity.entity.Fields.Field;
 import com.dgitalfactory.usersecurity.entity.Person;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,18 +22,25 @@ import java.util.Optional;
 public interface FieldRepository extends JpaRepository<Field,Long> {
 
     @Query("SELECT NEW com.dgitalfactory.usersecurity.DTO.Field.FieldDTO(" +
-            "f.id, f.name, f.dimensions, f.observation, f.geolocation,f.address, f.contact, f.person.id) " +
-            "FROM Field f WHERE f.person.id = :userid")
-    Page<FieldDTO> findAllFieldsDTOByUserId(@Param("userid") Long userid, Pageable pageable);
+            "f.id, f.name, f.dimensions, f.observation, f.geolocation,f.address, f.contact, f.person.id, f.active) " +
+            " FROM Field f " +
+            " WHERE f.person.id = :userid AND" +
+            " f.active= :active")
+    Page<FieldDTO> findAllFieldsDTOByUserId(@Param("userid") Long userid,@Param("active") boolean active, Pageable pageable);
 
     @Query("SELECT NEW com.dgitalfactory.usersecurity.DTO.Field.FieldDTO(" +
-            "f.id, f.name, f.dimensions, f.observation, f.geolocation,f.address, f.contact, f.person.id) " +
-            "FROM Field f")
+            "f.id, f.name, f.dimensions, f.observation, f.geolocation,f.address, f.contact, f.person.id, f.active) " +
+            " FROM Field f ")
     Page<FieldDTO> findAllFieldsDTO(Pageable pageable);
 
+    @Query("SELECT NEW com.dgitalfactory.usersecurity.DTO.Field.FieldDTO(" +
+            "f.id, f.name, f.dimensions, f.observation, f.geolocation,f.address, f.contact, f.person.id, f.active) " +
+            " FROM Field f " +
+            " WHERE f.active = :active")
+    Page<FieldDTO> findAllFieldsByActiveDTO(Pageable pageable, @Param("active") boolean active);
 
     @Query("SELECT NEW com.dgitalfactory.usersecurity.DTO.Field.FieldDTO(" +
-            "f.id, f.name, f.dimensions, f.observation, f.geolocation,f.address, f.contact, f.person.id) " +
+            "f.id, f.name, f.dimensions, f.observation, f.geolocation,f.address, f.contact, f.person.id, f.active) " +
             "FROM Field f WHERE f.id = :id")
     Optional<FieldDTO> findFieldDTOById(@Param("id") Long id);
     public Optional<Field> findById(Long id);

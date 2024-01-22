@@ -7,7 +7,7 @@ import com.dgitalfactory.usersecurity.entity.Location.Location;
 import com.dgitalfactory.usersecurity.entity.Person;
 import com.dgitalfactory.usersecurity.repository.LocationRepository;
 import com.dgitalfactory.usersecurity.repository.PersonRepository;
-import com.dgitalfactory.usersecurity.repository.TypeServiceRepository;
+import com.dgitalfactory.usersecurity.repository.RequestServices.TypeServiceRepository;
 import com.dgitalfactory.usersecurity.security.entity.Role;
 import com.dgitalfactory.usersecurity.security.entity.User;
 import com.dgitalfactory.usersecurity.security.repository.RoleRepository;
@@ -109,7 +109,7 @@ public class Runner implements CommandLineRunner {
                                 .id(1L)
                                 .name("Cristian")
                                 .lastname("Orozco")
-                                .dniCuit("32035722")
+                                .dni("32035722")
                                 .address(Address.builder()
                                         .location(this.locationRepo.findById(1L).orElseThrow())
                                         .build())
@@ -121,7 +121,7 @@ public class Runner implements CommandLineRunner {
                                 .id(2L)
                                 .name("user02")
                                 .lastname("user02")
-                                .dniCuit("2222222")
+                                .dni("2222222")
                                 .address(Address.builder()
                                         .location(this.locationRepo.findById(2L).orElseThrow())
                                         .build())
@@ -133,7 +133,7 @@ public class Runner implements CommandLineRunner {
                                 .id(3L)
                                 .name("user03")
                                 .lastname("user03")
-                                .dniCuit("3333333")
+                                .dni("3333333")
                                 .address(Address.builder()
                                         .location(this.locationRepo.findById(3L).orElseThrow())
                                         .build())
@@ -151,10 +151,12 @@ public class Runner implements CommandLineRunner {
                         TypeService.builder()
                                 .name("Aplicación de Productos")
                                 .description("Uso de dron para realizar la aplicación de un producto determinado, según area y tipo de plantación")
+                                .isActive(true)
                                 .build(),
                         TypeService.builder()
                                 .name("Imagenes")
                                 .description("Servicio de control de estado de plantación por imágenes")
+                                .isActive(true)
                                 .build()
                 )
         );

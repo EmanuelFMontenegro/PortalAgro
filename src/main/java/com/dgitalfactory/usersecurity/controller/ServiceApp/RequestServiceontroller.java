@@ -1,0 +1,118 @@
+package com.dgitalfactory.usersecurity.controller.ServiceApp;
+
+import com.dgitalfactory.usersecurity.service.RequestServiceRelated.RequestService;
+import com.dgitalfactory.usersecurity.utils.UtilsCommons;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+/**
+ * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com
+ * @created 19/12/2023 - 10:34
+ */
+@RestController
+@RequestMapping("/api")
+@CrossOrigin
+@Validated
+@Tag(name = "Request Service", description = "Request of Services.")
+public class RequestServiceontroller {
+
+    @Autowired
+    private RequestService serviceAppSVR;
+
+    @Autowired
+    private UtilsCommons utilsCommons;
+//
+//    @PreAuthorize("hasRole('ADMIN')")
+//    @GetMapping("/user/field/service")
+//    public ResponseEntity<?> getAllServiceApp(
+//            @RequestParam(value = "pageNo", defaultValue = AppConstants.PAGE_NUMBER_DEFAULT, required = false) int pageNumber,
+//            @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE_DEFAULT, required = false) int pageSize,
+//            @RequestParam(value = "sortBy", defaultValue = AppConstants.ORDER_BY_DEFAULT, required = false) String sortBy,
+//            @RequestParam(value = "sortDir", defaultValue = AppConstants.ORDER_DIR_DEFAULT, required = false) String sortDir) {
+//        if (!sortDir.isEmpty()) {
+//            if (!sortDir.equalsIgnoreCase("ASC") && !sortDir.equalsIgnoreCase("DESC")) {
+//                return ResponseEntity.badRequest().body(
+//                        MessageDTO.builder()
+//                                .code(4035)
+//                                .message(utilsCommons.getStatusMessage(4035))
+//                                .details(utilsCommons.getMessage("field.name.location"))
+//                                .build()
+//                );
+//            }
+//        }
+//        return new ResponseEntity<ResponsePaginationDTO<Object>>(
+//                this.serviceAppSVR.getAllService(pageNumber, pageSize, sortBy, sortDir), HttpStatus.OK);
+//    }
+//
+//    @PreAuthorize("hasRole('ADMIN') or @conditionEvaluatorService.canPreAuthAdmin(#user_id)")
+//    @GetMapping("/user/{user_id}/field/{field_id}/service")
+//    public ResponseEntity<?> getAllServiceAppByUser(
+//            @RequestParam(value = "pageNo", defaultValue = AppConstants.PAGE_NUMBER_DEFAULT, required = false) int pageNumber,
+//            @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE_DEFAULT, required = false) int pageSize,
+//            @RequestParam(value = "sortBy", defaultValue = AppConstants.ORDER_BY_DEFAULT, required = false) String sortBy,
+//            @RequestParam(value = "sortDir", defaultValue = AppConstants.ORDER_DIR_DEFAULT, required = false) String sortDir,
+//            @PathVariable("user_id") Long user_id,
+//            @PathVariable("field_id") Long field_id) {
+//
+//        return new ResponseEntity<ResponsePaginationDTO<Object>>(
+//                this.serviceAppSVR.getAllServiceByUser(pageNumber, pageSize, sortBy, sortDir, field_id, user_id), HttpStatus.OK);
+//    }
+//
+//    @PreAuthorize("hasRole('ADMIN') or @conditionEvaluatorService.canPreAuthAdmin(#user_id)")
+//    @PostMapping("/user/{user_id}/field/{field_id}/service")
+//    public ResponseEntity<MessageDTO> addServiceApp(@PathVariable("user_id") Long user_id,
+//                                                    @PathVariable("field_id") Long field_id,
+//                                                    @RequestBody @Valid RequestServiceResponseDTO serviceResponseDTO) {
+//        this.serviceAppSVR.addServiceApp(user_id, field_id, serviceResponseDTO);
+//        return new ResponseEntity<MessageDTO>(
+//                MessageDTO.builder()
+//                        .code(2001)
+//                        .message(utilsCommons.getStatusMessage(2001))
+//                        .details(utilsCommons.getMessage("field.name.service.order"))
+//                        .build()
+//                , HttpStatus.OK);
+//    }
+//
+//    @PreAuthorize("hasRole('ADMIN') or @conditionEvaluatorService.canPreAuthAdmin(#user_id)")
+//    @GetMapping("/user/{user_id}/field/{field_id}/service/{service_id}")
+//    public ResponseEntity<RequestServiceDTO> getServiceById(@PathVariable("user_id") Long user_id,
+//                                                            @PathVariable("field_id") Long field_id,
+//                                                            @PathVariable("service_id") Long service_id) {
+//        return new ResponseEntity<RequestServiceDTO>(
+//                this.serviceAppSVR.getServiceAppDTO(user_id, field_id, service_id),
+//                HttpStatus.OK);
+//    }
+//
+//    @PreAuthorize("hasRole('ADMIN') or @conditionEvaluatorService.canPreAuthAdmin(#user_id)")
+//    @PutMapping("/user/{user_id}/field/{field_id}/service/{service_id}")
+//    public ResponseEntity<MessageDTO> updateServiceById(@PathVariable("user_id") Long user_id,
+//                                                        @PathVariable("field_id") Long field_id,
+//                                                        @PathVariable("service_id") Long service_id,
+//                                                        @RequestBody @Valid RequestServiceResponseDTO serviceResponseDTO) {
+//        this.serviceAppSVR.updateService(user_id, field_id, service_id, serviceResponseDTO);
+//        return new ResponseEntity<MessageDTO>(
+//                MessageDTO.builder()
+//                        .code(2002)
+//                        .message(utilsCommons.getStatusMessage(2001))
+//                        .details(utilsCommons.getMessage("field.name.service.order"))
+//                        .build(),
+//                HttpStatus.OK);
+//    }
+//
+//    @PreAuthorize("hasRole('ADMIN') or @conditionEvaluatorService.canPreAuthAdmin(#user_id)")
+//    @DeleteMapping("/user/{user_id}/field/{field_id}/service/{service_id}")
+//    public ResponseEntity<MessageDTO> deleteServiceById(@PathVariable("user_id") Long user_id,
+//                                                        @PathVariable("field_id") Long field_id,
+//                                                        @PathVariable("service_id") Long service_id) {
+//        this.serviceAppSVR.deleteServiceAppDTO(user_id, field_id, service_id);
+//        return new ResponseEntity<MessageDTO>(
+//                MessageDTO.builder()
+//                        .code(2003)
+//                        .message(utilsCommons.getStatusMessage(2003))
+//                        .details(utilsCommons.getMessage("field.name.service.order"))
+//                        .build(),
+//                HttpStatus.OK);
+//    }
+}

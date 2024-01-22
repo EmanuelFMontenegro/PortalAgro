@@ -6,5 +6,5 @@ package com.dgitalfactory.usersecurity.DTO.AppService;
  */
 public class ServiceReportDTO {
     private Long id;
-    private ServiceAppDTO service;
+    private RequestServiceDTO service;
 }

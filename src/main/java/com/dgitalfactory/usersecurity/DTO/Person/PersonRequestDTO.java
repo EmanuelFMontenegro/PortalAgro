@@ -26,9 +26,9 @@ public class PersonRequestDTO {
     @NotBlank
     private String lastname;
 
-    @Size(min= AppConstants.DNI_MIN,max = AppConstants.CUIT_CUIL_MAX)
+    @Size(min= AppConstants.DNI_MIN,max = AppConstants.DNI_MAX)
     @NotBlank
-    private String dniCuit;
+    private String dni;
 
     @Size(max = 150)
     private String descriptions;

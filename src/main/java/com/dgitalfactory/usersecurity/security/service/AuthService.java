@@ -8,6 +8,7 @@ import com.dgitalfactory.usersecurity.security.dto.UserRequestDTO;
 import com.dgitalfactory.usersecurity.security.entity.CustomeUserDetails;
 import com.dgitalfactory.usersecurity.security.entity.User;
 import com.dgitalfactory.usersecurity.service.PersonService;
+import com.dgitalfactory.usersecurity.utils.AppConstants;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -96,6 +97,15 @@ public class AuthService {
     public void register(@NotNull UserRequestDTO userRequestDTO) {
         if (this.userSVC.existsUser(userRequestDTO.getUsername())) {
             throw new GlobalAppException(HttpStatus.BAD_REQUEST, 4002,utilsCommons.getMessage("field.name.user"));
+        }
+        if (!UtilsCommons.validPassword(userRequestDTO.getPassword())) {
+            throw new GlobalAppException(HttpStatus.NOT_FOUND, 4012,
+                    utilsCommons.getFormatMessage(
+                            4034,
+                            String.valueOf(AppConstants.PASSWORD_MIN),
+                            String.valueOf(AppConstants.PASSWORD_MAX)
+                    )
+            );
         }
         String token = this.jwtSVC.generatedToken(userRequestDTO.getUsername(), EMAIL_ACCOUNT_EXPIRATION_IN_MS);
         User us = this.userSVC.saveUser(userRequestDTO, token);

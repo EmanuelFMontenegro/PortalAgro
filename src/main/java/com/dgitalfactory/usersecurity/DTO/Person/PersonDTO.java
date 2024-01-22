@@ -22,9 +22,9 @@ public class PersonDTO {
     @NotBlank
     private String lastname;
 
-    @Size(min=7,max = 10)
+    @Size(min=7,max = 8)
     @NotBlank
-    private String dniCuit;
+    private String dni;
 
     @Size(max = 150)
     private String descriptions;
@@ -33,11 +33,11 @@ public class PersonDTO {
 
     private ContactDTO contactDTO;
 
-    public PersonDTO(Long id, String name, String lastname, String dniCuit, String descriptions, AddressDTO addressDTO, ContactDTO contactDTO) {
+    public PersonDTO(Long id, String name, String lastname, String dni, String descriptions, AddressDTO addressDTO, ContactDTO contactDTO) {
         this.id = id;
         this.name = name;
         this.lastname = lastname;
-        this.dniCuit = dniCuit;
+        this.dni = dni;
         this.descriptions = descriptions;
         this.addressDTO = addressDTO;
         this.contactDTO = contactDTO;

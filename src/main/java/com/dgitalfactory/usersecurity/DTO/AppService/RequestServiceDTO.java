@@ -14,7 +14,7 @@ import java.time.LocalDate;
  */
 @Data
 @NoArgsConstructor
-public class ServiceAppDTO {
+public class RequestServiceDTO {
     private Long id;
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     @JsonFormat(pattern = "dd/MM/yyyy")
@@ -22,14 +22,14 @@ public class ServiceAppDTO {
     private String observations;
     private StatusService status;
     private Long typeService_id;
-    private Long field_id;
+    private Long plot_id;
 
-    public ServiceAppDTO(Long id, LocalDate dateOfService, String observations, StatusService status, Long typeService_id, Long field_id) {
+    public RequestServiceDTO(Long id, LocalDate dateOfService, String observations, StatusService status, Long typeService_id, Long plot_id) {
         this.id = id;
         this.dateOfService = dateOfService;
         this.observations = observations;
         this.status = status;
         this.typeService_id = typeService_id;
-        this.field_id = field_id;
+        this.plot_id = plot_id;
     }
 }

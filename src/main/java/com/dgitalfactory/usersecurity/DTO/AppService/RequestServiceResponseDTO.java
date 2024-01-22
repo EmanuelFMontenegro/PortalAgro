@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ServiceAppResponseDTO {
+public class RequestServiceResponseDTO {
     @NotNull
     @Future(message = "{entity.type.service.dateOfService.future}")
     @DateTimeFormat(pattern = "dd/MM/yyyy")

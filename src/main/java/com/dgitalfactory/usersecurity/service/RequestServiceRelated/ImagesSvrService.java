@@ -1,6 +1,6 @@
-package com.dgitalfactory.usersecurity.service;
+package com.dgitalfactory.usersecurity.service.RequestServiceRelated;
 
-import com.dgitalfactory.usersecurity.repository.ImagesSvrRepository;
+import com.dgitalfactory.usersecurity.repository.RequestServices.ImagesSvrRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

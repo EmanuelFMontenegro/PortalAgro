@@ -106,11 +106,6 @@ public class UserService {
         return listUsers;
     }
 
-    public List<Role> findAllUserMinResponseDTO(){
-        List<Role> listUsers = this.userRepo.findAllRolesByUser();
-        return listUsers;
-    }
-
     /**
      * Find all Users with pagination
      * @param pageNo

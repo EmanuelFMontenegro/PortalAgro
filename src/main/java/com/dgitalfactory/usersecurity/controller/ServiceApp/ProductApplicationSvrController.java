@@ -1,6 +1,7 @@
-package com.dgitalfactory.usersecurity.controller.service_app;
+package com.dgitalfactory.usersecurity.controller.ServiceApp;
 
-import com.dgitalfactory.usersecurity.service.ProductAppSvrService;
+import com.dgitalfactory.usersecurity.service.RequestServiceRelated.ProductAppSvrService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +14,8 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @CrossOrigin
 @RequestMapping("/api")
-public class ProductApSvrController {
+@Tag(name = "Application Service", description = "Product Application services.")
+public class ProductApplicationSvrController {
 
     @Autowired
     private ProductAppSvrService productAppSvrService;

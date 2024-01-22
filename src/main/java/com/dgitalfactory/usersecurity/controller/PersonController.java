@@ -42,28 +42,38 @@ public class PersonController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/user/person/{dniCuit}")
-    public ResponseEntity<PersonResponseDTO> getPersonByDniCuit(
-            @PathVariable("dniCuit") String dniCuit) {
-        return ResponseEntity.ok(this.personSVC.getPersonDTOByDniCuit(dniCuit));
+    @GetMapping("/user/person/{dni}")
+    public ResponseEntity<PersonResponseDTO> getPersonByDni(
+            @PathVariable("dni") String dni) {
+        return ResponseEntity.ok(this.personSVC.getPersonDTOByDni(dni));
     }
 
     @PreAuthorize("isAuthenticated")
     @GetMapping("/user/person")
-    public ResponseEntity<MessageDTO> existPersonByDniCuit(
-            @RequestParam(value = "dniCuit", required = false) String dniCuit) {
-        if(this.personSVC.existPersonByDniCuit(dniCuit)) {
+    public ResponseEntity<MessageDTO> existPersonByDni(
+            @RequestParam(value = "dni", required = false) String dni) {
+        if(this.personSVC.existPersonByDni(dni)) {
             return ResponseEntity.ok(MessageDTO.builder()
                     .code(2008)
                     .message(utilsCommons.getFormatMessage(
                             utilsCommons.getStatusMessage(2008),
                             utilsCommons.getMessage("field.name.person"),
-                            utilsCommons.getMessage("field.name.dnicuil"))
+                            utilsCommons.getMessage("field.name.dni"))
                     )
                     .details(utilsCommons.getMessage("field.name.person"))
                     .build());
         }else{
-            return errorFindPersonByFields("field.name.dnicuil");
+            return ResponseEntity.ok(MessageDTO.builder()
+                    .code(4033)
+                    .message(utilsCommons.getFormatMessage(
+                            utilsCommons.getStatusMessage(4033),
+                            utilsCommons.getMessage("field.name.person"),
+                            "user_id",
+                            utilsCommons.getMessage("field.name.dni"),
+                            "dni")
+                    )
+                    .details(utilsCommons.getMessage("field.name.person"))
+                    .build());
         }
     }
 
@@ -115,23 +125,5 @@ public class PersonController {
                         .details(utilsCommons.getMessage("field.name.person"))
                         .build()
         );
-    }
-
-    /**
-     * Gets error if it doesn't match parameters
-     * @param fieldParam: type {@link String}
-     * @return <@{@link MessageDTO}
-     */
-    @NotNull
-    private ResponseEntity<MessageDTO> errorFindPersonByFields(String fieldParam) {
-        return ResponseEntity.ok(MessageDTO.builder()
-                .code(4033)
-                .message(utilsCommons.getFormatMessage(
-                        utilsCommons.getStatusMessage(4033),
-                        utilsCommons.getMessage("field.name.person"),
-                        utilsCommons.getMessage(fieldParam))
-                )
-                .details(utilsCommons.getMessage("field.name.person"))
-                .build());
     }
 }

@@ -1,8 +1,9 @@
-package com.dgitalfactory.usersecurity.entity;
+package com.dgitalfactory.usersecurity.entity.Fields;
 
-import com.dgitalfactory.usersecurity.entity.AppServices.ServiceApp;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.dgitalfactory.usersecurity.entity.Address;
+import com.dgitalfactory.usersecurity.entity.AppServices.RequestService;
+import com.dgitalfactory.usersecurity.entity.Contact;
+import com.dgitalfactory.usersecurity.entity.Person;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -52,5 +53,7 @@ public class Field {
     private Person person;
 
     @OneToMany(mappedBy = "field", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<ServiceApp> services = new HashSet<>();
+    private Set<Plot> services = new HashSet<>();
+
+    Boolean active;
 }

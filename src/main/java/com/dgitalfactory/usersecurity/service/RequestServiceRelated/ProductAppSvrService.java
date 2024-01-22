@@ -1,18 +1,9 @@
-package com.dgitalfactory.usersecurity.service;
+package com.dgitalfactory.usersecurity.service.RequestServiceRelated;
 
-import com.dgitalfactory.usersecurity.DTO.ResponsePaginationDTO;
-import com.dgitalfactory.usersecurity.entity.AppServices.ProductApSvr;
-import com.dgitalfactory.usersecurity.repository.ProductApSvrRepository;
+import com.dgitalfactory.usersecurity.repository.RequestServices.ProductApSvrRepository;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * @author Cristian Manuel Orozco - Orozcocristian860@gmail.com

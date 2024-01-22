@@ -1,4 +1,4 @@
-package com.dgitalfactory.usersecurity.service;
+package com.dgitalfactory.usersecurity.service.FieldRelated;
 
 import com.dgitalfactory.usersecurity.DTO.Field.FieldDTO;
 import com.dgitalfactory.usersecurity.DTO.Field.FieldResponseDTO;
@@ -6,12 +6,15 @@ import com.dgitalfactory.usersecurity.DTO.Field.GeolocationDTO;
 import com.dgitalfactory.usersecurity.DTO.ResponsePaginationDTO;
 import com.dgitalfactory.usersecurity.entity.Address;
 import com.dgitalfactory.usersecurity.entity.Contact;
-import com.dgitalfactory.usersecurity.entity.Field;
+import com.dgitalfactory.usersecurity.entity.Fields.Field;
 import com.dgitalfactory.usersecurity.entity.Location.Location;
 import com.dgitalfactory.usersecurity.entity.Person;
 import com.dgitalfactory.usersecurity.exception.GlobalAppException;
 import com.dgitalfactory.usersecurity.exception.GlobalMessageException;
-import com.dgitalfactory.usersecurity.repository.FieldRepository;
+import com.dgitalfactory.usersecurity.repository.Fields.FieldRepository;
+import com.dgitalfactory.usersecurity.service.CustomeErrorService;
+import com.dgitalfactory.usersecurity.service.LocationService;
+import com.dgitalfactory.usersecurity.service.PersonService;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -61,7 +64,7 @@ public class FieldService {
      * @param field_id: type {@link Long}
      * @return @{@link Field}
      */
-    public Field getFieldById(Long field_id) {
+    private Field getFieldById(Long field_id) {
         return this.fieldRepo.findById(field_id)
                 .orElseThrow(() -> errorSVC.getResourceNotFoundException("Field ID", "field_id", field_id));
     }
@@ -112,7 +115,9 @@ public class FieldService {
                     utilsCommons.getFormatMessage(
                             utilsCommons.getStatusMessage(4033),
                             utilsCommons.getMessage("field.name.user"),
-                            utilsCommons.getMessage("field.name.field")
+                            "user_id",
+                            utilsCommons.getMessage("field.name.field"),
+                            "field_id"
                     ),
                     utilsCommons.getMessage("field.name.field.service"));
         }
@@ -127,6 +132,30 @@ public class FieldService {
     public Field getFieldByName(String name) {
         return this.fieldRepo.findByName(name)
                 .orElseThrow(() -> errorSVC.getResourceNotFoundException("Field", "name", name));
+    }
+
+    /**
+     * Delte locgical field with id
+     *
+     * @param field_id: type {@link Long}
+     */
+    public void deleteLogicalFieldById(Long field_id, Long user_Id, boolean active) {
+        if (this.existsFieldIdByUserId(field_id, user_Id)) {
+            Field field = this.getFieldById(field_id);
+            field.setActive(active);
+            this.fieldRepo.save(field);
+            return;
+        }
+        throw new GlobalMessageException(
+                HttpStatus.NOT_FOUND, 4033,
+                utilsCommons.getFormatMessage(
+                        utilsCommons.getStatusMessage(4033),
+                        utilsCommons.getMessage("field.name.field"),
+                        "field_id",
+                        utilsCommons.getMessage("field.name.user"),
+                        "user_id"
+                ),
+                utilsCommons.getMessage("field.name.field"));
     }
 
     /**
@@ -145,7 +174,9 @@ public class FieldService {
                 utilsCommons.getFormatMessage(
                         utilsCommons.getStatusMessage(4033),
                         utilsCommons.getMessage("field.name.field"),
-                        utilsCommons.getMessage("field.name.user")
+                        "field_id",
+                        utilsCommons.getMessage("field.name.user"),
+                        "user_id"
                 ),
                 utilsCommons.getMessage("field.name.field"));
     }
@@ -170,13 +201,15 @@ public class FieldService {
      * @param sortDir:  type {@link String}
      * @return @{@link ResponsePaginationDTO}
      */
-    public ResponsePaginationDTO<Object> getAllFieldsUsers(int pageNo, int pageSize, String sortBy, String sortDir) {
+    public ResponsePaginationDTO<Object> getAllFieldsUsersByActive(int pageNo, int pageSize,
+                                                           String sortBy, String sortDir,
+                                                           String active) {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
                 ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
 
-        Page<FieldDTO> listField = this.fieldRepo.findAllFieldsDTO(pageable);
+        Page<FieldDTO> listField = this.getPageFieldDTOByActive(pageable,active);
         List<FieldDTO> list = listField.getContent();
         if (list.isEmpty()) {
             throw new GlobalAppException(HttpStatus.OK, 2006, utilsCommons.getMessage("field.name.field"));
@@ -189,6 +222,23 @@ public class FieldService {
                 .itemsTotal(listField.getTotalPages())
                 .pageLast(listField.isLast())
                 .build();
+    }
+
+    /**
+     * Find field by active or all field and returning DTO class
+     * @param pageable: type {@link Pageable}
+     * @param active: type {@link String} : true or false
+     * @return @{@link Page<FieldDTO>}
+     */
+    private Page<FieldDTO> getPageFieldDTOByActive(Pageable pageable, String active) {
+        if (active.isEmpty()) {
+            return this.fieldRepo.findAllFieldsDTO(pageable);
+        } else {
+            if (active.equalsIgnoreCase("true") || active.equalsIgnoreCase("false")) {
+                return this.fieldRepo.findAllFieldsByActiveDTO(pageable, (Boolean.parseBoolean(active)));
+            }
+        }
+        return this.fieldRepo.findAllFieldsByActiveDTO(pageable, true);
     }
 
     /**
@@ -208,7 +258,7 @@ public class FieldService {
                 : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
 
-        Page<FieldDTO> listObject = this.fieldRepo.findAllFieldsDTOByUserId(user_id, pageable);
+        Page<FieldDTO> listObject = this.fieldRepo.findAllFieldsDTOByUserId(user_id,true, pageable);
         List<FieldDTO> list = listObject.getContent();
         if (list.isEmpty()) {
             throw new GlobalAppException(HttpStatus.OK, 2006, utilsCommons.getMessage("field.name.field"));
@@ -247,6 +297,7 @@ public class FieldService {
                         .location(location)
                         .build())
                 .contact(Contact.builder().build())
+                .active(true)
                 .build();
 
         field.setPerson(person);

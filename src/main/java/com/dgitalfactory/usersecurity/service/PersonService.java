@@ -11,9 +11,7 @@ import com.dgitalfactory.usersecurity.exception.GlobalMessageException;
 import com.dgitalfactory.usersecurity.repository.PersonRepository;
 import com.dgitalfactory.usersecurity.security.dto.RoleResponseDTO;
 import com.dgitalfactory.usersecurity.security.dto.UserResponseDTO;
-import com.dgitalfactory.usersecurity.security.entity.Role;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
-import com.dgitalfactory.usersecurity.utils.enums.RoleName;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,7 +67,9 @@ public class PersonService {
                     utilsCommons.getFormatMessage(
                             4033,
                             utilsCommons.getMessage("field.name.user"),
-                            utilsCommons.getMessage("field.name.person")
+                            "user_id",
+                            utilsCommons.getMessage("field.name.person"),
+                            "person_id"
                     ),
                     utilsCommons.getMessage("field.name.person")
             );
@@ -104,51 +104,52 @@ public class PersonService {
     /**
      * Return information of the Person searching by DNI
      *
-     * @param dniCuit: Type {@link String}: DNI or CUIT/CUIL by person
+     * @param dni: Type {@link String}: DNI by person
      * @return @{@link PersonResponseDTO}
      */
-    public PersonResponseDTO getPersonDTOByDniCuit(String dniCuit) {
-        return this.personRepo.findPersonResponseDTOByDniCuit(dniCuit)
+    public PersonResponseDTO getPersonDTOByDni(String dni) {
+        return this.personRepo.findPersonResponseDTOByDni(dni)
                 .orElseThrow(() -> errorSVC.getResourceNotFoundException(
                         utilsCommons.getMessage("field.name.person"),
-                        utilsCommons.getMessage("field.name.dnicuil"), dniCuit));
+                        utilsCommons.getMessage("field.name.dni"), dni));
     }
 
     /**
-     * Check if exists person by DNI / CUIT / CUIL
+     * Check if exists person by DNI
      *
-     * @param dniCuit: type {@link String}
+     * @param dni: type {@link String}
      * @return @{@link Boolean}
      */
-    public boolean existPersonByDniCuit(String dniCuit) {
-        return this.personRepo.existsByDniCuit(dniCuit);
+    public boolean existPersonByDni(String dni) {
+        return this.personRepo.existsByDni(dni);
     }
 
 
     /**
      * return information of the person searching by DNI
      *
-     * @param dniCuit: String DNI
+     * @param dni: String DNI
      * @return @{@link Person}
      */
-    public Person getPersonByDni(String dniCuit) {
-        Person person = this.personRepo.findByDniCuit(dniCuit)
+    public Person getPersonByDni(String dni) {
+        Person person = this.personRepo.findByDni(dni)
                 .orElseThrow(() -> errorSVC.getResourceNotFoundException(
                         utilsCommons.getMessage("field.name.person"),
-                        utilsCommons.getMessage("field.name.dnicuil"), dniCuit));
+                        utilsCommons.getMessage("field.name.dni"), dni));
         return person;
     }
 
     /**
      * Find data for profile user
-     * @param user_id: type {@link Long}
+     *
+     * @param user_id:   type {@link Long}
      * @param person_id: type {@link Long}
      * @return @{@link PersonUserProfile}
      */
-    public PersonUserProfile getPersonUserProfileById(Long user_id, Long person_id){
-        this.checkUserIdPersonId(user_id,person_id);
+    public PersonUserProfile getPersonUserProfileById(Long user_id, Long person_id) {
+        this.checkUserIdPersonId(user_id, person_id);
         return this.personRepo.findPersonUserProfile(user_id)
-                .orElseThrow(()->errorSVC.getResourceNotFoundException("Person", "id", user_id));
+                .orElseThrow(() -> errorSVC.getResourceNotFoundException("Person", "id", user_id));
 //        return PersonUserProfile.builder()
 //                .id((Long)data[0])
 //                .name((String) data[1])
@@ -183,10 +184,10 @@ public class PersonService {
                 : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
         Page<PersonResponseDTO> listField;
-        if(anyNames.isEmpty()){
+        if (anyNames.isEmpty()) {
             listField = this.personRepo.findAllPersonDTOPageable(pageable);
-        }else{
-            listField = this.personRepo.findByNameOrLastNameLike(anyNames,pageable);
+        } else {
+            listField = this.personRepo.findByNameOrLastNameLike(anyNames, pageable);
         }
         List<PersonResponseDTO> listDTO = listField.getContent();
         return ResponsePaginationDTO.builder()
@@ -212,12 +213,12 @@ public class PersonService {
                 : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
         Page<Object[]> listField;
-        if(anyNames.isEmpty()){
+        if (anyNames.isEmpty()) {
             listField = this.personRepo.findAllPersonUserPageable(pageable);
-        }else{
-            listField = this.personRepo.findAllPersonUserByNamesPageable(anyNames,pageable);
+        } else {
+            listField = this.personRepo.findAllPersonUserByNamesPageable(anyNames, pageable);
         }
-        List<PersonUserResponseDTO> listDTO= listField.getContent().stream()
+        List<PersonUserResponseDTO> listDTO = listField.getContent().stream()
                 .map(this::mapPersonUserToObjetArray).toList();
         return ResponsePaginationDTO.builder()
                 .list(Collections.singletonList(listDTO))
@@ -257,24 +258,19 @@ public class PersonService {
      * @param personDTO: @{@link PersonRequestDTO}
      * @return @{@link PersonResponseDTO}
      */
-//    @Transactional(propagation = Propagation.SUPPORTS)
     public PersonResponseDTO updatePerson(Long user_id, Long person_id, PersonRequestDTO personDTO) {
         this.checkUserIdPersonId(user_id, person_id);
         Location locationNew = this.locationSVC.getLocationById(personDTO.getLocation_id());
 
-        //validar datos
-        this.validatePerson(personDTO);
         Person person = this.personRepo.findById(person_id).orElseThrow(() ->
                 new GlobalAppException(HttpStatus.BAD_REQUEST, 4022, utilsCommons.getMessage("field.name.person"))
         );
-        if (person.getDniCuit() != person.getDniCuit()) {
-            if (this.personRepo.existsByDniCuit(personDTO.getDniCuit())) {
-                throw new GlobalAppException(HttpStatus.BAD_REQUEST, 4023, utilsCommons.getMessage("field.name.person"));
-            }
-        }
+
+        this.validatePerson(personDTO, person);
+
         person.setName(personDTO.getName());
         person.setLastname(personDTO.getLastname());
-        person.setDniCuit(personDTO.getDniCuit());
+        person.setDni(personDTO.getDni());
         person.setDescriptions(personDTO.getDescriptions());
         if (person.getAddress() != null) {
             person.getAddress().setLocation(locationNew);
@@ -288,7 +284,7 @@ public class PersonService {
         }
         this.personRepo.save(person);
 
-        return this.getPersonDTOByDniCuit(personDTO.getDniCuit());
+        return this.getPersonDTOByDni(personDTO.getDni());
     }
 
     /**
@@ -309,30 +305,24 @@ public class PersonService {
      * Verify person fields
      *
      * @param person: @{@link PersonRequestDTO}
-     * @return @{@link Boolean}
      */
-    private boolean validatePerson(PersonRequestDTO person) {
-        if (UtilsCommons.validarNumerosRepetidos(person.getDniCuit(), "cuitCuil")) {
-            throw new GlobalAppException(HttpStatus.NOT_FOUND, 2024, utilsCommons.getMessage("field.name.person"));
-        }
-        return true;
-    }
+    private void validatePerson(PersonRequestDTO personDTO, Person person) {
+        String dniDTO = personDTO.getDni();
+        String dniClass = person.getDni();
 
-    /**
-     * Verify person fields
-     *
-     * @param person: @{@link PersonDTO}
-     * @return @{@link Boolean}
-     */
-    private boolean validatePerson(PersonDTO person) {
-        if (UtilsCommons.validarNumerosRepetidos(person.getDniCuit(), "cuitCuil")) {
-            throw new GlobalAppException(HttpStatus.NOT_FOUND, 2024, utilsCommons.getMessage("field.name.person"));
+        if (!dniDTO.equals(dniClass)) {
+            if (UtilsCommons.validarNumerosRepetidosDni(dniDTO)) {
+                throw new GlobalAppException(HttpStatus.NOT_FOUND, 4024, utilsCommons.getMessage("field.name.person"));
+            }
+            if (this.personRepo.existsByDni(dniDTO)) {
+                    throw new GlobalAppException(HttpStatus.BAD_REQUEST, 4023, utilsCommons.getMessage("field.name.person"));
+            }
         }
-        return true;
     }
 
     /**
      * Mapping Objets[] and building classes person and user data with their roles
+     *
      * @param objectArray: type @{@link Object[]}
      * @return @{@link PersonUserResponseDTO}
      */
@@ -370,7 +360,7 @@ public class PersonService {
         personUserResDTO.setUserResponseDTO(userDto);
         personUserResDTO.setName((String) objectArray[7]);
         personUserResDTO.setLastname((String) objectArray[8]);
-        personUserResDTO.setDniCuit((String) objectArray[9]);
+        personUserResDTO.setDni((String) objectArray[9]);
         personUserResDTO.setDescriptions((String) objectArray[10]);
         personUserResDTO.setLocation_id((Long) objectArray[11]);
         personUserResDTO.setTelephone((String) objectArray[12]);

@@ -1,4 +1,4 @@
-package com.dgitalfactory.usersecurity.repository;
+package com.dgitalfactory.usersecurity.repository.RequestServices;
 
 import com.dgitalfactory.usersecurity.DTO.AppService.TypeServiceDTO;
 import com.dgitalfactory.usersecurity.entity.AppServices.TypeService;
