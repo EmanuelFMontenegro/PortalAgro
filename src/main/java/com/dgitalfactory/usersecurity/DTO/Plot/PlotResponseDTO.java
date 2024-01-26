@@ -15,17 +15,20 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class PlotResponseDTO {
-    @Size(min = 5 , max = 30)
-    @NotBlank
+    private Long id;
     private String name;
-
-    @NotNull
-    @DecimalMax(value = "1000000", inclusive = false)
-    @DecimalMin(value = "0.0", inclusive = false)
-    @Digits(integer=7, fraction=2)
-    @IsFloatValid
     private float dimensions;
+    private String descriptions;
+    private boolean active;
+    private Long type_plantation_id;
 
-    @Size(max = 255)
-    String descriptions;
+    public PlotResponseDTO(Long id, String name, float dimensions, String descriptions, boolean active, Long type_plantation_id) {
+        this.id = id;
+        this.name = name;
+        this.dimensions = dimensions;
+        this.descriptions = descriptions;
+        this.active=active;
+        this.type_plantation_id=type_plantation_id;
+    }
+
 }

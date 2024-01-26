@@ -3,6 +3,7 @@ package com.dgitalfactory.usersecurity.entity.Fields;
 import com.dgitalfactory.usersecurity.entity.AppServices.RequestService;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import java.util.Set;
  * @created 17/01/2024 - 12:03
  */
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -32,6 +34,10 @@ public class Plot {
 
     @Column(length = 255, nullable = true)
     String descriptions;
+
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinColumn(name = "type_plantation_id", referencedColumnName = "id", nullable = true)
+    private TypePlantation typePlantation;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "field_id", nullable = false)

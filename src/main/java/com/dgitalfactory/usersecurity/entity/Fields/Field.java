@@ -53,7 +53,7 @@ public class Field {
     private Person person;
 
     @OneToMany(mappedBy = "field", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Plot> services = new HashSet<>();
+    private Set<Plot> plots = new HashSet<>();
 
     Boolean active;
 }

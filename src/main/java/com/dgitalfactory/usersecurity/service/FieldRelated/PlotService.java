@@ -1,10 +1,14 @@
 package com.dgitalfactory.usersecurity.service.FieldRelated;
 
+import com.dgitalfactory.usersecurity.DTO.Plot.PlotResponseDTO;
 import com.dgitalfactory.usersecurity.DTO.Plot.PlotResquestDTO;
 import com.dgitalfactory.usersecurity.DTO.ResponsePaginationDTO;
+import com.dgitalfactory.usersecurity.entity.Fields.Field;
+import com.dgitalfactory.usersecurity.entity.Fields.Plot;
 import com.dgitalfactory.usersecurity.exception.GlobalAppException;
 import com.dgitalfactory.usersecurity.exception.GlobalMessageException;
 import com.dgitalfactory.usersecurity.repository.Fields.PlotRepository;
+import com.dgitalfactory.usersecurity.service.CustomeErrorService;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -34,15 +39,59 @@ public class PlotService {
     @Autowired
     private PlotRepository plotRepo;
 
+    @Autowired
+    private TypePlantationService typePlantationSVC;
+
+    @Autowired
+    private FieldService fieldSVC;
+
+    @Autowired
+    private CustomeErrorService errorSVC;
+
+    /**
+     * Add new plot the field
+     * @param field_id: type {@link Long}
+     * @param plotRequestDTO: tupe {@link PlotResponseDTO}
+     */
+    @Transactional()
+    public void addPlot(Long field_id, PlotResquestDTO plotRequestDTO) {
+        if (this.plotRepo.existsPlotByName(field_id, plotRequestDTO.getName())) {
+            throw new GlobalAppException(HttpStatus.NOT_FOUND, 4029, utilsCommons.getMessage("field.name.field.plot"));
+        }
+        Field field = this.fieldSVC.getFieldById(field_id);
+        Plot plot = Plot.builder()
+                .name(plotRequestDTO.getName())
+                .dimensions(plotRequestDTO.getDimensions())
+                .descriptions(plotRequestDTO.getDescriptions())
+                .typePlantation(this.typePlantationSVC.findTypePlantationById(plotRequestDTO.getType_plantation_id()))
+                .active(true)
+                .field(field)
+                .build();
+
+        Plot newPlot = this.plotRepo.save(plot);
+        log.info("Plot create: " + newPlot.toString());
+    }
+
+    /**
+     * Find plot by id
+     * @param plot_id: type {@link Long}
+     * @return @{@link Plot}
+     */
+    public Plot findPlotById(Long plot_id){
+        return this.plotRepo.findById(plot_id)
+                .orElseThrow(
+                        () -> errorSVC.getResourceNotFoundException("Plot ID", "plot_id", plot_id)
+                );
+    }
 
     /**
      * Get plot by field id and plot id
      * @param field_id: type {@link Long}
      * @param plot_id: type {@link Long}
-     * @return @{@link PlotResquestDTO}
+     * @return @{@link PlotResponseDTO}
      */
-    public PlotResquestDTO getPlotByPlotId(Long field_id, Long plot_id) {
-        if (!this.existsByFieldIdAndPlotId(field_id, plot_id)) {
+    public PlotResponseDTO getPlotDTOByPlotId(Long field_id, Long plot_id) {
+        if (!this.verifyExistsFieldAndPlotByIds(field_id, plot_id)) {
             throw new GlobalMessageException(
                     HttpStatus.NOT_FOUND, 4033,
                     utilsCommons.getFormatMessage(
@@ -64,7 +113,7 @@ public class PlotService {
      * @param plot_id:  type {@link Long} user ID
      * @return @{@link Boolean}
      */
-    private boolean existsByFieldIdAndPlotId(Long field_id, Long plot_id) {
+    private boolean verifyExistsFieldAndPlotByIds(Long field_id, Long plot_id) {
         return this.plotRepo.existsByFieldIdAndPlotId(field_id, plot_id);
     }
 
@@ -86,8 +135,8 @@ public class PlotService {
                 : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
 
-        Page<PlotResquestDTO> listObject = this.getPagePlotDTOByActive(field_id, pageable, active);
-        List<PlotResquestDTO> list = listObject.getContent();
+        Page<PlotResponseDTO> listObject = this.getPagePlotDTOByActive(field_id, pageable, active);
+        List<PlotResponseDTO> list = listObject.getContent();
         if (list.isEmpty()) {
             throw new GlobalAppException(HttpStatus.OK, 2006, utilsCommons.getMessage("field.name.field.plot"));
         }
@@ -106,9 +155,9 @@ public class PlotService {
      *
      * @param pageable: type {@link Pageable}
      * @param active:   type {@link String} : true or false
-     * @return @{@link Page<PlotResquestDTO>}
+     * @return @{@link Page<PlotResponseDTO>}
      */
-    private Page<PlotResquestDTO> getPagePlotDTOByActive(Long field_id, Pageable pageable, String active) {
+    private Page<PlotResponseDTO> getPagePlotDTOByActive(Long field_id, Pageable pageable, String active) {
         if (active.isEmpty()) {
             return this.plotRepo.findAllPlotResponseByFieldId(field_id, pageable);
         } else {
@@ -119,4 +168,56 @@ public class PlotService {
         return this.plotRepo.findAllPlotResponseByFieldIdAndActive(field_id, true, pageable);
     }
 
+    /**
+     * Update a user field
+     *
+     * @param field_id:        type @{@link Long}
+     * @param plot_id:        type @{@link Long
+     * @param fieldResponseDTO: type @{@link PlotResponseDTO}
+     */
+    @Transactional()
+    public void updatePlot(Long field_id, Long plot_id, PlotResquestDTO plotResquestDTO) {
+        this.verifyExistsFieldAndPlotByIds(field_id,plot_id);
+        Plot plot = this.findPlotById(plot_id);
+        if (!plot.getName().equals(plotResquestDTO.getName())) {
+            if (this.plotRepo.findByName(plotResquestDTO.getName()).isPresent()) {
+                throw new GlobalAppException(HttpStatus.NOT_FOUND, 4029, utilsCommons.getMessage("field.name.field.plot"));
+            }
+        }
+        plot.setName(plotResquestDTO.getName());
+        plot.setDimensions(plotResquestDTO.getDimensions());
+        plot.setDescriptions(plotResquestDTO.getDescriptions());
+        plot.setTypePlantation(this.typePlantationSVC.findTypePlantationById(plotResquestDTO.getType_plantation_id()));
+
+
+        Plot newPlot = this.plotRepo.save(plot);
+        log.info("PlotDTO: " + plotResquestDTO.toString());
+        log.info("Plot update: " + plot.toString());
+    }
+
+
+    /**
+     * logical delete plot by id
+     * @param field_id: type {@link Long}
+     * @param plot_id: type {@link Long}
+     * @param active: type {@link Boolean}
+     */
+    public void updateActivePlot(Long field_id, Long plot_id, boolean active){
+        if (this.verifyExistsFieldAndPlotByIds(field_id, plot_id)) {
+            Plot plot = this.findPlotById(plot_id);
+            plot.setActive(active);
+            this.plotRepo.save(plot);
+            return;
+        }
+        throw new GlobalMessageException(
+                HttpStatus.NOT_FOUND, 4033,
+                utilsCommons.getFormatMessage(
+                        utilsCommons.getStatusMessage(4033),
+                        utilsCommons.getMessage("field.name.field"),
+                        "field_id",
+                        utilsCommons.getMessage("field.name.field.plot"),
+                        "plot_id"
+                ),
+                utilsCommons.getMessage("field.name.field.plot"));
+    }
 }

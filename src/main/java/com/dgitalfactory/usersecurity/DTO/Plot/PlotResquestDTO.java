@@ -12,17 +12,21 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class PlotResquestDTO {
-    private Long id;
+    @Size(min = 5 , max = 30)
+    @NotBlank
     private String name;
-    private float dimensions;
-    private String descriptions;
-    private boolean active;
 
-    public PlotResquestDTO(Long id, String name, float dimensions, String descriptions, boolean active) {
-        this.id = id;
-        this.name = name;
-        this.dimensions = dimensions;
-        this.descriptions = descriptions;
-        this.active=active;
-    }
+    @NotNull
+    @DecimalMax(value = "1000000", inclusive = false)
+    @DecimalMin(value = "0.0", inclusive = false)
+    @Digits(integer=7, fraction=2)
+    @IsFloatValid
+    private float dimensions;
+
+    @Size(max = 255)
+    private String descriptions;
+
+    @NotNull
+    @Min(value=1)
+    private Long type_plantation_id;
 }

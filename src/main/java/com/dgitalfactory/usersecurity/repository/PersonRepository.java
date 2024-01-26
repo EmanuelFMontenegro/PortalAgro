@@ -122,7 +122,7 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
 
     @Query("SELECT CASE WHEN COUNT(p) > 0 THEN TRUE ELSE FALSE END " +
             " FROM Person p " +
-            " WHERE p.dni LIKE CONTACT('%', :dni, '%') ")
+            " WHERE p.dni LIKE CONCAT('%', :dni, '%') ")
     public boolean existsByDniLike(@Param("dni") String dni);
 
     public boolean existsByDni(String dni);

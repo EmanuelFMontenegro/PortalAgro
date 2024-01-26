@@ -1,14 +1,11 @@
 package com.dgitalfactory.usersecurity.service.FieldRelated;
 
 import com.dgitalfactory.usersecurity.DTO.AppService.TypeServiceDTO;
-import com.dgitalfactory.usersecurity.DTO.AppService.TypeServiceResponseDTO;
 import com.dgitalfactory.usersecurity.DTO.TypePlantation.TypePlantationRequestDTO;
 import com.dgitalfactory.usersecurity.DTO.TypePlantation.TypePlantationResponseDTO;
-import com.dgitalfactory.usersecurity.entity.AppServices.TypeService;
 import com.dgitalfactory.usersecurity.entity.Fields.TypePlantation;
 import com.dgitalfactory.usersecurity.exception.GlobalAppException;
 import com.dgitalfactory.usersecurity.repository.Fields.TypePlantationRespository;
-import com.dgitalfactory.usersecurity.repository.RequestServices.TypeServiceRepository;
 import com.dgitalfactory.usersecurity.service.CustomeErrorService;
 import com.dgitalfactory.usersecurity.utils.UtilsCommons;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +37,7 @@ public class TypePlantationService {
      *
      * @return @{@link List<TypePlantation>}
      */
-    private List<TypePlantation> getTypePlantation() {
+    private List<TypePlantation> findTypePlantationById() {
         return this.typePlantationREPO.findAll();
     }
 
@@ -74,7 +71,7 @@ public class TypePlantationService {
      * @return @{@link List<TypePlantationRequestDTO>}
      */
     public List<TypePlantationRequestDTO> getAllTypePlantationDTO() {
-        List<TypePlantation> lista = this.getTypePlantation();
+        List<TypePlantation> lista = this.findTypePlantationById();
         if (lista.isEmpty()) {
             throw new GlobalAppException(HttpStatus.NO_CONTENT, 2006, utilsCommons.getMessage("field.name.field.typeplantation"));
         }
@@ -87,7 +84,7 @@ public class TypePlantationService {
      * @param name: type @{@link String}
      * @return @{@link TypePlantation}
      */
-    private TypePlantation getTypePlantation(String name) {
+    private TypePlantation findTypePlantationById(String name) {
         return this.typePlantationREPO.findByName(name)
                 .orElseThrow(
                         () -> errorSVC.getResourceNotFoundException(utilsCommons.getMessage("field.name.field.typeplantation"), "name", name)
@@ -100,7 +97,7 @@ public class TypePlantationService {
      * @param idTypePlantation: type @{@link Long}
      * @return @{@link TypePlantation}
      */
-    public TypePlantation getTypePlantation(Long idTypePlantation) {
+    public TypePlantation findTypePlantationById(Long idTypePlantation) {
         return this.typePlantationREPO.findById(idTypePlantation)
                 .orElseThrow(
                         () -> errorSVC.getResourceNotFoundException(
@@ -131,7 +128,7 @@ public class TypePlantationService {
      */
     @Transactional(propagation = Propagation.SUPPORTS)
     public void updateTypePlantation(Long idTypePlantation, TypePlantationResponseDTO typePlantationResponseDTO) {
-        TypePlantation typeService = this.getTypePlantation(idTypePlantation);
+        TypePlantation typeService = this.findTypePlantationById(idTypePlantation);
         if (!typeService.getName().equals(typePlantationResponseDTO.getName())) {
             if (this.typePlantationREPO.existsByName(typePlantationResponseDTO.getName())) {
                 throw new GlobalAppException(HttpStatus.BAD_REQUEST, 4029, utilsCommons.getMessage("field.name.field.typeplantation"));
@@ -149,7 +146,7 @@ public class TypePlantationService {
      */
     @Transactional(propagation = Propagation.SUPPORTS)
     public void deleteTypePlantationLogical(Long idTypePlantation) {
-        TypePlantation typeService = this.getTypePlantation(idTypePlantation);
+        TypePlantation typeService = this.findTypePlantationById(idTypePlantation);
         typeService.setActive(false);
         this.typePlantationREPO.save(typeService);
     }
@@ -160,7 +157,7 @@ public class TypePlantationService {
      */
     @Transactional
     public void activeTypePlantationLogical(Long idTypePlantation) {
-        TypePlantation typeService = this.getTypePlantation(idTypePlantation);
+        TypePlantation typeService = this.findTypePlantationById(idTypePlantation);
         typeService.setActive(true);
         this.typePlantationREPO.save(typeService);
     }

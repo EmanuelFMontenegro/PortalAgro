@@ -116,7 +116,7 @@ public class FieldController {
     public ResponseEntity<MessageDTO> deleteLogicalField(
             @PathVariable("user_id") Long user_id,
             @PathVariable("field_id") Long field_id) {
-        this.fieldSVC.deleteLogicalFieldById(field_id, user_id,false);
+        this.fieldSVC.updateActiveFieldById(field_id, user_id,false);
         return new ResponseEntity<>(MessageDTO.builder().code(2003).message(utilsCommons.getStatusMessage(2003))
                 .details(utilsCommons.getMessage("field.name.field"))
                 .build(), HttpStatus.OK);
@@ -127,7 +127,7 @@ public class FieldController {
     public ResponseEntity<MessageDTO> activeLogicalField(
             @PathVariable("user_id") Long user_id,
             @PathVariable("field_id") Long field_id) {
-        this.fieldSVC.deleteLogicalFieldById(field_id, user_id,true);
+        this.fieldSVC.updateActiveFieldById(field_id, user_id,true);
         return new ResponseEntity<>(MessageDTO.builder().code(2009).message(utilsCommons.getStatusMessage(2009))
                 .details(utilsCommons.getMessage("field.name.field"))
                 .build(), HttpStatus.OK);

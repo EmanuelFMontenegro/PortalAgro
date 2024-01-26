@@ -64,7 +64,7 @@ public class FieldService {
      * @param field_id: type {@link Long}
      * @return @{@link Field}
      */
-    private Field getFieldById(Long field_id) {
+    public Field getFieldById(Long field_id) {
         return this.fieldRepo.findById(field_id)
                 .orElseThrow(() -> errorSVC.getResourceNotFoundException("Field ID", "field_id", field_id));
     }
@@ -139,7 +139,7 @@ public class FieldService {
      *
      * @param field_id: type {@link Long}
      */
-    public void deleteLogicalFieldById(Long field_id, Long user_Id, boolean active) {
+    public void updateActiveFieldById(Long field_id, Long user_Id, boolean active) {
         if (this.existsFieldIdByUserId(field_id, user_Id)) {
             Field field = this.getFieldById(field_id);
             field.setActive(active);
@@ -313,18 +313,15 @@ public class FieldService {
      */
     @Transactional()
     public FieldDTO updateField(Long person_id, Long field_id, FieldResponseDTO fieldResponseDTO) {
-//        Capitalizer fields
         Field field = this.getFieldById(field_id);
         if (!field.getName().equals(fieldResponseDTO.getName())) {
             if (this.fieldRepo.findByName(fieldResponseDTO.getName()).isPresent()) {
                 throw new GlobalAppException(HttpStatus.NOT_FOUND, 4029, utilsCommons.getMessage("field.name.field"));
             }
         }
-        //ADDRESSS
         Location locationNew = this.locationSVC.getLocationById(fieldResponseDTO.getAddress().getLocation_id());
         field.getAddress().setAddress(fieldResponseDTO.getAddress().getAddress());
         field.getAddress().setLocation(locationNew);
-        //FIELD
         field.setName(fieldResponseDTO.getName());
         field.setObservation(fieldResponseDTO.getObservation());
         field.setDimensions(fieldResponseDTO.getDimensions());
