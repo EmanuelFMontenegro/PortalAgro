@@ -1,0 +1,361 @@
+$primary-color: #3CA749
+$secondary-color: #8FCA8F
+$fluor-color: #00ff00
+$hover-color: #32963f
+$error-color: #d9534f
+$light-grey: #f4f4f4
+$dark-grey: #454545
+$dark-hard: #1c1b1b
+$medium-grey: #808080
+$border-color: #ddd
+$icon-color: #808080
+$font-family: 'Montserrat', sans-serif
+
+body
+  font-family: $font-family
+
+.container
+  display: grid
+  grid-template-columns: 1fr
+  grid-template-rows: auto
+  height: 100vh
+
+.titulo-perfil h2
+  color: $dark-grey
+  font-size: 1.5em
+  font-weight: bold
+  font-family: 'Montserrat', sans-serif
+  margin-left: 2%
+
+.main-card
+
+  width: 95%
+  padding: 20px
+  border-radius: 10px
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4)
+  background-color: $light-grey
+  margin: 0 auto
+  position: relative
+  display: grid
+  grid-template-columns: 1fr
+
+  .card
+    display: grid
+    grid-auto-rows: 22 rems
+    grid-template-columns: repeat(auto-fills,minmax(15rem, 1fr))
+    background-color: #f4f4f4
+    padding: 20px
+    border-radius: 10px
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3)
+    margin-top: -10px
+
+    &.user-card
+      display: flex
+      flex-direction: row
+      align-items: center
+      gap: 20px
+      margin-left: 2%
+
+    .avatar
+      position: relative
+
+    .avatar-circle
+      width: 90px
+      height: 90px
+      border-radius: 50%
+      background-color: green
+      display: flex
+      align-items: center
+      justify-content: center
+      border-radius: 50%
+      border: 3px solid $primary-color
+      background-color: white
+      position: relative
+
+      .avatar-icon
+        font-size: 60px
+        color: $icon-color
+
+      .edit-avatar-button
+        display: flex
+        position: absolute
+        bottom: 5px
+        right: 5px
+        background-color: $primary-color
+        padding: 3px
+        border-radius: 50%
+        cursor: pointer
+
+    .icon-edit-perfil
+      display: flex
+      align-items: center
+      color: #3CA749
+
+    .edit-container
+      display: flex
+      align-items: center
+      justify-content: flex-end
+      margin-top: 10px
+
+    .img-editar
+      position: absolute
+      cursor: pointer
+      margin-left: 75%
+      margin-top: -116px
+      border: 2px solid #3CA749
+      padding: 1px
+      border-radius: 10%
+      max-width: 30px
+
+    .edit-text
+      display: flex
+      position: absolute
+      font-family: "Montserrat", sans-serif
+      color: #3CA749
+      font-size: 14px
+      height: 40px
+      align-items: center
+      cursor: pointer
+      margin-left: 77.5%
+      margin-top: -114px
+
+    .mat-icon
+      height: unset
+      width: unset
+      color: white
+      font-size: 16px
+      overflow: none
+    p
+      font-size: 14px
+      color: $medium-grey
+      font-weight: bold
+
+    .titulo-perfil-avatar
+      color: #3CA749
+      font-size: 14px
+
+    &.info-card
+      height: 30%
+
+  .user-details-card
+    display: flex
+    padding: 20px
+    border-radius: 10px
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4)
+    background-color: $light-grey
+    margin-left: 20px
+
+  .datos-users
+    width: 100%
+    display: flex
+    gap: 10px
+    flex-direction: row
+    align-items: center
+    flex-wrap: wrap
+    padding-top: 3.5%
+
+  .field-container
+    position: relative
+    width: 100%
+    margin-bottom: 20px
+
+    .field-label
+      position: absolute
+      top: -20px
+      left: 10px
+      font-size: 0.8em
+      color: $dark-grey
+
+    .mat-localidad
+      font-family: $font-family
+      font-size: 13px
+    mat-select
+      width: calc(100% - 20px)
+      padding: 8px
+      border: 1px solid $border-color
+      border-radius: 4px
+      background-color: white
+      height: 17px
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2)
+
+      &:focus
+        outline: none
+        border-color: $primary-color
+        box-shadow: 0 0 5px $primary-color
+
+      &:nth-child(1),
+      &:nth-child(2)
+        display: flex
+        gap: 20px
+
+        mat-select
+          width: calc(50% - 10px)
+
+  .field-inline-container
+    display: flex
+    justify-content: column
+    margin-bottom: 10px
+
+  & .field-container
+    width: 48%
+
+  input
+    width: calc(100% - 20px)
+    padding: 8px
+    border: 1px solid $border-color
+    border-radius: 4px
+    background-color: white
+    font-size: 14px
+    color: $dark-hard
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2)
+
+    &:focus
+      outline: none
+      border-color: $primary-color
+      box-shadow: 0 0 5px $primary-color
+
+    &:nth-child(1),
+    &:nth-child(2)
+      display: flex
+      gap: 20px
+
+      input
+        width: calc(50% - 10px)
+
+  mat-card-header
+        position: absolute
+        top: 0
+        left: 0
+        right: 0
+        background-color: #3CA749
+        height: 30px
+        border-top-left-radius: 10px
+        border-top-right-radius: 10px
+
+  mat-card-title
+        padding: 2px
+        margin-left: 16px
+        display: inline-block
+        font-family: "Montserrat", sans-serif
+        font-size: 15px
+        color: #ddd
+        font-weight: bold
+
+  .title-input
+    font-family: $font-family
+    color: $dark-grey
+    font-weight: bold
+
+  .field-value
+    font-family: $font-family
+    color: $medium-grey
+
+    margin-top: 1.5%
+
+  .mat-divider
+    border-color: $medium-grey
+    border-width: 1px
+    margin-top: 5px
+
+  .extended-card
+    padding: 20px
+    border-radius: 10px
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4)
+    background-color: $light-grey
+    display: flex
+    margin-left: 20px
+
+  mat-card-content
+    display: grid
+    grid-template-columns: repeat(auto-fills,minmax(15rem, 1fr))
+
+
+mat-card-content textarea
+    width: 100%
+    padding: 8px
+    font-family: "Montserrat", sans-serif
+    color: #808080
+    border: 1px solid #ccc
+    border-radius: 4px
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
+    resize: vertical
+    margin-top: 4%
+    font-weight: bold
+
+    &:focus
+      outline: none
+      border-color: $primary-color
+      box-shadow: 0 0 5px $primary-color
+
+.readonly-textarea
+  width: 100%
+  border: none
+  resize: none
+  padding: 10px
+  font-size: 16px
+  background-color: #f0f0f0
+
+info-header
+  font-size: 1.5em
+  margin-bottom: 10px
+
+mat-card
+
+  padding: 20px
+  border-radius: 8px
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1)
+
+  .cards-container
+    display: flex
+    gap: 10px
+    flex-direction: column
+
+    .user-details-card,
+    .additional-details-card
+      padding: 20px
+      border-radius: 10px
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4)
+      background-color: #f4f4f4
+
+.botones-servicio
+  display: flex
+  justify-content: flex-end
+  margin-top: 10px
+  bottom: -40px
+  right: 20px
+
+  button
+    padding: 8px 18px
+    border: 1px solid transparent
+    border-radius: 5px
+    cursor: pointer
+    transition: background-color 0.3s, border-color 0.3s
+    font-size: 0.85em
+    font-family: 'Montserrat', sans-serif
+    font-weight: bold
+    margin-left: 10px
+
+    &.register-button
+      width: 15%
+      background-color: $primary-color
+      color: white
+
+     
+
+    &.cancel-button
+      width: 15%
+      background-color: white
+      color: $primary-color
+      border-color: $primary-color
+
+      &:hover
+        background-color: #f8f8f8
+        border-color: darken($primary-color, 10%)
+
+.error-message
+  color: $error-color
+  font-size: 12px
+  margin-top: 5px
+
+.error-border
+  border: 1px solid red

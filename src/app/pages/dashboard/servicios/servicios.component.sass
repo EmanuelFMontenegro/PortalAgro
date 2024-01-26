@@ -38,17 +38,11 @@ $font-family: 'Montserrat', sans-serif
   width: calc(100% - 40px)
   box-sizing: border-box
 
-.card-title
-  color: $primary-color
-  margin-bottom: 20px
+  &-title
+    color: $primary-color
+    margin-bottom: 20px
 
-.field-container
-  display: flex
-  align-items: center
-  justify-content: flex-start
-  width: 100%
-  margin-bottom: 10px
-
+.field-container,
 .field-container-fecha
   display: flex
   align-items: center
@@ -56,23 +50,17 @@ $font-family: 'Montserrat', sans-serif
   width: 100%
   margin-bottom: 10px
 
-.field-label
-  display: flex
-  align-items: center
-  margin-right: 20px
-  font-size: 17px
-  // font-weight: bold
-  color: $dark-grey
-
+.field-label,
 .field-label-fecha
   display: flex
   align-items: center
   margin-right: 20px
   font-size: 17px
-  // font-weight: bold
   color: $dark-grey
 
-.field-input
+.field-input,
+.field-input-fecha,
+.field-input-obs
   width: 40%
   border: 1px solid #ddd
   border-radius: 4px
@@ -102,19 +90,9 @@ $font-family: 'Montserrat', sans-serif
     box-shadow: 0 0 5px $primary-color
 
 .field-input-obs
-  width: 40%
-  border: 1px solid #ddd
-  border-radius: 4px
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3)
-  padding: 8px
-  background-color: white
-  font-size: 14px
-  margin-left: 10px
   height: 60px
-  &:focus
-    outline: none
-    border-color: $primary-color
-    box-shadow: 0 0 5px $primary-color
+  margin-left: 10px
+
 .boton-servicio
   display: flex
   padding-left: 85.5%
@@ -128,6 +106,8 @@ button[mat-raised-button]
   background-color: $primary-color
   transition: background-color 0.3s
 
-.mat-datepicker-toggle
-.mat-icon
+.mat-datepicker-toggle .mat-icon
   color: #3CA749
+
+// .mat-drawer-content
+//   overflow: visible !important

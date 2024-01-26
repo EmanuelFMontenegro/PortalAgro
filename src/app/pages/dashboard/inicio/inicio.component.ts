@@ -10,7 +10,11 @@ interface CustomJwtPayload {
   userId: number;
   sub: string;
 }
-
+interface DecodedToken {
+  userId: number;
+  sub: string;
+  roles: string;
+}
 @Component({
   selector: 'app-inicio',
   templateUrl: './inicio.component.html',
@@ -18,12 +22,25 @@ interface CustomJwtPayload {
 })
 
 export class InicioComponent implements OnInit {
-  userEmail: string = '';
-  userId: number | null = null;
+  nombre: string = '';
+  apellido: string = '';
+  descripcion: string = '';
+  dniCuit: string = '';
+  descriptions: string = '';
+  locationId: number | null = null;
+  telephone: string = '';
+  nombreCampo: string = '';
+  localidad: string = '';
+  nombreLocalidad: string = '';
+ private userId: number | any;
+  private personId: number | any;
+  public userEmail: string | null = null;
+  localidades: any[] = [];
+  campos: any[] = [];
   campoData = {
     name: '',
     dimensions: '',
-    geolocation:'',
+    geolocation: '',
     observation: '',
     address: {
       address: '',
@@ -49,8 +66,8 @@ export class InicioComponent implements OnInit {
     this.userEmail = this.authService.getUserEmail();
     this.decodeToken();
     this.campoData.geolocation = '';
-    // console.log('El id de usuario es', this.userId);
-    // console.log('El email del usuario es',this.userEmail);
+    this.cargarCampos();
+    this.cargarDatosDeUsuario()
   }
 
   decodeToken(): void {
@@ -62,6 +79,88 @@ export class InicioComponent implements OnInit {
 
     }
   }
+
+  BtnRegisterCampos():void {
+    console.log("diste click en btnregister")
+    // Utiliza el servicio Router para navegar a la página de registro de campos
+    this.router.navigate(['/dashboard/campo']);
+  }
+
+  cargarCampos() {
+    if (!this.userId) {
+      console.log('Este es el ID del señor', this.userId);
+      this.toastr.error('Error: No se ha identificado al usuario.', 'Error');
+      return;
+    }
+
+    this.apiService.getFields(this.userId).subscribe(
+      (response) => {
+        this.campos = response.list[0];
+        console.log('datos de los campos',this.campos)
+      },
+      (error) => {
+        console.error('Error al obtener campos:', error);
+        // Puedes manejar el error aquí según tus necesidades.
+      }
+    );
+  }
+  cargarDatosDeUsuario() {
+    const decoded: DecodedToken = jwtDecode(this.authService.getToken() || '');
+    if ('userId' in decoded && 'sub' in decoded && 'roles' in decoded) {
+      this.userId = decoded.userId;
+      this.userEmail = decoded.sub;
+
+      this.personId = this.userId;
+
+      if (this.userId !== null && this.personId !== null) {
+        // Obtener localidades primero
+        this.apiService.getLocationMisiones('location').subscribe(
+          (localidades) => {
+            this.localidades = localidades;
+
+            // Declarar nombreLocalidad antes de su uso
+            let nombreLocalidad: string = '';
+
+            // Luego obtener datos del usuario
+            this.apiService.getPersonByIdOperador(this.userId, this.personId).subscribe(
+              (data) => {
+                console.log('Datos del usuario:', data);
+
+                // Obtener información de la localidad
+                const localidad = this.localidades.find((loc) => loc.id === data.location_id);
+                nombreLocalidad = localidad ? localidad.name : '';
+
+                // Mostrar información en la consola
+                console.log('Información de la localidad:', nombreLocalidad);
+
+                // Asignar el nombre de la localidad a una propiedad de la clase
+                this.nombreLocalidad = nombreLocalidad;
+
+                // Continuar con el resto de la lógica
+                this.nombre = data.name;
+                this.apellido = data.lastname;
+                this.dniCuit = data.dniCuit;
+                this.descriptions = data.descriptions;
+                this.telephone = data.telephone;
+              },
+              (error) => {
+                console.error('Error al obtener nombre y apellido del usuario:', error);
+              }
+            );
+          },
+          (error) => {
+            console.error('Error al obtener las localidades', error);
+          }
+        );
+      }
+    } else {
+      this.userId = null;
+      this.userEmail = null;
+    }
+  }
+
+
+
 
 
   registrarCampo(): void {
@@ -100,6 +199,17 @@ export class InicioComponent implements OnInit {
       this.toastr.error('Por favor, completa todos los campos requeridos', 'Error');
     }
   }
+  obtenerLocalidades() {
+    this.apiService.getLocationMisiones('location').subscribe(
+      (localidades) => {
+        this.localidades = localidades;
+        console.log('Localidades:', this.localidades);
+      },
+      (error) => {
+        console.error('Error al obtener las localidades', error);
+      }
+    );
+  }
 
 
   isValidForm(): boolean {
@@ -111,5 +221,12 @@ export class InicioComponent implements OnInit {
     const areDimensionsValid = !isNaN(dimensions) && dimensions > 0;
 
     return isAddressValid && isLocationValid && isNameValid && areDimensionsValid && isObservationValid ;
+  }
+
+
+
+
+  verMas(numero: number): void {
+
   }
 }

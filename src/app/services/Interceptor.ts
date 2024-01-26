@@ -3,7 +3,7 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/c
 import { Observable } from 'rxjs';
 
 @Injectable()
-export class JwtInterceptor implements HttpInterceptor {
+export class Interceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token = localStorage.getItem('token');
     if (token) {
@@ -14,7 +14,7 @@ export class JwtInterceptor implements HttpInterceptor {
         }
       });
     } else {
-      console.log('No se encontró ningún token en el localStorage.'); // Agregar log si no hay token
+      // console.log('No se encontró ningún token en el localStorage.'); // Agregar log si no hay token
     }
 
     return next.handle(request);

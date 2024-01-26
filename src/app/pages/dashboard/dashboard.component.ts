@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Router } from '@angular/router';
@@ -12,20 +12,22 @@ export class DashboardComponent implements AfterViewInit {
   @ViewChild('sidenav') sidenav!: MatSidenav;
   isScreenSmall: boolean = false;
 
-  constructor(private breakpointObserver: BreakpointObserver,private router: Router) {}
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private router: Router,
+    private cdr: ChangeDetectorRef // Agregamos ChangeDetectorRef
+  ) {}
 
   ngAfterViewInit(): void {
     this.breakpointObserver.observe([Breakpoints.Handset])
       .subscribe(result => {
         this.isScreenSmall = result.matches;
-        // Uso de setTimeout para evitar el error ExpressionChangedAfterItHasBeenCheckedError
-        setTimeout(() => {
-          if (this.isScreenSmall) {
-            this.sidenav.close();
-          } else {
-            this.sidenav.open();
-          }
-        });
+        this.cdr.detectChanges(); // Forzamos la detección de cambios
+        if (this.isScreenSmall && this.sidenav) {
+          this.sidenav.close();
+        } else if (this.sidenav) {
+          this.sidenav.open();
+        }
       });
   }
 

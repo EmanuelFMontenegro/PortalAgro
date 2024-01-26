@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { ApiService } from 'src/app/services/ApiService';
 import { ToastrService } from 'ngx-toastr';
 import { DashboardComponent } from 'src/app/pages/dashboard/dashboard.component';
+import { PrimerRegistroComponent } from 'src/app/auth/primerRegistro/primerRegistro.component';
+import { jwtDecode } from 'jwt-decode';
 
 export function usernameValidator(control: FormControl): { [key: string]: any } | null {
   const validUsername = /^[a-zA-Z0-9_]+$/;
@@ -12,7 +14,11 @@ export function usernameValidator(control: FormControl): { [key: string]: any } 
   }
   return null;
 }
-
+interface DecodedToken {
+  userId: number;
+  sub: string;
+  roles: string;
+}
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -38,6 +44,8 @@ export class LoginComponent {
     Validators.email,
     this.usernameControl = new FormControl('', [Validators.required, Validators.email]);
     this.passwordControl = new FormControl('', [Validators.required, Validators.minLength(8)]);
+    this.usernameControl.setValue('emamonte777@gmail.com'); // Define el correo electrónico predefinido
+    this.passwordControl.setValue('Agustin15524201');
     this.login = new FormGroup({
       username: this.usernameControl,
       password: this.passwordControl
@@ -55,26 +63,111 @@ export class LoginComponent {
     passwordInput.type = this.passwordVisible ? 'text' : 'password';
   }
 
+  // enviarFormulario() {
+  //   if (this.login.valid) {
+  //     // localStorage.removeItem('token');
+  //     const username = this.login.get('username')?.value;
+  //     const password = this.login.get('password')?.value;
+
+  //     this.apiService.validarCredenciales(username, password).subscribe({
+  //       next: (response) => {
+
+  //         if (response.status === 200 && response.body && response.body.token) {
+  //           localStorage.setItem('token', response.body.token);
+  //           this.mostrarMensajeExitoso();
+  //           this.login.reset();
+  //           this.router.navigate(['/bienvenida']);
+  //         } else {
+
+  //           this.mostrarMensajeError('Error de autenticación');
+  //         }
+  //       },
+  //       error: (err) => {
+  //         if (err.status === 0) {
+  //           this.toastr.error('No se puede conectar al servidor. Por favor verifica tu conexión a internet.', 'Error de Conexión');
+  //         } else if (err.status === 404) {
+  //           this.toastr.info('El usuario no está registrado. Por favor regístrese', 'Atención');
+  //           this.login.reset();
+  //         } else if (err.status === 401 && err.error.code === 4011) {
+  //           const errorMessage = err.error.message || 'Error de autenticación';
+  //           const details = err.error.details || 'Detalles del error no disponibles';
+
+  //           if (details.includes('Email not found')) {
+  //             this.toastr.info('El usuario no está registrado. Por favor regístrese', 'Atención');
+  //             this.login.reset();
+  //           } else {
+
+  //             this.toastr.error(errorMessage, 'Error');
+  //           }
+  //         } else if (err.status === 400 && err.error.code === 4016) {
+  //           this.toastr.error('Error de contraseña. Por favor intenta de nuevo.','Atencion');
+  //         } else if (err.status === 401 && err.error.code === 4001) {
+  //           this.toastr.warning('Por favor revisa tu casilla de correo electrónico para activar tu cuenta.', 'Advertencia', { closeButton: true });
+  //         } else {
+  //           const errorMessage = err.error.message || 'Error desconocido';
+  //           this.toastr.error(errorMessage, 'Error');
+  //         }
+  //       }
+
+  //     });
+  //   } else {
+  //     // console.log('Formulario de inicio de sesión no válido:', this.login.value);
+  //   }
+  // }
   enviarFormulario() {
     if (this.login.valid) {
-      // localStorage.removeItem('token');
       const username = this.login.get('username')?.value;
       const password = this.login.get('password')?.value;
 
       this.apiService.validarCredenciales(username, password).subscribe({
         next: (response) => {
-
           if (response.status === 200 && response.body && response.body.token) {
             localStorage.setItem('token', response.body.token);
+
+            const decoded: DecodedToken = jwtDecode(response.body.token);
+            const userId = decoded.userId;
+            const personId = userId;
+
+            this.apiService.getPersonByIdOperador(userId, personId).subscribe(
+              (userData) => {
+                console.log('Datos del usuario:', userData);
+
+                if (userData && userData.name) {
+                  this.router.navigate(['/dashboard']);
+                } else {
+                  this.router.navigate(['/primerRegistro']);
+                }
+              },
+              (userError) => {
+                console.error('Error al obtener datos del usuario:', userError);
+              }
+            );
+
             this.mostrarMensajeExitoso();
             this.login.reset();
-            this.router.navigate(['/dashboard']);
           } else {
+            this.mostrarMensajeError('Error de autenticación');
+          }
+        },
 
+      });
+
+      this.apiService.validarCredenciales(username, password).subscribe({
+        next: (response) => {
+          if (response.status === 200 && response.body && response.body.token) {
+            localStorage.setItem('token', response.body.token);
+
+            // Redirigir directamente a 'primer-registro'
+            this.router.navigate(['/primer-registro']);
+
+            this.mostrarMensajeExitoso();
+            this.login.reset();
+          } else {
             this.mostrarMensajeError('Error de autenticación');
           }
         },
         error: (err) => {
+          // Manejar otros casos de error según sea necesario
           if (err.status === 0) {
             this.toastr.error('No se puede conectar al servidor. Por favor verifica tu conexión a internet.', 'Error de Conexión');
           } else if (err.status === 404) {
@@ -88,7 +181,6 @@ export class LoginComponent {
               this.toastr.info('El usuario no está registrado. Por favor regístrese', 'Atención');
               this.login.reset();
             } else {
-
               this.toastr.error(errorMessage, 'Error');
             }
           } else if (err.status === 400 && err.error.code === 4016) {
@@ -99,13 +191,17 @@ export class LoginComponent {
             const errorMessage = err.error.message || 'Error desconocido';
             this.toastr.error(errorMessage, 'Error');
           }
-        }
 
+          // Ejemplo de redirección a bienvenida en caso de error
+          // this.router.navigate(['/bienvenida']);
+        }
       });
     } else {
-      console.log('Formulario de inicio de sesión no válido:', this.login.value);
+
     }
   }
+
+
 
   mostrarMensajeExitoso() {
     this.toastr.info('Acceso permitido.', 'Bienvenido', { timeOut: 1000 });

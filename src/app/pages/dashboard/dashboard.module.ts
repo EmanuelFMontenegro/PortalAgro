@@ -1,3 +1,5 @@
+// Componentes de Pages
+
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -6,13 +8,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
 import { InicioComponent } from './inicio/inicio.component';
+import { CampoComponent } from './campo/campo.component';
 import { ServiciosComponent } from './servicios/servicios.component';
 import { GeolocalizacionComponent } from './geolocalizacion/geolocalizacion.component';
 import { ConfiguracionComponent } from './configuracion/configuracion.component';
 import { PerfilComponent } from './perfil/perfil.component';
 import { ReportesComponent } from './reportes/reportes.component';
 import { ProductosComponent } from './productos/productos.component';
-import { HomeComponent } from './home/home.component';
+
 
 // Angular Material
 import { MatCardModule } from '@angular/material/card';
@@ -34,13 +37,17 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FormatDatePipe } from 'src/app/format-date.pipe';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatOptionModule } from '@angular/material/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 const CUSTOM_DATE_FORMATS = {
   parse: {
-    dateInput: 'LL', // 'LL' se usa para mostrar el formato largo de fecha (día de mes, año)
+    dateInput: 'LL',
   },
   display: {
-    dateInput: 'DD/MM/YYYY', // Formato que muestra el día, mes y año separados por barras
+    dateInput: 'DD/MM/YYYY',
     monthYearLabel: 'MMM YYYY',
     dateA11yLabel: 'LL',
     monthYearA11yLabel: 'MMMM YYYY',
@@ -57,8 +64,9 @@ const CUSTOM_DATE_FORMATS = {
     PerfilComponent,
     ReportesComponent,
     ProductosComponent,
-    HomeComponent,
+    CampoComponent,
     FormatDatePipe
+
   ],
   imports: [
     CommonModule,
@@ -70,7 +78,6 @@ const CUSTOM_DATE_FORMATS = {
     MatInputModule,
     MatButtonModule,
     MatSnackBarModule,
-    MatIconModule,
     ToastrModule.forRoot(),
     MatSidenavModule,
     MatListModule,
@@ -87,6 +94,9 @@ const CUSTOM_DATE_FORMATS = {
     ReactiveFormsModule,
     FormsModule,
     MatExpansionModule,
+    MatAutocompleteModule,
+    MatOptionModule,
+    BrowserAnimationsModule,
     RouterModule
   ],
   providers: [

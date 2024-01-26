@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse, HttpParams  } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -23,7 +23,8 @@ export class ApiService {
     return this.http.post(`${this.baseURL}/auth/refresh`, { token });
   }
 
-  // Métodos relacionados con Email
+   // <--ENPOINTS DE E-MAIL -->
+
   recuperarContrasena(email: string): Observable<any> {
     return this.http.post(`${this.baseURL}/email/recovery`, { mailTo: email });
   }
@@ -32,7 +33,8 @@ export class ApiService {
     return this.http.post(`${this.baseURL}/email/change-pass`, { password, confirmPassword, token });
   }
 
-  // Métodos relacionados con User
+  // <--ENPOINTS DE USERS -->
+
   getUsers(): Observable<any> {
     return this.http.get(`${this.baseURL}/user`);
   }
@@ -45,56 +47,101 @@ export class ApiService {
     return this.http.delete(`${this.baseURL}/user/${id}`);
   }
 
-  // Métodos relacionados con Persona
-  getPeople(): Observable<any> {
-    return this.http.get(`${this.baseURL}/person`);
+  // <--ENPOINTS DE PERSONA -->
+
+  getPeopleAdmin(sortBy: string = 'id', sortDir: string = 'DESC'): Observable<any> {
+    const url = `${this.baseURL}/person?sortBy=${sortBy}&sortDir=${sortDir}`;
+    return this.http.get<any>(url);
   }
 
-  getPersonById(id: number): Observable<any> {
-    return this.http.get(`${this.baseURL}/person/${id}`);
+  getPeopleUserAdmin(sortBy: string = 'id', sortDir: string = 'DESC'): Observable<any> {
+    const url = `${this.baseURL}/user/person/all?sortBy=${sortBy}&sortDir=${sortDir}`;
+    return this.http.get<any>(url);
   }
 
-  addPerson(name: string, lastname: string, dni: string): Observable<any> {
-    return this.http.post(`${this.baseURL}/person`, { name, lastname, dni });
+  getPersonByIdOperador(userId: number, personId: number): Observable<any> {
+    const url = `${this.baseURL}/user/${userId}/person/${personId}`;
+    return this.http.get<any>(url);
   }
 
-  updatePerson(id: number, name: string, lastname: string, dni: string): Observable<any> {
-    return this.http.put(`${this.baseURL}/person/${id}`, { name, lastname, dni });
+  getProfileOperador(userId: number, personId: number): Observable<any> {
+    const url = `${this.baseURL}/user/${userId}/person/${personId}/profile`;
+    return this.http.get<any>(url);
   }
 
-  deletePerson(id: number): Observable<any> {
-    return this.http.delete(`${this.baseURL}/person/${id}`);
+  getPersonByDniCuitAdmin(dniCuit: string): Observable<any> {
+    const url = `${this.baseURL}/user/person/${dniCuit}`;
+    return this.http.get<any>(url);
   }
 
-  // Métodos relacionados con Fields(registro de campos)
+  existsPersonByParamsAdmin(dniCuit: string): Observable<any> {
+    const url = `${this.baseURL}/user/person?dniCuit=${dniCuit}`;
+    return this.http.get<any>(url);
+  }
+
+  updatePersonAdmin(userId: number, personId: number, personData: any): Observable<any> {
+    const url = `${this.baseURL}/user/${userId}/person/${personId}`;
+    return this.http.put<any>(url, personData);
+  }
+
+
+
+//  <<<<-------METODOS PARA CAMPOS------>>>>>
+
   getFields(userId: number): Observable<any> {
     return this.http.get(`${this.baseURL}/user/${userId}/field`);
   }
 
-  getFieldById(userId: number, fieldId: number): Observable<any> {
+  getUsersFields(pageNo: number, pageSize: number, sortBy: string, sortDir: string): Observable<any> {
+    const params = new HttpParams()
+      .set('pageNo', pageNo.toString())
+      .set('pageSize', pageSize.toString())
+      .set('sortBy', sortBy)
+      .set('sortDir', sortDir);
+
+    return this.http.get(`${this.baseURL}/user/field/`, { params });
+  }
+
+  getUsersFieldsDEF(): Observable<any> {
+    const params = new HttpParams()
+      .set('pageNo', '2')
+      .set('pageSize', '5')
+      .set('sortBy', 'id')
+      .set('sortDir', 'desc')
+      .set('disabled', 'true');
+
+    return this.http.get(`${this.baseURL}/user/field/`, { params });
+  }
+
+  getOneField(userId: number, fieldId: number): Observable<any> {
     return this.http.get(`${this.baseURL}/user/${userId}/field/${fieldId}`);
   }
 
-addField(userId: number, fieldData: any, httpOptions?: { headers: HttpHeaders }): Observable<any> {
-  return this.http.post(`${this.baseURL}/user/${userId}/field`, fieldData, httpOptions);
-}
+  addField(userId: number, newFieldData: any): Observable<any> {
+    return this.http.post(`${this.baseURL}/user/${userId}/field`, newFieldData);
+  }
 
-
-  updateField(userId: number, fieldId: number, fieldData: any): Observable<any> {
-    return this.http.put(`${this.baseURL}/user/${userId}/field/${fieldId}`, fieldData);
+  updateField(userId: number, fieldId: number, updatedFieldData: any): Observable<any> {
+    return this.http.put(`${this.baseURL}/user/${userId}/field/${fieldId}`, updatedFieldData);
   }
 
   deleteField(userId: number, fieldId: number): Observable<any> {
     return this.http.delete(`${this.baseURL}/user/${userId}/field/${fieldId}`);
   }
 
+
   // Métodos relacionados con Geolocalizacion
+
   getGeolocationField(userId: number, fieldId: number): Observable<any> {
-    return this.http.get(`${this.baseURL}/user/${userId}/field/${fieldId}/geolocation`);
+    return this.http.get<any>(`${this.baseURL}/user/${userId}/field/${fieldId}/geolocation`);
   }
 
   updateGeolocationField(userId: number, fieldId: number, geolocation: string): Observable<any> {
-    return this.http.put(`${this.baseURL}/user/${userId}/field/${fieldId}/geolocation`, { geolocation });
+    const body = {
+      geolocation: geolocation
+    };
+
+    return this.http.put<any>(`${this.baseURL}/user/${userId}/field/${fieldId}/geolocation`, body);
   }
 
   getFieldsPaged(userId: number, pageNo: number, pageSize: number, sortBy: string, sortDir: string): Observable<any> {
@@ -102,23 +149,33 @@ addField(userId: number, fieldData: any, httpOptions?: { headers: HttpHeaders })
   }
 
   // Métodos relacionados con Tipos de Servicios
+
   getAllTypeServices(): Observable<any> {
-    return this.http.get(`${this.baseURL}/user/field/service/type`);
+    return this.http.get<any>(`${this.baseURL}/field/service/type`);
   }
 
-  addTypeService(serviceData: any): Observable<any> {
-    return this.http.post(`${this.baseURL}/user/field/service/type`, serviceData);
+  getAllTypeServicesAdmin(): Observable<any> {
+    return this.http.get<any>(`${this.baseURL}/field/service/type/all?isActive=true`);
   }
 
-  updateTypeService(typeServiceId: number, serviceData: any): Observable<any> {
-    return this.http.put(`${this.baseURL}/user/field/service/type/${typeServiceId}`, serviceData);
+  addTypeService(typeService: any): Observable<any> {
+    return this.http.post<any>(`${this.baseURL}/field/service/type`, typeService);
+  }
+
+  updateTypeService(typeServiceId: number, updatedTypeService: any): Observable<any> {
+    return this.http.put<any>(`${this.baseURL}/field/service/type/${typeServiceId}`, updatedTypeService);
+  }
+
+  activateTypeService(typeServiceId: number, activationData: any): Observable<any> {
+    return this.http.put<any>(`${this.baseURL}/field/service/type/${typeServiceId}/active`, activationData);
   }
 
   deleteTypeService(typeServiceId: number): Observable<any> {
-    return this.http.delete(`${this.baseURL}/user/field/service/type/${typeServiceId}`);
+    return this.http.delete<any>(`${this.baseURL}/field/service/type/${typeServiceId}`);
   }
 
   // Métodos relacionados con AppServices
+
   getAllAppServices(fieldId: number): Observable<any> {
     return this.http.get(`${this.baseURL}/user/field/${fieldId}/service`);
   }
@@ -139,9 +196,34 @@ addField(userId: number, fieldData: any, httpOptions?: { headers: HttpHeaders })
     return this.http.delete(`${this.baseURL}/user/field/${fieldId}/service/${serviceId}`);
   }
 
+  // Métodos relacionados con Tipos de localidades
+  getLocationMisiones(location: string): Observable<any> {
+    return this.http.get<any>(`${this.baseURL}/${location}`);
+  }
+
+  getLocationMisionesParams(name: string, sortDir: string): Observable<any> {
+    const params = { name: name, sortDir: sortDir };
+    return this.http.get<any>(this.baseURL, { params: params });
+  }
+
+  addPullLocationMisiones(locations: any[]): Observable<any> {
+    return this.http.post<any>(`${this.baseURL}/all`, locations);
+  }
+
+  addLocationMisiones(location: any): Observable<any> {
+    return this.http.post<any>(this.baseURL, location);
+  }
+
+  updateLocationMisiones(location: any): Observable<any> {
+    return this.http.put<any>(`${this.baseURL}/${location.id}`, location);
+  }
+
+  getLocationID(id: number): Observable<any> {
+    return this.http.get<any>(`${this.baseURL}/${id}`);
+  }
+
   // Métodos adicionales
   getPruebaCambioIdioma(): Observable<any> {
     return this.http.get(`${this.baseURL}/person/demo`);
   }
 }
-

@@ -5,10 +5,11 @@ import { RegistrateComponent } from './registro/registro.component';
 import { RecuperContrasenaComponent } from './recuper-contrasena/recuper-contrasena.component';
 import { NuevaContrasenaComponent } from './nueva-contrasena/nueva-contrasena.component';
 import { BienvenidaComponent } from './bienvenida/bienvenida.component';
-
+import { PrimerRegistroComponent } from './primerRegistro/primerRegistro.component';
 
 const routes: Routes = [
   { path: 'bienvenida', component: BienvenidaComponent},
+  { path: 'primerRegistro', component: PrimerRegistroComponent},
   { path: 'login', component: LoginComponent },
   { path: 'registro', component: RegistrateComponent },
   { path: 'recuper-contrasena', component: RecuperContrasenaComponent },

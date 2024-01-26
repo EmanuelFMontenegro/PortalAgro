@@ -10,12 +10,9 @@ export class BienvenidaComponent implements OnInit {
   constructor(private router: Router) {}
 
   ngOnInit() {
-    setTimeout(() => {
-      this.redirectToLogin();
-    }, 3000); 
-  }
 
-  redirectToLogin() {
-    this.router.navigate(['/login']);
+    setTimeout(() => {
+      this.router.navigate(['/login']);
+    }, 2000);
   }
 }
