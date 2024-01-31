@@ -9,7 +9,8 @@ import { PerfilComponent } from './perfil/perfil.component';
 import { CampoComponent } from './campo/campo.component';
 import { DashboardComponent } from './dashboard.component';
 import { BienvenidaComponent } from 'src/app/auth/bienvenida/bienvenida.component';
-
+import { DetalleCampoComponent } from './detalle-campo/detalle-campo.component';
+import { LoteComponent } from './lote/lote.component';
 import { AuthGuard } from 'src/app/core/guards/auth.guard';
 
 const routes: Routes = [
@@ -22,6 +23,8 @@ const routes: Routes = [
       { path: 'bienvenida', component: BienvenidaComponent},
       { path: 'geolocalizacion', component: GeolocalizacionComponent},
       { path: 'inicio', component:InicioComponent},
+      { path: 'detalle-campo', component: DetalleCampoComponent},
+      { path: 'lote', component: LoteComponent},
       { path: 'servicios', component: ServiciosComponent},
       { path: 'productos', component: ProductosComponent},
       { path: 'campo', component: CampoComponent},

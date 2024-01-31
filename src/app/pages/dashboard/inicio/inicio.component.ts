@@ -32,7 +32,7 @@ export class InicioComponent implements OnInit {
   nombreCampo: string = '';
   localidad: string = '';
   nombreLocalidad: string = '';
- private userId: number | any;
+  private userId: number | any;
   private personId: number | any;
   public userEmail: string | null = null;
   localidades: any[] = [];
@@ -52,8 +52,8 @@ export class InicioComponent implements OnInit {
   locationTouched = false;
   nameTouched = false;
   dimensionsTouched = false;
-  // geolocationTouched = false;
   observationTouched=false;
+  campoSeleccionado: any;
   constructor(
     private authService: AuthService,
     private apiService: ApiService,
@@ -81,8 +81,8 @@ export class InicioComponent implements OnInit {
   }
 
   BtnRegisterCampos():void {
-    console.log("diste click en btnregister")
-    // Utiliza el servicio Router para navegar a la página de registro de campos
+
+
     this.router.navigate(['/dashboard/campo']);
   }
 
@@ -96,7 +96,7 @@ export class InicioComponent implements OnInit {
     this.apiService.getFields(this.userId).subscribe(
       (response) => {
         this.campos = response.list[0];
-        console.log('datos de los campos',this.campos)
+        // console.log('datos de los campos',this.campos)
       },
       (error) => {
         console.error('Error al obtener campos:', error);
@@ -113,30 +113,21 @@ export class InicioComponent implements OnInit {
       this.personId = this.userId;
 
       if (this.userId !== null && this.personId !== null) {
-        // Obtener localidades primero
+
         this.apiService.getLocationMisiones('location').subscribe(
           (localidades) => {
             this.localidades = localidades;
 
-            // Declarar nombreLocalidad antes de su uso
             let nombreLocalidad: string = '';
 
-            // Luego obtener datos del usuario
+
             this.apiService.getPersonByIdOperador(this.userId, this.personId).subscribe(
               (data) => {
-                console.log('Datos del usuario:', data);
 
-                // Obtener información de la localidad
                 const localidad = this.localidades.find((loc) => loc.id === data.location_id);
                 nombreLocalidad = localidad ? localidad.name : '';
 
-                // Mostrar información en la consola
-                console.log('Información de la localidad:', nombreLocalidad);
-
-                // Asignar el nombre de la localidad a una propiedad de la clase
                 this.nombreLocalidad = nombreLocalidad;
-
-                // Continuar con el resto de la lógica
                 this.nombre = data.name;
                 this.apellido = data.lastname;
                 this.dniCuit = data.dniCuit;
@@ -222,11 +213,10 @@ export class InicioComponent implements OnInit {
 
     return isAddressValid && isLocationValid && isNameValid && areDimensionsValid && isObservationValid ;
   }
+  verMas(campo: any): void {
 
-
-
-
-  verMas(numero: number): void {
-
+    this.campoSeleccionado = campo;
+    this.router.navigate(['dashboard/detalle-campo', { campoSeleccionado: JSON.stringify(campo) }]);
   }
+
 }

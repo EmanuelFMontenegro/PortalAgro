@@ -63,7 +63,6 @@ export class PrimerRegistroComponent implements OnInit, AfterViewInit {
     this.apiService.getLocationMisiones('location').subscribe(
       (localidades) => {
         this.localidades = localidades;
-        console.log('Estas son las localidades', this.localidades);
         this.filteredLocalidades = this.filtroLocalidades.valueChanges.pipe(
           startWith(''),
           map((value) => this.filtrarLocalidades(value ?? '')),

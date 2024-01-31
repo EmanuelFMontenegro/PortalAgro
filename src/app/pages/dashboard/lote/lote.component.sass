@@ -1,0 +1,81 @@
+$primary-color: #3CA749
+$secondary-color: #8FCA8F
+$hover-color: #32963f
+$error-color: #d9534f
+$light-grey: #f4f4f4
+$dark-grey: #454545
+$medium-grey: #808080
+$border-color: #ddd
+$icon-color: #808080
+$font-family: 'Montserrat', sans-serif
+
+body
+  font-family: $font-family
+
+.titulo-bienvenida
+  color: $dark-grey
+  font-size: 1.5em
+  font-family: $font-family
+  margin-top: 25px
+  margin-left: 17px
+
+.container
+  color: #454545
+  font-size: 1.4em
+  font-family: "Montserrat", sans-serif
+  margin-top: 31px
+  margin-left: 17px
+  width: 100%
+
+  .card
+    background-color: $light-grey
+    padding: 20px
+    border-radius: 10px
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3)
+    margin: 20px
+    width: 90%
+    margin-top: -12px
+
+    &.user-card
+      display: flex
+      margin-top: 8px
+      flex-direction: row
+      align-items: center
+      gap: 20px
+
+      .avatar
+        display: flex
+        justify-content: center
+        align-items: center
+        border-radius: 50%
+        border: 3px solid $primary-color
+        width: 90px
+        height: 90px
+        background-color: white
+
+        mat-icon
+          display: contents
+          color: $icon-color
+          font-size: 70px
+
+    p
+      font-size: 15px
+      color: $icon-color
+      font-weight: bold
+
+    .email
+      font-size: 14px
+      color: $medium-grey
+      font-weight: bold
+
+    .name
+      font-size: 18px
+      color: $dark-grey
+      font-weight: bold
+
+    .titulo-detalle-campo
+      color: $primary-color
+      font-family: 'Montserrat', sans-serif
+      font-size: 1.1em
+      font-weight: bold
+      margin-bottom: 20px

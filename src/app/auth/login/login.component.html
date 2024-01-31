@@ -20,7 +20,8 @@
       </div>
 
       <div class="password-field-container">
-        <input matInput type="password" id="password" [formControl]="passwordControl" placeholder="Contraseña">
+        <input matInput type="password" id="password" [formControl]="passwordControl" placeholder="Contraseña"
+          [class.blurred]="!passwordVisible">
         <mat-icon class="toggle-password" (click)="togglePasswordVisibility()">
           {{ passwordVisible ? 'visibility' :'visibility_off' }}
         </mat-icon>
@@ -34,8 +35,7 @@
         </mat-error>
       </div>
 
-      <button mat-raised-button type="submit" class="btn-submit mt-3" id="submitBtn"
-        [ngClass]="{'enabled': login.valid}" [disabled]="!login.valid">
+      <button mat-raised-button type="submit" class="btn-submit mt-3" id="submitBtn">
         Iniciar Sesión
       </button>
 

@@ -44,7 +44,7 @@ export class LoginComponent {
     Validators.email,
     this.usernameControl = new FormControl('', [Validators.required, Validators.email]);
     this.passwordControl = new FormControl('', [Validators.required, Validators.minLength(8)]);
-    this.usernameControl.setValue('emamonte777@gmail.com'); // Define el correo electrónico predefinido
+    this.usernameControl.setValue('emanuel_efm@hotmail.com'); // Define el correo electrónico predefinido
     this.passwordControl.setValue('Agustin15524201');
     this.login = new FormGroup({
       username: this.usernameControl,
@@ -130,7 +130,7 @@ export class LoginComponent {
 
             this.apiService.getPersonByIdOperador(userId, personId).subscribe(
               (userData) => {
-                console.log('Datos del usuario:', userData);
+                // console.log('Datos del usuario:', userData);
 
                 if (userData && userData.name) {
                   this.router.navigate(['/dashboard']);
@@ -158,7 +158,7 @@ export class LoginComponent {
             localStorage.setItem('token', response.body.token);
 
             // Redirigir directamente a 'primer-registro'
-            this.router.navigate(['/primer-registro']);
+            this.router.navigate(['/primerRegistro']);
 
             this.mostrarMensajeExitoso();
             this.login.reset();
@@ -186,7 +186,7 @@ export class LoginComponent {
           } else if (err.status === 400 && err.error.code === 4016) {
             this.toastr.error('Error de contraseña. Por favor intenta de nuevo.','Atencion');
           } else if (err.status === 401 && err.error.code === 4001) {
-            this.toastr.warning('Por favor revisa tu casilla de correo electrónico para activar tu cuenta.', 'Advertencia', { closeButton: true });
+            this.toastr.warning('Por favor revisa tu casilla de correo electrónico para activar tu cuenta.', 'Atención', { closeButton: true });
           } else {
             const errorMessage = err.error.message || 'Error desconocido';
             this.toastr.error(errorMessage, 'Error');

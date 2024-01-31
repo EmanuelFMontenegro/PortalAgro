@@ -13,6 +13,6 @@ export class BienvenidaComponent implements OnInit {
 
     setTimeout(() => {
       this.router.navigate(['/login']);
-    }, 2000);
-  }
+    }, 3000);
+   }
 }

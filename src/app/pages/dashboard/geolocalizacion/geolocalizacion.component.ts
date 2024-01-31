@@ -20,8 +20,9 @@ interface FieldArray {
 }
 interface AddressData {
   address: string;
-  location: string;
+  localidad_id: string;
 }
+
 
 interface ContactData {
   id: number;
@@ -125,7 +126,7 @@ export class GeolocalizacionComponent implements AfterViewInit {
       if (this.userId !== null) {
         this.apiService.getFields(this.userId).subscribe(
           (response: any) => {
-          if (response && response.list && Array.isArray(response.list) && response.list.length > 0) {
+            if (response && response.list && Array.isArray(response.list) && response.list.length > 0) {
               this.fields = response.list[0].map((item: any) => {
                 const field: FieldData = {
                   id: item.id || 0,
@@ -135,7 +136,7 @@ export class GeolocalizacionComponent implements AfterViewInit {
                   geolocation: item.geolocation || '',
                   address: {
                     address: item.address ? item.address.address || '' : '',
-                    location: item.address ? item.address.location || '' : ''
+                    localidad_id: item.address ? item.address.localidad_id || '' : ''  // Cambio aquí
                   },
                   contact: {
                     id: item.contact ? item.contact.id || 0 : 0,
@@ -148,6 +149,7 @@ export class GeolocalizacionComponent implements AfterViewInit {
               });
               this.selectedFieldId = this.fields[0].id;
             } else {
+              // ...
             }
           },
           (error) => {
@@ -156,6 +158,7 @@ export class GeolocalizacionComponent implements AfterViewInit {
         );
       }
     }
+
 
   ngAfterViewInit(): void {
     if (this.userId !== null) {
