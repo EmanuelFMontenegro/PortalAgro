@@ -166,10 +166,10 @@ INSERT INTO public.people (id, descriptions, dni, lastname, name, address_id, co
 INSERT INTO public.people (id, descriptions, dni, lastname, name, address_id, contact_id) VALUES (3, NULL, '3333333', 'user03', 'user03', 3, 3);
 INSERT INTO public.people (id, descriptions, dni, lastname, name, address_id, contact_id) VALUES (4, NULL, NULL, NULL, NULL, 4, 4);
 
-INSERT INTO public.users ( accountnonlocked, account_active, failedattempts,  password,  username) VALUES ( true, true, 0,  '$2a$10$CJOYTR.EwwYTyVnIvfWJielqoyRnoYFFV3zgsXFugSWoSDdm3.nTu',  'orozcocristian860@gmail.com');
-INSERT INTO public.users ( accountnonlocked, account_active, failedattempts,  password,  username) VALUES ( true, true, 0,  '$2a$10$S1F70LhgKzv1IgwsgL6Fi.dR9FDETDe.TmCXdFwQsjYugZnV.4Oaa',  'user01@gmail.com');
-INSERT INTO public.users ( accountnonlocked, account_active, failedattempts,  password,  username) VALUES ( true, true, 0,  '$2a$10$Jxw0bIfPLB0WgaaZq77TmutOk5c0ZNl6rklooR/pqAtqMyLE3/Scy',  'user02@gmail.com');
-INSERT INTO public.users ( accountnonlocked, account_active, failedattempts,  password, username) VALUES (  true, true, 0, '$2a$10$I4enFYIa6YogBXLkYo9f4Oey6lC4GfuVdpV4tEjI2vDxdYYoiWH.q', 'cristianwolf86@gmail.com');
+INSERT INTO public.users ( accountnonlocked, account_active, failedattempts,  password,  username) VALUES ( true, true, 0,  '$2a$10$I4enFYIa6YogBXLkYo9f4Oey6lC4GfuVdpV4tEjI2vDxdYYoiWH.q',  'orozcocristian860@gmail.com');
+INSERT INTO public.users ( accountnonlocked, account_active, failedattempts,  password,  username) VALUES ( true, true, 0,  '$2a$10$I4enFYIa6YogBXLkYo9f4Oey6lC4GfuVdpV4tEjI2vDxdYYoiWH.q',  'user01@gmail.com');
+INSERT INTO public.users ( accountnonlocked, account_active, failedattempts,  password,  username) VALUES ( true, true, 0,  '$2a$10$I4enFYIa6YogBXLkYo9f4Oey6lC4GfuVdpV4tEjI2vDxdYYoiWH.q',  'user02@gmail.com');
+INSERT INTO public.users ( accountnonlocked, account_active, failedattempts,  password, username) VALUES (  true, true, 0,  '$2a$10$I4enFYIa6YogBXLkYo9f4Oey6lC4GfuVdpV4tEjI2vDxdYYoiWH.q', 'cristianwolf86@gmail.com');
 
 INSERT INTO public.users_roles (user_id, role_id) VALUES (1, 1);
 INSERT INTO public.users_roles (user_id, role_id) VALUES (1, 3);
