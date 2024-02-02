@@ -12,24 +12,41 @@
       <p class="name">{{ nombre }} {{ apellido }}</p>
       <p class="email">{{ userEmail }}</p>
     </div>
+    <div class="volver-button" (click)="volver()">
+      <mat-icon style="color:green">arrow_back</mat-icon>
+      <span class="letra_btn_volver">Volver</span>
+    </div>
   </div>
 
-  <h2 class="titulo-detalle-campo">Detalle de Campos</h2>
-  <div class="card-main-card">
+<h4 class="titulo-detalle-campo">Detalle de Campos</h4>
+  <div class="card">
 
     <div class="campo-card">
-      <div class="campo-img-card primary-image">
+      <div class="campo-image-container">
         <img src="/assets/img/campo_{{ campoSeleccionado.id }}.png" alt="Campo Image" class="campo-image">
       </div>
-      <div class="thumbnail-container">
+      <div class="card-campo-secundarias">
         <div class="thumbnail-image">
-          <img src="/assets/img/campo_1.png" alt="campo-image_1">
+          <img src="/assets/img/campo_1.png" alt="campo" class="foto-campo">
         </div>
         <div class="thumbnail-image">
-          <img src="/assets/img/campo_2.png" alt="campo-image_2">
+          <img src="/assets/img/campo_2.png" alt="geolocalización" class="foto-geo">
         </div>
       </div>
-
+      <!--Logica para cambiar de imagen -->
+      <!-- <div class="campo-card">
+        <div class="campo-image-container">
+          <img [src]="imagenPrincipal" alt="Campo Image" class="campo-image">
+        </div>
+        <div class="card-campo-secundarias">
+          <div class="thumbnail-image">
+            <img (click)="cambiarImagenPrincipal('src/assets/img/campo_2.png')" alt="campo" class="foto-campo">
+          </div>
+          <div class="thumbnail-image">
+            <img (click)="cambiarImagenPrincipal('src/assets/img/campo_3.png')" alt="geolocalización" class="foto-geo">
+          </div>
+        </div>
+      </div> -->
     </div>
     <div class="campo-details-card">
       <h4>{{ campoSeleccionado.name }}</h4>
@@ -43,4 +60,9 @@
       </div>
     </div>
   </div>
+
+
+
+
+
 </div>

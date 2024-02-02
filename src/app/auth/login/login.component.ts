@@ -44,8 +44,8 @@ export class LoginComponent {
     Validators.email,
     this.usernameControl = new FormControl('', [Validators.required, Validators.email]);
     this.passwordControl = new FormControl('', [Validators.required, Validators.minLength(8)]);
-    this.usernameControl.setValue('emanuel_efm@hotmail.com'); // Define el correo electrónico predefinido
-    this.passwordControl.setValue('Agustin15524201');
+    this.usernameControl.setValue('cristianwolf86@gmail.com'); // Define el correo electrónico predefinido
+    this.passwordControl.setValue('Donna5722');
     this.login = new FormGroup({
       username: this.usernameControl,
       password: this.passwordControl

@@ -26,6 +26,7 @@ interface DecodedToken {
   styleUrls: ['./detalle-campo.component.sass']
 })
 export class DetalleCampoComponent {
+  imagenPrincipal: string = '';
   nombre: string = '';
   campo:any;
   apellido: string = '';
@@ -84,6 +85,7 @@ export class DetalleCampoComponent {
         this.campoSeleccionado = JSON.parse(campoSeleccionadoParam);
       }
     });
+    this.imagenPrincipal = `/assets/img/campo_${this.campoSeleccionado.id}.png`;
   }
 
 
@@ -95,7 +97,9 @@ export class DetalleCampoComponent {
       this.userEmail = decoded.sub;
     }
   }
-
+  cambiarImagenPrincipal(ruta: string): void {
+    this.imagenPrincipal = ruta;
+  }
   cargarDatosDeUsuario() {
     const decoded: DecodedToken = jwtDecode(this.authService.getToken() || '');
     if ('userId' in decoded && 'sub' in decoded && 'roles' in decoded) {
@@ -159,11 +163,14 @@ export class DetalleCampoComponent {
     );
   }
 
+  volver(){
+    this.router.navigate(['dashboard/inicio']);
 
+}
 
 
   geolocalizar() {
-    // Implementación de la función geolocalizar
+    this.router.navigate(['dashboard/geolocalizacion']);
   }
 
   verLotes() {

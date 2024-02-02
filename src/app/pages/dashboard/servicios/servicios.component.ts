@@ -94,12 +94,12 @@ export class ServiciosComponent implements OnInit {
 
   onSubmit(): void {
     if (this.userId !== null && this.token) {
-      // Loguear el token antes de la solicitud
-      console.log('Token enviado:', this.token);
+      // Log the token before the request
+      console.log('Token sent:', this.token);
 
       this.apiService.getFields(this.userId).subscribe(
         (fieldsResponse: any) => {
-          console.log('Respuesta de campos:', fieldsResponse);
+          console.log('Fields response:', fieldsResponse);
 
           const fieldId = fieldsResponse?.list?.[0]?.[0]?.id || null;
 
@@ -111,32 +111,33 @@ export class ServiciosComponent implements OnInit {
               idTypeService: this.tipoServicioMap[this.solicitud.tipoServicio]
             };
 
-            // Loguear los datos del servicio antes de la solicitud
-            console.log('Datos del servicio a enviar:', servicio);
+            // Log service data before the request
+            console.log('Service data to send:', servicio);
 
-            this.apiService.addAppService(fieldId, servicio).subscribe(
+            this.apiService.addTypeServicesAdmin(servicio).subscribe(
               (serviceResponse: any) => {
-                console.log('Respuesta del servicio:', serviceResponse);
-                this.toastr.success('Solicitud de servicio enviada al campo específico');
-                // Manejar la respuesta del servicio si es necesario
+                console.log('Service response:', serviceResponse);
+                this.toastr.success('Service request sent to the specific field');
+                // Handle service response if necessary
               },
               (serviceError: any) => {
-                this.toastr.error('Error al enviar la solicitud de servicio al campo específico');
-                console.error('Error al agregar el servicio al campo:', serviceError);
-                // Manejar el error del servicio si es necesario
+                this.toastr.error('Error sending service request to the specific field');
+                console.error('Error adding service to the field:', serviceError);
+                // Handle service error if necessary
               }
             );
           } else {
-            console.error('No se encontró ningún campo para este usuario');
+            console.error('No field found for this user');
           }
         },
         (fieldsError: any) => {
-          console.error('Error al cargar los campos del usuario:', fieldsError);
-          // Manejar el error al cargar los campos si es necesario
+          console.error('Error loading user fields:', fieldsError);
+          // Handle error loading fields if necessary
         }
       );
     }
   }
+
 
 
 

@@ -19,6 +19,16 @@ body
   margin-top: 25px
   margin-left: 17px
 
+.titulo-detalle-campo
+  color: #3CA749
+  font-family: "Montserrat", sans-serif
+  font-size: 1.1em
+  font-weight: bold
+  margin-bottom: 10px
+  display: block
+  display: flex
+  margin-left: 24px
+
 .container
   color: #454545
   font-size: 1.4em
@@ -27,7 +37,24 @@ body
   margin-left: 17px
   width: 100%
 
+  .volver-button
+    display: flex
+    align-items: center
+    cursor: pointer
+    margin-top: 10px
+    margin-left: 62%
+
+  .letra_btn_volver
+    font-size: 14px
+    font-family: $font-family
+    color: $primary-color
+    font-weight: bold
+
+  mat-icon
+    margin-right: 5px
+
   .card
+    display: flex
     background-color: $light-grey
     padding: 20px
     border-radius: 10px
@@ -35,6 +62,7 @@ body
     margin: 20px
     width: 90%
     margin-top: -12px
+    gap: 10px
 
     &.user-card
       display: flex
@@ -73,116 +101,114 @@ body
       color: $dark-grey
       font-weight: bold
 
-    .titulo-detalle-campo
-      color: $primary-color
-      font-family: 'Montserrat', sans-serif
-      font-size: 1.1em
-      font-weight: bold
-      margin-bottom: 20px
+  .card
+    background-color: #f4f4f4
+    display: flex
+    padding: 20px
+    border-radius: 10px
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3)
+    margin: 20px
+    width: 90%
+    margin-top: -12px
 
-.card-main-card
-  display: grid
-  grid-template-columns: 1fr
-  grid-gap: 20px
-  width: 93%
-  margin-left: 17px
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.6)
+    .campo-details-card
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.6)
+      overflow: hidden
+      padding: 15px
+      margin-bottom: 10px
+      height: auto
+      width: 40%
 
-.titulo-detalle-campo
-  text-align: center
-  grid-column: 1
+    .card-main-card
+      display: flex
+      grid-template-columns: 1fr
+      width: 92%
+      margin-left: 17px
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.6)
 
-.campo-card
-  display: grid
-  grid-template-columns: 50% 1fr
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.6)
-  overflow: hidden
-  padding: 15px
-  margin-bottom: 10px
+    .campo-card
+      display: flex
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.6)
+      overflow: hidden
+      padding: 15px
+      margin-bottom: 10px
+      flex-direction: column
+      height: auto
+      width: 50%
 
-.campo-details-card
-  padding: 16px
-  background-color: #f4f4f4
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.6)
-  width: 66%
-  height: 56%
-  margin-left: 11px
-  font-size: 17px
-  overflow: overlay
+    .campo-image-container
+      width: 100%
+      max-height: 300px
+      overflow: hidden
 
-.campo-image-container
-  display: flex
-  align-items: center
-  justify-content: center
+    .campo-image
+      object-fit: cover
+      width: 98%
+      border-radius: 5px
+      height: 300px
 
-.campo-image
+    .card-campo-secundarias
+      display: flex
+      gap: 10px
+      margin-top: 10px
+      width: 100%
 
-  width: 100%
-  max-width: 100%
-  height: auto
+    .foto-campo
+      bject-fit: cover
+      width: 95%
+      border-radius: 5px
 
-.thumbnail-container
-  display: flex
-  gap: 10px
-  margin-top: 10px
+    .foto-geo
+      object-fit: cover
+      width: 95%
+      border-radius: 5px
 
-.thumbnail-image
-  width: 50%
-  height: auto
-  overflow: hidden
-  cursor: pointer
+    .campo-details-card h4,
+    .campo-details-card p
+      margin-bottom: 10px
 
-.details-campo
-  display: flex
-  flex-direction: column
+  .campo-buttons
+    display: flex
+    gap: 10px
+    margin-top: 62%
 
-.campo-details-card h4,
-.campo-details-card p
-  margin-bottom: 10px
+  .botones-servicio
+    display: flex
+    justify-content: flex-start
+    gap: 8px
+    margin-top: -16px
+    margin-bottom: 20px
+    flex-direction: column-reverse
+    align-content: center
+    align-items: center
 
-.campo-buttons
-  margin-top: 10px
-  display: flex
-  gap: 10px
-  margin-top: 80px
+  button
+    background-color: $primary-color
+    width: 100%
+    color: white
+    cursor: pointer
+    padding: 8px 18px
+    border: 1px solid transparent
+    border-radius: 5px
+    transition: background-color 0.3s, border-color 0.3s
+    font-size: 13px
+    font-family: 'Montserrat', sans-serif
+    font-weight: bold
 
-.botones-servicio
-  display: flex
-  justify-content: flex-start
-  gap: 8px
-  margin-top: -16px
-  margin-bottom: 20px
-  flex-direction: column-reverse
-  align-content: center
-  align-items: center
+  button.geolocalizar
+    width: 86%
+    background-color: white
+    border: 1px solid $primary-color
+    color: #3CA749
+    // height: 30px
 
-button
-  background-color: $primary-color
-  width: 100%
-  color: white
-  cursor: pointer
-  padding: 8px 18px
-  border: 1px solid transparent
-  border-radius: 5px
-  transition: background-color 0.3s, border-color 0.3s
-  font-size: 0.85em
-  font-family: 'Montserrat', sans-serif
-  font-weight: bold
+  // button.lotes
+  //   width: 86%
+  //   // background-color:$primary-color
+  //   border: 1px solid transparent
+  //   color: #3CA749
+  //   height: 30px
 
-button.geolocalizar
-  width: 86%
-  background-color: white
-  border: 1px solid $primary-color
-  color: #3CA749
-  // height: 30px
-
-// button.lotes
-//   width: 86%
-//   // background-color:$primary-color
-//   border: 1px solid transparent
-//   color: #3CA749
-//   height: 30px
-
-button:hover
-  // background-color: #f8f8f8
-  border-color: darken($primary-color, 10%)
+  button:hover
+    // background-color: #f8f8f8
+    border-color: darken($primary-color, 10%)

@@ -10,7 +10,7 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
-  // Métodos de autenticación
+  // < -- Métodos de autenticación Auth -- >
   registrarUsuario(username: string, password: string): Observable<any> {
     return this.http.post(`${this.baseURL}/auth/register`, { username, password });
   }
@@ -84,7 +84,12 @@ export class ApiService {
     return this.http.put<any>(url, personData);
   }
 
-
+  //  <<<<-------METODOS PARA ROLES------>>>>>
+    // GET: getRoles-ADMIN
+  getRolesAdmin(): Observable<any> {
+    const url = `${this.baseURL}`;
+    return this.http.get(url);
+  }
 
 //  <<<<-------METODOS PARA CAMPOS------>>>>>
 
@@ -130,7 +135,7 @@ export class ApiService {
   }
 
 
-  // Métodos relacionados con Geolocalizacion
+  // <<<<-------METODOS PARA GEOLOCALIZACION------>>>>>
 
   getGeolocationField(userId: number, fieldId: number): Observable<any> {
     return this.http.get<any>(`${this.baseURL}/user/${userId}/field/${fieldId}/geolocation`);
@@ -148,55 +153,8 @@ export class ApiService {
     return this.http.get(`${this.baseURL}/user/${userId}/field?pageNo=${pageNo}&pageSize=${pageSize}&sortBy=${sortBy}&sortDir=${sortDir}`);
   }
 
-  // Métodos relacionados con Tipos de Servicios
+   // <<<<-------METODOS PARA LOCALIDADES------>>>>>
 
-  getAllTypeServices(): Observable<any> {
-    return this.http.get<any>(`${this.baseURL}/field/service/type`);
-  }
-
-  getAllTypeServicesAdmin(): Observable<any> {
-    return this.http.get<any>(`${this.baseURL}/field/service/type/all?isActive=true`);
-  }
-
-  addTypeService(typeService: any): Observable<any> {
-    return this.http.post<any>(`${this.baseURL}/field/service/type`, typeService);
-  }
-
-  updateTypeService(typeServiceId: number, updatedTypeService: any): Observable<any> {
-    return this.http.put<any>(`${this.baseURL}/field/service/type/${typeServiceId}`, updatedTypeService);
-  }
-
-  activateTypeService(typeServiceId: number, activationData: any): Observable<any> {
-    return this.http.put<any>(`${this.baseURL}/field/service/type/${typeServiceId}/active`, activationData);
-  }
-
-  deleteTypeService(typeServiceId: number): Observable<any> {
-    return this.http.delete<any>(`${this.baseURL}/field/service/type/${typeServiceId}`);
-  }
-
-  // Métodos relacionados con AppServices
-
-  getAllAppServices(fieldId: number): Observable<any> {
-    return this.http.get(`${this.baseURL}/user/field/${fieldId}/service`);
-  }
-
-  addAppService(fieldId: number, serviceData: any): Observable<any> {
-    return this.http.post(`${this.baseURL}/user/field/${fieldId}/service`, serviceData);
-  }
-
-  getAppServiceById(fieldId: number, serviceId: number): Observable<any> {
-    return this.http.get(`${this.baseURL}/user/field/${fieldId}/service/${serviceId}`);
-  }
-
-  updateAppService(fieldId: number, serviceId: number, serviceData: any): Observable<any> {
-    return this.http.put(`${this.baseURL}/user/field/${fieldId}/service/${serviceId}`, serviceData);
-  }
-
-  deleteAppService(fieldId: number, serviceId: number): Observable<any> {
-    return this.http.delete(`${this.baseURL}/user/field/${fieldId}/service/${serviceId}`);
-  }
-
-  // Métodos relacionados con Tipos de localidades
   getLocationMisiones(location: string): Observable<any> {
     return this.http.get<any>(`${this.baseURL}/${location}`);
   }
@@ -222,8 +180,173 @@ export class ApiService {
     return this.http.get<any>(`${this.baseURL}/${id}`);
   }
 
-  // Métodos adicionales
+  // <<<<-------METODOS DE IDIOMAS------>>>>>
+
   getPruebaCambioIdioma(): Observable<any> {
     return this.http.get(`${this.baseURL}/person/demo`);
+  }
+
+  // <<<<-------METODOS PARA PLANTACION------>>>>>
+
+  // GET: getAllTypePlantation-OPERADOR
+  getAllTypePlantationOperador(): Observable<any> {
+    const url = `${this.baseURL}/type`;
+    return this.http.get(url);
+  }
+
+  // GET: getAllTypePlantationADMIN
+  getAllTypePlantationAdmin(): Observable<any> {
+    const url = `${this.baseURL}/all?isActive=true`;
+    return this.http.get(url);
+  }
+
+  // POST: AddTypePlantation-ADMIN
+  addTypePlantationAdmin(data: any): Observable<any> {
+    const url = `${this.baseURL}/type`;
+    return this.http.post(url, data);
+  }
+
+  // PUT: updateTypePlantation-ADMIN
+  updateTypePlantationAdmin(id: number, data: any): Observable<any> {
+    const url = `${this.baseURL}/type/${id}`;
+    return this.http.put(url, data);
+  }
+
+  // PUT: activeTypePlantationById-ADMIN
+  activeTypePlantationAdmin(id: number): Observable<any> {
+    const url = `${this.baseURL}/type/${id}/active`;
+    return this.http.put(url, {});
+  }
+
+  // DELETE: deleteTypePlantation-ADMIN
+  deleteTypePlantationAdmin(id: number): Observable<any> {
+    const url = `${this.baseURL}/type/${id}`;
+    return this.http.delete(url);
+  }
+
+  // < ---- METODOS PARA LOTES --- >
+
+  // GET: getAll-Plots-OPERADOR
+  getAllPlotsOperador(userId: number, fieldId?: number): Observable<any> {
+    const url = fieldId
+      ? `${this.baseURL}/user/${userId}/field/${fieldId}/plot`
+      : `${this.baseURL}/user/${userId}/plot`;
+
+    return this.http.get(url);
+  }
+
+
+
+  // GET: getAll-Plots-ADMIN
+getAllPlotsAdmin(userId: number, fieldId: number): Observable<any> {
+  const url = `${this.baseURL}/user/${userId}/field/${fieldId}/plot/all`;
+  return this.http.get(url);
+}
+
+
+
+  // POST: add-Plots-OPERADOR
+  addPlotOperador(data: any): Observable<any> {
+    const url = `${this.baseURL}`;
+    return this.http.post(url, data);
+  }
+
+  // PUT: update-Plots-OPERADOR
+  updatePlotOperador(id: number, data: any): Observable<any> {
+    const url = `${this.baseURL}/${id}`;
+    return this.http.put(url, data);
+  }
+
+  // DELETE: delete-LOGICAL-Plots-OPERADOR
+  deleteLogicalPlotOperador(id: number): Observable<any> {
+    const url = `${this.baseURL}/${id}`;
+    return this.http.delete(url);
+  }
+
+  // PUT: activate-Plots-ADMIN
+  activatePlotAdmin(id: number): Observable<any> {
+    const url = `${this.baseURL}/${id}/activate`;
+    return this.http.put(url, {});
+  }
+
+  // GET: get-PlotsById-OPERADOR
+  getPlotByIdOperador(id: number): Observable<any> {
+    const url = `${this.baseURL}/${id}`;
+    return this.http.get(url);
+  }
+
+  // < -- METODO PARA SERVICIOS -- >
+
+  // GET: getAllTypeServices-OPERADOR
+  getAllTypeServicesOperador(): Observable<any> {
+    const url = `${this.baseURL}`;
+    return this.http.get(url);
+  }
+
+  // GET: getAllTypeServicesADMIN
+  getAllTypeServicesAdmin(): Observable<any> {
+    const url = `${this.baseURL}/all?isActive=true`;
+    return this.http.get(url);
+  }
+
+  // POST: AddTypeServices-ADMIN
+  addTypeServicesAdmin(data: any): Observable<any> {
+    const url = `${this.baseURL}`;
+    return this.http.post(url, data);
+  }
+
+  // PUT: updateTypeServices-ADMIN
+  updateTypeServicesAdmin(id: number, data: any): Observable<any> {
+    const url = `${this.baseURL}/${id}`;
+    return this.http.put(url, data);
+  }
+
+  // PUT: activeTypeServicesById-ADMIN
+  activeTypeServicesByIdAdmin(id: number): Observable<any> {
+    const url = `${this.baseURL}/${id}/active`;
+    return this.http.put(url, {});
+  }
+
+  // DELETE: deleteTypeServices-ADMIN
+  deleteTypeServicesAdmin(id: number): Observable<any> {
+    const url = `${this.baseURL}/${id}`;
+    return this.http.delete(url);
+  }
+
+  // < -- Metodo Pedidos de Servicios -- >
+  // GET: getAllPedidoServices-ADMIN
+  getAllPedidoServicesAdmin(): Observable<any> {
+    const url = `${this.baseURL}`;
+    return this.http.get(url);
+  }
+
+  // POST: addPedidoSericio-OPERADOR
+  addPedidoSericioOperador(data: any): Observable<any> {
+    const url = `${this.baseURL}`;
+    return this.http.post(url, data);
+  }
+
+  // GET: getOnePedidoServicesApp-OPERADOR
+  getOnePedidoServicesAppOperador(id: number): Observable<any> {
+    const url = `${this.baseURL}/${id}`;
+    return this.http.get(url);
+  }
+
+  // DELETE: deletePedidoServicesApp-OPERADOR
+  deletePedidoServicesAppOperador(id: number): Observable<any> {
+    const url = `${this.baseURL}/${id}`;
+    return this.http.delete(url);
+  }
+
+  // GET: getAllPedidoServicesByField-OPERADOR
+  getAllPedidoServicesByFieldOperador(): Observable<any> {
+    const url = `${this.baseURL}`;
+    return this.http.get(url);
+  }
+
+  // PUT: updatePedidoServices-OPERADOR
+  updatePedidoServicesOperador(id: number, data: any): Observable<any> {
+    const url = `${this.baseURL}/${id}`;
+    return this.http.put(url, data);
   }
 }

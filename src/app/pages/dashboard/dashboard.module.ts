@@ -39,8 +39,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { FormatDatePipe } from 'src/app/format-date.pipe';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatOptionModule } from '@angular/material/core';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatDialog } from '@angular/material/dialog';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DetalleCampoComponent } from './detalle-campo/detalle-campo.component';
 import { LoteComponent } from './lote/lote.component';
@@ -84,7 +84,8 @@ const CUSTOM_DATE_FORMATS = {
     MatInputModule,
     MatButtonModule,
     MatSnackBarModule,
-    MatTableDataSource,
+    MatTableModule,
+    MatPaginatorModule,
     ToastrModule.forRoot(),
     MatSidenavModule,
     MatListModule,
