@@ -10,11 +10,20 @@
 	</parent>
 	<groupId>com.dgitalfactory</groupId>
 	<artifactId>usersecurity</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.3-SNAPSHOT</version>
 	<name>user security</name>
 	<description>Security Users</description>
 	<properties>
 		<java.version>17</java.version>
+		<minio-version>8.5.7</minio-version>
+		<model-maper-version>3.2.0</model-maper-version>
+		<snakeyaml-version>2.7</snakeyaml-version>
+		<jsonwebtoken-version>0.11.5</jsonwebtoken-version>
+		<nimbusds-version>9.37.1</nimbusds-version>
+		<iharder-version>2.3.9</iharder-version>
+		<hibernate-version>8.0.1.Final</hibernate-version>
+		<springdoc-version>2.2.0</springdoc-version>
+<!--		<mapstruct-version>1.5.5.Final</mapstruct-version>-->
 	</properties>
 	<dependencies>
 		<dependency>
@@ -28,9 +37,8 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-commons</artifactId>
-			<version>3.2.2</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -43,6 +51,11 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
+			<groupId>org.snakeyaml</groupId>
+			<artifactId>snakeyaml-engine</artifactId>
+			<version>${snakeyaml-version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
@@ -51,7 +64,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
-<!--		DATA BASE-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -64,18 +76,18 @@
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-api</artifactId>
-			<version>0.11.5</version>
+			<version>${jsonwebtoken-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-impl</artifactId>
-			<version>0.11.5</version>
+			<version>${jsonwebtoken-version}</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-jackson</artifactId>
-			<version>0.11.5</version>
+			<version>${jsonwebtoken-version}</version>
 			<scope>runtime</scope>
 		</dependency>
         <dependency>
@@ -87,12 +99,12 @@
 		<dependency>
 			<groupId>com.nimbusds</groupId>
 			<artifactId>nimbus-jose-jwt</artifactId>
-			<version>9.37.1</version>
+			<version>${nimbusds-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>net.iharder</groupId>
 			<artifactId>base64</artifactId>
-			<version>2.3.9</version>
+			<version>${iharder-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -101,7 +113,7 @@
 		<dependency>
 			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
-			<version>8.0.1.Final</version>
+			<version>${hibernate-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -114,18 +126,27 @@
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-			<version>2.2.0</version>
+			<version>${springdoc-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.modelmapper</groupId>
 			<artifactId>modelmapper</artifactId>
-			<version>3.2.0</version>
+			<version>${model-maper-version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-webflux</artifactId>
+			<groupId>io.minio</groupId>
+			<artifactId>minio</artifactId>
+			<version>${minio-version}</version>
 		</dependency>
-
+<!--		<dependency>-->
+<!--			<groupId>org.mapstruct</groupId>-->
+<!--			<artifactId>mapstruct</artifactId>-->
+<!--			<version>${mapstruct-version}</version>-->
+<!--		</dependency>-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-hateoas</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

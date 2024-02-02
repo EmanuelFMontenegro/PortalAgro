@@ -64,11 +64,11 @@ public class EmailServide {
 
     @Value("${agro.email.support}")
     private String EMAIL_AGRO_SUPPORT;
-    @Value("${commons.publc.img.portal}")
-    private String URL_IMG_PORTAL;
+//    @Value("${commons.publc.img.portal}")
+//    private String URL_IMG_PORTAL;
 
-    @Value("${commons.publc.img.silicon}")
-    private String URL_IMG_SILICON;
+//    @Value("${commons.publc.img.silicon}")
+//    private String URL_IMG_SILICON;
 
     private ClassPathResource portal2 = new ClassPathResource("static/public/img/portal-del-productor-2.png");
     private ClassPathResource silicon = new ClassPathResource("static/public/img/SiliconM.png");
