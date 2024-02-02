@@ -1,0 +1,89 @@
+version: "3.9"
+services:
+  db-agro:
+    container_name: db-agro
+    image: postgres:15.2
+    restart: unless-stopped
+    environment:
+      # - DATABASE_HOST=127.0.0.1
+      - POSTGRES_USER=wolf103
+      - POSTGRES_PASSWORD=Donna103
+      - POSTGRES_DB=agro_sus
+    ports:
+      - "5432:5432"
+    expose:
+      - 5432
+    command: -p 5432
+    volumes:
+      - db:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "orozcocristian860@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "Donna103"
+    ports:
+      - "5050:80"
+    expose:
+      - 5050
+    depends_on:
+      - db-agro
+    networks:
+      - backend
+
+
+  # MinIO server service
+  minio-srv01:
+    container_name: minio-srv01
+    image: minio/minio:latest
+    restart: unless-stopped
+    volumes:
+      - ${MINIO_CONFIG_ROOT_DIR:-minio_config}:/root/.minio # Volumen para la configuración de MinIO
+      - ${MINIO_DATA_ROOT_DIR:-minio_data}:/data # Volumen para los datos de MinIO
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    expose:
+      - 9001
+      - 9000
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-Wolfminio}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-Donna*-*5722}
+#      MINIO_SERVER_URL: ${MINIO_SERVER_URL:-http://minio-srv01} # Ajusta la URL del servidor MinIO según tu configuración
+#      MINIO_BROWSER_REDIRECT_URL: ${MINIO_BROWSER_REDIRECT_URL:-http://minio-srv01/minio/ui/} # Ajusta la URL de redirección según tu configuración
+      MINIO_DEFAULT_BUCKET: '${DEFAULT_BUCKET:-agro-sus}'
+    networks:
+      - backend
+    command: server /data --console-address ":9001"
+
+  createbuckets:
+    image: minio/mc:latest
+    networks:
+      - backend
+    depends_on:
+      - minio-srv01
+    volumes:
+      - ./scripts:/docker-entrypoint-initdb.d
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc config host add ${ALIAS:-minio103} http://minio-srv01:9000 ${MINIO_ROOT_USER:-Wolfminio} ${MINIO_ROOT_PASSWORD:-Donna*-*5722}; 
+      /usr/bin/mc mb ${ALIAS:-minio103}/${DEFAULT_BUCKET:-agro-sus}; 
+      /usr/bin/mc admin policy create ${ALIAS:-minio103} ${POLICY:-limited_by_agro} /docker-entrypoint-initdb.d/limited_policy.json;
+      /usr/bin/mc admin user add ${ALIAS:-minio103} ${USER_MC:-agrouser} ${PASS_MC:-Donna*-*5722};
+      /usr/bin/mc admin policy attach ${ALIAS:-minio103} ${POLICY:-limited_by_agro} --user ${USER_MC:-agrouser};
+      exit 0; "
+
+
+volumes:
+  db:
+  minio_config: # Volumen para la configuración de MinIO
+  minio_data:   # Volumen para los datos de MinIO
+
+networks:
+  backend:
+    driver: bridge
+
