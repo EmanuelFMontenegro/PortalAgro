@@ -150,6 +150,13 @@ export class InicioComponent implements OnInit {
     }
   }
 
+  geolocalizar() {
+    if (this.campoSeleccionado) {
+      this.router.navigate(['dashboard/geolocalizacion'], { state: { campoSeleccionado: this.campoSeleccionado } });
+    } else {
+      this.toastr.warning('No se ha seleccionado ningún campo', 'Advertencia');
+    }
+  }
 
 
 
@@ -214,9 +221,14 @@ export class InicioComponent implements OnInit {
     return isAddressValid && isLocationValid && isNameValid && areDimensionsValid && isObservationValid ;
   }
   verMas(campo: any): void {
-
+    
     this.campoSeleccionado = campo;
-    this.router.navigate(['dashboard/detalle-campo', { campoSeleccionado: JSON.stringify(campo) }]);
+    localStorage.setItem('campoSeleccionado', JSON.stringify(this.campoSeleccionado));
+
+    // Navegar a la ruta del componente DetalleCampoComponent
+    this.router.navigate(['dashboard/detalle-campo']);
   }
+
+
 
 }

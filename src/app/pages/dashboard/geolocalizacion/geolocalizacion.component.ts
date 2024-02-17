@@ -36,14 +36,26 @@ interface FieldData {
   dimensions: number;
   observation: string;
   geolocation: string;
-  address: AddressData;
-  contact: ContactData;
+  address: {
+    id: number;
+    address: string;
+    location?: {
+      id: number;
+      name: string;
+    };
+  };
+  contact: {
+    id: number;
+    movilPhone: string | null;
+    telephone: string | null;
+  };
   person_id: number;
+  active: boolean;
 }
 interface DecodedToken {
-  emailId: string;
   userId: number;
-
+  sub: string;
+  roles: string;
 }
 
 @Component({
@@ -52,7 +64,19 @@ interface DecodedToken {
   styleUrls: ['./geolocalizacion.component.sass']
 })
 export class GeolocalizacionComponent implements AfterViewInit {
+  campoSeleccionado:any={}
+  nombreCampo: string;
+  dimensionesCampo: number;
+  detallesCampoVisible: boolean;
   @ViewChild('map') private mapContainer!: ElementRef;
+  nombre: string = '';
+  apellido: string = '';
+  descripcion: string = '';
+  dni: string = '';
+  descriptions: string = '';
+  locationId: number | null = null;
+  telephone: string = '';
+  localidades: any[] = [];
   private map!: L.Map;
   private currentMarker?: L.Marker;
   private userId: number | null;
@@ -64,6 +88,7 @@ export class GeolocalizacionComponent implements AfterViewInit {
   fields: FieldData[] = [];
   fieldHasGeolocation: boolean = false;
   canRegister: boolean = false;
+  private personId: number | any;
   private misionesBoundingBox = {
     northWest: { lat: -25.5, lon: -56.5 },
     southEast: { lat: -28.5, lon: -53.5 }
@@ -78,12 +103,32 @@ export class GeolocalizacionComponent implements AfterViewInit {
     private toastr: ToastrService,
 
   ) {
+    this.nombreCampo = '';
+    this.dimensionesCampo = 0;
+    this.detallesCampoVisible = false;
     this.token = this.authService.getToken();
     if (this.token) {
       const decoded: DecodedToken = jwtDecode(this.token);
       this.userId = decoded.userId;
-      this.userEmail = decoded.emailId;
+      this.userEmail = decoded.sub;;
+      this.personId = this.userId;
 
+      if (this.userId !== null && this.personId !== null) {
+        this.apiService.getPersonByIdOperador(this.userId, this.personId).subscribe(
+          (data) => {
+            this.nombre = data.name;
+            this.apellido = data.lastname;
+            this.dni = data.dni;
+            this.descriptions = data.descriptions;
+            this.telephone = data.telephone;
+            const localidad = this.localidades.find((loc) => loc.id === data.location_id);
+            this.locationId = localidad ? localidad.name.toString() : '';
+          },
+          (error) => {
+            console.error('Error al obtener nombre y apellido del usuario:', error);
+          }
+        );
+      }
     } else {
       this.userId = null;
       this.userEmail = null;
@@ -109,12 +154,33 @@ export class GeolocalizacionComponent implements AfterViewInit {
   }
 
   ngOnInit(): void {
-    if (this.userId !== null) {
-      this.loadUserFields();
+    this.obtenerCampoSeleccionado();
+
+  }
+
+  obtenerCampoSeleccionado() {
+    const campoSeleccionadoString = localStorage.getItem('campoSeleccionado');
+
+    if (campoSeleccionadoString) {
+      this.campoSeleccionado = JSON.parse(campoSeleccionadoString);
+      console.log('Campo seleccionado en geolocalización:', this.campoSeleccionado);
     } else {
-      console.error('El ID de usuario es null.');
+      // Manejar el caso en que no se haya seleccionado ningún campo
     }
   }
+ // En tu componente.ts
+mostrarDetallesCampo(campo: any): void {
+  if (campo) {
+    this.nombreCampo = campo.name;
+    this.dimensionesCampo = campo.dimensions;
+    this.detallesCampoVisible = true;
+  } else {
+    console.warn('No se proporcionó un campo válido para mostrar detalles.');
+  }
+}
+
+
+
   isGeolocationNotUpdated(geolocation: string | null): boolean {
     return !geolocation || geolocation.trim() === '';
     }
@@ -135,19 +201,32 @@ export class GeolocalizacionComponent implements AfterViewInit {
                   observation: item.observation || '',
                   geolocation: item.geolocation || '',
                   address: {
+                    id: item.address ? item.address.id || 0 : 0,
                     address: item.address ? item.address.address || '' : '',
-                    localidad_id: item.address ? item.address.localidad_id || '' : ''  // Cambio aquí
+                    location: item.address ? item.address.location || null : null
                   },
                   contact: {
                     id: item.contact ? item.contact.id || 0 : 0,
                     movilPhone: item.contact ? item.contact.movilPhone || null : null,
                     telephone: item.contact ? item.contact.telephone || null : null
                   },
-                  person_id: item.person_id || 0
+                  person_id: item.person_id || 0,
+                  active: item.active || false,
                 };
                 return field;
               });
-              this.selectedFieldId = this.fields[0].id;
+
+              // Filtrar campos que no tienen geolocalización
+              const fieldsWithoutGeolocation = this.fields.filter(field => !this.isGeolocationUpdated(field.geolocation));
+
+              // Seleccionar el primero de los campos filtrados, si existe
+              if (fieldsWithoutGeolocation.length > 0) {
+                const firstFieldWithoutGeolocation = fieldsWithoutGeolocation[0];
+                this.selectedFieldId = firstFieldWithoutGeolocation.id;
+              } else {
+                // Si no hay campos sin geolocalización, seleccionar el primero de todos los campos
+                this.selectedFieldId = this.fields[0].id;
+              }
             } else {
               // ...
             }
@@ -158,6 +237,7 @@ export class GeolocalizacionComponent implements AfterViewInit {
         );
       }
     }
+
 
 
   ngAfterViewInit(): void {
@@ -183,12 +263,66 @@ export class GeolocalizacionComponent implements AfterViewInit {
     this.map.on('click', this.onMapClick.bind(this));
     this.cdr.detectChanges();
   }
+  cargarDatosDeUsuario() {
+    const decoded: DecodedToken = jwtDecode(this.authService.getToken() || '');
+    if ('userId' in decoded && 'sub' in decoded && 'roles' in decoded) {
+      this.userId = decoded.userId;
+      this.userEmail = decoded.sub;
+
+      this.personId = this.userId;
+
+      if (this.userId !== null && this.personId !== null) {
+        this.apiService.getPersonByIdOperador(this.userId, this.personId).subscribe(
+          (data) => {
+            this.nombre = data.name;
+            this.apellido = data.lastname;
+
+          },
+          (error) => {
+            console.error('Error al obtener nombre y apellido del usuario:', error);
+          }
+        );
+      }
+    } else {
+      this.userId = null;
+      this.userEmail = null;
+    }
+  }
+
+  mostrarGeolocalizacion(): void {
+      if (this.campoSeleccionado.geolocation) {
+      const geolocationData = this.campoSeleccionado.geolocation.split(',').map(parseFloat);
+      const latitude = geolocationData[0];
+      const longitude = geolocationData[1];
+
+      // Si el mapa aún no está creado, créalo
+      if (!this.map) {
+        this.map = L.map('map').setView([latitude, longitude], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '© OpenStreetMap contributors'
+        }).addTo(this.map);
+      }
+
+      // Elimina cualquier marcador existente en el mapa
+      this.map.eachLayer(layer => {
+        if (layer instanceof L.Marker) {
+          this.map.removeLayer(layer);
+        }
+      });
+
+      // Agrega un nuevo marcador con la ubicación actualizada
+      L.marker([latitude, longitude]).addTo(this.map)
+        .bindPopup('Ubicación del campo').openPopup();
+    } else {
+      this.toastr.warning('El campo no tiene información de geolocalización', 'Advertencia');
+    }
+  }
 
   private loadInitialGeolocation(): void {
     if (this.userId !== null) {
-      this.apiService.getGeolocationField(this.userId, 1)
-        .subscribe((response: any) => {
-         if (response && response.geolocation) {
+      this.apiService.getGeolocationField(this.userId, 1).subscribe(
+        (response: any) => {
+          if (response && response.geolocation) {
             const geoData = response.geolocation;
             if (geoData.latitude !== undefined && geoData.longitude !== undefined) {
               this.addMarker([geoData.latitude, geoData.longitude]);
@@ -199,16 +333,18 @@ export class GeolocalizacionComponent implements AfterViewInit {
           } else {
             this.toastr.info('Existen Campos sin Geolocalizar, Por Favor actualizalos.', 'Información');
           }
-        }, error => {
+        },
+        error => {
           console.error('Error al cargar la geolocalización:', error);
           this.toastr.info('No cuenta con campos para actualizar.', 'Atención');
-        });
+        }
+      );
     }
   }
 
   private addMarker(coords: [number, number]): void {
-
-    if (coords && coords[0] !== undefined && coords[1] !== undefined) {
+    if (coords && !isNaN(coords[0]) && !isNaN(coords[1])) {
+      // Verifica que las coordenadas sean números válidos
       this.currentMarker = L.marker(coords).addTo(this.map);
       this.currentMarker.bindPopup('Ubicación seleccionada').openPopup();
     } else {
@@ -216,6 +352,7 @@ export class GeolocalizacionComponent implements AfterViewInit {
       this.toastr.error('Coordenadas no válidas para la geolocalización', 'Error');
     }
   }
+
 
   onSearch(): void {
     const searchInput = document.getElementById('search-input') as HTMLInputElement;
@@ -276,13 +413,13 @@ export class GeolocalizacionComponent implements AfterViewInit {
   }
 
   registerField(): void {
-    if (!this.selectedFieldId || !this.userId) {
+    if (!this.userId || !this.campoSeleccionado) {
       console.error('Datos de campo no seleccionados o inválidos.');
       return;
     }
 
     if (!this.currentMarker || !this.currentMarker.getLatLng()) {
-      console.error('Marcador no encontrado o sin ubicación.');
+      this.toastr.warning('No has seleccionado ningún lugar', 'Atención');
       return;
     }
 
@@ -290,22 +427,26 @@ export class GeolocalizacionComponent implements AfterViewInit {
     const longitude = this.currentMarker.getLatLng().lng;
     const geolocationString = `${latitude},${longitude}`;
 
-    this.apiService.updateGeolocationField(this.userId, this.selectedFieldId, geolocationString)
+    this.apiService.updateGeolocationField(this.userId, this.campoSeleccionado.id, geolocationString)
       .subscribe(
         (response: any) => {
-
           this.toastr.success('Geolocalización actualizada con éxito', 'Éxito');
-
+          this.router.navigate(['dashboard/inicio']);
         },
         (error: any) => {
           this.toastr.error('Error al actualizar la geolocalización', 'Error');
         }
       );
+
   }
 
+
+  volver() {
+    this.router.navigate(['dashboard/inicio']);
+  }
   cancelar() {
 
-    this.router.navigate(['dashboard/perfil']);
+    this.router.navigate(['dashboard/inicio']);
   }
 
   onMapClick(e: L.LeafletMouseEvent): void {

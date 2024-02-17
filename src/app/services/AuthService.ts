@@ -64,6 +64,7 @@ export class AuthService {
   // Método para cerrar la sesión
   logout(): void {
     localStorage.removeItem('token');
+    localStorage.removeItem('campoSeleccionado');
     this.userEmail = '';
     this.userId = null;
     this.field = null;

@@ -34,17 +34,18 @@ body
     margin: 20px
     width: 55%
     margin-top: -1%
-    margin-left: 36.5%
+    margin-left: 41.5%
 
   .card-user
+    display: flex
     background-color: $light-grey
     padding: 20px
     border-radius: 10px
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3)
     margin: 20px
-    width: 90%
-    margin-top: -10px
-    // margin-left: 32%
+    width: 95%
+    margin-top: -12px
+    gap: 10px
     &.user-card
       display: flex
       margin-top: 8px
@@ -67,6 +68,35 @@ body
         color: $icon-color
         font-size: 70px
 
+    .volver-button
+      display: flex
+      align-items: center
+      cursor: pointer
+      margin-top: 10px
+      margin-left: 67%
+
+    .letra_btn_volver
+      font-size: 14px
+      font-family: $font-family
+      color: $primary-color
+      font-weight: bold
+  p
+    font-size: 15px
+    color: $icon-color
+    font-weight: bold
+
+  .email
+    font-size: 14px
+    color: $medium-grey
+    font-weight: bold
+    font-family: $font-family
+
+  .name
+    font-size: 18px
+    color: $primary-color
+    font-weight: bold
+    font-family: $font-family
+
   .geo-container
     flex-direction: column
     align-items: center
@@ -80,7 +110,7 @@ body
     border-radius: 10px
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3)
     margin: 20px
-    width: 31%
+    width: 36%
     height: 59.7vh
     display: flex
     margin-top: -37.5%
@@ -264,8 +294,6 @@ body
       margin-left: auto
       margin-right: auto
       height: auto
-
-
 
 // Finalmente, los estilos para dispositivos muy pequeños o móviles
 @media screen and (max-width: 480px)

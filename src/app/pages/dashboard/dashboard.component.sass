@@ -1,3 +1,117 @@
+// $primary-color: #3CA749
+// $secondary-color: #8FCA8F
+// $hover-color: #32963f
+// $error-color: #d9534f
+// $light-grey: #f4f4f4
+// $dark-grey: #454545
+// $medium-grey: #666
+// $default: #FFF
+// $border-color: #ddd
+// $font-family: 'Montserrat', sans-serif
+
+// body
+//   font-family: 'Montserrat', sans-serif
+
+// .sidenav-container
+//   height: 100%
+//   display: flex
+
+// .sidenav
+//   width: 240px
+//   box-shadow: 1px 0 5px rgba(0, 0, 0, 0.24)
+//   background-image: url('/assets/img/background.svg')
+
+// .logo-container
+//   padding: 10px
+//   background-image: url('/assets/img/background.svg')
+//   text-align: center
+//   padding-bottom: 46px
+//   padding-top: 20px
+
+//   .dashboard-logo
+//     max-height: 60px
+//     margin-bottom: 20px
+
+// .nav-item
+//   margin-top: 6px
+//   display: flex
+//   font-family: "Montserrat", sans-serif
+//   font-weight: 600
+//   font-size: 17px
+//   text-decoration: none
+//   padding: 10px
+//   border-radius: 5px
+//   margin-bottom: 5px
+//   color: white
+//   transition: border-color 0.3s
+//   border: 1px solid transparent
+//   align-content: flex-start
+//   margin-left: 12%
+
+//   &:hover
+//     // border-color: $default
+//     cursor: pointer
+
+// .logo-b
+//   display: flex
+//   margin-top: auto
+//   padding: 20px
+//   padding-top: 65%
+
+//   .sidenav-logo
+//     width: 70px
+//     height: auto
+//     display: block
+//     margin: 0 auto
+
+//   @media (max-width: 768px)
+//     display: flex
+//     flex-direction: column
+//     align-items: center
+
+// .sidenav-content
+//   flex-grow: 1
+//   transition: margin-left .3s
+
+// .toolbar-green
+//   background-image: url('/assets/img/background.svg')
+//   color: white
+//   font-size: 18px
+//   height: 64px
+
+// .search-input
+//   padding: 8px 12px
+//   border: 1px solid #ccc
+//   border-radius: 4px
+//   font-size: 14px
+//   width: 250px
+//   outline: none
+
+// .search-input::placeholder
+//   color: $medium-grey
+//   font-style: $font-family
+
+// /* Estilo para el espacio en la barra de herramientas */
+// .toolbar-spacer
+//   flex: 1
+
+//   .profile-menu
+//     margin-right: 10px
+
+// .open-sidebar-btn
+//   position: absolute
+//   top: 10px
+//   left: 10px
+//   color: $medium-grey
+
+// #inicio, #servicios
+//   font-size: 14px
+
+// .mat-drawer-content
+//   overflow: visible
+
+// prueba para mobile
+
 $primary-color: #3CA749
 $secondary-color: #8FCA8F
 $hover-color: #32963f
@@ -35,7 +149,7 @@ body
 .nav-item
   margin-top: 6px
   display: flex
-  font-family: "Montserrat", sans-serif
+  font-family: 'Montserrat', sans-serif
   font-weight: 600
   font-size: 17px
   text-decoration: none
@@ -64,14 +178,38 @@ body
     display: block
     margin: 0 auto
 
+  .search-input
+    padding: 8px 12px
+    border: 1px solid #ccc
+    border-radius: 4px
+    font-size: 14px
+    width: 250px
+    outline: none
+
+.search-input::placeholder
+  color: $medium-grey
+  font-style: $font-family
+  
+.logo-container-1
+  display: none
+
   @media (max-width: 768px)
     display: flex
     flex-direction: column
     align-items: center
 
+.logo-container-1
+  max-height: 40px
+  margin-left: 25px
+  background-image: none
+
+.dashboard-logo
+  max-height: 40px
+  margin-bottom: 20px
+
 .sidenav-content
   flex-grow: 1
-  transition: margin-left .3s
+  transition: margin-left 0.3s
 
 .toolbar-green
   background-image: url('/assets/img/background.svg')
@@ -80,32 +218,20 @@ body
   height: 64px
 
 .search-input
-  padding: 8px 12px
-  border: 1px solid #ccc
-  border-radius: 4px
-  font-size: 14px
-  width: 250px
-  outline: none
+  display: none
 
-.search-input::placeholder
-  color: $medium-grey
-  font-style: $font-family
+  &::placeholder
+    color: $medium-grey
+    font-style: $font-family
 
-/* Estilo para el espacio en la barra de herramientas */
 .toolbar-spacer
   flex: 1
 
-  .profile-menu
-    margin-right: 10px
+.profile-menu
+  margin-right: 10px
 
 .open-sidebar-btn
   position: absolute
   top: 10px
   left: 10px
   color: $medium-grey
-
-#inicio, #servicios
-  font-size: 14px
-
-// .mat-drawer-content
-//   overflow: visible

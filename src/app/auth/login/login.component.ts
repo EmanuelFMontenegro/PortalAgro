@@ -44,7 +44,7 @@ export class LoginComponent {
     Validators.email,
     this.usernameControl = new FormControl('', [Validators.required, Validators.email]);
     this.passwordControl = new FormControl('', [Validators.required, Validators.minLength(8)]);
-    this.usernameControl.setValue('cristianwolf86@gmail.com'); // Define el correo electrónico predefinido
+    this.usernameControl.setValue('cristianwolf86@gmail.com');
     this.passwordControl.setValue('Donna5722');
     this.login = new FormGroup({
       username: this.usernameControl,
@@ -204,7 +204,7 @@ export class LoginComponent {
 
 
   mostrarMensajeExitoso() {
-    this.toastr.info('Acceso permitido.', 'Bienvenido', { timeOut: 1000 });
+    this.toastr.info('Acceso permitido.', 'Bienvenido', { timeOut: 500 });
 
   }
 

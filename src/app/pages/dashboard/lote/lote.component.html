@@ -2,105 +2,51 @@
   <div class="titulo-bienvenida">
     <span>¡Bienvenido!</span>
   </div>
-
-  <div class="card user-card">
-    <div class="avatar">
-      <mat-icon>person</mat-icon>
-    </div>
-    <div class="user-info">
-      <p class="name">{{ nombre }} {{ apellido }}</p>
-      <p class="email">{{ userEmail }}</p>
-    </div>
-    <div class="volver-button" (click)="volver()">
-      <mat-icon style="color:green">arrow_back</mat-icon>
-      <span style="color:green">Volver</span>
-    </div>
-  </div>
-</div>
-
-
-
-<div class="card">
-  <!-- <h2 class="titulo-registrar-lote">Registrar Lote</h2>
-    <form class="solicitud-servicio-form" [formGroup]="loteForm" (ngSubmit)="registrarLote()">
-      <div class="lotes-formulario">
-        <div class="grupo-lotes">
-
-          <div class="field-container">
-            <label class="field-label" for="direccion">Nombre</label>
-            <input matInput formControlName="address" placeholder="nombre de lote" required
-              (blur)="addressTouched = true">
-            <span *ngIf="loteForm.get('address')?.hasError('required') && addressTouched" class="error-message">Este
-              campo es requerido</span>
-          </div>
-
-
-          <div class="field-container">
-            <label class="field-label" for="plantación">Plantación</label>
-            <mat-select class="mat-select" formControlName="plantacion" placeholder="seleccionar plantación">
-              <mat-option *ngFor="let loc of localidades" [value]="loc.id">
-                {{ loc.name }}
-              </mat-option>
-            </mat-select>
-          </div>
-
-
-          <div class="field-container">
-            <label class="field-label">Dimensiones (Hectáreas)</label>
-            <input matInput formControlName="dimensions" type="number" placeholder="ingresar valores en hectáreas"
-              required (blur)="dimensionsTouched = true">
-            <span *ngIf="loteForm.get('dimensions')?.hasError('required') && dimensionsTouched"
-              class="error-message">Este campo es requerido</span>
-          </div>
-        </div>
-
-        <div class="field-container-observaciones">
-          <label class="field-label">Observaciones</label>
-          <textarea matInput class="field-input-obs" formControlName="observation"></textarea>
-        </div>
+  <mat-card class="main-card">
+    <div class="card user-card">
+      <div class="avatar">
+        <mat-icon>person</mat-icon>
       </div>
-
-      <div class="botones-servicio">
-        <button mat-raised-button class="cancel-button" type="button">Cancelar</button>
-        <button mat-raised-button class="register-button" type="submit" [disabled]="!loteForm.valid">Registrar
-          Campo</button>
+      <div class="user-info">
+        <p class="name">{{ nombre }} {{ apellido }}</p>
+        <p class="email">{{ userEmail }}</p>
       </div>
-    </form>  -->
+      <div class="volver-button" (click)="volver()">
+        <mat-icon style="color:#47de5b">arrow_back</mat-icon>
+        <span style="color:#47de5b">Volver</span>
+      </div>
+    </div>
 
-  <h2 class="titulo-registrar-lote">Lotes</h2>
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 custom-table">
-    <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef>ID</th>
-      <td mat-cell *matCellDef="let element">{{ element.id }}</td>
-    </ng-container>
-    <ng-container matColumnDef="nombre">
-      <th mat-header-cell *matHeaderCellDef> Nombre de Lote </th>
-      <td mat-cell *matCellDef="let lote"> {{ lote.name }} </td>
-    </ng-container>
-    <ng-container matColumnDef="descripcion">
-      <th mat-header-cell *matHeaderCellDef> Descripción </th>
-      <td mat-cell *matCellDef="let lote"> {{ lote.descriptions }} </td>
-    </ng-container>
-    <ng-container matColumnDef="plantacion">
-      <th mat-header-cell *matHeaderCellDef> Plantación </th>
-      <td mat-cell *matCellDef="let lote"> {{ lote.type_plantation_id }} </td>
-    </ng-container>
-    <ng-container matColumnDef="hectareas">
-      <th mat-header-cell *matHeaderCellDef> Hectáreas </th>
-      <td mat-cell *matCellDef="let lote"> {{ lote.dimensions }} </td>
-    </ng-container>
-    <ng-container matColumnDef="acciones">
-      <th mat-header-cell *matHeaderCellDef> Acciones </th>
-      <td mat-cell *matCellDef="let lote">
-        <button mat-icon-button (click)="editarLote(lote)">
-          <mat-icon>edit</mat-icon>
+
+
+    <div class="card-campos-section">
+      <h2 class="titulo-campo">Lotes</h2>
+      <div class="leta_btn">
+        <button mat-raised-button (click)="cargarLotes()" class="plus-icon">
+          Cargar <mat-icon style="font-size: 20px;">add</mat-icon>
         </button>
-        <button mat-icon-button (click)="confirmarBorrado(lote)">
-          <mat-icon color="warn">delete</mat-icon>
-        </button>
-      </td>
-    </ng-container>
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
+      </div>
+    </div>
+    <div class="card-campos-lotes">
+        <div class="campo-card" *ngFor="let lote of dataSource.data">
+          <h3 class="titulo-campos">{{ lote.name }}</h3>
+          <p><span class="campo-variable">Plantación:</span> {{ lote.type_plantation_id }}</p>
+          <p><span class="campo-variable">Hectáreas:</span> {{ lote.dimensions }}</p>
+          <p><span class="campo-variable">Descripción:</span> {{ lote.descriptions }}</p>
+          <div class="acciones">
+            <button mat-icon-button (click)="editarLote(lote)">
+              <mat-icon style="color: #47de5b">edit</mat-icon>
+            </button>
+            <button mat-icon-button (click)="confirmarBorrado(lote)">
+              <mat-icon style="color: #47de5b">delete</mat-icon>
+            </button>
+          </div>
+       </div>
+    </div>
+
+
+
+
+
+  </mat-card>
 </div>

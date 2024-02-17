@@ -73,7 +73,7 @@ export class LoteComponent {
 
   // MatTable properties
   dataSource = new MatTableDataSource<any>();
-  displayedColumns: string[] = ['id', 'nombre', 'descripcion', 'plantacion', 'hectareas', 'acciones'];
+  displayedColumns: string[] = ['nombre', 'descripcion', 'plantacion', 'hectareas', 'acciones'];
 
 
 
@@ -169,8 +169,7 @@ export class LoteComponent {
 
   registrarLote(): void {
     if (!this.userId) {
-      console.log('este es el ide del señor',this.userId)
-      this.toastr.error('Error: No se ha identificado al usuario.', 'Error');
+     this.toastr.error('Error: No se ha identificado al usuario.', 'Error');
       return;
     }
 
@@ -222,10 +221,13 @@ export class LoteComponent {
     }
   }
 
-    volver(){
-        this.router.navigate(['dashboard/detalle-campo']);
+  cargarLotes(){
 
-    }
+  }
+  volver(){
+      this.router.navigate(['dashboard/inicio']);
+
+  }
 loadDataForMatTable(fieldId: number): void {
   if (this.userId !== null) {
     this.apiService.getAllPlotsOperador(this.userId, fieldId).subscribe(

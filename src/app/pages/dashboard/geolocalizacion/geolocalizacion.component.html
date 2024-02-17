@@ -6,8 +6,13 @@
     <div class="avatar">
       <mat-icon>person</mat-icon>
     </div>
-    <div *ngIf="userEmail">
+    <div class="user-info">
+      <p class="name">{{ nombre }} {{ apellido }}</p>
       <p class="email">{{ userEmail }}</p>
+    </div>
+    <div class="volver-button" (click)="volver()">
+      <mat-icon style="color:#32963f">arrow_back</mat-icon>
+      <span class="letra_btn_volver">Volver</span>
     </div>
   </div>
   <div class="card-map">
@@ -28,23 +33,26 @@
           </div>
         </div>
       </div>
-      <div class="card" *ngIf="fields && fields.length > 0">
-        <div class="card-item" *ngFor="let item of fields">
+      <div class="card" *ngIf="campoSeleccionado">
+        <div class="card-item">
           <p class="with-dot">
-            {{ item.name }}
+            {{ campoSeleccionado.name }}
           </p>
           <p class="with-dot">
-            {{ item.address.localidad_id }}
+            {{ campoSeleccionado.address?.location?.name }}
           </p>
           <p class="with-dot">
-            {{ item.address.address }}
+            {{ campoSeleccionado.address.address }}
           </p>
           <p class="with-dot">
-            {{ item.dimensions }} Hectáreas
-
+            {{ campoSeleccionado.dimensions }} Hectáreas
           </p>
         </div>
       </div>
+
+
+
+
     </div>
     <div class="botones-servicio">
       <button mat-raised-button class="register-button" type="button" (click)="registerField()">Registrar</button>
