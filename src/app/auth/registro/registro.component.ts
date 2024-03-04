@@ -39,9 +39,9 @@ export class RegistrateComponent {
       confirmPassword: this.confirmPasswordControl
     });
 
-    this.registro.valueChanges.subscribe(() => {
-      this.updateButtonValidity();
-    });
+    // this.registro.valueChanges.subscribe(() => {
+    //   this.updateButtonValidity();
+    // });
   }
   togglePasswordVisibility(): void {
     this.passwordVisible = !this.passwordVisible;
@@ -106,14 +106,14 @@ irAInicioSesion(): void {
     return null;
   }
 
-  updateButtonValidity() {
-    const isPasswordMatchError = this.confirmPasswordControl.errors?.['passwordsNotMatch'];
-    const isFormValid = this.registro.valid && !isPasswordMatchError;
-    const button = document.getElementById('submitBtn') as HTMLButtonElement;
+  // updateButtonValidity() {
+  //   const isPasswordMatchError = this.confirmPasswordControl.errors?.['passwordsNotMatch'];
+  //   const isFormValid = this.registro.valid && !isPasswordMatchError;
+  //   const button = document.getElementById('submitBtn') as HTMLButtonElement;
 
-    if (button) {
-      button.disabled = !isFormValid;
-    }
-  }
+  //   if (button) {
+  //     button.disabled = !isFormValid;
+  //   }
+  // }
 
 }

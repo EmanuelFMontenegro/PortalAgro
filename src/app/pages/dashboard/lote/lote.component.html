@@ -13,7 +13,7 @@
       </div>
       <div class="volver-button" (click)="volver()">
         <mat-icon style="color:#47de5b">arrow_back</mat-icon>
-        <span style="color:#47de5b">Volver</span>
+        <span class="letra-icon" style="color:#47de5b">Volver</span>
       </div>
     </div>
 
@@ -26,27 +26,41 @@
           Cargar <mat-icon style="font-size: 20px;">add</mat-icon>
         </button>
       </div>
+
     </div>
     <div class="card-campos-lotes">
-        <div class="campo-card" *ngFor="let lote of dataSource.data">
-          <h3 class="titulo-campos">{{ lote.name }}</h3>
-          <p><span class="campo-variable">Plantación:</span> {{ lote.type_plantation_id }}</p>
-          <p><span class="campo-variable">Hectáreas:</span> {{ lote.dimensions }}</p>
-          <p><span class="campo-variable">Descripción:</span> {{ lote.descriptions }}</p>
-          <div class="acciones">
-            <button mat-icon-button (click)="editarLote(lote)">
-              <mat-icon style="color: #47de5b">edit</mat-icon>
-            </button>
-            <button mat-icon-button (click)="confirmarBorrado(lote)">
-              <mat-icon style="color: #47de5b">delete</mat-icon>
-            </button>
-          </div>
-       </div>
+      <div class="campo-card" *ngFor="let lote of dataSource.data">
+        <img class="icono-geolocalizacion" src="assets/img/img_geolocation.png" alt="Geolocalización">
+        <p class="with-dot">
+          <span class="campo-titulos">Nombre del Lote:</span>
+          <span class="campo-variable">{{ lote.name }}</span>
+        </p>
+        <p class="with-dot">
+          <span class="campo-titulos">Plantación:</span>
+          <span class="campo-variable">{{ lote.type_plantation_id }}</span>
+        </p>
+        <p class="with-dot">
+          <span class="campo-titulos">Hectáreas:</span>
+          <span class="campo-variable">{{ lote.dimensions }}</span>
+        </p>
+        <p class="with-dot">
+          <span class="campo-titulos">Descripción:</span>
+          <span class="campo-variable">{{ lote.descriptions }}</span>
+        </p>
+
+        <div class="acciones">
+          <button mat-icon-button aria-label="Editar" class="edit-button" (click)="editarLote(lote)">
+            <mat-icon class="material-icons icon-size">edit</mat-icon>
+            <span style="color: #4CAF50;">Editar</span>
+          </button>
+          <button mat-icon-button aria-label="Eliminar" class="delete-button" (click)="confirmarBorrado(lote)">
+            <mat-icon class="material-icons icon-size">delete</mat-icon>
+            <span style="color: red;">Eliminar</span>
+          </button>
+        </div>
+
+
+      </div>
     </div>
-
-
-
-
-
   </mat-card>
 </div>

@@ -17,21 +17,16 @@
       <span class="letra_btn_volver">Volver</span>
     </div>
   </div>
-
   <h4 class="titulo-detalle-campo">Detalle de Campos</h4>
   <div class="card">
 
     <div class="campo-card">
-      <div class="campo-image-container">
-        <img src="/assets/img/campo_{{ campoSeleccionado.id }}.png" alt="Campo Image" class="campo-image">
-      </div>
-      <div class="card-campo-secundarias">
-        <div class="thumbnail-image">
-          <img src="/assets/img/campo_1.png" alt="campo" class="foto-campo">
-        </div>
-        <div id="map" class="thumbnail-image"></div>
+      <div id="map" class="campo-image-container" *ngIf="mostrarMapaPrincipal"></div>
+      <div class="campo-image-container" *ngIf="mostrarImagenPrincipal">
+        <img src="/assets/img/img_nogeo.png" alt="Campo Image" class="campo-image">
       </div>
     </div>
+
     <div class="campo-details-card">
       <h4>{{ campoSeleccionado.name }}</h4>
       <p>Localidad: {{ campoSeleccionado.address.location.name }}</p>
@@ -44,9 +39,4 @@
       </div>
     </div>
   </div>
-
-
-
-
-
 </div>

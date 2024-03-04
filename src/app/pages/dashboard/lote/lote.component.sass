@@ -123,7 +123,6 @@ body
   display: grid
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr))
   gap: 20px
-  // justify-items: center
 
   .titulo-campos
     color: $primary-color
@@ -136,33 +135,76 @@ body
     grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr))
     gap: 16px
 
-  .campo-card
-    background-color: #ffffff
-    padding: 20px
-    border-radius: 10px
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3)
-    width: 270px
-    height: 270px
+.campo-card
+  background-color: #ffffff
+  padding: 20px
+  border-radius: 10px
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3)
+  width: 270px
+  // height: 270px
 
-  .acciones
-    display: flex
-    justify-content: space-between
-    align-items: center
+.with-dot::before
+  content: "\2022"
+  font-size: 26px
+  color: $primary-color
+  margin-right: 5px
 
-  button
-    background-color: transparent
-    border: none
-    cursor: pointer
-    transition: color 0.3s ease
+.icono-geolocalizacion
+  width: 60px
+  height: 60px
+  margin-left: 40%
 
-    &:hover
-      color: #47de5b
+.campo-titulos
+  font-size: 15px
+  color: $medium-grey
+  font-weight: bold
 
-  button.mat-icon-button[aria-label="Editar"]
+.campo-variable
+  font-size: 15px
+  color: $medium-grey
+
+.acciones
+  display: flex
+  justify-content: space-between
+  align-items: center
+  margin-top: 10%
+
+.icon-size
+  font-size: 20px
+
+.edit-button,
+.delete-button
+  background-color: transparent
+  border: 2px solid transparent
+  border-radius: 5px
+  cursor: pointer
+  padding: 5px 10px
+  transition: all 0.3s ease
+
+.edit-button
+  font-size: 12px
+  font-weight: bold
+  border-color: #4CAF50
+  color: #4CAF50
+  width: 35%
+  height: auto
+
+  &:hover
+    border-color: #4CAF50
     color: #4CAF50
 
-  button.mat-icon-button[aria-label="Eliminar"]
-    color: red
+.edit-button mat-icon,
+.delete-button mat-icon
+  vertical-align: middle
+
+.delete-button
+  font-size: 12px
+  font-weight: bold
+  margin-left: 10px
+  border-color: $error-color
+  color: $error-color
+  width: 35%
+  height: auto
 
 .leta_btn
   display: flex
@@ -193,3 +235,29 @@ body
 
   & mat-icon
     font-size: 18px
+
+@media screen and (max-width: 768px)
+  .card
+    width: 81%
+
+  .main-card
+    width: 100%
+    padding: 4px
+    border-radius: 10px
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4)
+  .letra-icon
+    display: none
+
+  .card.user-card .avatar
+    width: 90px
+    height: 80px
+
+  .card .volver-button
+    display: initial
+    align-items: initial
+    cursor: initial
+    margin-top: initial
+    margin-left: initial
+
+  .card-campos-section
+    width: 80%

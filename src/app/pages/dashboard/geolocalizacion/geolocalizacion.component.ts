@@ -5,7 +5,9 @@ import { ApiService } from 'src/app/services/ApiService';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { jwtDecode } from 'jwt-decode';
-import { MatDialog } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
+import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { startWith, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 interface GeolocationData {
@@ -22,7 +24,6 @@ interface AddressData {
   address: string;
   localidad_id: string;
 }
-
 
 interface ContactData {
   id: number;
@@ -64,6 +65,8 @@ interface DecodedToken {
   styleUrls: ['./geolocalizacion.component.sass']
 })
 export class GeolocalizacionComponent implements AfterViewInit {
+  filteredLocalidades: Observable<any[]> = new Observable<any[]>();
+  filtroLocalidades = new FormControl('');
   campoSeleccionado:any={}
   nombreCampo: string;
   dimensionesCampo: number;
@@ -155,6 +158,7 @@ export class GeolocalizacionComponent implements AfterViewInit {
 
   ngOnInit(): void {
     this.obtenerCampoSeleccionado();
+    this.obtenerLocalidades();
 
   }
 
@@ -288,6 +292,24 @@ mostrarDetallesCampo(campo: any): void {
       this.userEmail = null;
     }
   }
+  obtenerLocalidades() {
+    this.apiService.getLocationMisiones('location').subscribe(
+      (localidades) => {
+        this.localidades = localidades;
+        this.filteredLocalidades = this.filtroLocalidades.valueChanges.pipe(
+          startWith(''),
+          map((value) => this.filtrarLocalidades(value ?? '')),
+        );
+      },
+      (error) => {
+        console.error('Error al obtener las localidades', error);
+      }
+    );
+  }
+  private filtrarLocalidades(value: string): any[] {
+    const filterValue = value.toLowerCase();
+    return this.localidades.filter((loc) => loc.name.toLowerCase().includes(filterValue));
+  }
 
   mostrarGeolocalizacion(): void {
       if (this.campoSeleccionado.geolocation) {
@@ -354,11 +376,15 @@ mostrarDetallesCampo(campo: any): void {
   }
 
 
-  onSearch(): void {
-    const searchInput = document.getElementById('search-input') as HTMLInputElement;
-    const query = searchInput.value;
-    this.searchPlace(query);
+  onSearch(localidad: string): void {
+    if (localidad) {
+      this.searchPlace(localidad);
+    } else {
+      console.error('El valor de búsqueda es nulo.');
+    }
   }
+
+
 
   private searchPlace(query: string): void {
     const boundingBox = [this.misionesBoundingBox.northWest.lon, this.misionesBoundingBox.northWest.lat,

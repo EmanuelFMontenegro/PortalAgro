@@ -21,11 +21,11 @@ interface DecodedToken {
 }
 
 @Component({
-  selector: 'app-campo',
-  templateUrl: './campo.component.html',
-  styleUrls: ['./campo.component.sass']
+  selector: 'app-cargar-lote',
+  templateUrl: './cargar-lote.component.html',
+  styleUrls: ['./cargar-lote.component.sass']
 })
-export class CampoComponent implements OnInit {
+export class CargarLoteComponent {
   nombre: string = '';
   apellido: string = '';
   descripcion: string = '';
@@ -35,29 +35,24 @@ export class CampoComponent implements OnInit {
   telephone: string = '';
   modoEdicion: boolean = false;
   persona: any = {};
-  localidades: any[] = [];
+  plantations: any[] = [];
   campoForm: FormGroup;
-  filteredLocalidades: Observable<any[]> = new Observable<any[]>();
-  filtroLocalidades = new FormControl('');
+  filteredPlantations: Observable<any[]> = new Observable<any[]>();
+  filtroPlantations = new FormControl('');
   private userId: number | any;
   private personId: number | any;
   public userEmail: string | null = null;
 
   campoData = {
     name: '',
-    dimensions: '',
-    geolocation: '',
-    address: {
-      address: '',
-      location: ''
-    }
+    plantation:'',
+    dimensions: ''
+
   };
   nameTouched = false;
   dimensionsTouched = false;
-  geolocationTouched = false;
-  locationTouched = false;
-  addressTouched = false;
-  observationTouched = false;
+  plantationTouched = false;
+
 
 
   constructor(
@@ -70,20 +65,19 @@ export class CampoComponent implements OnInit {
   ) {
 
     this.campoForm = this.fb.group({
-      address: ['', Validators.required],
-      localidad: ['', Validators.required],
       name: ['', Validators.required],
       dimensions: ['', [Validators.required, Validators.min(0)]],
       observation: [''],
+      plantation: new FormControl('', Validators.required),
     });
+
   }
 
   ngOnInit(): void {
     this.cargarDatosDeUsuario();
     this.userEmail = this.authService.getUserEmail();
     this.decodeToken();
-    this.campoData.geolocation = '';
-    this.obtenerLocalidades();
+    this.obtenerPlantaciones();
 
   }
 
@@ -96,24 +90,32 @@ export class CampoComponent implements OnInit {
     }
   }
 
-  obtenerLocalidades() {
-    this.apiService.getLocationMisiones('location').subscribe(
-      (localidades) => {
-        this.localidades = localidades;
-        this.filteredLocalidades = this.filtroLocalidades.valueChanges.pipe(
+  obtenerPlantaciones() {
+    this.apiService.getAllTypePlantationOperador().subscribe(
+      (plantations) => {
+        this.plantations = plantations;
+        this.filteredPlantations = this.filtroPlantations.valueChanges.pipe(
           startWith(''),
-          map((value) => this.filtrarLocalidades(value ?? '')),
+          map((value) => {
+            if (typeof value === 'string') { // Verifica si value es de tipo string
+              return this.filtrarPlantaciones(value);
+            } else {
+              return []; // Retorna un arreglo vacío si value es null o no es string
+            }
+          }),
         );
       },
       (error) => {
-        console.error('Error al obtener las localidades', error);
+        console.error('Error al obtener las plantaciones', error);
       }
     );
   }
 
-  private filtrarLocalidades(value: string): any[] {
+
+
+  private filtrarPlantaciones(value: string): any[] {
     const filterValue = value.toLowerCase();
-    return this.localidades.filter((loc) => loc.name.toLowerCase().includes(filterValue));
+    return this.plantations.filter((planta) => planta.name.toLowerCase().includes(filterValue));
   }
 
 
@@ -133,8 +135,8 @@ export class CampoComponent implements OnInit {
             this.dni = data.dni;
             this.descriptions = data.descriptions;
             this.telephone = data.telephone;
-            const localidad = this.localidades.find((loc) => loc.id === data.location_id);
-            this.locationId = localidad ? localidad.name.toString() : '';
+            // const localidad = this.localidades.find((loc) => loc.id === data.location_id);
+            // this.locationId = localidad ? localidad.name.toString() : '';
           },
           (error) => {
             console.error('Error al obtener nombre y apellido del usuario:', error);
@@ -147,50 +149,43 @@ export class CampoComponent implements OnInit {
     }
   }
 
-  registrarCampo(): void {
+
+
+
+
+  cargarLotes(): void {
     if (!this.userId) {
-      console.log('este es el ide del señor',this.userId)
       this.toastr.error('Error: No se ha identificado al usuario.', 'Error');
       return;
     }
 
     if (this.campoForm.valid) {
-      // Obtener referencias a los controles del formulario
       const nameControl = this.campoForm.get('name');
       const dimensionsControl = this.campoForm.get('dimensions');
-      const addressControl = this.campoForm.get('address');
-      const localidadControl = this.campoForm.get('localidad');
-      const observationControl = this.campoForm.get('observation');  // Obtener control de observación
+      const observationControl = this.campoForm.get('observation');
+      const plantationControl = this.campoForm.get('plantation');
 
-      // Verificar que los controles no son nulos
-      if (nameControl && dimensionsControl && addressControl && localidadControl && observationControl) {
-        const fixedGeolocation = "";
-
-
-
+      if (nameControl && dimensionsControl && observationControl && plantationControl) {
         const campoData: any = {
           name: nameControl.value,
           dimensions: dimensionsControl.value,
-          geolocation: fixedGeolocation,
-          address: {
-            address: this.campoForm.get('address')?.value,
-            location_id: this.campoForm.get('localidad')?.value
-          },
-          observation: observationControl?.value
+          observation: observationControl.value,
+          id: plantationControl.value // Se obtiene el valor seleccionado de la plantación
         };
-
-        this.apiService.addField(this.userId, campoData).subscribe(
+        console.log('Datos del lote a enviar :', campoData);
+        // Aquí actualizamos la plantación utilizando el servicio ApiService
+        this.apiService.updateTypePlantationAdmin(campoData.id, campoData).subscribe(
           () => {
-            this.toastr.success('Campo registrado con éxito', 'Éxito');
+            this.toastr.success('Campo actualizado con éxito', 'Éxito');
             this.campoForm.reset();
             this.router.navigate(['dashboard/geolocalizacion']);
           },
           (error) => {
-            console.error('Error al registrar el campo:', error);
+            console.error('Error al actualizar el campo:', error);
             if (error.error && error.error.message) {
-              this.toastr.error('Ya Existe un campo registrado con este nombre.', 'Atención');
+              this.toastr.error('Error al actualizar el campo: ' + error.error.message, 'Atención');
             } else {
-              this.toastr.error('Error al registrar el campo. Detalles: ' + error.message, 'Error');
+              this.toastr.error('Error al actualizar el campo. Detalles: ' + error.message, 'Error');
             }
           }
         );
@@ -201,6 +196,7 @@ export class CampoComponent implements OnInit {
       this.toastr.error('Por favor, completa todos los campos requeridos', 'Error');
     }
   }
+
 
 
 

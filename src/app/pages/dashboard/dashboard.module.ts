@@ -44,6 +44,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DetalleCampoComponent } from './detalle-campo/detalle-campo.component';
 import { LoteComponent } from './lote/lote.component';
+import { CargarLoteComponent } from './cargar-lote/cargar-lote.component';
 
 
 const CUSTOM_DATE_FORMATS = {
@@ -71,7 +72,8 @@ const CUSTOM_DATE_FORMATS = {
     CampoComponent,
     FormatDatePipe,
     DetalleCampoComponent,
-    LoteComponent
+    LoteComponent,
+    CargarLoteComponent
 
   ],
   imports: [

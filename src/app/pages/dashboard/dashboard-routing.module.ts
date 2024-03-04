@@ -11,6 +11,7 @@ import { DashboardComponent } from './dashboard.component';
 import { BienvenidaComponent } from 'src/app/auth/bienvenida/bienvenida.component';
 import { DetalleCampoComponent } from './detalle-campo/detalle-campo.component';
 import { LoteComponent } from './lote/lote.component';
+import { CargarLoteComponent } from './cargar-lote/cargar-lote.component';
 import { AuthGuard } from 'src/app/core/guards/auth.guard';
 
 const routes: Routes = [
@@ -25,6 +26,7 @@ const routes: Routes = [
       { path: 'inicio', component:InicioComponent},
       { path: 'detalle-campo', component: DetalleCampoComponent},
       { path: 'lote', component: LoteComponent},
+      { path : 'cargar-lote', component: CargarLoteComponent},
       { path: 'servicios', component: ServiciosComponent},
       { path: 'productos', component: ProductosComponent},
       { path: 'campo', component: CampoComponent},

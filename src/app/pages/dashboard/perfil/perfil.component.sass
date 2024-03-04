@@ -257,7 +257,7 @@ body
     border-color: $medium-grey
     border-width: 1px
     margin-top: 5px
-
+    width: 33vh
   .extended-card
     padding: 20px
     border-radius: 10px
@@ -269,7 +269,6 @@ body
   mat-card-content
     display: grid
     grid-template-columns: repeat(auto-fills,minmax(15rem, 1fr))
-
 
 mat-card-content textarea
     width: 100%
@@ -341,8 +340,6 @@ mat-card
       background-color: $primary-color
       color: white
 
-
-
     &.cancel-button
       width: 15%
       background-color: white
@@ -360,3 +357,61 @@ mat-card
 
 .error-border
   border: 1px solid red
+
+@media screen and (max-width: 767px)
+
+  .main-card .card.user-card
+    flex-direction: column
+    display: flex
+
+  .main-card .card .img-editar
+    position: unset
+    margin-left: 45%
+    margin-top: 9px
+    border: 2px solid #3CA749
+    padding: 4px
+    border-radius: 10%
+
+  .main-card .card .edit-text
+    display: none
+
+  .card .avatar
+    display: flex
+    justify-content: center
+
+  .main-card .user-details-card
+    margin-left: unset
+
+  .main-card .datos-users
+    padding-top: 16%
+    flex-direction: column
+    align-content: flex-start
+
+  .main-card .extended-card
+    margin-left: unset
+
+  .main-card input:nth-child(2)
+    width: 30vh
+
+  .main-card .field-container mat-select
+    width: 30vh
+
+  .title-input
+    font-size: 12px
+  .botones-servicio
+    isplay: flex
+    margin-top: 10px
+    flex-direction: column-reverse
+    gap: 10px
+    align-items: center
+
+    button.register-button
+      width: 100%
+      background-color: #3CA749
+      color: white
+
+    button.cancel-button
+      width: 100%
+      background-color: white
+      color: #3CA749
+      border-color: #3CA749

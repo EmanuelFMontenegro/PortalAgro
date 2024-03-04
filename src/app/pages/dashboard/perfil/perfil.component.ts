@@ -194,41 +194,51 @@ verificarExistenciadni(dni: string): void {
     }
   );
 }
-  guardarCambios() {
-    if (this.userDetailsForm.dirty) {
-      if (this.validarFormulario()) {
-        const formData = this.userDetailsForm.value;
-        this.personId = this.userId;
+guardarCambios() {
+  if (this.userDetailsForm.dirty) {
+    if (this.validarFormulario()) {
+      const formData = this.userDetailsForm.value;
+      this.personId = this.userId;
 
-        if (this.userId !== null && this.personId !== null) {
-          const personData = {
-            userId: this.userId,
-            name: formData.nombre,
-            lastname: formData.apellido,
-            dni: formData.dni,
-            descriptions: formData.descripcion,
-            location_id: +formData.localidad,
-            telephone: formData.contacto,
-          };
+      if (this.userId !== null && this.personId !== null) {
+        const personData = {
+          userId: this.userId,
+          name: formData.nombre,
+          lastname: formData.apellido,
+          dni: formData.dni,
+          descriptions: formData.descripcion,
+          location_id: +formData.localidad,
+          telephone: formData.contacto,
+        };
 
-          this.apiService.updatePersonAdmin(this.userId, this.personId, personData).subscribe(
-            (response) => {
-              this.toastr.success('¡Perfil actualizado correctamente!', 'Éxito');
-              this.activarEdicion(false);
-              this.cargarDatosDeUsuario();
-            },
-            (error) => {
-              this.toastr.error('¡Ya Existe una personsa registrada con este dni!', 'Atención');
-            }
-          );
-        } else {
-          this.toastr.error('¡Error al obtener información del usuario!', 'Atención');
-        }
+        this.apiService.updatePersonAdmin(this.userId, this.personId, personData).subscribe(
+          (response) => {
+            this.toastr.success('¡Perfil actualizado correctamente!', 'Éxito');
+            this.activarEdicion(false);
+            this.cargarDatosDeUsuario();
+
+            // Llamada al método cambiarContrasena para cambiar la contraseña
+            this.apiService.cambiarContrasena(formData.contrasenaNueva, formData.contrasenaNueva, 'token').subscribe(
+              (resultado) => {
+                // Maneja el resultado de la llamada cambiarContrasena si es necesario
+              },
+              (error) => {
+                // Maneja los errores de la llamada cambiarContrasena si es necesario
+              }
+            );
+          },
+          (error) => {
+            this.toastr.error('¡Ya Existe una persona registrada con este dni!', 'Atención');
+          }
+        );
+      } else {
+        this.toastr.error('¡Error al obtener información del usuario!', 'Atención');
       }
-    } else {
-      this.toastr.info('No se realizaron modificaciones.', 'Información');
     }
+  } else {
+    this.toastr.info('No se realizaron modificaciones.', 'Información');
   }
+}
 
   validarFormulario(): boolean {
     if (this.userDetailsForm.get('nombre')?.value.trim() === '' ||

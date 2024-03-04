@@ -221,7 +221,7 @@ export class InicioComponent implements OnInit {
     return isAddressValid && isLocationValid && isNameValid && areDimensionsValid && isObservationValid ;
   }
   verMas(campo: any): void {
-    
+
     this.campoSeleccionado = campo;
     localStorage.setItem('campoSeleccionado', JSON.stringify(this.campoSeleccionado));
 

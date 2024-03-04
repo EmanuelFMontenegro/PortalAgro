@@ -23,36 +23,22 @@
   <div class="card-search">
     <h2 class="titulo-registrar-campo">Geolocalización</h2>
     <div class="geolocation-info">
-      <div class="card-info">
-        <div class="search-container">
-          <div class="input-container">
-            <input matInput type="text" id="search-input" placeholder="Buscar lugares...">
-            <button mat-icon-button matSuffix (click)="onSearch()">
-              <mat-icon>search</mat-icon>
-            </button>
-          </div>
-        </div>
-      </div>
       <div class="card" *ngIf="campoSeleccionado">
         <div class="card-item">
-          <p class="with-dot">
-            {{ campoSeleccionado.name }}
-          </p>
-          <p class="with-dot">
-            {{ campoSeleccionado.address?.location?.name }}
-          </p>
-          <p class="with-dot">
-            {{ campoSeleccionado.address.address }}
-          </p>
-          <p class="with-dot">
-            {{ campoSeleccionado.dimensions }} Hectáreas
-          </p>
+          <p class="with-dot">{{ campoSeleccionado.name }}</p>
+          <p class="with-dot">{{ campoSeleccionado.address?.location?.name }}</p>
+          <p class="with-dot">{{ campoSeleccionado.address.address }}</p>
+          <p class="with-dot">{{ campoSeleccionado.dimensions }} Hectáreas</p>
         </div>
       </div>
-
-
-
-
+      <div class="card-info">
+        <div class="search-container">
+          <mat-select placeholder="Buscar localidades..." (selectionChange)="onSearch($event.value)">
+            <mat-option *ngFor="let localidad of filteredLocalidades | async" [value]="localidad.name">{{ localidad.name
+              }}</mat-option>
+          </mat-select>
+        </div>
+      </div>
     </div>
     <div class="botones-servicio">
       <button mat-raised-button class="register-button" type="button" (click)="registerField()">Registrar</button>

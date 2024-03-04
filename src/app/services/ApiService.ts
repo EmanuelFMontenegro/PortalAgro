@@ -189,40 +189,41 @@ export class ApiService {
   // <<<<-------METODOS PARA PLANTACION------>>>>>
 
   // GET: getAllTypePlantation-OPERADOR
-  getAllTypePlantationOperador(): Observable<any> {
-    const url = `${this.baseURL}/type`;
-    return this.http.get(url);
-  }
+getAllTypePlantationOperador(): Observable<any> {
+  const url = `${this.baseURL}/field/plantation/type`;
+  return this.http.get(url);
+}
 
-  // GET: getAllTypePlantationADMIN
-  getAllTypePlantationAdmin(): Observable<any> {
-    const url = `${this.baseURL}/all?isActive=true`;
-    return this.http.get(url);
-  }
+// GET: getAllTypePlantationADMIN
+getAllTypePlantationAdmin(): Observable<any> {
+  const url = `${this.baseURL}/field/plantation/type/all?isActive=true`;
+  return this.http.get(url);
+}
 
-  // POST: AddTypePlantation-ADMIN
-  addTypePlantationAdmin(data: any): Observable<any> {
-    const url = `${this.baseURL}/type`;
-    return this.http.post(url, data);
-  }
+// POST: AddTypePlantation-ADMIN
+addTypePlantationAdmin(data: any): Observable<any> {
+  const url = `${this.baseURL}/field/plantation/type`;
+  return this.http.post(url, data);
+}
 
-  // PUT: updateTypePlantation-ADMIN
-  updateTypePlantationAdmin(id: number, data: any): Observable<any> {
-    const url = `${this.baseURL}/type/${id}`;
-    return this.http.put(url, data);
-  }
+// PUT: updateTypePlantation-ADMIN
+updateTypePlantationAdmin(id: number, data: any): Observable<any> {
+  const url = `${this.baseURL}/field/plantation/type/${id}`;
+  return this.http.put(url, data);
+}
 
-  // PUT: activeTypePlantationById-ADMIN
-  activeTypePlantationAdmin(id: number): Observable<any> {
-    const url = `${this.baseURL}/type/${id}/active`;
-    return this.http.put(url, {});
-  }
+// PUT: activeTypePlantationById-ADMIN
+activeTypePlantationAdmin(id: number): Observable<any> {
+  const url = `${this.baseURL}/field/plantation/type/${id}/active`;
+  return this.http.put(url, {});
+}
 
-  // DELETE: deleteTypePlantation-ADMIN
-  deleteTypePlantationAdmin(id: number): Observable<any> {
-    const url = `${this.baseURL}/type/${id}`;
-    return this.http.delete(url);
-  }
+// DELETE: deleteTypePlantation-ADMIN
+deleteTypePlantationAdmin(id: number): Observable<any> {
+  const url = `${this.baseURL}/field/plantation/type/${id}`;
+  return this.http.delete(url);
+}
+
 
   // < ---- METODOS PARA LOTES --- >
 

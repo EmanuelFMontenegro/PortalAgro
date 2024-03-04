@@ -222,6 +222,7 @@ export class LoteComponent {
   }
 
   cargarLotes(){
+    this.router.navigate(['dashboard/cargar-lote']);
 
   }
   volver(){

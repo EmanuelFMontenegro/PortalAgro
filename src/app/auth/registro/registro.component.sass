@@ -16,16 +16,18 @@ $font-family: 'Montserrat', sans-serif
   justify-content: center
   align-items: center
   height: 100vh
-  background-image: url('/assets/img/background.svg')
+  background-image: url('/assets/img/fondo_agro.png')
 
 .register-card
   width: 500px
   max-width: 100%
   padding: 40px
-  background: #fff
-  color: $dark-grey
-  border-radius: 10px
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2)
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))
+  backdrop-filter: blur(10px)
+  -webkit-backdrop-filter: blur(15px)
+  border-radius: 20px
+  border: 1px solid rgba(255, 255, 255, 0.18)
+  overflow: hidden
   font-family: $font-family
   text-align: center
   font-size: 14px
@@ -40,7 +42,7 @@ $font-family: 'Montserrat', sans-serif
 
 h1
   font-size: 32px
-  color: $dark-grey
+  color: white
   font-weight: 700
 
 .form-field-container
@@ -52,12 +54,17 @@ h1
   margin-bottom: 20px
 
   input
-    width: 95%
-    padding: 10px
     font-size: 14px
+    width: 95%
+    color: $medium-grey
+    padding: 10px
+    margin-bottom: 15px
     border: 1px solid $border-color
     border-radius: 4px
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3)
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))
+    backdrop-filter: blur(10px)
+    -webkit-backdrop-filter: blur(15px)
 
     &:focus
       outline: none
@@ -67,11 +74,25 @@ h1
 .toggle-password
   position: absolute
   right: 10px
-  top: 50%
+  top: 35%
   transform: translateY(-50%)
   cursor: pointer
   font-size: 16px
-  color: $primary-color
+  color: white
+  &:before
+    content: ""
+    position: absolute
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))
+    backdrop-filter: blur(10px)
+    -webkit-backdrop-filter: blur(15px)
+    border-radius: 4px
+    pointer-events: none
+    opacity: 0
+    transition: opacity 0.3s ease
 
 .mat-error
   color: $error-color
@@ -81,13 +102,6 @@ h1
   display: block
   margin-top: 5px
 
-.toggle-password
-  position: absolute
-  right: 10px
-  top: 50%
-  transform: translateY(-50%)
-  cursor: pointer
-  font-size: 16px
 
 button[type="submit"]
   width: 50%
@@ -108,6 +122,7 @@ button[type="submit"]
 
 .login-prompt
   font-size: 14px
+  color: white
 
 .login-link
   color: $primary-color

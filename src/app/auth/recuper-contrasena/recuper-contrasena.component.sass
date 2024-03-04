@@ -1,5 +1,6 @@
 $primary-color: #3CA749
 $secondary-color: #8FCA8F
+$hard-color: #47de5b
 $hover-color: #32963f
 $error-color: #d9534f
 $light-grey: #f4f4f4
@@ -13,19 +14,22 @@ $font-family: 'Montserrat', sans-serif
   justify-content: center
   align-items: center
   height: 100vh
-  background-image: url('/assets/img/background.svg')
+  background-image: url('/assets/img/fondo_agro.png')
 
   .recuper-card
-    width: 100%
-    max-width: 500px
-    height: 70%
-    padding: 20px
-    color: $dark-grey
-    border: 2px solid $border-color
-    border-radius: 17px
+    width: 500px
+    height: 550px
+    max-width: 100%
+    padding: 40px
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))
+    backdrop-filter: blur(10px)
+    -webkit-backdrop-filter: blur(15px)
+    border-radius: 20px
+    border: 1px solid rgba(255, 255, 255, 0.18)
+    overflow: hidden
     font-family: $font-family
     text-align: center
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1)
+    font-size: 14px
 
     .logo-container
       margin-bottom: 20px
@@ -41,7 +45,7 @@ $font-family: 'Montserrat', sans-serif
 
     h1
       font-size: 24px
-      color: $dark-grey
+      color: white
       margin-bottom: 20px
 
     .info-text-container
@@ -49,6 +53,7 @@ $font-family: 'Montserrat', sans-serif
       flex-direction: column
       font-size: 13px
       font-weight: bold
+      color: white
 
       .info-text
         margin-bottom: 5px
@@ -59,13 +64,17 @@ $font-family: 'Montserrat', sans-serif
       flex-direction: column
 
     input
-      padding: 8px
+      font-size: 14px
+      width: 95%
+      color: #808080
+      padding: 10px
       margin-bottom: 15px
+      border: 1px solid #ddd
       border-radius: 4px
-      border: 2px solid $border-color
-      margin-top: 30px
-      font-weight: bold
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3)
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))
+      backdrop-filter: blur(10px)
+      -webkit-backdrop-filter: blur(15px)
 
       &:focus
         outline: none
@@ -81,7 +90,7 @@ $font-family: 'Montserrat', sans-serif
       padding: 10px
       border-radius: 4px
       border: none
-      background-color: $secondary-color
+      background-color: $primary-color
       color: white
       cursor: pointer
       font-size: 16px
@@ -100,15 +109,17 @@ $font-family: 'Montserrat', sans-serif
 
       .login-prompt
         font-size: 14px
+        color: white
 
       .login-link
-        color: $primary-color
+        color: $hover-color
         text-decoration: none
         font-size: 14px
 
     @media (max-width: 600px)
       padding: 15px
       width: 90%
+      height: 70%
 
       .logo-container
         img

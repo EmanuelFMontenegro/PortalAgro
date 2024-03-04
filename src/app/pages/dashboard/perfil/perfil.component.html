@@ -133,14 +133,14 @@
                 </div>
 
                 <div class="field-container">
-                  <label class="title-input" for="contrasenaActual">Contraseña Actual</label>
-                  <input matInput type="password" placeholder="contraseña actual" formControlName="contrasenaActual"
-                    id="contrasenaActual">
+                  <label class="title-input" for="contacto">Contacto</label>
+                  <input matInput [placeholder]="telephone" formControlName="contacto" id="contacto">
                 </div>
 
                 <div class="field-container">
-                  <label class="title-input" for="contacto">Contacto</label>
-                  <input matInput [placeholder]="telephone" formControlName="contacto" id="contacto">
+                  <label class="title-input" for="contrasenaActual">Contraseña Actual</label>
+                  <input matInput type="password" placeholder="contraseña actual" formControlName="contrasenaActual"
+                    id="contrasenaActual">
                 </div>
 
                 <div class="field-container">
@@ -148,6 +148,7 @@
                   <input matInput type="password" placeholder="contraseña nueva" formControlName="contrasenaNueva"
                     id="contrasenaNueva">
                 </div>
+
               </div>
             </form>
           </mat-card-content>
