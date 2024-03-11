@@ -45,6 +45,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DetalleCampoComponent } from './detalle-campo/detalle-campo.component';
 import { LoteComponent } from './lote/lote.component';
 import { CargarLoteComponent } from './cargar-lote/cargar-lote.component';
+import { DialogComponent } from './dialog/dialog.component';
 
 
 const CUSTOM_DATE_FORMATS = {
@@ -73,7 +74,8 @@ const CUSTOM_DATE_FORMATS = {
     FormatDatePipe,
     DetalleCampoComponent,
     LoteComponent,
-    CargarLoteComponent
+    CargarLoteComponent,
+    DialogComponent
 
   ],
   imports: [

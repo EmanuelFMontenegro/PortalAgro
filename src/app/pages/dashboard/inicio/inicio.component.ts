@@ -81,14 +81,12 @@ export class InicioComponent implements OnInit {
   }
 
   BtnRegisterCampos():void {
-
-
     this.router.navigate(['/dashboard/campo']);
   }
 
   cargarCampos() {
     if (!this.userId) {
-      console.log('Este es el ID del señor', this.userId);
+
       this.toastr.error('Error: No se ha identificado al usuario.', 'Error');
       return;
     }
@@ -96,11 +94,11 @@ export class InicioComponent implements OnInit {
     this.apiService.getFields(this.userId).subscribe(
       (response) => {
         this.campos = response.list[0];
-        // console.log('datos de los campos',this.campos)
+
       },
       (error) => {
         console.error('Error al obtener campos:', error);
-        // Puedes manejar el error aquí según tus necesidades.
+
       }
     );
   }
@@ -225,7 +223,7 @@ export class InicioComponent implements OnInit {
     this.campoSeleccionado = campo;
     localStorage.setItem('campoSeleccionado', JSON.stringify(this.campoSeleccionado));
 
-    // Navegar a la ruta del componente DetalleCampoComponent
+  
     this.router.navigate(['dashboard/detalle-campo']);
   }
 

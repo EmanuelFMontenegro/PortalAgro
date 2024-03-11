@@ -143,11 +143,16 @@ body
   width: 270px
   // height: 270px
 
-.with-dot::before
-  content: "\2022"
-  font-size: 26px
-  color: $primary-color
-  margin-right: 5px
+.with-dot
+  display: flex
+  align-items: flex-start
+
+  &::before
+    content: "\2022"
+    font-size: 26px
+    color: $primary-color
+    margin-right: 5px
+    margin-top: -6px
 
 .icono-geolocalizacion
   width: 60px
@@ -161,6 +166,7 @@ body
 
 .campo-variable
   font-size: 15px
+  margin-left: 1px
   color: $medium-grey
 
 .acciones

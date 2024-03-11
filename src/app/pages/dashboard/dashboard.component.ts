@@ -25,22 +25,24 @@ export class DashboardComponent implements AfterViewInit {
     this.breakpointObserver.observe([Breakpoints.Handset])
       .subscribe(result => {
         this.isScreenSmall = result.matches;
-        this.cdr.detectChanges(); // Forzamos la detección de cambios
         if (this.isScreenSmall && this.sidenav) {
           this.sidenav.close();
         } else if (this.sidenav) {
           this.sidenav.open();
         }
+        this.cdr.detectChanges(); // Forzamos la detección de cambios
       });
   }
 
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
+    this.cdr.detectChanges(); // Forzamos la detección de cambios
   }
 
   closeSidenavIfSmall() {
     if (this.isScreenSmall) {
       this.isSidebarOpen = false;
+      this.cdr.detectChanges(); // Forzamos la detección de cambios
     }
   }
 

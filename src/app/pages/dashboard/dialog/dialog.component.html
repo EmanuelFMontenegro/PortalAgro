@@ -1,0 +1,15 @@
+<div style="border-bottom: 2px solid #d9534f; margin-bottom: 10px;">
+  <h2 mat-dialog-title
+    style="display: flex;justify-content: center;align-items: flex-end;font-size: 26px; font-weight: bold; font-family: 'Montserrat', sans-serif;color: red;">
+    Confirmar !!!
+  </h2>
+</div>
+<div mat-dialog-content style="font-size: 16px; margin-bottom: 20px;">
+  {{ data.message }}
+</div>
+<div mat-dialog-actions style="display: flex; justify-content: flex-end;">
+  <button mat-button [mat-dialog-close]="false"
+    style="margin-left: 10px; font-size: 16px; border: 2px solid ; color:#3CA749 ;background-color: transparent;">Cancelar</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial
+    style="font-size: 16px; background-color: transparent; color:  #d9534f;border: 2px solid;">Aceptar</button>
+</div>

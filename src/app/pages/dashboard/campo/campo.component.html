@@ -47,11 +47,14 @@
           <!-- Dimensiones -->
           <div class="field-container">
             <label class="field-label">Dimensiones (Hectáreas)</label>
-            <input matInput formControlName="dimensions" type="number" placeholder="ingresar valores en hectáreas"
-              required (blur)="dimensionsTouched = true">
+            <input matInput formControlName="dimensions" type="number" placeholder="Ingresar valores en hectáreas"
+              required [min]="1" (blur)="dimensionsTouched = true">
             <span *ngIf="campoForm.get('dimensions')?.hasError('required') && dimensionsTouched"
               class="error-message">Este campo es requerido</span>
+            <span *ngIf="campoForm.get('dimensions')?.hasError('min') && dimensionsTouched" class="error-message">El
+              valor debe ser mayor a 0</span>
           </div>
+
         </div>
 
         <div class="field-container-observaciones">

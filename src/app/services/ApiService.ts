@@ -118,7 +118,7 @@ export class ApiService {
     return this.http.get(`${this.baseURL}/user/field/`, { params });
   }
 
-  getOneField(userId: number, fieldId: number): Observable<any> {
+ getOneField(userId: number, fieldId: number): Observable<any> {
     return this.http.get(`${this.baseURL}/user/${userId}/field/${fieldId}`);
   }
 
@@ -227,54 +227,41 @@ deleteTypePlantationAdmin(id: number): Observable<any> {
 
   // < ---- METODOS PARA LOTES --- >
 
-  // GET: getAll-Plots-OPERADOR
-  getAllPlotsOperador(userId: number, fieldId?: number): Observable<any> {
-    const url = fieldId
-      ? `${this.baseURL}/user/${userId}/field/${fieldId}/plot`
-      : `${this.baseURL}/user/${userId}/plot`;
-
-    return this.http.get(url);
-  }
-
-
-
-  // GET: getAll-Plots-ADMIN
-getAllPlotsAdmin(userId: number, fieldId: number): Observable<any> {
-  const url = `${this.baseURL}/user/${userId}/field/${fieldId}/plot/all`;
-  return this.http.get(url);
+// Obtener todos los lotes para un operador
+getPlotsOperador(userId: number, fieldId: number): Observable<any> {
+  return this.http.get(`${this.baseURL}/user/${userId}/field/${fieldId}/plot`);
 }
 
+// Obtener todos los lotes para un administrador
+getAllPlotsAdmin(userId: number, fieldId: number): Observable<any> {
+  return this.http.get(`${this.baseURL}/user/${userId}/field/${fieldId}/plot/all?isActive=true`);
+}
 
+// Agregar un lote para un operador
+addPlotOperador(userId: number, fieldId: number, newPlotData: any): Observable<any> {
+  return this.http.post(`${this.baseURL}/user/${userId}/field/${fieldId}/plot`, newPlotData);
+}
 
-  // POST: add-Plots-OPERADOR
-  addPlotOperador(data: any): Observable<any> {
-    const url = `${this.baseURL}`;
-    return this.http.post(url, data);
-  }
+// Actualizar un lote para un operador
+updatePlotOperador(userId: number, fieldId: number, plotId: number, updatedPlotData: any): Observable<any> {
+  return this.http.put(`${this.baseURL}/user/${userId}/field/${fieldId}/plot/${plotId}`, updatedPlotData);
+}
 
-  // PUT: update-Plots-OPERADOR
-  updatePlotOperador(id: number, data: any): Observable<any> {
-    const url = `${this.baseURL}/${id}`;
-    return this.http.put(url, data);
-  }
+// Eliminar un lote de forma lógica para un operador
+deleteLogicalPlotOperador(userId: number, fieldId: number, plotId: number): Observable<any> {
+  return this.http.delete(`${this.baseURL}/user/${userId}/field/${fieldId}/plot/${plotId}`);
+}
 
-  // DELETE: delete-LOGICAL-Plots-OPERADOR
-  deleteLogicalPlotOperador(id: number): Observable<any> {
-    const url = `${this.baseURL}/${id}`;
-    return this.http.delete(url);
-  }
+// Activar un lote para un administrador
+activatePlotAdmin(userId: number, fieldId: number, plotId: number): Observable<any> {
+  return this.http.put(`${this.baseURL}/user/${userId}/field/${fieldId}/plot/${plotId}/activate`, {});
+}
 
-  // PUT: activate-Plots-ADMIN
-  activatePlotAdmin(id: number): Observable<any> {
-    const url = `${this.baseURL}/${id}/activate`;
-    return this.http.put(url, {});
-  }
+// Obtener un lote por ID para un operador
+getPlotByIdOperador(userId: number, fieldId: number, plotId: number): Observable<any> {
+  return this.http.get(`${this.baseURL}/user/${userId}/field/${fieldId}/plot/${plotId}`);
+}
 
-  // GET: get-PlotsById-OPERADOR
-  getPlotByIdOperador(id: number): Observable<any> {
-    const url = `${this.baseURL}/${id}`;
-    return this.http.get(url);
-  }
 
   // < -- METODO PARA SERVICIOS -- >
 

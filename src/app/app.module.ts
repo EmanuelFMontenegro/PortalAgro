@@ -15,6 +15,7 @@ import { FormatDatePipe } from './format-date.pipe';
 
 
 
+
 const routes: Routes = [];
 
 @NgModule({
@@ -29,7 +30,7 @@ const routes: Routes = [];
     DashboardModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: !isDevMode(),
-    
+
       registrationStrategy: 'registerWhenStable:30000'
     }),
   ],

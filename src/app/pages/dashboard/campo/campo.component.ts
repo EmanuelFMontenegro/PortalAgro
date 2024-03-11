@@ -73,7 +73,7 @@ export class CampoComponent implements OnInit {
       address: ['', Validators.required],
       localidad: ['', Validators.required],
       name: ['', Validators.required],
-      dimensions: ['', [Validators.required, Validators.min(0)]],
+      dimensions: ['', [Validators.required, Validators.min(1)]],
       observation: [''],
     });
   }

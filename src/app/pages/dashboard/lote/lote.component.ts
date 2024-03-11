@@ -1,5 +1,4 @@
-// Import necessary Angular modules and components
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ApiService } from 'src/app/services/ApiService';
 import { ToastrService } from 'ngx-toastr';
@@ -7,13 +6,16 @@ import { AuthService } from 'src/app/services/AuthService';
 import { Router, ActivatedRoute } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { Observable } from 'rxjs';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  FormBuilder,
+  Validators,
+} from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { switchMap } from 'rxjs/operators';
+import { DialogComponent } from '../dialog/dialog.component';
 
-
-// Define interfaces for JWT payload and decoded token
 interface CustomJwtPayload {
   userId: number;
   sub: string;
@@ -26,18 +28,20 @@ interface DecodedToken {
 }
 interface Lote {
   id: number;
-  nombre: string;
-  descripcion: string;
-  plantacion: string;
-  hectareas: number;
-  // ... other properties
+  name: string;
+  descriptions: string;
+  type_plantation_id: string;
+  dimensions: number;
+  plant_name?: string; // Propiedad para el nombre de la plantación
 }
+
 @Component({
   selector: 'app-lote',
   templateUrl: './lote.component.html',
-  styleUrls: ['./lote.component.sass']
+  styleUrls: ['./lote.component.sass'],
 })
 export class LoteComponent {
+  @Output() campoSeleccionadoCambio = new EventEmitter<any>();
   loteForm: FormGroup;
   nombre: string = '';
   apellido: string = '';
@@ -47,7 +51,9 @@ export class LoteComponent {
   telephone: string = '';
   modoEdicion: boolean = false;
   persona: any = {};
+  FieldId: number = 0;
   localidades: any[] = [];
+  loteData: Lote[] = [];
   filteredLocalidades: Observable<any[]> = new Observable<any[]>();
   filtroLocalidades = new FormControl('');
   private userId: number | any;
@@ -60,8 +66,8 @@ export class LoteComponent {
     geolocation: '',
     address: {
       address: '',
-      location: ''
-    }
+      location: '',
+    },
   };
   nameTouched = false;
   dimensionsTouched = false;
@@ -71,18 +77,6 @@ export class LoteComponent {
   observationTouched = false;
   campoSeleccionado: any = {};
 
-  // MatTable properties
-  dataSource = new MatTableDataSource<any>();
-  displayedColumns: string[] = ['nombre', 'descripcion', 'plantacion', 'hectareas', 'acciones'];
-
-
-
-
-  // ViewChild decorators for accessing MatPaginator and MatSort
-  @ViewChild(MatPaginator) paginator?: MatPaginator;
-  @ViewChild(MatSort) sort?: MatSort;
-
-  // Constructor with injected services
   constructor(
     private authService: AuthService,
     private apiService: ApiService,
@@ -91,7 +85,9 @@ export class LoteComponent {
     private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder,
+    private dialog: MatDialog
   ) {
+    this.loadDataLote(this.FieldId, this.userId);
     this.loteForm = this.fb.group({
       nombre: ['', Validators.required],
       plantación: ['', Validators.required],
@@ -100,32 +96,18 @@ export class LoteComponent {
     });
   }
 
-  // Lifecycle hook: Component initialization
   ngOnInit(): void {
-    // Load user data and decode token on component initialization
-    this.cargarDatosDeUsuario();
-    this.userEmail = this.authService.getUserEmail();
-    this.decodeToken();
-
-    // Subscribe to route parameters to get selected field data
-    this.route.paramMap.subscribe(params => {
-      const campoSeleccionadoParam = params.get('campoSeleccionado');
-      if (campoSeleccionadoParam) {
-        this.campoSeleccionado = JSON.parse(campoSeleccionadoParam);
-      }
-    });
-
-    // Initialize MatTableDataSource
-    if (this.paginator && this.sort) {
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
+    const campoSeleccionadoParam = localStorage.getItem('campoSeleccionado');
+    const campoSeleccionado = campoSeleccionadoParam
+      ? JSON.parse(campoSeleccionadoParam)
+      : null;
+    if (campoSeleccionado) {
+      const campoId = campoSeleccionado.id;
+      this.FieldId = campoId;
     }
-    const fieldId = 1;
-    // Load data for MatTableDataSource
-    this.loadDataForMatTable(fieldId);
+    this.decodeToken();
+    this.cargarDatosDeUsuario();
   }
-
-  // Method to decode JWT token and extract userId
   decodeToken(): void {
     const token = this.authService.getToken();
     if (token) {
@@ -135,31 +117,40 @@ export class LoteComponent {
     }
   }
 
-  // Method to load user data from API
   cargarDatosDeUsuario() {
     const decoded: DecodedToken = jwtDecode(this.authService.getToken() || '');
     if ('userId' in decoded && 'sub' in decoded && 'roles' in decoded) {
       this.userId = decoded.userId;
       this.userEmail = decoded.sub;
-
       this.personId = this.userId;
 
       if (this.userId !== null && this.personId !== null) {
-        // API call to get user details
-        this.apiService.getPersonByIdOperador(this.userId, this.personId).subscribe(
-          (data) => {
-            this.nombre = data.name;
-            this.apellido = data.lastname;
-            this.dni = data.dni;
-            this.descriptions = data.descriptions;
-            this.telephone = data.telephone;
-            const localidad = this.localidades.find((loc) => loc.id === data.location_id);
-            this.locationId = localidad ? localidad.name.toString() : '';
-          },
-          (error) => {
-            console.error('Error al obtener nombre y apellido del usuario:', error);
-          }
-        );
+        this.apiService
+          .getPersonByIdOperador(this.userId, this.personId)
+          .subscribe(
+            (data) => {
+              this.nombre = data.name;
+              this.apellido = data.lastname;
+              this.dni = data.dni;
+              this.descriptions = data.descriptions;
+              this.telephone = data.telephone;
+              const localidad = this.localidades.find(
+                (loc) => loc.id === data.location_id
+              );
+              this.locationId = localidad ? localidad.name.toString() : '';
+
+              // Llamar a loadDataLote una vez que userId esté definido correctamente
+              if (this.userId !== null) {
+                this.loadDataLote(this.FieldId, this.userId);
+              }
+            },
+            (error) => {
+              console.error(
+                'Error al obtener nombre y apellido del usuario:',
+                error
+              );
+            }
+          );
       }
     } else {
       this.userId = null;
@@ -169,33 +160,34 @@ export class LoteComponent {
 
   registrarLote(): void {
     if (!this.userId) {
-     this.toastr.error('Error: No se ha identificado al usuario.', 'Error');
+      this.toastr.error('Error: No se ha identificado al usuario.', 'Error');
       return;
     }
 
     if (this.loteForm.valid) {
-      // Obtener referencias a los controles del formulario
       const nameControl = this.loteForm.get('name');
       const dimensionsControl = this.loteForm.get('dimensions');
       const addressControl = this.loteForm.get('address');
       const localidadControl = this.loteForm.get('localidad');
-      const observationControl = this.loteForm.get('observation');  // Obtener control de observación
+      const observationControl = this.loteForm.get('observation');
 
-      // Verificar que los controles no son nulos
-      if (nameControl && dimensionsControl && addressControl && localidadControl && observationControl) {
+      if (
+        nameControl &&
+        dimensionsControl &&
+        addressControl &&
+        localidadControl &&
+        observationControl
+      ) {
         const fixedGeolocation = "10°38'26'' - 10°38'26''";
-
-
-
         const campoData: any = {
           name: nameControl.value,
           dimensions: dimensionsControl.value,
           geolocation: fixedGeolocation,
           address: {
             address: this.loteForm.get('address')?.value,
-            location_id: this.loteForm.get('localidad')?.value
+            location_id: this.loteForm.get('localidad')?.value,
           },
-          observation: observationControl?.value
+          observation: observationControl?.value,
         };
 
         this.apiService.addField(this.userId, campoData).subscribe(
@@ -207,68 +199,104 @@ export class LoteComponent {
           (error) => {
             console.error('Error al registrar el campo:', error);
             if (error.error && error.error.message) {
-              this.toastr.error('Ya Existe un campo registrado con este nombre.', 'Atención');
+              this.toastr.error(
+                'Ya Existe un campo registrado con este nombre.',
+                'Atención'
+              );
             } else {
-              this.toastr.error('Error al registrar el campo. Detalles: ' + error.message, 'Error');
+              this.toastr.error(
+                'Error al registrar el campo. Detalles: ' + error.message,
+                'Error'
+              );
             }
           }
         );
       } else {
-        console.error('Error: Al menos uno de los controles del formulario es nulo.');
+        console.error(
+          'Error: Al menos uno de los controles del formulario es nulo.'
+        );
       }
     } else {
-      this.toastr.error('Por favor, completa todos los campos requeridos', 'Error');
+      this.toastr.error(
+        'Por favor, completa todos los campos requeridos',
+        'Error'
+      );
     }
   }
 
-  cargarLotes(){
-    this.router.navigate(['dashboard/cargar-lote']);
-
-  }
-  volver(){
-      this.router.navigate(['dashboard/inicio']);
-
-  }
-loadDataForMatTable(fieldId: number): void {
-  if (this.userId !== null) {
-    this.apiService.getAllPlotsOperador(this.userId, fieldId).subscribe(
-      (response: any) => {
-        // Extract the data from the nested array
+  async loadDataLote(FieldId: number, userId: number): Promise<void> {
+    if (userId !== null && FieldId !== null) {
+      try {
+        const response = await this.apiService
+          .getPlotsOperador(userId, FieldId)
+          .toPromise();
         const lotsArray: Lote[][] = response?.list?.[0] || [];
+        const data: Lote[] = lotsArray.reduce(
+          (acc, curr) => acc.concat(curr),
+          []
+        );
+        const typePlantations$ = this.apiService.getAllTypePlantationOperador();
 
-        // Flatten the array of lots
-        const data: Lote[] = lotsArray.reduce((acc, curr) => acc.concat(curr), []);
-
-        // Log the data to the console
-        console.log('Data:', data);
-
-        // Set the data to the MatTableDataSource
-        this.dataSource.data = data;
-      },
-      (error) => {
-        console.error('Error loading data for MatTableDataSource:', error);
-      }
-    );
-  } else {
-    console.error('User ID is null. Cannot load data.');
-  }
-}
-
-
-
-
-
-
-
-
-
-  // Method to handle editing a plot
-  editarLote(lote: any): void {
-    // Implementation
+        typePlantations$
+          .pipe(
+            switchMap((typePlantations: any) => {
+              const typePlantationsMap = typePlantations.reduce(
+                (acc: any, curr: any) => {
+                  acc[curr.id] = curr.name;
+                  return acc;
+                },
+                {}
+              );
+              data.forEach((lote: Lote) => {
+                lote.plant_name =
+                  typePlantationsMap[lote.type_plantation_id] || '';
+              });
+              return data;
+            })
+          )
+          .subscribe();
+        this.loteData = data;
+      } catch (error) {}
+    }
   }
 
-  // Method to handle confirming plot deletion
   confirmarBorrado(lote: any): void {
-    // Implementation
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: '400px',
+      data: {
+        message: `¿Estás seguro que queres eliminar el lote ${lote.name}?`,
+        value: lote,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.apiService
+          .deleteLogicalPlotOperador(this.userId, this.FieldId, lote.id)
+          .subscribe(
+            () => {
+              this.toastr.success('El Lote ah sido borrado con éxito', 'Éxito');
+              this.loadDataLote(this.FieldId, this.userId);
+            },
+            (error) => {
+              this.toastr.error('Error al borrar el lote', 'Error');
+            }
+          );
+      }
+    });
+  }
+
+  cargarLotes() {
+    this.router.navigate(['dashboard/cargar-lote']);
+  }
+  volver() {
+    this.router.navigate(['dashboard/inicio']);
+  }
+  editarLote(lote: Lote): void {
+   
+
+       localStorage.setItem('plotId', lote.id.toString());
+
+    this.router.navigate(['dashboard/cargar-lote']);
   }
 }

@@ -11,7 +11,7 @@
         <p class="name">{{ nombre }} {{ apellido }}</p>
         <p class="email">{{ userEmail }}</p>
       </div>
-      <div class="volver-button" (click)="volver()">
+      <div class="volver-button" (click)="volver()" style="display: flex; align-items: center; cursor: pointer;">
         <mat-icon style="color:#47de5b">arrow_back</mat-icon>
         <span class="letra-icon" style="color:#47de5b">Volver</span>
       </div>
@@ -29,7 +29,7 @@
 
     </div>
     <div class="card-campos-lotes">
-      <div class="campo-card" *ngFor="let lote of dataSource.data">
+      <div class="campo-card" *ngFor="let lote of loteData">
         <img class="icono-geolocalizacion" src="assets/img/img_geolocation.png" alt="Geolocalización">
         <p class="with-dot">
           <span class="campo-titulos">Nombre del Lote:</span>
@@ -37,7 +37,7 @@
         </p>
         <p class="with-dot">
           <span class="campo-titulos">Plantación:</span>
-          <span class="campo-variable">{{ lote.type_plantation_id }}</span>
+          <span class="campo-variable">{{ lote.plant_name }}</span>
         </p>
         <p class="with-dot">
           <span class="campo-titulos">Hectáreas:</span>

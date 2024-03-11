@@ -64,13 +64,14 @@ export class AuthService {
   // Método para cerrar la sesión
   logout(): void {
     localStorage.removeItem('token');
-    localStorage.removeItem('campoSeleccionado');
+    localStorage.removeItem('campoSeleccionado'); // Eliminar datos del campo
     this.userEmail = '';
     this.userId = null;
     this.field = null;
   }
 
   clearToken(): void {
-    localStorage.removeItem('token'); // O sessionStorage si prefieres
+    localStorage.removeItem('token');
+    localStorage.removeItem('campoSeleccionado'); // O sessionStorage si prefieres
   }
 }
