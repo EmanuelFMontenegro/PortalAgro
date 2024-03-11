@@ -7,17 +7,19 @@ import { jwtDecode } from 'jwt-decode';
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {
+    // Escuchar el evento beforeunload
+    window.addEventListener('beforeunload', () => {
+      this.clearTokenOnWindowClose();
+    });
+  }
 
   canActivate(): boolean {
     const token = this.authService.getToken();
-    // console.log("Token:", token);
 
     if (token && !this.isTokenExpired(token)) {
-      console.log("Acceso permitido");
       return true;
     } else {
-      console.log("Acceso denegado. Redirigiendo a login");
       this.router.navigate(['/login']);
       return false;
     }
@@ -28,14 +30,17 @@ export class AuthGuard implements CanActivate {
       const decoded = jwtDecode<any>(token);
       const now = Date.now().valueOf() / 1000;
 
-      // Comprueba si el token ha expirado.
-      if (decoded.exp < now) {
-        return true;
-      }
-
-      return false;
+      return decoded.exp < now;
     } catch (error) {
-      return true; // Si hay un error en la decodificación, asume que el token es inválido
+      return true;
+    }
+  }
+
+  private clearTokenOnWindowClose(): void {
+    const token = this.authService.getToken();
+    if (token) {
+      // Eliminar el token al cerrar la ventana
+      this.authService.clearToken();
     }
   }
 }

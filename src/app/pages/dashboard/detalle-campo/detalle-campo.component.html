@@ -1,0 +1,42 @@
+<div class="container">
+  <div class="titulo-bienvenida">
+    <span>¡Bienvenido!</span>
+  </div>
+
+  <!-- User Card -->
+  <div class="card user-card">
+    <div class="avatar">
+      <mat-icon>person</mat-icon>
+    </div>
+    <div class="user-info">
+      <p class="name">{{ nombre }} {{ apellido }}</p>
+      <p class="email">{{ userEmail }}</p>
+    </div>
+    <div class="volver-button" (click)="volver()">
+      <mat-icon style="color:#32963f">arrow_back</mat-icon>
+      <span class="letra_btn_volver">Volver</span>
+    </div>
+  </div>
+  <h4 class="titulo-detalle-campo">Detalle de Campos</h4>
+  <div class="card">
+
+    <div class="campo-card">
+      <div id="map" class="campo-image-container" *ngIf="mostrarMapaPrincipal"></div>
+      <div class="campo-image-container" *ngIf="mostrarImagenPrincipal">
+        <img src="/assets/img/img_nogeo.png" alt="Campo Image" class="campo-image">
+      </div>
+    </div>
+
+    <div class="campo-details-card">
+      <h4>{{ campoSeleccionado.name }}</h4>
+      <p>Localidad: {{ campoSeleccionado.address.location.name }}</p>
+      <p>Dirección: {{ campoSeleccionado.address.address }}</p>
+      <p>Hectáreas: {{ campoSeleccionado.dimensions }}</p>
+      <p>Descripción: {{ campoSeleccionado.observation }}</p>
+      <div class="campo-buttons">
+        <button class="geolocalizar" (click)="geolocalizar()">Geolocalizar</button>
+        <button (click)="verLotes()">Ver Lotes</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,20 +1,28 @@
-<div class="login-container">
-  <div class="background-image">
-    <!-- Imagen de fondo -->
-  </div>
-  <div class="content">
-    <h1 class="thank-you">¡Gracias por unirte!</h1>
-    <p class="subtext">Productor</p>
-    <p class="activation-message">Se ha activado correctamente su cuenta. Ya puede iniciar sesión.</p>
-    <button class="login-button" (click)="redirectToLogin()">Iniciar Sesión</button>
-    <footer>
-      <p class="footer-text">¿Conectamos?</p>
-      <div class="social-icons">
+<!-- Vista de bienvenida al portal -->
+
+<div class="container">
+  <img class="background-image" src="/assets/img/pantalla_inicio.png" alt="">
+  <mat-card class="card-blur">
+    <span class="welcome-title">¡Gracias por unirte!</span>
+    <img src="assets/img/log_sustentable.png" alt="Imagen Superior" class="top-image">
+    <span class="white-text">Se ha activado correctamente su cuenta.Pasaremos a completar tu perfil.</span>
+  </mat-card>
+  <footer>
+    <span class="white-text-icons">¿Conectamos?</span>
+    <div class="social-icons">
+      <a href="https://www.facebook.com/SiliconmisionesOk" target="_blank">
         <img src="assets/img/facebook.png" alt="Facebook" class="social-icon">
+      </a>
+      <a href="https://www.linkedin.com/company/silicon-misiones/mycompany/" target="_blank">
         <img src="assets/img/linkedin.png" alt="Linkedin" class="social-icon">
+      </a>
+      <a href="https://www.instagram.com/siliconmisiones" target="_blank">
         <img src="assets/img/instagram.png" alt="Instagram" class="social-icon">
+      </a>
+      <a href="https://siliconmisiones.gob.ar/" target="_blank">
         <img src="assets/img/logo_silicon.png" alt="Silicon Misiones" class="silicon-logo">
-      </div>
-    </footer>
-  </div>
+      </a>
+    </div>
+
+  </footer>
 </div>

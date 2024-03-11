@@ -1,16 +1,19 @@
-<mat-sidenav-container class="sidenav-container">
+<!-- <mat-sidenav-container class="sidenav-container">
   <mat-sidenav #sidenav mode="side" opened="true" class="sidenav">
     <div class="logo-container">
       <img src="assets/img/logo_sidebar.png" alt="Logo" class="dashboard-logo">
     </div>
     <mat-nav-list class="btn_nav">
-      <a mat-list-item routerLink="/dashboard/inicio" class="nav-item" (click)="closeSidenavIfSmall()">Inicio</a>
-      <a mat-list-item routerLink="/dashboard/servicios" class="nav-item" (click)="closeSidenavIfSmall()">Servicios</a>
-      <a mat-list-item routerLink="/dashboard/productos" class="nav-item" (click)="closeSidenavIfSmall()">Productos</a>
-      <a mat-list-item routerLink="/dashboard/configuracion" class="nav-item"
-        (click)="closeSidenavIfSmall()">Configuracion</a>
-      <a mat-list-item routerLink="/dashboard/perfil" class="nav-item" (click)="closeSidenavIfSmall()">Perfil</a>
+      <p mat-list-item routerLink="/dashboard/inicio" class="nav-item" (click)="closeSidenavIfSmall()">Inicio</p>
+      <p mat-list-item routerLink="/dashboard/servicios" class="nav-item" (click)="closeSidenavIfSmall()">Servicios</p>
+      <p mat-list-item routerLink="/dashboard/productos" class="nav-item" (click)="closeSidenavIfSmall()">Productos</p>
+      <p mat-list-item routerLink="/dashboard/configuracion" class="nav-item" (click)="closeSidenavIfSmall()">
+        Configuracion</p>
+      <p mat-list-item routerLink="/dashboard/perfil" class="nav-item" (click)="closeSidenavIfSmall()">Perfil</p>
     </mat-nav-list>
+    <div class="logo-b">
+      <img src="assets/img/empresa_b.png" alt="Logo" class="sidenav-logo">
+    </div>
   </mat-sidenav>
 
   <mat-sidenav-content class="sidenav-content">
@@ -19,20 +22,73 @@
     </button>
 
     <mat-toolbar color="primary" class="toolbar-green">
-      <mat-form-field class="search-field">
-        <mat-label>Buscar</mat-label>
-        <input matInput placeholder="Escribe aquí...">
-      </mat-form-field>
+
+
+      <input matInput class="search-input" placeholder="Buscar ...">
+
       <span class="toolbar-spacer"></span>
 
       <button mat-icon-button [matMenuTriggerFor]="menu" class="profile-menu">
         <mat-icon>account_circle</mat-icon>
       </button>
       <mat-menu #menu="matMenu">
-        <button mat-menu-item>Perfil</button>
+        <button mat-menu-item routerLink="/dashboard/perfil">Perfil</button>
         <button mat-menu-item (click)="cerrarSesion()">Cerrar Sesión</button>
+
       </mat-menu>
 
+    </mat-toolbar>
+
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container> -->
+
+
+
+
+
+
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #sidenav mode="side" [opened]="isSidebarOpen" class="sidenav">
+    <div class="logo-container">
+      <img src="assets/img/logo_sidebar.png" alt="Logo" class="dashboard-logo">
+    </div>
+    <mat-nav-list class="btn_nav">
+      <p mat-list-item routerLink="/dashboard/inicio" class="nav-item" (click)="closeSidenavIfSmall()">Inicio</p>
+      <p mat-list-item routerLink="/dashboard/servicios" class="nav-item" (click)="closeSidenavIfSmall()">Servicios</p>
+      <p mat-list-item routerLink="/dashboard/productos" class="nav-item" (click)="closeSidenavIfSmall()">Productos</p>
+      <p mat-list-item routerLink="/dashboard/configuracion" class="nav-item" (click)="closeSidenavIfSmall()">
+        Configuración</p>
+      <p mat-list-item routerLink="/dashboard/perfil" class="nav-item" (click)="closeSidenavIfSmall()">Perfil</p>
+    </mat-nav-list>
+    <div class="logo-b">
+      <img src="assets/img/empresa_b.png" alt="Logo" class="sidenav-logo">
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="sidenav-content">
+    <button mat-icon-button (click)="toggleSidebar()" *ngIf="isScreenSmall" class="open-sidebar-btn">
+      <mat-icon style="color: white;">menu</mat-icon>
+    </button>
+
+    <mat-toolbar color="primary" class="toolbar-green">
+      <input matInput class="search-input" placeholder="Buscar ...">
+      <span class="toolbar-spacer"></span>
+
+
+      <div class="logo-container-1">
+        <img src="assets/img/logo_sidebar-1.png" alt="Logo" class="dashboard-logo">
+      </div>
+
+      <span class="toolbar-spacer"></span>
+
+      <button mat-icon-button [matMenuTriggerFor]="menu" class="profile-menu">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item routerLink="/dashboard/perfil">Perfil</button>
+        <button mat-menu-item (click)="cerrarSesion()">Cerrar Sesión</button>
+      </mat-menu>
     </mat-toolbar>
 
     <router-outlet></router-outlet>

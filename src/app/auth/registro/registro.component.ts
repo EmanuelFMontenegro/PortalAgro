@@ -39,9 +39,9 @@ export class RegistrateComponent {
       confirmPassword: this.confirmPasswordControl
     });
 
-    this.registro.valueChanges.subscribe(() => {
-      this.updateButtonValidity();
-    });
+    // this.registro.valueChanges.subscribe(() => {
+    //   this.updateButtonValidity();
+    // });
   }
   togglePasswordVisibility(): void {
     this.passwordVisible = !this.passwordVisible;
@@ -55,7 +55,7 @@ export class RegistrateComponent {
       const username = this.registro.get('username')?.value;
       const password = this.registro.get('password')?.value;
 
-      console.log('Enviando formulario de registro con:', { username, password });
+      // console.log('Enviando formulario de registro con:', { username, password });
 
       this.cargandoValidacion = true;
 
@@ -63,7 +63,7 @@ export class RegistrateComponent {
         next: (response) => {
 
           this.cargandoValidacion = false;
-          console.log('Registro exitoso:', response);
+          // console.log('Registro exitoso:', response);
           this.toastr.info('Registro exitoso. Por favor, inicie sesión.', 'Éxito');
           this.irAInicioSesion();
         },
@@ -81,15 +81,19 @@ export class RegistrateComponent {
   manejarErrorRegistro(err: any) {
     console.log('Error:', err);
 
-     if (err.status === 400 && err.error?.message === 'User already exists.') {
-        this.toastr.error('El usuario ya está registrado. Por favor, intente con otro email.', 'Usuario Existente');
+    if (err.status === 400 && err.error?.code === 4002 && err.error?.details === 'Usuario') {
+        // Agrega el código 4002 al mensaje de error existente
+        const mensajeError = `${err.error.message} `;
+
+        this.toastr.error(mensajeError, 'Usuario Existente');
     } else if (err.status === 0) {
         this.toastr.error('Ocurrió un error de conexión. Por favor, inténtelo de nuevo más tarde.', 'Error de Conexión');
     } else {
-
         this.toastr.error('Ocurrió un error desconocido. Por favor, inténtelo de nuevo.', 'Error');
     }
 }
+
+
 
 irAInicioSesion(): void {
     this.router.navigate(['/login']);
@@ -102,14 +106,14 @@ irAInicioSesion(): void {
     return null;
   }
 
-  updateButtonValidity() {
-    const isPasswordMatchError = this.confirmPasswordControl.errors?.['passwordsNotMatch'];
-    const isFormValid = this.registro.valid && !isPasswordMatchError;
-    const button = document.getElementById('submitBtn') as HTMLButtonElement;
+  // updateButtonValidity() {
+  //   const isPasswordMatchError = this.confirmPasswordControl.errors?.['passwordsNotMatch'];
+  //   const isFormValid = this.registro.valid && !isPasswordMatchError;
+  //   const button = document.getElementById('submitBtn') as HTMLButtonElement;
 
-    if (button) {
-      button.disabled = !isFormValid;
-    }
-  }
+  //   if (button) {
+  //     button.disabled = !isFormValid;
+  //   }
+  // }
 
 }

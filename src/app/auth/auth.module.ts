@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthRoutingModule } from './auth-routing.module';
 import { RouterModule } from '@angular/router';
-// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -16,6 +16,7 @@ import { RecuperContrasenaComponent } from './recuper-contrasena/recuper-contras
 import { MatIconModule } from '@angular/material/icon';
 import { NuevaContrasenaComponent } from './nueva-contrasena/nueva-contrasena.component';
 import { BienvenidaComponent } from './bienvenida/bienvenida.component';
+import { PrimerRegistroComponent } from './primerRegistro/primerRegistro.component';
 
 
 
@@ -27,12 +28,14 @@ import { BienvenidaComponent } from './bienvenida/bienvenida.component';
     RecuperContrasenaComponent,
     NuevaContrasenaComponent,
     BienvenidaComponent,
+    PrimerRegistroComponent,
   ],
   imports: [
     AuthRoutingModule,
     RouterModule,
     CommonModule,
     MatCardModule,
+    MatSelectModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,

@@ -8,9 +8,10 @@ import { DashboardModule } from './pages/dashboard/dashboard.module';
 import { AppComponent } from './app.component';
 import { ToastrModule } from 'ngx-toastr';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { JwtInterceptor } from 'src/app/services/JwtInterceptor';
+import { Interceptor } from 'src/app/services/Interceptor';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { FormatDatePipe } from './format-date.pipe';
+
 
 
 
@@ -29,13 +30,12 @@ const routes: Routes = [];
     DashboardModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: !isDevMode(),
-      // Register the ServiceWorker as soon as the application is stable
-      // or after 30 seconds (whichever comes first).
+
       registrationStrategy: 'registerWhenStable:30000'
     }),
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
+    { provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true},
     ],
    bootstrap: [AppComponent]
 })

@@ -25,9 +25,11 @@ export class AuthService {
 
           // Decodificar el token y almacenar los datos
           const decodedToken = jwtDecode<{ email: string, userId: number, field: string }>(token);
+          console.log('Decoded Token:', decodedToken);
           this.userEmail = decodedToken.email;
-          console.log('este es el mail',this.userEmail)
+          console.log('Email del usuario:', this.userEmail); // Log del email
           this.userId = decodedToken.userId;
+          console.log('ID del usuario:', this.userId); // Log del ID de usuario
           this.field = decodedToken.field; // Almacenar el campo adicional
 
           // Devolver los datos relevantes
@@ -41,7 +43,7 @@ export class AuthService {
 
   // Método para obtener el email del usuario
   getUserEmail(): string {
-     return this.userEmail;
+    return this.userEmail;
   }
 
   // Método para obtener el ID del usuario
@@ -62,10 +64,14 @@ export class AuthService {
   // Método para cerrar la sesión
   logout(): void {
     localStorage.removeItem('token');
+    localStorage.removeItem('campoSeleccionado'); // Eliminar datos del campo
     this.userEmail = '';
     this.userId = null;
     this.field = null;
   }
 
-  // Aquí puedes agregar cualquier otro método que necesites
+  clearToken(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('campoSeleccionado'); // O sessionStorage si prefieres
+  }
 }

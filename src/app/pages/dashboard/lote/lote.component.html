@@ -1,0 +1,66 @@
+<div class="container">
+  <div class="titulo-bienvenida">
+    <span>¡Bienvenido!</span>
+  </div>
+  <mat-card class="main-card">
+    <div class="card user-card">
+      <div class="avatar">
+        <mat-icon>person</mat-icon>
+      </div>
+      <div class="user-info">
+        <p class="name">{{ nombre }} {{ apellido }}</p>
+        <p class="email">{{ userEmail }}</p>
+      </div>
+      <div class="volver-button" (click)="volver()" style="display: flex; align-items: center; cursor: pointer;">
+        <mat-icon style="color:#47de5b">arrow_back</mat-icon>
+        <span class="letra-icon" style="color:#47de5b">Volver</span>
+      </div>
+    </div>
+
+
+
+    <div class="card-campos-section">
+      <h2 class="titulo-campo">Lotes</h2>
+      <div class="leta_btn">
+        <button mat-raised-button (click)="cargarLotes()" class="plus-icon">
+          Cargar <mat-icon style="font-size: 20px;">add</mat-icon>
+        </button>
+      </div>
+
+    </div>
+    <div class="card-campos-lotes">
+      <div class="campo-card" *ngFor="let lote of loteData">
+        <img class="icono-geolocalizacion" src="assets/img/img_geolocation.png" alt="Geolocalización">
+        <p class="with-dot">
+          <span class="campo-titulos">Nombre del Lote:</span>
+          <span class="campo-variable">{{ lote.name }}</span>
+        </p>
+        <p class="with-dot">
+          <span class="campo-titulos">Plantación:</span>
+          <span class="campo-variable">{{ lote.plant_name }}</span>
+        </p>
+        <p class="with-dot">
+          <span class="campo-titulos">Hectáreas:</span>
+          <span class="campo-variable">{{ lote.dimensions }}</span>
+        </p>
+        <p class="with-dot">
+          <span class="campo-titulos">Descripción:</span>
+          <span class="campo-variable">{{ lote.descriptions }}</span>
+        </p>
+
+        <div class="acciones">
+          <button mat-icon-button aria-label="Editar" class="edit-button" (click)="editarLote(lote)">
+            <mat-icon class="material-icons icon-size">edit</mat-icon>
+            <span style="color: #4CAF50;">Editar</span>
+          </button>
+          <button mat-icon-button aria-label="Eliminar" class="delete-button" (click)="confirmarBorrado(lote)">
+            <mat-icon class="material-icons icon-size">delete</mat-icon>
+            <span style="color: red;">Eliminar</span>
+          </button>
+        </div>
+
+
+      </div>
+    </div>
+  </mat-card>
+</div>

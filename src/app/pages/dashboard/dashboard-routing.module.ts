@@ -6,8 +6,12 @@ import { ProductosComponent } from './productos/productos.component';
 import { GeolocalizacionComponent } from './geolocalizacion/geolocalizacion.component';
 import { ConfiguracionComponent } from './configuracion/configuracion.component';
 import { PerfilComponent } from './perfil/perfil.component';
+import { CampoComponent } from './campo/campo.component';
 import { DashboardComponent } from './dashboard.component';
 import { BienvenidaComponent } from 'src/app/auth/bienvenida/bienvenida.component';
+import { DetalleCampoComponent } from './detalle-campo/detalle-campo.component';
+import { LoteComponent } from './lote/lote.component';
+import { CargarLoteComponent } from './cargar-lote/cargar-lote.component';
 import { AuthGuard } from 'src/app/core/guards/auth.guard';
 
 const routes: Routes = [
@@ -15,12 +19,17 @@ const routes: Routes = [
     path: 'dashboard',
     component: DashboardComponent,
     canActivate: [AuthGuard],
+
     children: [
       { path: 'bienvenida', component: BienvenidaComponent},
       { path: 'geolocalizacion', component: GeolocalizacionComponent},
-      { path: 'inicio', component: InicioComponent},
+      { path: 'inicio', component:InicioComponent},
+      { path: 'detalle-campo', component: DetalleCampoComponent},
+      { path: 'lote', component: LoteComponent},
+      { path : 'cargar-lote', component: CargarLoteComponent},
       { path: 'servicios', component: ServiciosComponent},
       { path: 'productos', component: ProductosComponent},
+      { path: 'campo', component: CampoComponent},
       { path: 'configuracion', component: ConfiguracionComponent},
       { path: 'perfil', component: PerfilComponent},
       { path: '', redirectTo: 'inicio', pathMatch: 'full' },

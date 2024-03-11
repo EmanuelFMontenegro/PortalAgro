@@ -1,6 +1,6 @@
 $primary-color: #3CA749
 $secondary-color: #8FCA8F
-$hover-color: #32963f
+$hover-color: #47de5b
 $error-color: #d9534f
 $light-grey: #f4f4f4
 $dark-grey: #454545
@@ -16,19 +16,23 @@ $font-family: 'Montserrat', sans-serif
   justify-content: center
   align-items: center
   height: 100vh
-  background-color: $primary-color
+  background-image: url('/assets/img/fondo_agro.png')
+  background-size: cover
 
 .login-card
   width: 500px
   max-width: 100%
   padding: 40px
-  background: #fff
-  color: $dark-grey
-  border-radius: 10px
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2)
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))
+  backdrop-filter: blur(10px)
+  -webkit-backdrop-filter: blur(15px)
+  border-radius: 20px
+  border: 1px solid rgba(255, 255, 255, 0.18)
+  overflow: hidden
   font-family: $font-family
   text-align: center
   font-size: 14px
+
   @media (max-width: 600px)
     width: 90%
     padding: 20px
@@ -40,21 +44,26 @@ $font-family: 'Montserrat', sans-serif
 
 h1
   font-size: 32px
-  color: $dark-grey
-  font-weight: 700
+  color: white
+  font-weight: 600
 
 .info-text-container
   margin-bottom: 20px
-  color: $medium-grey
+  color: white
+  font-weight: 600
 
 input[type="email"], input[type="password"]
   font-size: 14px
   width: 95%
+  color: $medium-grey
   padding: 10px
   margin-bottom: 15px
   border: 1px solid $border-color
   border-radius: 4px
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3)
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))
+  backdrop-filter: blur(10px)
+  -webkit-backdrop-filter: blur(15px)
 
   &:focus
     outline: none
@@ -65,21 +74,27 @@ input[type="email"], input[type="password"]
   position: relative
   display: flex
   align-items: center
+  margin-top: 2%
 
   input
     width: 100%
     padding-right: 30px
     font-size: 14px
+    color: $medium-grey
     padding: 10px
     margin-bottom: 15px
     border: 1px solid $border-color
     border-radius: 4px
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3)
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))
+    backdrop-filter: blur(10px)
+    -webkit-backdrop-filter: blur(15px)
 
     &:focus
       outline: none
       border-color: $primary-color
       box-shadow: 0 0 5px $primary-color
+
   .toggle-password
     position: absolute
     right: 10px
@@ -87,12 +102,37 @@ input[type="email"], input[type="password"]
     transform: translateY(-50%)
     cursor: pointer
     font-size: 16px
-    color: $primary-color
+    color: white
+
+    &:before
+      content: ""
+      position: absolute
+      top: 0
+      left: 0
+      right: 0
+      bottom: 0
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))
+      backdrop-filter: blur(10px)
+      -webkit-backdrop-filter: blur(15px)
+      border-radius: 4px
+      pointer-events: none
+      opacity: 0
+      transition: opacity 0.3s ease
+
+    &.visible
+      color: $hover-color
+
+      &:before
+        opacity: 1
+
 button[type="submit"]
-  width: 50%
+  width: 100%
   margin-top: 20px
   padding: 10px 0
-  background-color: $secondary-color
+  // background: none
+  background: $primary-color
+  backdrop-filter: blur(25px)
+  -webkit-backdrop-filter: blur(15px)
   color: white
   border: none
   border-radius: 4px
@@ -100,15 +140,20 @@ button[type="submit"]
   cursor: pointer
   transition: background-color 0.3s ease
 
+  &:hover
+    backdrop-filter: blur(10px)
+    -webkit-backdrop-filter: blur(15px)
+    background-color: $hover-color // Cambiar el color de fondo al hacer hover
+
   @media (max-width: 600px)
     width: 80%
 
 .btn-submit
-  background-color: #8FCA8F
+  // background-color: #8FCA8F
   color: white
 
 .btn-submit.enabled
-  background-color: #3CA749
+  // background-color: #3CA749
 
 .login-links
   margin-top: 20px
@@ -117,10 +162,11 @@ button[type="submit"]
 .login-prompt
   font-size: 14px
   margin-bottom: 10px
+  color: white
 
 .login-link
   font-size: 14px
-  color: $primary-color
+  color: $hover-color
   text-decoration: none
   margin-left: 5px
   // border-bottom: 2px solid $primary-color
@@ -133,7 +179,7 @@ button[type="submit"]
   display: block
   min-height: 20px
   font-size: 12px
-  color: $error-color
+  color: white
   margin-top: 5px
   visibility: hidden
   opacity: 0
