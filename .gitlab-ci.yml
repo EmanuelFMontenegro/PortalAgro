@@ -28,9 +28,9 @@ build_image_stage:
     - deploy_stage
   tags:
     - stage, devops, silicon
-  before_script: 
+  #before_script: 
   # - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
-   - echo -n $HARBOR_PASSWORD | docker login -u $HARBOR_USERNAME --password-stdin $HARBOR_URL
+   #- echo -n $HARBOR_PASSWORD | docker login -u $HARBOR_USERNAME --password-stdin $HARBOR_URL
   script:
    # - truncate -s 0 .env.local && truncate -s 0 .env.development && truncate -s 0 .env.production
     #- echo "$CONFIG_ENV_PORTAL_STAGE_FRONT" >> .env.local
