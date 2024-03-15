@@ -1,0 +1,166 @@
+$primary-color: #0F8054
+$secondary-color: #8FCA8F
+$hard-color: #47de5b
+$hover-color: #32963f
+$error-color: #d9534f
+$light-grey: #f4f4f4
+$dark-grey: #454545
+$medium-grey: #666
+$border-color: #ddd
+$font-family: 'Montserrat', sans-serif
+
+.recuper-container
+  display: flex
+  justify-content: center
+  align-items: center
+  height: 100vh
+  // background-image: url('/assets/img/fondo_agro.png')
+  background: #263238
+  background-size: cover
+
+  .recuper-card
+    width: 500px
+    max-width: 100%
+    padding: 40px
+    height: 535px
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))
+    backdrop-filter: blur(10px)
+    -webkit-backdrop-filter: blur(15px)
+    border-radius: 20px
+    border: 1px solid rgba(255, 255, 255, 0.18)
+    overflow: hidden
+    font-family: $font-family
+    text-align: center
+    font-size: 14px
+
+    .logo-container
+      margin-bottom: 20px
+      display: flex
+      justify-content: center
+      align-items: center
+
+      img
+        max-width: 250px
+        margin-top: 10px
+        width: 100%
+        height: auto
+
+    h1
+      font-size: 24px
+      color: $light-grey
+      margin-bottom: 20px
+
+    .info-text-container
+      display: flex
+      flex-direction: column
+      font-size: 13px
+      font-weight: bold
+      color: $light-grey
+      margin-bottom: 20px
+
+      .info-text
+        margin-bottom: 5px
+
+    form
+      width: 100%
+      display: flex
+      flex-direction: column
+
+    input
+      font-size: 14px
+      width: 95%
+      color: $light-grey
+      padding: 10px
+      margin-bottom: 15px
+      border: 1px solid #ddd
+      border-radius: 4px
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3)
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))
+      backdrop-filter: blur(10px)
+      -webkit-backdrop-filter: blur(15px)
+
+      &:focus
+        outline: none
+        border-color: $primary-color
+        box-shadow: 0 0 5px $primary-color
+
+    .mat-error
+      color: $error-color
+      font-size: 12px
+
+    button
+      width: 100%
+      padding: 10px
+      border-radius: 4px
+      border: none
+      background-color: $primary-color
+      color: white
+      cursor: pointer
+      font-size: 16px
+      transition: background-color 0.3s ease
+      margin: 20px auto 0
+
+      // &:hover
+      //   background-color: $hover-color
+
+    .login-links
+      display: flex
+      justify-content: center
+      align-items: center
+      flex-direction: column
+      margin-top: 10px
+
+      .login-prompt
+        font-size: 14px
+        color: $light-grey
+
+      .login-link
+        color: $primary-color
+        text-decoration: none
+        font-size: 14px
+        text-decoration: underline
+
+    @media (max-width: 600px)
+      padding: 15px
+      width: 90%
+      height: 70%
+
+      .logo-container
+        img
+          max-width: 80px
+          margin-top: 5px
+
+      h1
+        font-size: 20px
+        margin-bottom: 15px
+
+      .info-text-container
+        font-size: 12px
+
+        .info-text
+          margin-bottom: 3px
+
+      input
+        padding: 6px
+        margin-bottom: 10px
+        margin-top: 20px
+        font-weight: bold
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3)
+
+      .mat-error
+        font-size: 10px
+        margin-top: 3px
+
+      button
+        width: 60%
+        padding: 8px
+        font-size: 14px
+        margin-top: 15px
+
+      .login-links
+        .login-prompt
+          font-size: 12px
+          margin-bottom: 5px
+
+        .login-link
+          font-size: 12px

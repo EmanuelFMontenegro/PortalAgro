@@ -1,0 +1,34 @@
+<div class="recuper-container">
+  <mat-card class="recuper-card">
+    <div class="logo-container">
+      <img src="../../../assets/img/log_sustentable _gris.png" alt="Logo">
+    </div>
+    <h1 class="mb-4">Recuperar Contraseña</h1>
+    <div class="info-text-container">
+      <span class="info-text">
+        Por favor ingresa el email con el que te registraste,
+      </span>
+      <span class="info-text">
+        luego, revisa tu bandeja de entrada para continuar <br />con el proceso.
+      </span>
+    </div>
+    <form class="text-start" [formGroup]="formulario" (ngSubmit)="onSubmit()">
+      <input matInput formControlName="email" type="email" id="email" placeholder="Correo electrónico">
+      <mat-error *ngIf="emailField?.invalid && emailField?.touched">
+        <span *ngIf="emailField?.hasError('required')">El correo electrónico es requerido.</span>
+        <span *ngIf="emailField?.hasError('email')">Por favor ingresa un correo electrónico válido.</span>
+      </mat-error>
+
+      <button mat-raised-button type="submit" class="btn btn-block mt-3" [disabled]="envioExitoso">Recuperar
+        Contraseña</button>
+
+      <div class="login-links mt-3">
+        <div class="login-prompt">
+          ¿Ya tienes cuenta? <a routerLink="/login" class="login-link" (click)="irAInicioSesion()">Iniciar Sesión</a>
+        </div>
+      </div>
+    </form>
+
+
+  </mat-card>
+</div>

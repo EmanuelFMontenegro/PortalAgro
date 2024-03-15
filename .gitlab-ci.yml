@@ -1,0 +1,64 @@
+variables:
+  IMAGE_TAG: $CI_PROJECT_NAME:$CI_PIPELINE_ID 
+
+stages:
+  - test
+  - build
+  - deploy
+  
+run_tests:
+  stage: test
+  image: nginx:latest
+  only: 
+    - deploy_stage
+  tags:
+    - stage, devops, silicon
+
+  before_script:
+#    - echo "Hello, $GITLAB_USER_LOGIN !"
+    - date
+    # && apt-get install make
+  script:
+    - date
+#
+build_image_stage:
+  image: docker
+  stage: build
+  only: 
+    - deploy_stage
+  tags:
+    - stage, devops, silicon
+  #before_script: 
+  # - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
+   #- echo -n $HARBOR_PASSWORD | docker login -u $HARBOR_USERNAME --password-stdin $HARBOR_URL
+  script:
+   # - truncate -s 0 .env.local && truncate -s 0 .env.development && truncate -s 0 .env.production
+    #- echo "$CONFIG_ENV_PORTAL_STAGE_FRONT" >> .env.local
+    - docker build -t $IMAGE_TAG .
+    - docker tag $IMAGE_TAG $HARBOR_HOST/$HARBOR_PROJECT/stage/portal-prod-$IMAGE_TAG
+    - docker push $HARBOR_HOST/$HARBOR_PROJECT/stage/portal-prod-$IMAGE_TAG
+
+dev_deploy_stage:
+  image: ubuntu:latest
+  stage: deploy
+  #before_script:
+   # - chmod 0600 $SSH_KEY_DESARROLLO_SILICON
+  only: 
+    - deploy_stage
+  tags:
+    - stage, devops, silicon
+  before_script:
+    #- apt-get -yq update
+    #- apt-get -yqq install ssh
+    - install -m 600 -D /dev/null ~/.ssh/id_rsa
+    - echo "$SSH_KEY_DESARROLLO_SILICON" | base64 -d > ~/.ssh/id_rsa
+    - ssh-keyscan -H $DEV_HOST_DESAROLLO_SILICON > ~/.ssh/known_hosts
+  script:
+    - ssh $DEV_USER_DESARROLLO_SILICON@$DEV_HOST_DESAROLLO_SILICON "date && docker rm $CI_PROJECT_NAME --force &&                     docker run -d -p 4200:4200 --name $CI_PROJECT_NAME $HARBOR_HOST/$HARBOR_PROJECT/stage/portal-prod-$IMAGE_TAG "
+
+   # - ssh $DEV_USER_DESARROLLO_SILICON@$DEV_HOST_DESAROLLO_SILICON "date && echo -n $HARBOR_PASSWORD | docker login -u $HARBOR_USERNAME --password-stdin $HARBOR_URL &&
+    #  docker rm $CI_PROJECT_NAME --force &&  docker run -d -p 4200:4200 --name $CI_PROJECT_NAME $HARBOR_HOST/$HARBOR_PROJECT/$IMAGE_TAG "
+  after_script:
+    - rm -rf ~/.ssh
+
+    ##

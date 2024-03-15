@@ -26,7 +26,7 @@ const routes: Routes = [
       { path: 'inicio', component:InicioComponent},
       { path: 'detalle-campo', component: DetalleCampoComponent},
       { path: 'lote', component: LoteComponent},
-      { path : 'cargar-lote', component: CargarLoteComponent},
+      { path :'cargar-lote', component: CargarLoteComponent},
       { path: 'servicios', component: ServiciosComponent},
       { path: 'productos', component: ProductosComponent},
       { path: 'campo', component: CampoComponent},

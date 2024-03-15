@@ -17,9 +17,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { NuevaContrasenaComponent } from './nueva-contrasena/nueva-contrasena.component';
 import { BienvenidaComponent } from './bienvenida/bienvenida.component';
 import { PrimerRegistroComponent } from './primerRegistro/primerRegistro.component';
-
-
-
+import { LoginAdminComponent } from './login-admin/login-admin.component';
+import { RecuperContrasenaAdminComponent } from './recuper-contrasena-admin/recuper-contrasena-admincomponent';
 
 @NgModule({
   declarations: [
@@ -29,6 +28,8 @@ import { PrimerRegistroComponent } from './primerRegistro/primerRegistro.compone
     NuevaContrasenaComponent,
     BienvenidaComponent,
     PrimerRegistroComponent,
+    LoginAdminComponent,
+    RecuperContrasenaAdminComponent,
   ],
   imports: [
     AuthRoutingModule,
@@ -42,7 +43,7 @@ import { PrimerRegistroComponent } from './primerRegistro/primerRegistro.compone
     MatButtonModule,
     MatSnackBarModule,
     MatIconModule,
-    ToastrModule.forRoot()
-  ]
+    ToastrModule.forRoot(),
+  ],
 })
-export class AuthModule { }
+export class AuthModule {}

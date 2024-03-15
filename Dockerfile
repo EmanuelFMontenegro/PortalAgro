@@ -19,7 +19,11 @@ COPY . .
 #RUN npm run build --prod
 #RUN npm install --save-dev https-proxy-agent
 #RUN npm install leaflet @types/leaflet
+<<<<<<< HEAD
 RUN npm audit fix --force
+=======
+#RUN npm audit fix --force
+>>>>>>> remotes/origin/deploy_stage
 
 RUN npm run build 
 #RUN ng serve
@@ -29,4 +33,7 @@ EXPOSE 4200
 # Start the application
 CMD ["ng", "serve", "--host", "0.0.0.0"]
 #CMD ["npm", "start"]
+<<<<<<< HEAD
 
+=======
+>>>>>>> remotes/origin/deploy_stage

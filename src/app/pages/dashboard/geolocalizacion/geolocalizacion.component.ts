@@ -350,7 +350,7 @@ mostrarDetallesCampo(campo: any): void {
               this.addMarker([geoData.latitude, geoData.longitude]);
               this.map.setView([geoData.latitude, geoData.longitude], 200);
             } else {
-              this.toastr.info('Cargando datos de geolocalización.', 'Información');
+              // this.toastr.info('Cargando datos de geolocalización.', 'Información');
             }
           } else {
             this.toastr.info('Existen Campos sin Geolocalizar, Por Favor actualizalos.', 'Información');
@@ -445,7 +445,7 @@ mostrarDetallesCampo(campo: any): void {
     }
 
     if (!this.currentMarker || !this.currentMarker.getLatLng()) {
-      this.toastr.warning('No has seleccionado ningún lugar', 'Atención');
+      this.toastr.warning('No has seleccionado ningún lugar en el mapa.', 'Atención');
       return;
     }
 

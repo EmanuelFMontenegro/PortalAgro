@@ -22,6 +22,7 @@ interface DecodedToken {
 })
 
 export class InicioComponent implements OnInit {
+  currentYear: number = new Date().getFullYear();
   nombre: string = '';
   apellido: string = '';
   descripcion: string = '';
@@ -223,7 +224,7 @@ export class InicioComponent implements OnInit {
     this.campoSeleccionado = campo;
     localStorage.setItem('campoSeleccionado', JSON.stringify(this.campoSeleccionado));
 
-  
+
     this.router.navigate(['dashboard/detalle-campo']);
   }
 

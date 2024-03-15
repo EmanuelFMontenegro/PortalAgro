@@ -1,7 +1,7 @@
 <div class="login-container">
-  <mat-card class="login-card" [ngStyle]="{'height': hasErrors ? 'auto' : '550px'}" *ngIf="!mostrarRegistro">
+  <mat-card class="login-card" [ngStyle]="{'height': hasErrors ? 'auto' : '535px'}" *ngIf="!mostrarRegistro">
     <div class="logo-container">
-      <img src="../../../assets/img/log_sustentable.png" alt="Logo">
+      <img src="../../../assets/img/log_sustentable _gris.png" alt="Logo">
     </div>
     <h1 class="mb-4">Iniciar Sesión</h1>
     <div class="info-text-container">
@@ -10,7 +10,7 @@
       </span>
     </div>
     <form [formGroup]="login" (ngSubmit)="enviarFormulario()" class="text-start">
-      <input matInput type="email" id="username" [formControl]="usernameControl" placeholder="Correo electrónico">
+      <input matInput type="email" id="username" [formControl]="usernameControl" placeholder="Usuario Administrador">
 
       <div class="error-container">
         <mat-error *ngIf="usernameControl.invalid && usernameControl.touched">
@@ -40,13 +40,16 @@
       </button>
 
       <div class="login-links mt-3">
-        <div class="login-prompt">
+        <!-- <div class="login-prompt">
           ¿No tienes cuenta?<a routerLink="/registro" class="login-link">Regístrate</a>
-        </div>
+        </div> -->
         <div class="login-prompt">
-          <a routerLink="/recuper-contrasena" class="login-link">Recuperar Contraseña</a>
+          <a routerLink="/recuper-contrasena-admin" class="login-link">Recuperar Contraseña</a>
         </div>
       </div>
     </form>
+  </mat-card>
+  <mat-card class="photo-card">
+ <img src="../../../assets/img/fondo_agro.png" class="img_card_photo" alt="Foto">
   </mat-card>
 </div>

@@ -1,0 +1,214 @@
+$primary-color: #0F8054
+$secondary-color: #8FCA8F
+$hover-color: #47de5b
+$error-color: #d9534f
+$light-grey: #f4f4f4
+$dark-grey: #454545
+$medium-grey: #808080
+$border-color: #ddd
+$font-family: 'Montserrat', sans-serif
+
+.body
+  font-family: $font-family
+
+.login-container
+  display: flex
+  justify-content: center
+  align-items: center
+  height: 100vh
+  // background-image: url('/assets/img/fondo_agro.png')
+
+  background: #263238
+  background-size: cover
+  flex-direction: row-reverse
+
+.login-card
+  width: 500px
+  max-width: 100%
+  padding: 40px
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))
+  backdrop-filter: blur(10px)
+  -webkit-backdrop-filter: blur(15px)
+  // background: $border-color
+  border-radius: 0 20px 20px 0
+  border: 1px solid rgba(255, 255, 255, 0.18)
+  overflow: hidden
+  font-family: $font-family
+  text-align: center
+  font-size: 14px
+
+  @media (max-width: 600px)
+    width: 90%
+    padding: 20px
+    border-radius: 20px
+
+  .logo-container
+  img
+    max-width: 200px
+    margin-bottom: 20px
+
+h1
+  font-size: 32px
+  color: $light-grey
+  font-weight: 600
+
+.photo-card
+  width: 500px
+  height: 535px
+  max-width: 100%
+  margin-left: 20px
+  overflow: hidden
+  border-radius: 20px 0 0 20px
+
+  img
+    width: 100%
+    height: 100%
+    object-fit: cover
+
+@media (max-width: 600px)
+  .photo-card
+    display: none
+
+.info-text-container
+  margin-bottom: 20px
+  color: $light-grey
+  font-weight: 600
+
+input[type="email"], input[type="password"]
+  font-size: 14px
+  width: 95%
+  color: $light-grey
+  padding: 10px
+  margin-bottom: 15px
+  border: 1px solid $border-color
+  border-radius: 4px
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3)
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))
+  backdrop-filter: blur(10px)
+  -webkit-backdrop-filter: blur(15px)
+
+  &:focus
+    outline: none
+    border-color: $primary-color
+    box-shadow: 0 0 5px $primary-color
+
+.password-field-container
+  position: relative
+  display: flex
+  align-items: center
+  margin-top: 2%
+
+  input
+    width: 100%
+    padding-right: 30px
+    font-size: 14px
+    color: $light-grey
+    padding: 10px
+    margin-bottom: 15px
+    border: 1px solid $border-color
+    border-radius: 4px
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3)
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))
+    backdrop-filter: blur(10px)
+    -webkit-backdrop-filter: blur(15px)
+
+    &:focus
+      outline: none
+      border-color: $primary-color
+      box-shadow: 0 0 5px $primary-color
+
+  .toggle-password
+    position: absolute
+    right: 10px
+    top: 50%
+    transform: translateY(-50%)
+    cursor: pointer
+    font-size: 16px
+    color: $light-grey
+
+    &:before
+      content: ""
+      position: absolute
+      top: 0
+      left: 0
+      right: 0
+      bottom: 0
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))
+      backdrop-filter: blur(10px)
+      -webkit-backdrop-filter: blur(15px)
+      border-radius: 4px
+      pointer-events: none
+      opacity: 0
+      transition: opacity 0.3s ease
+
+    &.visible
+      color: $hover-color
+
+      &:before
+        opacity: 1
+
+button[type="submit"]
+  width: 100%
+  margin-top: 20px
+  padding: 10px 0
+  // background: none
+  background: $primary-color
+  backdrop-filter: blur(25px)
+  -webkit-backdrop-filter: blur(15px)
+  color: white
+  border: none
+  border-radius: 4px
+  font-size: 16px
+  cursor: pointer
+  transition: background-color 0.3s ease
+
+  // &:hover
+  //   backdrop-filter: blur(10px)
+  //   -webkit-backdrop-filter: blur(15px)
+  //   background-color: $hover-color // Cambiar el color de fondo al hacer hover
+
+  @media (max-width: 600px)
+    width: 80%
+
+.btn-submit
+  // background-color: #8FCA8F
+  color: white
+
+.btn-submit.enabled
+  // background-color: #3CA749
+
+.login-links
+  margin-top: 20px
+  text-align: center
+
+.login-prompt
+  font-size: 14px
+  margin-bottom: 10px
+  color: white
+
+.login-link
+  font-size: 14px
+  color: $light-grey
+  text-decoration: none
+  margin-left: 5px
+  // border-bottom: 2px solid $primary-color
+  padding-bottom: 1px
+
+  &:hover
+    text-decoration: underline
+
+.mat-error
+  display: block
+  min-height: 20px
+  font-size: 12px
+  color: white
+  margin-top: 5px
+  visibility: hidden
+  opacity: 0
+
+  &.active
+    visibility: visible
+    opacity: 1
+
+  .login-prompt
+    font-size: 14px
