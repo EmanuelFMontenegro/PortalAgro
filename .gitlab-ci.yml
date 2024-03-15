@@ -60,3 +60,5 @@ dev_deploy_stage:
     #  docker rm $CI_PROJECT_NAME --force &&  docker run -d -p 4200:4200 --name $CI_PROJECT_NAME $HARBOR_HOST/$HARBOR_PROJECT/$IMAGE_TAG "
   after_script:
     - rm -rf ~/.ssh
+
+    ##
