@@ -10,7 +10,7 @@ run_tests:
   stage: test
   image: nginx:latest
   only: 
-    - dev
+    - deploy_stage
   tags:
     - stage, devops, silicon
 
@@ -25,7 +25,7 @@ build_image_stage:
   image: docker
   stage: build
   only: 
-    - dev
+    - deploy_stage
   tags:
     - stage, devops, silicon
   before_script: 
@@ -44,7 +44,7 @@ dev_deploy_stage:
   #before_script:
    # - chmod 0600 $SSH_KEY_DESARROLLO_SILICON
   only: 
-    - dev
+    - deploy_stage
   tags:
     - stage, devops, silicon
   before_script:
