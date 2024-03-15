@@ -19,7 +19,7 @@ COPY . .
 #RUN npm run build --prod
 #RUN npm install --save-dev https-proxy-agent
 #RUN npm install leaflet @types/leaflet
-RUN npm audit fix --force
+#RUN npm audit fix --force
 
 RUN npm run build 
 #RUN ng serve
