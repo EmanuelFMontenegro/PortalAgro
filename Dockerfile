@@ -11,7 +11,7 @@ RUN npm install -g @angular/cli@11.0.7
 
 COPY . /app
 
-RUN ng build 
+RUN npm run build 
 #--output-path=dist
 
 FROM nginx:1.16.0-alpine
