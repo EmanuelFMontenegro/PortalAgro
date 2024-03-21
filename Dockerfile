@@ -8,10 +8,10 @@ ENV PATH /app/node_modules/.bin:$PATH
 COPY package.json /app/package.json
 RUN npm install
 RUN npm install -g @angular/cli@11.0.7
-
+RUN npm install ngx-spinner
 COPY . /app
 
-#RUN npm run build 
+RUN npm run build 
 #--output-path=dist
 
 FROM nginx:1.16.0-alpine
