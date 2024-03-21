@@ -1,6 +1,6 @@
-$primary-color: #3CA749
+$primary-color: #0F8054
 $secondary-color: #8FCA8F
-$hover-color: #32963f
+$hover-color: #47de5b
 $error-color: #d9534f
 $light-grey: #f4f4f4
 $dark-grey: #454545
@@ -16,8 +16,10 @@ $font-family: 'Montserrat', sans-serif
   justify-content: center
   align-items: center
   height: 100vh
-  background-image: url('/assets/img/fondo_agro.png')
+  background: #263238
+  // background-image: url('/assets/img/fondo_agro.png')
   background-size: cover
+  flex-direction: row-reverse
 
 .nueva-contrasena-card
   width: 500px
@@ -43,7 +45,7 @@ $font-family: 'Montserrat', sans-serif
 
 h1
   font-size: 32px
-  color: $dark-grey
+  color: $border-color
   font-weight: 700
 
 .form-field-container
@@ -66,12 +68,13 @@ h1
       padding: 10px
       font-size: 14px
       border: 1px solid $border-color
+      color: $border-color
       border-radius: 4px
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3)
       background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))
       backdrop-filter: blur(10px)
       -webkit-backdrop-filter: blur(15px)
-      color: $border-color
+
       &:focus
         border-color: $primary-color
         box-shadow: 0 0 12px rgba($primary-color, 0.5)
@@ -83,7 +86,7 @@ h1
       transform: translateY(-50%)
       cursor: pointer
       font-size: 14px
-      color: $primary-color
+      color: $border-color
 
 .mat-error
   color: $error-color
@@ -96,20 +99,18 @@ h1
 button[type="submit"]
   width: 100%
   padding: 10px 0
-  background-color: $primary-color // Color por defecto cuando está desactivado
+  background-color: $primary-color
   color: white
   border: none
   border-radius: 4px
   font-size: 16px
   cursor: pointer
   transition: background-color 0.3s ease
+  margin-top: 5%
 
-  // &:disabled
-  //   background-color: $secondary-color
-  //   cursor: not-allowed
 
-  // &.enabled
-  //   background-color: $primary-color
+  &.enabled
+    background-color: $primary-color
 
   @media (max-width: 600px)
     width: 80%
@@ -128,14 +129,16 @@ button[type="submit"]
 .login-prompt
   font-size: 14px
   margin-bottom: 10px
+  color: white
 
 .login-link
   font-size: 14px
-  color: $primary-color
+  color: $hover-color
   text-decoration: none
   margin-left: 5px
   // border-bottom: 2px solid $primary-color
   padding-bottom: 1px
+  text-decoration: underline
 
   &:hover
     text-decoration: underline

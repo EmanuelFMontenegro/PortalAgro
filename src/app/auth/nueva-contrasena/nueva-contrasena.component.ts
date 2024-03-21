@@ -10,6 +10,7 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./nueva-contrasena.component.sass']
 })
 export class NuevaContrasenaComponent implements OnInit {
+  hasErrors: boolean = false;
   passwordResetForm!: FormGroup;
   hideNewPassword = true;
   hideConfirmPassword = true;
@@ -97,6 +98,19 @@ export class NuevaContrasenaComponent implements OnInit {
       }
     } else {
       this.toastr.error('Formulario no válido o no inicializado');
+    }
+  }
+  adjustCardSize(hasError: boolean): void {
+    const cardElement = document.querySelector('.nueva-contrasena-card') as HTMLElement;
+
+    if (cardElement) {
+      if (!hasError) {
+        // Restaura el tamaño original de la tarjeta si no hay errores
+        cardElement.style.height = '500px';
+      } else {
+        // Establece la altura en 535px cuando hay errores
+        cardElement.style.height = '535px';
+      }
     }
   }
 }

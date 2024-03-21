@@ -7,7 +7,8 @@ import { NuevaContrasenaComponent } from './nueva-contrasena/nueva-contrasena.co
 import { BienvenidaComponent } from './bienvenida/bienvenida.component';
 import { PrimerRegistroComponent } from './primerRegistro/primerRegistro.component';
 import { LoginAdminComponent } from './login-admin/login-admin.component';
-import { RecuperContrasenaAdminComponent } from './recuper-contrasena-admin/recuper-contrasena-admincomponent';
+import { RecuperContrasenaAdminComponent } from './recuper-contrasena-admin/recuper-contrasena-admin.component';
+import { NuevaContrasenaAdminComponent } from './nueva-contrasena-admin/nueva-contrasena-admin.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -20,9 +21,12 @@ const routes: Routes = [
     path: 'recuper-contrasena-admin',
     component: RecuperContrasenaAdminComponent,
   },
+  {
+    path: 'nueva-contrasena-admin/:token',
+    component: NuevaContrasenaAdminComponent,
+  },
   { path: 'nueva-contrasena/:token', component: NuevaContrasenaComponent },
-  // { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: '', redirectTo: '/login-backoffice', pathMatch: 'full' },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
 ];
 
 @NgModule({

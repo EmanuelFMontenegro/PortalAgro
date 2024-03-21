@@ -1,44 +1,40 @@
-import { Component } from '@angular/core';
-import {
-  FormControl,
-  FormGroup,
-  Validators,
-  FormBuilder,
-} from '@angular/forms';
+import { Component} from '@angular/core';
+import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { ApiService } from 'src/app/services/ApiService';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner'; // Importa NgxSpinnerService
 
 @Component({
-  selector: 'app-recuper-contrasena',
-  templateUrl: './recuper-contrasena.component.html',
-  styleUrls: ['./recuper-contrasena.component.sass'],
+  selector: 'app-recuper-contrasena-admin',
+  templateUrl: './recuper-contrasena-admin.component.html',
+  styleUrls: ['./recuper-contrasena-admin.component.sass'],
 })
-export class RecuperContrasenaComponent {
+export class RecuperContrasenaAdminComponent  {
   emailControl = new FormControl('', [Validators.required, Validators.email]);
   formulario: FormGroup;
   envioExitoso: boolean = false;
-  loading: boolean = false; // Asegúrate de declarar la propiedad loading y asignarle un valor inicial
+  loading: boolean = false; // Declarar la propiedad loading
 
   constructor(
     private apiService: ApiService,
     private toastr: ToastrService,
     private formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
+    private spinner: NgxSpinnerService // Inyecta NgxSpinnerService
   ) {
     this.formulario = this.formBuilder.group({
       email: [''],
     });
   }
 
-  get emailField() {
-    return this.formulario.get('email');
-  }
 
   async onSubmit() {
     try {
       if (this.formulario.valid && !this.envioExitoso) {
-        this.loading = true; // Activa el spinner
+        this.loading = true; // Activa el spinner al enviar la solicitud
+        this.spinner.show(); // Mostrar el spinner
+
         const email = this.emailField?.value!;
         const response = await this.apiService
           .recuperarContrasena(email)
@@ -48,11 +44,9 @@ export class RecuperContrasenaComponent {
           this.toastr.info(
             'Solicitud de recuperación de contraseña enviada con éxito. Revise su correo y siga las instrucciones'
           );
-          this.envioExitoso = true;
           this.formulario.reset();
-          setTimeout(() => {
-            this.router.navigate(['/login']);
-          }, 5000);
+          this.envioExitoso = true;
+          this.router.navigate(['/login-admin'])
         } else {
           this.toastr.warning(
             'Respuesta inesperada del servidor. Por favor, inténtalo de nuevo más tarde.',
@@ -67,11 +61,16 @@ export class RecuperContrasenaComponent {
       );
       console.error('Error al enviar el correo de recuperación:', error);
     } finally {
-      this.loading = false; // Desactiva el spinner
+      this.loading = false; // Desactiva el spinner al finalizar la solicitud
+      this.spinner.hide(); // Oculta el spinner
     }
   }
 
+  get emailField() {
+    return this.formulario.get('email');
+  }
+
   irAInicioSesion(): void {
-    this.router.navigate(['/login']);
+    this.router.navigate(['/login-admin']);
   }
 }

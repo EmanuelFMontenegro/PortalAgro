@@ -1,6 +1,6 @@
 $primary-color: #3CA749
 $secundary-color: #8FCA8F
-$hover-color: #32963f
+$hover-color: #47de5b
 $error-color: #d9534f
 $light-grey: #f4f4f4
 $dark-grey: #454545
@@ -105,7 +105,7 @@ h1
 
 
 button[type="submit"]
-  width: 50%
+  width: 100%
   padding: 10px 0
   background-color: $primary-color
   color: white
@@ -114,6 +114,9 @@ button[type="submit"]
   font-size: 16px
   cursor: pointer
   transition: background-color 0.3s ease
+
+  &:hover
+   background-color: $hover-color
   @media (max-width: 600px)
     width: 80%
 
@@ -126,8 +129,9 @@ button[type="submit"]
   color: white
 
 .login-link
-  color: $primary-color
+  color: $hover-color
   text-decoration: none
   margin-left: 5px
-  &:hover
-    text-decoration: underline
+  text-decoration: underline
+
+

@@ -18,8 +18,9 @@ import { NuevaContrasenaComponent } from './nueva-contrasena/nueva-contrasena.co
 import { BienvenidaComponent } from './bienvenida/bienvenida.component';
 import { PrimerRegistroComponent } from './primerRegistro/primerRegistro.component';
 import { LoginAdminComponent } from './login-admin/login-admin.component';
-import { RecuperContrasenaAdminComponent } from './recuper-contrasena-admin/recuper-contrasena-admincomponent';
-
+import { RecuperContrasenaAdminComponent } from './recuper-contrasena-admin/recuper-contrasena-admin.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { NuevaContrasenaAdminComponent } from './nueva-contrasena-admin/nueva-contrasena-admin.component';
 @NgModule({
   declarations: [
     LoginComponent,
@@ -30,6 +31,7 @@ import { RecuperContrasenaAdminComponent } from './recuper-contrasena-admin/recu
     PrimerRegistroComponent,
     LoginAdminComponent,
     RecuperContrasenaAdminComponent,
+    NuevaContrasenaAdminComponent,
   ],
   imports: [
     AuthRoutingModule,
@@ -43,6 +45,7 @@ import { RecuperContrasenaAdminComponent } from './recuper-contrasena-admin/recu
     MatButtonModule,
     MatSnackBarModule,
     MatIconModule,
+    NgxSpinnerModule.forRoot(),
     ToastrModule.forRoot(),
   ],
 })

@@ -3,8 +3,6 @@ import { FormGroup, FormControl, Validators,AbstractControl } from '@angular/for
 import { Router } from '@angular/router';
 import { ApiService } from 'src/app/services/ApiService';
 import { ToastrService } from 'ngx-toastr';
-import { DashboardComponent } from 'src/app/pages/dashboard/dashboard.component';
-import { PrimerRegistroComponent } from 'src/app/auth/primerRegistro/primerRegistro.component';
 import { jwtDecode } from 'jwt-decode';
 
 export function usernameValidator(control: FormControl): { [key: string]: any } | null {
@@ -45,8 +43,8 @@ export class LoginComponent implements OnInit{
     Validators.email,
     this.usernameControl = new FormControl('', [Validators.required, Validators.email]);
     this.passwordControl = new FormControl('', [Validators.required, Validators.minLength(8)]);
-    this.usernameControl.setValue('cristianwolf86@gmail.com');
-    this.passwordControl.setValue('Donna5722');
+    this.usernameControl.setValue('emanuel_efm@hotmail.com');
+    this.passwordControl.setValue('Agustin15524201');
     this.login = new FormGroup({
       username: this.usernameControl,
       password: this.passwordControl
@@ -59,7 +57,7 @@ export class LoginComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    // Llama a adjustCardSize en el ngOnInit
+
     this.adjustCardSize(false);
   }
 
@@ -74,10 +72,10 @@ export class LoginComponent implements OnInit{
 
     if (cardElement) {
       if (!hasError) {
-        // Restaura el tamaño original de la tarjeta si no hay errores
+
         cardElement.style.height = '500px';
       } else {
-        // Establece la altura en 535px cuando hay errores
+
         cardElement.style.height = '535px';
       }
     }
@@ -98,7 +96,7 @@ export class LoginComponent implements OnInit{
 
             this.apiService.getPersonByIdOperador(userId, personId).subscribe(
               (userData) => {
-                // console.log('Datos del usuario:', userData);
+
 
                 if (userData && userData.name) {
                   this.router.navigate(['/dashboard']);
@@ -125,7 +123,7 @@ export class LoginComponent implements OnInit{
           if (response.status === 200 && response.body && response.body.token) {
             localStorage.setItem('token', response.body.token);
 
-            // Redirigir directamente a 'primer-registro'
+
             this.router.navigate(['/primerRegistro']);
 
             this.mostrarMensajeExitoso();
@@ -136,7 +134,7 @@ export class LoginComponent implements OnInit{
           }
         },
         error: (err) => {
-          // Manejar otros casos de error según sea necesario
+
           if (err.status === 0) {
             this.toastr.error('No se puede conectar al servidor. Por favor verifica tu conexión a internet.', 'Error de Conexión');
           } else if (err.status === 404) {

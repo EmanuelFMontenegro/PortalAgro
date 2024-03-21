@@ -1,7 +1,8 @@
 <div class="recuper-container">
   <mat-card class="recuper-card">
+
     <div class="logo-container">
-      <img src="../../../assets/img/log_sustentable _gris.png" alt="Logo">
+      <img src="../../../assets/img/log_sustentable.png" alt="Logo">
     </div>
     <h1 class="mb-4">Recuperar Contraseña</h1>
     <div class="info-text-container">
@@ -19,16 +20,22 @@
         <span *ngIf="emailField?.hasError('email')">Por favor ingresa un correo electrónico válido.</span>
       </mat-error>
 
-      <button mat-raised-button type="submit" class="btn btn-block mt-3" [disabled]="envioExitoso">Recuperar
-        Contraseña</button>
+      <!-- Mostrar el spinner si loading es true, sobre el botón -->
+      <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="large" color="#fff" type="ball-fussion" [fullScreen]="true">
+        <p style="color: white"> Loading... </p>
+      </ngx-spinner>
+
+      <button mat-raised-button type="submit" class="btn btn-block mt-3" [disabled]="envioExitoso || loading"
+        style="position: relative; z-index: 1;">
+        Recuperar Contraseña
+      </button>
 
       <div class="login-links mt-3">
         <div class="login-prompt">
-          ¿Ya tienes cuenta? <a routerLink="/login" class="login-link" (click)="irAInicioSesion()">Iniciar Sesión</a>
+          ¿Ya tienes cuenta? <a routerLink="/login-admin" class="login-link" (click)="irAInicioSesion()">Iniciar
+            Sesión</a>
         </div>
       </div>
     </form>
-
-
   </mat-card>
 </div>

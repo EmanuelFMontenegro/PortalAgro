@@ -11,9 +11,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Interceptor } from 'src/app/services/Interceptor';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { FormatDatePipe } from './format-date.pipe';
-
-
-
+import { NgxSpinnerModule } from "ngx-spinner";
 
 
 const routes: Routes = [];
@@ -22,6 +20,7 @@ const routes: Routes = [];
   declarations: [AppComponent],
   imports: [
     BrowserModule,
+    NgxSpinnerModule,
     RouterModule.forRoot(routes),
     ToastrModule.forRoot(),
     BrowserAnimationsModule,
@@ -31,12 +30,12 @@ const routes: Routes = [];
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: !isDevMode(),
 
-      registrationStrategy: 'registerWhenStable:30000'
+      registrationStrategy: 'registerWhenStable:30000',
     }),
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true},
-    ],
-   bootstrap: [AppComponent]
+    { provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true },
+  ],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
