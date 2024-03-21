@@ -1,9 +1,6 @@
 FROM node:18.18.2-alpine AS build
 # Set the working directory inside the container
 
-ROM node:18.18.2-alpine AS build
-
-
 WORKDIR /app
 
 ENV PATH /app/node_modules/.bin:$PATH
