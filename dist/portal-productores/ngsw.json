@@ -1,0 +1,153 @@
+{
+  "configVersion": 1,
+  "timestamp": 1711034403763,
+  "index": "/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/favicon.ico",
+        "/index.html",
+        "/main.7b1662f9f41aa0c3.js",
+        "/manifest.webmanifest",
+        "/polyfills.be05328e1f042e1e.js",
+        "/runtime.bb3ef3ba34f76de0.js",
+        "/styles.c62f3fc20a0d717c.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/assets/icons/icon-128x128.png",
+        "/assets/icons/icon-144x144.png",
+        "/assets/icons/icon-152x152.png",
+        "/assets/icons/icon-192x192.png",
+        "/assets/icons/icon-384x384.png",
+        "/assets/icons/icon-512x512.png",
+        "/assets/icons/icon-72x72.png",
+        "/assets/icons/icon-96x96.png",
+        "/assets/img/Imagen_fondo.png",
+        "/assets/img/agrosustentable.png",
+        "/assets/img/avatar.png",
+        "/assets/img/background.svg",
+        "/assets/img/background_agro.png",
+        "/assets/img/campo_1.png",
+        "/assets/img/campo_2.png",
+        "/assets/img/campo_3.png",
+        "/assets/img/campo_4.png",
+        "/assets/img/campo_5.png",
+        "/assets/img/campo_6.png",
+        "/assets/img/campo_7.png",
+        "/assets/img/campo_8.png",
+        "/assets/img/empresa_b.png",
+        "/assets/img/facebook.png",
+        "/assets/img/fondo_agro.png",
+        "/assets/img/fondo_blur.png",
+        "/assets/img/fondo_blur.svg",
+        "/assets/img/icono_editar.jpg",
+        "/assets/img/img_geolocation.png",
+        "/assets/img/img_nogeo.png",
+        "/assets/img/instagram.png",
+        "/assets/img/linkedin.png",
+        "/assets/img/log_sustentable _gris.png",
+        "/assets/img/log_sustentable.png",
+        "/assets/img/logo_afip.png",
+        "/assets/img/logo_agro_white.png",
+        "/assets/img/logo_sidebar-1.png",
+        "/assets/img/logo_sidebar.png",
+        "/assets/img/logo_silicon.png",
+        "/assets/img/mapa.png",
+        "/assets/img/ndvi.png",
+        "/assets/img/nuevo_fondo_agro.svg",
+        "/assets/img/otofoto.png",
+        "/assets/img/pantalla_inicio.png",
+        "/assets/img/vari.png"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [],
+  "hashTable": {
+    "/assets/icons/icon-128x128.png": "b1f06c7d714abb4a0cc4d1f7c954feb26826e4c4",
+    "/assets/icons/icon-144x144.png": "96a0d629765c1bc85d9263c6bc83094ca776d267",
+    "/assets/icons/icon-152x152.png": "b1fbbee3902eb96a7658e3bb006f31f78ca5a44c",
+    "/assets/icons/icon-192x192.png": "e4211163bf0911688fbfb80278d8ff4d2f77691d",
+    "/assets/icons/icon-384x384.png": "329749cd6393768d3131ed6304c136b1ca05f2fd",
+    "/assets/icons/icon-512x512.png": "559d9c4318b45a1f2b10596bbb4c960fe521dbcc",
+    "/assets/icons/icon-72x72.png": "279825a1ac4377032ae996a1832c641e33ccf1b6",
+    "/assets/icons/icon-96x96.png": "592885efcbfee27e5e20be4fa3043589390d2740",
+    "/assets/img/Imagen_fondo.png": "9c88e00fa7861a3c844922d192f23f5ec2fe7341",
+    "/assets/img/agrosustentable.png": "36fe701759ff87802ecfc39f63a4c506d8c2c236",
+    "/assets/img/avatar.png": "b2fb81ab11053d56461c0d1489be826d15d23dc8",
+    "/assets/img/background.svg": "1720d4dfbf1a4cf5a65344098efe24751960550f",
+    "/assets/img/background_agro.png": "1358b42b86068f4487d2c52544ea52e962fece87",
+    "/assets/img/campo_1.png": "42cc9ac1ac275c2a069d9e1e0206a346496a94ff",
+    "/assets/img/campo_2.png": "a40da5ff3f90e58f9c1302cacb0586bfe9ac1fcf",
+    "/assets/img/campo_3.png": "7c4306e34dd3800d16e5417a1d3d5293a1827e9e",
+    "/assets/img/campo_4.png": "a40da5ff3f90e58f9c1302cacb0586bfe9ac1fcf",
+    "/assets/img/campo_5.png": "42cc9ac1ac275c2a069d9e1e0206a346496a94ff",
+    "/assets/img/campo_6.png": "625b97ce6f164101af9558bf4ec40493e55e41f6",
+    "/assets/img/campo_7.png": "42cc9ac1ac275c2a069d9e1e0206a346496a94ff",
+    "/assets/img/campo_8.png": "a40da5ff3f90e58f9c1302cacb0586bfe9ac1fcf",
+    "/assets/img/empresa_b.png": "2e5af33ec874227643809e1da6e41cc3b134ef92",
+    "/assets/img/facebook.png": "4f18973959b6b9a2354728d5d98872bef80f8122",
+    "/assets/img/fondo_agro.png": "c01102b2cf9b0012c852cc5668ae1f5b514e1965",
+    "/assets/img/fondo_blur.png": "916c6600f633d69653f6667ed20ab3da92220f5c",
+    "/assets/img/fondo_blur.svg": "84d44db8cb48f5c0222399e03c9b9c5645c53676",
+    "/assets/img/icono_editar.jpg": "6602da73b6fd32db8f712e238a59d52b22fa5991",
+    "/assets/img/img_geolocation.png": "431e8272556462e61b2868b017edd0117f893cc2",
+    "/assets/img/img_nogeo.png": "ff504ea1139040d710ec2678547d78c7c1ca3b77",
+    "/assets/img/instagram.png": "c90546cddfa9c23f3b0fe3b10b0533752e3f4dd8",
+    "/assets/img/linkedin.png": "0fe60b31a5d4403cfaab6688e8914287362ff186",
+    "/assets/img/log_sustentable _gris.png": "dc0a6c431766f0c4fdc69c2c1aa3eb94fcdc2c39",
+    "/assets/img/log_sustentable.png": "e6445f2b714d7d03ed65f88ea2f46a3096d4f38f",
+    "/assets/img/logo_afip.png": "246945afe7f52824b14f8515902149d02c8cdafd",
+    "/assets/img/logo_agro_white.png": "304bfd56e8325c85bcbcb1418439ec42e2dc9506",
+    "/assets/img/logo_sidebar-1.png": "85a9a4d1ac905892d7d2863a7271145684601723",
+    "/assets/img/logo_sidebar.png": "85a9a4d1ac905892d7d2863a7271145684601723",
+    "/assets/img/logo_silicon.png": "f98717136fac8b2db71316773e6ccb34c19cdcbf",
+    "/assets/img/mapa.png": "2a126a08bb96d8c660c5990981ce155af705714a",
+    "/assets/img/ndvi.png": "625b97ce6f164101af9558bf4ec40493e55e41f6",
+    "/assets/img/nuevo_fondo_agro.svg": "6383c67316bbd2d9f500482a09355c996ce58605",
+    "/assets/img/otofoto.png": "ce57619e5347e67b8820f26fd55deeb13187bf98",
+    "/assets/img/pantalla_inicio.png": "161eace897bc0e1d6e7b9af8e7d28cd78391a71b",
+    "/assets/img/vari.png": "13cb0b52d5ed1e7ad9aff6b6b401ac7a8ce1f0f5",
+    "/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
+    "/index.html": "977f9045d34fa829428964d4df49fa21dcdf01b9",
+    "/main.7b1662f9f41aa0c3.js": "ee767f299985b6e8b0fd5ab8083248b65b94304c",
+    "/manifest.webmanifest": "b9db4252a62817a9eb887ba921be9ab3af1079c8",
+    "/polyfills.be05328e1f042e1e.js": "9b8dadec832ec27ee0ba5a1394fc9de885671400",
+    "/runtime.bb3ef3ba34f76de0.js": "b6e6e6c15044d98117a688591b8b3956777a2910",
+    "/styles.c62f3fc20a0d717c.css": "35662660b23aa9adf132672b04573dcfafcc3d14"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ],
+  "navigationRequestStrategy": "performance"
+}
