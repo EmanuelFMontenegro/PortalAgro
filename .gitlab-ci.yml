@@ -57,7 +57,7 @@ dev_deploy_stage:
     - ssh $DEV_USER_DESARROLLO_SILICON@$DEV_HOST_DESAROLLO_SILICON "date && docker rm $CI_PROJECT_NAME --force &&                     docker run -d -p 4200:4200 --name $CI_PROJECT_NAME $HARBOR_HOST/$HARBOR_PROJECT/stage/portal-prod-$IMAGE_TAG "
 
    # - ssh $DEV_USER_DESARROLLO_SILICON@$DEV_HOST_DESAROLLO_SILICON "date && echo -n $HARBOR_PASSWORD | docker login -u $HARBOR_USERNAME --password-stdin $HARBOR_URL &&
-    #  docker rm $CI_PROJECT_NAME --force &&  docker run -d -p 4200:4200 --name $CI_PROJECT_NAME $HARBOR_HOST/$HARBOR_PROJECT/$IMAGE_TAG "
+    #  docker rm $CI_PROJECT_NAME --force &&  docker run -d -p 4200:80 --name $CI_PROJECT_NAME $HARBOR_HOST/$HARBOR_PROJECT/$IMAGE_TAG "
   after_script:
     - rm -rf ~/.ssh
 

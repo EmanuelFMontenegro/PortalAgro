@@ -1,28 +1,43 @@
-FROM node:18.18.2-alpine
+FROM node:18.18.2-alpine AS build
 # Set the working directory inside the container
+
+ROM node:18.18.2-alpine AS build
+
+
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
-COPY package*.json ./
+ENV PATH /app/node_modules/.bin:$PATH
 
-# Install project dependencies
-RUN npm install -g @angular/cli@16.2.9
+COPY package.json /app/package.json
+RUN npm install
+RUN npm install -g @angular/cli@11.0.7
 
-RUN npm install -g npm@10.5.0
-RUN npm install 
+COPY . /app
+
+RUN ng build --output-path=dist
+
+FROM nginx:1.16.0-alpine
+
+COPY --from=build /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
 
 
-# Copy the rest of the application code to the working directory
-COPY . .
+#COPY nginx.conf /etc/nginx/nginx.conf
+#COPY --from=build /code/dist/portal-productores/ /usr/share/nginx/html
 
-
-#RUN npm audit fix --force
-
-RUN npm run build 
-#RUN ng serve
-# Expose the port the app runs on
-EXPOSE 4200
 
 # Start the application
-CMD ["ng", "serve", "--host", "0.0.0.0", "--disable-host-check"]
+#CMD ["ng", "serve","--disable-host-check"]
+#CMD ["npm", "start"]
+
+
+EXPOSE 4200
+EXPOSE 80
+
+# Start the application
+#CMD ["ng", "serve", "--host", "0.0.0.0", "--disable-host-check"]
 #CMD ["npm", "start"]
