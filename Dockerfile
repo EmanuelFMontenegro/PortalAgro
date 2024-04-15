@@ -12,6 +12,7 @@ RUN npm install
 RUN npm install -g @angular/cli@11.0.7
 RUN npm install ngx-spinner
 COPY . /app
+ENV NODE_TLS_REJECT_UNAUTHORIZED=0
 
 RUN npm run build 
 #--output-path=dist
