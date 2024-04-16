@@ -62,4 +62,4 @@ dev_deploy_stage:
   after_script:
     - rm -rf ~/.ssh
 
-    ##
+    #
