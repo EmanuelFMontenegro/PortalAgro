@@ -1,39 +1,41 @@
-import { Component} from '@angular/core';
-import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { Component } from '@angular/core';
+import {
+  FormControl,
+  FormGroup,
+  Validators,
+  FormBuilder,
+} from '@angular/forms';
 import { ApiService } from 'src/app/services/ApiService';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { NgxSpinnerService } from 'ngx-spinner'; // Importa NgxSpinnerService
+// Importa NgxSpinnerService
 
 @Component({
   selector: 'app-recuper-contrasena-admin',
   templateUrl: './recuper-contrasena-admin.component.html',
   styleUrls: ['./recuper-contrasena-admin.component.sass'],
 })
-export class RecuperContrasenaAdminComponent  {
+export class RecuperContrasenaAdminComponent {
   emailControl = new FormControl('', [Validators.required, Validators.email]);
   formulario: FormGroup;
-  envioExitoso: boolean = false;
-  loading: boolean = false; // Declarar la propiedad loading
+  cargandoValidacion: boolean = false;
 
   constructor(
     private apiService: ApiService,
     private toastr: ToastrService,
     private formBuilder: FormBuilder,
-    private router: Router,
-    private spinner: NgxSpinnerService // Inyecta NgxSpinnerService
+    private router: Router // Inyecta NgxSpinnerService
   ) {
     this.formulario = this.formBuilder.group({
       email: [''],
     });
   }
 
-
   async onSubmit() {
     try {
-      if (this.formulario.valid && !this.envioExitoso) {
-        this.loading = true; // Activa el spinner al enviar la solicitud
-        this.spinner.show(); // Mostrar el spinner
+      if (this.formulario.valid) {
+        this.cargandoValidacion = true; // Activa el spinner al enviar la solicitud
+        // Mostrar el spinner
 
         const email = this.emailField?.value!;
         const response = await this.apiService
@@ -45,8 +47,8 @@ export class RecuperContrasenaAdminComponent  {
             'Solicitud de recuperación de contraseña enviada con éxito. Revise su correo y siga las instrucciones'
           );
           this.formulario.reset();
-          this.envioExitoso = true;
-          this.router.navigate(['/login-admin'])
+
+          this.router.navigate(['/login-admin']);
         } else {
           this.toastr.warning(
             'Respuesta inesperada del servidor. Por favor, inténtalo de nuevo más tarde.',
@@ -61,8 +63,8 @@ export class RecuperContrasenaAdminComponent  {
       );
       console.error('Error al enviar el correo de recuperación:', error);
     } finally {
-      this.loading = false; // Desactiva el spinner al finalizar la solicitud
-      this.spinner.hide(); // Oculta el spinner
+      this.cargandoValidacion = false; // Desactiva el spinner al finalizar la solicitud
+      // Oculta el spinner
     }
   }
 

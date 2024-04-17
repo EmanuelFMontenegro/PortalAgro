@@ -11,13 +11,13 @@
       <p class="email">{{ userEmail }}</p>
     </div>
     <div class="volver-button" (click)="volver()">
-      <mat-icon style="color:#32963f">arrow_back</mat-icon>
-      <span class="letra_btn_volver">Volver</span>
+      <mat-icon style="color:#FFFFFF">arrow_back</mat-icon>
+      <span class="letra_btn_volver">VOLVER ATRAS</span>
     </div>
   </div>
   <div class="card-map">
     <div class="geo-container">
-      <div #map style="height: 400px;"></div>
+      <div #map style="height: 500px;border: 1px solid #32963f"></div>
     </div>
   </div>
   <div class="card-search">
@@ -33,7 +33,7 @@
       </div>
       <div class="card-info">
         <div class="search-container">
-          <mat-select placeholder="Buscar localidades..." (selectionChange)="onSearch($event.value)">
+          <mat-select placeholder="Localidades..." (selectionChange)="onSearch($event.value)">
             <mat-option *ngFor="let localidad of filteredLocalidades | async" [value]="localidad.name">{{ localidad.name
               }}</mat-option>
           </mat-select>
@@ -41,7 +41,7 @@
       </div>
     </div>
     <div class="botones-servicio">
-      <button mat-raised-button class="register-button" type="button" (click)="registerField()">Registrar</button>
+      <button mat-raised-button class="register-button" type="button" (click)="registerField()">Agregar</button>
       <button mat-raised-button class="cancel-button" type="button" (click)="cancelar()">Cancelar</button>
     </div>
   </div>

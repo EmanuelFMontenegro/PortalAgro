@@ -12,8 +12,8 @@
         <p class="email">{{ userEmail }}</p>
       </div>
       <div class="volver-button" (click)="volver()" style="display: flex; align-items: center; cursor: pointer;">
-        <mat-icon style="color:#47de5b">arrow_back</mat-icon>
-        <span class="letra-icon" style="color:#47de5b">Volver</span>
+        <mat-icon style="color:#FFFFFF">arrow_back</mat-icon>
+        <span class="letra-icon" style="color:#FFFFFF">VOLVER ATRAS</span>
       </div>
     </div>
 
@@ -23,14 +23,16 @@
       <h2 class="titulo-campo">Lotes</h2>
       <div class="leta_btn">
         <button mat-raised-button (click)="cargarLotes()" class="plus-icon">
-          Cargar <mat-icon style="font-size: 20px;">add</mat-icon>
+          Cargar
+          <mat-icon style="font-size: 20px;">add</mat-icon>
         </button>
       </div>
 
+
     </div>
     <div class="card-campos-lotes">
-      <div class="campo-card" *ngFor="let lote of loteData">
-        <img class="icono-geolocalizacion" src="assets/img/img_geolocation.png" alt="Geolocalización">
+      <div class="campo-card" *ngFor="let lote of loteData; let i = index">
+        <img class="img_lotes" [src]="'assets/img/lote_' + (i + 1) + '.svg'" alt="Img Lote">
         <p class="with-dot">
           <span class="campo-titulos">Nombre del Lote:</span>
           <span class="campo-variable">{{ lote.name }}</span>
@@ -51,11 +53,11 @@
         <div class="acciones">
           <button mat-icon-button aria-label="Editar" class="edit-button" (click)="editarLote(lote)">
             <mat-icon class="material-icons icon-size">edit</mat-icon>
-            <span style="color: #4CAF50;">Editar</span>
+            <span style="color: #FFFFFF;">Editar</span>
           </button>
           <button mat-icon-button aria-label="Eliminar" class="delete-button" (click)="confirmarBorrado(lote)">
             <mat-icon class="material-icons icon-size">delete</mat-icon>
-            <span style="color: red;">Eliminar</span>
+            <span style="color:#FFFFFF;">Eliminar</span>
           </button>
         </div>
 

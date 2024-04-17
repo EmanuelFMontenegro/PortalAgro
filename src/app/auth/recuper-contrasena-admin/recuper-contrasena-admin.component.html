@@ -21,12 +21,16 @@
       </mat-error>
 
       <!-- Mostrar el spinner si loading es true, sobre el botón -->
-      <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="large" color="#fff" type="ball-fussion" [fullScreen]="true">
-        <p style="color: white"> Loading... </p>
-      </ngx-spinner>
+      <div *ngIf="cargandoValidacion" class="overlay">
+        <div *ngIf="cargandoValidacion" class="lds-ellipsis">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
 
-      <button mat-raised-button type="submit" class="btn btn-block mt-3" [disabled]="envioExitoso || loading"
-        style="position: relative; z-index: 1;">
+      <button mat-raised-button type="submit" class="btn btn-block mt-3" [disabled]="cargandoValidacion">
         Recuperar Contraseña
       </button>
 

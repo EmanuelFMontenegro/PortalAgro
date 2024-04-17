@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { InicioComponent } from './inicio/inicio.component';
 import { ServiciosComponent } from './servicios/servicios.component';
-import { ProductosComponent } from './productos/productos.component';
+// import { ProductosComponent } from './productos/productos.component';
 import { GeolocalizacionComponent } from './geolocalizacion/geolocalizacion.component';
 import { ConfiguracionComponent } from './configuracion/configuracion.component';
 import { PerfilComponent } from './perfil/perfil.component';
@@ -28,7 +28,7 @@ const routes: Routes = [
       { path: 'lote', component: LoteComponent},
       { path :'cargar-lote', component: CargarLoteComponent},
       { path: 'servicios', component: ServiciosComponent},
-      { path: 'productos', component: ProductosComponent},
+      // { path: 'productos', component: ProductosComponent},
       { path: 'campo', component: CampoComponent},
       { path: 'configuracion', component: ConfiguracionComponent},
       { path: 'perfil', component: PerfilComponent},

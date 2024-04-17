@@ -15,7 +15,7 @@
 
   <div class="card">
     <h2 class="titulo-registrar-campo">Cargar Lotes</h2>
-    <form class="solicitud-servicio-form" [formGroup]="campoForm" (ngSubmit)="cargarLotes()" novalidate>
+    <form class="solicitud-servicio-form" [formGroup]="campoForm" >
       <div class="campos-formulario">
         <div class="grupo-campos">
           <!-- Nombre -->
@@ -57,8 +57,7 @@
 
       <div class="botones-servicio">
         <button mat-raised-button class="cancel-button" type="button" (click)="cancelar()">Cancelar</button>
-        <button mat-raised-button class="register-button" type="submit"
-          (click)="currentPlotId ? actualizarLote() : cargarLotes()">Cargar Lote</button>
+        <button mat-raised-button class="register-button" type="submit" (click)="currentPlotId ? actualizarLote() : cargarLotes()">Cargar Lote</button>
       </div>
     </form>
   </div>

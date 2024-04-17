@@ -13,12 +13,13 @@
       <p class="email">{{ userEmail }}</p>
     </div>
     <div class="volver-button" (click)="volver()">
-      <mat-icon style="color:#32963f">arrow_back</mat-icon>
-      <span class="letra_btn_volver">Volver</span>
+      <mat-icon style="color:#FFFFFF">arrow_back</mat-icon>
+      <span class="letra_btn_volver">VOLVER ATRAS</span>
     </div>
   </div>
-  <h4 class="titulo-detalle-campo">Detalle de Campos</h4>
-  <div class="card">
+
+  <h4 class="titulo-detalle-campo">Campos</h4>
+  <div class="card-campo-container">
 
     <div class="campo-card">
       <div id="map" class="campo-image-container" *ngIf="mostrarMapaPrincipal"></div>
@@ -28,15 +29,29 @@
     </div>
 
     <div class="campo-details-card">
-      <h4>{{ campoSeleccionado.name }}</h4>
-      <p>Localidad: {{ campoSeleccionado.address.location.name }}</p>
-      <p>Dirección: {{ campoSeleccionado.address.address }}</p>
-      <p>Hectáreas: {{ campoSeleccionado.dimensions }}</p>
-      <p>Descripción: {{ campoSeleccionado.observation }}</p>
+      <h4 class="title-campo-details">{{ campoSeleccionado.name }}</h4>
+      <div class="details localidad">
+        <span class="localidad">Localidad:</span>
+        <span class="loc_details">{{ campoSeleccionado.address.location.name }}</span>
+        <img src="assets/img/location.svg" alt="Icono" class="icono_location">
+      </div>
+      <div class="details direccion">
+        <span>Dirección:</span>
+        <span class="direc_details">{{ campoSeleccionado.address.address }}</span>
+      </div>
+      <div class="details hectareas">
+        <span>Hectáreas:</span>
+        <span class="hect_details">{{ campoSeleccionado.dimensions }}</span>
+      </div>
+      <div class="details descripcion">
+        <span>Descripción:</span>
+        <span class="desc_details" >{{ campoSeleccionado.observation }}</span>
+      </div>
       <div class="campo-buttons">
-        <button class="geolocalizar" (click)="geolocalizar()">Geolocalizar</button>
-        <button (click)="verLotes()">Ver Lotes</button>
+        <button class="geolocalizar" (click)="geolocalizar()">Geolocalizar <img src="assets/img/location.svg" alt="Icono" class="icono_location"></button>
+        <button (click)="verLotes()">Lotes</button>
       </div>
     </div>
+
   </div>
 </div>

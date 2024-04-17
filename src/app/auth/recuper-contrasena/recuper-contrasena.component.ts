@@ -8,6 +8,7 @@ import {
 import { ApiService } from 'src/app/services/ApiService';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { UntypedFormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-recuper-contrasena',
@@ -15,10 +16,14 @@ import { Router } from '@angular/router';
   styleUrls: ['./recuper-contrasena.component.sass'],
 })
 export class RecuperContrasenaComponent {
-  emailControl = new FormControl('', [Validators.required, Validators.email]);
-  formulario: FormGroup;
-  envioExitoso: boolean = false;
-  loading: boolean = false; // Asegúrate de declarar la propiedad loading y asignarle un valor inicial
+  hasErrors: boolean = false;
+  emailControl = new UntypedFormControl('', [
+    Validators.required,
+    Validators.email,
+  ]);
+  recuperContra: FormGroup;
+  usernameControl: FormControl;
+  cargandoValidacion: boolean = false;
 
   constructor(
     private apiService: ApiService,
@@ -26,19 +31,37 @@ export class RecuperContrasenaComponent {
     private formBuilder: FormBuilder,
     private router: Router
   ) {
-    this.formulario = this.formBuilder.group({
-      email: [''],
+    Validators.required,
+      Validators.email,
+      (this.usernameControl = new FormControl('', [
+        Validators.required,
+        Validators.email,
+      ]));
+    this.recuperContra = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
     });
   }
 
   get emailField() {
-    return this.formulario.get('email');
+    return this.recuperContra.get('email');
+  }
+
+  adjustCardSize(hasError: boolean): void {
+    const cardElement = document.querySelector('.recuper-card') as HTMLElement;
+
+    if (cardElement) {
+      if (!hasError) {
+        cardElement.style.height = '500px';
+      } else {
+        cardElement.style.height = '535px';
+      }
+    }
   }
 
   async onSubmit() {
     try {
-      if (this.formulario.valid && !this.envioExitoso) {
-        this.loading = true; // Activa el spinner
+      if (this.recuperContra.valid) {
+        this.cargandoValidacion = true; // Activa el spinner
         const email = this.emailField?.value!;
         const response = await this.apiService
           .recuperarContrasena(email)
@@ -48,8 +71,8 @@ export class RecuperContrasenaComponent {
           this.toastr.info(
             'Solicitud de recuperación de contraseña enviada con éxito. Revise su correo y siga las instrucciones'
           );
-          this.envioExitoso = true;
-          this.formulario.reset();
+          // this.activarSpinner = true;
+          this.recuperContra.reset();
           setTimeout(() => {
             this.router.navigate(['/login']);
           }, 5000);
@@ -67,7 +90,7 @@ export class RecuperContrasenaComponent {
       );
       console.error('Error al enviar el correo de recuperación:', error);
     } finally {
-      this.loading = false; // Desactiva el spinner
+      this.cargandoValidacion = false; // Desactiva el spinner
     }
   }
 

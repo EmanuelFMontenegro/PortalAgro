@@ -287,16 +287,17 @@ export class LoteComponent {
   }
 
   cargarLotes() {
-    this.router.navigate(['dashboard/cargar-lote']);
+    this.router.navigate(['dashboard/cargar-lote'], {
+      state: { modoEdicion: this.modoEdicion },
+    });
   }
+
   volver() {
     this.router.navigate(['dashboard/inicio']);
   }
   editarLote(lote: Lote): void {
-   
-
-       localStorage.setItem('plotId', lote.id.toString());
-
+    this.modoEdicion = true;
+    localStorage.setItem('plotId', lote.id.toString());
     this.router.navigate(['dashboard/cargar-lote']);
   }
 }

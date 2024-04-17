@@ -20,6 +20,7 @@ import { PrimerRegistroComponent } from './primerRegistro/primerRegistro.compone
 import { LoginAdminComponent } from './login-admin/login-admin.component';
 import { RecuperContrasenaAdminComponent } from './recuper-contrasena-admin/recuper-contrasena-admin.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NuevaContrasenaAdminComponent } from './nueva-contrasena-admin/nueva-contrasena-admin.component';
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { NuevaContrasenaAdminComponent } from './nueva-contrasena-admin/nueva-co
     MatButtonModule,
     MatSnackBarModule,
     MatIconModule,
-    NgxSpinnerModule.forRoot(),
+    NgxSpinnerModule.forRoot (),
+    MatProgressSpinnerModule,
     ToastrModule.forRoot(),
   ],
 })

@@ -1,7 +1,7 @@
 <div class="recuper-container">
-  <mat-card class="recuper-card">
+  <mat-card class="recuper-card" [ngStyle]="{'height': hasErrors ? 'auto' : '550px'}">
     <div class="logo-container">
-      <img src="../../../assets/img/log_sustentable.png" alt="Logo">
+      <img src="../../../assets/img/log_sustentable_gris.png" alt="Logo">
     </div>
     <h1 class="mb-4">Recuperar Contraseña</h1>
     <div class="info-text-container">
@@ -12,27 +12,29 @@
         luego, revisa tu bandeja de entrada para continuar <br />con el proceso.
       </span>
     </div>
-    <form class="text-start" [formGroup]="formulario" (ngSubmit)="onSubmit()">
+    <form class="text-start" [formGroup]="recuperContra" (ngSubmit)="onSubmit()">
       <input matInput formControlName="email" type="email" id="email" placeholder="Correo electrónico">
       <mat-error *ngIf="emailField?.invalid && emailField?.touched">
-        <span *ngIf="emailField?.hasError('required')">El correo electrónico es requerido.</span>
-        <span *ngIf="emailField?.hasError('email')">Por favor ingresa un correo electrónico válido.</span>
+        <span *ngIf="usernameControl.hasError('required')">El correo electrónico es requerido.</span>
+        <span *ngIf="usernameControl.hasError('email')">Ingresa un correo electrónico válido.</span>
       </mat-error>
 
-      <button mat-raised-button type="submit" class="btn btn-block mt-3" [disabled]="envioExitoso">Recuperar
+      <button mat-raised-button type="submit" class="btn btn-block mt-3" [disabled]="cargandoValidacion">Recuperar
         Contraseña</button>
-
       <div class="login-links mt-3">
         <div class="login-prompt">
           ¿Ya tienes cuenta? <a routerLink="/login" class="login-link" (click)="irAInicioSesion()">Iniciar Sesión</a>
         </div>
       </div>
 
-      <!-- Div para mostrar el spinner -->
-      <div *ngIf="loading" class="spinner">
-        <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
-          <p style="font-size: 20px; color: rgb(185, 25, 25)">Loading...</p>
-        </ngx-spinner>
+      <!--  spinner -->
+      <div *ngIf="cargandoValidacion" class="overlay">
+        <div *ngIf="cargandoValidacion" class="lds-ellipsis">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
       </div>
     </form>
   </mat-card>
