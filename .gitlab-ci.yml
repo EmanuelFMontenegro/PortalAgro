@@ -55,7 +55,7 @@ dev_deploy_stage:
     - echo "$SSH_KEY_DESARROLLO_SILICON" | base64 -d > ~/.ssh/id_rsa
     - ssh-keyscan -H $DEV_HOST_DESAROLLO_SILICON > ~/.ssh/known_hosts
   script:
-    - ssh $DEV_USER_DESARROLLO_SILICON@$DEV_HOST_DESAROLLO_SILICON "date && docker rm $CI_PROJECT_NAME --force &&  docker run -d -p 4200:80 --name $CI_PROJECT_NAME $HARBOR_HOST/$HARBOR_PROJECT/stage/portal-prod-$IMAGE_TAG && docker ps "
+    - ssh $DEV_USER_DESARROLLO_SILICON@$DEV_HOST_DESAROLLO_SILICON "date && echo -n $HARBOR_PASSWORD | docker login -u $HARBOR_USERNAME --password-stdin $HARBOR_URL && docker rm $CI_PROJECT_NAME --force &&  docker run -d -p 4200:80 --name $CI_PROJECT_NAME $HARBOR_HOST/$HARBOR_PROJECT/stage/portal-prod-$IMAGE_TAG && docker ps "
 
    # - ssh $DEV_USER_DESARROLLO_SILICON@$DEV_HOST_DESAROLLO_SILICON "date && echo -n $HARBOR_PASSWORD | docker login -u $HARBOR_USERNAME --password-stdin $HARBOR_URL &&
     #  docker rm $CI_PROJECT_NAME --force &&  docker run -d -p 4200:80 --name $CI_PROJECT_NAME $HARBOR_HOST/$HARBOR_PROJECT/$IMAGE_TAG "
