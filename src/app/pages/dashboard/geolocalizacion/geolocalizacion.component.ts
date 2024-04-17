@@ -142,7 +142,7 @@ export class GeolocalizacionComponent implements AfterViewInit {
     const geolocation = fieldArray.geolocation;
 
     if (!geolocation) {
-      console.log('Geolocalización no cargada');
+
       this.fieldHasGeolocation = false;
     } else {
       const [lat, lon] = geolocation.split(',').map(parseFloat);
@@ -167,7 +167,7 @@ export class GeolocalizacionComponent implements AfterViewInit {
 
     if (campoSeleccionadoString) {
       this.campoSeleccionado = JSON.parse(campoSeleccionadoString);
-      console.log('Campo seleccionado en geolocalización:', this.campoSeleccionado);
+
     } else {
       // Manejar el caso en que no se haya seleccionado ningún campo
     }
@@ -220,19 +220,18 @@ mostrarDetallesCampo(campo: any): void {
                 return field;
               });
 
-              // Filtrar campos que no tienen geolocalización
+
               const fieldsWithoutGeolocation = this.fields.filter(field => !this.isGeolocationUpdated(field.geolocation));
 
-              // Seleccionar el primero de los campos filtrados, si existe
               if (fieldsWithoutGeolocation.length > 0) {
                 const firstFieldWithoutGeolocation = fieldsWithoutGeolocation[0];
                 this.selectedFieldId = firstFieldWithoutGeolocation.id;
               } else {
-                // Si no hay campos sin geolocalización, seleccionar el primero de todos los campos
+
                 this.selectedFieldId = this.fields[0].id;
               }
             } else {
-              // ...
+
             }
           },
           (error) => {
@@ -317,7 +316,7 @@ mostrarDetallesCampo(campo: any): void {
       const latitude = geolocationData[0];
       const longitude = geolocationData[1];
 
-      // Si el mapa aún no está creado, créalo
+
       if (!this.map) {
         this.map = L.map('map').setView([latitude, longitude], 13);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -325,14 +324,14 @@ mostrarDetallesCampo(campo: any): void {
         }).addTo(this.map);
       }
 
-      // Elimina cualquier marcador existente en el mapa
+
       this.map.eachLayer(layer => {
         if (layer instanceof L.Marker) {
           this.map.removeLayer(layer);
         }
       });
 
-      // Agrega un nuevo marcador con la ubicación actualizada
+
       L.marker([latitude, longitude]).addTo(this.map)
         .bindPopup('Ubicación del campo').openPopup();
     } else {
@@ -350,7 +349,7 @@ mostrarDetallesCampo(campo: any): void {
               this.addMarker([geoData.latitude, geoData.longitude]);
               this.map.setView([geoData.latitude, geoData.longitude], 200);
             } else {
-              // this.toastr.info('Cargando datos de geolocalización.', 'Información');
+
             }
           } else {
             this.toastr.info('Existen Campos sin Geolocalizar, Por Favor actualizalos.', 'Información');
@@ -366,7 +365,7 @@ mostrarDetallesCampo(campo: any): void {
 
   private addMarker(coords: [number, number]): void {
     if (coords && !isNaN(coords[0]) && !isNaN(coords[1])) {
-      // Verifica que las coordenadas sean números válidos
+      
       this.currentMarker = L.marker(coords).addTo(this.map);
       this.currentMarker.bindPopup('Ubicación seleccionada').openPopup();
     } else {

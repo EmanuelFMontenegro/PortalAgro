@@ -1,11 +1,13 @@
-$primary-color: #3CA749
+$primary-color: #0F8054
 $secondary-color: #8FCA8F
-$hover-color: #32963f
-$error-color: #d9534f
+$hover-color: #47de5b
+$error-color: #F54C51
 $light-grey: #f4f4f4
 $dark-grey: #454545
+$hard-black: #1E1E1E
 $medium-grey: #808080
-$border-color: #ddd
+$border-color: #FFFFFF
+$btn_cards: #3B7AF6
 $icon-color: #808080
 $font-family: 'Montserrat', sans-serif
 
@@ -19,30 +21,29 @@ body
   font-size: 1.4em
   margin-top: 25px
   margin-left: 17px
+  font-weight: bold
+  font-family: $font-family
 
 .container
   display: flex
   flex-direction: column
   justify-content: center
-  // height: 100vh;
 
 .main-card
-  width: 95%
+  width: 100%
   padding: 20px
   border-radius: 10px
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4)
-  background-color: $light-grey
+  background-color: rgba(255, 255, 255, 0.5)
   margin: 0 auto
   position: relative
   display: grid
   grid-template-columns: 1fr
   margin-bottom: 18%
+  box-shadow: none
 
 .card
-  background-color: #f4f4f4
   padding: 20px
   border-radius: 10px
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3)
   display: grid
   grid-template-columns: 1fr auto
   gap: 20px
@@ -50,13 +51,14 @@ body
 .card
   background-color: $light-grey
   padding: 20px
-  border-radius: 10px
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3)
+  border-radius: 30px
   margin: 20px
-  width: 96%
-  margin-left: 3px
+  width: 97%
+  margin-left: 1em
+  position: relative
 
   &.user-card
+    background: linear-gradient(to bottom, #3BA549 40%, #0F8054 100%)
     display: flex
     margin-top: 8px
     flex-direction: row
@@ -85,46 +87,46 @@ body
 
     .email
       font-size: 14px
-      color: $medium-grey
+      color: $border-color
       font-weight: bold
 
     .name
       font-size: 18px
-      color: $dark-grey
+      color: $border-color
       font-weight: bold
 
   .volver-button
+    position: absolute
+    top: 60px
+    right: 10px
     display: flex
     align-items: center
     cursor: pointer
-    margin-top: 10px
-    margin-left: 63%
+    font-family: $font-family
+    font-size: 12px
+    font-weight: bold
 
   mat-icon
     margin-right: 5px
 
 .card-campos-section
-  background-color: #f4f4f4
   color: $primary-color
   padding: 22px
   border-radius: 10px
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3)
   margin-top: 16px
   display: flex
   gap: 10px
   justify-content: space-between
 
 .card-campos-lotes
-  background-color: #f4f4f4
+  background-color: #FFFFFF
   padding: 20px
   border-radius: 10px
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3)
-  margin-top: 16px
   display: grid
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr))
   gap: 20px
 
-  .titulo-campos
+  .titulo-campo
     color: $primary-color
     font-size: 1.4em
     margin-bottom: 20px
@@ -136,12 +138,10 @@ body
     gap: 16px
 
 .campo-card
-  background-color: #ffffff
   padding: 20px
-  border-radius: 10px
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3)
+  border-radius: 20px
   width: 270px
-  // height: 270px
+  border: 2px solid $primary-color
 
 .with-dot
   display: flex
@@ -150,20 +150,18 @@ body
   &::before
     content: "\2022"
     font-size: 26px
-    color: $primary-color
+    color: $hover-color
     margin-right: 5px
     margin-top: -6px
 
-.icono-geolocalizacion
-  width: 60px
-  height: 60px
-  margin-left: 40%
+.img_lotes
+  width: 100%
 
 .campo-titulos
   font-size: 15px
-  color: $medium-grey
+  color: $hard-black
   font-weight: bold
-
+  white-space: nowrap
 .campo-variable
   font-size: 15px
   margin-left: 1px
@@ -187,17 +185,19 @@ body
   padding: 5px 10px
   transition: all 0.3s ease
 
+  &:hover
+    border-color: $border-color
+
 .edit-button
   font-size: 12px
   font-weight: bold
-  border-color: #4CAF50
-  color: #4CAF50
+  color: $border-color
+  background-color: $btn_cards
   width: 35%
   height: auto
 
   &:hover
-    border-color: #4CAF50
-    color: #4CAF50
+    border-color: $border-color
 
 .edit-button mat-icon,
 .delete-button mat-icon
@@ -207,9 +207,9 @@ body
   font-size: 12px
   font-weight: bold
   margin-left: 10px
-  border-color: $error-color
-  color: $error-color
-  width: 35%
+  color: $border-color
+  background-color: $error-color
+  width: 36%
   height: auto
 
 .leta_btn
@@ -250,7 +250,7 @@ body
     width: 100%
     padding: 4px
     border-radius: 10px
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4)
+
   .letra-icon
     display: none
 

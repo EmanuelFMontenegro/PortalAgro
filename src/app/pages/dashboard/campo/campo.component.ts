@@ -7,7 +7,12 @@ import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { startWith, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  FormBuilder,
+  Validators,
+} from '@angular/forms';
 
 interface CustomJwtPayload {
   userId: number;
@@ -23,7 +28,7 @@ interface DecodedToken {
 @Component({
   selector: 'app-campo',
   templateUrl: './campo.component.html',
-  styleUrls: ['./campo.component.sass']
+  styleUrls: ['./campo.component.sass'],
 })
 export class CampoComponent implements OnInit {
   nombre: string = '';
@@ -49,8 +54,8 @@ export class CampoComponent implements OnInit {
     geolocation: '',
     address: {
       address: '',
-      location: ''
-    }
+      location: '',
+    },
   };
   nameTouched = false;
   dimensionsTouched = false;
@@ -59,16 +64,14 @@ export class CampoComponent implements OnInit {
   addressTouched = false;
   observationTouched = false;
 
-
   constructor(
     private authService: AuthService,
     private apiService: ApiService,
     private toastr: ToastrService,
     private http: HttpClient,
     private router: Router,
-    private fb: FormBuilder,
+    private fb: FormBuilder
   ) {
-
     this.campoForm = this.fb.group({
       address: ['', Validators.required],
       localidad: ['', Validators.required],
@@ -84,7 +87,6 @@ export class CampoComponent implements OnInit {
     this.decodeToken();
     this.campoData.geolocation = '';
     this.obtenerLocalidades();
-
   }
 
   decodeToken(): void {
@@ -102,7 +104,7 @@ export class CampoComponent implements OnInit {
         this.localidades = localidades;
         this.filteredLocalidades = this.filtroLocalidades.valueChanges.pipe(
           startWith(''),
-          map((value) => this.filtrarLocalidades(value ?? '')),
+          map((value) => this.filtrarLocalidades(value ?? ''))
         );
       },
       (error) => {
@@ -113,9 +115,10 @@ export class CampoComponent implements OnInit {
 
   private filtrarLocalidades(value: string): any[] {
     const filterValue = value.toLowerCase();
-    return this.localidades.filter((loc) => loc.name.toLowerCase().includes(filterValue));
+    return this.localidades.filter((loc) =>
+      loc.name.toLowerCase().includes(filterValue)
+    );
   }
-
 
   cargarDatosDeUsuario() {
     const decoded: DecodedToken = jwtDecode(this.authService.getToken() || '');
@@ -126,20 +129,27 @@ export class CampoComponent implements OnInit {
       this.personId = this.userId;
 
       if (this.userId !== null && this.personId !== null) {
-        this.apiService.getPersonByIdOperador(this.userId, this.personId).subscribe(
-          (data) => {
-            this.nombre = data.name;
-            this.apellido = data.lastname;
-            this.dni = data.dni;
-            this.descriptions = data.descriptions;
-            this.telephone = data.telephone;
-            const localidad = this.localidades.find((loc) => loc.id === data.location_id);
-            this.locationId = localidad ? localidad.name.toString() : '';
-          },
-          (error) => {
-            console.error('Error al obtener nombre y apellido del usuario:', error);
-          }
-        );
+        this.apiService
+          .getPersonByIdOperador(this.userId, this.personId)
+          .subscribe(
+            (data) => {
+              this.nombre = data.name;
+              this.apellido = data.lastname;
+              this.dni = data.dni;
+              this.descriptions = data.descriptions;
+              this.telephone = data.telephone;
+              const localidad = this.localidades.find(
+                (loc) => loc.id === data.location_id
+              );
+              this.locationId = localidad ? localidad.name.toString() : '';
+            },
+            (error) => {
+              console.error(
+                'Error al obtener nombre y apellido del usuario:',
+                error
+              );
+            }
+          );
       }
     } else {
       this.userId = null;
@@ -149,7 +159,7 @@ export class CampoComponent implements OnInit {
 
   registrarCampo(): void {
     if (!this.userId) {
-      console.log('este es el ide del señor',this.userId)
+      console.log('este es el ide del señor', this.userId);
       this.toastr.error('Error: No se ha identificado al usuario.', 'Error');
       return;
     }
@@ -160,13 +170,17 @@ export class CampoComponent implements OnInit {
       const dimensionsControl = this.campoForm.get('dimensions');
       const addressControl = this.campoForm.get('address');
       const localidadControl = this.campoForm.get('localidad');
-      const observationControl = this.campoForm.get('observation');  // Obtener control de observación
+      const observationControl = this.campoForm.get('observation'); // Obtener control de observación
 
       // Verificar que los controles no son nulos
-      if (nameControl && dimensionsControl && addressControl && localidadControl && observationControl) {
-        const fixedGeolocation = "";
-
-
+      if (
+        nameControl &&
+        dimensionsControl &&
+        addressControl &&
+        localidadControl &&
+        observationControl
+      ) {
+        const fixedGeolocation = '';
 
         const campoData: any = {
           name: nameControl.value,
@@ -174,35 +188,44 @@ export class CampoComponent implements OnInit {
           geolocation: fixedGeolocation,
           address: {
             address: this.campoForm.get('address')?.value,
-            location_id: this.campoForm.get('localidad')?.value
+            location_id: this.campoForm.get('localidad')?.value,
           },
-          observation: observationControl?.value
+          observation: observationControl?.value,
         };
 
         this.apiService.addField(this.userId, campoData).subscribe(
           () => {
             this.toastr.success('Campo registrado con éxito', 'Éxito');
             this.campoForm.reset();
-            this.router.navigate(['dashboard/geolocalizacion']);
+            this.router.navigate(['dashboard/inicio']);
           },
           (error) => {
             console.error('Error al registrar el campo:', error);
             if (error.error && error.error.message) {
-              this.toastr.error('Ya Existe un campo registrado con este nombre.', 'Atención');
+              this.toastr.error(
+                'La Descripción del campo es muy grande.',
+                'Atención'
+              );
             } else {
-              this.toastr.error('Error al registrar el campo. Detalles: ' + error.message, 'Error');
+              this.toastr.error(
+                'Error al registrar el campo. Detalles: ' + error.message,
+                'Error'
+              );
             }
           }
         );
       } else {
-        console.error('Error: Al menos uno de los controles del formulario es nulo.');
+        console.error(
+          'Error: Al menos uno de los controles del formulario es nulo.'
+        );
       }
     } else {
-      this.toastr.error('Por favor, completa todos los campos requeridos', 'Error');
+      this.toastr.error(
+        'Por favor, completa todos los campos requeridos',
+        'Error'
+      );
     }
   }
-
-
 
   cancelar() {
     this.router.navigate(['dashboard/inicio']);

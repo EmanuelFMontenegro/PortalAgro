@@ -18,9 +18,8 @@ interface DecodedToken {
 @Component({
   selector: 'app-inicio',
   templateUrl: './inicio.component.html',
-  styleUrls: ['./inicio.component.sass']
+  styleUrls: ['./inicio.component.sass'],
 })
-
 export class InicioComponent implements OnInit {
   currentYear: number = new Date().getFullYear();
   nombre: string = '';
@@ -45,15 +44,15 @@ export class InicioComponent implements OnInit {
     observation: '',
     address: {
       address: '',
-      location: ''
-    }
+      location: '',
+    },
   };
 
   addressTouched = false;
   locationTouched = false;
   nameTouched = false;
   dimensionsTouched = false;
-  observationTouched=false;
+  observationTouched = false;
   campoSeleccionado: any;
   constructor(
     private authService: AuthService,
@@ -68,7 +67,7 @@ export class InicioComponent implements OnInit {
     this.decodeToken();
     this.campoData.geolocation = '';
     this.cargarCampos();
-    this.cargarDatosDeUsuario()
+    this.cargarDatosDeUsuario();
   }
 
   decodeToken(): void {
@@ -77,29 +76,29 @@ export class InicioComponent implements OnInit {
       const decoded = jwtDecode<CustomJwtPayload>(token);
       this.userId = decoded.userId;
       this.userEmail = decoded.sub;
-
     }
   }
 
-  BtnRegisterCampos():void {
+  BtnRegisterCampos(): void {
     this.router.navigate(['/dashboard/campo']);
   }
 
   cargarCampos() {
     if (!this.userId) {
-
       this.toastr.error('Error: No se ha identificado al usuario.', 'Error');
       return;
     }
 
     this.apiService.getFields(this.userId).subscribe(
       (response) => {
-        this.campos = response.list[0];
-
+        if (response.list && response.list.length > 0) {
+          this.campos = response.list[0];
+        } else {
+          console.error('La lista de campos está vacía o no está definida');
+        }
       },
       (error) => {
         console.error('Error al obtener campos:', error);
-
       }
     );
   }
@@ -112,31 +111,35 @@ export class InicioComponent implements OnInit {
       this.personId = this.userId;
 
       if (this.userId !== null && this.personId !== null) {
-
         this.apiService.getLocationMisiones('location').subscribe(
           (localidades) => {
             this.localidades = localidades;
 
             let nombreLocalidad: string = '';
 
+            this.apiService
+              .getPersonByIdOperador(this.userId, this.personId)
+              .subscribe(
+                (data) => {
+                  const localidad = this.localidades.find(
+                    (loc) => loc.id === data.location_id
+                  );
+                  nombreLocalidad = localidad ? localidad.name : '';
 
-            this.apiService.getPersonByIdOperador(this.userId, this.personId).subscribe(
-              (data) => {
-
-                const localidad = this.localidades.find((loc) => loc.id === data.location_id);
-                nombreLocalidad = localidad ? localidad.name : '';
-
-                this.nombreLocalidad = nombreLocalidad;
-                this.nombre = data.name;
-                this.apellido = data.lastname;
-                this.dniCuit = data.dniCuit;
-                this.descriptions = data.descriptions;
-                this.telephone = data.telephone;
-              },
-              (error) => {
-                console.error('Error al obtener nombre y apellido del usuario:', error);
-              }
-            );
+                  this.nombreLocalidad = nombreLocalidad;
+                  this.nombre = data.name;
+                  this.apellido = data.lastname;
+                  this.dniCuit = data.dniCuit;
+                  this.descriptions = data.descriptions;
+                  this.telephone = data.telephone;
+                },
+                (error) => {
+                  console.error(
+                    'Error al obtener nombre y apellido del usuario:',
+                    error
+                  );
+                }
+              );
           },
           (error) => {
             console.error('Error al obtener las localidades', error);
@@ -151,14 +154,13 @@ export class InicioComponent implements OnInit {
 
   geolocalizar() {
     if (this.campoSeleccionado) {
-      this.router.navigate(['dashboard/geolocalizacion'], { state: { campoSeleccionado: this.campoSeleccionado } });
+      this.router.navigate(['dashboard/geolocalizacion'], {
+        state: { campoSeleccionado: this.campoSeleccionado },
+      });
     } else {
       this.toastr.warning('No se ha seleccionado ningún campo', 'Advertencia');
     }
   }
-
-
-
 
   registrarCampo(): void {
     if (!this.userId) {
@@ -177,23 +179,31 @@ export class InicioComponent implements OnInit {
             observation: '',
             address: {
               address: '',
-              location: ''
-            }
+              location: '',
+            },
           };
           this.router.navigate(['dashboard/geolocalizacion']);
-
         },
         (error) => {
           console.error('Error al registrar el campo:', error);
           if (error.error && error.error.message) {
-            this.toastr.error('Ya Existe un campo registrado con este nombre.', 'Atención');
+            this.toastr.error(
+              'Ya Existe un campo registrado con este nombre.',
+              'Atención'
+            );
           } else {
-            this.toastr.error('Error al registrar el campo. Detalles: ' + error.message, 'Error');
+            this.toastr.error(
+              'Error al registrar el campo. Detalles: ' + error.message,
+              'Error'
+            );
           }
         }
       );
     } else {
-      this.toastr.error('Por favor, completa todos los campos requeridos', 'Error');
+      this.toastr.error(
+        'Por favor, completa todos los campos requeridos',
+        'Error'
+      );
     }
   }
   obtenerLocalidades() {
@@ -208,7 +218,6 @@ export class InicioComponent implements OnInit {
     );
   }
 
-
   isValidForm(): boolean {
     const dimensions = Number(this.campoData.dimensions);
     const isAddressValid = this.campoData.address.address.trim() !== '';
@@ -217,17 +226,21 @@ export class InicioComponent implements OnInit {
     const isObservationValid = this.campoData.observation.trim() !== '';
     const areDimensionsValid = !isNaN(dimensions) && dimensions > 0;
 
-    return isAddressValid && isLocationValid && isNameValid && areDimensionsValid && isObservationValid ;
+    return (
+      isAddressValid &&
+      isLocationValid &&
+      isNameValid &&
+      areDimensionsValid &&
+      isObservationValid
+    );
   }
   verMas(campo: any): void {
-
     this.campoSeleccionado = campo;
-    localStorage.setItem('campoSeleccionado', JSON.stringify(this.campoSeleccionado));
-
+    localStorage.setItem(
+      'campoSeleccionado',
+      JSON.stringify(this.campoSeleccionado)
+    );
 
     this.router.navigate(['dashboard/detalle-campo']);
   }
-
-
-
 }

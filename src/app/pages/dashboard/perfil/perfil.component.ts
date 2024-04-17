@@ -23,6 +23,7 @@ interface UserData {
   styleUrls: ['./perfil.component.sass'],
 })
 export class PerfilComponent implements OnInit, AfterViewInit {
+  selectedImage: string | ArrayBuffer | null = null;
   nombre: string = '';
   apellido: string = '';
   descripcion: string = '';
@@ -79,10 +80,15 @@ export class PerfilComponent implements OnInit, AfterViewInit {
 
   }
 
-  cargarNuevoAvatar(event: any) {
-    const fileList: FileList = event.target.files;
-    if (fileList.length > 0) {
-      this.avatarFile = fileList[0];
+  onFileSelected(event: any) {
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      // Leer la imagen como un objeto URL local
+      const reader = new FileReader();
+      reader.readAsDataURL(selectedFile);
+      reader.onload = () => {
+        this.selectedImage = reader.result;
+      };
     }
   }
 

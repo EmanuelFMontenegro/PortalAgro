@@ -221,6 +221,7 @@ export class CargarLoteComponent {
   cargarLotes(): void {
     console.log('Cargar Lote method called');
     console.log('Form value:', this.campoForm.value);
+    console.log('Current Plot ID:', this.currentPlotId);
     if (this.campoForm.valid && !this.currentPlotId) {
       const nameControl = this.campoForm.get('name');
       const dimensionsControl = this.campoForm.get('dimensions');
@@ -279,6 +280,7 @@ export class CargarLoteComponent {
   actualizarLote(): void {
     console.log('Actualizar Lote method called');
     console.log('Form value:', this.campoForm.value);
+    console.log('Current Plot ID:', this.currentPlotId);
     if (this.campoForm.valid && this.currentPlotId) {
       const nameControl = this.campoForm.get('name');
       const dimensionsControl = this.campoForm.get('dimensions');

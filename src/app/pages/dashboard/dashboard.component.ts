@@ -1,4 +1,9 @@
-import { Component, AfterViewInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  AfterViewInit,
+  ViewChild,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Router } from '@angular/router';
@@ -6,46 +11,51 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.sass']
+  styleUrls: ['./dashboard.component.sass'],
 })
 export class DashboardComponent implements AfterViewInit {
+  [x: string]: any;
   @ViewChild('sidenav') sidenav!: MatSidenav;
   isScreenSmall: boolean;
   isSidebarOpen: boolean = false;
+  HomeOutlinedIcon: any;
+  LocalOfferOutlinedIcon: any;
+  StoreMallDirectoryOutlinedIcon: any;
+  SettingsOutlinedIcon: any;
+  PersonOutlineOutlinedIcon: any;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
     private router: Router,
-    private cdr: ChangeDetectorRef // Agregamos ChangeDetectorRef
+    private cdr: ChangeDetectorRef
   ) {
     this.isScreenSmall = window.innerWidth < 768;
+    // this.isSidebarOpen = false;
   }
 
   ngAfterViewInit(): void {
-    this.breakpointObserver.observe([Breakpoints.Handset])
-      .subscribe(result => {
+    this.breakpointObserver
+      .observe([Breakpoints.Handset])
+      .subscribe((result) => {
         this.isScreenSmall = result.matches;
         if (this.isScreenSmall && this.sidenav) {
           this.sidenav.close();
         } else if (this.sidenav) {
           this.sidenav.open();
         }
-        this.cdr.detectChanges(); // Forzamos la detección de cambios
+        this.cdr.detectChanges()
       });
   }
 
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
-    this.cdr.detectChanges(); // Forzamos la detección de cambios
   }
 
   closeSidenavIfSmall() {
     if (this.isScreenSmall) {
       this.isSidebarOpen = false;
-      this.cdr.detectChanges(); // Forzamos la detección de cambios
     }
   }
-
   cerrarSesion(): void {
     console.log('Cerrando sesión...');
     localStorage.removeItem('token');

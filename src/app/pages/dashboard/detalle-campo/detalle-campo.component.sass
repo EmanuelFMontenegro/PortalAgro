@@ -1,11 +1,11 @@
-$primary-color: #3CA749
+$primary-color: #0F8054
 $secondary-color: #8FCA8F
 $hover-color: #32963f
 $error-color: #d9534f
 $light-grey: #f4f4f4
 $dark-grey: #454545
 $medium-grey: #808080
-$border-color: #ddd
+$border-color: #FFFFFF
 $icon-color: #808080
 $font-family: 'Montserrat', sans-serif
 
@@ -14,17 +14,18 @@ body
 
 .titulo-bienvenida
   color: $dark-grey
-  font-size: 1.5em
+  font-size: 1.2em
   font-family: $font-family
   margin-top: 25px
   margin-left: 17px
+  font-weight: bold
 
 .titulo-detalle-campo
-  color: #3CA749
+  color: $primary-color
   font-family: "Montserrat", sans-serif
   font-size: 1.1em
   font-weight: bold
-  margin-bottom: 10px
+  margin-bottom: 17px
   display: block
   display: flex
   margin-left: 24px
@@ -35,6 +36,7 @@ body
   font-family: "Montserrat", sans-serif
   margin-top: 31px
   margin-left: 17px
+  margin-bottom: 5em
 
   .volver-button
     display: flex
@@ -44,9 +46,9 @@ body
     margin-left: auto
 
   .letra_btn_volver
-    font-size: 14px
+    font-size: 12px
     font-family: $font-family
-    color: $primary-color
+    color: $border-color
     font-weight: bold
 
   mat-icon
@@ -56,13 +58,13 @@ body
     display: flex
     background-color: $light-grey
     padding: 20px
-    border-radius: 10px
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3)
+    border-radius: 30px
     margin: 20px
     width: 95%
     margin-top: -12px
 
     &.user-card
+      background: linear-gradient(to bottom, #3BA549 40%, #0F8054 100%)
       display: flex
       margin-top: 8px
       flex-direction: row
@@ -84,63 +86,109 @@ body
           font-size: 70px
 
     p
+      font-family: "Montserrat", sans-serif
       font-size: 15px
-      color: $icon-color
-      font-weight: bold
-
-    .email
-      font-size: 14px
-      color: $medium-grey
-      font-weight: bold
+      color: #454545
+      display: flex
+      gap: 5px
+      flex-wrap: wrap
 
     .name
-      font-size: 18px
-      color: $dark-grey
+      font-family: $font-family
+      font-size: 16px
+      color: $border-color
       font-weight: bold
+      margin-left: 5%
 
-  .card
-    background-color: #f4f4f4
+    .email
+      font-family: $font-family
+      font-size: 15px
+      color: $border-color
+      font-weight: bold
+      margin-left: 5%
+
+.card-campo-container
+  background-color: #FFFFFF
+  display: flex
+  padding: 10px
+  border-radius: 20px
+  border: 1px solid #808080
+  margin: 20px
+
+  .campo-details-card
+    overflow: hidden
+    padding: 8px
+    margin-top: -25px
+    width: 65%
+    height: 24em
+    border-radius: 5px
+    font-size: 18p
+
+  .title-campo-details
+    color: #454545
+    margin-bottom: 55px
+
+  .localidad
+    color: #454545
+    margin-bottom: 10px
+    font-size: 15px
+    font-weight: bold
+    .loc_details
+      font-size: 12px
+      font-family: $font-family
+      color: $medium-grey
+  .direccion
+    color: #454545
+    margin-bottom: 10px
+    font-size: 15px
+    font-weight: bold
+    .direc_details
+      font-size: 12px
+      font-family: $font-family
+      color: $medium-grey
+  .hectareas
+    color: #454545
+    margin-bottom: 10px
+    font-size: 15px
+    font-weight: bold
+    .hect_details
+      font-size: 12px
+      font-family: $font-family
+      color: $medium-grey
+  .descripcion
+    color: #454545
+    margin-bottom: 10px
+    font-size: 15px
+    font-weight: bold
+    .desc_details
+      font-size: 12px
+      font-family: $font-family
+      color: $medium-grey
+
+  .card-main-card
     display: flex
-    padding: 20px
-    border-radius: 10px
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3)
-    margin: 20px
-    width: 94%
-    margin-top: -12px
+    grid-template-columns: 1fr
+    width: 92%
+    margin-left: 17px
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.6)
 
-    .campo-details-card
-      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.6)
-      overflow: hidden
-      padding: 15px
-      margin-bottom: 10px
-      height: auto
-      width: 40%
-      border-radius: 5px
+  .campo-card
+    display: flex
+    overflow: hidden
+    padding: 7px
+    width: 70%
+    border-radius: 5px
 
-    .card-main-card
-      display: flex
-      grid-template-columns: 1fr
-      width: 92%
-      margin-left: 17px
-      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.6)
+  .campo-image-container
+    width: 100%
+    overflow: hidden
 
-    .campo-card
-      display: flex
-      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.6)
-      overflow: hidden
-      padding: 15px
-      margin-bottom: 10px
-      width: 90%
-      border-radius: 5px
-    .campo-image-container
-      width: 100%
-      // max-height: 300px
-      overflow: hidden
-
-    .campo-image
-      object-fit: cover
-      width: 98%
-      border-radius: 5px
+  .campo-image
+    object-fit: cover
+    width: 99%
+    height: 22.9em
+    border-radius: 20px
+    border: 1px solid #808080
 
   .card-campo-secundarias
     display: flex
@@ -161,7 +209,8 @@ body
   .campo-buttons
     display: flex
     gap: 10px
-    margin-top: 62%
+    margin-top: 8.2em
+    flex-direction: column-reverse
 
   .botones-servicio
     display: flex
@@ -174,23 +223,32 @@ body
     align-items: center
 
   button
-    background-color: $primary-color
+    background-color: #0F8054
     width: 100%
     color: white
     cursor: pointer
-    padding: 8px 18px
+    padding: 12px 18px
     border: 1px solid transparent
-    border-radius: 5px
+    border-radius: 12px
     transition: background-color 0.3s, border-color 0.3s
-    font-size: 13px
-    font-family: 'Montserrat', sans-serif
+    font-size: 0.7em
+    font-family: "Montserrat", sans-serif
     font-weight: bold
 
+  .icono_location
+    width: 20px
+    height: auto
+    margin-left: 5px
+    vertical-align: middle
+    fill: #0F8054
+
   button.geolocalizar
-    width: 86%
+    width: 100%
+    border-radius: 12px
+    padding: 9px 18px
     background-color: white
-    border: 1px solid $primary-color
-    color: #3CA749
+    border: 2px solid #0F8054
+    color: #0F8054
 
   button:hover
     // background-color: #f8f8f8
@@ -198,13 +256,11 @@ body
 
 #map
   object-fit: cover
-  width: 98%
-  height: 98%
-  border-radius: 5px
-  margin-right: 12px
-  border: 1px solid $primary-color
+  width: 100%
+  border-radius: 20px
+  border: 1px solid $dark-grey
 
-@media screen and (max-width: 767px)
+@media screen and (max-width: 768px)
   #map
     width: 100%
     height: 300px
@@ -259,23 +315,23 @@ body
     width: 100%
     margin: auto
 
-  .container .card.user-card .avatar mat-icon
-    display: contents
-    color: #808080
+  .card-campo-container .campo-card
+    padding: 1px
+    width: 100%
 
-  .container .card.user-card
-    align-items: center
-    gap: 10px
-    width: 85%
+  .card-campo-container
+    display: flex
+    flex-direction: column
+    width: 87%
 
-  .container .card.user-card .avatar
-    width: 70px
-    height: 70px
+  .card-campo-container .campo-details-card
+    width: 100%
 
   .container .card
     display: flex
     flex-direction: column
-    width: 100%
+    width: 87%
+    margin-left: 1%
 
   .container .card .campo-image
     object-fit: cover
@@ -289,7 +345,9 @@ body
     border-radius: 5px
 
   .container .card .campo-card
-    width: 80%
+    width: 100%
+    display: flex
+    justify-content: columns
 
   .container .card.user-card
     display: flex
@@ -297,14 +355,14 @@ body
     align-items: center
 
   .container .card .campo-details-card
-    width: 80%
+    width: 100%
 
   .container .card p
     font-size: 13px
 
   .container .campo-buttons
-    display: flex
-    flex-direction: column-reverse
+    margin-top: 5em
+    margin-right: 1em
 
   .container button.geolocalizar
     width: 100%

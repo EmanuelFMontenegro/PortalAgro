@@ -14,13 +14,14 @@ import { FormatDatePipe } from './format-date.pipe';
 import { NgxSpinnerModule } from "ngx-spinner";
 
 
+
 const routes: Routes = [];
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
-    NgxSpinnerModule,
+    NgxSpinnerModule.forRoot (),
     RouterModule.forRoot(routes),
     ToastrModule.forRoot(),
     BrowserAnimationsModule,

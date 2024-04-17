@@ -1,6 +1,6 @@
-$primary-color: #3CA749
-$secondary-color: #8FCA8F
-$hover-color: #32963f
+$primary-color: #0F8054
+$secondary-color: #3CA749
+$hover-color: #47de5b
 $error-color: #d9534f
 $light-grey: #f4f4f4
 $dark-grey: #454545
@@ -23,9 +23,6 @@ $font-family: 'Montserrat', sans-serif
   width: 500px
   max-width: 100%
   padding: 40px
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))
-  backdrop-filter: blur(10px)
-  -webkit-backdrop-filter: blur(15px)
   border-radius: 20px
   border: 1px solid rgba(255, 255, 255, 0.18)
   overflow: hidden
@@ -37,14 +34,20 @@ $font-family: 'Montserrat', sans-serif
     padding: 20px
 
 .logo-container
+  display: flex
+  justify-content: center
+  align-items: center
   img
-    max-width: 200px
+    max-width: 240px
     margin-bottom: 20px
 
 h1
-  font-size: 32px
+  font-size: 35px
   color: $dark-grey
-  font-weight: 700
+  font-weight: 600
+
+  @media (max-width: 600px)
+    font-size: 30px
 
 .form-field-container
   position: relative
@@ -61,42 +64,52 @@ h1
     width: 100%
 
     .input-style
-      flex-grow: 1
-      width: 100%
-      padding: 10px
       font-size: 14px
-      border: 1px solid $border-color
+      width: 95%
+      color: $medium-grey
+      padding: 10px
+      margin-bottom: 15px
+      border: 1px solid $dark-grey
       border-radius: 4px
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3)
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))
-      backdrop-filter: blur(10px)
-      -webkit-backdrop-filter: blur(15px)
-      color: $border-color
+
       &:focus
+        outline: none
         border-color: $primary-color
-        box-shadow: 0 0 12px rgba($primary-color, 0.5)
+        box-shadow: 0 0 5px $primary-color
 
     .toggle-password
       position: absolute
       right: 10px
-      top: 70%
-      transform: translateY(-50%)
+      top: 25%
       cursor: pointer
-      font-size: 14px
+      font-size: 16px
       color: $primary-color
 
-.mat-error
-  color: $error-color
-  font-size: 12px
-  text-align: center
-  width: 100%
-  display: block
-  margin-top: 5px
+      &:before
+        content: ""
+        position: absolute
+        top: 0
+        left: 0
+        right: 0
+        bottom: 0
+        border-radius: 4px
+        pointer-events: none
+        opacity: 0
+        transition: opacity 0.3s ease
+
+        &.visible
+          color: $hover-color
+
+      &:before
+        opacity: 1
 
 button[type="submit"]
   width: 100%
+  margin-top: 20px
   padding: 10px 0
-  background-color: $primary-color // Color por defecto cuando está desactivado
+  background: $primary-color
+  backdrop-filter: blur(25px)
+  -webkit-backdrop-filter: blur(15px)
   color: white
   border: none
   border-radius: 4px
@@ -104,15 +117,13 @@ button[type="submit"]
   cursor: pointer
   transition: background-color 0.3s ease
 
-  // &:disabled
-  //   background-color: $secondary-color
-  //   cursor: not-allowed
-
-  // &.enabled
-  //   background-color: $primary-color
+  &:hover
+    backdrop-filter: blur(10px)
+    -webkit-backdrop-filter: blur(15px)
+    background-color: $hover-color
 
   @media (max-width: 600px)
-    width: 80%
+    width: 100%
 
 .btn-submit
   background-color: #8FCA8F
@@ -128,14 +139,24 @@ button[type="submit"]
 .login-prompt
   font-size: 14px
   margin-bottom: 10px
+  color: $dark-grey
 
 .login-link
   font-size: 14px
-  color: $primary-color
+  color: $secondary-color
   text-decoration: none
   margin-left: 5px
-  // border-bottom: 2px solid $primary-color
   padding-bottom: 1px
+  text-decoration: underline
 
   &:hover
     text-decoration: underline
+
+.mat-error
+  display: block
+  min-height: 20px
+  font-size: 12px
+  color: white
+  margin-top: 5px
+  visibility: hidden
+  opacity: 0

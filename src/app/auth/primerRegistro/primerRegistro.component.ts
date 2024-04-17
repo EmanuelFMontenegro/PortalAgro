@@ -8,6 +8,8 @@ import { jwtDecode } from 'jwt-decode';
 import { Observable } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { startWith, map } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from 'src/app/pages/dashboard/dialog/dialog.component';
 
 interface DecodedToken {
   userId: number;
@@ -41,14 +43,35 @@ export class PrimerRegistroComponent implements OnInit, AfterViewInit {
     private authService: AuthService,
     private apiService: ApiService,
     private toastr: ToastrService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {
     this.userDetailsForm = this.formBuilder.group({
-      nombre: ['', [Validators.maxLength(20), Validators.pattern('^[a-zA-Z]+$')]],
-      apellido: ['', [Validators.maxLength(20), Validators.pattern('^[a-zA-Z]+$')]],
+      nombre: [
+        '',
+        [Validators.maxLength(20), Validators.pattern('^[a-zA-Z]+$')],
+      ],
+      apellido: [
+        '',
+        [Validators.maxLength(20), Validators.pattern('^[a-zA-Z]+$')],
+      ],
       localidad: [null, Validators.required],
-      dni: ['', [Validators.minLength(8), Validators.maxLength(11), Validators.pattern('^[0-9]+$')]],
-      contacto: ['', [Validators.minLength(10), Validators.maxLength(12), Validators.pattern('^[0-9]+$')]],
+      dni: [
+        '',
+        [
+          Validators.minLength(8),
+          Validators.maxLength(11),
+          Validators.pattern('^[0-9]+$'),
+        ],
+      ],
+      contacto: [
+        '',
+        [
+          Validators.minLength(10),
+          Validators.maxLength(12),
+          Validators.pattern('^[0-9]+$'),
+        ],
+      ],
       descripcion: [''],
     });
   }
@@ -65,7 +88,7 @@ export class PrimerRegistroComponent implements OnInit, AfterViewInit {
         this.localidades = localidades;
         this.filteredLocalidades = this.filtroLocalidades.valueChanges.pipe(
           startWith(''),
-          map((value) => this.filtrarLocalidades(value ?? '')),
+          map((value) => this.filtrarLocalidades(value ?? ''))
         );
       },
       (error) => {
@@ -76,26 +99,10 @@ export class PrimerRegistroComponent implements OnInit, AfterViewInit {
 
   private filtrarLocalidades(value: string): any[] {
     const filterValue = value.toLowerCase();
-    return this.localidades.filter((loc) => loc.name.toLowerCase().includes(filterValue));
+    return this.localidades.filter((loc) =>
+      loc.name.toLowerCase().includes(filterValue)
+    );
   }
-
-  // cargarDatosPerfil() {
-  //   const decoded: DecodedToken = jwtDecode(this.authService.getToken() || '');
-  //   if ('userId' in decoded && 'sub' in decoded && 'roles' in decoded) {
-  //     this.userId = decoded.userId;
-  //     this.userEmail = decoded.sub;
-
-  //     this.personId = this.userId;
-
-  //     if (this.userId !== null && this.personId !== null) {
-  //       // Eliminamos la llamada a getPersonByIdOperador
-  //       this.actualizarValoresFormulario();
-  //     }
-  //   } else {
-  //     this.userId = null;
-  //     this.userEmail = null;
-  //   }
-  // }
 
   cargarDatosPerfil() {
     if (!this.validarFormulario()) {
@@ -110,6 +117,7 @@ export class PrimerRegistroComponent implements OnInit, AfterViewInit {
       location_id: this.userDetailsForm.get('localidad')?.value || null,
       descriptions: this.userDetailsForm.get('descripcion')?.value || null,
     };
+
     const decoded: DecodedToken = jwtDecode(this.authService.getToken() || '');
     if ('userId' in decoded && 'sub' in decoded && 'roles' in decoded) {
       this.userId = decoded.userId;
@@ -118,25 +126,56 @@ export class PrimerRegistroComponent implements OnInit, AfterViewInit {
       this.personId = this.userId;
 
       if (this.userId !== null && this.personId !== null) {
-        // Eliminamos la llamada a getPersonByIdOperador
         this.actualizarValoresFormulario();
       }
     } else {
       this.userId = null;
       this.userEmail = null;
     }
-    this.apiService.updatePersonAdmin(this.userId, this.personId, personData).subscribe(
-      (response) => {
-        this.toastr.success('Gracias por actualizar tu perfil:', 'Bienvenido')
-        this.router.navigate(['/dashboard']);
-      },
-      (error) => {
-        console.error('Error al actualizar la información del usuario:', error);
-        this.toastr.error('Tuvimos un problema en actualizar tu perfil:', 'Atencion')
-      }
-    );
-  }
 
+    this.apiService
+      .updatePersonAdmin(this.userId, this.personId, personData)
+      .subscribe(
+        (response) => {
+          this.toastr.success(
+            'Gracias por actualizar tu perfil:',
+            'Bienvenido'
+          );
+          this.router.navigate(['/dashboard']);
+        },
+        (error) => {
+          console.error(
+            'Error al actualizar la información del usuario:',
+            error
+          );
+          if (error?.error?.code === 4023) {
+            this.userDetailsForm.get('dni')?.setErrors({ incorrect: true });
+            const dialogRef = this.dialog.open(DialogComponent, {
+              data: {
+                title: 'Atención',
+                message: 'El DNI ya está registrado. Por favor, verifíquelo',
+              },
+            });
+          } else if (error?.error?.code === 4012) {
+            this.userDetailsForm
+              .get('contacto')
+              ?.setErrors({ incorrectSize: true });
+            const dialogRef = this.dialog.open(DialogComponent, {
+              data: {
+                title: 'Atención',
+                message:
+                  'El Nro de Celular es incorrecto. Por favor, verifíquelo',
+              },
+            });
+          } else {
+            this.toastr.error(
+              'Tuvimos un problema en actualizar tu perfil:',
+              'Atencion'
+            );
+          }
+        }
+      );
+  }
 
   actualizarValoresFormulario() {
     this.userDetailsForm.patchValue({
@@ -151,27 +190,42 @@ export class PrimerRegistroComponent implements OnInit, AfterViewInit {
 
   validarFormulario(): boolean {
     const formValues = this.userDetailsForm.value;
+    const dniControl = this.userDetailsForm.get('dni');
+    const contactoControl = this.userDetailsForm.get('contacto');
+
+    if (dniControl?.errors && dniControl.errors['incorrect']) {
+      dniControl.setErrors({ incorrect: true });
+      return false;
+    }
+
+    if (contactoControl?.errors && contactoControl.errors['incorrectSize']) {
+      contactoControl.setErrors({ incorrectSize: true });
+      return false;
+    }
+
+    // Aquí puedes agregar otras validaciones necesarias
+
     if (
       formValues.nombre?.trim() === '' ||
       formValues.apellido?.trim() === '' ||
       formValues.dni?.trim() === '' ||
       formValues.localidad === null ||
       formValues.contacto?.trim() === ''
-
     ) {
-      this.toastr.warning('Por favor, complete todos los campos obligatorios.', 'Atención');
+      this.toastr.warning(
+        'Por favor, complete todos los campos obligatorios.',
+        'Atención'
+      );
       return false;
     }
     return true;
   }
-
 
   redirectToLogin() {
     this.router.navigate(['/login']);
   }
 
   cancelar() {
-
     this.router.navigate(['/login']);
   }
 }

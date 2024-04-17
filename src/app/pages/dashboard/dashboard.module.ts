@@ -14,8 +14,7 @@ import { GeolocalizacionComponent } from './geolocalizacion/geolocalizacion.comp
 import { ConfiguracionComponent } from './configuracion/configuracion.component';
 import { PerfilComponent } from './perfil/perfil.component';
 import { ReportesComponent } from './reportes/reportes.component';
-import { ProductosComponent } from './productos/productos.component';
-
+// import { ProductosComponent } from './productos/productos.component';
 
 // Angular Material
 import { MatCardModule } from '@angular/material/card';
@@ -69,14 +68,14 @@ const CUSTOM_DATE_FORMATS = {
     ConfiguracionComponent,
     PerfilComponent,
     ReportesComponent,
-    ProductosComponent,
+    // ProductosComponent,
     CampoComponent,
     FormatDatePipe,
     DetalleCampoComponent,
     LoteComponent,
     CargarLoteComponent,
-    DialogComponent
-
+    DialogComponent,
+    DashboardComponent,
   ],
   imports: [
     CommonModule,
@@ -109,10 +108,8 @@ const CUSTOM_DATE_FORMATS = {
     MatAutocompleteModule,
     MatOptionModule,
     BrowserAnimationsModule,
-    RouterModule
+    RouterModule,
   ],
-  providers: [
-    { provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS }
-  ],
+  providers: [{ provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS }],
 })
-export class DashboardModule { }
+export class DashboardModule {}

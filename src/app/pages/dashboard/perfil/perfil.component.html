@@ -7,28 +7,28 @@
     <mat-card class="main-card">
       <div class="cards-container">
         <div class="card user-card">
-          <div class="avatar">
-            <div class="avatar-circle">
-              <mat-icon class="avatar-icon">person</mat-icon>
-              <label for="file-input" class="edit-avatar-button">
-                <mat-icon class="edit-icon">edit</mat-icon>
-              </label>
+          <div class="user-content">
+            <div class="avatar">
+              <div class="avatar-circle">
+                <mat-icon *ngIf="!selectedImage && !modoEdicion" class="avatar-icon">person</mat-icon>
+              </div>
             </div>
-          </div>
-          <div class="titulo-perfil-avatar">
-            <div class="titulo-welcome">
-              <h2>Bienvenido, {{ nombre }} {{ apellido }}</h2>
-              <p class="email">Email: {{ userEmail }}</p>
-              <p class="email">Ciudad: {{ locationId }}</p>
-              <div class="icon-edit-perfil">
-                <mat-icon class="img-editar" style="color:#3CA749;font-size: 18px;"
-                  (click)="activarEdicion(true)">edit</mat-icon>
-                <span class="edit-text">Editar</span>
+            <div class="titulo-perfil-avatar">
+              <div class="titulo-welcome">
+                <h2>Bienvenido, {{ nombre }} {{ apellido }}</h2>
+                <p class="email">Email: {{ userEmail }}</p>
+                <p class="email">Ciudad: {{ locationId }}</p>
               </div>
             </div>
           </div>
-        </div>
+          <div class="boton-editar">
+            <button mat-raised-button class="btn-editar" (click)="activarEdicion(true)">
+              <img src="assets/img/edit_square_FILL0_wght400_GRAD0_opsz24.svg" alt="Icon Edit" class="img-editar">
+              Editar
+            </button>
+          </div>
 
+        </div>
         <mat-card class="user-details-card">
           <mat-card-header>
             <mat-card-title>Información Personal</mat-card-title>
@@ -88,11 +88,12 @@
         <div class="card user-card">
           <div class="avatar">
             <div class="avatar-circle">
-              <mat-icon class="avatar-icon">person</mat-icon>
+              <input type="file" id="file-input" style="display: none" (change)="onFileSelected($event)">
               <label for="file-input" class="edit-avatar-button">
                 <mat-icon class="edit-icon">edit</mat-icon>
               </label>
-              <input id="file-input" type="file" (change)="cargarNuevoAvatar($event)" style="display:none;">
+              <img *ngIf="selectedImage" [src]="selectedImage" class="avatar-icon">
+              <mat-icon *ngIf="!selectedImage" class="avatar-icon">person</mat-icon>
             </div>
           </div>
           <div class="titulo-perfil-avatar">

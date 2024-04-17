@@ -1,47 +1,50 @@
 // Variables de colores
-$primary-color: #3CA749
-$secondary-color: #8FCA8F
+$primary-color: #0F8054
+$secondary-color: #3CA749
 $light-grey: #f4f4f4
 $medium-grey: #808080
+$hard-black: #232323
 $hard-grey: #454545
-$hover-color: #32963f
+$hover-color: #47de5b
 $error-color: #d9534f
-$border-color: #ddd
+$white-color: #FFFFFF
+$border-card: #929497
+$color-footer: #3BA549
 $font-family: 'Montserrat', sans-serif
 
 .container
   display: grid
   grid-template-columns: 1fr
   grid-template-rows: auto
-  height: 100vh
 
 .titulo-perfil
   color: $hard-grey
-  font-size: 1.4em
-  font-family: 'Montserrat', sans-serif
+  font-size: 1.2em
+  font-family: "Montserrat", sans-serif
   margin-left: 1%
-  margin-top: 3%
+  margin-top: 0.5%
+  font-weight: bold
 
 .main-card
-  width: 95%
+  width: 100%
   padding: 20px
   border-radius: 10px
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4)
-  background-color: $light-grey
-  margin: 0 auto
+  background-color: $white-color
   position: relative
   display: grid
   grid-template-columns: 1fr
-  margin-bottom: 18%
 
 .card
-  background-color: #f4f4f4
-  padding: 20px
-  border-radius: 10px
+  background: linear-gradient(to bottom, #3BA549 40%, #0F8054 100%)
+  padding: 10px
+  border-radius: 30px
+  border: 2px solid #ccc
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3)
   display: grid
   grid-template-columns: 1fr auto
   gap: 20px
+  width: 98%
+  margin-left: 1em
 
 .user-content
   display: flex
@@ -55,17 +58,28 @@ $font-family: 'Montserrat', sans-serif
       width: 90px
       height: 90px
       border-radius: 50%
-      background-color: green
       display: flex
       align-items: center
       justify-content: center
-      border: 3px solid $primary-color
+      border: 2px solid #808080
       background-color: white
       position: relative
 
       .avatar-icon
         font-size: 60px
+        border-radius: 50%
         color: $medium-grey
+        width: 100%
+        height: 100%
+        display: flex
+        justify-content: center
+        align-items: center
+
+      .avatar-circle img
+        width: 100%
+        height: 100%
+        object-fit: cover
+        border-radius: 50%
 
       mat-icon
         height: unset
@@ -85,13 +99,13 @@ $font-family: 'Montserrat', sans-serif
         cursor: pointer
 
   .titulo-perfil-avatar
-    color: $primary-color
+    color: $white-color
     font-size: 14px
     font-family: $font-family
 
   .email
     font-size: 14px
-    color: $medium-grey
+    color: $white-color
     font-weight: bold
     font-family: $font-family
 
@@ -99,10 +113,11 @@ $font-family: 'Montserrat', sans-serif
   display: flex
   justify-content: flex-end
   align-items: center
+  margin-top: 45%
 
 .register-button
   padding: 8px 18px
-  border: 1px solid transparent
+  border: 2px solid $white-color
   border-radius: 5px
   cursor: pointer
   transition: background-color 0.3s, border-color 0.3s
@@ -111,13 +126,14 @@ $font-family: 'Montserrat', sans-serif
   font-weight: bold
   background-color: $primary-color
   color: white
+  margin-right: 2em
 
 .card-campos-section
-  background-color: #f4f4f4
+  background-color: $white-color
   padding: 20px
   border-radius: 10px
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3)
   margin-top: 16px
+  overflow: auto
 
   .titulo-campos
     color: $primary-color
@@ -131,10 +147,10 @@ $font-family: 'Montserrat', sans-serif
     gap: 16px
 
   .campo-card
-    background-color: #ffffff
-    padding: 20px
+    background-color: $white-color
+    padding: 12px
     border-radius: 10px
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3)
+    border: 1px solid $border-card
     font-family: $font-family
 
     img
@@ -143,16 +159,27 @@ $font-family: 'Montserrat', sans-serif
       margin-bottom: 10px
 
     h3
-      color: $primary-color
+      color: $hard-black
       font-size: 1.2em
       margin-bottom: 8px
+      font-family: $font-family
+      width: 20em
 
     p
-      color: $medium-grey
+      color: $hard-black
       margin-bottom: 10px
-      white-space: nowrap
       overflow: hidden
+      display: -webkit-box
+      -webkit-line-clamp: 3
+      -webkit-box-orient: vertical
       text-overflow: ellipsis
+      text-align: justify
+
+    .icono_location
+      width: 20px
+      height: auto
+      margin-left: 5px
+      vertical-align: middle
 
     .campo-variable
       font-weight: bold
@@ -170,13 +197,18 @@ $font-family: 'Montserrat', sans-serif
       font-size: 0.85em
       font-family: 'Montserrat', sans-serif
       font-weight: bold
+
 @media screen and (max-width: 768px)
 
   .card
     display: block
     width: 85%
+    margin-left: 1em
+
   .card-campos-section
     width: 85%
+  .campo-card
+    margin-right: 6%
   .main-card
     width: 100%
 
@@ -196,7 +228,8 @@ $font-family: 'Montserrat', sans-serif
   .botones-servicio
     display: flex
     justify-content: center
-    margin-top: 10px
+    margin-top: 2%
+    margin-left: 10%
 
   .register-button
     width: 100%

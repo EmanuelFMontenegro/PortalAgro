@@ -8,9 +8,6 @@
         <div class="avatar">
           <div class="avatar-circle">
             <mat-icon class="avatar-icon">person</mat-icon>
-            <label for="file-input" class="edit-avatar-button">
-              <mat-icon class="edit-icon">edit</mat-icon>
-            </label>
           </div>
         </div>
         <div class="titulo-perfil-avatar">
@@ -20,8 +17,6 @@
             <p class="email">Ciudad: {{ nombreLocalidad }}</p>
           </div>
         </div>
-
-
       </div>
       <div class="botones-servicio">
         <button mat-raised-button class="register-button" (click)="BtnRegisterCampos()">Registrar Campo</button>
@@ -34,21 +29,13 @@
         <div class="campo-card" *ngFor="let campo of campos">
           <img src="/assets/img/campo_{{ campo.id }}.png" alt="Campo {{ campo.id }}">
           <h3>{{ campo.name }}</h3>
-          <p><span class="campo-variable">Localidad:</span> {{ campo.address.location.name }}</p>
-          <p><span class="campo-variable">Descripción:</span> {{ campo.observation }}</p>
-          <p><span class="campo-variable">Dirección:</span> {{ campo.address.address }}</p>
+          <p>
+            <span class="campo-variable">Localidad:</span> {{ campo.address.location.name }}
+            <img src="assets/img/location.svg" alt="Icono" class="icono_location">
+          </p>
+          <p><span class="campo-variable"></span> {{ campo.observation }}</p>
+          <!-- <p><span class="campo-variable">Dirección:</span> {{ campo.address.address }}</p> -->
           <button mat-raised-button class="ver-mas-button" (click)="verMas(campo)">Ver Más</button>
         </div>
       </div>
     </div>
-    <!-- Footer -->
-    <footer class="footer">
-      <div style="margin-top: 10px; padding: 0 15px;margin-top: 2%;">
-        <div style="display: flex; justify-content: center; align-items: center;">
-          <img src="/assets/img/logo_afip.png" alt="Logo de AFIP"
-            style="display:flex ; width: 100px; height: auto; margin-right: 20px;width: 85px;">
-          <p class="text-muted" style="color: #454545; margin-bottom: 0;">© {{ currentYear }} Agro-Sustentable S.A.
-            Todos los derechos reservados.</p>
-        </div>
-      </div>
-    </footer>
