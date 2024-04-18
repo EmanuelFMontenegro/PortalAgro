@@ -1,11 +1,11 @@
 <div class="container">
   <img class="background-image" src="/assets/img/pantalla_inicio.png" alt="">
-    <mat-card class="card-blur">
-      <img src="assets/img/logo_agro_white.png" alt="Imagen Superior" class="top-image">
-      <div class="centrar-card">
-        <mat-card class="user-details-card">
-         <header>Por favor ingresa tus datos</header>
-         <mat-card-content>
+  <mat-card class="card-blur">
+    <img src="assets/img/logo_agro_white.png" alt="Imagen Superior" class="top-image">
+    <div class="centrar-card">
+      <mat-card class="user-details-card">
+        <header>Por favor ingresa tus datos</header>
+        <mat-card-content>
           <form [formGroup]="userDetailsForm">
             <div class="datos-users">
               <div class="field-container">
@@ -24,9 +24,11 @@
                   [ngClass]="{ 'invalid-field': userDetailsForm.get('dni')?.invalid && (userDetailsForm.get('dni')?.dirty || userDetailsForm.get('dni')?.touched) }">
               </div>
 
+
               <div class="field-container">
                 <label class="field-label" for="contacto">Contacto</label>
-                <input matInput formControlName="contacto" id="contacto">
+                <input matInput formControlName="contacto" id="contacto"
+                [ngClass]="{ 'invalid-field': userDetailsForm.get('contacto')?.invalid && (userDetailsForm.get('contacto')?.dirty || userDetailsForm.get('contacto')?.touched) }">
               </div>
 
               <div class="field-container">
@@ -41,14 +43,14 @@
             </div>
           </form>
 
-          </mat-card-content>
-          <div class="botones-servicio">
+        </mat-card-content>
+        <div class="botones-servicio">
           <button mat-raised-button class="cancel-button" type="button" (click)="cancelar()">Cancelar</button>
-           <button mat-raised-button class="register-button" (click)="cargarDatosPerfil()">Aceptar</button>
-          </div>
-         </mat-card>
-     </div>
-    </mat-card>
+          <button mat-raised-button class="register-button" (click)="cargarDatosPerfil()">Aceptar</button>
+        </div>
+      </mat-card>
+    </div>
+  </mat-card>
 
 
 </div>

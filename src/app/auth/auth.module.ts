@@ -46,7 +46,7 @@ import { NuevaContrasenaAdminComponent } from './nueva-contrasena-admin/nueva-co
     MatButtonModule,
     MatSnackBarModule,
     MatIconModule,
-    NgxSpinnerModule.forRoot (),
+    NgxSpinnerModule.forRoot(),
     MatProgressSpinnerModule,
     ToastrModule.forRoot(),
   ],

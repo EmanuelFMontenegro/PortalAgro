@@ -148,31 +148,28 @@ export class PrimerRegistroComponent implements OnInit, AfterViewInit {
             'Error al actualizar la información del usuario:',
             error
           );
-          if (error?.error?.code === 4023) {
-            this.userDetailsForm.get('dni')?.setErrors({ incorrect: true });
-            const dialogRef = this.dialog.open(DialogComponent, {
-              data: {
-                title: 'Atención',
-                message: 'El DNI ya está registrado. Por favor, verifíquelo',
-              },
-            });
-          } else if (error?.error?.code === 4012) {
-            this.userDetailsForm
-              .get('contacto')
-              ?.setErrors({ incorrectSize: true });
-            const dialogRef = this.dialog.open(DialogComponent, {
-              data: {
-                title: 'Atención',
-                message:
-                  'El Nro de Celular es incorrecto. Por favor, verifíquelo',
-              },
-            });
-          } else {
-            this.toastr.error(
-              'Tuvimos un problema en actualizar tu perfil:',
-              'Atencion'
-            );
+          let errorMessage =
+            'Error al actualizar tu perfil. Por favor, inténtalo de nuevo.';
+          switch (error?.error?.code) {
+            case 4023:
+              this.userDetailsForm.get('dni')?.setErrors({ incorrect: true });
+              errorMessage =
+                'El DNI ya está registrado. Por favor, verifíquelo';
+              break;
+            case 4012:
+              this.userDetailsForm
+                .get('contacto')
+                ?.setErrors({ incorrectSize: true });
+              errorMessage =
+                'El Nro de Celular es incorrecto. Por favor, verifíquelo';
+              break;
           }
+          const dialogRef = this.dialog.open(DialogComponent, {
+            data: {
+              title: 'Atención',
+              message: errorMessage,
+            },
+          });
         }
       );
   }
