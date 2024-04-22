@@ -266,6 +266,7 @@ export class LoteComponent {
       data: {
         message: `¿Estás seguro que queres eliminar el lote ${lote.name}?`,
         value: lote,
+        showCancel: true,
       },
     });
 

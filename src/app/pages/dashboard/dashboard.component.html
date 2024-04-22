@@ -1,27 +1,27 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #sidenav mode="side" [opened]="isSidebarOpen" class="sidenav">
+  <mat-sidenav #sidenav mode="side" [opened]="!isScreenSmall" class="sidenav">
     <!-- Contenido del sidenav -->
     <div class="logo-container">
       <img src="assets/img/LogoAgroBYTECH.svg" alt="Logo" class="dashboard-logo">
     </div>
     <mat-nav-list class="btn_nav">
-      <p mat-list-item routerLink="/dashboard/inicio" class="nav-item" (click)="closeSidenavIfSmall()">
+      <a mat-list-item routerLink="/dashboard/inicio" class="nav-item" (click)="closeSidenavIfSmall()">
         <img src="assets/img/home_FILL0_wght400_GRAD-25_opsz24.svg" alt="Home" class="nav-item-icon">Inicio
-      </p>
-      <p mat-list-item routerLink="/dashboard/servicios" class="nav-item" (click)="closeSidenavIfSmall()">
+      </a>
+      <a mat-list-item routerLink="/dashboard/servicios" class="nav-item" (click)="closeSidenavIfSmall()">
         <img src="assets/img/sell_FILL0_wght400_GRAD0_opsz24.svg" alt="Servicios" class="nav-item-icon">Servicios
-      </p>
-      <!-- <p mat-list-item routerLink="/dashboard/productos" class="nav-item" (click)="closeSidenavIfSmall()">
+      </a>
+      <!-- <a mat-list-item routerLink="/dashboard/productos" class="nav-item" (click)="closeSidenavIfSmall()">
         <img src="assets/img/store_FILL0_wght400_GRAD-25_opsz24.svg" alt="Productos" class="nav-item-icon">Productos
-      </p> -->
-      <p mat-list-item routerLink="/dashboard/configuracion" class="nav-item" (click)="closeSidenavIfSmall()">
+      </a> -->
+      <a mat-list-item routerLink="/dashboard/configuracion" class="nav-item" (click)="closeSidenavIfSmall()">
         <img src="assets/img/settings_FILL0_wght400_GRAD-25_opsz24.svg" alt="Configuración" class="nav-item-icon">
         Configuración
-      </p>
-      <p mat-list-item routerLink="/dashboard/perfil" class="nav-item" (click)="closeSidenavIfSmall()">
+      </a>
+      <a mat-list-item routerLink="/dashboard/perfil" class="nav-item" (click)="closeSidenavIfSmall()">
         <img src="assets/img/person_FILL0_wght400_GRAD-25_opsz24.svg" alt="Perfil" class="nav-item-icon">
         Perfil
-      </p>
+      </a>
     </mat-nav-list>
     <div class="logo-b">
       <img src="assets/img/empresa_b.png" alt="Logo" class="sidenav-logo">
@@ -57,6 +57,7 @@
   </mat-sidenav-content>
 
 </mat-sidenav-container>
+
 
 <mat-card class="card-footer">
   <footer class="footer">

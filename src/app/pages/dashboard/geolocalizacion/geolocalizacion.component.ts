@@ -1,4 +1,10 @@
-import { Component, ViewChild, ElementRef, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+  ChangeDetectorRef,
+} from '@angular/core';
 import * as L from 'leaflet';
 import { AuthService } from 'src/app/services/AuthService';
 import { ApiService } from 'src/app/services/ApiService';
@@ -6,7 +12,12 @@ import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { jwtDecode } from 'jwt-decode';
 import { Observable } from 'rxjs';
-import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  FormBuilder,
+  Validators,
+} from '@angular/forms';
 import { startWith, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
@@ -15,10 +26,10 @@ interface GeolocationData {
   longitude: number;
 }
 interface FieldArray {
-    name: string;
-    geolocation: string | null;
-    dimensions?: number;
-    observation?: string;
+  name: string;
+  geolocation: string | null;
+  dimensions?: number;
+  observation?: string;
 }
 interface AddressData {
   address: string;
@@ -62,12 +73,12 @@ interface DecodedToken {
 @Component({
   selector: 'app-geolocalizacion',
   templateUrl: './geolocalizacion.component.html',
-  styleUrls: ['./geolocalizacion.component.sass']
+  styleUrls: ['./geolocalizacion.component.sass'],
 })
 export class GeolocalizacionComponent implements AfterViewInit {
   filteredLocalidades: Observable<any[]> = new Observable<any[]>();
   filtroLocalidades = new FormControl('');
-  campoSeleccionado:any={}
+  campoSeleccionado: any = {};
   nombreCampo: string;
   dimensionesCampo: number;
   detallesCampoVisible: boolean;
@@ -94,7 +105,7 @@ export class GeolocalizacionComponent implements AfterViewInit {
   private personId: number | any;
   private misionesBoundingBox = {
     northWest: { lat: -25.5, lon: -56.5 },
-    southEast: { lat: -28.5, lon: -53.5 }
+    southEast: { lat: -28.5, lon: -53.5 },
   };
 
   constructor(
@@ -103,8 +114,7 @@ export class GeolocalizacionComponent implements AfterViewInit {
     private apiService: ApiService,
     private http: HttpClient,
     private router: Router,
-    private toastr: ToastrService,
-
+    private toastr: ToastrService
   ) {
     this.nombreCampo = '';
     this.dimensionesCampo = 0;
@@ -113,24 +123,31 @@ export class GeolocalizacionComponent implements AfterViewInit {
     if (this.token) {
       const decoded: DecodedToken = jwtDecode(this.token);
       this.userId = decoded.userId;
-      this.userEmail = decoded.sub;;
+      this.userEmail = decoded.sub;
       this.personId = this.userId;
 
       if (this.userId !== null && this.personId !== null) {
-        this.apiService.getPersonByIdOperador(this.userId, this.personId).subscribe(
-          (data) => {
-            this.nombre = data.name;
-            this.apellido = data.lastname;
-            this.dni = data.dni;
-            this.descriptions = data.descriptions;
-            this.telephone = data.telephone;
-            const localidad = this.localidades.find((loc) => loc.id === data.location_id);
-            this.locationId = localidad ? localidad.name.toString() : '';
-          },
-          (error) => {
-            console.error('Error al obtener nombre y apellido del usuario:', error);
-          }
-        );
+        this.apiService
+          .getPersonByIdOperador(this.userId, this.personId)
+          .subscribe(
+            (data) => {
+              this.nombre = data.name;
+              this.apellido = data.lastname;
+              this.dni = data.dni;
+              this.descriptions = data.descriptions;
+              this.telephone = data.telephone;
+              const localidad = this.localidades.find(
+                (loc) => loc.id === data.location_id
+              );
+              this.locationId = localidad ? localidad.name.toString() : '';
+            },
+            (error) => {
+              console.error(
+                'Error al obtener nombre y apellido del usuario:',
+                error
+              );
+            }
+          );
       }
     } else {
       this.userId = null;
@@ -142,12 +159,10 @@ export class GeolocalizacionComponent implements AfterViewInit {
     const geolocation = fieldArray.geolocation;
 
     if (!geolocation) {
-
       this.fieldHasGeolocation = false;
     } else {
       const [lat, lon] = geolocation.split(',').map(parseFloat);
       if (!isNaN(lat) && !isNaN(lon)) {
-
         this.fieldHasGeolocation = true;
       } else {
         console.error('Error en los datos de ubicación');
@@ -159,7 +174,6 @@ export class GeolocalizacionComponent implements AfterViewInit {
   ngOnInit(): void {
     this.obtenerCampoSeleccionado();
     this.obtenerLocalidades();
-
   }
 
   obtenerCampoSeleccionado() {
@@ -167,85 +181,88 @@ export class GeolocalizacionComponent implements AfterViewInit {
 
     if (campoSeleccionadoString) {
       this.campoSeleccionado = JSON.parse(campoSeleccionadoString);
-
     } else {
       // Manejar el caso en que no se haya seleccionado ningún campo
     }
   }
- // En tu componente.ts
-mostrarDetallesCampo(campo: any): void {
-  if (campo) {
-    this.nombreCampo = campo.name;
-    this.dimensionesCampo = campo.dimensions;
-    this.detallesCampoVisible = true;
-  } else {
-    console.warn('No se proporcionó un campo válido para mostrar detalles.');
+  // En tu componente.ts
+  mostrarDetallesCampo(campo: any): void {
+    if (campo) {
+      this.nombreCampo = campo.name;
+      this.dimensionesCampo = campo.dimensions;
+      this.detallesCampoVisible = true;
+    } else {
+      console.warn('No se proporcionó un campo válido para mostrar detalles.');
+    }
   }
-}
-
-
 
   isGeolocationNotUpdated(geolocation: string | null): boolean {
     return !geolocation || geolocation.trim() === '';
-    }
-     isGeolocationUpdated(geolocation: string | null): boolean {
-      return !!geolocation && geolocation.trim() !== '';
-    }
+  }
+  isGeolocationUpdated(geolocation: string | null): boolean {
+    return !!geolocation && geolocation.trim() !== '';
+  }
 
-    private loadUserFields(): void {
-      if (this.userId !== null) {
-        this.apiService.getFields(this.userId).subscribe(
-          (response: any) => {
-            if (response && response.list && Array.isArray(response.list) && response.list.length > 0) {
-              this.fields = response.list[0].map((item: any) => {
-                const field: FieldData = {
-                  id: item.id || 0,
-                  name: item.name || '',
-                  dimensions: item.dimensions || 0,
-                  observation: item.observation || '',
-                  geolocation: item.geolocation || '',
-                  address: {
-                    id: item.address ? item.address.id || 0 : 0,
-                    address: item.address ? item.address.address || '' : '',
-                    location: item.address ? item.address.location || null : null
-                  },
-                  contact: {
-                    id: item.contact ? item.contact.id || 0 : 0,
-                    movilPhone: item.contact ? item.contact.movilPhone || null : null,
-                    telephone: item.contact ? item.contact.telephone || null : null
-                  },
-                  person_id: item.person_id || 0,
-                  active: item.active || false,
-                };
-                return field;
-              });
+  private loadUserFields(): void {
+    if (this.userId !== null) {
+      this.apiService.getFields(this.userId).subscribe(
+        (response: any) => {
+          if (
+            response &&
+            response.list &&
+            Array.isArray(response.list) &&
+            response.list.length > 0
+          ) {
+            this.fields = response.list[0].map((item: any) => {
+              const field: FieldData = {
+                id: item.id || 0,
+                name: item.name || '',
+                dimensions: item.dimensions || 0,
+                observation: item.observation || '',
+                geolocation: item.geolocation || '',
+                address: {
+                  id: item.address ? item.address.id || 0 : 0,
+                  address: item.address ? item.address.address || '' : '',
+                  location: item.address ? item.address.location || null : null,
+                },
+                contact: {
+                  id: item.contact ? item.contact.id || 0 : 0,
+                  movilPhone: item.contact
+                    ? item.contact.movilPhone || null
+                    : null,
+                  telephone: item.contact
+                    ? item.contact.telephone || null
+                    : null,
+                },
+                person_id: item.person_id || 0,
+                active: item.active || false,
+              };
+              return field;
+            });
 
+            const fieldsWithoutGeolocation = this.fields.filter(
+              (field) => !this.isGeolocationUpdated(field.geolocation)
+            );
 
-              const fieldsWithoutGeolocation = this.fields.filter(field => !this.isGeolocationUpdated(field.geolocation));
-
-              if (fieldsWithoutGeolocation.length > 0) {
-                const firstFieldWithoutGeolocation = fieldsWithoutGeolocation[0];
-                this.selectedFieldId = firstFieldWithoutGeolocation.id;
-              } else {
-
-                this.selectedFieldId = this.fields[0].id;
-              }
+            if (fieldsWithoutGeolocation.length > 0) {
+              const firstFieldWithoutGeolocation = fieldsWithoutGeolocation[0];
+              this.selectedFieldId = firstFieldWithoutGeolocation.id;
             } else {
-
+              this.selectedFieldId = this.fields[0].id;
             }
-          },
-          (error) => {
-            console.error('Error al cargar los campos del usuario:', error);
+          } else {
           }
-        );
-      }
+        },
+        (error) => {
+          console.error('Error al cargar los campos del usuario:', error);
+        }
+      );
     }
-
-
+  }
 
   ngAfterViewInit(): void {
     if (this.userId !== null) {
-     this.initializeMap();
+      this.initializeMap();
       this.loadInitialGeolocation();
       this.loadUserFields();
     } else {
@@ -258,14 +275,19 @@ mostrarDetallesCampo(campo: any): void {
     const longitudInicial = -55.900875;
     const zoomInicial = 13;
 
-    this.map = L.map(this.mapContainer.nativeElement).setView([latitudInicial, longitudInicial], zoomInicial);
+    // Utiliza el contenedor específico del mapa para el selector
+    this.map = L.map(this.mapContainer.nativeElement).setView(
+      [latitudInicial, longitudInicial],
+      zoomInicial
+    );
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors'
+      attribution: '© OpenStreetMap contributors',
     }).addTo(this.map);
 
     this.map.on('click', this.onMapClick.bind(this));
     this.cdr.detectChanges();
   }
+
   cargarDatosDeUsuario() {
     const decoded: DecodedToken = jwtDecode(this.authService.getToken() || '');
     if ('userId' in decoded && 'sub' in decoded && 'roles' in decoded) {
@@ -275,16 +297,20 @@ mostrarDetallesCampo(campo: any): void {
       this.personId = this.userId;
 
       if (this.userId !== null && this.personId !== null) {
-        this.apiService.getPersonByIdOperador(this.userId, this.personId).subscribe(
-          (data) => {
-            this.nombre = data.name;
-            this.apellido = data.lastname;
-
-          },
-          (error) => {
-            console.error('Error al obtener nombre y apellido del usuario:', error);
-          }
-        );
+        this.apiService
+          .getPersonByIdOperador(this.userId, this.personId)
+          .subscribe(
+            (data) => {
+              this.nombre = data.name;
+              this.apellido = data.lastname;
+            },
+            (error) => {
+              console.error(
+                'Error al obtener nombre y apellido del usuario:',
+                error
+              );
+            }
+          );
       }
     } else {
       this.userId = null;
@@ -297,7 +323,7 @@ mostrarDetallesCampo(campo: any): void {
         this.localidades = localidades;
         this.filteredLocalidades = this.filtroLocalidades.valueChanges.pipe(
           startWith(''),
-          map((value) => this.filtrarLocalidades(value ?? '')),
+          map((value) => this.filtrarLocalidades(value ?? ''))
         );
       },
       (error) => {
@@ -307,35 +333,41 @@ mostrarDetallesCampo(campo: any): void {
   }
   private filtrarLocalidades(value: string): any[] {
     const filterValue = value.toLowerCase();
-    return this.localidades.filter((loc) => loc.name.toLowerCase().includes(filterValue));
+    return this.localidades.filter((loc) =>
+      loc.name.toLowerCase().includes(filterValue)
+    );
   }
 
   mostrarGeolocalizacion(): void {
-      if (this.campoSeleccionado.geolocation) {
-      const geolocationData = this.campoSeleccionado.geolocation.split(',').map(parseFloat);
+    if (this.campoSeleccionado.geolocation) {
+      const geolocationData = this.campoSeleccionado.geolocation
+        .split(',')
+        .map(parseFloat);
       const latitude = geolocationData[0];
       const longitude = geolocationData[1];
-
 
       if (!this.map) {
         this.map = L.map('map').setView([latitude, longitude], 13);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '© OpenStreetMap contributors'
+          attribution: '© OpenStreetMap contributors',
         }).addTo(this.map);
       }
 
-
-      this.map.eachLayer(layer => {
+      this.map.eachLayer((layer) => {
         if (layer instanceof L.Marker) {
           this.map.removeLayer(layer);
         }
       });
 
-
-      L.marker([latitude, longitude]).addTo(this.map)
-        .bindPopup('Ubicación del campo').openPopup();
+      L.marker([latitude, longitude])
+        .addTo(this.map)
+        .bindPopup('Ubicación del campo')
+        .openPopup();
     } else {
-      this.toastr.warning('El campo no tiene información de geolocalización', 'Advertencia');
+      this.toastr.warning(
+        'El campo no tiene información de geolocalización',
+        'Advertencia'
+      );
     }
   }
 
@@ -345,17 +377,22 @@ mostrarDetallesCampo(campo: any): void {
         (response: any) => {
           if (response && response.geolocation) {
             const geoData = response.geolocation;
-            if (geoData.latitude !== undefined && geoData.longitude !== undefined) {
+            if (
+              geoData.latitude !== undefined &&
+              geoData.longitude !== undefined
+            ) {
               this.addMarker([geoData.latitude, geoData.longitude]);
               this.map.setView([geoData.latitude, geoData.longitude], 200);
             } else {
-
             }
           } else {
-            this.toastr.info('Existen Campos sin Geolocalizar, Por Favor actualizalos.', 'Información');
+            this.toastr.info(
+              'Existen Campos sin Geolocalizar, Por Favor actualizalos.',
+              'Información'
+            );
           }
         },
-        error => {
+        (error) => {
           console.error('Error al cargar la geolocalización:', error);
           this.toastr.info('No cuenta con campos para actualizar.', 'Atención');
         }
@@ -365,15 +402,16 @@ mostrarDetallesCampo(campo: any): void {
 
   private addMarker(coords: [number, number]): void {
     if (coords && !isNaN(coords[0]) && !isNaN(coords[1])) {
-      
       this.currentMarker = L.marker(coords).addTo(this.map);
       this.currentMarker.bindPopup('Ubicación seleccionada').openPopup();
     } else {
       console.error('Coordenadas no válidas:', coords);
-      this.toastr.error('Coordenadas no válidas para la geolocalización', 'Error');
+      this.toastr.error(
+        'Coordenadas no válidas para la geolocalización',
+        'Error'
+      );
     }
   }
-
 
   onSearch(localidad: string): void {
     if (localidad) {
@@ -383,29 +421,47 @@ mostrarDetallesCampo(campo: any): void {
     }
   }
 
-
-
   private searchPlace(query: string): void {
-    const boundingBox = [this.misionesBoundingBox.northWest.lon, this.misionesBoundingBox.northWest.lat,
-                         this.misionesBoundingBox.southEast.lon, this.misionesBoundingBox.southEast.lat].join(',');
+    const boundingBox = [
+      this.misionesBoundingBox.northWest.lon,
+      this.misionesBoundingBox.northWest.lat,
+      this.misionesBoundingBox.southEast.lon,
+      this.misionesBoundingBox.southEast.lat,
+    ].join(',');
 
-    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&bounded=1&viewbox=${boundingBox}`;
-    this.http.get<any[]>(url).subscribe(results => {
-      if (results && results.length > 0) {
-        const firstResult = results[0];
-        this.map.setView([firstResult.lat, firstResult.lon], 13);
-        if (this.currentMarker) {
-          this.map.removeLayer(this.currentMarker);
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+      query
+    )}&bounded=1&viewbox=${boundingBox}`;
+    this.http.get<any[]>(url).subscribe(
+      (results) => {
+        if (results && results.length > 0) {
+          const firstResult = results[0];
+          this.map.setView([firstResult.lat, firstResult.lon], 13);
+          if (this.currentMarker) {
+            this.map.removeLayer(this.currentMarker);
+          }
+          this.currentMarker = L.marker([
+            firstResult.lat,
+            firstResult.lon,
+          ]).addTo(this.map);
+          this.currentMarker
+            .bindPopup(`Ubicación encontrada: ${query}`)
+            .openPopup();
+          this.cdr.detectChanges();
+        } else {
+          this.toastr.info(
+            'No se encontraron resultados para la búsqueda en Misiones',
+            'Info'
+          );
         }
-        this.currentMarker = L.marker([firstResult.lat, firstResult.lon]).addTo(this.map);
-        this.currentMarker.bindPopup(`Ubicación encontrada: ${query}`).openPopup();
-        this.cdr.detectChanges();
-      } else {
-        this.toastr.info('No se encontraron resultados para la búsqueda en Misiones', 'Info');
+      },
+      (error) => {
+        this.toastr.error(
+          'Error en la búsqueda de lugares en Misiones',
+          'Error'
+        );
       }
-    }, error => {
-      this.toastr.error('Error en la búsqueda de lugares en Misiones', 'Error');
-    });
+    );
   }
   updateGeolocation(item: FieldData): void {
     const misionesCoordinates: GeolocationData = {
@@ -415,7 +471,8 @@ mostrarDetallesCampo(campo: any): void {
 
     const geolocationString = `${misionesCoordinates.latitude},${misionesCoordinates.longitude}`;
 
-    this.apiService.updateGeolocationField(this.userId!, item.id, geolocationString)
+    this.apiService
+      .updateGeolocationField(this.userId!, item.id, geolocationString)
       .subscribe(
         (response: any) => {
           this.toastr.success('Geolocalización actualizada con éxito', 'Éxito');
@@ -428,10 +485,11 @@ mostrarDetallesCampo(campo: any): void {
   }
 
   selectField(fieldName: string): void {
-    const selectedField = this.fieldsData.list.find((field) => field.name === fieldName);
+    const selectedField = this.fieldsData.list.find(
+      (field) => field.name === fieldName
+    );
     if (selectedField) {
       this.selectedFieldId = selectedField.id;
-
     } else {
       console.warn('Campo no encontrado:', fieldName);
     }
@@ -444,7 +502,10 @@ mostrarDetallesCampo(campo: any): void {
     }
 
     if (!this.currentMarker || !this.currentMarker.getLatLng()) {
-      this.toastr.warning('No has seleccionado ningún lugar en el mapa.', 'Atención');
+      this.toastr.warning(
+        'No has seleccionado ningún lugar en el mapa.',
+        'Atención'
+      );
       return;
     }
 
@@ -452,7 +513,12 @@ mostrarDetallesCampo(campo: any): void {
     const longitude = this.currentMarker.getLatLng().lng;
     const geolocationString = `${latitude},${longitude}`;
 
-    this.apiService.updateGeolocationField(this.userId, this.campoSeleccionado.id, geolocationString)
+    this.apiService
+      .updateGeolocationField(
+        this.userId,
+        this.campoSeleccionado.id,
+        geolocationString
+      )
       .subscribe(
         (response: any) => {
           this.toastr.success('Geolocalización actualizada con éxito', 'Éxito');
@@ -462,25 +528,20 @@ mostrarDetallesCampo(campo: any): void {
           this.toastr.error('Error al actualizar la geolocalización', 'Error');
         }
       );
-
   }
-
 
   volver() {
     this.router.navigate(['dashboard/inicio']);
   }
   cancelar() {
-
     this.router.navigate(['dashboard/inicio']);
   }
 
   onMapClick(e: L.LeafletMouseEvent): void {
-
     if (!this.currentMarker) {
       this.currentMarker = L.marker(e.latlng).addTo(this.map);
     } else {
       this.currentMarker.setLatLng(e.latlng);
     }
   }
-
 }

@@ -46,7 +46,6 @@ import { LoteComponent } from './lote/lote.component';
 import { CargarLoteComponent } from './cargar-lote/cargar-lote.component';
 import { DialogComponent } from './dialog/dialog.component';
 
-
 const CUSTOM_DATE_FORMATS = {
   parse: {
     dateInput: 'LL',

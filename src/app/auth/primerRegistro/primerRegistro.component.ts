@@ -82,6 +82,12 @@ export class PrimerRegistroComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {}
 
+  openDialog() {
+    // Para mostrar solo el botón Aceptar, pasa showCancel como false
+    this.dialog.open(DialogComponent, {
+      data: { message: 'Este es un mensaje de error.', showCancel: false },
+    });
+  }
   obtenerLocalidades() {
     this.apiService.getLocationMisiones('location').subscribe(
       (localidades) => {
@@ -108,7 +114,7 @@ export class PrimerRegistroComponent implements OnInit, AfterViewInit {
     if (!this.validarFormulario()) {
       return;
     }
-
+    const formValues = this.userDetailsForm.value;
     const personData = {
       name: this.userDetailsForm.get('nombre')?.value || '',
       lastname: this.userDetailsForm.get('apellido')?.value || '',
@@ -148,28 +154,39 @@ export class PrimerRegistroComponent implements OnInit, AfterViewInit {
             'Error al actualizar la información del usuario:',
             error
           );
-          let errorMessage =
-            'Error al actualizar tu perfil. Por favor, inténtalo de nuevo.';
-          switch (error?.error?.code) {
-            case 4023:
-              this.userDetailsForm.get('dni')?.setErrors({ incorrect: true });
-              errorMessage =
-                'El DNI ya está registrado. Por favor, verifíquelo';
-              break;
-            case 4012:
-              this.userDetailsForm
-                .get('contacto')
-                ?.setErrors({ incorrectSize: true });
-              errorMessage =
-                'El Nro de Celular es incorrecto. Por favor, verifíquelo';
-              break;
+          if (error?.error?.code === 4023) {
+            this.userDetailsForm.get('dni')?.setErrors({ incorrect: true });
+            const dialogRef = this.dialog.open(DialogComponent, {
+              data: {
+                title: 'Atención',
+                message: 'El DNI ya está registrado. Por favor, verifíquelo',
+              },
+            });
+          } else if (formValues.contacto.trim().length > 12) {
+            this.userDetailsForm.get('contacto')?.setErrors({ incorrectSize: true });
+            const dialogRef = this.dialog.open(DialogComponent, {
+              data: {
+                title: 'Atención',
+                message: 'El Nro de Celular debe tener como máximo 12 dígitos.',
+              },
+            });
+            return;
+           } if (formValues.dni.trim().length > 8) {
+            this.userDetailsForm.get('dni')?.setErrors({ incorrectSize: true });
+            const dialogRef = this.dialog.open(DialogComponent, {
+              data: {
+                title: 'Atención',
+                message: 'El DNI debe tener como máximo 8 dígitos.',
+              },
+            });
+            return;
           }
-          const dialogRef = this.dialog.open(DialogComponent, {
-            data: {
-              title: 'Atención',
-              message: errorMessage,
-            },
-          });
+           else {
+            this.toastr.error(
+              'Tuvimos un problema en actualizar tu perfil:',
+              'Atencion'
+            );
+          }
         }
       );
   }

@@ -1,9 +1,4 @@
-import {
-  Component,
-  AfterViewInit,
-  ViewChild,
-  ChangeDetectorRef,
-} from '@angular/core';
+import { Component, AfterViewInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Router } from '@angular/router';
@@ -14,23 +9,14 @@ import { Router } from '@angular/router';
   styleUrls: ['./dashboard.component.sass'],
 })
 export class DashboardComponent implements AfterViewInit {
-  [x: string]: any;
   @ViewChild('sidenav') sidenav!: MatSidenav;
   isScreenSmall: boolean;
-  isSidebarOpen: boolean = false;
-  HomeOutlinedIcon: any;
-  LocalOfferOutlinedIcon: any;
-  StoreMallDirectoryOutlinedIcon: any;
-  SettingsOutlinedIcon: any;
-  PersonOutlineOutlinedIcon: any;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private router: Router,
-    private cdr: ChangeDetectorRef
+    private router: Router
   ) {
     this.isScreenSmall = window.innerWidth < 768;
-    // this.isSidebarOpen = false;
   }
 
   ngAfterViewInit(): void {
@@ -43,19 +29,22 @@ export class DashboardComponent implements AfterViewInit {
         } else if (this.sidenav) {
           this.sidenav.open();
         }
-        this.cdr.detectChanges()
       });
   }
 
   toggleSidebar() {
-    this.isSidebarOpen = !this.isSidebarOpen;
+    if (this.isScreenSmall && this.sidenav) {
+      this.sidenav.toggle();
+    }
   }
 
   closeSidenavIfSmall() {
-    if (this.isScreenSmall) {
-      this.isSidebarOpen = false;
+    if (this.isScreenSmall && this.sidenav) {
+      this.sidenav.close();
+      console.log('Drawer cerrado en dispositivo móvil.');
     }
   }
+
   cerrarSesion(): void {
     console.log('Cerrando sesión...');
     localStorage.removeItem('token');
