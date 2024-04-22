@@ -11,11 +11,11 @@ import { Router } from '@angular/router';
 // Importa NgxSpinnerService
 
 @Component({
-  selector: 'app-recuper-contrasena-admin',
-  templateUrl: './recuper-contrasena-admin.component.html',
-  styleUrls: ['./recuper-contrasena-admin.component.sass'],
+  selector: 'app-recuper-contrasena-backoffice',
+  templateUrl: './recuper-contrasena-backoffice.component.html',
+  styleUrls: ['./recuper-contrasena-backoffice.component.sass'],
 })
-export class RecuperContrasenaAdminComponent {
+export class RecuperContrasenaBackofficeComponent {
   emailControl = new FormControl('', [Validators.required, Validators.email]);
   formulario: FormGroup;
   cargandoValidacion: boolean = false;
@@ -48,7 +48,7 @@ export class RecuperContrasenaAdminComponent {
           );
           this.formulario.reset();
 
-          this.router.navigate(['/login-admin']);
+          this.router.navigate(['/login-backoffice']);
         } else {
           this.toastr.warning(
             'Respuesta inesperada del servidor. Por favor, inténtalo de nuevo más tarde.',
@@ -73,6 +73,6 @@ export class RecuperContrasenaAdminComponent {
   }
 
   irAInicioSesion(): void {
-    this.router.navigate(['/login-admin']);
+    this.router.navigate(['/login-backoffice']);
   }
 }

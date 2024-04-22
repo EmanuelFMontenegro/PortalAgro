@@ -73,9 +73,17 @@ export class PrimerRegistroComponent implements OnInit, AfterViewInit {
         ],
       ],
       descripcion: [''],
+
+      aceptarTerminos: [false]
     });
   }
 
+  marcarCheckbox() {
+    const aceptarTerminosControl = this.userDetailsForm.get('aceptarTerminos');
+    if (aceptarTerminosControl) {
+      aceptarTerminosControl.setValue(true);
+    }
+  }
   ngOnInit(): void {
     this.obtenerLocalidades();
   }
@@ -163,7 +171,9 @@ export class PrimerRegistroComponent implements OnInit, AfterViewInit {
               },
             });
           } else if (formValues.contacto.trim().length > 12) {
-            this.userDetailsForm.get('contacto')?.setErrors({ incorrectSize: true });
+            this.userDetailsForm
+              .get('contacto')
+              ?.setErrors({ incorrectSize: true });
             const dialogRef = this.dialog.open(DialogComponent, {
               data: {
                 title: 'Atención',
@@ -171,7 +181,8 @@ export class PrimerRegistroComponent implements OnInit, AfterViewInit {
               },
             });
             return;
-           } if (formValues.dni.trim().length > 8) {
+          }
+          if (formValues.dni.trim().length > 8) {
             this.userDetailsForm.get('dni')?.setErrors({ incorrectSize: true });
             const dialogRef = this.dialog.open(DialogComponent, {
               data: {
@@ -180,8 +191,7 @@ export class PrimerRegistroComponent implements OnInit, AfterViewInit {
               },
             });
             return;
-          }
-           else {
+          } else {
             this.toastr.error(
               'Tuvimos un problema en actualizar tu perfil:',
               'Atencion'

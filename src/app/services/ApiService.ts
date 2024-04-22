@@ -17,6 +17,7 @@ export class ApiService {
   constructor(private http: HttpClient) {}
 
   // < -- Métodos de autenticación Auth -- >
+  
   registrarUsuario(username: string, password: string): Observable<any> {
     return this.http.post(`${this.baseURL}/auth/register`, {
       username,

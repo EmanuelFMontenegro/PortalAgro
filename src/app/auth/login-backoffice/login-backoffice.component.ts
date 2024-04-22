@@ -28,11 +28,11 @@ interface DecodedToken {
 }
 
 @Component({
-  selector: 'app-login-admin',
-  templateUrl: './login-admin.component.html',
-  styleUrls: ['./login-admin.component.sass'],
+  selector: 'app-login-backoffice',
+  templateUrl: './login-backoffice.component.html',
+  styleUrls: ['./login-backoffice.component.sass'],
 })
-export class LoginAdminComponent implements OnInit {
+export class LoginBackofficeComponent implements OnInit {
   hasErrors: boolean = false;
   hidePassword: boolean = true;
   login: FormGroup;

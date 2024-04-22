@@ -17,11 +17,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { NuevaContrasenaComponent } from './nueva-contrasena/nueva-contrasena.component';
 import { BienvenidaComponent } from './bienvenida/bienvenida.component';
 import { PrimerRegistroComponent } from './primerRegistro/primerRegistro.component';
-import { LoginAdminComponent } from './login-admin/login-admin.component';
-import { RecuperContrasenaAdminComponent } from './recuper-contrasena-admin/recuper-contrasena-admin.component';
+import { LoginBackofficeComponent } from './login-backoffice/login-backoffice.component';
+import { RecuperContrasenaBackofficeComponent } from './recuper-contrasena-backoffice/recuper-contrasena-backoffice.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { NuevaContrasenaAdminComponent } from './nueva-contrasena-admin/nueva-contrasena-admin.component';
+import { NuevaContrasenaBackofficeComponent } from './nueva-contrasena-backoffice/nueva-contrasena-backoffice.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 @NgModule({
   declarations: [
     LoginComponent,
@@ -30,9 +31,9 @@ import { NuevaContrasenaAdminComponent } from './nueva-contrasena-admin/nueva-co
     NuevaContrasenaComponent,
     BienvenidaComponent,
     PrimerRegistroComponent,
-    LoginAdminComponent,
-    RecuperContrasenaAdminComponent,
-    NuevaContrasenaAdminComponent,
+    LoginBackofficeComponent,
+    RecuperContrasenaBackofficeComponent,
+    NuevaContrasenaBackofficeComponent,
   ],
   imports: [
     AuthRoutingModule,
@@ -43,6 +44,7 @@ import { NuevaContrasenaAdminComponent } from './nueva-contrasena-admin/nueva-co
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
+    MatCheckboxModule,
     MatButtonModule,
     MatSnackBarModule,
     MatIconModule,

@@ -20,7 +20,8 @@
 
               <div class="field-container">
                 <label class="field-label" for="dni">DNI</label>
-                <input matInput formControlName="dni" id="dni" [ngClass]="{ 'invalid-field': userDetailsForm.get('dni')?.invalid && (userDetailsForm.get('dni')?.dirty || userDetailsForm.get('dni')?.touched) }">
+                <input matInput formControlName="dni" id="dni"
+                  [ngClass]="{ 'invalid-field': userDetailsForm.get('dni')?.invalid && (userDetailsForm.get('dni')?.dirty || userDetailsForm.get('dni')?.touched) }">
 
               </div>
 
@@ -28,7 +29,7 @@
               <div class="field-container">
                 <label class="field-label" for="contacto">Contacto</label>
                 <input matInput formControlName="contacto" id="contacto"
-                [ngClass]="{ 'invalid-field': userDetailsForm.get('contacto')?.invalid && (userDetailsForm.get('contacto')?.dirty || userDetailsForm.get('contacto')?.touched) }">
+                  [ngClass]="{ 'invalid-field': userDetailsForm.get('contacto')?.invalid && (userDetailsForm.get('contacto')?.dirty || userDetailsForm.get('contacto')?.touched) }">
               </div>
 
               <div class="field-container">
@@ -39,7 +40,12 @@
                   </mat-option>
                 </mat-select>
               </div>
-
+              <!-- Checkbox para aceptar términos y condiciones -->
+              <div class="btn_TyC">
+                <mat-checkbox class="mat-primary" >
+                  <a href="/ruta/a/terminos_y_condiciones" target="_blank" class="terminos-link">Acepto los términos y condiciones</a>
+                </mat-checkbox>
+              </div>
             </div>
           </form>
 

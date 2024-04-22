@@ -12,13 +12,14 @@ import { Interceptor } from 'src/app/services/Interceptor';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { FormatDatePipe } from './format-date.pipe';
 import { NgxSpinnerModule } from "ngx-spinner";
+import { DashboardBackofficeComponent } from './pages/dashboard-backoffice/dashboard-backoffice.component';
 
 
 
 const routes: Routes = [];
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, DashboardBackofficeComponent],
   imports: [
     BrowserModule,
     NgxSpinnerModule.forRoot (),

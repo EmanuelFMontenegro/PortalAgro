@@ -6,24 +6,24 @@ import { RecuperContrasenaComponent } from './recuper-contrasena/recuper-contras
 import { NuevaContrasenaComponent } from './nueva-contrasena/nueva-contrasena.component';
 import { BienvenidaComponent } from './bienvenida/bienvenida.component';
 import { PrimerRegistroComponent } from './primerRegistro/primerRegistro.component';
-import { LoginAdminComponent } from './login-admin/login-admin.component';
-import { RecuperContrasenaAdminComponent } from './recuper-contrasena-admin/recuper-contrasena-admin.component';
-import { NuevaContrasenaAdminComponent } from './nueva-contrasena-admin/nueva-contrasena-admin.component';
+import { LoginBackofficeComponent } from './login-backoffice/login-backoffice.component';
+import { NuevaContrasenaBackofficeComponent } from './nueva-contrasena-backoffice/nueva-contrasena-backoffice.component';
+import { RecuperContrasenaBackofficeComponent } from './recuper-contrasena-backoffice/recuper-contrasena-backoffice.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'bienvenida', component: BienvenidaComponent },
   { path: 'primerRegistro', component: PrimerRegistroComponent },
-  { path: 'login-admin', component: LoginAdminComponent },
+  { path: 'login-backoffice', component: LoginBackofficeComponent },
   { path: 'registro', component: RegistrateComponent },
   { path: 'recuper-contrasena', component: RecuperContrasenaComponent },
   {
-    path: 'recuper-contrasena-admin',
-    component: RecuperContrasenaAdminComponent,
+    path: 'recuper-contrasena-backoffice',
+    component: RecuperContrasenaBackofficeComponent,
   },
   {
-    path: 'nueva-contrasena-admin/:token',
-    component: NuevaContrasenaAdminComponent,
+    path: 'nueva-contrasena-backoffice/:token',
+    component: NuevaContrasenaBackofficeComponent,
   },
   { path: 'nueva-contrasena/:token', component: NuevaContrasenaComponent },
   { path: '', redirectTo: '/login', pathMatch: 'full' },

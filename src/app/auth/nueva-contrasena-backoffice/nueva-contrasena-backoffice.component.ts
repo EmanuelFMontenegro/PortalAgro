@@ -5,11 +5,11 @@ import { ToastrService } from 'ngx-toastr';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-nueva-contrasena-admin',
-  templateUrl: './nueva-contrasena-admin.component.html',
-  styleUrls: ['./nueva-contrasena-admin.component.sass'],
+  selector: 'app-nueva-contrasena-backoffice',
+  templateUrl: './nueva-contrasena-backoffice.component.html',
+  styleUrls: ['./nueva-contrasena-backoffice.component.sass'],
 })
-export class NuevaContrasenaAdminComponent {
+export class NuevaContrasenaBackofficeComponent {
   hasErrors: boolean = false;
   passwordResetForm!: FormGroup;
   hideNewPassword = true;
@@ -36,16 +36,6 @@ export class NuevaContrasenaAdminComponent {
       }
     }
   }
-  // navigateAndClose(): void {
-  //   this.router.navigate(['/login']).then(() => {
-  //     try {
-  //       window.close();
-  //     } catch (e) {
-  //       console.error("No se pudo cerrar la pestaña", e);
-  //     }
-  //   });
-  // }
-
   ngOnInit(): void {
     this.passwordResetForm = new FormGroup({
       newPassword: new FormControl('', [
@@ -112,7 +102,7 @@ export class NuevaContrasenaAdminComponent {
                 'Ahora podra iniciar sesion con su nueva contraseña',
                 'Contraseña cambiada con éxito'
               );
-              this.router.navigate(['/login-admin']);
+              this.router.navigate(['/login-backoffice']);
             },
             error: (error) => {
               if (error.status === 401) {
