@@ -35,6 +35,7 @@ build_image_stage:
     - truncate -s 0 src/environments/environment.prod.ts && truncate -s 0 src/environments/environment.ts
     - echo "$CONFIG_ENV_PORTAL_STAGE_FRONT" >> src/environments/environment.prod.ts
     - echo "$CONFIG_ENV_PORTAL_STAGE_FRONT" >> src/environments/environment.ts
+    - cat src/environments/environment.prod.ts
     - docker build -t $IMAGE_TAG .
     - docker tag $IMAGE_TAG $HARBOR_HOST/$HARBOR_PROJECT/stage/portal-prod-$IMAGE_TAG
     - docker push $HARBOR_HOST/$HARBOR_PROJECT/stage/portal-prod-$IMAGE_TAG
