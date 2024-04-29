@@ -32,9 +32,10 @@ build_image_stage:
   # - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
    #- echo -n $HARBOR_PASSWORD | docker login -u $HARBOR_USERNAME --password-stdin $HARBOR_URL
   script:
-    - truncate -s 0 .env.local && truncate -s 0 src/environments/environment.prod.ts && truncate -s 0 src/environments/environment.ts
+    - truncate -s 0 src/environments/environment.prod.ts && truncate -s 0 src/environments/environment.ts
     - echo "$CONFIG_ENV_PORTAL_STAGE_FRONT" >> src/environments/environment.prod.ts
     - echo "$CONFIG_ENV_PORTAL_STAGE_FRONT" >> src/environments/environment.ts
+    - cat src/environments/environment.prod.ts
     - docker build -t $IMAGE_TAG .
     - docker tag $IMAGE_TAG $HARBOR_HOST/$HARBOR_PROJECT/stage/portal-prod-$IMAGE_TAG
     - docker push $HARBOR_HOST/$HARBOR_PROJECT/stage/portal-prod-$IMAGE_TAG
@@ -61,5 +62,3 @@ dev_deploy_stage:
     #  docker rm $CI_PROJECT_NAME --force &&  docker run -d -p 4200:80 --name $CI_PROJECT_NAME $HARBOR_HOST/$HARBOR_PROJECT/$IMAGE_TAG "
   after_script:
     - rm -rf ~/.ssh
-#
-    #
