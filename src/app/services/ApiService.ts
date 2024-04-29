@@ -17,7 +17,7 @@ export class ApiService {
   constructor(private http: HttpClient) {}
 
   // < -- Métodos de autenticación Auth -- >
-  
+
   registrarUsuario(username: string, password: string): Observable<any> {
     return this.http.post(`${this.baseURL}/auth/register`, {
       username,
@@ -36,8 +36,72 @@ export class ApiService {
     );
   }
 
+  validarCredencialBackoffice(
+    username: string,
+    password: string
+  ): Observable<HttpResponse<any>> {
+    return this.http.post<HttpResponse<any>>(
+      `http://localhost:8095/api/dist/auth/login`, // URL corregida
+      { username, password },
+      { observe: 'response' } // Observar la respuesta completa
+    );
+  }
+
   refreshToken(token: string): Observable<any> {
     return this.http.post(`${this.baseURL}/auth/refresh`, { token });
+  }
+
+  //<------- Enpoint Terminos Y condiciones-------->
+  acceptLicense(userId: number, personId: number): Observable<any> {
+    const requestData = {
+      accept_license: true,
+    };
+
+    return this.http.put(
+      `${this.baseURL}/user/${userId}/person/${personId}`,
+      requestData
+    );
+  }
+
+  // Métodos relacionados con el backoffice (Admin-Opertator-all)
+
+  loginBackoffice(username: string, password: string): Observable<any> {
+    return this.http.post(`${this.baseURL}/dist/auth/login`, {
+      username,
+      password,
+    });
+  }
+
+  recuperarContrasenaBackoffice(email: string): Observable<any> {
+    return this.http.post(`${this.baseURL}/dist/auth/recovery`, {
+      mailTo: email,
+    });
+  }
+
+  cambiarContrasenaBackoffice(
+    password: string,
+    confirmPassword: string,
+    token: string
+  ): Observable<any> {
+    return this.http.post(`${this.baseURL}/dist/auth/change-pass`, {
+      password,
+      confirmPassword,
+      token,
+    });
+  }
+
+  // Métodos de prueba (Dev-login y Dev-login DNS)
+
+  devLogin(): Observable<any> {
+    return this.http.post(`${this.baseURL}/auth/login`, {
+      // Inserta los datos necesarios para el login de prueba
+    });
+  }
+
+  devLoginDNS(): Observable<any> {
+    return this.http.post(`${this.baseURL}/auth/login`, {
+      // Inserta los datos necesarios para el login DNS de prueba
+    });
   }
 
   // <--ENPOINTS DE E-MAIL -->
@@ -58,6 +122,47 @@ export class ApiService {
     });
   }
 
+  // <----------------USUARIOS  ADMINISTRADORES -------------------------------------->
+
+  // Eliminar un usuario de la compañía por ID
+  deleteUserCompany(companyId: number, userId: number): Observable<any> {
+    return this.http.delete(`${this.baseURL}/dist/${companyId}/user/${userId}`);
+  }
+
+  // Deshabilitar lógicamente un usuario de la compañía por ID
+  disableUserCompany(companyId: number, userId: number): Observable<any> {
+    return this.http.delete(
+      `${this.baseURL}/dist/${companyId}/user/${userId}/disabled`
+    );
+  }
+
+  // Encontrar un usuario por ID
+  findUserById(companyId: number, userId: number): Observable<any> {
+    return this.http.get(`${this.baseURL}/dist/${companyId}/user/${userId}`);
+  }
+
+  // Obtener todos los usuarios administradores de una compañía
+  getAdministratorUsers(companyId: number): Observable<any> {
+    return this.http.get(`${this.baseURL}/dist/${companyId}/user/all`);
+  }
+
+  // Agregar un nuevo administrador a una compañía
+  addAdministrator(companyId: number, adminData: any): Observable<any> {
+    return this.http.post(`${this.baseURL}/dist/${companyId}/user`, adminData);
+  }
+
+  // Actualizar información de un administrador por ID en una compañía
+  updateAdministrator(
+    companyId: number,
+    userId: number,
+    adminData: any
+  ): Observable<any> {
+    return this.http.put(
+      `${this.baseURL}/dist/${companyId}/user/${userId}`,
+      adminData
+    );
+  }
+
   // <--ENPOINTS DE USERS -->
 
   getUsers(): Observable<any> {
@@ -74,6 +179,23 @@ export class ApiService {
 
   // <--ENPOINTS DE PERSONA -->
 
+  uploadProfileImage(userId: number, file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('files', file);
+
+    return this.http.put(
+      `http://localhost:8095/api/user/${userId}/profile/image`,
+      formData
+    );
+  }
+
+  getProfileImage(userId: number): Observable<any> {
+    return this.http.get(
+      `http://localhost:8095/api/user/${userId}/profile/image`,
+      { responseType: 'blob' }
+    );
+  }
+  
   getPeopleAdmin(
     sortBy: string = 'id',
     sortDir: string = 'DESC'
@@ -115,8 +237,9 @@ export class ApiService {
     personId: number,
     personData: any
   ): Observable<any> {
+    const updatedPersonData = { ...personData, accept_license: true };
     const url = `${this.baseURL}/user/${userId}/person/${personId}`;
-    return this.http.put<any>(url, personData);
+    return this.http.put<any>(url, updatedPersonData);
   }
 
   //  <<<<-------METODOS PARA ROLES------>>>>>
@@ -249,41 +372,41 @@ export class ApiService {
     return this.http.get(`${this.baseURL}/person/demo`);
   }
 
-  // <<<<-------METODOS PARA PLANTACION------>>>>>
+  // <<<<-------METODOS DE PLANTACIONS ------>>>>>
 
-  // GET: getAllTypePlantation-OPERADOR
-  getAllTypePlantationOperador(): Observable<any> {
-    const url = `${this.baseURL}/field/plantation/type`;
+  // GET: getAllTypeCrop-OPERADOR
+  getAllTypeCropOperador(): Observable<any> {
+    const url = `${this.baseURL}/field/crop/type`;
     return this.http.get(url);
   }
 
-  // GET: getAllTypePlantationADMIN
-  getAllTypePlantationAdmin(): Observable<any> {
-    const url = `${this.baseURL}/field/plantation/type/all?isActive=true`;
+  // GET: getAllTypeCropADMIN
+  getAllTypeCropAdmin(isActive: boolean = false): Observable<any> {
+    const url = `${this.baseURL}/field/crop/all?isActive=${isActive}`;
     return this.http.get(url);
   }
 
-  // POST: AddTypePlantation-ADMIN
-  addTypePlantationAdmin(data: any): Observable<any> {
-    const url = `${this.baseURL}/field/plantation/type`;
+  // POST: AddTypeCrop-ADMIN
+  addTypeCropAdmin(data: any): Observable<any> {
+    const url = `${this.baseURL}/field/crop/type`;
     return this.http.post(url, data);
   }
 
-  // PUT: updateTypePlantation-ADMIN
-  updateTypePlantationAdmin(id: number, data: any): Observable<any> {
-    const url = `${this.baseURL}/field/plantation/type/${id}`;
+  // PUT: updateTypeCrop-ADMIN
+  updateTypeCropAdmin(id: number, data: any): Observable<any> {
+    const url = `${this.baseURL}/field/crop/type/${id}`;
     return this.http.put(url, data);
   }
 
-  // PUT: activeTypePlantationById-ADMIN
-  activeTypePlantationAdmin(id: number): Observable<any> {
+  // PUT: activeTypeCropById-ADMIN
+  activeTypeCropByIdAdmin(id: number): Observable<any> {
     const url = `${this.baseURL}/field/plantation/type/${id}/active`;
     return this.http.put(url, {});
   }
 
-  // DELETE: deleteTypePlantation-ADMIN
-  deleteTypePlantationAdmin(id: number): Observable<any> {
-    const url = `${this.baseURL}/field/plantation/type/${id}`;
+  // DELETE: deleteTypeCrop-ADMIN
+  deleteTypeCropAdmin(id: number): Observable<any> {
+    const url = `${this.baseURL}/field/crop/type/${id}`;
     return this.http.delete(url);
   }
 

@@ -6,17 +6,29 @@
     </div>
     <mat-nav-list class="btn_nav">
       <a mat-list-item routerLink="/dashboard/inicio" class="nav-item" (click)="closeSidenavIfSmall()">
-        <img src="assets/img/home_FILL0_wght400_GRAD-25_opsz24.svg" alt="Home" class="nav-item-icon">Inicio
+        <img src="assets/img/home_FILL0_wght400_GRAD-25_opsz24.svg" alt="Home" class="nav-item-icon">
+        Inicio
       </a>
       <a mat-list-item routerLink="/dashboard/servicios" class="nav-item" (click)="closeSidenavIfSmall()">
-        <img src="assets/img/sell_FILL0_wght400_GRAD0_opsz24.svg" alt="Servicios" class="nav-item-icon">Servicios
+        <img src="assets/img/sell_FILL0_wght400_GRAD0_opsz24.svg" alt="Servicios" class="nav-item-icon">
+        Solicitudes y Servicios
       </a>
-      <!-- <a mat-list-item routerLink="/dashboard/productos" class="nav-item" (click)="closeSidenavIfSmall()">
-        <img src="assets/img/store_FILL0_wght400_GRAD-25_opsz24.svg" alt="Productos" class="nav-item-icon">Productos
-      </a> -->
-      <a mat-list-item routerLink="/dashboard/configuracion" class="nav-item" (click)="closeSidenavIfSmall()">
-        <img src="assets/img/settings_FILL0_wght400_GRAD-25_opsz24.svg" alt="Configuración" class="nav-item-icon">
-        Configuración
+      <a mat-list-item routerLink="/dashboard/chacras" class="nav-item" (click)="closeSidenavIfSmall()">
+        <img src="assets/img/soil-moisture-global.svg" alt="Configuración" class="nav-item-icon">
+        Chacras
+      </a>
+      <a mat-list-item routerLink="/dashboard/calendario" class="nav-item" (click)="closeSidenavIfSmall()">
+        <img src="assets/img/calendar-03.svg" alt="Configuración" class="nav-item-icon">
+        Calendario
+      </a>
+      <a mat-list-item routerLink="/dashboard/notificaciones" class="nav-item" (click)="closeSidenavIfSmall()">
+        <img src="assets/img/notifications_active_FILL0_wght400_GRAD0_opsz24.svg" alt="Notificacón"
+          class="nav-item-icon">
+        Notificacón
+      </a>
+      <a mat-list-item routerLink="/dashboard/informes" class="nav-item" (click)="closeSidenavIfSmall()">
+        <img src="assets/img/Vector_i.svg" alt="Planificaciónes" class="nav-item-icon">
+        Informes
       </a>
       <a mat-list-item routerLink="/dashboard/perfil" class="nav-item" (click)="closeSidenavIfSmall()">
         <img src="assets/img/person_FILL0_wght400_GRAD-25_opsz24.svg" alt="Perfil" class="nav-item-icon">
@@ -40,11 +52,20 @@
       <input matInput class="search-input" placeholder="Buscar ...">
       <span class="toolbar-spacer"></span>
       <span class="toolbar-spacer"></span>
+      <a routerLink="/dashboard/notificaciones" class="profile-menu">
+        <button mat-icon-button>
+          <mat-icon>
+            <img src="assets/img/Icon _notif_orange.svg" alt="Foto de perfil" style="width: 22px;
+              top: 13px;position: relative;">
+          </mat-icon>
+        </button>
+      </a>
       <button mat-icon-button [matMenuTriggerFor]="menu" class="profile-menu">
         <mat-icon>
-          <img src="assets/img/avatar.png" alt="Foto de perfil" style="width: 24px; height: 24px; border-radius: 50%;">
+          <img src="assets/img/avatar.png" alt="Foto de perfil" style="width: 40px; height: 40px; border-radius: 50%;">
         </mat-icon>
       </button>
+
       <mat-menu #menu="matMenu">
         <button mat-menu-item routerLink="/dashboard/perfil">Perfil</button>
         <button mat-menu-item routerLink="/dashboard/mensajes">Mensajes</button>

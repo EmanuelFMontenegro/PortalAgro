@@ -14,23 +14,23 @@
           <div class="titulo-welcome">
             <h2>{{ nombre }} {{ apellido }}</h2>
             <p class="email">Email: {{ userEmail }}</p>
-            <p class="email">Ciudad: {{ nombreLocalidad }}</p>
+            <p class="email">Ciudad: {{ locationId }}</p>
           </div>
         </div>
       </div>
       <div class="botones-servicio">
-        <button mat-raised-button class="register-button" (click)="BtnRegisterCampos()">Registrar Campo</button>
+        <button mat-raised-button class="register-button" (click)="BtnRegisterCampos()">Registrar Chacra</button>
       </div>
     </div>
 
     <div class="card-campos-section">
-      <h2 class="titulo-campos">Campos</h2>
+      <h2 class="titulo-campos"></h2>
       <div class="campos-container">
         <div class="campo-card" *ngFor="let campo of campos">
           <img src="/assets/img/campo_{{ campo.id }}.png" alt="Campo {{ campo.id }}">
           <h3>{{ campo.name }}</h3>
           <p>
-            <span class="campo-variable">Localidad:</span> {{ campo.address.location.name }}
+            <span class="campo-variable">Localidad:</span> {{ campo.address.locationDTO.name }}
             <img src="assets/img/location.svg" alt="Icono" class="icono_location">
           </p>
           <p><span class="campo-variable"></span> {{ campo.observation }}</p>

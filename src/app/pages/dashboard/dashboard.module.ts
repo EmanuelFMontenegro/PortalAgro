@@ -14,7 +14,7 @@ import { GeolocalizacionComponent } from './geolocalizacion/geolocalizacion.comp
 import { ConfiguracionComponent } from './configuracion/configuracion.component';
 import { PerfilComponent } from './perfil/perfil.component';
 import { ReportesComponent } from './reportes/reportes.component';
-// import { ProductosComponent } from './productos/productos.component';
+
 
 // Angular Material
 import { MatCardModule } from '@angular/material/card';
@@ -45,6 +45,10 @@ import { DetalleCampoComponent } from './detalle-campo/detalle-campo.component';
 import { LoteComponent } from './lote/lote.component';
 import { CargarLoteComponent } from './cargar-lote/cargar-lote.component';
 import { DialogComponent } from './dialog/dialog.component';
+import { InformesComponent } from './informes/informes.component';
+import { CalendarioComponent } from './calendario/calendario.component';
+import { ChacrasComponent } from './chacras/chacras.component';
+import { NotificacionesComponent } from './notificaciones/notificaciones.component';
 
 const CUSTOM_DATE_FORMATS = {
   parse: {
@@ -60,14 +64,12 @@ const CUSTOM_DATE_FORMATS = {
 
 @NgModule({
   declarations: [
-    DashboardComponent,
     InicioComponent,
     ServiciosComponent,
     GeolocalizacionComponent,
     ConfiguracionComponent,
     PerfilComponent,
     ReportesComponent,
-    // ProductosComponent,
     CampoComponent,
     FormatDatePipe,
     DetalleCampoComponent,
@@ -75,6 +77,10 @@ const CUSTOM_DATE_FORMATS = {
     CargarLoteComponent,
     DialogComponent,
     DashboardComponent,
+    InformesComponent,
+    CalendarioComponent,
+    ChacrasComponent,
+    NotificacionesComponent,
   ],
   imports: [
     CommonModule,

@@ -13,7 +13,7 @@
   </div>
 
   <div class="card">
-    <h2 class="titulo-registrar-campo">Registrar Campo</h2>
+    <h2 class="titulo-registrar-campo">Registrar Chacra</h2>
     <form class="solicitud-servicio-form" [formGroup]="campoForm" (ngSubmit)="registrarCampo()">
       <div class="campos-formulario">
         <div class="grupo-campos">
@@ -60,14 +60,14 @@
         <div class="field-container-observaciones">
           <label class="field-label">Observaciones</label>
           <textarea matInput class="field-input-obs" formControlName="observation"></textarea>
-          
+
         </div>
       </div>
 
       <div class="botones-servicio">
         <button mat-raised-button class="cancel-button" type="button" (click)="cancelar()">Cancelar</button>
         <button mat-raised-button class="register-button" type="submit" [disabled]="!campoForm.valid">Registrar
-          Campo</button>
+          Chacra</button>
       </div>
     </form>
   </div>

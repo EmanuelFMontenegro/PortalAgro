@@ -24,15 +24,19 @@ body
   flex-direction: column
 
 .sidenav
-  width: 240px
+  width: 250px
   box-shadow: 1px 0 5px rgba(0, 0, 0, 0.24)
   background-color: $default
 
-.logo-container
-  padding: 10px
-  background-color: $default
-  padding-bottom: 46px
-  padding-top: 10px
+.mat-icon
+  height: 40px
+  width: 40px
+
+  .logo-container
+    padding: 10px
+    background-color: $default
+    padding-bottom: 46px
+    padding-top: 10px
 
   .dashboard-logo
     max-height: 60px
@@ -51,7 +55,6 @@ body
   color: $dark-grey
   transition: border-color 0.3s
   border: 1px solid transparent
-  margin-left: 3%
 
   &:hover
     // border-color: $default
@@ -59,9 +62,10 @@ body
 
 .logo-b
   display: flex
-  margin-top: auto
+  top: 10em
   padding: 20px
-  padding-top: 65%
+  flex-direction: column-reverse
+  position: relative
 
   .sidenav-logo
     width: 70px
@@ -103,7 +107,8 @@ body
 
 .sidenav-content
   flex-grow: 1
-  transition: margin-left 0.3s
+  transition: none
+  overflow: hidden
 
 .toolbar-green
   background-color: $default
@@ -129,9 +134,8 @@ body
 .nav-item-icon
   filter: invert(70%) sepia(60%) saturate(10000%) hue-rotate(130deg)
   margin-right: 2%
-
-// .open-sidebar-btn
-//   display: none
+  margin-bottom: -1.5%
+  width: 25px
 
 .card-footer
   position: relative
@@ -251,6 +255,7 @@ body
   display: none
 
 @media screen and (max-width: 768px)
+
   .open-sidebar-btn
     display: block
     position: absolute
@@ -288,29 +293,38 @@ body
     display: block
     width: 45%
     position: absolute
-    top: 3em
+    top: 1.5em
     left: 8em
 
   .footer
     height: 38em
 
+  .contacto
+    position: relative
+    top: -2em
+    left: 11em
+
   .contacto h2
-    top: 7em
-    right: 1.3em
+    position: relative
+    left: -13em
+    top: 6.5em
 
   .lista-contacto
-    margin-top: 13.5em
-    margin-left: -10.5em
+    position: relative
+    top: 10.5em
+    left: -22.5em
     font-size: 10.5px
 
   .redes-container
     position: relative
-    margin-left: -15em
-    margin-top: -1em
+    right: 65em
+    top: 20em
+    display: flex
 
   .redes-title h2
-    margin-left: -9.5em
-    margin-top: 15em
+    left: 1.3em
+    top: 11.2em
+    position: absolute
 
   .redes-sociales a img
     margin-top: 10%
@@ -320,12 +334,12 @@ body
     margin-right: 25%
 
   .derechos-autor
-    margin-top: 7em
-    margin-left: 0.5em
+    margin-top: 26.5em
+    margin-left: 2em
     font-size: 9px
 
   .logo-afip img
-    width: 45px
+    idth: 45px
     position: absolute
-    margin-top: -7.5em
-    margin-left: 6%
+    top: 36em
+    right: 25.5em

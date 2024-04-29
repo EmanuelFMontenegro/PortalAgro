@@ -158,52 +158,51 @@ export class CampoComponent implements OnInit {
   }
 
   registrarCampo(): void {
+    // Verificar si el usuario está autenticado
     if (!this.userId) {
-      console.log('este es el ide del señor', this.userId);
+      console.log('ID del usuario:', this.userId);
       this.toastr.error('Error: No se ha identificado al usuario.', 'Error');
       return;
     }
 
+    // Verificar si el formulario es válido
     if (this.campoForm.valid) {
       // Obtener referencias a los controles del formulario
       const nameControl = this.campoForm.get('name');
       const dimensionsControl = this.campoForm.get('dimensions');
       const addressControl = this.campoForm.get('address');
       const localidadControl = this.campoForm.get('localidad');
-      const observationControl = this.campoForm.get('observation'); // Obtener control de observación
+      const observationControl = this.campoForm.get('observation');
 
       // Verificar que los controles no son nulos
-      if (
-        nameControl &&
-        dimensionsControl &&
-        addressControl &&
-        localidadControl &&
-        observationControl
-      ) {
+      if (nameControl && dimensionsControl && addressControl && localidadControl && observationControl) {
+        // Construir objeto campoData para enviar al backend
         const fixedGeolocation = '';
-
         const campoData: any = {
           name: nameControl.value,
           dimensions: dimensionsControl.value,
           geolocation: fixedGeolocation,
           address: {
-            address: this.campoForm.get('address')?.value,
-            location_id: this.campoForm.get('localidad')?.value,
+            address: addressControl.value,
+            location_id: localidadControl.value,
           },
-          observation: observationControl?.value,
+          observation: observationControl.value,
         };
 
+        // Llamar al servicio API para agregar el campo
         this.apiService.addField(this.userId, campoData).subscribe(
           () => {
+            // Éxito: mostrar mensaje y redirigir
             this.toastr.success('Campo registrado con éxito', 'Éxito');
             this.campoForm.reset();
             this.router.navigate(['dashboard/inicio']);
           },
           (error) => {
+            // Error al registrar el campo: mostrar mensaje de error
             console.error('Error al registrar el campo:', error);
             if (error.error && error.error.message) {
               this.toastr.error(
-                'La Descripción del campo es muy grande.',
+                'La descripción del campo es muy grande.',
                 'Atención'
               );
             } else {
@@ -215,17 +214,18 @@ export class CampoComponent implements OnInit {
           }
         );
       } else {
-        console.error(
-          'Error: Al menos uno de los controles del formulario es nulo.'
-        );
+        // Al menos uno de los controles del formulario es nulo
+        console.error('Error: Al menos uno de los controles del formulario es nulo.');
       }
     } else {
+      // El formulario no es válido: mostrar mensaje de error
       this.toastr.error(
         'Por favor, completa todos los campos requeridos',
         'Error'
       );
     }
   }
+
 
   cancelar() {
     this.router.navigate(['dashboard/inicio']);

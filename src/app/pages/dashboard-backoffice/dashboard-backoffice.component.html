@@ -1,1 +1,147 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #sidenav mode="side" [opened]="!isScreenSmall" class="sidenav">
+    <!-- Contenido del sidenav -->
+    <div class="logo-container">
+      <img src="assets/img/LogoAgroBYTECH.svg" alt="Logo" class="dashboard-logo">
+    </div>
+    <mat-nav-list class="btn_nav">
+      <a mat-list-item routerLink="/dashboard-backoffice/inicio" class="nav-item" (click)="closeSidenavIfSmall()">
+        <img src="assets/img/home_FILL0_wght400_GRAD-25_opsz24.svg" alt="Home" class="nav-item-icon">
+        Inicio
+      </a>
+      <a mat-list-item routerLink="/dashboard-backoffice/servicios" class="nav-item" (click)="closeSidenavIfSmall()">
+        <img src="assets/img/sell_FILL0_wght400_GRAD0_opsz24.svg" alt="Servicios" class="nav-item-icon">
+        Solicitudes y Servicios
+      </a>
 
+      <a mat-list-item routerLink="/dashboard-backoffice/productores" class="nav-item" (click)="closeSidenavIfSmall()">
+        <img src="assets/img/person_FILL0_wght400_GRAD-25_opsz24.svg" alt="Productores" class="nav-item-icon">
+        Productores
+      </a>
+      <a mat-list-item routerLink="/dashboard-backoffice/chacras" class="nav-item" (click)="closeSidenavIfSmall()">
+        <img src="assets/img/soil-moisture-global.svg" alt="Chacras" class="nav-item-icon">
+        Chacras
+      </a>
+      <a mat-list-item routerLink="/dashboard-backoffice/lotes" class="nav-item" (click)="closeSidenavIfSmall()">
+        <img src="assets/img/mdi_land-plots-marker.svg" alt="Lotes" class="nav-item-icon">
+        Lotes
+      </a>
+      <a mat-list-item routerLink="/dashboard-backoffice/calendarios" class="nav-item" (click)="closeSidenavIfSmall()">
+        <img src="assets/img/calendar-03.svg" alt="calendario" class="nav-item-icon">
+        Calendarios
+      </a>
+      <a mat-list-item routerLink="/dashboard-backoffice/notificacion" class="nav-item" (click)="closeSidenavIfSmall()">
+        <img src="assets/img/notifications_active_FILL0_wght400_GRAD0_opsz24.svg" alt="Notificacón"
+          class="nav-item-icon">
+        Notificacón
+      </a>
+      <a mat-list-item routerLink="/dashboard-backoffice/planificaciones" class="nav-item"
+        (click)="closeSidenavIfSmall()">
+        <img src="assets/img/Vector.svg" alt="Planificaciónes" class="nav-item-icon">
+        Planificacónes
+      </a>
+      <a mat-list-item routerLink="/dashboard-backoffice/informes" class="nav-item" (click)="closeSidenavIfSmall()">
+        <img src="assets/img/Vector_i.svg" alt="Planificaciónes" class="nav-item-icon">
+        Informes
+      </a>
+      <a mat-list-item routerLink="/dashboard-backoffice/configuracion" class="nav-item"
+        (click)="closeSidenavIfSmall()">
+        <img src="assets/img/setting-07.svg" alt="Chacras" class="nav-item-icon">
+        Configuración
+      </a>
+    </mat-nav-list>
+    <div class="logo-b">
+      <img src="assets/img/empresa_b.png" alt="Logo" class="sidenav-logo">
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-content class="sidenav-content">
+    <!-- Botón de menú para pantallas pequeñas -->
+    <button mat-icon-button (click)="toggleSidebar()" *ngIf="isScreenSmall" class="open-sidebar-btn">
+      <mat-icon style="color:#0F8054;">menu</mat-icon>
+    </button>
+    <!-- Resto del contenido principal -->
+    <mat-toolbar class="toolbar-green">
+      <div div *ngIf="isScreenSmall" class="logo-container-mobile">
+        <img src="assets/img/LogoAgroBYTECH_M.svg" alt="Logo" class="dashboard-logo">
+      </div>
+      <input matInput class="search-input" placeholder="Buscar ...">
+      <span class="toolbar-spacer"></span>
+      <span class="toolbar-spacer"></span>
+      <a routerLink="/dashboard/notificaciones" class="profile-menu">
+        <button mat-icon-button>
+          <mat-icon>
+            <img src="assets/img/Icon _notif_orange.svg" alt="Foto de perfil"
+            style="width: 22px;top: 13px;position: relative;">
+          </mat-icon>
+        </button>
+      </a>
+      
+      <button mat-icon-button [matMenuTriggerFor]="menu" class="profile-menu">
+        <mat-icon>
+          <img src="assets/img/avatar.png" alt="Foto de perfil" style="width: 40px; height: 40px; border-radius: 50%;">
+        </mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item routerLink="/dashboard/perfil">Perfil</button>
+        <button mat-menu-item routerLink="/dashboard/mensajes">Mensajes</button>
+        <button mat-menu-item (click)="cerrarSesion()">Cerrar Sesión</button>
+      </mat-menu>
+    </mat-toolbar>
+
+    <router-outlet></router-outlet>
+
+  </mat-sidenav-content>
+
+</mat-sidenav-container>
+
+
+<mat-card class="card-footer">
+  <footer class="footer">
+    <img src="assets/img/log_sustentable_gris.png" alt="Logo Marca" class="logo-marca">
+    <img src="assets/img/logo_agro_white.png" alt="Logo Marca" class="logo-marca-white">
+    <div class="container">
+      <div class="contacto">
+        <h2>Contacto</h2>
+        <ul class="lista-contacto">
+          <li><img src="assets/img/Envelope.svg" alt="Logo Email">
+            <a>E-mail: infodagro-sustentable.com</a>
+          </li>
+          <li><img src="assets/img/ic_baseline-whatsapp.svg" alt="Logo Whatsapp"><a>Teléfono: (376)-4121212</a></li>
+          <li><img src="assets/img/Location_b.svg" alt="Logo Ubicación"><a>Dirección: Parque Industrial y de la
+              Innovación, Posadas</a></li>
+        </ul>
+      </div>
+      <div class="redes-sociales">
+        <div class="redes-title">
+          <h2>Redes Sociales</h2>
+        </div>
+        <div class="redes-container">
+          <a href="https://www.facebook.com/AgroSustentable/" target="_blank"><img src="assets/img/facebook.svg"
+              alt="Facebook"></a>
+          <a href="https://www.linkedin.com/company/agro-sustentable1/mycompany/" target="_blank"><img
+              src="assets/img/linkedin.svg" alt="Linkedin"></a>
+          <a href="https://www.instagram.com/agrosustentable/" target="_blank"><img src="assets/img/instagram.svg"
+              alt="Instagram"></a>
+          <a href="https://www.youtube.com/@agro_sustentable" target="_blank"><img src="assets/img/youtube.svg"
+              alt="YouTube"></a>
+        </div>
+      </div>
+    </div>
+    <div class="derechos-autor">
+      <p>&copy; 2024 Agro Sustentable. Todos los Derechos Reservados - Política de Privacidad - Joaquín Basanta,
+        Presidente</p>
+      <div class="desarrollado-por">
+        <p>Desarrollado por:</p>
+        <div class="logos-container">
+          <div class="logo-silicon">
+            <a href=" https://siliconmisiones.gob.ar/" target="_blank"><img src="assets/img/silicon.png"
+                alt="Logo Silicon Misiones"></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="logo-afip">
+      <img src="assets/img/afip.png" alt="Logo AFIP">
+    </div>
+  </footer>
+</mat-card>

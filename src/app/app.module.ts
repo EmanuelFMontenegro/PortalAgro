@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthModule } from './auth/auth.module';
 import { DashboardModule } from './pages/dashboard/dashboard.module';
+import { DashboardBackofficeModule } from './pages/dashboard-backoffice/dashboard-backoffice.module';
 import { AppComponent } from './app.component';
 import { ToastrModule } from 'ngx-toastr';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -12,14 +13,14 @@ import { Interceptor } from 'src/app/services/Interceptor';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { FormatDatePipe } from './format-date.pipe';
 import { NgxSpinnerModule } from "ngx-spinner";
-import { DashboardBackofficeComponent } from './pages/dashboard-backoffice/dashboard-backoffice.component';
+
 
 
 
 const routes: Routes = [];
 
 @NgModule({
-  declarations: [AppComponent, DashboardBackofficeComponent],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     NgxSpinnerModule.forRoot (),
@@ -29,6 +30,7 @@ const routes: Routes = [];
     HttpClientModule,
     AuthModule,
     DashboardModule,
+    DashboardBackofficeModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: !isDevMode(),
 

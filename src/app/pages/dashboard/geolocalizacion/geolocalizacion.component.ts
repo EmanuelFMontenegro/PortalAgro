@@ -270,6 +270,7 @@ export class GeolocalizacionComponent implements AfterViewInit {
     }
   }
 
+
   private initializeMap(): void {
     const latitudInicial = -27.362137;
     const longitudInicial = -55.900875;
@@ -280,7 +281,10 @@ export class GeolocalizacionComponent implements AfterViewInit {
       [latitudInicial, longitudInicial],
       zoomInicial
     );
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+
+    // Agrega solo la capa de relieve
+    L.tileLayer('https://tile.thunderforest.com/outdoors/{z}/{x}/{y}.png?apikey=d82d7283cc9a4b128c398f3b8f789c30'
+    , {
       attribution: '© OpenStreetMap contributors',
     }).addTo(this.map);
 

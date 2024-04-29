@@ -1,0 +1,334 @@
+
+$primary-color: #3BA549
+$secondary-color: #8FCA8F
+$hover-color: #47de5b
+$error-color: #d9534f
+$light-grey: #f4f4f4
+$dark-grey: #454545
+$medium-grey: #666
+$default: #FFFFFF
+$border-color: #929497
+$font-family: 'Montserrat', sans-serif
+
+body
+  font-family: 'Montserrat', sans-serif
+
+.main-container
+  display: flex
+  flex-direction: column
+  height: 100%
+
+.sidenav-container
+  min-height: 100vh
+  display: flex
+  flex-direction: column
+
+.sidenav
+  width: 262px
+  box-shadow: 1px 0 5px rgba(0, 0, 0, 0.24)
+  background-color: $default
+
+.mat-icon
+  height: 40px
+  width: 40px
+
+.logo-container
+  padding: 10px
+  background-color: $default
+  padding-bottom: 46px
+  padding-top: 10px
+
+  .dashboard-logo
+    max-height: 60px
+    margin-bottom: 20px
+
+.nav-item
+  bottom: 2em
+  display: flex
+  font-family: "Montserrat", sans-serif
+  font-weight: 600
+  font-size: 17px
+  text-decoration: none
+  padding: 10px
+  border-radius: 5px
+  color: #454545
+  transition: border-color 0.3s
+  border: 1px solid transparent
+  position: relative
+
+  &:hover
+    // border-color: $default
+    cursor: pointer
+
+.logo-b
+  display: flex
+  top: 13em
+  padding: 20px
+  flex-direction: column-reverse
+  position: relative
+
+  .sidenav-logo
+    width: 70px
+    height: auto
+    display: block
+    margin: 0 auto
+
+.search-input
+  width: 300px
+  padding: 10px 30px 10px 10px
+  border: 1px solid $border-color
+  border-radius: 10px
+  background-image: url("/assets/img/search.svg")
+  background-repeat: no-repeat
+  background-position: right 10px center
+
+.search-input:focus
+  outline: none
+  border-color: $primary-color
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5)
+
+.logo-container-1
+  display: none
+
+  @media (max-width: 768px)
+    display: flex
+    flex-direction: column
+    align-items: center
+
+.logo-container-mobile
+  max-height: 40px
+  margin-left: 25px
+  background-image: none
+  margin-left: 5em
+
+.dashboard-logo
+  max-height: 40px
+  margin-bottom: 20px
+
+.sidenav-content
+  flex-grow: 1
+  transition: margin-left 0.3s
+
+.toolbar-green
+  background-color: $default
+  box-shadow: 1px 0 5px rgba(0, 0, 0, 0.40)
+  font-size: 18px
+  height: 70px
+
+.search-input
+  // display: none
+
+.toolbar-spacer
+  flex: 1
+
+.profile-menu
+  margin-right: 10px
+
+.open-sidebar-btn
+  position: absolute
+  top: 10px
+  left: 10px
+  color: $medium-grey
+
+.nav-item-icon
+  filter: invert(70%) sepia(60%) saturate(10000%) hue-rotate(130deg)
+  margin-right: 2%
+  margin-bottom: -2%
+  width: 20px
+
+.card-footer
+  position: relative
+  bottom: 0
+  left: 0
+  width: 100%
+  z-index: 9999
+  height: auto
+  height: 10em
+
+.footer
+  background-image: url('/assets/img/footer.svg')
+  background-repeat: no-repeat
+  background-size: cover
+  background-position: center
+  background-color: $secondary-color
+  box-sizing: border-box
+  overflow: hidden
+  font-size: 12px
+
+.container
+  display: flex
+  padding: 5px
+
+.logo-marca
+  position: absolute
+  margin-top: 6em
+  margin-left: 12%
+  transform: translate(-50%, -50%)
+  z-index: 2
+
+.contacto
+  position: absolute
+  margin-left: 33%
+  margin-top: -2em
+
+.contacto h2
+  font-size: 18px
+  font-family: "Montserrat"
+  color: $default
+  position: relative
+  z-index: 2
+  margin-right: 18.5em
+  margin-top: 2em
+
+.lista-contacto
+  color: $default
+  list-style-type: none
+  padding: 0
+  font-family: $font-family
+  margin-right: 5em
+  margin-top: 0em
+
+  & li
+    margin-bottom: 4px
+    display: flex
+    align-items: center
+    color: $default
+
+    img
+      margin-right: 10px
+      height: 20px
+
+.redes-sociales
+  margin-left: 75%
+  color: white
+  font-family: $font-family
+
+.redes-sociales ul p
+  display: flex
+  justify-content: center
+
+.redes-sociales ul
+  display: flex
+  justify-content: center
+
+.redes-sociales li
+  margin-right: 3px
+
+.redes-sociales a
+  color: #FFFFFF
+  font-size: 16px
+  margin-right: 5px
+  text-decoration: none
+
+.redes-sociales a img
+  height: 24px
+  position: relative
+  z-index: 2
+  margin-top: 5%
+
+.derechos-autor
+  color: white
+  font-family: "Montserrat", sans-serif
+  margin-top: 3.5em
+  margin-left: 31%
+
+.desarrollado-por
+  display: flex
+  margin-top: -3.5em
+  justify-content: flex-end
+
+.logos-container
+  display: flex
+  align-items: center
+
+.logo-silicon
+  margin-right: 10px
+
+.logo-afip img
+  width: 50px
+  position: absolute
+  margin-top: -11em
+  margin-left: 96%
+
+.logo-marca-white
+  display: none
+
+@media screen and (max-width: 768px)
+  .open-sidebar-btn
+    display: block
+    position: absolute
+    top: 10px
+    left: 10px
+    color: $medium-grey
+    background: none
+    border: none
+    font-size: 24px
+    cursor: pointer
+    z-index: 9999
+
+  .sidenav
+    width: 0
+
+  sidenav-container.open
+    transition: all 0.3s
+
+  sidenav-container.open .sidenav
+    width: 240px
+
+  .search-input
+    display: none
+
+  .sidebar-content.active
+    display: block
+
+  .card-footer
+    height: 28em
+
+  .logo-marca
+    display: none
+
+  .logo-marca-white
+    display: block
+    width: 45%
+    position: absolute
+    top: 3em
+    left: 8em
+
+  .footer
+    height: 38em
+
+  .contacto h2
+    top: 7em
+    right: 1.3em
+
+  .lista-contacto
+    margin-top: 13.5em
+    margin-left: -10.5em
+    font-size: 10.5px
+
+  .redes-container
+    position: relative
+    margin-left: -15em
+    margin-top: -1em
+
+  .redes-title h2
+    margin-left: -9.5em
+    margin-top: 15em
+
+  .redes-sociales a img
+    margin-top: 10%
+
+  .desarrollado-por
+    margin-top: -9em
+    margin-right: 25%
+
+  .derechos-autor
+    margin-top: 7em
+    margin-left: 0.5em
+    font-size: 9px
+
+  .logo-afip img
+    width: 45px
+    position: absolute
+    margin-top: -7.5em
+    margin-left: 6%

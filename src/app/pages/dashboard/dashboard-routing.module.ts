@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { InicioComponent } from './inicio/inicio.component';
 import { ServiciosComponent } from './servicios/servicios.component';
-// import { ProductosComponent } from './productos/productos.component';
 import { GeolocalizacionComponent } from './geolocalizacion/geolocalizacion.component';
 import { ConfiguracionComponent } from './configuracion/configuracion.component';
 import { PerfilComponent } from './perfil/perfil.component';
@@ -12,6 +11,10 @@ import { BienvenidaComponent } from 'src/app/auth/bienvenida/bienvenida.componen
 import { DetalleCampoComponent } from './detalle-campo/detalle-campo.component';
 import { LoteComponent } from './lote/lote.component';
 import { CargarLoteComponent } from './cargar-lote/cargar-lote.component';
+import { InformesComponent } from './informes/informes.component';
+import { CalendarioComponent } from './calendario/calendario.component';
+import { ChacrasComponent } from './chacras/chacras.component';
+import { NotificacionesComponent } from './notificaciones/notificaciones.component';
 import { AuthGuard } from 'src/app/core/guards/auth.guard';
 
 const routes: Routes = [
@@ -28,11 +31,15 @@ const routes: Routes = [
       { path: 'lote', component: LoteComponent},
       { path :'cargar-lote', component: CargarLoteComponent},
       { path: 'servicios', component: ServiciosComponent},
-      // { path: 'productos', component: ProductosComponent},
       { path: 'campo', component: CampoComponent},
       { path: 'configuracion', component: ConfiguracionComponent},
       { path: 'perfil', component: PerfilComponent},
       { path: '', redirectTo: 'inicio', pathMatch: 'full' },
+      { path: 'servicios', component: ServiciosComponent },
+      { path: 'informes', component: InformesComponent },
+      { path: 'calendario', component: CalendarioComponent },
+      { path: 'chacras', component: ChacrasComponent },
+      { path: 'notificaciones', component: NotificacionesComponent },
     ]
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' },

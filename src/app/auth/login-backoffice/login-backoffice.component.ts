@@ -59,8 +59,9 @@ export class LoginBackofficeComponent implements OnInit {
       Validators.required,
       Validators.minLength(8),
     ]);
-    this.usernameControl.setValue('cristianwolf86@gmail.com');
-    this.passwordControl.setValue('Donna5722');
+    this.usernameControl.setValue('emamonte777@gmail.com');
+    this.passwordControl.setValue('vN3#pgvjoVZZV_$xTGOE(5i)?5spq5');
+
     this.login = new FormGroup({
       username: this.usernameControl,
       password: this.passwordControl,
@@ -87,30 +88,12 @@ export class LoginBackofficeComponent implements OnInit {
       const username = this.login.get('username')?.value;
       const password = this.login.get('password')?.value;
 
-      this.apiService.validarCredenciales(username, password).subscribe({
+      this.apiService.validarCredencialBackoffice(username, password).subscribe({
         next: (response) => {
+          console.log("Lo que envia el EnpoinBackAdmin",response)
           if (response.status === 200 && response.body && response.body.token) {
             localStorage.setItem('token', response.body.token);
-
-            const decoded: DecodedToken = jwtDecode(response.body.token);
-            const userId = decoded.userId;
-            const personId = userId;
-
-            this.apiService.getPersonByIdOperador(userId, personId).subscribe(
-              (userData) => {
-                // console.log('Datos del usuario:', userData);
-
-                if (userData && userData.name) {
-                  this.router.navigate(['/dashboard']);
-                } else {
-                  this.router.navigate(['/primerRegistro']);
-                }
-              },
-              (userError) => {
-                console.error('Error al obtener datos del usuario:', userError);
-              }
-            );
-
+            this.router.navigate(['/dashboard-backoffice']);
             this.mostrarMensajeExitoso();
             this.login.reset();
           } else {
@@ -119,67 +102,6 @@ export class LoginBackofficeComponent implements OnInit {
         },
       });
 
-      this.apiService.validarCredenciales(username, password).subscribe({
-        next: (response) => {
-          if (response.status === 200 && response.body && response.body.token) {
-            localStorage.setItem('token', response.body.token);
-
-            // Redirigir directamente a 'primer-registro'
-            this.router.navigate(['/primerRegistro']);
-
-            this.mostrarMensajeExitoso();
-            this.login.reset();
-          } else {
-            this.mostrarMensajeError('Error de autenticación');
-          }
-        },
-        error: (err) => {
-          // Manejar otros casos de error según sea necesario
-          if (err.status === 0) {
-            this.toastr.error(
-              'No se puede conectar al servidor. Por favor verifica tu conexión a internet.',
-              'Error de Conexión'
-            );
-          } else if (err.status === 404) {
-            this.toastr.info(
-              'El usuario no está registrado. Por favor regístrese',
-              'Atención'
-            );
-            this.login.reset();
-          } else if (err.status === 401 && err.error.code === 4011) {
-            const errorMessage = err.error.message || 'Error de autenticación';
-            const details =
-              err.error.details || 'Detalles del error no disponibles';
-
-            if (details.includes('Email not found')) {
-              this.toastr.info(
-                'El usuario no está registrado. Por favor regístrese',
-                'Atención'
-              );
-              this.login.reset();
-            } else {
-              this.toastr.error(errorMessage, 'Error');
-            }
-          } else if (err.status === 400 && err.error.code === 4016) {
-            this.toastr.error(
-              'Error de contraseña. Por favor intenta de nuevo.',
-              'Atencion'
-            );
-          } else if (err.status === 401 && err.error.code === 4001) {
-            this.toastr.warning(
-              'Por favor revisa tu casilla de correo electrónico para activar tu cuenta.',
-              'Atención',
-              { closeButton: true }
-            );
-          } else {
-            const errorMessage = err.error.message || 'Error desconocido';
-            this.toastr.error(errorMessage, 'Error');
-          }
-
-          // Ejemplo de redirección a bienvenida en caso de error
-          // this.router.navigate(['/bienvenida']);
-        },
-      });
       this.toggleErrorCardClass(false);
     } else {
       this.toggleErrorCardClass(true); // Hay errores
@@ -189,8 +111,9 @@ export class LoginBackofficeComponent implements OnInit {
     }
   }
 
+
   mostrarMensajeExitoso() {
-    this.toastr.info('Portal Agro.', 'Bienvenido', { timeOut: 500 });
+    this.toastr.info('Portal AgroSustetable AgroTech.', 'Bienvenido', { timeOut: 500 });
   }
   adjustCardSize(hasError: boolean): void {
     const cardElement = document.querySelector('.login-card') as HTMLElement;

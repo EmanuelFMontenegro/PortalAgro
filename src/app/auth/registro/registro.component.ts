@@ -89,7 +89,7 @@ export class RegistrateComponent {
           this.cargandoValidacion = false;
 
           this.toastr.info(
-            'Registro exitoso. Por favor, inicie sesión.',
+            'Registro exitoso. Por favor, aguarde que le llegará un E-mail.',
             'Éxito'
           );
           this.irAInicioSesion();
