@@ -37,7 +37,7 @@ export class PrimerRegistroComponent implements OnInit, AfterViewInit {
   telephone: string = '';
   descriptions: string = '';
   activarEdicion: boolean = false;
-
+  isTermsPopupVisible: boolean = false;
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
@@ -74,28 +74,24 @@ export class PrimerRegistroComponent implements OnInit, AfterViewInit {
       ],
       descripcion: [''],
 
-      aceptarTerminos: [false]
+      aceptarTerminos: [false, Validators.requiredTrue],
     });
   }
 
-  marcarCheckbox() {
-    const aceptarTerminosControl = this.userDetailsForm.get('aceptarTerminos');
-    if (aceptarTerminosControl) {
-      aceptarTerminosControl.setValue(true);
-    }
-  }
   ngOnInit(): void {
     this.obtenerLocalidades();
   }
 
   ngAfterViewInit(): void {}
 
-  openDialog() {
-    // Para mostrar solo el botón Aceptar, pasa showCancel como false
-    this.dialog.open(DialogComponent, {
-      data: { message: 'Este es un mensaje de error.', showCancel: false },
-    });
+  openTermsPopup(): void {
+    this.isTermsPopupVisible = true;
   }
+
+  closeTermsPopup(): void {
+    this.isTermsPopupVisible = false;
+  }
+
   obtenerLocalidades() {
     this.apiService.getLocationMisiones('location').subscribe(
       (localidades) => {
@@ -122,21 +118,40 @@ export class PrimerRegistroComponent implements OnInit, AfterViewInit {
     if (!this.validarFormulario()) {
       return;
     }
+    const aceptarTerminosControl = this.userDetailsForm.get('aceptarTerminos');
+    const aceptarTerminos = aceptarTerminosControl?.value;
+
+
+    if (aceptarTerminos === null) {
+      console.error('El campo aceptarTerminos es null');
+      return;
+    }
+
+
+    if (!aceptarTerminos) {
+      this.toastr.warning(
+        'Debe Aceptar los Términos y Condiciones para continuar.',
+        'Atención'
+      );
+      return;
+    }
+
+    // Continuar con el proceso de actualización del perfil
     const formValues = this.userDetailsForm.value;
     const personData = {
-      name: this.userDetailsForm.get('nombre')?.value || '',
-      lastname: this.userDetailsForm.get('apellido')?.value || '',
-      dni: this.userDetailsForm.get('dni')?.value || '',
-      telephone: this.userDetailsForm.get('contacto')?.value || '',
-      location_id: this.userDetailsForm.get('localidad')?.value || null,
-      descriptions: this.userDetailsForm.get('descripcion')?.value || null,
+      name: formValues.nombre || '',
+      lastname: formValues.apellido || '',
+      dni: formValues.dni || '',
+      telephone: formValues.contacto || '',
+      location_id: formValues.localidad || null,
+      descriptions: formValues.descripcion || null,
+      accept_license: aceptarTerminos,
     };
 
     const decoded: DecodedToken = jwtDecode(this.authService.getToken() || '');
     if ('userId' in decoded && 'sub' in decoded && 'roles' in decoded) {
       this.userId = decoded.userId;
       this.userEmail = decoded.sub;
-
       this.personId = this.userId;
 
       if (this.userId !== null && this.personId !== null) {
@@ -147,6 +162,7 @@ export class PrimerRegistroComponent implements OnInit, AfterViewInit {
       this.userEmail = null;
     }
 
+    // Llamar al endpoint de actualización del perfil
     this.apiService
       .updatePersonAdmin(this.userId, this.personId, personData)
       .subscribe(
@@ -162,60 +178,25 @@ export class PrimerRegistroComponent implements OnInit, AfterViewInit {
             'Error al actualizar la información del usuario:',
             error
           );
-          if (error?.error?.code === 4023) {
-            this.userDetailsForm.get('dni')?.setErrors({ incorrect: true });
-            const dialogRef = this.dialog.open(DialogComponent, {
-              data: {
-                title: 'Atención',
-                message: 'El DNI ya está registrado. Por favor, verifíquelo',
-              },
-            });
-          } else if (formValues.contacto.trim().length > 12) {
-            this.userDetailsForm
-              .get('contacto')
-              ?.setErrors({ incorrectSize: true });
-            const dialogRef = this.dialog.open(DialogComponent, {
-              data: {
-                title: 'Atención',
-                message: 'El Nro de Celular debe tener como máximo 12 dígitos.',
-              },
-            });
-            return;
-          }
-          if (formValues.dni.trim().length > 8) {
-            this.userDetailsForm.get('dni')?.setErrors({ incorrectSize: true });
-            const dialogRef = this.dialog.open(DialogComponent, {
-              data: {
-                title: 'Atención',
-                message: 'El DNI debe tener como máximo 8 dígitos.',
-              },
-            });
-            return;
-          } else {
-            this.toastr.error(
-              'Tuvimos un problema en actualizar tu perfil:',
-              'Atencion'
-            );
-          }
         }
       );
   }
 
   actualizarValoresFormulario() {
-    this.userDetailsForm.patchValue({
-      nombre: this.nombre,
-      apellido: this.apellido,
-      dni: this.dni,
-      contacto: this.telephone,
-      localidad: this.locationId || null,
-      descripcion: this.descriptions,
-    });
+    const formValues = this.userDetailsForm.value;
+    this.nombre = formValues.nombre;
+    this.apellido = formValues.apellido;
+    this.dni = formValues.dni;
+    this.telephone = formValues.contacto;
+    this.locationId = formValues.localidad;
+    this.descriptions = formValues.descripcion;
   }
 
   validarFormulario(): boolean {
     const formValues = this.userDetailsForm.value;
     const dniControl = this.userDetailsForm.get('dni');
     const contactoControl = this.userDetailsForm.get('contacto');
+    const aceptarTerminosControl = this.userDetailsForm.get('aceptarTerminos');
 
     if (dniControl?.errors && dniControl.errors['incorrect']) {
       dniControl.setErrors({ incorrect: true });
@@ -227,7 +208,14 @@ export class PrimerRegistroComponent implements OnInit, AfterViewInit {
       return false;
     }
 
-    // Aquí puedes agregar otras validaciones necesarias
+    // Verificar si se han aceptado los términos y condiciones
+    if (!aceptarTerminosControl?.value) {
+      this.toastr.warning(
+        'Debe aceptar los términos y condiciones para continuar.',
+        'Atención'
+      );
+      return false;
+    }
 
     if (
       formValues.nombre?.trim() === '' ||

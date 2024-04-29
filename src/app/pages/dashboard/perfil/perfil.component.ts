@@ -1,11 +1,21 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  FormControl,
+} from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from 'src/app/services/ApiService';
 import { AuthService } from 'src/app/services/AuthService';
 import { jwtDecode } from 'jwt-decode';
 import { Observable } from 'rxjs';
-import { startWith, map, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import {
+  startWith,
+  map,
+  debounceTime,
+  distinctUntilChanged,
+} from 'rxjs/operators';
 
 interface DecodedToken {
   userId: number;
@@ -52,20 +62,38 @@ export class PerfilComponent implements OnInit, AfterViewInit {
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private apiService: ApiService,
-    private toastr: ToastrService,
+    private toastr: ToastrService
   ) {
     this.userDetailsForm = this.formBuilder.group({
-      nombre: ['', [Validators.maxLength(20), Validators.pattern('^[a-zA-Z]+$')]],
-      apellido: ['', [Validators.maxLength(20), Validators.pattern('^[a-zA-Z]+$')]],
+      nombre: [
+        '',
+        [Validators.maxLength(20), Validators.pattern('^[a-zA-Z]+$')],
+      ],
+      apellido: [
+        '',
+        [Validators.maxLength(20), Validators.pattern('^[a-zA-Z]+$')],
+      ],
       localidad: [null, Validators.required],
-      dni: ['', [Validators.minLength(8), Validators.maxLength(11), Validators.pattern('^[0-9]+$')]],
-      contacto: ['', [Validators.minLength(10), Validators.maxLength(12), Validators.pattern('^[0-9]+$')]],
+      dni: [
+        '',
+        [
+          Validators.minLength(8),
+          Validators.maxLength(11),
+          Validators.pattern('^[0-9]+$'),
+        ],
+      ],
+      contacto: [
+        '',
+        [
+          Validators.minLength(10),
+          Validators.maxLength(12),
+          Validators.pattern('^[0-9]+$'),
+        ],
+      ],
       descripcion: [''],
       contrasenaActual: [''],
       contrasenaNueva: [''],
     });
-
-
   }
 
   ngOnInit(): void {
@@ -74,10 +102,23 @@ export class PerfilComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-
     this.componenteInicializado = true;
-
-
+  }
+  cargarImagenPerfil(event: any) {
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      this.apiService.uploadProfileImage(this.userId, selectedFile).subscribe(
+        (response) => {
+          console.log('Imagen de perfil cargada exitosamente:', response);
+          // Actualizar la imagen de perfil después de cargarla
+          this.cargarDatosDeUsuario();
+        },
+        (error) => {
+          console.error('Error al cargar la imagen de perfil:', error);
+          // Manejar el error de carga de la imagen de perfil
+        }
+      );
+    }
   }
 
   onFileSelected(event: any) {
@@ -97,14 +138,10 @@ export class PerfilComponent implements OnInit, AfterViewInit {
     if (modoEdicion) {
       this.userDetailsForm.enable();
       this.userDetailsForm.patchValue(this.datosUsuarioTemporal);
-
-
-
     } else {
       this.userDetailsForm.disable();
     }
   }
-
 
   obtenerLocalidades() {
     this.apiService.getLocationMisiones('location').subscribe(
@@ -112,7 +149,7 @@ export class PerfilComponent implements OnInit, AfterViewInit {
         this.localidades = localidades;
         this.filteredLocalidades = this.filtroLocalidades.valueChanges.pipe(
           startWith(''),
-          map((value) => this.filtrarLocalidades(value ?? '')),
+          map((value) => this.filtrarLocalidades(value ?? ''))
         );
       },
       (error) => {
@@ -123,7 +160,9 @@ export class PerfilComponent implements OnInit, AfterViewInit {
 
   private filtrarLocalidades(value: string): any[] {
     const filterValue = value.toLowerCase();
-    return this.localidades.filter((loc) => loc.name.toLowerCase().includes(filterValue));
+    return this.localidades.filter((loc) =>
+      loc.name.toLowerCase().includes(filterValue)
+    );
   }
 
   cargarDatosDeUsuario() {
@@ -135,31 +174,36 @@ export class PerfilComponent implements OnInit, AfterViewInit {
       this.personId = this.userId;
 
       if (this.userId !== null && this.personId !== null) {
-        this.apiService.getPersonByIdOperador(this.userId, this.personId).subscribe(
-          (data) => {
-            this.nombre = data.name;
-            this.apellido = data.lastname;
-            this.dni = data.dni;
-            this.descriptions = data.descriptions;
-            this.telephone = data.telephone;
-            const localidad = this.localidades.find((loc) => loc.id === data.location_id);
-            this.locationId = localidad ? localidad.name.toString() : '';
+        this.apiService
+          .getPersonByIdOperador(this.userId, this.personId)
+          .subscribe(
+            (data) => {
+              this.nombre = data.name;
+              this.apellido = data.lastname;
+              this.dni = data.dni;
+              this.descriptions = data.descriptions;
+              this.telephone = data.telephone;
+              const localidad = this.localidades.find(
+                (loc) => loc.id === data.location.id
+              );
+              this.locationId = localidad ? localidad.name : null; // Cambiar aquí
 
-            this.userDetailsForm.patchValue({
-              nombre: this.nombre,
-              apellido: this.apellido,
-              dni: this.dni,
-              contacto: this.telephone,
-              localidad: localidad ? localidad.id : null,
-              descripcion: this.descriptions,
-            });
-
-
-          },
-          (error) => {
-            console.error('Error al obtener nombre y apellido del usuario:', error);
-          }
-        );
+              this.userDetailsForm.patchValue({
+                nombre: this.nombre,
+                apellido: this.apellido,
+                dni: this.dni,
+                contacto: this.telephone,
+                localidad: this.locationId, // Cambiar aquí
+                descripcion: this.descriptions,
+              });
+            },
+            (error) => {
+              console.error(
+                'Error al obtener nombre y apellido del usuario:',
+                error
+              );
+            }
+          );
       }
     } else {
       this.userId = null;
@@ -167,91 +211,111 @@ export class PerfilComponent implements OnInit, AfterViewInit {
     }
   }
 
+  verificarExistenciadni(dni: string): void {
+    this.apiService.existsPersonByParamsAdmin(dni).subscribe(
+      (response) => {
+        console.log('Respuesta del servidor:', response);
 
+        if (response && response.data && response.data.length > 0) {
+          const usuarioExistente = response.data[0];
+          if (usuarioExistente.id !== this.personId) {
+            this.toastr.warning(
+              `Ya existe una persona registrada con este dni.`,
+              'Atención'
+            );
+            this.userDetailsForm
+              .get('dni')
+              ?.setErrors({ dniExistsForOtherUser: true });
 
-
-verificarExistenciadni(dni: string): void {
-
-  this.apiService.existsPersonByParamsAdmin(dni).subscribe(
-    (response) => {
-      console.log('Respuesta del servidor:', response);
-
-      if (response && response.data && response.data.length > 0) {
-
-        const usuarioExistente = response.data[0];
-        if (usuarioExistente.id !== this.personId) {
-
-          this.toastr.warning(
-            `Ya existe una persona registrada con este dni.`,
-            'Atención'
-          );
-          this.userDetailsForm.get('dni')?.setErrors({ 'dniExistsForOtherUser': true });
-
-          this.userDetailsForm.disable();
-        } else {
-
-          this.toastr.info(`El dni ${dni} no está registrado para otro usuario. Puedes editar.`, 'Información');
-          this.userDetailsForm.get('dni')?.setErrors(null);
+            this.userDetailsForm.disable();
+          } else {
+            this.toastr.info(
+              `El dni ${dni} no está registrado para otro usuario. Puedes editar.`,
+              'Información'
+            );
+            this.userDetailsForm.get('dni')?.setErrors(null);
+          }
         }
+      },
+      (error) => {
+        console.error('Error al verificar el dni:', error);
       }
-    },
-    (error) => {
-      console.error('Error al verificar el dni:', error);
-    }
-  );
-}
-guardarCambios() {
-  if (this.userDetailsForm.dirty) {
-    if (this.validarFormulario()) {
-      const formData = this.userDetailsForm.value;
-      this.personId = this.userId;
+    );
+  }
+  guardarCambios() {
+    if (this.userDetailsForm.dirty) {
+      if (this.validarFormulario()) {
+        const formData = this.userDetailsForm.value;
+        this.personId = this.userId;
 
-      if (this.userId !== null && this.personId !== null) {
-        const personData = {
-          userId: this.userId,
-          name: formData.nombre,
-          lastname: formData.apellido,
-          dni: formData.dni,
-          descriptions: formData.descripcion,
-          location_id: +formData.localidad,
-          telephone: formData.contacto,
-        };
+        if (this.userId !== null && this.personId !== null) {
+          const personData = {
+            userId: this.userId,
+            name: formData.nombre,
+            lastname: formData.apellido,
+            dni: formData.dni,
+            descriptions: formData.descripcion,
+            location_id: +formData.localidad,
+            telephone: formData.contacto,
+          };
 
-        this.apiService.updatePersonAdmin(this.userId, this.personId, personData).subscribe(
-          (response) => {
-            this.toastr.success('¡Perfil actualizado correctamente!', 'Éxito');
-            this.activarEdicion(false);
-            this.cargarDatosDeUsuario();
+          this.apiService
+            .updatePersonAdmin(this.userId, this.personId, personData)
+            .subscribe(
+              (response) => {
+                this.toastr.success(
+                  '¡Perfil actualizado correctamente!',
+                  'Éxito'
+                );
+                this.activarEdicion(false);
+                this.cargarDatosDeUsuario();
 
-            // Llamada al método cambiarContrasena para cambiar la contraseña
-            this.apiService.cambiarContrasena(formData.contrasenaNueva, formData.contrasenaNueva, 'token').subscribe(
-              (resultado) => {
-                // Maneja el resultado de la llamada cambiarContrasena si es necesario
+                // Llamada al método cambiarContrasena para cambiar la contraseña
+                this.apiService
+                  .cambiarContrasena(
+                    formData.contrasenaNueva,
+                    formData.contrasenaNueva,
+                    'token'
+                  )
+                  .subscribe(
+                    (resultado) => {
+                      // Maneja el resultado de la llamada cambiarContrasena si es necesario
+                    },
+                    (error) => {
+                      // Maneja los errores de la llamada cambiarContrasena si es necesario
+                    }
+                  );
               },
               (error) => {
-                // Maneja los errores de la llamada cambiarContrasena si es necesario
+                this.toastr.error(
+                  '¡Ya Existe una persona registrada con este dni!',
+                  'Atención'
+                );
               }
             );
-          },
-          (error) => {
-            this.toastr.error('¡Ya Existe una persona registrada con este dni!', 'Atención');
-          }
-        );
-      } else {
-        this.toastr.error('¡Error al obtener información del usuario!', 'Atención');
+        } else {
+          this.toastr.error(
+            '¡Error al obtener información del usuario!',
+            'Atención'
+          );
+        }
       }
+    } else {
+      this.toastr.info('No se realizaron modificaciones.', 'Información');
     }
-  } else {
-    this.toastr.info('No se realizaron modificaciones.', 'Información');
   }
-}
 
   validarFormulario(): boolean {
-    if (this.userDetailsForm.get('nombre')?.value.trim() === '' ||
+    if (
+      this.userDetailsForm.get('nombre')?.value.trim() === '' ||
       this.userDetailsForm.get('apellido')?.value.trim() === '' ||
       this.userDetailsForm.get('dni')?.value.trim() === '' ||
-      this.userDetailsForm.get('contacto')?.value.trim() === '') {
-      this.toastr.warning('Por favor, complete todos los campos obligatorios.', 'Atención');
+      this.userDetailsForm.get('contacto')?.value.trim() === ''
+    ) {
+      this.toastr.warning(
+        'Por favor, complete todos los campos obligatorios.',
+        'Atención'
+      );
       return false;
     }
     return true;

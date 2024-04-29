@@ -26,7 +26,7 @@
       <div class="card" *ngIf="campoSeleccionado">
         <div class="card-item">
           <p class="with-dot">{{ campoSeleccionado.name }}</p>
-          <p class="with-dot">{{ campoSeleccionado.address?.location?.name }}</p>
+          <p class="with-dot">{{ campoSeleccionado.address?.locationDTO.name }}</p>
           <p class="with-dot">{{ campoSeleccionado.address.address }}</p>
           <p class="with-dot">{{ campoSeleccionado.dimensions }} Hectáreas</p>
         </div>

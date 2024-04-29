@@ -51,7 +51,7 @@ export class CargarLoteComponent {
   public userEmail: string | null = null;
 
   campoData = {
-    name: '',
+    // name: '',
     plantation: '',
     dimensions: '',
   };
@@ -68,22 +68,13 @@ export class CargarLoteComponent {
     private fb: FormBuilder
   ) {
     this.campoForm = this.fb.group({
-      name: ['', Validators.required],
+      // name: ['', Validators.required],
       dimensions: ['', [Validators.required, Validators.min(1)]],
       observation: [''],
       plantation: ['', Validators.required],
     });
   }
-  clearStoredPlotId(): void {
-    const storedPlotId = localStorage.getItem('plotId');
-    if (storedPlotId) {
-      localStorage.removeItem('plotId');
-      this.currentPlotId = null;
-      this.campoForm.reset();
-      this.buttonText = 'Cargar Lote';
-      console.log('Plot ID eliminado:', storedPlotId);
-    }
-  }
+
   ngOnInit(): void {
     console.log('ngOnInit en CargarLoteComponent');
     this.cargarDatosDeUsuario();
@@ -92,7 +83,7 @@ export class CargarLoteComponent {
     this.obtenerPlantaciones();
     console.log('Modo edición en ngOnInit:', this.currentPlotId);
 
-    // Agregar lógica para limpiar plotId si existe
+
     const storedPlotId = localStorage.getItem('plotId');
     if (storedPlotId) {
       localStorage.removeItem('plotId');
@@ -112,26 +103,28 @@ export class CargarLoteComponent {
     }
   }
 
-  obtenerPlantaciones() {
-    this.apiService.getAllTypePlantationOperador().subscribe(
-      (plantations) => {
-        this.plantations = plantations;
-        this.filteredPlantations = this.filtroPlantations.valueChanges.pipe(
-          startWith(''),
-          map((value) => {
-            if (typeof value === 'string') {
-              return this.filtrarPlantaciones(value);
-            } else {
-              return [];
-            }
-          })
-        );
-      },
-      (error) => {
-        console.error('Error al obtener las plantaciones', error);
-      }
-    );
-  }
+
+obtenerPlantaciones() {
+  this.apiService.getAllTypeCropOperador().subscribe(
+    (plantations) => {
+      this.plantations = plantations;
+      this.filteredPlantations = this.filtroPlantations.valueChanges.pipe(
+        startWith(''),
+        map((value) => {
+          if (typeof value === 'string') {
+            return this.filtrarPlantaciones(value);
+          } else {
+            return [];
+          }
+        })
+      );
+    },
+    (error) => {
+      console.error('Error al obtener las plantaciones', error);
+    }
+  );
+}
+
 
   private filtrarPlantaciones(value: string): any[] {
     const filterValue = value.toLowerCase();
@@ -192,13 +185,13 @@ export class CargarLoteComponent {
               console.log('Datos del lote:', lote);
               this.currentPlotId = plotIdNumber;
               this.campoData = {
-                name: lote.name,
-                plantation: lote.type_plantation_id,
+                // name: lote.name,
+                plantation: lote.type_crop_id,
                 dimensions: lote.dimensions,
               };
               this.campoForm.patchValue({
-                name: lote.name,
-                plantation: lote.type_plantation_id,
+                // name: lote.name,
+                plantation: lote.type_crop_id,
                 dimensions: lote.dimensions,
                 observation: lote.descriptions,
               });
@@ -223,22 +216,22 @@ export class CargarLoteComponent {
     console.log('Form value:', this.campoForm.value);
     console.log('Current Plot ID:', this.currentPlotId);
     if (this.campoForm.valid && !this.currentPlotId) {
-      const nameControl = this.campoForm.get('name');
+      // const nameControl = this.campoForm.get('name');
       const dimensionsControl = this.campoForm.get('dimensions');
       const observationControl = this.campoForm.get('observation');
       const plantationControl = this.campoForm.get('plantation');
 
       if (
-        nameControl &&
+        // nameControl &&
         dimensionsControl &&
         observationControl &&
         plantationControl
       ) {
         const newPlotData: any = {
-          name: nameControl.value,
+          // name: nameControl.value,
           dimensions: dimensionsControl.value,
           descriptions: observationControl.value,
-          type_plantation_id: plantationControl.value,
+          type_crop_id: plantationControl.value,
         };
 
         this.apiService
@@ -281,34 +274,28 @@ export class CargarLoteComponent {
     console.log('Actualizar Lote method called');
     console.log('Form value:', this.campoForm.value);
     console.log('Current Plot ID:', this.currentPlotId);
+
     if (this.campoForm.valid && this.currentPlotId) {
-      const nameControl = this.campoForm.get('name');
+      // const nameControl = this.campoForm.get('name');
       const dimensionsControl = this.campoForm.get('dimensions');
       const observationControl = this.campoForm.get('observation');
       const plantationControl = this.campoForm.get('plantation');
 
-      if (
-        nameControl &&
-        dimensionsControl &&
-        observationControl &&
-        plantationControl
-      ) {
+      if (dimensionsControl && observationControl && plantationControl) {
         const updatedPlotData: any = {
-          name: nameControl.value,
+          // name: nameControl.value,
           dimensions: dimensionsControl.value,
           descriptions: observationControl.value,
-          type_plantation_id: plantationControl.value,
+          type_crop_id: plantationControl.value,
         };
 
+        console.log('Updated Plot Data:', updatedPlotData);
+
         this.apiService
-          .updatePlotOperador(
-            this.userId,
-            this.FieldId,
-            this.currentPlotId,
-            updatedPlotData
-          )
+          .updatePlotOperador(this.userId, this.FieldId, this.currentPlotId, updatedPlotData)
           .subscribe(
             () => {
+              console.log('Lote actualizado con éxito');
               this.toastr.success('Lote actualizado con éxito', 'Éxito');
               this.router.navigate(['dashboard/lote']);
             },
@@ -318,21 +305,17 @@ export class CargarLoteComponent {
                 'Error al actualizar el lote. Por favor, inténtalo de nuevo más tarde.',
                 'Error'
               );
-
             }
           );
       } else {
-        console.warn(
-          'Advertencia: Al menos uno de los campos del formulario es nulo.'
-        );
-        this.toastr.warning(
-          'Por favor, completa todos los campos del Lote',
-          'Atención'
-        );
+        console.warn('Advertencia: Al menos uno de los campos del formulario es nulo.');
+        this.toastr.warning('Por favor, completa todos los campos del Lote', 'Atención');
       }
     } else {
+      console.warn('Advertencia: El formulario no es válido o el ID del lote actual no está definido.');
     }
   }
+
 
   cancelar() {
     this.router.navigate(['dashboard/inicio']);

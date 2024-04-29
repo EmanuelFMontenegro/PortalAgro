@@ -30,7 +30,7 @@ interface Lote {
   id: number;
   name: string;
   descriptions: string;
-  type_plantation_id: string;
+  type_crop_id: string;
   dimensions: number;
   plant_name?: string; // Propiedad para el nombre de la plantación
 }
@@ -224,47 +224,11 @@ export class LoteComponent {
     }
   }
 
-  async loadDataLote(FieldId: number, userId: number): Promise<void> {
-    if (userId !== null && FieldId !== null) {
-      try {
-        const response = await this.apiService
-          .getPlotsOperador(userId, FieldId)
-          .toPromise();
-        const lotsArray: Lote[][] = response?.list?.[0] || [];
-        const data: Lote[] = lotsArray.reduce(
-          (acc, curr) => acc.concat(curr),
-          []
-        );
-        const typePlantations$ = this.apiService.getAllTypePlantationOperador();
-
-        typePlantations$
-          .pipe(
-            switchMap((typePlantations: any) => {
-              const typePlantationsMap = typePlantations.reduce(
-                (acc: any, curr: any) => {
-                  acc[curr.id] = curr.name;
-                  return acc;
-                },
-                {}
-              );
-              data.forEach((lote: Lote) => {
-                lote.plant_name =
-                  typePlantationsMap[lote.type_plantation_id] || '';
-              });
-              return data;
-            })
-          )
-          .subscribe();
-        this.loteData = data;
-      } catch (error) {}
-    }
-  }
-
   confirmarBorrado(lote: any): void {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '400px',
       data: {
-        message: `¿Estás seguro que queres eliminar el lote ${lote.name}?`,
+        message: `¿Estás seguro que quieres eliminar el lote ${lote.name}?`,
         value: lote,
         showCancel: true,
       },
@@ -272,12 +236,12 @@ export class LoteComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.apiService
-          .deleteLogicalPlotOperador(this.userId, this.FieldId, lote.id)
+        this.apiService.deleteLogicalPlotOperador(this.userId, this.FieldId, lote.id)
           .subscribe(
             () => {
-              this.toastr.success('El Lote ah sido borrado con éxito', 'Éxito');
-              this.loadDataLote(this.FieldId, this.userId);
+              this.toastr.success('El Lote ha sido borrado con éxito', 'Éxito');
+              // Eliminar el lote de la lista
+              this.loteData = this.loteData.filter(item => item.id !== lote.id);
             },
             (error) => {
               this.toastr.error('Error al borrar el lote', 'Error');
@@ -286,6 +250,56 @@ export class LoteComponent {
       }
     });
   }
+
+
+
+  loadDataLote(FieldId: number, userId: number): void {
+    if (userId && FieldId) {
+      this.apiService.getPlotsOperador(userId, FieldId).subscribe(
+        (response: any) => {
+          if (response?.list && response.list.length > 0) {
+            const lotsArray: Lote[][] = response.list[0];
+            const data: Lote[] = lotsArray.reduce((acc, curr) => acc.concat(curr), []);
+
+            if (data.length > 0) {
+              this.apiService.getAllTypeCropOperador().subscribe(
+                (typeCrops: any) => {
+                  const typeCropsMap = typeCrops.reduce((acc: any, curr: any) => {
+                    acc[curr.id] = curr.name;
+                    return acc;
+                  }, {});
+
+                  data.forEach((lote: Lote) => {
+                    lote.plant_name = typeCropsMap[lote.type_crop_id] || '';
+                  });
+
+                  this.loteData = data;
+                },
+                (error) => {
+                  console.error('Error al cargar los tipos de cultivo:', error);
+                }
+              );
+            } else {
+              this.toastr.info('Aún no has agregado ningún lote.', 'Información');
+
+            }
+          } else {
+            this.toastr.info('Aún no has agregado ningún lote.', 'Información');
+
+          }
+        },
+        (error) => {
+          console.error('Error al cargar los lotes:', error);
+        }
+      );
+    } else {
+      console.warn('El userId o el FieldId son null o undefined, por lo que no se cargan los lotes.');
+    }
+  }
+
+
+
+
 
   cargarLotes() {
     this.router.navigate(['dashboard/cargar-lote'], {

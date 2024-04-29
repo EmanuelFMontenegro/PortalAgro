@@ -48,11 +48,11 @@ export class LoginComponent implements OnInit {
   ) {
     Validators.required,
       Validators.email,
-      (this.usernameControl = new FormControl('', [
+      (this.usernameControl = new FormControl('emanuel_efm@hotmail.com', [
         Validators.required,
         Validators.email,
       ]));
-    this.passwordControl = new FormControl('', [
+    this.passwordControl = new FormControl('Agustin15524201', [
       Validators.required,
       Validators.minLength(8),
     ]);
@@ -118,21 +118,6 @@ export class LoginComponent implements OnInit {
             this.mostrarMensajeExitoso();
             this.login.reset();
           } else {
-            this.mostrarMensajeError('Error de autenticación');
-          }
-        },
-      });
-
-      this.apiService.validarCredenciales(username, password).subscribe({
-        next: (response) => {
-          if (response.status === 200 && response.body && response.body.token) {
-            localStorage.setItem('token', response.body.token);
-
-            this.router.navigate(['/primerRegistro']);
-
-            this.mostrarMensajeExitoso();
-            this.login.reset();
-          } else {
             this.hasErrors = true;
             this.mostrarMensajeError('Error de autenticación');
           }
@@ -182,9 +167,9 @@ export class LoginComponent implements OnInit {
           this.hasErrors = true;
         },
       });
-    } else {
     }
   }
+
   toggleErrorCardClass(hasError: boolean): void {
     this.login.setErrors({ customError: hasError });
   }
