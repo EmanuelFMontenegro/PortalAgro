@@ -20,7 +20,7 @@
 FROM nginx:1.16.0-alpine
 
 WORKDIR /app
-
+COPY . /app
 COPY --from=build /app/dist/portal-productores/ /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
