@@ -22,7 +22,8 @@ run_tests:
     - date
 #
 build_image_stage:
-  image: docker
+ ## image: docker
+  image: harbor-tools.spm.gob.ar/silicon/stage/portal-prod-frontend:1196
   stage: build
   only: 
     - deploy_stage
