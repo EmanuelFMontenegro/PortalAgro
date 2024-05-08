@@ -179,38 +179,37 @@ export class ApiService {
 
   // <--ENPOINTS DE PERSONA -->
 
-  uploadProfileImage(userId: number, file: File): Observable<any> {
+  actualizarImagenDePerfil(userId: number, file: File) {
     const formData = new FormData();
     formData.append('files', file);
 
-    return this.http.put(
-      `http://localhost:8095/api/user/${userId}/profile/image`,
-      formData
-    );
+    return this.http.put(`http://localhost:8095/api/user/${userId}/profile/image`, formData);
   }
 
   getProfileImage(userId: number): Observable<any> {
     return this.http.get(
-      `http://localhost:8095/api/user/${userId}/profile/image`,
+      `${this.baseURL}/user/${userId}/profile/image`,
       { responseType: 'blob' }
     );
   }
-  
-  getPeopleAdmin(
-    sortBy: string = 'id',
-    sortDir: string = 'DESC'
-  ): Observable<any> {
-    const url = `${this.baseURL}/person?sortBy=${sortBy}&sortDir=${sortDir}`;
-    return this.http.get<any>(url);
+
+  getPeopleAdmin(locationId?: number): Observable<any> {
+    let params = new HttpParams();
+    if (locationId) {
+      params = params.set('locationId', locationId.toString());
+    }
+
+    return this.http.get<any>(`${this.baseURL}/dist/person`, { params: params });
   }
 
-  getPeopleUserAdmin(
-    sortBy: string = 'id',
-    sortDir: string = 'DESC'
-  ): Observable<any> {
-    const url = `${this.baseURL}/user/person/all?sortBy=${sortBy}&sortDir=${sortDir}`;
-    return this.http.get<any>(url);
+
+  getPeopleUserAdmin(filter: any): Observable<any> {
+    const url = `${this.baseURL}/dist/user/person/all`;
+    return this.http.get<any>(url, { params: filter });
   }
+
+
+
 
   getPersonByIdOperador(userId: number, personId: number): Observable<any> {
     const url = `${this.baseURL}/user/${userId}/person/${personId}`;
@@ -222,13 +221,13 @@ export class ApiService {
     return this.http.get<any>(url);
   }
 
-  getPersonByDniCuitAdmin(dniCuit: string): Observable<any> {
-    const url = `${this.baseURL}/user/person/${dniCuit}`;
+  getPersonByDniAdmin(dniCuit: string): Observable<any> {
+    const url = `${this.baseURL}/dist/user/person/${dniCuit}`;
     return this.http.get<any>(url);
   }
 
   existsPersonByParamsAdmin(dniCuit: string): Observable<any> {
-    const url = `${this.baseURL}/user/person?dniCuit=${dniCuit}`;
+    const url = `${this.baseURL}/dist/user/person?dniCuit=${dniCuit}`;
     return this.http.get<any>(url);
   }
 
@@ -241,6 +240,7 @@ export class ApiService {
     const url = `${this.baseURL}/user/${userId}/person/${personId}`;
     return this.http.put<any>(url, updatedPersonData);
   }
+
 
   //  <<<<-------METODOS PARA ROLES------>>>>>
   // GET: getRoles-ADMIN
@@ -259,16 +259,33 @@ export class ApiService {
     pageNo: number,
     pageSize: number,
     sortBy: string,
-    sortDir: string
+    sortDir: string,
+    isActive: boolean = true,
+    producerNames: string = '',
+    fieldName: string = '', 
+    locationId: number | null = null,
+    personId: number | null = null,
+    dimMin: number | null = null,
+    dimMax: number | null = null
   ): Observable<any> {
     const params = new HttpParams()
       .set('pageNo', pageNo.toString())
       .set('pageSize', pageSize.toString())
       .set('sortBy', sortBy)
-      .set('sortDir', sortDir);
+      .set('sortDir', sortDir)
+      .set('isActive', isActive.toString())
+      .set('producerNames', producerNames)
+      .set('filedName', fieldName)
+      .set('locationId', locationId ? locationId.toString() : '')
+      .set('person_id', personId ? personId.toString() : '')
+      .set('dimMin', dimMin ? dimMin.toString() : '')
+      .set('dimMax', dimMax ? dimMax.toString() : '');
 
-    return this.http.get(`${this.baseURL}/user/field/`, { params });
+      return this.http.get(`${this.baseURL}/user/field/`, { params });
+
   }
+
+
 
   getUsersFieldsDEF(): Observable<any> {
     const params = new HttpParams()
@@ -420,11 +437,12 @@ export class ApiService {
   }
 
   // Obtener todos los lotes para un administrador
-  getAllPlotsAdmin(userId: number, fieldId: number): Observable<any> {
+  getAllPlotsAdmin(): Observable<any> {
     return this.http.get(
-      `${this.baseURL}/user/${userId}/field/${fieldId}/plot/all?isActive=true`
+      `${this.baseURL}/user/field/plot/all`
     );
   }
+
 
   // Agregar un lote para un operador
   addPlotOperador(
