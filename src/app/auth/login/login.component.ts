@@ -48,11 +48,11 @@ export class LoginComponent implements OnInit {
   ) {
     Validators.required,
       Validators.email,
-      (this.usernameControl = new FormControl( [
+      (this.usernameControl = new FormControl('', [
         Validators.required,
         Validators.email,
       ]));
-    this.passwordControl = new FormControl( [
+    this.passwordControl = new FormControl('', [
       Validators.required,
       Validators.minLength(8),
     ]);

@@ -28,7 +28,7 @@
     </ng-container>
 
     <ng-container *ngIf="filtroSeleccionado === 'productor'">
-      <input class="field-input" matInput [placeholder]="'Buscar por productor'" [(ngModel)]="filtrarPorProductor" (ngModelChange)="filtrarPorProductor()">
+      <input class="field-input" matInput [placeholder]="'Buscar por productor'" [(ngModel)]="nombreProductor" (ngModelChange)="filtrarPorProductor()">
     </ng-container>
 
     <ng-container *ngIf="filtroSeleccionado === 'cultivo'">
