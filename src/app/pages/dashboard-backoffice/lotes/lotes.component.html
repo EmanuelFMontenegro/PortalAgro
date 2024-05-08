@@ -1,1 +1,97 @@
-<p>lotes works!</p>
+<div class="container">
+  <div class="titulo-perfil">
+    <span class="titulo-perfil">¡Bienvenido, {{ nombre }} {{ apellido }}!</span>
+  </div>
+  <div class="titulo-welcome">
+    <p>
+      Acá podrás gestionar, supervisar y controlar todas las actividades de los usuarios de
+      <strong>
+        <img src="assets/img/logo_AGROtech.svg" alt="AGROTECH"
+          style="width: auto; height: 1.3em; vertical-align: bottom;">
+      </strong>.
+    </p>
+    <h2 class="titulo-chacra">Lotes</h2>
+  </div>
+
+  <div class="field-container">
+    <mat-select class="field-input" placeholder="Filtrar por" [(ngModel)]="filtroSeleccionado" (ngModelChange)="aplicarFiltro($event)">
+      <mat-option value="localidad">Localidad</mat-option>
+      <mat-option value="productor">Productor</mat-option>
+      <mat-option value="cultivo">Cultivo</mat-option>
+      <mat-option value="hectareas">Hectáreas</mat-option>
+    </mat-select>
+
+    <ng-container *ngIf="filtroSeleccionado === 'localidad'">
+      <mat-select class="field-input" placeholder="Seleccionar localidad" [(ngModel)]="filtroLocalidades" (ngModelChange)="filtrarPorLocalidad()">
+        <mat-option *ngFor="let localidad of localidades" [value]="localidad.id">{{ localidad.name }}</mat-option>
+      </mat-select>
+    </ng-container>
+
+    <ng-container *ngIf="filtroSeleccionado === 'productor'">
+      <input class="field-input" matInput [placeholder]="'Buscar por productor'" [(ngModel)]="filtrarPorProductor" (ngModelChange)="filtrarPorProductor()">
+    </ng-container>
+
+    <ng-container *ngIf="filtroSeleccionado === 'cultivo'">
+      <mat-select class="field-input" placeholder="Seleccionar cultivo" [(ngModel)]="filtrarPorCultivo" (ngModelChange)="filtrarPorCultivo()">
+        <mat-option value="1">Cereales</mat-option>
+        <mat-option value="2">Leguminosas</mat-option>
+      </mat-select>
+    </ng-container>
+
+    <ng-container *ngIf="filtroSeleccionado === 'hectareas'">
+      <input class="field-input" matInput type="number" placeholder="Min" [(ngModel)]="minHectareas">
+      <input class="field-input" matInput type="number" placeholder="Max" [(ngModel)]="maxHectareas">
+    </ng-container>
+
+    <!-- Botones para limpiar y filtrar -->
+    <button mat-raised-button class="clear-button" (click)="limpiarTexto()">Limpiar
+      <img src="assets/img/ink_eraser_FILL0_wght400_GRAD0_opsz24.svg"
+        style="filter: invert(70%) sepia(60%) saturate(10000%) hue-rotate(130deg)" alt="IconoBorrar">
+    </button>
+
+    <button mat-raised-button class="active-button" (click)="activarFiltro()">Filtrar
+      <img src="assets/img/filter_alt_FILL0_wght400_GRAD0_opsz24.svg"
+        style="filter: invert(70%) sepia(60%) saturate(10000%) hue-rotate(130deg)" alt="IconoBorrar">
+    </button>
+
+    <button mat-raised-button class="nuevaChacra-button" (click)="BtnNuevaChacra()">Nueva Lote
+      <mat-icon style="font-size: 20px; position: relative; top: 1px; right: 3px;">add</mat-icon>
+    </button>
+  </div>
+
+
+
+
+  <div class="card-campos-lotes">
+    <div class="campo-card" *ngFor="let lote of loteData; let i = index">
+      <img class="img_lotes" [src]="'assets/img/lote_' + (i + 1) + '.svg'" alt="Img Lote">
+      <p class="with-dot">
+        <span class="campo-titulos">Nombre del Lote:</span>
+        <span class="campo-variable">{{ lote.name }}</span>
+      </p>
+      <p class="with-dot">
+        <span class="campo-titulos">Plantación:</span>
+        <span class="campo-variable">{{ lote.plant_name }}</span>
+      </p>
+      <p class="with-dot">
+        <span class="campo-titulos">Hectáreas:</span>
+        <span class="campo-variable">{{ lote.dimensions }}</span>
+      </p>
+      <p class="with-dot">
+        <span class="campo-titulos">Descripción:</span>
+        <span class="campo-variable">{{ lote.descriptions }}</span>
+      </p>
+      <div class="acciones">
+        <button mat-icon-button aria-label="Editar" class="edit-button" (click)="editarLote(lote)">
+          <mat-icon class="material-icons icon-size">edit</mat-icon>
+          <span style="color: #FFFFFF;">Editar</span>
+        </button>
+        <button mat-icon-button aria-label="Eliminar" class="delete-button" (click)="confirmarBorrado(lote)">
+          <mat-icon class="material-icons icon-size">delete</mat-icon>
+          <span style="color:#FFFFFF;">Eliminar</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

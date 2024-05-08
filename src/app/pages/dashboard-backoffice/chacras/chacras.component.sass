@@ -1,0 +1,252 @@
+// Variables de colores
+$primary-color: #0F8054
+$secondary-color: #3CA749
+$light-grey: #f4f4f4
+$medium-grey: #808080
+$hard-black: #232323
+$dark-grey: #454545
+$hover-color: #47de5b
+$error-color: #d9534f
+$white-color: #FFFFFF
+$border-card: #929497
+$color-footer: #3BA549
+$font-family: 'Montserrat', sans-serif
+
+.container
+  display: grid
+  grid-template-columns: 1fr
+  grid-template-rows: auto
+
+.titulo-perfil
+  color: #232323
+  font-size: 1.2em
+  font-family: "Montserrat", sans-serif
+  margin-left: 1%
+  margin-top: 2%
+  font-weight: bold
+
+.titulo-welcome
+  color: #454545
+  font-size: 1em
+  font-family: "Montserrat", sans-serif
+  margin-left: 2%
+  margin-top: 0.5%
+
+.titulo-chacra
+  color: $primary-color
+  font-family: 'Montserrat', sans-serif
+  font-size: 1.5em
+  font-weight: bold
+  margin-bottom: 20px
+
+.field-container
+  display: flex
+  width: 100%
+  height: 40px
+  gap: 15px
+  position: relative
+  font-family: 'Montserrat', sans-serif
+  justify-content: flex-start
+
+  .field-input
+    width: 90%
+    border: 1px solid #FFFFFF
+    border-radius: 4px
+    padding: 8px
+    background-color: white
+    font-size: 0.9em
+    color: #454545
+    font-family: 'Montserrat', sans-serif
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3)
+    position: relative
+    left: 1.5em
+
+    &:focus
+      outline: none
+      border-color: $primary-color
+      box-shadow: 0 0 5px $primary-color
+
+
+
+.clear-button
+  padding: 6px 18px
+  border: 1px solid #FFFFFF
+  border-radius: 5px
+  cursor: pointer
+  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s
+  font-size: 0.85em
+  width: 50%
+  font-family: "Montserrat", sans-serif
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3)
+  color: #929497
+  margin-right: 2em
+  display: flex
+  align-items: center
+  flex-direction: row
+  justify-content: center
+  position: relative
+  gap: 20px
+  left: 1.5em
+
+  // &:hover
+  //   backdrop-filter: blur(10px)
+  //   -webkit-backdrop-filter: blur(15px)
+
+  &:active
+    transform: translateY(2px)
+    border: 2px solid #3CA749
+
+.active-button
+  padding: 6px 18px
+  border: 1px solid $white-color
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3)
+  border-radius: 5px
+  cursor: pointer
+  transition: background-color 0.3s, border-color 0.3s
+  font-size: 0.85em
+  width: 50%
+  font-family: "Montserrat", sans-serif
+  gap: 20px
+  color: $border-card
+  margin-right: 2em
+  display: flex
+  align-items: center
+  flex-direction: row
+  justify-content: center
+
+  &:active
+    transform: translateY(2px)
+    border: 2px solid #3CA749
+
+.nuevaChacra-button
+  padding: 6px 18px
+  border: 2px solid #FFFFFF
+  border-radius: 5px
+  cursor: pointer
+  transition: background-color 0.3s, border-color 0.3s
+  font-size: 0.85em
+  gap: 10px
+  width: 50%
+  font-family: "Montserrat", sans-serif
+  font-weight: bold
+  background-color: #0F8054
+  color: white
+  margin-right: 1em
+  display: flex
+  align-items: center
+  flex-direction: row
+  justify-content: center
+
+  &:active
+    transform: translateY(2px)
+
+.card-campos-section
+  background-color: $white-color
+  padding: 20px
+  border-radius: 10px
+  margin-top: 16px
+  overflow: auto
+
+  .titulo-campos
+    color: $primary-color
+    font-size: 1.5em
+    margin-bottom: 20px
+    font-family: $font-family
+
+  .campos-container
+    display: grid
+    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr))
+    gap: 16px
+
+  .campo-card
+    background-color: $white-color
+    padding: 17px
+    border-radius: 10px
+    border: 1px solid $border-card
+    font-family: $font-family
+
+    img
+      max-width: 100%
+      border-radius: 8px
+      margin-bottom: 10px
+
+    h3
+      color: $hard-black
+      font-size: 1.2em
+      margin-bottom: 8px
+      font-family: $font-family
+      width: 20em
+
+    p
+      color: $hard-black
+      margin-bottom: 10px
+      overflow: hidden
+      display: -webkit-box
+      -webkit-line-clamp: 3
+      -webkit-box-orient: vertical
+      text-overflow: ellipsis
+      text-align: justify
+
+    .icono_location
+      width: 20px
+      height: auto
+      margin-left: 5px
+      vertical-align: middle
+
+    .campo-variable
+      font-weight: bold
+      font-family: $font-family
+
+    .ver-mas-button
+      background-color: $primary-color
+      width: 100%
+      color: white
+      cursor: pointer
+      padding: 8px 18px
+      border: 1px solid transparent
+      border-radius: 5px
+      transition: background-color 0.3s, border-color 0.3s
+      font-size: 0.85em
+      font-family: 'Montserrat', sans-serif
+      font-weight: bold
+
+@media screen and (max-width: 768px)
+
+  .card
+    display: block
+    width: 100%
+    margin-left: -0.7em
+
+  .card-campos-section
+    width: 100%
+
+  .campo-card
+    left: -1.2em
+    width: 95%
+    position: relative
+
+  .main-card
+    width: 98%
+
+  .user-content
+    flex-direction: column
+    align-items: center
+    gap: 10px
+
+  .titulo-perfil
+    font-size: 1.2em
+    margin-left: 14%
+
+  .titulo-perfil-avatar
+    margin-top: 10px
+    text-align: center
+
+  .botones-servicio
+    display: flex
+    justify-content: center
+    margin-top: 2%
+    margin-left: 10%
+
+  .register-button
+    width: 100%
+    margin-top: 10px

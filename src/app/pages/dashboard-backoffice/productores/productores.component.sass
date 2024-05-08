@@ -11,137 +11,57 @@ $btn_cards: #3B7AF6
 $icon-color: #808080
 $font-family: 'Montserrat', sans-serif
 
-body
-  font-family: $font-family
-  margin: 0
-  padding: 0
-
-.titulo-bienvenida
-  color: $dark-grey
-  font-size: 1.4em
-  margin-top: 25px
-  margin-left: 17px
-  font-weight: bold
-  font-family: $font-family
-
 .container
-  display: flex
-  flex-direction: column
-  justify-content: center
-
-.main-card
-  width: 100%
-  padding: 20px
-  border-radius: 10px
-  background-color: rgba(255, 255, 255, 0.5)
-  margin: 0 auto
-  position: relative
   display: grid
   grid-template-columns: 1fr
-  margin-bottom: 18%
-  box-shadow: none
+  grid-template-rows: auto
 
-.card
-  padding: 20px
-  border-radius: 10px
-  display: grid
-  grid-template-columns: 1fr auto
-  gap: 20px
+.titulo-perfil
+  color: #232323
+  font-size: 1.2em
+  font-family: "Montserrat", sans-serif
+  margin-left: 1%
+  margin-top: 2%
+  font-weight: bold
 
-.card
-  background-color: $light-grey
-  padding: 20px
-  border-radius: 30px
-  margin: 20px
-  width: 97%
-  margin-left: 1em
-  position: relative
+.titulo-welcome
+  color: #454545
+  font-size: 1em
+  font-family: "Montserrat", sans-serif
+  margin-left: 2%
+  margin-top: 0.5%
 
-  &.user-card
-    background: linear-gradient(to bottom, #3BA549 40%, #0F8054 100%)
-    display: flex
-    margin-top: 8px
-    flex-direction: row
-    align-items: center
-    gap: 20px
-
-    .avatar
-      display: flex
-      justify-content: center
-      align-items: center
-      border-radius: 50%
-      border: 3px solid $primary-color
-      width: 90px
-      height: 90px
-      background-color: white
-
-      mat-icon
-        display: contents
-        color: $icon-color
-        font-size: 70px
-
-    p
-      font-size: 15px
-      color: $icon-color
-      font-weight: bold
-
-    .email
-      font-size: 14px
-      color: $border-color
-      font-weight: bold
-
-    .name
-      font-size: 18px
-      color: $border-color
-      font-weight: bold
-
-  .volver-button
-    position: absolute
-    top: 60px
-    right: 10px
-    display: flex
-    align-items: center
-    cursor: pointer
-    font-family: $font-family
-    font-size: 12px
-    font-weight: bold
-
-  mat-icon
-    margin-right: 5px
-
-.card-campos-section
-  color: $primary-color
-  padding: 22px
-  border-radius: 10px
-  margin-top: -2em
-  display: flex
-  gap: 10px
-  justify-content: space-between
-
-.card-campos-lotes
+.card-usuarios-productores
   background-color: #FFFFFF
   padding: 20px
   border-radius: 10px
   display: grid
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr))
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr))
   gap: 20px
-
-  .titulo-campo
-    color: $primary-color
-    font-size: 1.4em
-    margin-bottom: 20px
-    font-family: $font-family
-
-  .campos-container
-    display: grid
-    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr))
-    gap: 16px
+  justify-content: center
+  position: relative
 
 .campo-card
+  background-color: #FFFFFF
   padding: 20px
   border-radius: 20px
-  width: 270px
-  border: 2px solid $primary-color
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4)
+  max-width: 225px
+  border-top: 70px solid #32963f
+  border-radius: 45px
+
+.avatar
+  width: 100px
+  height: 100px
+  overflow: hidden
+
+.img_prod
+  position: relative
+  left: 4em
+  bottom: 3em
+
+.user-info
+  margin-top: 20px
 
 .with-dot
   display: flex
@@ -149,20 +69,19 @@ body
 
   &::before
     content: "\2022"
-    font-size: 26px
-    color: $hover-color
+    font-size: 1.5em
     margin-right: 5px
-    margin-top: -6px
+    position: relative
+    top: -5px
+    color: #47de5b
 
-.img_lotes
-  width: 100%
-
-.campo-titulos
+.user-titulos
   font-size: 15px
   color: $hard-black
   font-weight: bold
   white-space: nowrap
-.campo-variable
+
+.card-variable
   font-size: 15px
   margin-left: 1px
   color: $medium-grey
@@ -176,94 +95,166 @@ body
 .icon-size
   font-size: 20px
 
-.edit-button,
-.delete-button
+.verMas-button
   background-color: transparent
   border: 2px solid transparent
   border-radius: 5px
   cursor: pointer
   padding: 5px 10px
   transition: all 0.3s ease
-
-  &:hover
-    border-color: $border-color
-
-.edit-button
   font-size: 12px
   font-weight: bold
-  color: $border-color
-  background-color: $btn_cards
-  width: 35%
-  height: auto
-
-  &:hover
-    border-color: $border-color
-
-.edit-button mat-icon,
-.delete-button mat-icon
-  vertical-align: middle
-
-.delete-button
-  font-size: 12px
-  font-weight: bold
-  margin-left: 10px
-  color: $border-color
-  background-color: $error-color
-  width: 36%
+  margin-left: 0px
+  color: #FFFFFF
+  background-color: #0F8054
+  width: 100%
   height: auto
 
 .leta_btn
   display: flex
   justify-content: space-between
 
-.titulo-lote
+.titulo-chacra
   color: $primary-color
   font-family: 'Montserrat', sans-serif
-  font-size: 1.6em
+  font-size: 1.5em
   font-weight: bold
   margin-bottom: 20px
 
-.plus-icon
-  background-color: $primary-color
+.field-container
+  display: flex
+  width: 100%
+  height: 40px
+  gap: 15px
+  position: relative
   font-family: 'Montserrat', sans-serif
-  font-size: 1em
-  color: white
+  justify-content: flex-start
+  margin-bottom: 2em
+
+  & .field-input
+    width: 90%
+    border: 1px solid #FFFFFF
+    border-radius: 4px
+    padding: 8px
+    background-color: white
+    font-size: 0.9em
+    color: #454545
+    font-family: 'Montserrat', sans-serif
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3)
+    position: relative
+    left: 1.5em
+
+  & .field-input:focus
+    outline: none
+    border-color: $primary-color
+    box-shadow: 0 0 5px $primary-color
+
+.clear-button
+  padding: 6px 18px
+  border: 1px solid #FFFFFF
+  border-radius: 5px
+  cursor: pointer
+  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s
+  font-size: 0.85em
+  width: 50%
+  font-family: "Montserrat", sans-serif
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3)
+  color: #929497
+  margin-right: 2em
+  display: flex
+  align-items: center
+  flex-direction: row
+  justify-content: center
+  position: relative
+  gap: 20px
+  left: 1.5em
+
+  &:hover
+    backdrop-filter: blur(10px)
+    -webkit-backdrop-filter: blur(15px)
+
+  &:active
+    transform: translateY(2px)
+    border: 2px solid #3CA749
+
+.active-button
+  padding: 6px 18px
+  border: 1px solid $border-color
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3)
+  border-radius: 5px
+  cursor: pointer
+  transition: background-color 0.3s, border-color 0.3s
+  font-size: 0.85em
+  width: 50%
+  font-family: "Montserrat", sans-serif
+  gap: 20px
+  color: #929497
+  margin-right: 2em
+  display: flex
+  align-items: center
+  flex-direction: row
+  justify-content: center
+
+  &:active
+    transform: translateY(2px)
+    border: 2px solid #3CA749
+
+.nuevaChacra-button
+  padding: 6px 18px
+  border: 2px solid #FFFFFF
+  border-radius: 5px
+  cursor: pointer
+  transition: background-color 0.3s, border-color 0.3s
+  font-size: 0.85em
+  gap: 10px
+  width: 50%
+  font-family: "Montserrat", sans-serif
   font-weight: bold
-  margin-top: 15px
+  background-color: #0F8054
+  color: white
+  margin-right: 2em
+  display: flex
+  align-items: center
+  flex-direction: row
+  justify-content: center
 
-  .solicitud-servicio-form
-    .lote-formulario
-      display: flex
-      justify-content: space-between
-
-      .grupo-lotes
-        width: 50%
-
-  & mat-icon
-    font-size: 18px
+  &:active
+    transform: translateY(2px)
 
 @media screen and (max-width: 768px)
-  .card
-    width: 81%
+  .container
+    grid-template-columns: 1fr
+    margin-left: 1%
+    margin-right: 1%
 
-  .main-card
+  .titulo-perfil
+    margin-left: 0
+    margin-top: 2%
+    text-align: center
+
+  .titulo-welcome
+    font-size: 0.8em
+    margin-left: 5%
+    margin-top: 0.5%
+    text-align: center
+
+  .field-container
+    display: flex
+    margin-bottom: 14em
+    flex-direction: column
+    right: 0.5em
+
+  .clear-button
+    width: 95%
+
+  .active-button
+    width: 95%
+    margin-left: 1.5em
+
+  .nuevaChacra-button
     width: 100%
-    padding: 4px
-    border-radius: 10px
+    position: relative
+    left: 0.5em
 
-  .letra-icon
-    display: none
-
-  .card.user-card .avatar
-    width: 90px
-    height: 80px
-
-  .card .volver-button
-    display: initial
-    align-items: initial
-    cursor: initial
-    margin-top: initial
-    margin-left: initial
-
-  .card-campos-section
-    width: 80%
+  .card-usuarios-productores
+    left: 2em

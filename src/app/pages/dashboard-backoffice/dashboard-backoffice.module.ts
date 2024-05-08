@@ -8,6 +8,15 @@ import { MatMenuModule } from '@angular/material/menu';
 import { DashboardBackofficeComponents } from './dashboard-backoffice.component';
 import { DashboardBackofficeRoutingModule } from './dashboard-backoffice-routing.module';
 import { InicioComponent } from './inicio/inicio.component';
+import { ServiciosComponent } from './servicios/servicios.component';
+import { ProductoresComponent } from './productores/productores.component';
+import { ChacrasComponent } from './chacras/chacras.component';
+import { LotesComponent } from './lotes/lotes.component';
+import { CalendariosComponent } from './calendarios/calendarios.component';
+import { NotificacionComponent } from './notificacion/notificacion.component';
+import { PlanificacionesComponent } from './planificaciones/planificaciones.component';
+import { InformesComponent } from './informes/informes.component';
+import { ConfiguracionComponent } from './configuracion/configuracion.component';
 
 // Angular Material
 import { MatCardModule } from '@angular/material/card';
@@ -25,19 +34,12 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FormatDatePipe } from 'src/app/format-date.pipe';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatOptionModule } from '@angular/material/core';
+import { MatOptionModule } from '@angular/material/core'; // Corrección aquí
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ServiciosComponent } from './servicios/servicios.component';
-import { ProductoresComponent } from './productores/productores.component';
-import { ChacrasComponent } from './chacras/chacras.component';
-import { LotesComponent } from './lotes/lotes.component';
-import { CalendariosComponent } from './calendarios/calendarios.component';
-import { NotificacionComponent } from './notificacion/notificacion.component';
-import { PlanificacionesComponent } from './planificaciones/planificaciones.component';
-import { InformesComponent } from './informes/informes.component';
-import { ConfiguracionComponent } from './configuracion/configuracion.component';
+import { FormsModule } from '@angular/forms';
+import { DialogComponent } from './dialog/dialog.component';
 
 
 @NgModule({
@@ -53,6 +55,7 @@ import { ConfiguracionComponent } from './configuracion/configuracion.component'
     PlanificacionesComponent,
     InformesComponent,
     ConfiguracionComponent,
+    DialogComponent,
   ],
   imports: [
     CommonModule,
@@ -63,6 +66,13 @@ import { ConfiguracionComponent } from './configuracion/configuracion.component'
     MatIconModule,
     MatMenuModule,
     MatCardModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatAutocompleteModule,
+    MatOptionModule,
+    MatSelectModule,
+    FormsModule
   ],
+
 })
 export class DashboardBackofficeModule {}

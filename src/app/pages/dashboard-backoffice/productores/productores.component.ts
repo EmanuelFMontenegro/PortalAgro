@@ -1,12 +1,14 @@
-import { Component, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ApiService } from 'src/app/services/ApiService';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/AuthService';
-import { Router, ActivatedRoute } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
+import { MatSelectChange } from '@angular/material/select';
 import { Observable } from 'rxjs';
-
+import { FormControl } from '@angular/forms';
+import { startWith, map } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators';
 
 interface CustomJwtPayload {
   userId: number;
@@ -18,110 +20,257 @@ interface DecodedToken {
   sub: string;
   roles: string;
 }
+
 @Component({
   selector: 'app-productores',
   templateUrl: './productores.component.html',
-  styleUrls: ['./productores.component.sass']
+  styleUrls: ['./productores.component.sass'],
 })
-export class ProductoresComponent {
+export class ProductoresComponent implements OnInit {
+  mostrarMatSelectLocalidades: boolean = false;
+  Buscar: string = '';
+  nombreABuscar: string = '';
+  apellidoABuscar: string = '';
+  placeholderText: string = 'Buscar por . . .';
+  usuarios: { nombre: string; apellido: string; localidad: string }[] = [];
   nombre: string = '';
   apellido: string = '';
   dni: string = '';
   descriptions: string = '';
-  locationId: number | null = null;
+  location_id: string | null = null;
   telephone: string = '';
   localidades: any[] = [];
+  filteredLocalidades: Observable<any[]> = new Observable<any[]>();
+  filtroLocalidades: FormControl = new FormControl('');
   private userId: number | any;
-  private personId: number | any;
   public userEmail: string | null = null;
+  private companyId: number | any;
 
-constructor(
-  private authService: AuthService,
+  constructor(
+    private authService: AuthService,
     private apiService: ApiService,
     private toastr: ToastrService,
-    private http: HttpClient,
-    private router: Router,
-    private route: ActivatedRoute,
-){
+    private http: HttpClient
+  ) {}
 
-}
-ngOnInit(): void {
-  const campoSeleccionadoParam = localStorage.getItem('campoSeleccionado');
-  const campoSeleccionado = campoSeleccionadoParam
-    ? JSON.parse(campoSeleccionadoParam)
-    : null;
-  if (campoSeleccionado) {
-    const campoId = campoSeleccionado.id;
-
+  ngOnInit(): void {
+    this.decodeToken();
+    this.cargarDatosDeUsuario();
+    this.cargarUsuarios();
+    this.obtenerLocalidades();
   }
-  this.decodeToken();
-  this.cargarDatosDeUsuario();
-}
-decodeToken(): void {
-  const token = this.authService.getToken();
-  if (token) {
-    const decoded = jwtDecode<CustomJwtPayload>(token);
-    this.userId = decoded.userId;
-    this.userEmail = decoded.sub;
+
+  decodeToken(): void {
+    const token = this.authService.getToken();
+    if (token) {
+      const decoded = jwtDecode<CustomJwtPayload>(token);
+      this.userId = decoded.userId;
+      this.userEmail = decoded.sub;
+    }
   }
-}
 
-cargarDatosDeUsuario() {
-  const decoded: DecodedToken = jwtDecode(this.authService.getToken() || '');
-  if ('userId' in decoded && 'sub' in decoded && 'roles' in decoded) {
-    this.userId = decoded.userId;
-    this.userEmail = decoded.sub;
-    this.personId = this.userId;
+  cargarDatosDeUsuario() {
+    const decoded: DecodedToken = jwtDecode(this.authService.getToken() || '');
+    if ('userId' in decoded && 'sub' in decoded && 'roles' in decoded) {
+      this.userId = decoded.userId;
+      this.userEmail = decoded.sub;
 
-    if (this.userId !== null && this.personId !== null) {
-      this.apiService
-        .getPersonByIdOperador(this.userId, this.personId)
-        .subscribe(
+      this.companyId = 1;
+
+      if (this.userId !== null && this.companyId !== null) {
+        this.apiService.findUserById(this.companyId, this.userId).subscribe(
           (data) => {
             this.nombre = data.name;
             this.apellido = data.lastname;
-            this.dni = data.dni;
-            this.descriptions = data.descriptions;
-            this.telephone = data.telephone;
-            const localidad = this.localidades.find(
-              (loc) => loc.id === data.location_id
-            );
-            this.locationId = localidad ? localidad.name.toString() : '';
-
-
-
           },
           (error) => {
-            console.error(
-              'Error al obtener nombre y apellido del usuario:',
-              error
-            );
+            console.error('Error al obtener el nombre del usuario:', error);
           }
         );
+      }
+    } else {
+      this.userId = null;
+      this.userEmail = null;
     }
-  } else {
-    this.userId = null;
-    this.userEmail = null;
   }
-}
-cargarProductores() {
-  // Lógica para cargar los productores
-}
 
-// Las siguientes funciones podrían ser implementadas para filtrar por localidad, apellido y nombre
-filtrarPorLocalidad(value: string) {
-  // Lógica para filtrar por localidad
-}
+  cargarUsuarios(locationId?: number) {
+    this.apiService.getPeopleAdmin(locationId).subscribe(
+      (data: any) => {
+        console.log('Datos de usuarios obtenidos:', data);
+        if (data.list && data.list.length > 0) {
+          const usuariosList = data.list.flat();
+          this.usuarios = usuariosList.map((usuario: any) => ({
+            nombre: usuario.name,
+            apellido: usuario.lastname,
+            localidad: usuario.location.name,
+          }));
+        }
+      },
+      (error) => {
+        console.error('Error al obtener los usuarios:', error);
+      }
+    );
+  }
 
-filtrarPorApellido(value: string) {
-  // Lógica para filtrar por apellido
-}
+  obtenerLocalidades() {
+    this.apiService.getLocationMisiones('location').subscribe(
+      (localidades) => {
+        this.localidades = localidades;
+        console.log('localidades de misiones', this.localidades);
+        this.filteredLocalidades = this.filtroLocalidades.valueChanges.pipe(
+          startWith(''),
+          map((value: string) => this.filtrarLocalidades(value || ''))
+        );
+      },
+      (error) => {
+        console.error('Error al obtener las localidades', error);
+      }
+    );
+  }
 
-filtrarPorNombre(value: string) {
-  // Lógica para filtrar por nombre
-}
+  private filtrarLocalidades(value: string): any[] {
+    console.log('el filtro de localidades', this.filteredLocalidades);
+    const filterValue = value.toLowerCase();
+    return this.localidades.filter((loc) =>
+      loc.name.toLowerCase().includes(filterValue)
+    );
+  }
 
-volver() {
-  this.router.navigate(['dashboard-backoffice/inicio']);
-}
+  aplicarFiltro(event: MatSelectChange) {
+    const valorSeleccionado = event.value;
+    console.log('Valor seleccionado:', valorSeleccionado);
+    switch (valorSeleccionado) {
+      case 'nombre':
+        this.placeholderText = 'Buscar por nombre';
+        this.mostrarMatSelectLocalidades = false;
+        this.filtrarPorNombreOApellido();
+        break;
+      case 'apellido':
+        this.placeholderText = 'Buscar por apellido';
+        this.mostrarMatSelectLocalidades = false;
+        this.filtrarPorNombreOApellido();
+        break;
+      case 'localidad':
+        this.placeholderText = 'Buscar por localidad';
+        this.mostrarMatSelectLocalidades = true;
+        break;
+      default:
+        this.placeholderText = '';
+        this.mostrarMatSelectLocalidades = false;
+        break;
+    }
+  }
+
+  filtrarPorLocalidad() {
+    if (!this.Buscar) {
+      console.error('Debe seleccionar una localidad');
+      return;
+    }
+    const localidadSeleccionada = this.localidades.find(
+      (loc) => loc.name === this.Buscar
+    );
+    if (!localidadSeleccionada) {
+      console.error('Localidad no encontrada');
+      return;
+    }
+    const locationId = localidadSeleccionada.id;
+    this.apiService.getPeopleAdmin(locationId).subscribe(
+      (data: any) => {
+        if (data.list && data.list.length > 0) {
+          const usuariosList = data.list.flat();
+          this.usuarios = usuariosList.map((usuario: any) => ({
+            nombre: usuario.name || '',
+            apellido: usuario.lastname || '',
+            localidad: localidadSeleccionada.name,
+          }));
+          console.log('Usuarios filtrados por localidad:', this.usuarios);
+          if (this.usuarios.length === 0) {
+            this.toastr.info('No existen productores para esta localidad.');
+          }
+        } else {
+          // Limpiar la lista de usuarios
+          this.usuarios = [];
+        }
+      },
+      (error) => {
+        console.error(
+          'Error al obtener los usuarios filtrados por localidad:',
+          error
+        );
+      }
+    );
+  }
+
+  filtrarPorNombreOApellido() {
+    if (!this.nombreABuscar && !this.apellidoABuscar) {
+      console.log('Por favor ingresa un nombre o apellido para filtrar.');
+      return;
+    }
+
+    const filter = {
+      anyNames: this.nombreABuscar || this.apellidoABuscar || '',
+    };
+
+    // Aplicar un tiempo de espera usando debounceTime para limitar la frecuencia de llamadas a la API
+    this.apiService
+      .getPeopleUserAdmin(filter)
+      .pipe(
+        debounceTime(500) // Esperar 500 milisegundos (0.5 segundos) antes de realizar la llamada a la API
+      )
+      .subscribe(
+        (data: any) => {
+          this.procesarDatosUsuarios(data);
+          if (this.usuarios.length === 0) {
+            this.toastr.info(
+              'No se encontraron productores con el nombre o apellido especificado.'
+            );
+          }
+        },
+        (error) => {
+          console.error('Error al obtener usuarios filtrados:', error);
+        }
+      );
+  }
+
+  procesarDatosUsuarios(data: any) {
+    if (data && data.list && data.list.length > 0) {
+      const usuariosList = data.list.flat();
+      this.usuarios = usuariosList.map((usuario: any) => ({
+        nombre: usuario.name || '',
+        apellido: usuario.lastname || '',
+        localidad: usuario.location ? usuario.location.name : '',
+      }));
+    } else {
+      this.usuarios = []; // Limpiar la lista de usuarios
+    }
+  }
+
+  limpiarTexto() {
+    this.Buscar = '';
+    this.nombreABuscar = '';
+    this.apellidoABuscar = '';
+
+    this.cargarUsuarios();
+  }
+
+  activarFiltro() {
+    if (
+      !this.mostrarMatSelectLocalidades &&
+      (this.nombreABuscar || this.apellidoABuscar)
+    ) {
+      this.filtrarPorNombreOApellido();
+    } else if (this.mostrarMatSelectLocalidades && !this.Buscar) {
+      console.log('Por favor selecciona una localidad para filtrar usuarios.');
+    } else {
+      if (this.mostrarMatSelectLocalidades) {
+        this.filtrarPorLocalidad();
+      } else {
+        this.filtrarPorNombreOApellido();
+      }
+    }
+  }
+
+  BtnNuevaChacra() {}
+  verMas() {}
 }

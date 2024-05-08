@@ -120,12 +120,13 @@
 
                 <div class="field-container">
                   <label class="title-input" for="localidad">Localidad</label>
-                  <mat-select formControlName="localidad" placeholder="Seleccionar Localidad">
+                  <mat-select formControlName="localidad" placeholder="{{ locationId ? locationId : 'Seleccionar Localidad' }}">
                     <mat-option *ngFor="let loc of localidades" [value]="loc.id">
                       {{ loc.name }}
                     </mat-option>
                   </mat-select>
                 </div>
+
 
                 <div class="field-container">
                   <label class="title-input" for="dni">DNI</label>

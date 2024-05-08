@@ -10,13 +10,23 @@ import { Router } from '@angular/router';
 })
 export class DashboardComponent implements AfterViewInit {
   @ViewChild('sidenav') sidenav!: MatSidenav;
-  isScreenSmall: boolean;
+  isScreenSmall = false;
+
 
   constructor(
     private breakpointObserver: BreakpointObserver,
     private router: Router
   ) {
-    this.isScreenSmall = window.innerWidth < 768;
+    this.breakpointObserver
+      .observe([Breakpoints.Handset])
+      .subscribe((result) => {
+        this.isScreenSmall = result.matches;
+        if (this.isScreenSmall && this.sidenav) {
+          this.sidenav.close();
+        } else if (!this.isScreenSmall && this.sidenav) {
+          this.sidenav.open();
+        }
+      });
   }
 
   ngAfterViewInit(): void {
@@ -24,13 +34,14 @@ export class DashboardComponent implements AfterViewInit {
       .observe([Breakpoints.Handset])
       .subscribe((result) => {
         this.isScreenSmall = result.matches;
-        if (this.isScreenSmall && this.sidenav) {
+        if (this.isScreenSmall) {
           this.sidenav.close();
-        } else if (this.sidenav) {
+        } else {
           this.sidenav.open();
         }
       });
   }
+
 
   toggleSidebar() {
     if (this.isScreenSmall && this.sidenav) {

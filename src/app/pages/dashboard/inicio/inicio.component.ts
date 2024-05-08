@@ -27,7 +27,7 @@ export class InicioComponent implements OnInit {
   descripcion: string = '';
   dniCuit: string = '';
   descriptions: string = '';
-  locationId: number | null = null;
+  location: number | null = null;
   telephone: string = '';
   nombreCampo: string = '';
   localidad: string = '';
@@ -44,7 +44,7 @@ export class InicioComponent implements OnInit {
     observation: '',
     address: {
       address: '',
-      locationDTO: '',
+      location: '',
     },
   };
 
@@ -124,7 +124,7 @@ export class InicioComponent implements OnInit {
                   const localidad = this.localidades.find(
                     (loc) => loc.id === data.location.id
                   );
-                  this.locationId = localidad ? localidad.name : null;
+                  this.location = localidad ? localidad.name : null;
 
                   this.nombreLocalidad = nombreLocalidad;
                   this.nombre = data.name;
@@ -179,7 +179,7 @@ export class InicioComponent implements OnInit {
             observation: '',
             address: {
               address: '',
-              locationDTO: '',
+              location: '',
             },
           };
           this.router.navigate(['dashboard/geolocalizacion']);
@@ -221,7 +221,7 @@ export class InicioComponent implements OnInit {
   isValidForm(): boolean {
     const dimensions = Number(this.campoData.dimensions);
     const isAddressValid = this.campoData.address.address.trim() !== '';
-    const isLocationValid = this.campoData.address.locationDTO.trim() !== '';
+    const isLocationValid = this.campoData.address.location.trim() !== '';
     const isNameValid = this.campoData.name.trim() !== '';
     const isObservationValid = this.campoData.observation.trim() !== '';
     const areDimensionsValid = !isNaN(dimensions) && dimensions > 0;

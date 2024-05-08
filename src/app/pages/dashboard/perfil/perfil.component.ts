@@ -73,7 +73,7 @@ export class PerfilComponent implements OnInit, AfterViewInit {
         '',
         [Validators.maxLength(20), Validators.pattern('^[a-zA-Z]+$')],
       ],
-      localidad: [null, Validators.required],
+      localidad: [null], // Eliminamos Validators.required
       dni: [
         '',
         [
@@ -94,6 +94,7 @@ export class PerfilComponent implements OnInit, AfterViewInit {
       contrasenaActual: [''],
       contrasenaNueva: [''],
     });
+
   }
 
   ngOnInit(): void {
@@ -104,34 +105,45 @@ export class PerfilComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.componenteInicializado = true;
   }
-  cargarImagenPerfil(event: any) {
-    const selectedFile = event.target.files[0];
-    if (selectedFile) {
-      this.apiService.uploadProfileImage(this.userId, selectedFile).subscribe(
-        (response) => {
-          console.log('Imagen de perfil cargada exitosamente:', response);
-          // Actualizar la imagen de perfil después de cargarla
-          this.cargarDatosDeUsuario();
-        },
-        (error) => {
-          console.error('Error al cargar la imagen de perfil:', error);
-          // Manejar el error de carga de la imagen de perfil
-        }
-      );
-    }
+ // Cambiamos la firma de la función cargarImagenPerfil para que no requiera ningún argumento
+cargarImagenPerfil() {
+  const selectedFile = this.avatarFile; // Usamos la variable avatarFile en lugar del evento
+  if (selectedFile) {
+    this.apiService.actualizarImagenDePerfil(this.userId, selectedFile).subscribe(
+      (response) => {
+        console.log('Imagen de perfil cargada exitosamente:', response);
+        // Actualizar la imagen de perfil después de cargarla
+        this.cargarDatosDeUsuario();
+      },
+      (error) => {
+        console.error('Error al cargar la imagen de perfil:', error);
+        // Manejar el error de carga de la imagen de perfil
+      }
+    );
   }
+}
 
-  onFileSelected(event: any) {
-    const selectedFile = event.target.files[0];
-    if (selectedFile) {
-      // Leer la imagen como un objeto URL local
-      const reader = new FileReader();
-      reader.readAsDataURL(selectedFile);
-      reader.onload = () => {
-        this.selectedImage = reader.result;
-      };
-    }
+
+
+
+onFileSelected(event: any) {
+  const selectedFile = event.target.files[0];
+  if (selectedFile) {
+    // Leer la imagen como un objeto URL local
+    const reader = new FileReader();
+    reader.readAsDataURL(selectedFile);
+    reader.onload = () => {
+      this.selectedImage = reader.result;
+    };
+
+    // Asignar la imagen seleccionada a avatarFile y actualizar el valor del formulario
+    this.avatarFile = selectedFile;
+    this.userDetailsForm.patchValue({
+      avatar: selectedFile // Puede ser necesario ajustar el nombre del control dependiendo del nombre en el formulario
+    });
   }
+}
+
 
   activarEdicion(modoEdicion: boolean) {
     this.modoEdicion = modoEdicion;
@@ -171,6 +183,10 @@ export class PerfilComponent implements OnInit, AfterViewInit {
       this.userId = decoded.userId;
       this.userEmail = decoded.sub;
 
+
+      if (this.avatarFile) {
+        this.cargarImagenPerfil();
+      }
       this.personId = this.userId;
 
       if (this.userId !== null && this.personId !== null) {
@@ -285,6 +301,9 @@ export class PerfilComponent implements OnInit, AfterViewInit {
                       // Maneja los errores de la llamada cambiarContrasena si es necesario
                     }
                   );
+
+                // Llamar a cargarImagenPerfil después de guardar los cambios
+                this.cargarImagenPerfil(); // Añade esta línea
               },
               (error) => {
                 this.toastr.error(
@@ -304,6 +323,7 @@ export class PerfilComponent implements OnInit, AfterViewInit {
       this.toastr.info('No se realizaron modificaciones.', 'Información');
     }
   }
+
 
   validarFormulario(): boolean {
     if (

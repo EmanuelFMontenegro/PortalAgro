@@ -60,7 +60,7 @@ export class LoginBackofficeComponent implements OnInit {
       Validators.minLength(8),
     ]);
     this.usernameControl.setValue('emamonte777@gmail.com');
-    this.passwordControl.setValue('vN3#pgvjoVZZV_$xTGOE(5i)?5spq5');
+    this.passwordControl.setValue('gI2@l5gO2acp=?C9s8JJtH8_m0DBgc');
 
     this.login = new FormGroup({
       username: this.usernameControl,

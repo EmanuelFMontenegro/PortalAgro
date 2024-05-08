@@ -1,1 +1,78 @@
-<p>chacras works!</p>
+<div class="container">
+  <div class="titulo-perfil">
+    <span class="titulo-perfil">¡Bienvenido, {{ nombre }} {{ apellido }}!</span>
+  </div>
+  <div class="titulo-welcome">
+    <p>
+      Acá podrás gestionar, supervisar y controlar todas las actividades de los usuarios de
+      <strong>
+        <img src="assets/img/logo_AGROtech.svg" alt="AGROTECH"
+          style="width: auto; height: 1.3em; vertical-align: bottom;">
+      </strong>.
+    </p>
+    <h2 class="titulo-chacra">Chacras</h2>
+  </div>
+
+  <div class="field-container">
+    <mat-select class="field-input" placeholder="Filtrar por" (selectionChange)="aplicarFiltro($event)">
+      <mat-option value="localidad">Localidad</mat-option>
+      <mat-option value="productor">Productor</mat-option>
+      <mat-option value="nombreChacra">Nombre de Chacra</mat-option>
+      <mat-option value="hectareas">Hectáreas</mat-option>
+    </mat-select>
+
+    <!-- Input para rango de hectáreas -->
+    <ng-container *ngIf="placeholderText === 'Buscar por Hectáreas'">
+      <input class="field-input" matInput type="number" placeholder="Min" [(ngModel)]="minHectareas">
+      <input class="field-input" matInput type="number" placeholder="Max" [(ngModel)]="maxHectareas">
+    </ng-container>
+
+    <!-- Input para productor -->
+    <input *ngIf="placeholderText === 'Buscar por Productor'" class="field-input" matInput
+      [placeholder]="placeholderText" [(ngModel)]="nombreProductor" (input)="filtrarPorProductor()">
+
+
+    <!-- Input para nombre de chacra -->
+    <input *ngIf="placeholderText === 'Buscar por Nombre de Chacra'" class="field-input" matInput
+      placeholder="{{ placeholderText }}" [(ngModel)]="nombreChacra" (input)="activarFiltro()">
+
+    <!-- Mat-select para seleccionar localidad -->
+    <mat-select *ngIf="placeholderText === 'Buscar por Localidad'" class="field-input"
+      placeholder="Seleccionar Localidad" [(ngModel)]="Buscar">
+      <mat-option *ngFor="let localidad of localidades" [value]="localidad.name">{{ localidad.name }}</mat-option>
+    </mat-select>
+
+    <!-- Botones para limpiar y filtrar -->
+    <button mat-raised-button class="clear-button" (click)="limpiarTexto()">Limpiar
+      <img src="assets/img/ink_eraser_FILL0_wght400_GRAD0_opsz24.svg"
+        style="filter: invert(70%) sepia(60%) saturate(10000%) hue-rotate(130deg)" alt="IconoBorrar">
+    </button>
+
+    <button mat-raised-button class="active-button" (click)="activarFiltro()">Filtrar
+      <img src="assets/img/filter_alt_FILL0_wght400_GRAD0_opsz24.svg"
+        style="filter: invert(70%) sepia(60%) saturate(10000%) hue-rotate(130deg)" alt="IconoBorrar">
+    </button>
+
+    <button mat-raised-button class="nuevaChacra-button" (click)="BtnNuevaChacra()">Nueva Chacra
+      <mat-icon style="font-size: 20px; position: relative; top: 1px; right: 3px;">add</mat-icon>
+    </button>
+  </div>
+</div>
+
+
+<div class="card-campos-section">
+  <h2 class="titulo-campos"></h2>
+  <div class="campos-container">
+    <div class="campo-card" *ngFor="let campo of campos">
+      <img src="/assets/img/campo_{{ campo.id }}.png" alt="Campo {{ campo.id }}">
+      <h3>{{ campo.name }}</h3>
+      <p>
+        <span class="campo-variable">Localidad:</span> {{ campo.address.location.name }}
+        <img src="assets/img/location.svg" alt="Icono" class="icono_location">
+      </p>
+      <p><span class="campo-variable"></span> {{ campo.observation }}</p>
+      <!-- <p><span class="campo-variable">Dirección:</span> {{ campo.address.address }}</p> -->
+      <button mat-raised-button class="ver-mas-button" (click)="verMas(campo)">Ver Más</button>
+    </div>
+  </div>
+</div>

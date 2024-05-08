@@ -1,46 +1,74 @@
-<!-- <div class="container">
-  <div class="titulo-bienvenida">
-    <span>¡Bienvenido!</span>
+<div class="container">
+  <div class="titulo-perfil">
+    <span class="titulo-perfil">¡Bienvenido, {{ nombre }} {{ apellido }}!</span>
   </div>
-  <mat-card class="main-card">
-    <div class="card user-card">
-      <div class="avatar">
-        <mat-icon>person</mat-icon>
-      </div>
+  <div class="titulo-welcome">
+    <p>
+      Acá podrás gestionar, supervisar y controlar todas las actividades de los usuarios de
+      <strong>
+        <img src="assets/img/logo_AGROtech.svg" alt="AGROTECH"
+          style="width: auto; height: 1.3em; vertical-align: bottom;">
+      </strong>.
+    </p>
+    <h2 class="titulo-chacra">Productores</h2>
+  </div>
+
+  <div class="field-container">
+
+    <mat-select class="field-input" placeholder="Filtrar por" (selectionChange)="aplicarFiltro($event)">
+      <mat-option value="nombre">Nombre</mat-option>
+      <mat-option value="apellido">Apellido</mat-option>
+      <mat-option value="localidad">Localidad</mat-option>
+    </mat-select>
+
+    <input *ngIf="!mostrarMatSelectLocalidades" class="field-input" matInput [placeholder]="placeholderText"
+    [(ngModel)]="nombreABuscar" (input)="activarFiltro()">
+
+
+    <ng-container *ngIf="mostrarMatSelectLocalidades">
+      <mat-select class="field-input" placeholder="Seleccionar Localidad" [(ngModel)]="Buscar">
+        <mat-option *ngFor="let localidad of localidades" [value]="localidad.name">{{ localidad.name }}</mat-option>
+      </mat-select>
+    </ng-container>
+
+    <button mat-raised-button class="clear-button" (click)="limpiarTexto()">
+      Limpiar<img src="assets/img/ink_eraser_FILL0_wght400_GRAD0_opsz24.svg"
+        style="filter: invert(70%) sepia(60%) saturate(10000%) hue-rotate(130deg)" alt="IconoBorrar"></button>
+
+    <button mat-raised-button class="active-button" (click)="activarFiltro()">Filtrar
+      <img src="assets/img/filter_alt_FILL0_wght400_GRAD0_opsz24.svg"
+        style="filter: invert(70%) sepia(60%) saturate(10000%) hue-rotate(130deg)" alt="IconoBorrar">
+    </button>
+    <button mat-raised-button class="nuevaChacra-button" (click)="BtnNuevaChacra()">
+      Nuevo Usuario<mat-icon style="font-size: 20px; position: relative; top: 1px; right: 3px;">add</mat-icon>
+    </button>
+  </div>
+
+  <div class="card-usuarios-productores">
+    <!-- Mostrar tarjetas de usuarios -->
+    <div class="campo-card" *ngFor="let usuario of usuarios">
+
+      <img class="img_prod" src="assets/img/avatar_prod.svg" alt="Avatar">
+
       <div class="user-info">
-        <p class="name">{{ nombre }} {{ apellido }}</p>
-        <p class="email">{{ userEmail }}</p>
+        <p class="with-dot">
+          <span class="user-titulos">Nombre:</span>
+          <span class="card-variable">{{ usuario.nombre }}</span>
+        </p>
+        <p class="with-dot">
+          <span class="user-titulos">Apellido:</span>
+          <span class="card-variable">{{ usuario.apellido }}</span>
+        </p>
+        <p class="with-dot">
+          <span class="user-titulos">Localidad:</span>
+          <span class="card-variable">{{ usuario.localidad }}</span>
+        </p>
       </div>
-      <div class="volver-button" (click)="volver()" style="display: flex; align-items: center; cursor: pointer;">
-        <mat-icon style="color:#FFFFFF">arrow_back</mat-icon>
-        <span class="letra-icon" style="color:#FFFFFF">VOLVER ATRAS</span>
-      </div>
-    </div>
-
-    <div class="filtro-localidad">
-      <input type="text" placeholder="Filtrar por Localidad" (keyup)="filtrarPorLocalidad($event?.target?.value)">
-    </div>
-    <div class="filtro-apellido">
-      <input type="text" placeholder="Filtrar por Apellido" (keyup)="filtrarPorApellido($event.target.value)">
-    </div>
-    <div class="filtro-nombre">
-      <input type="text" placeholder="Filtrar por Nombre" (keyup)="filtrarPorNombre($event.target.value)">
-    </div>
-
-    <div class="card-campos-section">
-      <h2 class="titulo-campo">Productores</h2>
-      <div class="leta_btn">
-        <button mat-raised-button (click)="cargarProductores()" class="plus-icon">
-          Agregar Productor
-          <mat-icon style="font-size: 20px;">add</mat-icon>
+      <div class="acciones">
+        <button mat-icon-button aria-label="verMas" class="verMas-button" (click)="verMas()">
+          <span style="color: #FFFFFF;">Ver Más</span>
         </button>
       </div>
     </div>
-
-    <div class="card-campos-lotes">
-      <div class="campo-card" *ngFor="let productor of productores; let i = index">
-        <!-- Aquí van los detalles del productor -->
-      <!-- </div>
-    </div>
-  </mat-card>
-</div> -->
+  </div>
+</div>
