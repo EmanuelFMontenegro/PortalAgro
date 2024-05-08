@@ -1,23 +1,25 @@
 
 
-FROM node:18.18.2-alpine AS build
+##FROM node:18.18.2-alpine AS build
 # Set the working directory inside the container
+#
+##WORKDIR /app
 
-WORKDIR /app
+##ENV PATH /app/node_modules/.bin:$PATH
 
-ENV PATH /app/node_modules/.bin:$PATH
+##COPY package.json /app/package.json
+##RUN npm install
+##RUN npm install -g @angular/cli@11.0.7
+##RUN npm install ngx-spinner
+##COPY . /app
+##ENV NODE_TLS_REJECT_UNAUTHORIZED=0
 
-COPY package.json /app/package.json
-RUN npm install
-RUN npm install -g @angular/cli@11.0.7
-RUN npm install ngx-spinner
-COPY . /app
-ENV NODE_TLS_REJECT_UNAUTHORIZED=0
+##RUN npm run build 
 
-RUN npm run build 
-#--output-path=dist
 
 FROM nginx:1.16.0-alpine
+
+WORKDIR /app
 
 COPY --from=build /app/dist/portal-productores/ /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
