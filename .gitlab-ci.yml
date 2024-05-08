@@ -23,7 +23,7 @@ run_tests:
 #
 build_image_stage:
  ## image: docker
-  image: ubuntu:latest
+  image: docker
   stage: build
   only: 
     - deploy_stage
