@@ -59,8 +59,6 @@ export class LoginBackofficeComponent implements OnInit {
       Validators.required,
       Validators.minLength(8),
     ]);
-    this.usernameControl.setValue('emamonte777@gmail.com');
-    this.passwordControl.setValue('gI2@l5gO2acp=?C9s8JJtH8_m0DBgc');
 
     this.login = new FormGroup({
       username: this.usernameControl,
@@ -88,19 +86,25 @@ export class LoginBackofficeComponent implements OnInit {
       const username = this.login.get('username')?.value;
       const password = this.login.get('password')?.value;
 
-      this.apiService.validarCredencialBackoffice(username, password).subscribe({
-        next: (response) => {
-          console.log("Lo que envia el EnpoinBackAdmin",response)
-          if (response.status === 200 && response.body && response.body.token) {
-            localStorage.setItem('token', response.body.token);
-            this.router.navigate(['/dashboard-backoffice']);
-            this.mostrarMensajeExitoso();
-            this.login.reset();
-          } else {
-            this.mostrarMensajeError('Error de autenticación');
-          }
-        },
-      });
+      this.apiService
+        .validarCredencialBackoffice(username, password)
+        .subscribe({
+          next: (response) => {
+            console.log('Lo que envia el EnpoinBackAdmin', response);
+            if (
+              response.status === 200 &&
+              response.body &&
+              response.body.token
+            ) {
+              localStorage.setItem('token', response.body.token);
+              this.router.navigate(['/dashboard-backoffice']);
+              this.mostrarMensajeExitoso();
+              this.login.reset();
+            } else {
+              this.mostrarMensajeError('Error de autenticación');
+            }
+          },
+        });
 
       this.toggleErrorCardClass(false);
     } else {
@@ -111,9 +115,10 @@ export class LoginBackofficeComponent implements OnInit {
     }
   }
 
-
   mostrarMensajeExitoso() {
-    this.toastr.info('Portal AgroSustetable AgroTech.', 'Bienvenido', { timeOut: 500 });
+    this.toastr.info('Portal AgroSustetable AgroTech.', 'Bienvenido', {
+      timeOut: 500,
+    });
   }
   adjustCardSize(hasError: boolean): void {
     const cardElement = document.querySelector('.login-card') as HTMLElement;
