@@ -54,6 +54,7 @@ export class LotesComponent implements OnInit {
   filteredLocalidades: Observable<any[]> = new Observable<any[]>();
   filtroLocalidades: FormControl = new FormControl('');
   Buscar: string = '';
+  nombreProductor: string = '';
   filtroSeleccionado: string = '';
   placeholderText: string = 'Buscar por . . .';
   private userId: number | any;
