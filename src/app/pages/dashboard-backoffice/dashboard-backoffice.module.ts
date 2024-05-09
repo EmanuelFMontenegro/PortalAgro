@@ -67,6 +67,7 @@ import { DialogComponent } from './dialog/dialog.component';
     MatMenuModule,
     MatCardModule,
     MatInputModule,
+    MatDialogModule,
     MatFormFieldModule,
     MatAutocompleteModule,
     MatOptionModule,

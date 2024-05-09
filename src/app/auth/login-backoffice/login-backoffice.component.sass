@@ -1,8 +1,10 @@
 $primary-color: #0F8054
-$secondary-color: #8FCA8F
+$secondary-color: #3CA749
 $hover-color: #47de5b
 $error-color: #d9534f
 $light-grey: #f4f4f4
+$white-hard: #FFFFFF
+$black-hard:#333333
 $dark-grey: #454545
 $medium-grey: #808080
 $border-color: #ddd
@@ -16,8 +18,7 @@ $font-family: 'Montserrat', sans-serif
   justify-content: center
   align-items: center
   height: 100vh
-  // background-image: url('/assets/img/fondo_agro.png')
-  background: #263238
+  background: $white-hard
   background-size: cover
   flex-direction: row-reverse
 
@@ -28,9 +29,8 @@ $font-family: 'Montserrat', sans-serif
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))
   backdrop-filter: blur(10px)
   -webkit-backdrop-filter: blur(15px)
-  // background: $border-color
   border-radius: 0 20px 20px 0
-  border: 1px solid rgba(255, 255, 255, 0.18)
+  border: 1px solid $medium-grey
   overflow: hidden
   font-family: $font-family
   text-align: center
@@ -47,7 +47,7 @@ $font-family: 'Montserrat', sans-serif
 
 h1
   font-size: 32px
-  color: $light-grey
+  color: $black-hard
   font-weight: 600
 
 .photo-card
@@ -57,6 +57,7 @@ h1
   margin-left: 20px
   overflow: hidden
   border-radius: 20px 0 0 20px
+  border: 1px solid $medium-grey
 
   img
     width: 100%
@@ -69,18 +70,18 @@ h1
 
 .info-text-container
   margin-bottom: 20px
-  color: $light-grey
+  color: $medium-grey
   font-weight: 600
 
 input[type="email"], input[type="password"]
   font-size: 14px
   width: 95%
-  color: $light-grey
+  color: $black-hard
   padding: 10px
   margin-bottom: 15px
   border: 1px solid $border-color
   border-radius: 4px
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3)
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5)
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))
   backdrop-filter: blur(10px)
   -webkit-backdrop-filter: blur(15px)
@@ -100,12 +101,12 @@ input[type="email"], input[type="password"]
     width: 100%
     padding-right: 30px
     font-size: 14px
-    color: $light-grey
+    color: $black-hard
     padding: 10px
     margin-bottom: 15px
     border: 1px solid $border-color
     border-radius: 4px
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3)
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5)
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))
     backdrop-filter: blur(10px)
     -webkit-backdrop-filter: blur(15px)
@@ -122,7 +123,7 @@ input[type="email"], input[type="password"]
     transform: translateY(-50%)
     cursor: pointer
     font-size: 16px
-    color: $light-grey
+    color: $black-hard
 
     &:before
       content: ""
@@ -160,20 +161,11 @@ button[type="submit"]
   cursor: pointer
   transition: background-color 0.3s ease
 
-  // &:hover
-  //   backdrop-filter: blur(10px)
-  //   -webkit-backdrop-filter: blur(15px)
-  //   background-color: $hover-color // Cambiar el color de fondo al hacer hover
+
 
   @media (max-width: 600px)
     width: 80%
 
-.btn-submit
-  // background-color: #8FCA8F
-  color: white
-
-.btn-submit.enabled
-  // background-color: #3CA749
 
 .login-links
   margin-top: 20px
@@ -186,10 +178,9 @@ button[type="submit"]
 
 .login-link
   font-size: 14px
-  color: $hover-color
+  color: $secondary-color
   text-decoration: none
   margin-left: 5px
-  // border-bottom: 2px solid $primary-color
   padding-bottom: 1px
   text-decoration: underline
 

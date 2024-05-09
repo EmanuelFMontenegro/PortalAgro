@@ -4,7 +4,9 @@ $hard-color: #47de5b
 $hover-color: #32963f
 $error-color: #d9534f
 $light-grey: #f4f4f4
+$white-hard:#FFFFFF
 $dark-grey: #454545
+$black-hard:#333333
 $medium-grey: #666
 $border-color: #ddd
 $font-family: 'Montserrat', sans-serif
@@ -14,7 +16,7 @@ $font-family: 'Montserrat', sans-serif
   justify-content: center
   align-items: center
   height: 100vh
-  background: #263238
+  background: #FFFFFF
   background-size: cover
 
   .recuper-card
@@ -26,7 +28,7 @@ $font-family: 'Montserrat', sans-serif
     backdrop-filter: blur(10px)
     -webkit-backdrop-filter: blur(15px)
     border-radius: 20px
-    border: 1px solid rgba(255, 255, 255, 0.18)
+    border: 1px solid $medium-grey
     overflow: hidden
     font-family: $font-family
     text-align: center
@@ -39,14 +41,13 @@ $font-family: 'Montserrat', sans-serif
       align-items: center
 
       img
-        max-width: 250px
         margin-top: 10px
-        width: 100%
+        width: 70%
         height: auto
 
     h1
       font-size: 24px
-      color: $light-grey
+      color: $black-hard
       margin-bottom: 20px
 
     .info-text-container
@@ -54,7 +55,7 @@ $font-family: 'Montserrat', sans-serif
       flex-direction: column
       font-size: 13px
       font-weight: bold
-      color: $light-grey
+      color: $medium-grey
       margin-bottom: 20px
 
       .info-text
@@ -68,12 +69,12 @@ $font-family: 'Montserrat', sans-serif
     input
       font-size: 14px
       width: 95%
-      color: $light-grey
+      color: $black-hard
       padding: 10px
       margin-bottom: 15px
-      border: 1px solid #ddd
+      border: 1px solid $dark-grey
       border-radius: 4px
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3)
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5)
       background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))
       backdrop-filter: blur(10px)
       -webkit-backdrop-filter: blur(15px)
@@ -108,10 +109,10 @@ $font-family: 'Montserrat', sans-serif
 
       .login-prompt
         font-size: 14px
-        color: $light-grey
+        color: $medium-grey
 
       .login-link
-        color: $hard-color
+        color: $hover-color
         text-decoration: none
         font-size: 14px
         text-decoration: underline
@@ -123,7 +124,6 @@ $font-family: 'Montserrat', sans-serif
 
       .logo-container
         img
-          max-width: 80px
           margin-top: 5px
 
       h1
@@ -172,53 +172,4 @@ $font-family: 'Montserrat', sans-serif
     justify-content: center
     align-items: center
 
-.lds-ellipsis
-  position: relative
-  color: #47de5b
-  width: 80px
-  height: 80px
-  top: 2em
-  left: 0em
 
-.lds-ellipsis div
-  position: absolute
-  top: 33.33333px
-  width: 13.33333px
-  height: 13.33333px
-  border-radius: 50%
-  background: currentColor
-  animation-timing-function: cubic-bezier(0, 1, 1, 0)
-
-.lds-ellipsis div:nth-child(1)
-  left: 8px
-  animation: lds-ellipsis1 0.6s infinite
-
-.lds-ellipsis div:nth-child(2)
-  left: 8px
-  animation: lds-ellipsis2 0.6s infinite
-
-.lds-ellipsis div:nth-child(3)
-  left: 32px
-  animation: lds-ellipsis2 0.6s infinite
-
-.lds-ellipsis div:nth-child(4)
-  left: 56px
-  animation: lds-ellipsis3 0.6s infinite
-
-@keyframes lds-ellipsis1
-  0%
-    transform: scale(0)
-  100%
-    transform: scale(1)
-
-@keyframes lds-ellipsis3
-  0%
-    transform: scale(1)
-  100%
-    transform: scale(0)
-
-@keyframes lds-ellipsis2
-  0%
-    transform: translate(0, 0)
-  100%
-    transform: translate(24px, 0)

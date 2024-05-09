@@ -320,63 +320,41 @@ export class LotesComponent implements OnInit {
     });
   }
 
-  loadDataLote(FieldId: number, userId: number): void {
-    if (userId && FieldId) {
-      this.apiService.getPlotsOperador(userId, FieldId).subscribe(
-        (response: any) => {
-          if (response?.list && response.list.length > 0) {
-            const lotsArray: Lote[][] = response.list[0];
-            const data: Lote[] = lotsArray.reduce(
-              (acc, curr) => acc.concat(curr),
-              []
-            );
+  // loadDataLote(FieldId: number, userId: number): void {
+  //   if (userId && FieldId) {
+  //     this.apiService.getPlotsOperador(userId, FieldId).subscribe(
+  //       (response: any) => {
+  //         if (response?.list && response.list.length > 0) {
+  //           const lotsArray: Lote[][] = response.list[0];
+  //           const data: Lote[] = lotsArray.reduce(
+  //             (acc, curr) => acc.concat(curr),
+  //             []
+  //           );
 
-            if (data.length > 0) {
-              this.processLoteData(data);
-            } else {
-              this.toastr.info(
-                'Aún no has agregado ningún lote.',
-                'Información'
-              );
-            }
-          } else {
-            this.toastr.info('Aún no has agregado ningún lote.', 'Información');
-          }
-        },
-        (error) => {
-          console.error('Error al cargar los lotes:', error);
-        }
-      );
-    } else {
-      console.warn(
-        'El userId o el FieldId son null o undefined, por lo que no se cargan los lotes.'
-      );
-    }
-  }
+  //           if (data.length > 0) {
+  //             this.processLoteData(data);
+  //           } else {
+  //             this.toastr.info(
+  //               'Aún no has agregado ningún lote.',
+  //               'Información'
+  //             );
+  //           }
+  //         } else {
+  //           this.toastr.info('Aún no has agregado ningún lote.', 'Información');
+  //         }
+  //       },
+  //       (error) => {
+  //         console.error('Error al cargar los lotes:', error);
+  //       }
+  //     );
+  //   } else {
+  //     console.warn(
+  //       'El userId o el FieldId son null o undefined, por lo que no se cargan los lotes.'
+  //     );
+  //   }
+  // }
 
-  processLoteData(data: Lote[]): void {
-    this.apiService.getAllTypeCropOperador().subscribe(
-      (typeCrops: any) => {
-        const typeCropsMap = typeCrops.reduce((acc: any, curr: any) => {
-          acc[curr.id] = curr.name;
-          return acc;
-        }, {});
 
-        data.forEach((lote: Lote) => {
-          if (lote.typeCrop && lote.typeCrop.id !== undefined) {
-            lote.plant_name = typeCropsMap[lote.typeCrop.id] || '';
-          } else {
-            lote.plant_name = ''; // Asignar un valor predeterminado en caso de que typeCrop o su id sean undefined
-          }
-        });
-
-        this.loteData = data;
-      },
-      (error) => {
-        console.error('Error al cargar los tipos de cultivo:', error);
-      }
-    );
-  }
 
   cargarLotes() {
     this.apiService.getAllPlotsAdmin().subscribe(
@@ -400,7 +378,29 @@ export class LotesComponent implements OnInit {
       }
     );
   }
+  processLoteData(data: Lote[]): void {
+    this.apiService.getAllTypeCropOperador().subscribe(
+      (typeCrops: any) => {
+        const typeCropsMap = typeCrops.reduce((acc: any, curr: any) => {
+          acc[curr.id] = curr.name;
+          return acc;
+        }, {});
 
+        data.forEach((lote: Lote) => {
+          if (lote.typeCrop && lote.typeCrop.id !== undefined) {
+            lote.plant_name = typeCropsMap[lote.typeCrop.id] || '';
+          } else {
+            lote.plant_name = '';
+          }
+        });
+
+        this.loteData = data;
+      },
+      (error) => {
+        console.error('Error al cargar los tipos de cultivo:', error);
+      }
+    );
+  }
   // cargarLotes() {
   //   this.router.navigate(['dashboard/cargar-lote'], {
   //     state: { modoEdicion: this.modoEdicion },
