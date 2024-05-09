@@ -1,16 +1,17 @@
-<div style="border-top: 10px solid #d9534f; border-radius: 3px;">
-  <h2 mat-dialog-title
-    style="display: flex; justify-content: center; align-items: flex-end; font-size: 28px; font-weight: bold; font-family: 'Montserrat', sans-serif; color: #d9534f; margin-bottom: 10px;">
-    Atención !!!
-  </h2>
-  <div style="border-bottom: 2px solid #d9534f;"></div>
-</div>
 
-<div mat-dialog-content style="font-size: 18px; margin-bottom: 20px;">
-  {{ data.message }}
-</div>
+  <div class="dialog-container">
+    <h2 mat-dialog-title class="dialog-title">
+      ¿Confirmar Eliminación
+    </h2>
+    <div style="border-bottom: 2px solid #d9534f;"></div>
+  </div>
 
-<!-- <div mat-dialog-actions style="display: flex; justify-content: flex-end;">
-  <button *ngIf="showCancel" mat-button [mat-dialog-close]="false" style="font-size: 18px;background-color: #3B7AF6; color: #fff;">Cancelar</button>
-  <button mat-button [mat-dialog-close]="true" cdkFocusInitial style="font-size: 18px; background-color: #4CAF50; color: #fff;">Aceptar</button>
-</div> -->
+  <div mat-dialog-content class="dialog-content">
+    {{ data.message }}
+  </div>
+
+  <div mat-dialog-actions style="display: flex; justify-content: space-evenly;">
+    <button *ngIf="showCancel" mat-button [mat-dialog-close]="false" class="dialog-button cancel-button">Cancelar</button>
+    <button mat-button [mat-dialog-close]="true" cdkFocusInitial class="dialog-button accept-button">Aceptar</button>
+  </div>
+
