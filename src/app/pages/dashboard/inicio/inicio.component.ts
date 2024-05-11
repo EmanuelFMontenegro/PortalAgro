@@ -210,7 +210,7 @@ export class InicioComponent implements OnInit {
     this.apiService.getLocationMisiones('location').subscribe(
       (localidades) => {
         this.localidades = localidades;
-        console.log('Localidades:', this.localidades);
+       
       },
       (error) => {
         console.error('Error al obtener las localidades', error);

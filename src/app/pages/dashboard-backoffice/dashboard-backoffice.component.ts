@@ -41,12 +41,12 @@ export class DashboardBackofficeComponents  implements AfterViewInit {
   closeSidenavIfSmall() {
     if (this.isScreenSmall && this.sidenav) {
       this.sidenav.close();
-      console.log('Drawer cerrado en dispositivo móvil.');
+
     }
   }
 
   cerrarSesion(): void {
-    console.log('Cerrando sesión...');
+   
     localStorage.removeItem('token');
     this.router.navigate(['/login-backoffice']);
   }

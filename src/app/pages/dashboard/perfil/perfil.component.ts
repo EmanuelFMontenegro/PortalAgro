@@ -107,17 +107,16 @@ export class PerfilComponent implements OnInit, AfterViewInit {
   }
  // Cambiamos la firma de la función cargarImagenPerfil para que no requiera ningún argumento
 cargarImagenPerfil() {
-  const selectedFile = this.avatarFile; // Usamos la variable avatarFile en lugar del evento
+  const selectedFile = this.avatarFile;
   if (selectedFile) {
     this.apiService.actualizarImagenDePerfil(this.userId, selectedFile).subscribe(
       (response) => {
-        console.log('Imagen de perfil cargada exitosamente:', response);
-        // Actualizar la imagen de perfil después de cargarla
+
         this.cargarDatosDeUsuario();
       },
       (error) => {
         console.error('Error al cargar la imagen de perfil:', error);
-        // Manejar el error de carga de la imagen de perfil
+
       }
     );
   }
@@ -230,8 +229,7 @@ onFileSelected(event: any) {
   verificarExistenciadni(dni: string): void {
     this.apiService.existsPersonByParamsAdmin(dni).subscribe(
       (response) => {
-        console.log('Respuesta del servidor:', response);
-
+        
         if (response && response.data && response.data.length > 0) {
           const usuarioExistente = response.data[0];
           if (usuarioExistente.id !== this.personId) {

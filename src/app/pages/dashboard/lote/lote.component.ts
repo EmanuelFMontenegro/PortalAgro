@@ -30,9 +30,14 @@ interface Lote {
   id: number;
   name: string;
   descriptions: string;
-  type_crop_id: string;
   dimensions: number;
-  plant_name?: string; // Propiedad para el nombre de la plantación
+  typeCrop: {
+    id: number;
+    name: string; // Propiedad para el nombre de la plantación
+  };
+  url_profile: string | null;
+  plant_name?: string;
+  type_crop_id?: number;
 }
 
 @Component({
@@ -270,8 +275,9 @@ export class LoteComponent {
                   }, {});
 
                   data.forEach((lote: Lote) => {
-                    lote.plant_name = typeCropsMap[lote.type_crop_id] || '';
+                    lote.plant_name = lote.typeCrop ? lote.typeCrop.name : '';
                   });
+
 
                   this.loteData = data;
                 },

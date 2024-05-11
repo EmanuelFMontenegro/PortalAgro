@@ -23,7 +23,7 @@ interface DecodedToken {
 @Component({
   selector: 'app-servicios',
   templateUrl: './servicios.component.html',
-  styleUrls: ['./servicios.component.sass']
+  styleUrls: ['./servicios.component.sass'],
 })
 export class ServiciosComponent implements OnInit {
   private userId: number | null;
@@ -32,12 +32,12 @@ export class ServiciosComponent implements OnInit {
   solicitud: SolicitudServicio = {
     tipoServicio: '',
     fecha: null,
-    observaciones: ''
+    observaciones: '',
   };
 
   // Mapeo de tipos de servicio
   tipoServicioMap: { [key: string]: number } = {
-    'Aplicación': 1,
+    Aplicación: 1,
     'Servicio Topográfico': 2,
     // Otros tipos de servicio...
   };
@@ -52,22 +52,17 @@ export class ServiciosComponent implements OnInit {
       const decoded: DecodedToken = jwtDecode(this.token);
       this.userId = decoded.userId;
       this.userEmail = decoded.emailId;
-      console.log('este es mail', this.userEmail);
-      console.log('este es id', this.userId);
     } else {
       this.userId = null;
       this.userEmail = null;
     }
   }
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 
   onFechaChange(event: MatDatepickerInputEvent<Date>): void {
     this.solicitud.fecha = event.value;
   }
-
 
   // Método para formatear la fecha
   formatDate(date: Date | null): string {
@@ -75,7 +70,9 @@ export class ServiciosComponent implements OnInit {
       return '';
     }
 
-    const localDate = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
+    const localDate = new Date(
+      date.getTime() + date.getTimezoneOffset() * 60 * 1000
+    );
 
     const day = localDate.getDate();
     const month = localDate.getMonth() + 1;
@@ -91,16 +88,10 @@ export class ServiciosComponent implements OnInit {
     return value < 10 ? `0${value}` : value.toString();
   }
 
-
   onSubmit(): void {
     if (this.userId !== null && this.token) {
-      // Log the token before the request
-      console.log('Token sent:', this.token);
-
       this.apiService.getFields(this.userId).subscribe(
         (fieldsResponse: any) => {
-          console.log('Fields response:', fieldsResponse);
-
           const fieldId = fieldsResponse?.list?.[0]?.[0]?.id || null;
 
           if (fieldId) {
@@ -108,21 +99,24 @@ export class ServiciosComponent implements OnInit {
             const servicio = {
               dateOfService: formattedDate,
               observations: this.solicitud.observaciones,
-              idTypeService: this.tipoServicioMap[this.solicitud.tipoServicio]
+              idTypeService: this.tipoServicioMap[this.solicitud.tipoServicio],
             };
-
-            // Log service data before the request
-            console.log('Service data to send:', servicio);
 
             this.apiService.addTypeServicesAdmin(servicio).subscribe(
               (serviceResponse: any) => {
-                console.log('Service response:', serviceResponse);
-                this.toastr.success('Service request sent to the specific field');
+                this.toastr.success(
+                  'Service request sent to the specific field'
+                );
                 // Handle service response if necessary
               },
               (serviceError: any) => {
-                this.toastr.error('Error sending service request to the specific field');
-                console.error('Error adding service to the field:', serviceError);
+                this.toastr.error(
+                  'Error sending service request to the specific field'
+                );
+                console.error(
+                  'Error adding service to the field:',
+                  serviceError
+                );
                 // Handle service error if necessary
               }
             );
@@ -137,10 +131,4 @@ export class ServiciosComponent implements OnInit {
       );
     }
   }
-
-
-
-
-
-
 }

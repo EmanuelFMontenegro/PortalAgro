@@ -92,11 +92,10 @@ export class InicioComponent implements OnInit {
       this.companyId = 1;
 
       if (this.userId !== null && this.companyId !== null) {
-        // Llamada al método findUserById para obtener los datos del usuario
+        
         this.apiService.findUserById(this.companyId,this.userId).subscribe(
           (data) => {
-            // console.log("datos que trae el enpoint", data);
-            // Extraer el nombre del usuario y asignarlo a la variable nombre
+
             this.nombre = data.name;
             this.apellido= data.lastname;
           },

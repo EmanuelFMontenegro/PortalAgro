@@ -76,12 +76,12 @@ export class CargarLoteComponent {
   }
 
   ngOnInit(): void {
-    console.log('ngOnInit en CargarLoteComponent');
+
     this.cargarDatosDeUsuario();
     this.userEmail = this.authService.getUserEmail();
     this.decodeToken();
     this.obtenerPlantaciones();
-    console.log('Modo edición en ngOnInit:', this.currentPlotId);
+
 
 
     const storedPlotId = localStorage.getItem('plotId');
@@ -90,7 +90,7 @@ export class CargarLoteComponent {
       this.currentPlotId = null;
       this.campoForm.reset();
       this.buttonText = 'Cargar Lote';
-      console.log('Plot ID eliminado:', storedPlotId);
+
     }
   }
 
@@ -174,7 +174,7 @@ obtenerPlantaciones() {
       const campoId = campoSeleccionado.id;
       this.FieldId = campoId;
       const plotId = localStorage.getItem('plotId');
-      console.log('Plot ID:', plotId);
+
       this.decodeToken();
       if (plotId) {
         const plotIdNumber = parseInt(plotId, 10);
@@ -182,7 +182,7 @@ obtenerPlantaciones() {
           .getPlotByIdOperador(this.userId, this.FieldId, plotIdNumber)
           .subscribe(
             (lote) => {
-              console.log('Datos del lote:', lote);
+
               this.currentPlotId = plotIdNumber;
               this.campoData = {
                 // name: lote.name,
@@ -196,7 +196,7 @@ obtenerPlantaciones() {
                 observation: lote.descriptions,
               });
               this.buttonText = 'Actualizar Lote';
-              console.log('Modo edición:', this.currentPlotId);
+
             },
             (error) => {
               console.error('Error al obtener los datos del lote:', error);
@@ -207,14 +207,12 @@ obtenerPlantaciones() {
       this.campoForm.reset();
       this.buttonText = 'Cargar Lote';
       this.currentPlotId = null;
-      console.log('Modo edición:', this.currentPlotId);
+
     }
   }
 
   cargarLotes(): void {
-    console.log('Cargar Lote method called');
-    console.log('Form value:', this.campoForm.value);
-    console.log('Current Plot ID:', this.currentPlotId);
+
     if (this.campoForm.valid && !this.currentPlotId) {
       // const nameControl = this.campoForm.get('name');
       const dimensionsControl = this.campoForm.get('dimensions');
@@ -271,10 +269,6 @@ obtenerPlantaciones() {
   }
 
   actualizarLote(): void {
-    console.log('Actualizar Lote method called');
-    console.log('Form value:', this.campoForm.value);
-    console.log('Current Plot ID:', this.currentPlotId);
-
     if (this.campoForm.valid && this.currentPlotId) {
       // const nameControl = this.campoForm.get('name');
       const dimensionsControl = this.campoForm.get('dimensions');
@@ -289,13 +283,13 @@ obtenerPlantaciones() {
           type_crop_id: plantationControl.value,
         };
 
-        console.log('Updated Plot Data:', updatedPlotData);
+
 
         this.apiService
           .updatePlotOperador(this.userId, this.FieldId, this.currentPlotId, updatedPlotData)
           .subscribe(
             () => {
-              console.log('Lote actualizado con éxito');
+             
               this.toastr.success('Lote actualizado con éxito', 'Éxito');
               this.router.navigate(['dashboard/lote']);
             },

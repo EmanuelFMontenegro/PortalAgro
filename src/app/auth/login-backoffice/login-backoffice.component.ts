@@ -72,7 +72,7 @@ export class LoginBackofficeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Llama a adjustCardSize en el ngOnInit
+
     this.adjustCardSize(false);
   }
   togglePasswordVisibility(): void {
@@ -90,8 +90,7 @@ export class LoginBackofficeComponent implements OnInit {
         .validarCredencialBackoffice(username, password)
         .subscribe({
           next: (response) => {
-            console.log('Lo que envia el EnpoinBackAdmin', response);
-            if (
+              if (
               response.status === 200 &&
               response.body &&
               response.body.token

@@ -262,7 +262,7 @@ export class ApiService {
     sortDir: string,
     isActive: boolean = true,
     producerNames: string = '',
-    fieldName: string = '', 
+    fieldName: string = '',
     locationId: number | null = null,
     personId: number | null = null,
     dimMin: number | null = null,
@@ -437,11 +437,35 @@ export class ApiService {
   }
 
   // Obtener todos los lotes para un administrador
-  getAllPlotsAdmin(): Observable<any> {
-    return this.http.get(
-      `${this.baseURL}/user/field/plot/all`
-    );
+  getAllPlotsAdmin(
+    pageSize: number | undefined = undefined,
+    pageNo: number | undefined = undefined,
+    sortDir: string | undefined = undefined,
+    sortBy: string | undefined = undefined,
+    producerNames: string | undefined = undefined,
+    dimMin: string | undefined = undefined,
+    dimMax: string | undefined = undefined,
+    cropId: string | undefined = undefined,
+    isActive: boolean | undefined = undefined,
+    locationId: number | undefined = undefined
+  ): Observable<any> {
+    const url = `${this.baseURL}/user/field/plot/all`;
+    const params = new HttpParams()
+      .set('pageSize', pageSize?.toString() || '')
+      .set('pageNo', pageNo?.toString() || '')
+      .set('sortDir', sortDir || '')
+      .set('sortBy', sortBy || '')
+      .set('producerNames', producerNames || '')
+      .set('dimMin', dimMin || '')
+      .set('dimMax', dimMax || '')
+      .set('crop_id', cropId || '')
+      .set('isActive', isActive?.toString() || '')
+      .set('locationId', locationId?.toString() || '');
+
+    return this.http.get(url, { params });
   }
+
+
 
 
   // Agregar un lote para un operador

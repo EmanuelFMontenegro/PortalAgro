@@ -97,7 +97,7 @@ export class ProductoresComponent implements OnInit {
   cargarUsuarios(locationId?: number) {
     this.apiService.getPeopleAdmin(locationId).subscribe(
       (data: any) => {
-        console.log('Datos de usuarios obtenidos:', data);
+
         if (data.list && data.list.length > 0) {
           const usuariosList = data.list.flat();
           this.usuarios = usuariosList.map((usuario: any) => ({
@@ -117,7 +117,7 @@ export class ProductoresComponent implements OnInit {
     this.apiService.getLocationMisiones('location').subscribe(
       (localidades) => {
         this.localidades = localidades;
-        console.log('localidades de misiones', this.localidades);
+
         this.filteredLocalidades = this.filtroLocalidades.valueChanges.pipe(
           startWith(''),
           map((value: string) => this.filtrarLocalidades(value || ''))
@@ -130,7 +130,7 @@ export class ProductoresComponent implements OnInit {
   }
 
   private filtrarLocalidades(value: string): any[] {
-    console.log('el filtro de localidades', this.filteredLocalidades);
+
     const filterValue = value.toLowerCase();
     return this.localidades.filter((loc) =>
       loc.name.toLowerCase().includes(filterValue)
@@ -139,7 +139,7 @@ export class ProductoresComponent implements OnInit {
 
   aplicarFiltro(event: MatSelectChange) {
     const valorSeleccionado = event.value;
-    console.log('Valor seleccionado:', valorSeleccionado);
+
     switch (valorSeleccionado) {
       case 'nombre':
         this.placeholderText = 'Buscar por nombre';
@@ -164,14 +164,14 @@ export class ProductoresComponent implements OnInit {
 
   filtrarPorLocalidad() {
     if (!this.Buscar) {
-      console.error('Debe seleccionar una localidad');
+
       return;
     }
     const localidadSeleccionada = this.localidades.find(
       (loc) => loc.name === this.Buscar
     );
     if (!localidadSeleccionada) {
-      console.error('Localidad no encontrada');
+     
       return;
     }
     const locationId = localidadSeleccionada.id;
@@ -184,7 +184,7 @@ export class ProductoresComponent implements OnInit {
             apellido: usuario.lastname || '',
             localidad: localidadSeleccionada.name,
           }));
-          console.log('Usuarios filtrados por localidad:', this.usuarios);
+
           if (this.usuarios.length === 0) {
             this.toastr.info('No existen productores para esta localidad.');
           }
@@ -204,7 +204,7 @@ export class ProductoresComponent implements OnInit {
 
   filtrarPorNombreOApellido() {
     if (!this.nombreABuscar && !this.apellidoABuscar) {
-      console.log('Por favor ingresa un nombre o apellido para filtrar.');
+
       return;
     }
 
@@ -261,7 +261,7 @@ export class ProductoresComponent implements OnInit {
     ) {
       this.filtrarPorNombreOApellido();
     } else if (this.mostrarMatSelectLocalidades && !this.Buscar) {
-      console.log('Por favor selecciona una localidad para filtrar usuarios.');
+
     } else {
       if (this.mostrarMatSelectLocalidades) {
         this.filtrarPorLocalidad();

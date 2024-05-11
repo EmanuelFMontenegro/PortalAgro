@@ -154,6 +154,33 @@ export class GeolocalizacionComponent implements AfterViewInit {
       this.userEmail = null;
     }
   }
+  ngOnInit(): void {
+    this.obtenerLocalidades();
+    const campoSeleccionadoString = localStorage.getItem('campoSeleccionado');
+    const fieldId = localStorage.getItem('fieldId');
+
+    if (campoSeleccionadoString) {
+      this.campoSeleccionado = JSON.parse(campoSeleccionadoString);
+      this.searchFieldLocation(this.campoSeleccionado);
+    } else {
+      console.warn("No se encontró información del campo seleccionado en el localStorage");
+    }
+
+    if (fieldId) {
+      this.fieldId = parseInt(fieldId);
+      this.loadInitialGeolocation();
+    }
+  }
+
+  ngAfterViewInit(): void {
+    if (this.userId !== null) {
+      this.initializeMap();
+      this.loadInitialGeolocation();
+      this.loadUserFields();
+    } else {
+      this.toastr.error('Usuario no autenticado', 'Error');
+    }
+  }
 
   searchFieldLocation(fieldArray: FieldArray): void {
     const geolocation = fieldArray.geolocation;
@@ -171,10 +198,7 @@ export class GeolocalizacionComponent implements AfterViewInit {
     }
   }
 
-  ngOnInit(): void {
-    this.obtenerCampoSeleccionado();
-    this.obtenerLocalidades();
-  }
+
 
   obtenerCampoSeleccionado() {
     const campoSeleccionadoString = localStorage.getItem('campoSeleccionado');
@@ -182,10 +206,10 @@ export class GeolocalizacionComponent implements AfterViewInit {
     if (campoSeleccionadoString) {
       this.campoSeleccionado = JSON.parse(campoSeleccionadoString);
     } else {
-      // Manejar el caso en que no se haya seleccionado ningún campo
+
     }
   }
-  // En tu componente.ts
+
   mostrarDetallesCampo(campo: any): void {
     if (campo) {
       this.nombreCampo = campo.name;
@@ -260,33 +284,34 @@ export class GeolocalizacionComponent implements AfterViewInit {
     }
   }
 
-  ngAfterViewInit(): void {
-    if (this.userId !== null) {
-      this.initializeMap();
-      this.loadInitialGeolocation();
-      this.loadUserFields();
-    } else {
-      this.toastr.error('Usuario no autenticado', 'Error');
-    }
-  }
 
 
   private initializeMap(): void {
     const latitudInicial = -27.362137;
     const longitudInicial = -55.900875;
-    const zoomInicial = 13;
+    const zoomInicial = 4;
+
+    // Límites geográficos de Argentina
+    const southWest = L.latLng(-55.25, -75); // Latitud mínima, Longitud mínima
+    const northEast = L.latLng(-21.75, -53.5); // Latitud máxima, Longitud máxima
+    const bounds = L.latLngBounds(southWest, northEast);
 
     // Utiliza el contenedor específico del mapa para el selector
-    this.map = L.map(this.mapContainer.nativeElement).setView(
-      [latitudInicial, longitudInicial],
-      zoomInicial
-    );
+    this.map = L.map(this.mapContainer.nativeElement, {
+      center: [latitudInicial, longitudInicial],
+      zoom: zoomInicial,
+      maxBounds: bounds, // Establecer límites para el mapa
+      maxZoom: 18, // Limitar el zoom máximo para evitar ver más allá de Argentina
+      minZoom: 5, // Limitar el zoom mínimo para mantener la visualización de Argentina
+    });
 
-    // Agrega solo la capa de relieve
-    L.tileLayer('https://tile.thunderforest.com/outdoors/{z}/{x}/{y}.png?apikey=d82d7283cc9a4b128c398f3b8f789c30'
-    , {
-      attribution: '© OpenStreetMap contributors',
-    }).addTo(this.map);
+    // Agrega solo la capa de relieve de Stadia Maps
+    L.tileLayer(
+      'https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.jpg',
+      {
+        attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>',
+      }
+    ).addTo(this.map);
 
     this.map.on('click', this.onMapClick.bind(this));
     this.cdr.detectChanges();
@@ -343,43 +368,50 @@ export class GeolocalizacionComponent implements AfterViewInit {
   }
 
   mostrarGeolocalizacion(): void {
-    if (this.campoSeleccionado.geolocation) {
-      const geolocationData = this.campoSeleccionado.geolocation
-        .split(',')
-        .map(parseFloat);
-      const latitude = geolocationData[0];
-      const longitude = geolocationData[1];
+    let latitude: number;
+    let longitude: number;
 
-      if (!this.map) {
-        this.map = L.map('map').setView([latitude, longitude], 13);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '© OpenStreetMap contributors',
-        }).addTo(this.map);
-      }
-
-      this.map.eachLayer((layer) => {
-        if (layer instanceof L.Marker) {
-          this.map.removeLayer(layer);
-        }
-      });
-
-      L.marker([latitude, longitude])
-        .addTo(this.map)
-        .bindPopup('Ubicación del campo')
-        .openPopup();
+    const geolocationString = localStorage.getItem('geolocalizacion');
+    if (geolocationString) {
+      const geolocationData = geolocationString.split(',').map(parseFloat);
+      latitude = geolocationData[0];
+      longitude = geolocationData[1];
+    } else if (this.fieldHasGeolocation) {
+      const geolocationData = this.campoSeleccionado.geolocation.split(',').map(parseFloat);
+      latitude = geolocationData[0];
+      longitude = geolocationData[1];
     } else {
       this.toastr.warning(
         'El campo no tiene información de geolocalización',
         'Advertencia'
       );
+      return;
     }
+
+    if (!this.map) {
+      this.map = L.map('map').setView([latitude, longitude], 13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+      }).addTo(this.map);
+    }
+
+    this.map.eachLayer((layer) => {
+      if (layer instanceof L.Marker) {
+        this.map.removeLayer(layer);
+      }
+    });
+
+    L.marker([latitude, longitude])
+      .addTo(this.map)
+      .bindPopup('Ubicación del campo')
+      .openPopup();
   }
 
-  private loadInitialGeolocation(): void {
-    if (this.userId !== null) {
-      this.apiService.getGeolocationField(this.userId, 1).subscribe(
+   loadInitialGeolocation(): void {
+    if (this.userId !== null && this.fieldId !== undefined) {
+        this.apiService.getGeolocationField(this.userId, this.fieldId).subscribe(
         (response: any) => {
-          if (response && response.geolocation) {
+            if (response && response.geolocation) {
             const geoData = response.geolocation;
             if (
               geoData.latitude !== undefined &&
@@ -404,13 +436,13 @@ export class GeolocalizacionComponent implements AfterViewInit {
     }
   }
 
+
   private addMarker(coords: [number, number]): void {
     if (coords && !isNaN(coords[0]) && !isNaN(coords[1])) {
       this.currentMarker = L.marker(coords).addTo(this.map);
       this.currentMarker.bindPopup('Ubicación seleccionada').openPopup();
     } else {
-      console.error('Coordenadas no válidas:', coords);
-      this.toastr.error(
+        this.toastr.error(
         'Coordenadas no válidas para la geolocalización',
         'Error'
       );
