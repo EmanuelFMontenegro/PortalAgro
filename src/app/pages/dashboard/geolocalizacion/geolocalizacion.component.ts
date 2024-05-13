@@ -393,11 +393,11 @@ export class GeolocalizacionComponent implements AfterViewInit {
       L.tileLayer('https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
       {
         attribution: 'Imágenes satelitales &copy; <a href="https://www.esri.com/">Esri</a>',
-      
+
       }).addTo(this.map);
     }
 
-    this.map.eachLayer((layer) => {
+        this.map.eachLayer((layer) => {
       if (layer instanceof L.Marker) {
         this.map.removeLayer(layer);
       }
