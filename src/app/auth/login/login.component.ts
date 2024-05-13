@@ -134,6 +134,12 @@ export class LoginComponent implements OnInit {
               'Atención'
             );
             this.login.reset();
+          } else if (err.status === 403) {
+            this.toastr.info(
+              'Este usuario no está registrado. Por favor, regístrese para iniciar sesión.',
+              'Atención'
+            );
+            this.login.reset();
           } else if (err.status === 401 && err.error.code === 4011) {
             const errorMessage = err.error.message || 'Error de autenticación';
             const details =
