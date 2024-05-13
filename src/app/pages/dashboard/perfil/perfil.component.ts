@@ -94,7 +94,6 @@ export class PerfilComponent implements OnInit, AfterViewInit {
       contrasenaActual: [''],
       contrasenaNueva: [''],
     });
-
   }
 
   ngOnInit(): void {
@@ -105,45 +104,40 @@ export class PerfilComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.componenteInicializado = true;
   }
- // Cambiamos la firma de la función cargarImagenPerfil para que no requiera ningún argumento
-cargarImagenPerfil() {
-  const selectedFile = this.avatarFile; // Usamos la variable avatarFile en lugar del evento
-  if (selectedFile) {
-    this.apiService.actualizarImagenDePerfil(this.userId, selectedFile).subscribe(
-      (response) => {
-        console.log('Imagen de perfil cargada exitosamente:', response);
-        // Actualizar la imagen de perfil después de cargarla
-        this.cargarDatosDeUsuario();
-      },
-      (error) => {
-        console.error('Error al cargar la imagen de perfil:', error);
-        // Manejar el error de carga de la imagen de perfil
-      }
-    );
+  // Cambiamos la firma de la función cargarImagenPerfil para que no requiera ningún argumento
+  cargarImagenPerfil() {
+    const selectedFile = this.avatarFile;
+    if (selectedFile) {
+      this.apiService
+        .actualizarImagenDePerfil(this.userId, selectedFile)
+        .subscribe(
+          (response) => {
+            this.cargarDatosDeUsuario();
+          },
+          (error) => {
+            console.error('Error al cargar la imagen de perfil:', error);
+          }
+        );
+    }
   }
-}
 
+  onFileSelected(event: any) {
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      // Leer la imagen como un objeto URL local
+      const reader = new FileReader();
+      reader.readAsDataURL(selectedFile);
+      reader.onload = () => {
+        this.selectedImage = reader.result;
+      };
 
-
-
-onFileSelected(event: any) {
-  const selectedFile = event.target.files[0];
-  if (selectedFile) {
-    // Leer la imagen como un objeto URL local
-    const reader = new FileReader();
-    reader.readAsDataURL(selectedFile);
-    reader.onload = () => {
-      this.selectedImage = reader.result;
-    };
-
-    // Asignar la imagen seleccionada a avatarFile y actualizar el valor del formulario
-    this.avatarFile = selectedFile;
-    this.userDetailsForm.patchValue({
-      avatar: selectedFile // Puede ser necesario ajustar el nombre del control dependiendo del nombre en el formulario
-    });
+      // Asignar la imagen seleccionada a avatarFile y actualizar el valor del formulario
+      this.avatarFile = selectedFile;
+      this.userDetailsForm.patchValue({
+        avatar: selectedFile, // Puede ser necesario ajustar el nombre del control dependiendo del nombre en el formulario
+      });
+    }
   }
-}
-
 
   activarEdicion(modoEdicion: boolean) {
     this.modoEdicion = modoEdicion;
@@ -177,12 +171,23 @@ onFileSelected(event: any) {
     );
   }
 
+  onLocalidadSelectionChange(localidad: string) {
+    const selectedLocation = this.localidades.find(
+      (loc) => loc.name === localidad
+    );
+    if (selectedLocation) {
+      this.userDetailsForm.patchValue({
+        localidad: selectedLocation.name,
+      });
+      this.selectedLocationId = selectedLocation.id;
+    }
+  }
+
   cargarDatosDeUsuario() {
     const decoded: DecodedToken = jwtDecode(this.authService.getToken() || '');
     if ('userId' in decoded && 'sub' in decoded && 'roles' in decoded) {
       this.userId = decoded.userId;
       this.userEmail = decoded.sub;
-
 
       if (this.avatarFile) {
         this.cargarImagenPerfil();
@@ -230,8 +235,6 @@ onFileSelected(event: any) {
   verificarExistenciadni(dni: string): void {
     this.apiService.existsPersonByParamsAdmin(dni).subscribe(
       (response) => {
-        console.log('Respuesta del servidor:', response);
-
         if (response && response.data && response.data.length > 0) {
           const usuarioExistente = response.data[0];
           if (usuarioExistente.id !== this.personId) {
@@ -265,13 +268,18 @@ onFileSelected(event: any) {
         this.personId = this.userId;
 
         if (this.userId !== null && this.personId !== null) {
+          const selectedLocation = this.localidades.find(
+            (loc) => loc.name === formData.localidad
+          );
+          const locationId = selectedLocation ? selectedLocation.id : null;
+
           const personData = {
             userId: this.userId,
             name: formData.nombre,
             lastname: formData.apellido,
             dni: formData.dni,
             descriptions: formData.descripcion,
-            location_id: +formData.localidad,
+            location_id: locationId,
             telephone: formData.contacto,
           };
 
@@ -285,31 +293,29 @@ onFileSelected(event: any) {
                 );
                 this.activarEdicion(false);
                 this.cargarDatosDeUsuario();
-
-                // Llamada al método cambiarContrasena para cambiar la contraseña
-                this.apiService
-                  .cambiarContrasena(
-                    formData.contrasenaNueva,
-                    formData.contrasenaNueva,
-                    'token'
-                  )
-                  .subscribe(
-                    (resultado) => {
-                      // Maneja el resultado de la llamada cambiarContrasena si es necesario
-                    },
-                    (error) => {
-                      // Maneja los errores de la llamada cambiarContrasena si es necesario
-                    }
-                  );
-
-                // Llamar a cargarImagenPerfil después de guardar los cambios
-                this.cargarImagenPerfil(); // Añade esta línea
               },
               (error) => {
-                this.toastr.error(
-                  '¡Ya Existe una persona registrada con este dni!',
-                  'Atención'
-                );
+                if (
+                  error.status === 4012 &&
+                  error.listDetails &&
+                  error.listDetails.lastname
+                ) {
+                  this.toastr.warning(
+                    'Disculpe, su apellido excede el ingreso permitido',
+                    'Atención'
+                  );
+                } else if (error.status === 403) {
+                  this.toastr.warning(
+                    'Este usuario no está registrado. Por favor regístrese para iniciar sesión.',
+                    'Atención'
+                  );
+                } else {
+                  this.toastr.warning(
+                    'Error al actualizar el perfil: Su apellido o nombre es demasiado extenso.',
+                    'Atención'
+                  );
+
+                }
               }
             );
         } else {
@@ -323,7 +329,6 @@ onFileSelected(event: any) {
       this.toastr.info('No se realizaron modificaciones.', 'Información');
     }
   }
-
 
   validarFormulario(): boolean {
     if (

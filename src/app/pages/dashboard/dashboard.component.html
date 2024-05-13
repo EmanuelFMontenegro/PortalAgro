@@ -1,36 +1,40 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #sidenav mode="side" [opened]="!isScreenSmall" class="sidenav">
+  <mat-sidenav #sidenav [mode]="isScreenSmall ? 'over' : 'side'" [opened]="!isScreenSmall" class="sidenav">
     <!-- Contenido del sidenav -->
     <div class="logo-container">
       <img src="assets/img/LogoAgroBYTECH.svg" alt="Logo" class="dashboard-logo">
     </div>
+    <button mat-icon-button class="close-sidebar-btn" (click)="closeSidenav()" *ngIf="isScreenSmall">
+      <mat-icon style="color: #47de5b;">arrow_back</mat-icon>
+    </button>
+
     <mat-nav-list class="btn_nav">
-      <a mat-list-item routerLink="/dashboard/inicio" class="nav-item" (click)="closeSidenavIfSmall()">
+      <a mat-list-item routerLink="/dashboard/inicio" class="nav-item" (click)="closeSidenav()">
         <img src="assets/img/home_FILL0_wght400_GRAD-25_opsz24.svg" alt="Home" class="nav-item-icon">
         Inicio
       </a>
-      <a mat-list-item routerLink="/dashboard/servicios" class="nav-item" (click)="closeSidenavIfSmall()">
+      <a mat-list-item routerLink="/dashboard/servicios" class="nav-item" (click)="closeSidenav()">
         <img src="assets/img/sell_FILL0_wght400_GRAD0_opsz24.svg" alt="Servicios" class="nav-item-icon">
         Solicitudes y Servicios
       </a>
-      <a mat-list-item routerLink="/dashboard/chacras" class="nav-item" (click)="closeSidenavIfSmall()">
+      <a mat-list-item routerLink="/dashboard/chacras" class="nav-item" (click)="closeSidenav()">
         <img src="assets/img/soil-moisture-global.svg" alt="Configuración" class="nav-item-icon">
         Chacras
       </a>
-      <a mat-list-item routerLink="/dashboard/calendario" class="nav-item" (click)="closeSidenavIfSmall()">
+      <a mat-list-item routerLink="/dashboard/calendario" class="nav-item" (click)="closeSidenav()">
         <img src="assets/img/calendar-03.svg" alt="Configuración" class="nav-item-icon">
         Calendario
       </a>
-      <a mat-list-item routerLink="/dashboard/notificaciones" class="nav-item" (click)="closeSidenavIfSmall()">
+      <a mat-list-item routerLink="/dashboard/notificaciones" class="nav-item" (click)="closeSidenav()">
         <img src="assets/img/notifications_active_FILL0_wght400_GRAD0_opsz24.svg" alt="Notificacón"
           class="nav-item-icon">
         Notificacón
       </a>
-      <a mat-list-item routerLink="/dashboard/informes" class="nav-item" (click)="closeSidenavIfSmall()">
+      <a mat-list-item routerLink="/dashboard/informes" class="nav-item" (click)="closeSidenav()">
         <img src="assets/img/Vector_i.svg" alt="Planificaciónes" class="nav-item-icon">
         Informes
       </a>
-      <a mat-list-item routerLink="/dashboard/perfil" class="nav-item" (click)="closeSidenavIfSmall()">
+      <a mat-list-item routerLink="/dashboard/perfil" class="nav-item" (click)="closeSidenav()">
         <img src="assets/img/person_FILL0_wght400_GRAD-25_opsz24.svg" alt="Perfil" class="nav-item-icon">
         Perfil
       </a>
@@ -41,12 +45,12 @@
   </mat-sidenav>
   <mat-sidenav-content class="sidenav-content">
     <!-- Botón de menú para pantallas pequeñas -->
-    <button mat-icon-button (click)="toggleSidebar()" *ngIf="isScreenSmall" class="open-sidebar-btn">
+    <button mat-icon-button (click)="sidenav.toggle()" *ngIf="isScreenSmall" class="open-sidebar-btn">
       <mat-icon style="color:#0F8054;">menu</mat-icon>
     </button>
     <!-- Resto del contenido principal -->
     <mat-toolbar class="toolbar-green">
-      <div div *ngIf="isScreenSmall" class="logo-container-mobile">
+      <div *ngIf="isScreenSmall" class="logo-container-mobile">
         <img src="assets/img/LogoAgroBYTECH_M.svg" alt="Logo" class="dashboard-logo">
       </div>
       <input matInput class="search-input" placeholder="Buscar ...">
@@ -78,7 +82,6 @@
   </mat-sidenav-content>
 
 </mat-sidenav-container>
-
 
 <mat-card class="card-footer">
   <footer class="footer">

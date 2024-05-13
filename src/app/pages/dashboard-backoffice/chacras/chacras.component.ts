@@ -324,9 +324,7 @@ export class ChacrasComponent implements OnInit {
     const minHectareasNum = this.minHectareas;
     const maxHectareasNum = this.maxHectareas;
 
-    // Log de los valores que se enviarán al endpoint
-    console.log('Valor mínimo de hectáreas:', minHectareasNum);
-    console.log('Valor máximo de hectáreas:', maxHectareasNum);
+
 
     // Llamar al servicio con el rango de hectáreas para filtrar
     this.apiService
@@ -385,7 +383,7 @@ export class ChacrasComponent implements OnInit {
       )
       .subscribe(
         (response) => {
-          console.log("datos del enp productor",response)
+          
           if (response.list && response.list.length > 0) {
             this.campos = response.list[0];
           } else {

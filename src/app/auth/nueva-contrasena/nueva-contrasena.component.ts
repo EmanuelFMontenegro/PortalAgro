@@ -94,7 +94,7 @@ export class NuevaContrasenaComponent implements OnInit {
 
       this.route.paramMap.subscribe((params) => {
         this.token = params.get('token') || '';
-        console.log('Token en onSubmit:', this.token);
+      
 
         if (this.token) {
           this.apiService

@@ -160,7 +160,6 @@ export class CampoComponent implements OnInit {
   registrarCampo(): void {
     // Verificar si el usuario está autenticado
     if (!this.userId) {
-      console.log('ID del usuario:', this.userId);
       this.toastr.error('Error: No se ha identificado al usuario.', 'Error');
       return;
     }

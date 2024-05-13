@@ -42,6 +42,7 @@ import { FormsModule } from '@angular/forms';
 import { DialogComponent } from './dialog/dialog.component';
 
 
+
 @NgModule({
   declarations: [
     DashboardBackofficeComponents,

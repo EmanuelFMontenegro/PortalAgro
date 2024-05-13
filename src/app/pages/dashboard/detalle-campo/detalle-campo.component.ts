@@ -69,9 +69,10 @@ export class DetalleCampoComponent implements OnInit, AfterViewInit {
         const latitude = geolocationData[0];
         const longitude = geolocationData[1];
 
-        const map = L.map(mapElement).setView([latitude, longitude], 13);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        const map = L.map(mapElement).setView([latitude, longitude], 15); // Cambiado el nivel de zoom a 15
+        L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.jpg').addTo(map);
         L.marker([latitude, longitude]).addTo(map).bindPopup('Ubicación del campo').openPopup();
+
       }
     }
   }

@@ -64,7 +64,7 @@ export class RecuperContrasenaBackofficeComponent {
       console.error('Error al enviar el correo de recuperación:', error);
     } finally {
       this.cargandoValidacion = false; // Desactiva el spinner al finalizar la solicitud
-      // Oculta el spinner
+
     }
   }
 

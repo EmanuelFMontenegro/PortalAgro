@@ -4,15 +4,10 @@ import { AuthService } from 'src/app/services/AuthService';
 import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  constructor(private authService: AuthService, private router: Router) {
-    // Escuchar el evento beforeunload
-    window.addEventListener('beforeunload', () => {
-      this.clearTokenOnWindowClose();
-    });
-  }
+  constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(): boolean {
     const token = this.authService.getToken();
@@ -36,11 +31,8 @@ export class AuthGuard implements CanActivate {
     }
   }
 
-  private clearTokenOnWindowClose(): void {
-    const token = this.authService.getToken();
-    if (token) {
-      // Eliminar el token al cerrar la ventana
-      this.authService.clearToken();
-    }
+  // Método para cerrar la sesión y eliminar el token
+  logout(): void {
+    this.authService.logout();
   }
 }
