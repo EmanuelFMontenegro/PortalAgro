@@ -72,7 +72,6 @@ export class LoginBackofficeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     this.adjustCardSize(false);
   }
   togglePasswordVisibility(): void {
@@ -90,29 +89,45 @@ export class LoginBackofficeComponent implements OnInit {
         .validarCredencialBackoffice(username, password)
         .subscribe({
           next: (response) => {
-              if (
+            if (
               response.status === 200 &&
               response.body &&
               response.body.token
             ) {
+              // Usuario autenticado correctamente
               localStorage.setItem('token', response.body.token);
               this.router.navigate(['/dashboard-backoffice']);
               this.mostrarMensajeExitoso();
               this.login.reset();
             } else {
+              // Error de autenticación (usuario no registrado o contraseña incorrecta)
+              this.toastr.error(
+                'Contraseña incorrecta, intente de nuevo',
+                'Atención'
+              );
               this.mostrarMensajeError('Error de autenticación');
+            }
+          },
+          error: (error) => {
+            // Manejo de errores de la solicitud HTTP
+            if (error.status === 401 && error.error.code === 4016) {
+              this.toastr.error('La contraseña ingresada es incorrecta.', 'Atención');
+            } else {
+              this.toastr.error('Ha ocurrido un error durante la autenticación. Por favor, intenta nuevamente más tarde.', 'Error');
+              console.error('Error durante la autenticación:', error);
             }
           },
         });
 
       this.toggleErrorCardClass(false);
     } else {
-      this.toggleErrorCardClass(true); // Hay errores
+      this.toggleErrorCardClass(true); // Hay errores de validación en el formulario
       setTimeout(() => {
         this.adjustCardSize(true);
       }, 0);
     }
   }
+
 
   mostrarMensajeExitoso() {
     this.toastr.info('Portal AgroSustetable AgroTech.', 'Bienvenido', {
