@@ -41,7 +41,7 @@ export class ApiService {
     password: string
   ): Observable<HttpResponse<any>> {
     return this.http.post<HttpResponse<any>>(
-      `http://localhost:8095/api/dist/auth/login`, // URL corregida
+      `${this.baseURL}/dist/auth/login`, // URL corregida
       { username, password },
       { observe: 'response' } // Observar la respuesta completa
     );
