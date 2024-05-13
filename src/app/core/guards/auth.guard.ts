@@ -11,11 +11,16 @@ export class AuthGuard implements CanActivate {
 
   canActivate(): boolean {
     const token = this.authService.getToken();
+    const isBackoffice = this.isBackofficeUrl();
 
     if (token && !this.isTokenExpired(token)) {
       return true;
     } else {
-      this.router.navigate(['/login']);
+      if (isBackoffice) {
+        this.router.navigate(['/login-backoffice']);
+      } else {
+        this.router.navigate(['/login']);
+      }
       return false;
     }
   }
@@ -29,6 +34,17 @@ export class AuthGuard implements CanActivate {
     } catch (error) {
       return true;
     }
+  }
+
+  private isBackofficeUrl(): boolean {
+    // Obtener la URL actual del navegador
+    const currentUrl = window.location.pathname;
+
+    // Lista de identificadores que podrían indicar una URL del backoffice
+    const backofficeIdentifiers = ['/backoffice', '/admin'];
+
+    // Verificar si la URL contiene alguno de los identificadores de backoffice
+    return backofficeIdentifiers.some(identifier => currentUrl.includes(identifier));
   }
 
   // Método para cerrar la sesión y eliminar el token
