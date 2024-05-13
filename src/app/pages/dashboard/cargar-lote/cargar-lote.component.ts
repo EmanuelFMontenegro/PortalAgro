@@ -235,8 +235,7 @@ obtenerPlantaciones() {
         this.apiService
           .addPlotOperador(this.userId, this.FieldId, newPlotData)
           .subscribe(
-            (response) => {
-              console.log("datos de lotes que me trae",response)
+            () => {
               this.toastr.success('Lote creado con éxito', 'Éxito');
               this.campoForm.reset();
               this.router.navigate(['dashboard/lote']);
