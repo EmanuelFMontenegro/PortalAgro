@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1715219991360,
+  "timestamp": 1715608993298,
   "index": "/index.html",
   "assetGroups": [
     {
@@ -13,7 +13,7 @@
       "urls": [
         "/favicon.ico",
         "/index.html",
-        "/main.c3000759e812103f.js",
+        "/main.6fccaa100f58ac27.js",
         "/manifest.webmanifest",
         "/polyfills.be05328e1f042e1e.js",
         "/runtime.bb3ef3ba34f76de0.js",
@@ -96,6 +96,7 @@
         "/assets/img/instagram.png",
         "/assets/img/instagram.svg",
         "/assets/img/instagram_b.png",
+        "/assets/img/keyboard_double_arrow_left_24dp_FILL0_wght400_GRAD0_opsz24.svg",
         "/assets/img/linkedin.png",
         "/assets/img/linkedin.svg",
         "/assets/img/location.svg",
@@ -216,6 +217,7 @@
     "/assets/img/instagram.png": "c90546cddfa9c23f3b0fe3b10b0533752e3f4dd8",
     "/assets/img/instagram.svg": "dc68b1b8164be91048dc8f5a7bbafab1d78d7f81",
     "/assets/img/instagram_b.png": "2bacd64e83507d307c09a1e5c82e603aeb3d63fd",
+    "/assets/img/keyboard_double_arrow_left_24dp_FILL0_wght400_GRAD0_opsz24.svg": "4d0608c7a58b524f2cdd1745b5da83fedc44e114",
     "/assets/img/linkedin.png": "0fe60b31a5d4403cfaab6688e8914287362ff186",
     "/assets/img/linkedin.svg": "a8a9f98f04dd761537ab264ac602a9e1b319226b",
     "/assets/img/location.svg": "3f8d46f157cc7f7d9131c1126607c42bce353b1a",
@@ -264,8 +266,8 @@
     "/assets/img/vari.png": "13cb0b52d5ed1e7ad9aff6b6b401ac7a8ce1f0f5",
     "/assets/img/youtube.svg": "b6961f080f450652a5da313a3adce59aa5a7a785",
     "/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
-    "/index.html": "cb681b336a0a64798095d7d8afad26c8c53464f5",
-    "/main.c3000759e812103f.js": "2f5cacbe9e2d70fa02e59a5e7b90de99bbc5c6f0",
+    "/index.html": "2a59d1a7ce533d7870162e11fcc6a5a35600446a",
+    "/main.6fccaa100f58ac27.js": "e538b45890a4cbd6dfd2c9e9c0e346537e29bd34",
     "/manifest.webmanifest": "b9db4252a62817a9eb887ba921be9ab3af1079c8",
     "/polyfills.be05328e1f042e1e.js": "9b8dadec832ec27ee0ba5a1394fc9de885671400",
     "/runtime.bb3ef3ba34f76de0.js": "b6e6e6c15044d98117a688591b8b3956777a2910",

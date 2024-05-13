@@ -307,9 +307,9 @@ export class GeolocalizacionComponent implements AfterViewInit {
 
     // Agrega solo la capa de relieve de Stadia Maps
     L.tileLayer(
-      'https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.jpg',
+      'https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
       {
-        attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>',
+        attribution: 'Imágenes satelitales &copy; <a href="https://www.esri.com/">Esri</a>',
       }
     ).addTo(this.map);
 
@@ -390,8 +390,10 @@ export class GeolocalizacionComponent implements AfterViewInit {
 
     if (!this.map) {
       this.map = L.map('map').setView([latitude, longitude], 13);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors',
+      L.tileLayer('https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+      {
+        attribution: 'Imágenes satelitales &copy; <a href="https://www.esri.com/">Esri</a>',
+      
       }).addTo(this.map);
     }
 
