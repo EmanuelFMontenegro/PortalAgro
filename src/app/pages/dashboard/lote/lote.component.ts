@@ -33,7 +33,7 @@ interface Lote {
   dimensions: number;
   typeCrop: {
     id: number;
-    name: string; // Propiedad para el nombre de la plantación
+    name: string;
   };
   url_profile: string | null;
   plant_name?: string;

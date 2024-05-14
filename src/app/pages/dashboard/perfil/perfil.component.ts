@@ -331,18 +331,7 @@ export class PerfilComponent implements OnInit, AfterViewInit {
   }
 
   validarFormulario(): boolean {
-    if (
-      this.userDetailsForm.get('nombre')?.value.trim() === '' ||
-      this.userDetailsForm.get('apellido')?.value.trim() === '' ||
-      this.userDetailsForm.get('dni')?.value.trim() === '' ||
-      this.userDetailsForm.get('contacto')?.value.trim() === ''
-    ) {
-      this.toastr.warning(
-        'Por favor, complete todos los campos obligatorios.',
-        'Atención'
-      );
-      return false;
-    }
-    return true;
+    
+    return true; // Retornar siempre true para permitir guardar los cambios
   }
 }

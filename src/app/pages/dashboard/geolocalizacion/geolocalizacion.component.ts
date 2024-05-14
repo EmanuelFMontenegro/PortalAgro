@@ -163,7 +163,9 @@ export class GeolocalizacionComponent implements AfterViewInit {
       this.campoSeleccionado = JSON.parse(campoSeleccionadoString);
       this.searchFieldLocation(this.campoSeleccionado);
     } else {
-      console.warn("No se encontró información del campo seleccionado en el localStorage");
+      console.warn(
+        'No se encontró información del campo seleccionado en el localStorage'
+      );
     }
 
     if (fieldId) {
@@ -198,15 +200,12 @@ export class GeolocalizacionComponent implements AfterViewInit {
     }
   }
 
-
-
   obtenerCampoSeleccionado() {
     const campoSeleccionadoString = localStorage.getItem('campoSeleccionado');
 
     if (campoSeleccionadoString) {
       this.campoSeleccionado = JSON.parse(campoSeleccionadoString);
     } else {
-
     }
   }
 
@@ -284,8 +283,6 @@ export class GeolocalizacionComponent implements AfterViewInit {
     }
   }
 
-
-
   private initializeMap(): void {
     const latitudInicial = -27.362137;
     const longitudInicial = -55.900875;
@@ -309,7 +306,8 @@ export class GeolocalizacionComponent implements AfterViewInit {
     L.tileLayer(
       'https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
       {
-        attribution: 'Imágenes satelitales &copy; <a href="https://www.esri.com/">Esri</a>',
+        attribution:
+          'Imágenes satelitales &copy; <a href="https://www.esri.com/">Esri</a>',
       }
     ).addTo(this.map);
 
@@ -377,7 +375,9 @@ export class GeolocalizacionComponent implements AfterViewInit {
       latitude = geolocationData[0];
       longitude = geolocationData[1];
     } else if (this.fieldHasGeolocation) {
-      const geolocationData = this.campoSeleccionado.geolocation.split(',').map(parseFloat);
+      const geolocationData = this.campoSeleccionado.geolocation
+        .split(',')
+        .map(parseFloat);
       latitude = geolocationData[0];
       longitude = geolocationData[1];
     } else {
@@ -390,14 +390,16 @@ export class GeolocalizacionComponent implements AfterViewInit {
 
     if (!this.map) {
       this.map = L.map('map').setView([latitude, longitude], 13);
-      L.tileLayer('https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-      {
-        attribution: 'Imágenes satelitales &copy; <a href="https://www.esri.com/">Esri</a>',
-
-      }).addTo(this.map);
+      L.tileLayer(
+        'https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+        {
+          attribution:
+            'Imágenes satelitales &copy; <a href="https://www.esri.com/">Esri</a>',
+        }
+      ).addTo(this.map);
     }
 
-        this.map.eachLayer((layer) => {
+    this.map.eachLayer((layer) => {
       if (layer instanceof L.Marker) {
         this.map.removeLayer(layer);
       }
@@ -409,11 +411,11 @@ export class GeolocalizacionComponent implements AfterViewInit {
       .openPopup();
   }
 
-   loadInitialGeolocation(): void {
+  loadInitialGeolocation(): void {
     if (this.userId !== null && this.fieldId !== undefined) {
-        this.apiService.getGeolocationField(this.userId, this.fieldId).subscribe(
+      this.apiService.getGeolocationField(this.userId, this.fieldId).subscribe(
         (response: any) => {
-            if (response && response.geolocation) {
+          if (response && response.geolocation) {
             const geoData = response.geolocation;
             if (
               geoData.latitude !== undefined &&
@@ -438,13 +440,12 @@ export class GeolocalizacionComponent implements AfterViewInit {
     }
   }
 
-
   private addMarker(coords: [number, number]): void {
     if (coords && !isNaN(coords[0]) && !isNaN(coords[1])) {
       this.currentMarker = L.marker(coords).addTo(this.map);
       this.currentMarker.bindPopup('Ubicación seleccionada').openPopup();
     } else {
-        this.toastr.error(
+      this.toastr.error(
         'Coordenadas no válidas para la geolocalización',
         'Error'
       );

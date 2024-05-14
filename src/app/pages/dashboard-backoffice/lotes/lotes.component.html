@@ -36,10 +36,10 @@
 
     <ng-container *ngIf="filtroSeleccionado === 'cultivo'">
       <mat-select class="field-input" placeholder="Seleccionar cultivo" [(ngModel)]="cropId">
-        <mat-option value="1">Cereales</mat-option>
-        <mat-option value="2">Leguminosas</mat-option>
+        <mat-option *ngFor="let cultivo of cultivos" [value]="cultivo.id">{{ cultivo.name }}</mat-option>
       </mat-select>
     </ng-container>
+
 
 
 
