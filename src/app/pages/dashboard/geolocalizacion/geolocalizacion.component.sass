@@ -252,8 +252,8 @@ body
     flex-direction: column
     align-items: center
     .card
-      margin-top: -30%
-
+      position: relative
+      top: -17em
     .titulo-bienvenida
       order: -3
     .card-user
@@ -266,7 +266,7 @@ body
 
     .card-user .avatar mat-icon
       font-size: 65px
- 
+
     .letra_btn_volver
       display: none
 
@@ -279,6 +279,10 @@ body
       order: -1
       height: 34vh
       border-radius: 10px
+
+    .card-info
+      position: relative
+      bottom: 17em
 
     .input-container input[type=text]
       width: 100%
@@ -293,19 +297,20 @@ body
       color: #808080
 
     .botones-servicio
-      margin-top: 31em
+      margin-top: 23em
 
-      .register-button
-        background-color: $primary-color
-        width: 100%
-      .cancel-button
-        width: 100%
+    .register-button
+      background-color: $primary-color
+      width: 100%
+    .cancel-button
+      width: 100%
 
-    .card-map
-      width: 90%
-      margin-top: 23%
-      margin-left: 16px
-#map
-  width: 100%
-  order: 0
-  height: 250px
+  .container .card-map
+    width: 90%
+    top: 8em
+    left: -4em
+    position: relative
+  #map
+    width: 100%
+    order: 0
+    height: 250px

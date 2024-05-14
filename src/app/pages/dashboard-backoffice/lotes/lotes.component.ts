@@ -42,7 +42,10 @@ interface Lote {
   plant_name?: string;
   type_crop_id?: number;
 }
-
+interface Cultivo {
+  id: number;
+  name: string;
+}
 @Component({
   selector: 'app-lotes',
   templateUrl: './lotes.component.html',
@@ -52,6 +55,7 @@ export class LotesComponent implements OnInit {
   mostrarMatSelectLocalidades: boolean = false;
   localidades: any[] = [];
   cropId: string | undefined;
+  cultivos: Cultivo[] = [];
   filteredLocalidades: Observable<any[]> = new Observable<any[]>();
   filtroLocalidades: FormControl = new FormControl('');
   Buscar: string = '';
@@ -107,6 +111,8 @@ export class LotesComponent implements OnInit {
     this.decodeToken();
     this.cargarDatosDeUsuario();
     this.obtenerLocalidades();
+    this.obtenerCultivos();
+    this.filtrarPorCultivo();
     this.cargarLotes();
   }
 
@@ -170,7 +176,20 @@ export class LotesComponent implements OnInit {
   obtenerIdLocalidadSeleccionada(): number | undefined {
     return this.filtroLocalidades.value;
   }
-
+  obtenerCultivos() {
+    this.apiService.getAllTypeCropOperador().subscribe(
+      (typeCrops: any) => {
+          this.cultivos = typeCrops.map((crop: any) => ({
+          id: crop.id,
+          name: crop.name,
+        }));
+      },
+      (error) => {
+        console.error('Error al cargar los tipos de cultivo:', error);
+      }
+    );
+  }
+  
   aplicarFiltro(event: MatSelectChange) {
     const valorSeleccionado = event.value;
 
@@ -263,6 +282,7 @@ export class LotesComponent implements OnInit {
   processLoteData(data: Lote[]): void {
     this.apiService.getAllTypeCropOperador().subscribe(
       (typeCrops: any) => {
+        console.log("datos de los cultivos",typeCrops)
         const typeCropsMap = typeCrops.reduce((acc: any, curr: any) => {
           acc[curr.id] = curr.name;
           return acc;
@@ -334,7 +354,7 @@ export class LotesComponent implements OnInit {
         )
         .subscribe(
           (data: any) => {
-
+            console.log("los que trae el enpoint cultivos",data)
             if (data && data.list && data.list.length > 0) {
               const lotsArray: Lote[][] = data.list[0];
               const lotes: Lote[] = lotsArray.reduce(
@@ -401,7 +421,7 @@ export class LotesComponent implements OnInit {
       )
       .subscribe(
         (data: any) => {
-         
+
           if (data && data.list && data.list.length > 0) {
             const lotsArray: Lote[][] = data.list[0];
             const lotes: Lote[] = lotsArray.reduce(
