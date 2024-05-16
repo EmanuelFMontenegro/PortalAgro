@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { startWith, map } from 'rxjs/operators';
 import { debounceTime } from 'rxjs/operators';
+import { Router, ActivatedRoute } from '@angular/router';
 
 interface CustomJwtPayload {
   userId: number;
@@ -50,6 +51,7 @@ export class ProductoresComponent implements OnInit {
     private authService: AuthService,
     private apiService: ApiService,
     private toastr: ToastrService,
+    private router: Router,
     private http: HttpClient
   ) {}
 
@@ -171,7 +173,7 @@ export class ProductoresComponent implements OnInit {
       (loc) => loc.name === this.Buscar
     );
     if (!localidadSeleccionada) {
-     
+
       return;
     }
     const locationId = localidadSeleccionada.id;
@@ -270,7 +272,8 @@ export class ProductoresComponent implements OnInit {
       }
     }
   }
-
-  BtnNuevaChacra() {}
-  verMas() {}
+  //Agregar en Ver Mas el link o ruta a la pantalla agregar nuevos Productores
+  BtnNuevaChacra() {this.router.navigate(['/dashboard-backoffice/inicio']);}
+  //Agregar en Ver Mas el link o ruta a la pantalla editar un Productores
+  verMas() {this.router.navigate(['/dashboard-backoffice/inicio']);}
 }

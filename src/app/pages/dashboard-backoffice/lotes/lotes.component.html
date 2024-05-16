@@ -1,17 +1,23 @@
 <div class="container">
   <div class="titulo-perfil">
-    <span class="titulo-perfil">¡Bienvenido, {{ nombre }} {{ apellido }}!</span>
+    <span class="titulo-perfil">¡Bienvenido, Acá podrás gestionar, los lotes de los Productores</span>
   </div>
-  <div class="titulo-welcome">
-    <p>
-      Acá podrás gestionar, supervisar y controlar todas las actividades de los usuarios de
-      <strong>
-        <img src="assets/img/logo_AGROtech.svg" alt="AGROTECH"
-          style="width: auto; height: 1.3em; vertical-align: bottom;">
-      </strong>.
-    </p>
-    <h2 class="titulo-chacra">Lotes</h2>
-  </div>
+  <mat-card class="main-card">
+    <div class="card user-card">
+      <div class="user-content">
+        <div class="avatar">
+          <div class="avatar-circle">
+            <mat-icon class="avatar-icon">person</mat-icon>
+          </div>
+        </div>
+        <div class="titulo-perfil-avatar">
+          <div class="titulo-welcome">
+            <p class="email">Email: {{ userEmail }}</p>
+          </div>
+        </div>
+      </div>
+      <h2 class="titulo-chacra">Lotes</h2>
+</div>
 
   <div class="field-container">
     <mat-select class="field-input" placeholder="Filtrar por" [(ngModel)]="filtroSeleccionado"
@@ -63,8 +69,7 @@
         style="filter: invert(70%) sepia(60%) saturate(10000%) hue-rotate(130deg)" alt="IconoBorrar">
     </button>
 
-    <button mat-raised-button class="nuevaChacra-button" (click)="BtnNuevaChacra()">Nueva Lote
-      <mat-icon style="font-size: 20px; position: relative; top: 1px; right: 3px;">add</mat-icon>
+    <button mat-raised-button class="nuevaChacra-button" (click)="BtnNuevaChacra()">Volver al Inicio
     </button>
   </div>
 
@@ -89,15 +94,9 @@
         <span class="campo-variable">{{ lote.descriptions }}</span>
       </p>
       <div class="acciones">
-        <button mat-icon-button aria-label="Editar" class="edit-button" (click)="editarLote(lote)">
-          <mat-icon class="material-icons icon-size">edit</mat-icon>
-          <span style="color: #FFFFFF;">Editar</span>
-        </button>
-        <button mat-icon-button aria-label="Eliminar" class="delete-button" (click)="confirmarBorrado(lote)">
-          <mat-icon class="material-icons icon-size">delete</mat-icon>
-          <span style="color:#FFFFFF;">Eliminar</span>
+        <button mat-icon-button aria-label="verMas"  class="verMas-button" (click)="verMas(lote)">
+          <span style="color: #FFFFFF;">Ver Más</span>
         </button>
       </div>
     </div>
   </div>
-</div>

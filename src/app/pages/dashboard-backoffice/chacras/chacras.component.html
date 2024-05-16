@@ -1,15 +1,21 @@
 <div class="container">
   <div class="titulo-perfil">
-    <span class="titulo-perfil">¡Bienvenido, {{ nombre }} {{ apellido }}!</span>
+    <span class="titulo-perfil">¡Bienvenido, Acá podrás gestionar, las chacras de los Productores</span>
   </div>
-  <div class="titulo-welcome">
-    <p>
-      Acá podrás gestionar, supervisar y controlar todas las actividades de los usuarios de
-      <strong>
-        <img src="assets/img/logo_AGROtech.svg" alt="AGROTECH"
-          style="width: auto; height: 1.3em; vertical-align: bottom;">
-      </strong>.
-    </p>
+  <mat-card class="main-card">
+    <div class="card user-card">
+      <div class="user-content">
+        <div class="avatar">
+          <div class="avatar-circle">
+            <mat-icon class="avatar-icon">person</mat-icon>
+          </div>
+        </div>
+        <div class="titulo-perfil-avatar">
+          <div class="titulo-welcome">
+            <p class="email">Email: {{ userEmail }}</p>
+          </div>
+        </div>
+      </div>
     <h2 class="titulo-chacra">Chacras</h2>
   </div>
 
@@ -53,15 +59,11 @@
         style="filter: invert(70%) sepia(60%) saturate(10000%) hue-rotate(130deg)" alt="IconoBorrar">
     </button>
 
-    <button mat-raised-button class="nuevaChacra-button" (click)="BtnNuevaChacra()">Nueva Chacra
-      <mat-icon style="font-size: 20px; position: relative; top: 1px; right: 3px;">add</mat-icon>
+    <button mat-raised-button class="nuevaChacra-button" (click)="BtnNuevaChacra()">Volver al Inicio
     </button>
   </div>
-</div>
-
 
 <div class="card-campos-section">
-  <h2 class="titulo-campos"></h2>
   <div class="campos-container">
     <div class="campo-card" *ngFor="let campo of campos">
       <img src="/assets/img/campo_{{ campo.id }}.png" alt="Campo {{ campo.id }}">
@@ -70,7 +72,9 @@
         <span class="campo-variable">Localidad:</span> {{ campo.address.location.name }}
         <img src="assets/img/location.svg" alt="Icono" class="icono_location">
       </p>
-      <p><span class="campo-variable"></span> {{ campo.observation }}</p>
+      <p><span class="campo-variable">Dirección:</span> {{ campo.address.address }}</p>
+      <p><span class="campo-variable">Hectarias:</span> {{ campo.dimensions}}</p>
+      <p><span class="campo-variable">Descripción:</span> {{ campo.observation }}</p>
       <!-- <p><span class="campo-variable">Dirección:</span> {{ campo.address.address }}</p> -->
       <button mat-raised-button class="ver-mas-button" (click)="verMas(campo)">Ver Más</button>
     </div>

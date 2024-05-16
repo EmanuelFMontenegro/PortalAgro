@@ -13,6 +13,8 @@ import {
 } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { FormControl } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
+
 
 interface CustomJwtPayload {
   userId: number;
@@ -64,6 +66,7 @@ export class ChacrasComponent implements OnInit {
     private authService: AuthService,
     private apiService: ApiService,
     private toastr: ToastrService,
+    private router: Router,
     private http: HttpClient
   ) {
     for (let i = 1; i <= 100; i++) {
@@ -383,7 +386,7 @@ export class ChacrasComponent implements OnInit {
       )
       .subscribe(
         (response) => {
-          
+
           if (response.list && response.list.length > 0) {
             this.campos = response.list[0];
           } else {
@@ -401,7 +404,7 @@ export class ChacrasComponent implements OnInit {
   }
 
   BtnNuevaChacra() {
-    // Lógica para manejar el clic en el botón de registrar campos
+    this.router.navigate(['dashboard-backoffice/inicio']);
   }
 
   verMas(campo: any) {

@@ -110,7 +110,7 @@ export class LotesComponent implements OnInit {
 
   ngOnInit(): void {
     this.decodeToken();
-    this.cargarDatosDeUsuario();
+    //this.cargarDatosDeUsuario();
     this.obtenerLocalidades();
     this.obtenerCultivos();
     this.filtrarPorCultivo();
@@ -126,30 +126,30 @@ export class LotesComponent implements OnInit {
     }
   }
 
-  cargarDatosDeUsuario() {
-    const decoded: DecodedToken = jwtDecode(this.authService.getToken() || '');
-    if ('userId' in decoded && 'sub' in decoded && 'roles' in decoded) {
-      this.userId = decoded.userId;
-      this.userEmail = decoded.sub;
+  // cargarDatosDeUsuario() {
+  //   const decoded: DecodedToken = jwtDecode(this.authService.getToken() || '');
+  //   if ('userId' in decoded && 'sub' in decoded && 'roles' in decoded) {
+  //     this.userId = decoded.userId;
+  //     this.userEmail = decoded.sub;
 
-      this.companyId = 1;
+  //     this.companyId = 1;
 
-      if (this.userId !== null && this.companyId !== null) {
-        this.apiService.findUserById(this.companyId, this.userId).subscribe(
-          (data) => {
-            this.nombre = data.name;
-            this.apellido = data.lastname;
-          },
-          (error) => {
-            console.error('Error al obtener el nombre del usuario:', error);
-          }
-        );
-      }
-    } else {
-      this.userId = null;
-      this.userEmail = null;
-    }
-  }
+  //     if (this.userId !== null && this.companyId !== null) {
+  //       this.apiService.findUserById(this.companyId, this.userId).subscribe(
+  //         (data) => {
+  //           this.nombre = data.name;
+  //           this.apellido = data.lastname;
+  //         },
+  //         (error) => {
+  //           console.error('Error al obtener el nombre del usuario:', error);
+  //         }
+  //       );
+  //     }
+  //   } else {
+  //     this.userId = null;
+  //     this.userEmail = null;
+  //   }
+  // }
 
   obtenerLocalidades() {
     this.apiService.getLocationMisiones('location').subscribe(
@@ -541,54 +541,9 @@ export class LotesComponent implements OnInit {
     });
   }
 
-  // loadDataLote(FieldId: number, userId: number): void {
-  //   if (userId && FieldId) {
-  //     this.apiService.getPlotsOperador(userId, FieldId).subscribe(
-  //       (response: any) => {
-  //         if (response?.list && response.list.length > 0) {
-  //           const lotsArray: Lote[][] = response.list[0];
-  //           const data: Lote[] = lotsArray.reduce(
-  //             (acc, curr) => acc.concat(curr),
-  //             []
-  //           );
-
-  //           if (data.length > 0) {
-  //             this.processLoteData(data);
-  //           } else {
-  //             this.toastr.info(
-  //               'Aún no has agregado ningún lote.',
-  //               'Información'
-  //             );
-  //           }
-  //         } else {
-  //           this.toastr.info('Aún no has agregado ningún lote.', 'Información');
-  //         }
-  //       },
-  //       (error) => {
-  //         console.error('Error al cargar los lotes:', error);
-  //       }
-  //     );
-  //   } else {
-  //     console.warn(
-  //       'El userId o el FieldId son null o undefined, por lo que no se cargan los lotes.'
-  //     );
-  //   }
-  // }
-
-  // cargarLotes() {
-  //   this.router.navigate(['dashboard/cargar-lote'], {
-  //     state: { modoEdicion: this.modoEdicion },
-  //   });
-  // }
-
   volver() {
     this.router.navigate(['dashboard-backoffice/inicio']);
   }
-  // editarLote(lote: Lote): void {
-  //   this.modoEdicion = true;
-  //   localStorage.setItem('plotId', lote.id.toString());
-  //   this.router.navigate(['dashboard/cargar-lote']);
-  // }
 
   limpiarTexto() {
     this.Buscar = '';
@@ -665,7 +620,6 @@ export class LotesComponent implements OnInit {
     }
   }
 
-  BtnNuevaChacra() {}
-  editarLote(lote: any) {}
+  BtnNuevaChacra() {this.router.navigate(['dashboard-backoffice/inicio']);}
   verMas(campo: any) {}
 }
