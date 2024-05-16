@@ -23,11 +23,11 @@
     </mat-select>
 
     <ng-container *ngIf="filtroSeleccionado === 'localidad'">
-      <mat-select class="field-input" placeholder="Seleccionar localidad" [(ngModel)]="filtroLocalidades"
-        (ngModelChange)="filtrarPorLocalidad($event)">
+      <mat-select class="field-input" placeholder="Seleccionar localidad" [(ngModel)]="idLocalidadSeleccionada">
         <mat-option *ngFor="let localidad of localidades" [value]="localidad.id">{{ localidad.name }}</mat-option>
       </mat-select>
     </ng-container>
+
 
 
     <ng-container *ngIf="filtroSeleccionado === 'productor'">

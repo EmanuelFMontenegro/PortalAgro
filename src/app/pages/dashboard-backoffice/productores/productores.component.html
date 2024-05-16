@@ -22,7 +22,7 @@
     </mat-select>
 
     <input *ngIf="!mostrarMatSelectLocalidades" class="field-input" matInput [placeholder]="placeholderText"
-    [(ngModel)]="nombreABuscar" (input)="activarFiltro()">
+    [(ngModel)]="nombreABuscar" >
 
 
     <ng-container *ngIf="mostrarMatSelectLocalidades">
