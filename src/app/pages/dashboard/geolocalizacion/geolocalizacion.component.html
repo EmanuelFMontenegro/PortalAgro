@@ -25,11 +25,12 @@
     <div class="geolocation-info">
       <div class="card" *ngIf="campoSeleccionado">
         <div class="card-item">
-          <p class="with-dot">{{ campoSeleccionado.name }}</p>
-          <p class="with-dot">{{ campoSeleccionado.address?.location.name }}</p>
-          <p class="with-dot">{{ campoSeleccionado.address.address }}</p>
-          <p class="with-dot">{{ campoSeleccionado.dimensions }} Hectáreas</p>
+          <p class="with-dot"><strong>Nombre Chacra:</strong> {{ campoSeleccionado.name }}</p>
+          <p class="with-dot"><strong>Localidad:</strong> {{ campoSeleccionado.address?.location.name }}</p>
+          <p class="with-dot"><strong>Dirección:</strong> {{ campoSeleccionado.address.address }}</p>
+          <p class="with-dot"><strong>Hectáreas:</strong> {{ campoSeleccionado.dimensions }}</p>
         </div>
+
       </div>
       <div class="card-info">
         <div class="search-container">
