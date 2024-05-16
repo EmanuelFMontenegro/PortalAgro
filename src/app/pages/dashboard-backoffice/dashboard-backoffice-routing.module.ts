@@ -22,6 +22,7 @@ const routes: Routes = [
       { path: 'inicio', component: InicioComponent },
       { path: 'servicios', component: ServiciosComponent },
       { path: 'productores', component: ProductoresComponent },
+      { path: 'perfil-productor', component: PerfilProductorComponent },
       { path: 'chacras', component: ChacrasComponent },
       { path: 'lotes', component: LotesComponent },
       { path: 'calendarios', component: CalendariosComponent },

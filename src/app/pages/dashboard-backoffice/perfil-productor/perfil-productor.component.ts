@@ -16,6 +16,8 @@ import {
   debounceTime,
   distinctUntilChanged,
 } from 'rxjs/operators';
+import { ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 interface DecodedToken {
   userId: number;
@@ -30,7 +32,7 @@ interface UserData {
 @Component({
   selector: 'app-perfil-productor',
   templateUrl: './perfil-productor.component.html',
-  styleUrls: ['./perfil-productor.component.sass']
+  styleUrls: ['./perfil-productor.component.sass'],
 })
 export class PerfilProductorComponent implements OnInit, AfterViewInit {
   selectedImage: string | ArrayBuffer | null = null;
@@ -62,7 +64,8 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private apiService: ApiService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private router: Router
   ) {
     this.userDetailsForm = this.formBuilder.group({
       nombre: [
@@ -214,7 +217,7 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
                 apellido: this.apellido,
                 dni: this.dni,
                 contacto: this.telephone,
-                localidad: this.locationId, 
+                localidad: this.locationId,
                 descripcion: this.descriptions,
               });
             },
@@ -314,7 +317,6 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
                     'Error al actualizar el perfil: Su apellido o nombre es demasiado extenso.',
                     'Atención'
                   );
-
                 }
               }
             );
@@ -331,7 +333,6 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
   }
 
   validarFormulario(): boolean {
-
     return true; // Retornar siempre true para permitir guardar los cambios
   }
 }

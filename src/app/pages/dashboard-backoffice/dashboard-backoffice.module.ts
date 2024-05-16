@@ -41,6 +41,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { DialogComponent } from './dialog/dialog.component';
 import { PerfilProductorComponent } from './perfil-productor/perfil-productor.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -58,7 +59,7 @@ import { PerfilProductorComponent } from './perfil-productor/perfil-productor.co
     InformesComponent,
     ConfiguracionComponent,
     DialogComponent,
-    per
+    PerfilProductorComponent
 
   ],
   imports: [
@@ -76,7 +77,8 @@ import { PerfilProductorComponent } from './perfil-productor/perfil-productor.co
     MatAutocompleteModule,
     MatOptionModule,
     MatSelectModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
 
 })
