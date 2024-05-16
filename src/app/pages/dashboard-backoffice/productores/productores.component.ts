@@ -99,7 +99,6 @@ export class ProductoresComponent implements OnInit {
   cargarUsuarios(locationId?: number) {
     this.apiService.getPeopleAdmin(locationId).subscribe(
       (data: any) => {
-
         if (data.list && data.list.length > 0) {
           const usuariosList = data.list.flat();
           this.usuarios = usuariosList.map((usuario: any) => ({
@@ -132,7 +131,6 @@ export class ProductoresComponent implements OnInit {
   }
 
   private filtrarLocalidades(value: string): any[] {
-
     const filterValue = value.toLowerCase();
     return this.localidades.filter((loc) =>
       loc.name.toLowerCase().includes(filterValue)
@@ -166,14 +164,12 @@ export class ProductoresComponent implements OnInit {
 
   filtrarPorLocalidad() {
     if (!this.Buscar) {
-
       return;
     }
     const localidadSeleccionada = this.localidades.find(
       (loc) => loc.name === this.Buscar
     );
     if (!localidadSeleccionada) {
-
       return;
     }
     const locationId = localidadSeleccionada.id;
@@ -206,7 +202,6 @@ export class ProductoresComponent implements OnInit {
 
   filtrarPorNombreOApellido() {
     if (!this.nombreABuscar && !this.apellidoABuscar) {
-
       return;
     }
 
@@ -263,7 +258,6 @@ export class ProductoresComponent implements OnInit {
     ) {
       this.filtrarPorNombreOApellido();
     } else if (this.mostrarMatSelectLocalidades && !this.Buscar) {
-
     } else {
       if (this.mostrarMatSelectLocalidades) {
         this.filtrarPorLocalidad();
@@ -273,7 +267,11 @@ export class ProductoresComponent implements OnInit {
     }
   }
   //Agregar en Ver Mas el link o ruta a la pantalla agregar nuevos Productores
-  BtnNuevaChacra() {this.router.navigate(['/dashboard-backoffice/inicio']);}
+  BtnNuevaChacra() {
+    this.router.navigate(['/dashboard-backoffice/perfil-prodcutor']);
+  }
   //Agregar en Ver Mas el link o ruta a la pantalla editar un Productores
-  verMas() {this.router.navigate(['/dashboard-backoffice/inicio']);}
+  verMas() {
+    this.router.navigate(['/dashboard-backoffice/inicio']);
+  }
 }

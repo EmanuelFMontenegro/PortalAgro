@@ -40,6 +40,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { DialogComponent } from './dialog/dialog.component';
+import { PerfilProductorComponent } from './perfil-productor/perfil-productor.component';
 
 
 
@@ -57,6 +58,8 @@ import { DialogComponent } from './dialog/dialog.component';
     InformesComponent,
     ConfiguracionComponent,
     DialogComponent,
+    per
+
   ],
   imports: [
     CommonModule,

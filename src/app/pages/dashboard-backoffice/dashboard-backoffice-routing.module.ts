@@ -12,7 +12,7 @@ import { NotificacionComponent } from './notificacion/notificacion.component';
 import { PlanificacionesComponent } from './planificaciones/planificaciones.component';
 import { InformesComponent } from './informes/informes.component';
 import { ConfiguracionComponent } from './configuracion/configuracion.component';
-
+import { PerfilProductorComponent } from './perfil-productor/perfil-productor.component';
 const routes: Routes = [
   {
     path: 'dashboard-backoffice',
