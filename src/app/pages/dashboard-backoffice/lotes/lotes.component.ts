@@ -56,6 +56,7 @@ export class LotesComponent implements OnInit {
   localidades: any[] = [];
   cropId: string | undefined;
   cultivos: Cultivo[] = [];
+  idLocalidadSeleccionada: number | undefined;
   filteredLocalidades: Observable<any[]> = new Observable<any[]>();
   filtroLocalidades: FormControl = new FormControl('');
   Buscar: string = '';
@@ -166,7 +167,6 @@ export class LotesComponent implements OnInit {
   }
 
   private filtrarLocalidades(value: string): any[] {
-
     const filterValue = value.toLowerCase();
     return this.localidades.filter((loc) =>
       loc.name.toLowerCase().includes(filterValue)
@@ -174,12 +174,12 @@ export class LotesComponent implements OnInit {
   }
 
   obtenerIdLocalidadSeleccionada(): number | undefined {
-    return this.filtroLocalidades.value;
+     return this.filtroLocalidades.value;
   }
   obtenerCultivos() {
     this.apiService.getAllTypeCropOperador().subscribe(
       (typeCrops: any) => {
-          this.cultivos = typeCrops.map((crop: any) => ({
+        this.cultivos = typeCrops.map((crop: any) => ({
           id: crop.id,
           name: crop.name,
         }));
@@ -189,7 +189,7 @@ export class LotesComponent implements OnInit {
       }
     );
   }
-  
+
   aplicarFiltro(event: MatSelectChange) {
     const valorSeleccionado = event.value;
 
@@ -217,9 +217,8 @@ export class LotesComponent implements OnInit {
     }
   }
 
-  filtrarPorLocalidad(locationId: number | undefined) {
-    if (!locationId) {
-      // Muestra un mensaje de error si no se ha seleccionado una localidad
+  filtrarPorLocalidad() {
+    if (!this.idLocalidadSeleccionada) {
       this.toastr.error('Por favor selecciona una localidad.', 'Error');
       return;
     }
@@ -235,11 +234,10 @@ export class LotesComponent implements OnInit {
         undefined,
         undefined,
         undefined,
-        locationId
+        this.idLocalidadSeleccionada
       )
       .subscribe(
         (data: any) => {
-
           if (data && data.list && data.list.length > 0) {
             const lotsArray: Lote[][] = data.list[0];
             const lotes: Lote[] = lotsArray.reduce(
@@ -248,7 +246,10 @@ export class LotesComponent implements OnInit {
             );
             this.processLoteData(lotes);
           } else {
+            this.loteData = [];
             this.toastr.info('Aún no se han agregado lotes.', 'Información');
+
+
           }
         },
         (error) => {
@@ -261,7 +262,6 @@ export class LotesComponent implements OnInit {
   cargarLotes() {
     this.apiService.getAllPlotsAdmin().subscribe(
       (data: any) => {
-
         if (data && data.list && data.list.length > 0) {
           const lotsArray: Lote[][] = data.list[0];
           const lotes: Lote[] = lotsArray.reduce(
@@ -282,7 +282,7 @@ export class LotesComponent implements OnInit {
   processLoteData(data: Lote[]): void {
     this.apiService.getAllTypeCropOperador().subscribe(
       (typeCrops: any) => {
-        console.log("datos de los cultivos",typeCrops)
+        console.log('datos de los cultivos', typeCrops);
         const typeCropsMap = typeCrops.reduce((acc: any, curr: any) => {
           acc[curr.id] = curr.name;
           return acc;
@@ -315,7 +315,6 @@ export class LotesComponent implements OnInit {
         )
         .subscribe(
           (data: any) => {
-
             if (data && data.list && data.list.length > 0) {
               const lotsArray: Lote[][] = data.list[0];
               const lotes: Lote[] = lotsArray.reduce(
@@ -354,7 +353,7 @@ export class LotesComponent implements OnInit {
         )
         .subscribe(
           (data: any) => {
-            console.log("los que trae el enpoint cultivos",data)
+            console.log('los que trae el enpoint cultivos', data);
             if (data && data.list && data.list.length > 0) {
               const lotsArray: Lote[][] = data.list[0];
               const lotes: Lote[] = lotsArray.reduce(
@@ -386,7 +385,6 @@ export class LotesComponent implements OnInit {
       );
       this.minHectareas = undefined;
     }
-
   }
 
   validarMaxHectareas() {
@@ -397,7 +395,6 @@ export class LotesComponent implements OnInit {
       );
       this.maxHectareas = undefined;
     }
-
   }
 
   aplicarFiltroHectareas(minHectareas: number, maxHectareas: number) {
@@ -421,7 +418,6 @@ export class LotesComponent implements OnInit {
       )
       .subscribe(
         (data: any) => {
-
           if (data && data.list && data.list.length > 0) {
             const lotsArray: Lote[][] = data.list[0];
             const lotes: Lote[] = lotsArray.reduce(
@@ -596,6 +592,7 @@ export class LotesComponent implements OnInit {
 
   limpiarTexto() {
     this.Buscar = '';
+    this.idLocalidadSeleccionada = undefined;
     this.loteData = [];
     this.nombreProductor = '';
     this.cropId = '';
@@ -607,8 +604,23 @@ export class LotesComponent implements OnInit {
       this.toastr.warning('Por favor selecciona un filtro.', 'Advertencia');
       return;
     }
+
     switch (this.filtroSeleccionado) {
       case 'localidad':
+        const localidadId = this.obtenerIdLocalidadSeleccionada();
+        // Verifica si localidadId es un número válido antes de realizar la comparación
+        if (
+          localidadId === null ||
+          localidadId === undefined ||
+          isNaN(localidadId)
+        ) {
+          this.toastr.error(
+            'Por favor selecciona una localidad válida.',
+            'Error'
+          );
+          return;
+        }
+        this.filtrarPorLocalidad();
         break;
       case 'productor':
         this.filtrarPorProductor();
@@ -652,6 +664,7 @@ export class LotesComponent implements OnInit {
         break;
     }
   }
+
   BtnNuevaChacra() {}
   editarLote(lote: any) {}
   verMas(campo: any) {}
