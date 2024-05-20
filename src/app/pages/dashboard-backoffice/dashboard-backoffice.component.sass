@@ -1,5 +1,6 @@
 
 $primary-color: #3BA549
+$new-color: #015E85
 $secondary-color: #8FCA8F
 $hover-color: #47de5b
 $error-color: #d9534f
@@ -24,7 +25,7 @@ body
   flex-direction: column
 
 .sidenav
-  width: 262px
+  width: 265px
   box-shadow: 1px 0 5px rgba(0, 0, 0, 0.24)
   background-color: $default
 
@@ -62,7 +63,6 @@ body
 
 .logo-b
   display: flex
-  top: 13em
   padding: 20px
   flex-direction: column-reverse
   position: relative
@@ -122,12 +122,11 @@ body
   flex: 1
 
 .profile-menu
-  color: #858585
+  color: #015E85
   background: transparent
   border-radius: 50%
-  border: 1px solid #858585
-  padding: 6px
-
+  border: 1px solid #015E85
+  padding: 2px
 
 .open-sidebar-btn
   position: absolute
@@ -136,10 +135,9 @@ body
   color: $medium-grey
 
 .nav-item-icon
-  filter: invert(70%) sepia(60%) saturate(10000%) hue-rotate(130deg)
   margin-right: 2%
   margin-bottom: -2%
-  width: 20px
+  width: 23px
 
 .card-footer
   position: relative
@@ -259,6 +257,10 @@ body
   display: none
 
 @media screen and (max-width: 768px)
+  .cdk-overlay-container
+    position: static
+    z-index: 1000
+
   .open-sidebar-btn
     display: block
     position: absolute
@@ -271,8 +273,16 @@ body
     cursor: pointer
     z-index: 9999
 
+  .close-sidebar-btn
+    position: absolute
+    top: 10px
+    right: 10px
+    background: none
+    border: none
+
   sidenav-container.open
     transition: all 0.3s
+    position: static
 
   sidenav-container.open .sidenav
     width: 240px

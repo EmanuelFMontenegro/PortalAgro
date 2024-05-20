@@ -1,52 +1,57 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #sidenav mode="side" [opened]="!isScreenSmall" class="sidenav">
+  <mat-sidenav #sidenav [mode]="isScreenSmall ? 'over' : 'side'" [opened]="!isScreenSmall" class="sidenav">
     <!-- Contenido del sidenav -->
     <div class="logo-container">
       <img src="assets/img/LogoAgroBYTECH.svg" alt="Logo" class="dashboard-logo">
     </div>
+    <button mat-icon-button  class="close-sidebar-btn"
+      (click)="closeSidenavIfSmall()" *ngIf="isScreenSmall">
+      <mat-icon style="color:#015E85;">arrow_back</mat-icon>
+    </button>
     <mat-nav-list class="btn_nav">
       <a mat-list-item routerLink="/dashboard-backoffice/inicio" class="nav-item" (click)="closeSidenavIfSmall()">
-        <img src="assets/img/home_FILL0_wght400_GRAD-25_opsz24.svg" alt="Home" class="nav-item-icon">
+        <img src="assets/img/home_24dp_FILL0_wght300_GRAD0_opsz24.svg" alt="Home" class="nav-item-icon">
         Inicio
       </a>
       <a mat-list-item routerLink="/dashboard-backoffice/servicios" class="nav-item" (click)="closeSidenavIfSmall()">
-        <img src="assets/img/sell_FILL0_wght400_GRAD0_opsz24.svg" alt="Servicios" class="nav-item-icon">
+        <img src="assets/img/drone-15-svgrepo-com.svg" alt="Servicios" class="nav-item-icon">
         Solicitudes y Servicios
       </a>
 
       <a mat-list-item routerLink="/dashboard-backoffice/productores" class="nav-item" (click)="closeSidenavIfSmall()">
-        <img src="assets/img/person_FILL0_wght400_GRAD-25_opsz24.svg" alt="Productores" class="nav-item-icon">
+        <img src="assets/img/person_24dp_FILL0_wght300_GRAD0_opsz24.svg" alt="Productores" class="nav-item-icon">
         Productores
       </a>
       <a mat-list-item routerLink="/dashboard-backoffice/chacras" class="nav-item" (click)="closeSidenavIfSmall()">
-        <img src="assets/img/soil-moisture-global.svg" alt="Chacras" class="nav-item-icon">
+        <img src="assets/img/agriculture_24dp_FILL0_wght300_GRAD0_opsz24.svg" alt="Chacras" class="nav-item-icon">
         Chacras
       </a>
       <a mat-list-item routerLink="/dashboard-backoffice/lotes" class="nav-item" (click)="closeSidenavIfSmall()">
-        <img src="assets/img/mdi_land-plots-marker.svg" alt="Lotes" class="nav-item-icon">
+        <img src="assets/img/satellite_24dp_FILL0_wght300_GRAD0_opsz24.svg" alt="Lotes" class="nav-item-icon">
         Lotes
       </a>
       <a mat-list-item routerLink="/dashboard-backoffice/calendarios" class="nav-item" (click)="closeSidenavIfSmall()">
-        <img src="assets/img/calendar-03.svg" alt="calendario" class="nav-item-icon">
+        <img src="assets/img/calendar_month_24dp_FILL0_wght300_GRAD0_opsz24.svg" alt="calendario" class="nav-item-icon">
         Calendarios
       </a>
       <a mat-list-item routerLink="/dashboard-backoffice/notificacion" class="nav-item" (click)="closeSidenavIfSmall()">
-        <img src="assets/img/notifications_active_FILL0_wght400_GRAD0_opsz24.svg" alt="Notificacón"
+        <img src="assets/img/notifications_active_24dp_FILL0_wght300_GRAD0_opsz24.svg" alt="Notificacón"
           class="nav-item-icon">
         Notificacón
       </a>
       <a mat-list-item routerLink="/dashboard-backoffice/planificaciones" class="nav-item"
         (click)="closeSidenavIfSmall()">
-        <img src="assets/img/Vector.svg" alt="Planificaciónes" class="nav-item-icon">
+        <img src="assets/img/leaderboard_24dp_FILL0_wght300_GRAD0_opsz24.svg" alt="Planificaciónes"
+          class="nav-item-icon">
         Planificacónes
       </a>
       <a mat-list-item routerLink="/dashboard-backoffice/informes" class="nav-item" (click)="closeSidenavIfSmall()">
-        <img src="assets/img/Vector_i.svg" alt="Planificaciónes" class="nav-item-icon">
+        <img src="assets/img/rubric_24dp_FILL0_wght300_GRAD0_opsz24.svg" alt="Planificaciónes" class="nav-item-icon">
         Informes
       </a>
       <a mat-list-item routerLink="/dashboard-backoffice/configuracion" class="nav-item"
         (click)="closeSidenavIfSmall()">
-        <img src="assets/img/setting-07.svg" alt="Chacras" class="nav-item-icon">
+        <img src="assets/img/manage_accounts_24dp_FILL0_wght300_GRAD0_opsz24.svg" alt="Chacras" class="nav-item-icon">
         Configuración
       </a>
     </mat-nav-list>
@@ -55,11 +60,11 @@
     </div>
   </mat-sidenav>
   <mat-sidenav-content class="sidenav-content">
-    <!-- Botón de menú para pantallas pequeñas -->
+    <!-- Botón de menú para pantalla mobile -->
     <button mat-icon-button (click)="toggleSidebar()" *ngIf="isScreenSmall" class="open-sidebar-btn">
-      <mat-icon style="color:#0F8054;">menu</mat-icon>
+      <mat-icon style="color:#015E85;">menu</mat-icon>
     </button>
-    <!-- Resto del contenido principal -->
+
     <mat-toolbar class="toolbar-green">
       <div div *ngIf="isScreenSmall" class="logo-container-mobile">
         <img src="assets/img/LogoAgroBYTECH_M.svg" alt="Logo" class="dashboard-logo">
@@ -80,7 +85,7 @@
         <mat-icon style="display: flex;
         align-content: center;
         justify-content: center;
-        font-size: 30px;
+        font-size: 25px;
         align-items: center">
           person
         </mat-icon>

@@ -13,6 +13,7 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms';
+import { LoteComponent } from '../lote/lote.component';
 
 interface CustomJwtPayload {
   userId: number;
@@ -24,6 +25,19 @@ interface DecodedToken {
   sub: string;
   roles: string;
 }
+interface Lote {
+  id: number;
+  name: string;
+  descriptions: string;
+  dimensions: number;
+  typeCrop: {
+    id: number;
+    name: string;
+  };
+  url_profile: string | null;
+  plant_name?: string;
+  type_crop_id?: number;
+}
 
 @Component({
   selector: 'app-cargar-lote',
@@ -33,6 +47,7 @@ interface DecodedToken {
 export class CargarLoteComponent {
   currentPlotId: number | null = null;
   public buttonText: string = 'Cargar Lote';
+  ActualPlantationName: string = ''; //esta variable contiene el nombre de la plantacion actual para editar luego.-
   nombre: string = '';
   apellido: string = '';
   descripcion: string = '';
@@ -42,7 +57,7 @@ export class CargarLoteComponent {
   telephone: string = '';
   persona: any = {};
   plantations: any[] = [];
-  campoForm: FormGroup;
+  loteForm: FormGroup;
   FieldId: number = 0;
   filteredPlantations: Observable<any[]> = new Observable<any[]>();
   filtroPlantations = new FormControl('');
@@ -50,7 +65,7 @@ export class CargarLoteComponent {
   private personId: number | any;
   public userEmail: string | null = null;
 
-  campoData = {
+  loteData = {
     // name: '',
     plantation: '',
     dimensions: '',
@@ -67,7 +82,7 @@ export class CargarLoteComponent {
     private router: Router,
     private fb: FormBuilder
   ) {
-    this.campoForm = this.fb.group({
+    this.loteForm = this.fb.group({
       // name: ['', Validators.required],
       dimensions: ['', [Validators.required, Validators.min(1)]],
       observation: [''],
@@ -76,23 +91,43 @@ export class CargarLoteComponent {
   }
 
   ngOnInit(): void {
-
     this.cargarDatosDeUsuario();
     this.userEmail = this.authService.getUserEmail();
     this.decodeToken();
     this.obtenerPlantaciones();
 
-
-
     const storedPlotId = localStorage.getItem('plotId');
-    if (storedPlotId) {
-      localStorage.removeItem('plotId');
-      this.currentPlotId = null;
-      this.campoForm.reset();
-      this.buttonText = 'Cargar Lote';
+    const storedPlotData = localStorage.getItem('plotData');
 
+    if (storedPlotId && storedPlotData) {
+      localStorage.removeItem('plotId');
+      localStorage.removeItem('plotData');
+
+      const plotIdNumber = parseInt(storedPlotId, 10);
+      const plotData: Lote = JSON.parse(storedPlotData);
+
+      // Save the ID of the current plantation before loading plot data
+      const previousPlantationId = plotData.typeCrop.id;
+
+      this.currentPlotId = plotIdNumber;
+      this.loteData = {
+        plantation: plotData.typeCrop.id.toString(),
+        dimensions: plotData.dimensions.toString(),
+      };
+      this.loteForm.patchValue({
+        plantation: plotData.typeCrop.id.toString(),
+        dimensions: plotData.dimensions.toString(),
+        observation: plotData.descriptions,
+      });
+
+     
+      this.loteForm.addControl('previousPlantation', new FormControl(previousPlantationId));
+
+      this.buttonText = 'Update Lote';
     }
   }
+
+
 
   decodeToken(): void {
     const token = this.authService.getToken();
@@ -103,28 +138,26 @@ export class CargarLoteComponent {
     }
   }
 
-
-obtenerPlantaciones() {
-  this.apiService.getAllTypeCropOperador().subscribe(
-    (plantations) => {
-      this.plantations = plantations;
-      this.filteredPlantations = this.filtroPlantations.valueChanges.pipe(
-        startWith(''),
-        map((value) => {
-          if (typeof value === 'string') {
-            return this.filtrarPlantaciones(value);
-          } else {
-            return [];
-          }
-        })
-      );
-    },
-    (error) => {
-      console.error('Error al obtener las plantaciones', error);
-    }
-  );
-}
-
+  obtenerPlantaciones() {
+    this.apiService.getAllTypeCropOperador().subscribe(
+      (plantations) => {
+        this.plantations = plantations;
+        this.filteredPlantations = this.filtroPlantations.valueChanges.pipe(
+          startWith(''),
+          map((value) => {
+            if (typeof value === 'string') {
+              return this.filtrarPlantaciones(value);
+            } else {
+              return [];
+            }
+          })
+        );
+      },
+      (error) => {
+        console.error('Error al obtener las plantaciones', error);
+      }
+    );
+  }
 
   private filtrarPlantaciones(value: string): any[] {
     const filterValue = value.toLowerCase();
@@ -165,14 +198,14 @@ obtenerPlantaciones() {
       this.userEmail = null;
     }
 
-    const campoSeleccionadoParam = localStorage.getItem('campoSeleccionado');
-    const campoSeleccionado = campoSeleccionadoParam
-      ? JSON.parse(campoSeleccionadoParam)
+    const loteSeleccionadoParam = localStorage.getItem('loteSeleccionado');
+    const loteSeleccionado = loteSeleccionadoParam
+      ? JSON.parse(loteSeleccionadoParam)
       : null;
 
-    if (campoSeleccionado) {
-      const campoId = campoSeleccionado.id;
-      this.FieldId = campoId;
+    if (loteSeleccionado) {
+      const loteId = loteSeleccionado.id;
+      this.FieldId = loteId;
       const plotId = localStorage.getItem('plotId');
 
       this.decodeToken();
@@ -182,21 +215,19 @@ obtenerPlantaciones() {
           .getPlotByIdOperador(this.userId, this.FieldId, plotIdNumber)
           .subscribe(
             (lote) => {
-
               this.currentPlotId = plotIdNumber;
-              this.campoData = {
+              this.loteData = {
                 // name: lote.name,
                 plantation: lote.type_crop_id,
                 dimensions: lote.dimensions,
               };
-              this.campoForm.patchValue({
+              this.loteForm.patchValue({
                 // name: lote.name,
                 plantation: lote.type_crop_id,
                 dimensions: lote.dimensions,
                 observation: lote.descriptions,
               });
               this.buttonText = 'Actualizar Lote';
-
             },
             (error) => {
               console.error('Error al obtener los datos del lote:', error);
@@ -204,29 +235,20 @@ obtenerPlantaciones() {
           );
       }
     } else {
-      this.campoForm.reset();
+      this.loteForm.reset();
       this.buttonText = 'Cargar Lote';
       this.currentPlotId = null;
-
     }
   }
 
   cargarLotes(): void {
+    if (this.loteForm.valid) {
+      const dimensionsControl = this.loteForm.get('dimensions');
+      const observationControl = this.loteForm.get('observation');
+      const plantationControl = this.loteForm.get('plantation');
 
-    if (this.campoForm.valid && !this.currentPlotId) {
-      // const nameControl = this.campoForm.get('name');
-      const dimensionsControl = this.campoForm.get('dimensions');
-      const observationControl = this.campoForm.get('observation');
-      const plantationControl = this.campoForm.get('plantation');
-
-      if (
-        // nameControl &&
-        dimensionsControl &&
-        observationControl &&
-        plantationControl
-      ) {
+      if (dimensionsControl && observationControl && plantationControl) {
         const newPlotData: any = {
-          // name: nameControl.value,
           dimensions: dimensionsControl.value,
           descriptions: observationControl.value,
           type_crop_id: plantationControl.value,
@@ -237,7 +259,7 @@ obtenerPlantaciones() {
           .subscribe(
             () => {
               this.toastr.success('Lote creado con éxito', 'Éxito');
-              this.campoForm.reset();
+              this.loteForm.reset();
               this.router.navigate(['dashboard/lote']);
             },
             (error) => {
@@ -254,42 +276,32 @@ obtenerPlantaciones() {
               }
             }
           );
-      } else {
-        console.error(
-          'Error: Al menos uno de los campos del formulario es nulo.'
-        );
-        this.toastr.warning(
-          'Por favor, completa todos los campos del Lote',
-          'Atención'
-        );
       }
-    } else {
-
     }
   }
 
   actualizarLote(): void {
-    if (this.campoForm.valid && this.currentPlotId) {
-      // const nameControl = this.campoForm.get('name');
-      const dimensionsControl = this.campoForm.get('dimensions');
-      const observationControl = this.campoForm.get('observation');
-      const plantationControl = this.campoForm.get('plantation');
+    if (this.loteForm.valid && this.currentPlotId) {
+      const dimensionsControl = this.loteForm.get('dimensions');
+      const observationControl = this.loteForm.get('observation');
+      const plantationControl = this.loteForm.get('plantation');
 
       if (dimensionsControl && observationControl && plantationControl) {
         const updatedPlotData: any = {
-          // name: nameControl.value,
           dimensions: dimensionsControl.value,
           descriptions: observationControl.value,
           type_crop_id: plantationControl.value,
         };
 
-
-
         this.apiService
-          .updatePlotOperador(this.userId, this.FieldId, this.currentPlotId, updatedPlotData)
+          .updatePlotOperador(
+            this.userId,
+            this.FieldId,
+            this.currentPlotId,
+            updatedPlotData
+          )
           .subscribe(
             () => {
-
               this.toastr.success('Lote actualizado con éxito', 'Éxito');
               this.router.navigate(['dashboard/lote']);
             },
@@ -301,15 +313,9 @@ obtenerPlantaciones() {
               );
             }
           );
-      } else {
-        console.warn('Advertencia: Al menos uno de los campos del formulario es nulo.');
-        this.toastr.warning('Por favor, completa todos los campos del Lote', 'Atención');
       }
-    } else {
-      console.warn('Advertencia: El formulario no es válido o el ID del lote actual no está definido.');
     }
   }
-
 
   cancelar() {
     this.router.navigate(['dashboard/inicio']);

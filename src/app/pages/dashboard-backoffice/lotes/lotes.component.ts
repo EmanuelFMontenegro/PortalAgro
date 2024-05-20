@@ -621,5 +621,8 @@ export class LotesComponent implements OnInit {
   }
 
   BtnNuevaChacra() {this.router.navigate(['dashboard-backoffice/inicio']);}
-  verMas(campo: any) {}
+  
+  verMas(campo: any) {
+    this.router.navigate(['dashboard-backoffice/perfil-productor']);
+  }
 }

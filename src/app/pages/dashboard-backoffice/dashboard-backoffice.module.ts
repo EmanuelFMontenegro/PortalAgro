@@ -42,6 +42,7 @@ import { FormsModule } from '@angular/forms';
 import { DialogComponent } from './dialog/dialog.component';
 import { PerfilProductorComponent } from './perfil-productor/perfil-productor.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { NuevoUsuarioComponent } from './productores/nuevo-usuario/nuevo-usuario.component';
 
 
 
@@ -59,7 +60,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     InformesComponent,
     ConfiguracionComponent,
     DialogComponent,
-    PerfilProductorComponent
+    PerfilProductorComponent,
+    NuevoUsuarioComponent
 
   ],
   imports: [

@@ -3,6 +3,7 @@
   <div class="container">
     <div class="titulo-perfil">
       <h2>Perfil</h2>
+      <div class="titulo-linea"></div>
     </div>
     <mat-card class="main-card">
       <div class="cards-container">
@@ -81,6 +82,7 @@
   <div class="container">
     <div class="titulo-perfil">
       <h2>Perfil</h2>
+      <div class="titulo-linea"></div>
     </div>
     <mat-card class="main-card">
       <div class="cards-container">
@@ -120,7 +122,9 @@
 
                 <div class="field-container">
                   <label class="title-input" for="localidad">Localidad</label>
-                  <mat-select formControlName="localidad" placeholder="{{ locationId ? locationId : 'Seleccionar Localidad' }}" (selectionChange)="onLocalidadSelectionChange($event.value)">
+                  <mat-select formControlName="localidad"
+                    placeholder="{{ locationId ? locationId : 'Seleccionar Localidad' }}"
+                    (selectionChange)="onLocalidadSelectionChange($event.value)">
                     <mat-option *ngFor="let loc of localidades" [value]="loc.name">
                       {{ loc.name }}
                     </mat-option>

@@ -44,11 +44,11 @@
     </div>
   </mat-sidenav>
   <mat-sidenav-content class="sidenav-content">
-    <!-- Botón de menú para pantallas pequeñas -->
+    <!-- Botón de menú para pantalla mobile -->
     <button mat-icon-button (click)="sidenav.toggle()" *ngIf="isScreenSmall" class="open-sidebar-btn">
       <mat-icon style="color:#0F8054;">menu</mat-icon>
     </button>
-    <!-- Resto del contenido principal -->
+
     <mat-toolbar class="toolbar-green">
       <div *ngIf="isScreenSmall" class="logo-container-mobile">
         <img src="assets/img/LogoAgroBYTECH_M.svg" alt="Logo" class="dashboard-logo">
@@ -69,7 +69,7 @@
         <mat-icon style="display: flex;
         align-content: center;
         justify-content: center;
-        font-size: 30px;
+        font-size: 25px;
         align-items: center">
           person
         </mat-icon>

@@ -267,11 +267,12 @@ export class ProductoresComponent implements OnInit {
     }
   }
   //Agregar en Ver Mas el link o ruta a la pantalla agregar nuevos Productores
-  BtnNuevaChacra() {
-    this.router.navigate(['dashboard-backoffice/perfil-productor']);
+  BtnNuevoUsuario() {
+    this.router.navigate(['dashboard-backoffice/nuevo-usuario']);
+
   }
   //Agregar en Ver Mas el link o ruta a la pantalla editar un Productores
   verMas() {
-    this.router.navigate(['/inicio']);
+    this.router.navigate(['dashboard-backoffice/perfil-productor']);
   }
 }

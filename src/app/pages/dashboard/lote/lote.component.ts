@@ -319,6 +319,9 @@ export class LoteComponent {
   editarLote(lote: Lote): void {
     this.modoEdicion = true;
     localStorage.setItem('plotId', lote.id.toString());
+    localStorage.setItem('plotData', JSON.stringify(lote));
     this.router.navigate(['dashboard/cargar-lote']);
-  }
+}
+
+
 }

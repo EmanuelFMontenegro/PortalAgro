@@ -45,6 +45,11 @@ body
     margin-top: 10px
     margin-left: auto
 
+  .flecha-doble
+    width: 2em
+    position: relative
+    right: 0.5em
+
   .letra_btn_volver
     font-size: 12px
     font-family: $font-family
@@ -82,7 +87,7 @@ body
 
         mat-icon
           display: contents
-          color: $icon-color
+          color: $hover-color
           font-size: 70px
 
     p
@@ -216,7 +221,7 @@ body
   .campo-buttons
     display: flex
     gap: 10px
-    margin-top: 10em
+    margin-top: 9em
     flex-direction: column-reverse
 
   .botones-servicio
@@ -322,6 +327,14 @@ body
     width: 100%
     margin: auto
 
+  .container .card .name
+    font-size: 13px
+
+  .flecha-doble
+    width: 2em
+    position: relative
+    margin-right: -2em
+
   .card-campo-container .campo-card
     padding: 1px
     width: 100%
@@ -362,16 +375,19 @@ body
     flex-direction: row
     align-items: center
 
+  .container .card.user-card .avatar mat-icon
+    font-size: 60px
+
   .container .card .campo-details-card
     width: 100%
-
-  .container .card p
-    font-size: 13px
 
   .container .campo-buttons
     bottom: 5em
     right: 0.3em
     position: relative
+
+  .container .card .email
+    font-size: 13px
 
   .container button.geolocalizar
     width: 100%

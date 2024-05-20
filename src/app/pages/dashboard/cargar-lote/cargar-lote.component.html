@@ -14,36 +14,38 @@
   </div>
 
   <div class="card">
-    <h2 class="titulo-registrar-campo">Cargar Lotes</h2>
-    <form class="solicitud-servicio-form" [formGroup]="campoForm" >
+    <h2 class="titulo-registrar-lote">Cargar Lotes</h2>
+    <form class="solicitud-servicio-form" [formGroup]="loteForm">
       <div class="campos-formulario">
         <div class="grupo-campos">
           <!-- Nombre -->
           <!-- <div class="field-container">
             <label class="field-label" for="direccion">Nombre</label>
             <input matInput formControlName="name" placeholder="Nombre del lote" required (blur)="nameTouched = true">
-            <span *ngIf="campoForm.get('name')?.hasError('required') && nameTouched" class="error-message">Este
+            <span *ngIf="loteForm.get('name')?.hasError('required') && nameTouched" class="error-message">Este
               campo es requerido</span>
           </div> -->
 
           <!-- Plantacion -->
           <div class="field-container">
             <label class="field-label" for="plantacion">Plantación</label>
-            <mat-select class="mat-select" formControlName="plantation" placeholder="Seleccionar plantación">
+            <mat-select class="mat-select" formControlName="plantation"
+              [placeholder]="ActualPlantationName ? ActualPlantationName : 'Seleccionar plantación'">
               <mat-option *ngFor="let planta of plantations" [value]="planta.id">
                 {{ planta.name }}
               </mat-option>
             </mat-select>
           </div>
 
+
           <!-- Dimensiones -->
           <div class="field-container">
             <label class="field-label">Dimensiones (Hectáreas)</label>
             <input matInput formControlName="dimensions" type="number" placeholder="Ingresar valores en hectáreas"
               required [min]="1" (blur)="dimensionsTouched = true">
-            <span *ngIf="campoForm.get('dimensions')?.hasError('required') && dimensionsTouched"
+            <span *ngIf="loteForm.get('dimensions')?.hasError('required') && dimensionsTouched"
               class="error-message">Este campo es requerido</span>
-            <span *ngIf="campoForm.get('dimensions')?.hasError('min') && dimensionsTouched" class="error-message">El
+            <span *ngIf="loteForm.get('dimensions')?.hasError('min') && dimensionsTouched" class="error-message">El
               valor debe ser mayor a 0</span>
           </div>
 
@@ -57,7 +59,9 @@
 
       <div class="botones-servicio">
         <button mat-raised-button class="cancel-button" type="button" (click)="cancelar()">Cancelar</button>
-        <button mat-raised-button class="register-button" type="submit" (click)="currentPlotId ? actualizarLote() : cargarLotes()">Cargar Lote</button>
+        <button mat-raised-button class="register-button" type="submit"
+          (click)="currentPlotId ? actualizarLote() : cargarLotes()">{{ buttonText }}</button>
       </div>
     </form>
   </div>
+</div>

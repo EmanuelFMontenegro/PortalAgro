@@ -1,0 +1,72 @@
+<div class="container">
+  <div class="centrar-card">
+    <div class="titulo-perfil">
+      <h2>Nuevo Usuario</h2>
+      <div class="titulo-linea"></div>
+    </div>
+    <mat-card class="main-card">
+      <div class="cards-container">
+        <mat-card class="user-details-card">
+          <mat-card-header>
+            <mat-card-title>Información Personal</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <form [formGroup]="userDetailsForm">
+              <div class="datos-nuevo-user">
+                <div class="field-container">
+                  <label class="field-label" for="usuario">Usuario</label>
+                  <input matInput formControlName="usuario" id="usuario">
+                </div>
+                <div class="field-container">
+                  <label class="field-label" for="password">Contraseña</label>
+                  <div class="password-container">
+                    <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'" id="password">
+                    <mat-icon class="eye-icon" (click)="togglePasswordVisibility()">{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                  </div>
+                </div>
+                <div class="field-container">
+                  <label class="field-label" for="nombre">Nombre</label>
+                  <input matInput formControlName="nombre" id="nombre">
+                </div>
+                <div class="field-container">
+                  <label class="field-label" for="apellido">Apellido</label>
+                  <input matInput formControlName="apellido" id="apellido">
+                </div>
+                <div class="field-container">
+                  <label class="field-label" for="localidad">Localidad</label>
+                  <mat-select formControlName="localidad" placeholder="Seleccionar localidad">
+                    <mat-option *ngFor="let loc of filteredLocalidades | async" [value]="loc.id">
+                      {{ loc.name }}
+                    </mat-option>
+                  </mat-select>
+                </div>
+                <div class="field-container">
+                  <label class="field-label" for="dni">DNI/CUIT</label>
+                  <input matInput formControlName="dni" id="dni"
+                    [ngClass]="{ 'invalid-field': userDetailsForm.get('dni')?.invalid && (userDetailsForm.get('dni')?.dirty || userDetailsForm.get('dni')?.touched) }">
+                </div>
+                <div class="field-container">
+                  <label class="field-label" for="contacto">Contacto</label>
+                  <input matInput formControlName="contacto" id="contacto"
+                    [ngClass]="{ 'invalid-field': userDetailsForm.get('contacto')?.invalid && (userDetailsForm.get('contacto')?.dirty || userDetailsForm.get('contacto')?.touched) }">
+                </div>
+              </div>
+            </form>
+          </mat-card-content>
+        </mat-card>
+        <mat-card class="extended-card">
+          <mat-card-header>
+            <mat-card-title>Información Adicional</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <textarea rows="5" readonly class="texto-area">{{ descriptions }}</textarea>
+          </mat-card-content>
+        </mat-card>
+        <div class="botones-servicio">
+          <button mat-raised-button class="cancel-button" type="button" (click)="cancelar()">Cancelar</button>
+          <button mat-raised-button class="register-button" (click)="cargarDatosPerfil()">Guardar Cambios</button>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>

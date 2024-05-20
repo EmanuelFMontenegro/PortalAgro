@@ -1,10 +1,11 @@
 $primary-color: #0F8054
+$new-color: #015E85
 $secondary-color: #3CA749
 $hover-color: #47de5b
 $error-color: #d9534f
 $light-grey: #f4f4f4
 $white-hard: #FFFFFF
-$black-hard:#333333
+$black-hard: #333333
 $dark-grey: #454545
 $medium-grey: #808080
 $border-color: #ddd
@@ -18,7 +19,7 @@ $font-family: 'Montserrat', sans-serif
   justify-content: center
   align-items: center
   height: 100vh
-  background: $white-hard
+  background-image: url('/assets/img/2024_Backs_Drone_Misiones_01.png')
   background-size: cover
   flex-direction: row-reverse
 
@@ -27,7 +28,8 @@ $font-family: 'Montserrat', sans-serif
   max-width: 100%
   padding: 40px
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))
-  backdrop-filter: blur(10px)
+  // backdrop-filter: blur(10px)
+  backdrop-filter: blur(5px)
   -webkit-backdrop-filter: blur(15px)
   border-radius: 0 20px 20px 0
   border: 1px solid $medium-grey
@@ -47,7 +49,8 @@ $font-family: 'Montserrat', sans-serif
 
 h1
   font-size: 32px
-  color: $black-hard
+  // color: $black-hard
+  color: $white-hard
   font-weight: 600
 
 .photo-card
@@ -70,7 +73,8 @@ h1
 
 .info-text-container
   margin-bottom: 20px
-  color: $medium-grey
+  // color: $medium-grey
+  color: $white-hard
   font-weight: 600
 
 input[type="email"], input[type="password"]
@@ -93,12 +97,12 @@ input[type="email"], input[type="password"]
 
 .password-field-container
   position: relative
-  display: flex
-  align-items: center
+  // display: flex
+  // align-items: center
   margin-top: 2%
 
   input
-    width: 100%
+    width: 95%
     padding-right: 30px
     font-size: 14px
     color: $black-hard
@@ -123,7 +127,7 @@ input[type="email"], input[type="password"]
     transform: translateY(-50%)
     cursor: pointer
     font-size: 16px
-    color: $black-hard
+    color: $new-color
 
     &:before
       content: ""
@@ -150,7 +154,7 @@ button[type="submit"]
   width: 100%
   margin-top: 20px
   padding: 10px 0
-  background: $primary-color
+  background: $new-color
   backdrop-filter: blur(25px)
   -webkit-backdrop-filter: blur(15px)
   color: white
@@ -160,11 +164,8 @@ button[type="submit"]
   cursor: pointer
   transition: background-color 0.3s ease
 
-
-
   @media (max-width: 600px)
-    width: 80%
-
+    width: 100%
 
 .login-links
   margin-top: 20px
@@ -176,8 +177,10 @@ button[type="submit"]
   color: white
 
 .login-link
-  font-size: 14px
-  color: $secondary-color
+  font-size: 13px
+  color: $white-hard
+  font-family: $font-family
+  font-weight: bold
   text-decoration: none
   margin-left: 5px
   padding-bottom: 1px

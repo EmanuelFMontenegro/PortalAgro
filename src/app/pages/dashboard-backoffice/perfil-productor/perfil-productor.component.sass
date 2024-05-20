@@ -1,4 +1,4 @@
-$primary-color: #01648C
+$primary-color: #015E83
 $secondary-color: #8FCA8F
 $fluor-color: #00ff00
 $hover-color: #32963f
@@ -21,11 +21,17 @@ body
   margin-bottom: 10em
 
 .titulo-perfil h2
-  color: $dark-grey
+  color: $primary-color
   font-size: 1.5em
   font-weight: bold
   font-family: $font-family
-  margin-left: 1%
+  margin-left: 3%
+
+.titulo-linea
+  content: ""
+  display: block
+  height: 2px
+  background-color: #01648C
 
 .main-card
   width: 100%
@@ -76,7 +82,7 @@ body
       .avatar-icon
         font-size: 60px
         border-radius: 50%
-        color: $medium-grey
+        color: $primary-color
         width: 100%
         height: 100%
         display: flex
@@ -93,7 +99,7 @@ body
         position: absolute
         bottom: 5px
         right: 5px
-        background-color: $icon-color
+        background-color: $border-color
         padding: 3px
         border-radius: 50%
         cursor: pointer
@@ -129,7 +135,7 @@ body
     .mat-icon
       height: unset
       width: unset
-      color: white
+      color: $primary-color
       font-size: 16px
       overflow: none
 
@@ -203,8 +209,6 @@ body
     display: flex
     justify-content: column
     margin-bottom: 10px
-
-
 
   input
     width: calc(100% - 20px)

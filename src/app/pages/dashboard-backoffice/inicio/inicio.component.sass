@@ -1,5 +1,6 @@
 // Variables de colores
 $primary-color: #0F8054
+$new-color: #015E85
 $secondary-color: #3CA749
 $light-grey: #f4f4f4
 $medium-grey: #808080
@@ -35,9 +36,11 @@ $font-family: 'Montserrat', sans-serif
 .row
   display: flex
   flex-wrap: wrap
-  justify-content: space-evenly
   position: relative
-  right: 9em
+  right: 10em
+  gap: 30px
+  justify-content: center
+  align-items: center
 
 .card
   margin: 10px
@@ -58,7 +61,7 @@ $font-family: 'Montserrat', sans-serif
     left: 50%
     width: 200%
     height: 200%
-    background-color: #47de5b
+    background-color: #015E85
     transition: width 0.3s ease-out, height 0.3s ease-out, opacity 0.3s ease-out
     border-radius: 50%
     z-index: 0
@@ -72,6 +75,7 @@ $font-family: 'Montserrat', sans-serif
 
 .icono-card
   height: auto
+  width: 20%
   top: 50%
   right: 14em
   position: absolute
@@ -83,9 +87,9 @@ $font-family: 'Montserrat', sans-serif
   top: 50%
   transform: translate(-50%, -50%)
   margin: 0
-  font-size: 18px
+  font-size: 20px
   font-family: $font-family
-  color: $hard-black
+  color: $new-color
 
 .card-title-down
   position: absolute
@@ -93,11 +97,11 @@ $font-family: 'Montserrat', sans-serif
   top: 50%
   transform: translate(-50%, -50%)
   margin: 0
-  font-size: 18px
+  font-size: 20px
   font-family: $font-family
-  color: $hard-black
+  color: $new-color
 
-  // Queries para mobile
+  
 
 @media screen and (max-width: 768px)
   .container

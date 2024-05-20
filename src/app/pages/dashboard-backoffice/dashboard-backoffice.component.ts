@@ -38,15 +38,15 @@ export class DashboardBackofficeComponents  implements AfterViewInit {
     }
   }
 
+
   closeSidenavIfSmall() {
     if (this.isScreenSmall && this.sidenav) {
       this.sidenav.close();
 
     }
   }
-
   cerrarSesion(): void {
-   
+
     localStorage.removeItem('token');
     this.router.navigate(['/login-backoffice']);
   }

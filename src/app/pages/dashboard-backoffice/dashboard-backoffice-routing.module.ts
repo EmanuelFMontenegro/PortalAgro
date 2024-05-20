@@ -13,6 +13,7 @@ import { PlanificacionesComponent } from './planificaciones/planificaciones.comp
 import { InformesComponent } from './informes/informes.component';
 import { ConfiguracionComponent } from './configuracion/configuracion.component';
 import { PerfilProductorComponent } from './perfil-productor/perfil-productor.component';
+import { NuevoUsuarioComponent } from './productores/nuevo-usuario/nuevo-usuario.component';
 const routes: Routes = [
   {
     path: 'dashboard-backoffice',
@@ -23,6 +24,7 @@ const routes: Routes = [
       { path: 'servicios', component: ServiciosComponent },
       { path: 'productores', component: ProductoresComponent },
       { path: 'perfil-productor', component: PerfilProductorComponent },
+      { path: 'nuevo-usuario', component: NuevoUsuarioComponent },
       { path: 'chacras', component: ChacrasComponent },
       { path: 'lotes', component: LotesComponent },
       { path: 'calendarios', component: CalendariosComponent },

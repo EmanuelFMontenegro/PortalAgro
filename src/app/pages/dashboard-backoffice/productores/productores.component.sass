@@ -1,8 +1,8 @@
 $primary-color: #0F8054
 $secondary-color: #8FCA8F
-$nuevotextos-azul: #015E83
+$new-color-blue-hard: #015E83
 $white-color: #FFFFFF
-$nuevovermas-azul: #015E85
+$new_color_blue: #015E85
 $hover-color: #47de5b
 $error-color: #F54C51
 $light-grey: #f4f4f4
@@ -76,14 +76,14 @@ $font-family: 'Montserrat', sans-serif
       display: flex
       align-items: center
       justify-content: center
-      border: 2px solid #808080
+      border: 2px solid $new_color_blue
       background-color: white
       position: relative
 
       .avatar-icon
         font-size: 60px
         border-radius: 50%
-        color: $medium-grey
+        color: $new_color_blue
         width: 100%
         height: 100%
         display: flex
@@ -99,7 +99,7 @@ $font-family: 'Montserrat', sans-serif
       mat-icon
         height: unset
         width: unset
-        color: white
+        color: $new_color_blue
         font-size: 16px
         overflow: none
 
@@ -108,7 +108,7 @@ $font-family: 'Montserrat', sans-serif
         position: absolute
         bottom: 0
         right: 0
-        background-color: $primary-color
+        background-color: $white-color
         padding: 3px
         border-radius: 50%
         cursor: pointer
@@ -123,7 +123,6 @@ $font-family: 'Montserrat', sans-serif
     color: $white-color
     font-weight: bold
     font-family: $font-family
-
 
 .card-usuarios-productores
   background-color: #FFFFFF
@@ -198,7 +197,7 @@ $font-family: 'Montserrat', sans-serif
   font-size: 0.85em
   font-family: 'Montserrat', sans-serif
   font-weight: bold
-  background-color: $nuevovermas-azul
+  background-color: $new_color_blue
   color: white
   margin-right: 2em
 
@@ -222,7 +221,7 @@ $font-family: 'Montserrat', sans-serif
   justify-content: space-between
 
 .titulo-chacra
-  color: $nuevotextos-azul
+  color: $new-color-blue
   font-family: 'Montserrat', sans-serif
   font-size: 1.5em
   font-weight: bold
@@ -253,8 +252,8 @@ $font-family: 'Montserrat', sans-serif
 
   & .field-input:focus
     outline: none
-    border-color: $primary-color
-    box-shadow: 0 0 5px $primary-color
+    border-color: #015E83
+    box-shadow: 0 0 5px #015E83
 
 .clear-button
   padding: 6px 18px
@@ -283,7 +282,7 @@ $font-family: 'Montserrat', sans-serif
 
   &:active
     transform: translateY(2px)
-    border: 2px solid #3CA749
+    border: 2px solid #015E83
 
 .active-button
   padding: 6px 18px
@@ -304,11 +303,14 @@ $font-family: 'Montserrat', sans-serif
   flex-direction: row
   justify-content: center
 
+  &:hover
+    backdrop-filter: blur(10px)
+    -webkit-backdrop-filter: blur(15px)
   &:active
     transform: translateY(2px)
-    border: 2px solid #3CA749
+    border: 2px solid #015E83
 
-.nuevaChacra-button
+.nuevoUsuario-button
   padding: 6px 18px
   border: 2px solid #FFFFFF
   border-radius: 5px
@@ -316,7 +318,7 @@ $font-family: 'Montserrat', sans-serif
   transition: background-color 0.3s, border-color 0.3s
   font-size: 0.85em
   gap: 10px
-  width: 50%
+  width: 55%
   font-family: "Montserrat", sans-serif
   font-weight: bold
   background-color: #015E83
@@ -346,12 +348,15 @@ $font-family: 'Montserrat', sans-serif
     margin-left: 0
     margin-top: 2%
     text-align: center
+    font-size: 17px
 
   .titulo-welcome
     font-size: 0.8em
     margin-left: 5%
     margin-top: 0.5%
     text-align: center
+  .user-content
+    display: none
 
   .field-container
     display: flex
@@ -366,10 +371,10 @@ $font-family: 'Montserrat', sans-serif
     width: 95%
     margin-left: 1.5em
 
-  .nuevaChacra-button
+  .nuevoUsuario-button
     width: 100%
     position: relative
-    left: 0.5em
+    left: 1em
 
   .card-usuarios-productores
     left: 2em

@@ -63,9 +63,14 @@ body
 
       mat-icon
         display: contents
-        color: $icon-color
+        color: $hover-color
         font-size: 70px
 
+    .flecha-doble
+      width: 2.5em
+      position: relative
+      right: 0.5em
+      bottom: 0em
     .volver-button
       display: flex
       align-items: center
@@ -241,6 +246,7 @@ body
 
 strong
   color: #32963f
+
 .with-dot::before
   content: "\2022"
   font-size: 25px
@@ -248,8 +254,14 @@ strong
   margin-right: 5px
 
 @media screen and (max-width: 768px)
+
   .titulo-bienvenida h2
     padding: 0
+
+  .container .name
+    font-size: 14px
+    color: $default
+
   .container
     flex-direction: column
     align-items: center
@@ -263,11 +275,17 @@ strong
       margin-bottom: 24%
 
     .card-user .avatar
-      height: 77px
-      width: 66px
+      height: 70px
+      width: 70px
 
     .card-user .avatar mat-icon
       font-size: 65px
+
+    .flecha-doble
+      width: 2.5em
+      position: relative
+      right: 0.5em
+      bottom: 2em
 
     .letra_btn_volver
       display: none
@@ -309,7 +327,7 @@ strong
 
   .container .card-map
     width: 90%
-    top: 7em
+    top: 8.5em
     left: -4em
     position: relative
   #map

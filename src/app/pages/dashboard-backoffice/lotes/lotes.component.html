@@ -17,86 +17,84 @@
         </div>
       </div>
       <h2 class="titulo-chacra">Lotes</h2>
-</div>
+    </div>
 
-  <div class="field-container">
-    <mat-select class="field-input" placeholder="Filtrar por" [(ngModel)]="filtroSeleccionado"
-      (ngModelChange)="aplicarFiltro($event)">
-      <mat-option value="localidad">Localidad</mat-option>
-      <mat-option value="productor">Productor</mat-option>
-      <mat-option value="cultivo">Cultivo</mat-option>
-      <mat-option value="hectareas">Hectáreas</mat-option>
-    </mat-select>
-
-    <ng-container *ngIf="filtroSeleccionado === 'localidad'">
-      <mat-select class="field-input" placeholder="Seleccionar localidad" [(ngModel)]="idLocalidadSeleccionada">
-        <mat-option *ngFor="let localidad of localidades" [value]="localidad.id">{{ localidad.name }}</mat-option>
+    <div class="field-container">
+      <mat-select class="field-input" placeholder="Filtrar por" [(ngModel)]="filtroSeleccionado"
+        (ngModelChange)="aplicarFiltro($event)">
+        <mat-option value="localidad">Localidad</mat-option>
+        <mat-option value="productor">Productor</mat-option>
+        <mat-option value="cultivo">Cultivo</mat-option>
+        <mat-option value="hectareas">Hectáreas</mat-option>
       </mat-select>
-    </ng-container>
+
+      <ng-container *ngIf="filtroSeleccionado === 'localidad'">
+        <mat-select class="field-input" placeholder="Seleccionar localidad" [(ngModel)]="idLocalidadSeleccionada">
+          <mat-option *ngFor="let localidad of localidades" [value]="localidad.id">{{ localidad.name }}</mat-option>
+        </mat-select>
+      </ng-container>
 
 
 
-    <ng-container *ngIf="filtroSeleccionado === 'productor'">
-      <input class="field-input" matInput [placeholder]="'Buscar por productor'" [(ngModel)]="nombreProductor">
-    </ng-container>
+      <ng-container *ngIf="filtroSeleccionado === 'productor'">
+        <input class="field-input" matInput [placeholder]="'Buscar por productor'" [(ngModel)]="nombreProductor">
+      </ng-container>
 
-    <ng-container *ngIf="filtroSeleccionado === 'cultivo'">
-      <mat-select class="field-input" placeholder="Seleccionar cultivo" [(ngModel)]="cropId">
-        <mat-option *ngFor="let cultivo of cultivos" [value]="cultivo.id">{{ cultivo.name }}</mat-option>
-      </mat-select>
-    </ng-container>
-
-
-
-
-    <ng-container *ngIf="filtroSeleccionado === 'hectareas'">
-      <input class="field-input" matInput type="number" placeholder="Min" [(ngModel)]="minHectareas"
-        (blur)="validarMinHectareas()">
-      <input class="field-input" matInput type="number" placeholder="Max" [(ngModel)]="maxHectareas"
-        (blur)="validarMaxHectareas()">
-    </ng-container>
+      <ng-container *ngIf="filtroSeleccionado === 'cultivo'">
+        <mat-select class="field-input" placeholder="Seleccionar cultivo" [(ngModel)]="cropId">
+          <mat-option *ngFor="let cultivo of cultivos" [value]="cultivo.id">{{ cultivo.name }}</mat-option>
+        </mat-select>
+      </ng-container>
 
 
 
-    <!-- Botones para limpiar y filtrar -->
-    <button mat-raised-button class="clear-button" (click)="limpiarTexto()">Limpiar
-      <img src="assets/img/ink_eraser_FILL0_wght400_GRAD0_opsz24.svg"
-        style="filter: invert(70%) sepia(60%) saturate(10000%) hue-rotate(130deg)" alt="IconoBorrar">
-    </button>
 
-    <button mat-raised-button class="active-button" (click)="filtrar()">Filtrar
-      <img src="assets/img/filter_alt_FILL0_wght400_GRAD0_opsz24.svg"
-        style="filter: invert(70%) sepia(60%) saturate(10000%) hue-rotate(130deg)" alt="IconoBorrar">
-    </button>
-
-    <button mat-raised-button class="nuevaChacra-button" (click)="BtnNuevaChacra()">Volver al Inicio
-    </button>
-  </div>
+      <ng-container *ngIf="filtroSeleccionado === 'hectareas'">
+        <input class="field-input" matInput type="number" placeholder="Min" [(ngModel)]="minHectareas"
+          (blur)="validarMinHectareas()">
+        <input class="field-input" matInput type="number" placeholder="Max" [(ngModel)]="maxHectareas"
+          (blur)="validarMaxHectareas()">
+      </ng-container>
 
 
-  <div class="card-campos-lotes">
-    <div class="campo-card" *ngFor="let lote of loteData; let i = index">
-      <img class="img_lotes" [src]="'assets/img/lote_' + (i + 1) + '.svg'" alt="Img Lote">
-      <p class="with-dot">
-        <span class="campo-titulos">Nombre del Lote:</span>
-        <span class="campo-variable">{{ lote.name }}</span>
-      </p>
-      <p class="with-dot">
-        <span class="campo-titulos">Plantación:</span>
-        <span class="campo-variable">{{ lote.plant_name }}</span>
-      </p>
-      <p class="with-dot">
-        <span class="campo-titulos">Hectáreas:</span>
-        <span class="campo-variable">{{ lote.dimensions }}</span>
-      </p>
-      <p class="with-dot">
-        <span class="campo-titulos">Descripción:</span>
-        <span class="campo-variable">{{ lote.descriptions }}</span>
-      </p>
-      <div class="acciones">
-        <button mat-icon-button aria-label="verMas"  class="verMas-button" (click)="verMas(lote)">
-          <span style="color: #FFFFFF;">Ver Más</span>
-        </button>
+
+      <!-- Botones para limpiar y filtrar -->
+      <button mat-raised-button class="clear-button" (click)="limpiarTexto()">Limpiar
+        <img src="assets/img/ink_eraser_24dp_FILL0_wght400_GRAD0_opsz24.svg" alt="IconoBorrar">
+      </button>
+
+      <button mat-raised-button class="active-button" (click)="filtrar()">Filtrar
+        <img src="assets/img/filter_alt_24dp_FILL0_wght400_GRAD0_opsz24.svg" alt="IconoBorrar">
+      </button>
+
+      <button mat-raised-button class="nuevaChacra-button" (click)="BtnNuevaChacra()">Volver al Inicio
+      </button>
+    </div>
+
+
+    <div class="card-campos-lotes">
+      <div class="campo-card" *ngFor="let lote of loteData; let i = index">
+        <img class="img_lotes" [src]="'assets/img/lote_' + (i + 1) + '.svg'" alt="Img Lote">
+        <p class="with-dot">
+          <span class="campo-titulos">Nombre del Lote:</span>
+          <span class="campo-variable">{{ lote.name }}</span>
+        </p>
+        <p class="with-dot">
+          <span class="campo-titulos">Plantación:</span>
+          <span class="campo-variable">{{ lote.plant_name }}</span>
+        </p>
+        <p class="with-dot">
+          <span class="campo-titulos">Hectáreas:</span>
+          <span class="campo-variable">{{ lote.dimensions }}</span>
+        </p>
+        <p class="with-dot">
+          <span class="campo-titulos">Descripción:</span>
+          <span class="campo-variable">{{ lote.descriptions }}</span>
+        </p>
+        <div class="acciones">
+          <button mat-icon-button aria-label="verMas" class="verMas-button" (click)="verMas(lote)">
+            <span style="color: #FFFFFF;">Ver Más</span>
+          </button>
+        </div>
       </div>
     </div>
-  </div>
