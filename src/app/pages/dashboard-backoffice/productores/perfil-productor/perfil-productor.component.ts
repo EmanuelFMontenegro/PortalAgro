@@ -91,19 +91,17 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
     this.userDetailsForm = this.formBuilder.group({
       nombre: [''],
       apellido: [''],
-      localidad: [null],
+      localidad: [''],
       dni: [''],
       contacto: [''],
       descripcion: [''],
       contrasenaActual: [''],
       contrasenaNueva: [''],
     });
-
   }
 
   ngOnInit(): void {
     this.obtenerLocalidades();
-    this.cargarDatosDeUsuario();
 
     const usuarioData = localStorage.getItem('selectedUser');
 
@@ -134,7 +132,7 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
       }
     );
   }
-  // Metodo para los datos que se obtiene de la card de productores
+
   cargarDatosUsuarioPerfil(usuario: Usuario): void {
     this.userId = usuario.id;
     this.personId = usuario.id;
@@ -147,16 +145,13 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
     this.userEmail = usuario.email || null;
   }
 
-  // Cambiamos la firma de la función cargarImagenPerfil para que no requiera ningún argumento
   cargarImagenPerfil() {
     const selectedFile = this.avatarFile;
     if (selectedFile) {
       this.apiService
         .actualizarImagenDePerfil(this.userId, selectedFile)
         .subscribe(
-          (response) => {
-            this.cargarDatosDeUsuario();
-          },
+          (response) => {},
           (error) => {
             console.error('Error al cargar la imagen de perfil:', error);
           }
@@ -167,17 +162,15 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
   onFileSelected(event: any) {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
-      // Leer la imagen como un objeto URL local
       const reader = new FileReader();
       reader.readAsDataURL(selectedFile);
       reader.onload = () => {
         this.selectedImage = reader.result;
       };
 
-      // Asignar la imagen seleccionada a avatarFile y actualizar el valor del formulario
       this.avatarFile = selectedFile;
       this.userDetailsForm.patchValue({
-        avatar: selectedFile, // Puede ser necesario ajustar el nombre del control dependiendo del nombre en el formulario
+        avatar: selectedFile,
       });
     }
   }
@@ -185,8 +178,8 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
   activarEdicion(modoEdicion: boolean) {
     this.modoEdicion = modoEdicion;
     if (modoEdicion) {
-      this.userDetailsForm.enable(); // Habilitar el formulario
-      // Asignar los valores del usuario al formulario
+      this.userDetailsForm.enable();
+
       this.userDetailsForm.patchValue({
         nombre: this.nombre,
         apellido: this.apellido,
@@ -195,7 +188,7 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
         contacto: this.telefono,
       });
     } else {
-      this.userDetailsForm.disable(); // Deshabilitar el formulario
+      this.userDetailsForm.disable();
     }
   }
 
@@ -233,66 +226,6 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
     }
   }
 
-  cargarDatosDeUsuario() {
-    // Obtener usuario del localStorage
-    const usuarioData = localStorage.getItem('selectedUser');
-
-    if (usuarioData) {
-      const usuario: Usuario = JSON.parse(usuarioData);
-      this.userId = usuario.id;
-      this.personId = usuario.id; // Se usa el mismo id para personId
-
-      const decoded: DecodedToken = jwtDecode(
-        this.authService.getToken() || ''
-      );
-      if ('userId' in decoded && 'sub' in decoded && 'roles' in decoded) {
-        this.userEmail = decoded.sub;
-
-        if (this.avatarFile) {
-          this.cargarImagenPerfil();
-        }
-
-        if (this.userId !== null && this.personId !== null) {
-          this.apiService
-          .getPersonByIdOperador(this.userId, this.personId)
-          .subscribe(
-            (data) => {
-              // Otros datos...
-              const localidad = this.localidades.find(
-                (loc) => loc.id === data.location.id
-              );
-              this.locationId = localidad ? localidad.id : null; // Asignar ID en lugar de nombre
-
-              this.userDetailsForm.patchValue({
-                nombre: this.nombre,
-                apellido: this.apellido,
-                dni: this.dni,
-                contacto: this.telefono,
-                localidad: this.locationId,
-                descripcion: this.descriptions,
-              });
-
-              this.cd.detectChanges();
-            },
-            (error) => {
-              console.error(
-                'Error al obtener nombre y apellido del usuario:',
-                error
-              );
-            }
-          );
-
-        }
-      } else {
-        this.userId = null;
-        this.userEmail = null;
-      }
-    } else {
-      console.error('No se encontraron datos de usuario en localStorage.');
-      this.router.navigate(['dashboard-backoffice']);
-    }
-  }
-
   verificarExistenciadni(dni: string): void {
     this.apiService.existsPersonByParamsAdmin(dni).subscribe(
       (response) => {
@@ -327,34 +260,28 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
       if (this.validarFormulario()) {
         const formData = this.userDetailsForm.value;
 
-        // Obtener usuario del localStorage
         const usuarioData = localStorage.getItem('selectedUser');
 
         if (usuarioData) {
           const usuario: Usuario = JSON.parse(usuarioData);
           this.userId = usuario.id;
-          this.personId = usuario.id; // Se usa el mismo id para personId
+          this.personId = usuario.id;
 
           if (this.userId !== null && this.personId !== null) {
             const selectedLocation = this.localidades.find(
               (loc) => loc.name === formData.localidad
             );
             const locationId = selectedLocation ? selectedLocation.id : null;
-
-            // Construir el objeto personData sin incluir locationId si no es válido
             const personData: any = {
               userId: this.userId,
               name: formData.nombre,
               lastname: formData.apellido,
               dni: formData.dni,
-              // Usa locationId aquí en lugar de this.locationId
-              localidad: locationId,
+              location_id: locationId,
               descriptions: formData.descripcion,
               telephone: formData.contacto,
               accept_license: true,
             };
-
-            // No hay necesidad de verificar nuevamente locationId, ya lo hiciste arriba
 
             this.apiService
               .updatePersonAdmin(this.userId, this.personId, personData)
@@ -365,30 +292,30 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
                     'Éxito'
                   );
                   this.activarEdicion(false);
-                  this.cargarDatosDeUsuario();
 
-                  // Navegar a la vista principal después de actualizar el perfil
+
                   this.router.navigate([
-                    'dashboard-backoffice/perfil-prodcutorl',
+                    'dashboard-backoffice/perfil-productor',
                   ]);
                 },
                 (error) => {
-                  // Manejo de errores omitido por brevedad
+
                 }
               );
           } else {
-            // Manejo de errores omitido por brevedad
+
           }
         } else {
-          // Manejo de errores omitido por brevedad
+
         }
       }
     } else {
       this.toastr.info('No se realizaron modificaciones.', 'Información');
+      this.activarEdicion(false);
     }
   }
 
   validarFormulario(): boolean {
-    return true; // Retornar siempre true para permitir guardar los cambios
+    return true; 
   }
 }
