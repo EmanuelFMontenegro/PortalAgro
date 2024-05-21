@@ -33,7 +33,7 @@ export class ProductoresComponent implements OnInit {
   nombreABuscar: string = '';
   apellidoABuscar: string = '';
   placeholderText: string = 'Buscar por . . .';
-  usuarios: { nombre: string; apellido: string; localidad: string }[] = [];
+  usuarios: { nombre: string; apellido: string; localidad: string,dni:number, }[] = [];
   nombre: string = '';
   apellido: string = '';
   dni: string = '';
@@ -99,14 +99,22 @@ export class ProductoresComponent implements OnInit {
   cargarUsuarios(locationId?: number) {
     this.apiService.getPeopleAdmin(locationId).subscribe(
       (data: any) => {
+
         if (data.list && data.list.length > 0) {
           const usuariosList = data.list.flat();
+          console.log('datos de tdos los prodctores', data);
           this.usuarios = usuariosList.map((usuario: any) => ({
+            id:usuario.id,
             nombre: usuario.name,
             apellido: usuario.lastname,
+            dni:usuario.dni,
+            telefono:usuario.telephone,
             localidad: usuario.location.name,
+
           }));
         }
+
+
       },
       (error) => {
         console.error('Error al obtener los usuarios:', error);
@@ -208,14 +216,8 @@ export class ProductoresComponent implements OnInit {
     const filter = {
       anyNames: this.nombreABuscar || this.apellidoABuscar || '',
     };
-
-    // Aplicar un tiempo de espera usando debounceTime para limitar la frecuencia de llamadas a la API
     this.apiService
-      .getPeopleUserAdmin(filter)
-      .pipe(
-        debounceTime(500) // Esperar 500 milisegundos (0.5 segundos) antes de realizar la llamada a la API
-      )
-      .subscribe(
+      .getPeopleUserAdmin(filter).subscribe(
         (data: any) => {
           this.procesarDatosUsuarios(data);
           if (this.usuarios.length === 0) {
@@ -269,10 +271,12 @@ export class ProductoresComponent implements OnInit {
   //Agregar en Ver Mas el link o ruta a la pantalla agregar nuevos Productores
   BtnNuevoUsuario() {
     this.router.navigate(['dashboard-backoffice/nuevo-usuario']);
-
   }
   //Agregar en Ver Mas el link o ruta a la pantalla editar un Productores
-  verMas() {
+  verMas(usuario: any) {
+    // Guardar los datos del usuario en localStorage
+    localStorage.setItem('selectedUser', JSON.stringify(usuario));
+    // Navegar al componente perfil-productor
     this.router.navigate(['dashboard-backoffice/perfil-productor']);
   }
 }

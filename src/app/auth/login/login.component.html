@@ -5,7 +5,7 @@
 
     </div>
     <h1 class="mb-4">Iniciar Sesión</h1>
-    <form [formGroup]="login" (ngSubmit)="enviarFormulario()" class="text-start">
+    <form [formGroup]="login" (ngSubmit)="loginUser()" class="text-start">
       <input matInput type="email" id="username" [formControl]="usernameControl" placeholder="Correo electrónico">
 
       <div class="error-container">

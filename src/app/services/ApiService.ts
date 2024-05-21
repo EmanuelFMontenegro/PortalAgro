@@ -52,16 +52,24 @@ export class ApiService {
   }
 
   //<------- Enpoint Terminos Y condiciones-------->
-  acceptLicense(userId: number, personId: number): Observable<any> {
+
+  acceptLicenseGet(userId: number, personId: number): Observable<any> {
+    const url = `http://localhost:8095/api/user/${userId}/person/${personId}/accept_license`;
+    return this.http.get(url);
+  }
+
+  acceptLicensePut(userId: number, personId: number): Observable<any> {
     const requestData = {
       accept_license: true,
     };
-
+  
     return this.http.put(
       `${this.baseURL}/user/${userId}/person/${personId}`,
       requestData
     );
   }
+
+
 
   // Métodos relacionados con el backoffice (Admin-Opertator-all)
 
@@ -234,13 +242,13 @@ export class ApiService {
   updatePersonAdmin(
     userId: number,
     personId: number,
-    personData: any
+    updatedPersonData: any
   ): Observable<any> {
-    const updatedPersonData = { ...personData, accept_license: true };
-    const url = `${this.baseURL}/user/${userId}/person/${personId}`;
-    return this.http.put<any>(url, updatedPersonData);
+    return this.http.put(
+      `${this.baseURL}/user/${userId}/person/${personId}`,
+      updatedPersonData
+    );
   }
-
 
   //  <<<<-------METODOS PARA ROLES------>>>>>
   // GET: getRoles-ADMIN

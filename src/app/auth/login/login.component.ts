@@ -88,7 +88,7 @@ export class LoginComponent implements OnInit {
       }
     }
   }
-  enviarFormulario() {
+  loginUser() {
     if (this.login.valid) {
       const username = this.login.get('username')?.value;
       const password = this.login.get('password')?.value;

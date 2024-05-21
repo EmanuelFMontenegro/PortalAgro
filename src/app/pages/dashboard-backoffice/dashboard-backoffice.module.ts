@@ -40,11 +40,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { DialogComponent } from './dialog/dialog.component';
-import { PerfilProductorComponent } from './perfil-productor/perfil-productor.component';
+import { PerfilProductorComponent } from './productores/perfil-productor/perfil-productor.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NuevoUsuarioComponent } from './productores/nuevo-usuario/nuevo-usuario.component';
-
-
 
 @NgModule({
   declarations: [
@@ -61,8 +59,7 @@ import { NuevoUsuarioComponent } from './productores/nuevo-usuario/nuevo-usuario
     ConfiguracionComponent,
     DialogComponent,
     PerfilProductorComponent,
-    NuevoUsuarioComponent
-
+    NuevoUsuarioComponent,
   ],
   imports: [
     CommonModule,
@@ -80,8 +77,7 @@ import { NuevoUsuarioComponent } from './productores/nuevo-usuario/nuevo-usuario
     MatOptionModule,
     MatSelectModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
-
 })
 export class DashboardBackofficeModule {}
