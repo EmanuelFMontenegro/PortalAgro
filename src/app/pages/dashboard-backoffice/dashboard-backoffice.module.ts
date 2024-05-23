@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { DashboardBackofficeComponents } from './dashboard-backoffice.component';
 import { DashboardBackofficeRoutingModule } from './dashboard-backoffice-routing.module';
@@ -43,6 +42,9 @@ import { DialogComponent } from './dialog/dialog.component';
 import { PerfilProductorComponent } from './productores/perfil-productor/perfil-productor.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NuevoUsuarioComponent } from './productores/nuevo-usuario/nuevo-usuario.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { BrowserModule } from '@angular/platform-browser';
 
 @NgModule({
   declarations: [
@@ -78,6 +80,9 @@ import { NuevoUsuarioComponent } from './productores/nuevo-usuario/nuevo-usuario
     MatSelectModule,
     FormsModule,
     ReactiveFormsModule,
+    BrowserModule,
+    MatIconModule,
+    MatCheckboxModule
   ],
 })
 export class DashboardBackofficeModule {}

@@ -47,7 +47,7 @@ interface Lote {
 export class CargarLoteComponent {
   currentPlotId: number | null = null;
   public buttonText: string = 'Cargar Lote';
-  ActualPlantationName: string = ''; //esta variable contiene el nombre de la plantacion actual para editar luego.-
+  ActualPlantationName: string = '';
   nombre: string = '';
   apellido: string = '';
   descripcion: string = '';
@@ -58,7 +58,7 @@ export class CargarLoteComponent {
   persona: any = {};
   plantations: any[] = [];
   loteForm: FormGroup;
-  FieldId: number = 0;
+  FieldId: number;
   filteredPlantations: Observable<any[]> = new Observable<any[]>();
   filtroPlantations = new FormControl('');
   private userId: number | any;
@@ -82,13 +82,25 @@ export class CargarLoteComponent {
     private router: Router,
     private fb: FormBuilder
   ) {
+    // Inicializar loteForm
     this.loteForm = this.fb.group({
-      // name: ['', Validators.required],
       dimensions: ['', [Validators.required, Validators.min(1)]],
       observation: [''],
       plantation: ['', Validators.required],
     });
+
+    // Obtener el valor del localStorage y asignarlo a FieldId si existe
+    const campoSeleccionado = localStorage.getItem('campoSeleccionado');
+    if (campoSeleccionado) {
+      const campoSeleccionadoObj = JSON.parse(campoSeleccionado);
+      this.FieldId = campoSeleccionadoObj.id;
+    } else {
+      // Asignar un valor por defecto si no se encuentra en el localStorage
+      this.FieldId = 0; // O cualquier otro valor
+    }
   }
+
+
 
   ngOnInit(): void {
     this.cargarDatosDeUsuario();
@@ -106,7 +118,7 @@ export class CargarLoteComponent {
       const plotIdNumber = parseInt(storedPlotId, 10);
       const plotData: Lote = JSON.parse(storedPlotData);
 
-      // Save the ID of the current plantation before loading plot data
+
       const previousPlantationId = plotData.typeCrop.id;
 
       this.currentPlotId = plotIdNumber;
@@ -120,10 +132,10 @@ export class CargarLoteComponent {
         observation: plotData.descriptions,
       });
 
-     
+
       this.loteForm.addControl('previousPlantation', new FormControl(previousPlantationId));
 
-      this.buttonText = 'Update Lote';
+      this.buttonText = 'Actualizar Lote';
     }
   }
 
@@ -216,6 +228,8 @@ export class CargarLoteComponent {
           .subscribe(
             (lote) => {
               this.currentPlotId = plotIdNumber;
+              this.ActualPlantationName = lote.plant_name;
+
               this.loteData = {
                 // name: lote.name,
                 plantation: lote.type_crop_id,

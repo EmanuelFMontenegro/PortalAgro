@@ -3,63 +3,57 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from 'src/app/services/ApiService';
-import { AuthService } from 'src/app/services/AuthService';
-import { jwtDecode } from 'jwt-decode';
 import { Observable } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { startWith, map } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogComponent } from 'src/app/pages/dashboard/dialog/dialog.component';
-
-interface DecodedToken {
-  userId: number;
-  sub: string;
-  roles: string;
-}
+import { MatIconModule } from '@angular/material/icon';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-nuevo-usuario',
   templateUrl: './nuevo-usuario.component.html',
-  styleUrls: ['./nuevo-usuario.component.sass']
+  styleUrls: ['./nuevo-usuario.component.sass'],
 })
 export class NuevoUsuarioComponent implements OnInit, AfterViewInit {
   userDetailsForm: FormGroup;
-  private userId: number | any;
-  public userEmail: string | null = null;
-  private personId: number | any;
-  locationId: number | null = null;
-  hidePassword = true;
   filteredLocalidades: Observable<any[]> = new Observable<any[]>();
   filtroLocalidades = new FormControl('');
-  nombre: string = '';
-  apellido: string = '';
   localidades: any[] = [];
-  dni: string = '';
-  telephone: string = '';
-  descriptions: string = '';
-  activarEdicion: boolean = false;
   isTermsPopupVisible: boolean = false;
+  hidePassword = true;
+
   constructor(
     private formBuilder: FormBuilder,
-    private authService: AuthService,
     private apiService: ApiService,
     private toastr: ToastrService,
     private router: Router,
     private dialog: MatDialog
   ) {
     this.userDetailsForm = this.formBuilder.group({
+      usuario: ['', Validators.required],
+      password: ['', Validators.required],
       nombre: [
         '',
-        [Validators.maxLength(20), Validators.pattern('^[a-zA-Z]+$')],
+        [
+          Validators.required,
+          Validators.maxLength(20),
+          Validators.pattern('^[a-zA-Z]+$'),
+        ],
       ],
       apellido: [
         '',
-        [Validators.maxLength(20), Validators.pattern('^[a-zA-Z]+$')],
+        [
+          Validators.required,
+          Validators.maxLength(20),
+          Validators.pattern('^[a-zA-Z]+$'),
+        ],
       ],
       localidad: [null, Validators.required],
       dni: [
         '',
         [
+          Validators.required,
           Validators.minLength(8),
           Validators.maxLength(11),
           Validators.pattern('^[0-9]+$'),
@@ -68,14 +62,15 @@ export class NuevoUsuarioComponent implements OnInit, AfterViewInit {
       contacto: [
         '',
         [
+          Validators.required,
           Validators.minLength(10),
           Validators.maxLength(12),
           Validators.pattern('^[0-9]+$'),
         ],
       ],
       descripcion: [''],
-
-      aceptarTerminos: [false, Validators.requiredTrue],
+      isPreAcceptTherms: [false], // Agregar validación predeterminada para isPreAcceptTherms
+      isPreActivate: [false], // Agregar validación predeterminada para isPreActivate
     });
   }
 
@@ -88,6 +83,7 @@ export class NuevoUsuarioComponent implements OnInit, AfterViewInit {
   togglePasswordVisibility(): void {
     this.hidePassword = !this.hidePassword;
   }
+
   openTermsPopup(): void {
     this.isTermsPopupVisible = true;
   }
@@ -117,128 +113,56 @@ export class NuevoUsuarioComponent implements OnInit, AfterViewInit {
       loc.name.toLowerCase().includes(filterValue)
     );
   }
+  cargarNuevoUsuario() {
+    if (this.userDetailsForm.valid) {
+      const formValues = this.userDetailsForm.value;
+      const userData = {
+        username: formValues.usuario,
+        password: formValues.password,
+        name: formValues.nombre,
+        lastname: formValues.apellido,
+        dni: formValues.dni,
+        telephone: formValues.contacto,
+        location_id: formValues.localidad,
+        descriptions: formValues.descripcion,
+        isPreAcceptTherms: formValues.isPreAcceptTherms, // Incluir isPreAcceptTherms del formulario
+        isPreActivate: formValues.isPreActivate, // Incluir isPreActivate del formulario
+      };
 
-  cargarDatosPerfil() {
-    if (!this.validarFormulario()) {
-      return;
-    }
-    const aceptarTerminosControl = this.userDetailsForm.get('aceptarTerminos');
-    const aceptarTerminos = aceptarTerminosControl?.value;
-
-
-    if (aceptarTerminos === null) {
-      console.error('El campo aceptarTerminos es null');
-      return;
-    }
-
-
-    if (!aceptarTerminos) {
-      this.toastr.warning(
-        'Debe Aceptar los Términos y Condiciones para continuar.',
-        'Atención'
-      );
-      return;
-    }
-
-    // Continuar con el proceso de actualización del perfil
-    const formValues = this.userDetailsForm.value;
-    const personData = {
-      name: formValues.nombre || '',
-      lastname: formValues.apellido || '',
-      dni: formValues.dni || '',
-      telephone: formValues.contacto || '',
-      location_id: formValues.localidad || null,
-      descriptions: formValues.descripcion || null,
-      accept_license: aceptarTerminos,
-    };
-
-    const decoded: DecodedToken = jwtDecode(this.authService.getToken() || '');
-    if ('userId' in decoded && 'sub' in decoded && 'roles' in decoded) {
-      this.userId = decoded.userId;
-      this.userEmail = decoded.sub;
-      this.personId = this.userId;
-
-      if (this.userId !== null && this.personId !== null) {
-        this.actualizarValoresFormulario();
-      }
-    } else {
-      this.userId = null;
-      this.userEmail = null;
-    }
-
-    // Llamar al endpoint de actualización del perfil
-    this.apiService
-      .updatePersonAdmin(this.userId, this.personId, personData)
-      .subscribe(
+      // Llamar al endpoint de creación de usuario
+      this.apiService.crearNuevoUsuario(userData).subscribe(
         (response) => {
-          this.toastr.success(
-            'Gracias por actualizar tu perfil:',
-            'Bienvenido'
-          );
-          this.router.navigate(['/dashboard']);
+          this.toastr.success('Usuario creado exitosamente', 'Éxito');
+          this.router.navigate(['/dashboard-backoffice/productores']);
         },
-        (error) => {
-          console.error(
-            'Error al actualizar la información del usuario:',
-            error
-          );
+        (errorResponse) => {
+          console.error('Error al crear el usuario:', errorResponse);
+
+          // Extraer el objeto de error desde el errorResponse, dependiendo de la estructura del error
+          const error = errorResponse.error || errorResponse;
+
+          let errorMessage = 'Error al crear el usuario'; // Mensaje genérico por defecto
+
+          if (error.code === 4002) {
+            errorMessage = 'El Email ingresa ya fue regisrado. Por favor, intente con otro email.';
+          } else if (error.code === 4023) {
+            errorMessage = 'El DNI ingresado ya fue registrado. Por favor, verifique e intente nuevamente.';
+          } else if (error.code === 4004) {
+            errorMessage = 'La contraseña no cumple con los requisitos de seguridad. Por favor, intente con otra.';
+          }
+          // Añadir más condiciones según los códigos de error específicos
+
+          this.toastr.error(errorMessage, 'Atención');
         }
       );
-  }
 
-  actualizarValoresFormulario() {
-    const formValues = this.userDetailsForm.value;
-    this.nombre = formValues.nombre;
-    this.apellido = formValues.apellido;
-    this.dni = formValues.dni;
-    this.telephone = formValues.contacto;
-    this.locationId = formValues.localidad;
-    this.descriptions = formValues.descripcion;
-  }
 
+
+
+}
+}
   validarFormulario(): boolean {
-    const formValues = this.userDetailsForm.value;
-    const dniControl = this.userDetailsForm.get('dni');
-    const contactoControl = this.userDetailsForm.get('contacto');
-    const aceptarTerminosControl = this.userDetailsForm.get('aceptarTerminos');
-
-    if (dniControl?.errors && dniControl.errors['incorrect']) {
-      dniControl.setErrors({ incorrect: true });
-      return false;
-    }
-
-    if (contactoControl?.errors && contactoControl.errors['incorrectSize']) {
-      contactoControl.setErrors({ incorrectSize: true });
-      return false;
-    }
-
-    // Verificar si se han aceptado los términos y condiciones
-    if (!aceptarTerminosControl?.value) {
-      this.toastr.warning(
-        'Debe aceptar los términos y condiciones para continuar.',
-        'Atención'
-      );
-      return false;
-    }
-
-    if (
-      formValues.nombre?.trim() === '' ||
-      formValues.apellido?.trim() === '' ||
-      formValues.dni?.trim() === '' ||
-      formValues.localidad === null ||
-      formValues.contacto?.trim() === ''
-    ) {
-      this.toastr.warning(
-        'Por favor, complete todos los campos obligatorios.',
-        'Atención'
-      );
-      return false;
-    }
-    return true;
-  }
-
-  redirectToLogin() {
-    this.router.navigate(['/login']);
+    return true; // Ya que no hay campos obligatorios, siempre devolvemos true
   }
 
   cancelar() {

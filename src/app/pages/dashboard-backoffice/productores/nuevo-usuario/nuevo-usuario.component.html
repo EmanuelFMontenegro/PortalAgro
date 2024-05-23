@@ -6,7 +6,7 @@
     </div>
     <mat-card class="main-card">
       <div class="cards-container">
-        <mat-card class="user-details-card">
+        <mat-card class="nuevo-user-details-card">
           <mat-card-header>
             <mat-card-title>Información Personal</mat-card-title>
           </mat-card-header>
@@ -15,13 +15,16 @@
               <div class="datos-nuevo-user">
                 <div class="field-container">
                   <label class="field-label" for="usuario">Usuario</label>
-                  <input matInput formControlName="usuario" id="usuario">
+                  <input matInput formControlName="usuario" id="usuario"
+                    [value]="userDetailsForm.get('usuario')?.value">
                 </div>
                 <div class="field-container">
                   <label class="field-label" for="password">Contraseña</label>
                   <div class="password-container">
-                    <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'" id="password">
-                    <mat-icon class="eye-icon" (click)="togglePasswordVisibility()">{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                    <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'" id="password"
+                      [value]="userDetailsForm.get('password')?.value">
+                    <mat-icon class="eye-icon" (click)="togglePasswordVisibility()">{{ hidePassword ? 'visibility_off' :
+                      'visibility' }}</mat-icon>
                   </div>
                 </div>
                 <div class="field-container">
@@ -50,6 +53,15 @@
                   <input matInput formControlName="contacto" id="contacto"
                     [ngClass]="{ 'invalid-field': userDetailsForm.get('contacto')?.invalid && (userDetailsForm.get('contacto')?.dirty || userDetailsForm.get('contacto')?.touched) }">
                 </div>
+                <div class="field-container">
+                  <mat-checkbox formControlName="isPreAcceptTherms"></mat-checkbox>
+                  <label class="field-label" for="isPreAcceptTherms">Aceptar términos</label>
+                </div>
+                <div class="field-container">
+                  <mat-checkbox formControlName="isPreActivate"></mat-checkbox>
+                  <label class="field-label" for="isPreActivate">Activar cuenta</label>
+                </div>
+
               </div>
             </form>
           </mat-card-content>
@@ -59,12 +71,12 @@
             <mat-card-title>Información Adicional</mat-card-title>
           </mat-card-header>
           <mat-card-content>
-            <textarea rows="5" readonly class="texto-area">{{ descriptions }}</textarea>
+            <textarea rows="5" readonly class="texto-area">{{ userDetailsForm.get('descripcion')?.value }}</textarea>
           </mat-card-content>
         </mat-card>
         <div class="botones-servicio">
           <button mat-raised-button class="cancel-button" type="button" (click)="cancelar()">Cancelar</button>
-          <button mat-raised-button class="register-button" (click)="cargarDatosPerfil()">Guardar Cambios</button>
+          <button mat-raised-button class="register-button" (click)="cargarNuevoUsuario()">Guardar Cambios</button>
         </div>
       </div>
     </mat-card>

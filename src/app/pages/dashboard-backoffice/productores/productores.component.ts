@@ -102,7 +102,6 @@ export class ProductoresComponent implements OnInit {
 
         if (data.list && data.list.length > 0) {
           const usuariosList = data.list.flat();
-          console.log('datos de tdos los prodctores', data);
           this.usuarios = usuariosList.map((usuario: any) => ({
             id:usuario.id,
             nombre: usuario.name,

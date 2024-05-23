@@ -152,6 +152,7 @@ export class PerfilComponent implements OnInit, AfterViewInit {
   obtenerLocalidades() {
     this.apiService.getLocationMisiones('location').subscribe(
       (localidades) => {
+
         this.localidades = localidades;
         this.filteredLocalidades = this.filtroLocalidades.valueChanges.pipe(
           startWith(''),
@@ -199,6 +200,7 @@ export class PerfilComponent implements OnInit, AfterViewInit {
           .getPersonByIdOperador(this.userId, this.personId)
           .subscribe(
             (data) => {
+
               this.nombre = data.name;
               this.apellido = data.lastname;
               this.dni = data.dni;
@@ -208,7 +210,7 @@ export class PerfilComponent implements OnInit, AfterViewInit {
                 (loc) => loc.id === data.location.id
               );
               this.locationId = localidad ? localidad.name : null; // Cambiar aquí
-
+             
               this.userDetailsForm.patchValue({
                 nombre: this.nombre,
                 apellido: this.apellido,
@@ -331,7 +333,7 @@ export class PerfilComponent implements OnInit, AfterViewInit {
   }
 
   validarFormulario(): boolean {
-    
+
     return true; // Retornar siempre true para permitir guardar los cambios
   }
 }

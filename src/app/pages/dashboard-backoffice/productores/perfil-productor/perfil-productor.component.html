@@ -21,12 +21,21 @@
               </div>
             </div>
           </div>
-          <div class="boton-editar">
-            <button mat-raised-button class="btn-editar" (click)="activarEdicion(true)">
-              <img src="assets/img/edit_square_FILL0_wght400_GRAD0_opsz24.svg" alt="Icon Edit" class="img-editar">
-              Editar
-            </button>
+          <div class="botones-container">
+            <div class="boton-editar">
+              <button mat-raised-button class="btn-editar" (click)="activarEdicion(true)">
+                <img src="assets/img/edit_square_FILL0_wght400_GRAD0_opsz24.svg" alt="Icon Edit" class="img-editar">
+                Editar
+              </button>
+            </div>
+            <div class="boton-chacra">
+              <button mat-raised-button class="btn-chacra" (click)="btnVerMas()" >
+                <img src="assets/img/agriculture_24dp_FILL0_wght300_GRAD0_opsz24.svg" alt="Icon Chacra" class="img-chacra">
+                Ver Chacras
+              </button>
+            </div>
           </div>
+
         </div>
         <mat-card class="user-details-card">
           <mat-card-header>
@@ -68,7 +77,7 @@
             <mat-card-title>Información Adicional</mat-card-title>
           </mat-card-header>
           <mat-card-content>
-            <textarea rows="5" readonly class="texto-area">{{ descriptions }}</textarea>
+            <textarea rows="5" readonly class="texto-area">{{ descripcion }}</textarea>
           </mat-card-content>
         </mat-card>
       </div>
@@ -84,7 +93,7 @@
     </div>
     <mat-card class="main-card">
       <div class="cards-container">
-        <div class="card user-card">
+        <div class="card user-card-edit">
           <div class="avatar">
             <div class="avatar-circle">
               <input type="file" id="file-input" style="display: none" (change)="onFileSelected($event)">

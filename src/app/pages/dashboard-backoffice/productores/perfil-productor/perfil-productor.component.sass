@@ -57,7 +57,16 @@ body
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3)
     margin-top: -10px
     height: 6em
+
     &.user-card
+      background: linear-gradient(to bottom, #01648C 40%, #015172 100%)
+      display: flex
+      justify-content: space-between
+      gap: 20px
+      margin-left: 1.5%
+      align-items: center
+
+    &.user-card-edit
       background: linear-gradient(to bottom, #01648C 40%, #015172 100%)
       display: flex
       gap: 20px
@@ -88,6 +97,7 @@ body
         display: flex
         justify-content: center
         align-items: center
+
       .avatar-circle img
         width: 100%
         height: 100%
@@ -111,7 +121,7 @@ body
       margin-left: auto
 
     .btn-editar
-      padding: 8px 18px
+      padding: 8px 38px
       border: 2px solid $border-color
       border-radius: 5px
       cursor: pointer
@@ -121,13 +131,21 @@ body
       font-weight: bold
       background-color: $primary-color
       color: $border-color
+      margin-bottom: 10px
 
     .img-editar
-      width: 24px
-      height: 24px
+      width: 20px
+      height: 20px
       margin-right: 5px
       vertical-align: middle
       filter: invert(100%)
+
+    .img-chacra
+      width: 20px
+      height: 20px
+      margin-right: 5px
+      vertical-align: middle
+      filter: invert(100%) brightness(5) saturate(100%)
 
     .edit-text
       color: white
@@ -139,6 +157,23 @@ body
       font-size: 16px
       overflow: none
 
+    .boton-chacra
+      display: flex
+      align-items: center
+      margin-top: 2%
+      margin-left: auto
+
+    .btn-chacra
+      padding: 8px 18px
+      border: 2px solid $border-color
+      border-radius: 5px
+      cursor: pointer
+      transition: background-color 0.3s, border-color 0.3s
+      font-size: 0.85em
+      font-family: 'Montserrat', sans-serif
+      font-weight: bold
+      background-color: $primary-color
+      color: $border-color
     p
       font-size: 14px
       color: $border-color
@@ -423,6 +458,14 @@ mat-card
     margin-top: 2%
 
   .btn-editar
+    width: 20em
+
+  .boton-chacra
+    display: flex
+    justify-content: center
+    margin-top: 2%
+
+  .btn-chacra
     width: 20em
 
   .botones-servicio

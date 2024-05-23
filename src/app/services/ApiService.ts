@@ -62,7 +62,7 @@ export class ApiService {
     const requestData = {
       accept_license: true,
     };
-  
+
     return this.http.put(
       `${this.baseURL}/user/${userId}/person/${personId}`,
       requestData
@@ -248,6 +248,11 @@ export class ApiService {
       `${this.baseURL}/user/${userId}/person/${personId}`,
       updatedPersonData
     );
+  }
+
+  //enpoint para crear Nuevo Usuario Backoofice
+  crearNuevoUsuario(userData: any): Observable<any> {
+    return this.http.post(`${this.baseURL}/dist/user/person`, userData);
   }
 
   //  <<<<-------METODOS PARA ROLES------>>>>>
