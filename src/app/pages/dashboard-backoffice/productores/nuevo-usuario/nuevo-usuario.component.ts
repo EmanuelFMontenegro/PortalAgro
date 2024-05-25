@@ -69,8 +69,8 @@ export class NuevoUsuarioComponent implements OnInit, AfterViewInit {
         ],
       ],
       descripcion: [''],
-      isPreAcceptTherms: [false], // Agregar validación predeterminada para isPreAcceptTherms
-      isPreActivate: [false], // Agregar validación predeterminada para isPreActivate
+      isPreAcceptTherms: [false],
+      isPreActivate: [false],
     });
   }
 
@@ -125,8 +125,8 @@ export class NuevoUsuarioComponent implements OnInit, AfterViewInit {
         telephone: formValues.contacto,
         location_id: formValues.localidad,
         descriptions: formValues.descripcion,
-        isPreAcceptTherms: formValues.isPreAcceptTherms, // Incluir isPreAcceptTherms del formulario
-        isPreActivate: formValues.isPreActivate, // Incluir isPreActivate del formulario
+        isPreAcceptTherms: formValues.isPreAcceptTherms,
+        isPreActivate: formValues.isPreActivate, 
       };
 
       // Llamar al endpoint de creación de usuario

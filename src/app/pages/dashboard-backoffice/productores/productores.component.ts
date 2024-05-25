@@ -33,7 +33,7 @@ export class ProductoresComponent implements OnInit {
   nombreABuscar: string = '';
   apellidoABuscar: string = '';
   placeholderText: string = 'Buscar por . . .';
-  usuarios: { nombre: string; apellido: string; localidad: string,dni:number, }[] = [];
+  usuarios: { nombre: string; apellido: string; localidad: string,dni:number,email:string }[] = [];
   nombre: string = '';
   apellido: string = '';
   dni: string = '';
@@ -107,6 +107,7 @@ export class ProductoresComponent implements OnInit {
             nombre: usuario.name,
             apellido: usuario.lastname,
             dni:usuario.dni,
+            email:usuario.userEmail,
             telefono:usuario.telephone,
             localidad: usuario.location.name,
 
@@ -272,9 +273,9 @@ export class ProductoresComponent implements OnInit {
     this.router.navigate(['dashboard-backoffice/nuevo-usuario']);
   }
   //Agregar en Ver Mas el link o ruta a la pantalla editar un Productores
-  verMas(usuario: any) {
+  verMas(usuarios: any) {
     // Guardar los datos del usuario en localStorage
-    localStorage.setItem('selectedUser', JSON.stringify(usuario));
+    localStorage.setItem('selectedUser', JSON.stringify(usuarios));
     // Navegar al componente perfil-productor
     this.router.navigate(['dashboard-backoffice/perfil-productor']);
   }

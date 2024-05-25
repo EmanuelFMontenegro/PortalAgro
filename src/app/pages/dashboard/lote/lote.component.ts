@@ -131,7 +131,7 @@ export class LoteComponent {
 
       if (this.userId !== null && this.personId !== null) {
         this.apiService
-          .getPersonByIdOperador(this.userId, this.personId)
+          .getPersonByIdProductor(this.userId, this.personId)
           .subscribe(
             (data) => {
               this.nombre = data.name;
@@ -320,8 +320,11 @@ export class LoteComponent {
     this.modoEdicion = true;
     localStorage.setItem('plotId', lote.id.toString());
     localStorage.setItem('plotData', JSON.stringify(lote));
+    localStorage.setItem('previousPlantation', lote.typeCrop.name); 
     this.router.navigate(['dashboard/cargar-lote']);
 }
+
+
 
 
 }

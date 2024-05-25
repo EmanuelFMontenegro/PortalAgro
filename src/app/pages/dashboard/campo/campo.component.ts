@@ -130,7 +130,7 @@ export class CampoComponent implements OnInit {
 
       if (this.userId !== null && this.personId !== null) {
         this.apiService
-          .getPersonByIdOperador(this.userId, this.personId)
+          .getPersonByIdProductor(this.userId, this.personId)
           .subscribe(
             (data) => {
               this.nombre = data.name;

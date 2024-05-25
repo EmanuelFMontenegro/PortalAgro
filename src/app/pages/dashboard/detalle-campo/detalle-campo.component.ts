@@ -95,7 +95,7 @@ export class DetalleCampoComponent implements OnInit, AfterViewInit {
       this.personId = this.userId;
 
       if (this.userId !== null && this.personId !== null) {
-        this.apiService.getPersonByIdOperador(this.userId, this.personId).subscribe(
+        this.apiService.getPersonByIdProductor(this.userId, this.personId).subscribe(
           (data) => {
             this.nombre = data.name;
             this.apellido = data.lastname;

@@ -128,7 +128,7 @@ export class GeolocalizacionComponent implements AfterViewInit {
 
       if (this.userId !== null && this.personId !== null) {
         this.apiService
-          .getPersonByIdOperador(this.userId, this.personId)
+          .getPersonByIdProductor(this.userId, this.personId)
           .subscribe(
             (data) => {
               this.nombre = data.name;
@@ -325,7 +325,7 @@ export class GeolocalizacionComponent implements AfterViewInit {
 
       if (this.userId !== null && this.personId !== null) {
         this.apiService
-          .getPersonByIdOperador(this.userId, this.personId)
+          .getPersonByIdProductor(this.userId, this.personId)
           .subscribe(
             (data) => {
               this.nombre = data.name;

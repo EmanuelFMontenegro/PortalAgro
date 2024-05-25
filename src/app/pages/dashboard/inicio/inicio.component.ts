@@ -118,7 +118,7 @@ export class InicioComponent implements OnInit {
             let nombreLocalidad: string = '';
 
             this.apiService
-              .getPersonByIdOperador(this.userId, this.personId)
+              .getPersonByIdProductor(this.userId, this.personId)
               .subscribe(
                 (data) => {
                   const localidad = this.localidades.find(
@@ -210,7 +210,7 @@ export class InicioComponent implements OnInit {
     this.apiService.getLocationMisiones('location').subscribe(
       (localidades) => {
         this.localidades = localidades;
-       
+
       },
       (error) => {
         console.error('Error al obtener las localidades', error);

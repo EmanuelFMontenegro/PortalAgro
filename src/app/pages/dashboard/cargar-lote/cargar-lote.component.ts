@@ -1,10 +1,10 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ApiService } from 'src/app/services/ApiService';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/AuthService';
 import { Router } from '@angular/router';
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode} from 'jwt-decode';
 import { startWith, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import {
@@ -13,7 +13,6 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms';
-import { LoteComponent } from '../lote/lote.component';
 
 interface CustomJwtPayload {
   userId: number;
@@ -25,6 +24,7 @@ interface DecodedToken {
   sub: string;
   roles: string;
 }
+
 interface Lote {
   id: number;
   name: string;
@@ -44,10 +44,11 @@ interface Lote {
   templateUrl: './cargar-lote.component.html',
   styleUrls: ['./cargar-lote.component.sass'],
 })
-export class CargarLoteComponent {
+export class CargarLoteComponent implements OnInit {
   currentPlotId: number | null = null;
   public buttonText: string = 'Cargar Lote';
   ActualPlantationName: string = '';
+  AnteriorPlantationName: string = '';
   nombre: string = '';
   apellido: string = '';
   descripcion: string = '';
@@ -66,7 +67,6 @@ export class CargarLoteComponent {
   public userEmail: string | null = null;
 
   loteData = {
-    // name: '',
     plantation: '',
     dimensions: '',
   };
@@ -82,25 +82,20 @@ export class CargarLoteComponent {
     private router: Router,
     private fb: FormBuilder
   ) {
-    // Inicializar loteForm
     this.loteForm = this.fb.group({
-      dimensions: ['', [Validators.required, Validators.min(1)]],
+      dimensions: ['', [Validators.min(1)]],
       observation: [''],
-      plantation: ['', Validators.required],
+      plantation: [''],
     });
 
-    // Obtener el valor del localStorage y asignarlo a FieldId si existe
     const campoSeleccionado = localStorage.getItem('campoSeleccionado');
     if (campoSeleccionado) {
       const campoSeleccionadoObj = JSON.parse(campoSeleccionado);
       this.FieldId = campoSeleccionadoObj.id;
     } else {
-      // Asignar un valor por defecto si no se encuentra en el localStorage
-      this.FieldId = 0; // O cualquier otro valor
+      this.FieldId = 0;
     }
   }
-
-
 
   ngOnInit(): void {
     this.cargarDatosDeUsuario();
@@ -110,36 +105,30 @@ export class CargarLoteComponent {
 
     const storedPlotId = localStorage.getItem('plotId');
     const storedPlotData = localStorage.getItem('plotData');
+    const previousPlantation = localStorage.getItem('previousPlantation');
 
     if (storedPlotId && storedPlotData) {
-      localStorage.removeItem('plotId');
-      localStorage.removeItem('plotData');
-
       const plotIdNumber = parseInt(storedPlotId, 10);
       const plotData: Lote = JSON.parse(storedPlotData);
-
-
-      const previousPlantationId = plotData.typeCrop.id;
 
       this.currentPlotId = plotIdNumber;
       this.loteData = {
         plantation: plotData.typeCrop.id.toString(),
         dimensions: plotData.dimensions.toString(),
       };
+
       this.loteForm.patchValue({
+        // plantation: previousPlantation
+        //   ? previousPlantation
+        //   : plotData.typeCrop.id.toString(),
         plantation: plotData.typeCrop.id.toString(),
         dimensions: plotData.dimensions.toString(),
         observation: plotData.descriptions,
       });
 
-
-      this.loteForm.addControl('previousPlantation', new FormControl(previousPlantationId));
-
       this.buttonText = 'Actualizar Lote';
     }
   }
-
-
 
   decodeToken(): void {
     const token = this.authService.getToken();
@@ -164,6 +153,12 @@ export class CargarLoteComponent {
             }
           })
         );
+
+        const storedPlotData = localStorage.getItem('plotData');
+        if (storedPlotData) {
+          const plotData: Lote = JSON.parse(storedPlotData);
+          this.AnteriorPlantationName = plotData.typeCrop.name;
+        }
       },
       (error) => {
         console.error('Error al obtener las plantaciones', error);
@@ -188,7 +183,7 @@ export class CargarLoteComponent {
 
       if (this.userId !== null && this.personId !== null) {
         this.apiService
-          .getPersonByIdOperador(this.userId, this.personId)
+          .getPersonByIdProductor(this.userId, this.personId)
           .subscribe(
             (data) => {
               this.nombre = data.name;
@@ -228,17 +223,15 @@ export class CargarLoteComponent {
           .subscribe(
             (lote) => {
               this.currentPlotId = plotIdNumber;
-              this.ActualPlantationName = lote.plant_name;
+              this.ActualPlantationName = lote.typeCrop.name;
 
               this.loteData = {
-                // name: lote.name,
-                plantation: lote.type_crop_id,
-                dimensions: lote.dimensions,
+                plantation: lote.typeCrop.id.toString(), // Use ID instead of name
+                dimensions: lote.dimensions.toString(),
               };
               this.loteForm.patchValue({
-                // name: lote.name,
-                plantation: lote.type_crop_id,
-                dimensions: lote.dimensions,
+                plantation: lote.typeCrop.id.toString(), // Use ID instead of name
+                dimensions: lote.dimensions.toString(),
                 observation: lote.descriptions,
               });
               this.buttonText = 'Actualizar Lote';
@@ -256,80 +249,87 @@ export class CargarLoteComponent {
   }
 
   cargarLotes(): void {
-    if (this.loteForm.valid) {
-      const dimensionsControl = this.loteForm.get('dimensions');
-      const observationControl = this.loteForm.get('observation');
-      const plantationControl = this.loteForm.get('plantation');
+    const dimensionsControl = this.loteForm.get('dimensions');
+    const observationControl = this.loteForm.get('observation');
+    const plantationControl = this.loteForm.get('plantation');
 
-      if (dimensionsControl && observationControl && plantationControl) {
-        const newPlotData: any = {
-          dimensions: dimensionsControl.value,
-          descriptions: observationControl.value,
-          type_crop_id: plantationControl.value,
-        };
+    const changes = {
+      dimensions: dimensionsControl?.value,
+      descriptions: observationControl?.value,
+      type_crop_id: plantationControl?.value,
+    };
 
-        this.apiService
-          .addPlotOperador(this.userId, this.FieldId, newPlotData)
-          .subscribe(
-            () => {
-              this.toastr.success('Lote creado con éxito', 'Éxito');
-              this.loteForm.reset();
-              this.router.navigate(['dashboard/lote']);
-            },
-            (error) => {
-              if (error.error && error.error.message) {
-                this.toastr.error(
-                  'Ya existe un Lote con ese Nombre',
-                  'Atención'
-                );
-              } else {
-                this.toastr.error(
-                  'Error al registrar el lote. Detalles: ' + error.message,
-                  'Error'
-                );
-              }
-            }
-          );
-      }
+    if (
+      Object.values(changes).every((value) => value === null || value === '')
+    ) {
+      this.toastr.info('No se realizaron cambios', 'Información');
+      return; // No se realizaron cambios, salir del método
     }
+
+    this.apiService
+      .addPlotOperador(this.userId, this.FieldId, changes)
+      .subscribe(
+        () => {
+          this.toastr.success('Lote creado con éxito', 'Éxito');
+          this.loteForm.reset();
+          this.router.navigate(['dashboard/lote']);
+        },
+        (error) => {
+          this.toastr.error(
+            'Error al registrar el lote. Detalles: ' + error.message,
+            'Error'
+          );
+        }
+      );
   }
 
   actualizarLote(): void {
-    if (this.loteForm.valid && this.currentPlotId) {
-      const dimensionsControl = this.loteForm.get('dimensions');
-      const observationControl = this.loteForm.get('observation');
-      const plantationControl = this.loteForm.get('plantation');
+    if (!this.currentPlotId) return;
 
-      if (dimensionsControl && observationControl && plantationControl) {
-        const updatedPlotData: any = {
-          dimensions: dimensionsControl.value,
-          descriptions: observationControl.value,
-          type_crop_id: plantationControl.value,
-        };
+    const dimensionsControl = this.loteForm.get('dimensions');
+    const observationControl = this.loteForm.get('observation');
+    const plantationControl = this.loteForm.get('plantation');
 
-        this.apiService
-          .updatePlotOperador(
-            this.userId,
-            this.FieldId,
-            this.currentPlotId,
-            updatedPlotData
-          )
-          .subscribe(
-            () => {
-              this.toastr.success('Lote actualizado con éxito', 'Éxito');
-              this.router.navigate(['dashboard/lote']);
-            },
-            (error) => {
-              console.error('Error al actualizar el lote:', error);
-              this.toastr.error(
-                'Error al actualizar el lote. Por favor, inténtalo de nuevo más tarde.',
-                'Error'
-              );
-            }
-          );
-      }
+    const changes = {
+      dimensions: dimensionsControl?.value,
+      descriptions: observationControl?.value,
+      type_crop_id: plantationControl?.value,
+    };
+
+    if (
+      Object.values(changes).every((value) => value === null || value === '')
+    ) {
+      this.toastr.info('No se realizaron cambios', 'Información');
+      return; // No se realizaron cambios, salir del método
     }
+
+    this.apiService
+      .updatePlotOperador(
+        this.userId,
+        this.FieldId,
+        this.currentPlotId,
+        changes
+      )
+      .subscribe(
+        () => {
+          this.toastr.success('Lote actualizado con éxito', 'Éxito');
+          localStorage.removeItem('plotId');
+          localStorage.removeItem('plotData');
+          localStorage.removeItem('previousPlantation');
+          this.router.navigate(['dashboard/lote']);
+        },
+        (error) => {
+          console.error('Error al actualizar el lote:', error);
+          this.toastr.error(
+            'Error al actualizar el lote. Por favor, inténtalo de nuevo más tarde.',
+            'Error'
+          );
+        }
+      );
   }
+
+
+
 
   cancelar() {
     this.router.navigate(['dashboard/inicio']);

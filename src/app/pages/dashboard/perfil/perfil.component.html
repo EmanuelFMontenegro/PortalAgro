@@ -17,7 +17,7 @@
               <div class="titulo-welcome">
                 <h2>Bienvenido, {{ nombre }} {{ apellido }}</h2>
                 <p class="email">Email: {{ userEmail }}</p>
-                <p class="email">Ciudad: {{ locationId }}</p>
+                <p class="email">Ciudad: {{ location }}</p>
               </div>
             </div>
           </div>
@@ -46,7 +46,7 @@
               </div>
               <div class="field-container">
                 <label class="title-input">Localidad</label>
-                <div class="field-value">{{ locationId }}</div>
+                <div class="field-value">{{ location }}</div>
                 <mat-divider></mat-divider>
               </div>
               <div class="field-container">
@@ -120,8 +120,8 @@
 
                 <div class="field-container">
                   <label class="title-input" for="localidad">Localidad</label>
-                  <mat-select formControlName="localidad" placeholder="{{ locationId ? locationId : 'Seleccionar Localidad' }}" (selectionChange)="onLocalidadSelectionChange($event.value)">
-                    <mat-option *ngFor="let loc of localidades" [value]="loc.name">
+                  <mat-select formControlName="localidad" placeholder="{{ location ? location : 'Seleccionar Localidad' }}" (selectionChange)="onLocalidadSelectionChange($event.value)">
+                    <mat-option *ngFor="let loc of localidad" [value]="loc.name">
                       {{ loc.name }}
                     </mat-option>
                   </mat-select>

@@ -18,50 +18,36 @@
     <form class="solicitud-servicio-form" [formGroup]="loteForm">
       <div class="campos-formulario">
         <div class="grupo-campos">
-          <!-- Nombre -->
-          <!-- <div class="field-container">
-            <label class="field-label" for="direccion">Nombre</label>
-            <input matInput formControlName="name" placeholder="Nombre del lote" required (blur)="nameTouched = true">
-            <span *ngIf="loteForm.get('name')?.hasError('required') && nameTouched" class="error-message">Este
-              campo es requerido</span>
-          </div> -->
-
           <!-- Plantacion -->
           <div class="field-container">
             <label class="field-label" for="plantacion">Plantación</label>
             <mat-select class="mat-select" formControlName="plantation"
-              [placeholder]="ActualPlantationName ? ActualPlantationName : 'Seleccionar plantación'">
+              [placeholder]="AnteriorPlantationName ? AnteriorPlantationName : 'Seleccionar plantación'">
               <mat-option *ngFor="let planta of plantations" [value]="planta.id">
                 {{ planta.name }}
               </mat-option>
             </mat-select>
           </div>
+      
 
-
-          <!-- Dimensiones -->
-          <div class="field-container">
-            <label class="field-label">Dimensiones (Hectáreas)</label>
-            <input matInput formControlName="dimensions" type="number" placeholder="Ingresar valores en hectáreas"
-              required [min]="1" (blur)="dimensionsTouched = true">
-            <span *ngIf="loteForm.get('dimensions')?.hasError('required') && dimensionsTouched"
-              class="error-message">Este campo es requerido</span>
-            <span *ngIf="loteForm.get('dimensions')?.hasError('min') && dimensionsTouched" class="error-message">El
-              valor debe ser mayor a 0</span>
-          </div>
-
-        </div>
-
-        <div class="field-container-observaciones">
-          <label class="field-label">Observaciones</label>
-          <textarea matInput class="field-input-obs" formControlName="observation"></textarea>
+        <!-- Dimensiones -->
+        <div class="field-container">
+          <label class="field-label">Dimensiones (Hectáreas)</label>
+          <input matInput formControlName="dimensions" type="number" placeholder="Ingresar valores en hectáreas">
         </div>
       </div>
 
-      <div class="botones-servicio">
-        <button mat-raised-button class="cancel-button" type="button" (click)="cancelar()">Cancelar</button>
-        <button mat-raised-button class="register-button" type="submit"
-          (click)="currentPlotId ? actualizarLote() : cargarLotes()">{{ buttonText }}</button>
+      <div class="field-container-observaciones">
+        <label class="field-label">Observaciones</label>
+        <textarea matInput class="field-input-obs" formControlName="observation"></textarea>
       </div>
-    </form>
   </div>
+
+  <div class="botones-servicio">
+    <button mat-raised-button class="cancel-button" type="button" (click)="cancelar()">Cancelar</button>
+    <button mat-raised-button class="register-button" type="submit"
+      (click)="currentPlotId ? actualizarLote() : cargarLotes()">{{ buttonText }}</button>
+  </div>
+  </form>
+</div>
 </div>

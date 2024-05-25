@@ -1,5 +1,15 @@
-import { Component, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
+  ChangeDetectorRef,
+} from '@angular/core';
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  FormControl,
+} from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from 'src/app/services/ApiService';
 import { AuthService } from 'src/app/services/AuthService';
@@ -31,6 +41,7 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
   apellido: string = '';
   descripcion: string = '';
   dni: string = '';
+  email: string = '';
   descriptions: string = '';
   locationId: number | null = null;
   telefono: string = '';
@@ -63,6 +74,7 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
     this.userDetailsForm = this.formBuilder.group({
       nombre: [''],
       apellido: [''],
+      email: [''],
       localidad: [''],
       dni: [''],
       contacto: [''],
@@ -76,7 +88,6 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
     this.obtenerLocalidades();
 
     const usuarioData = localStorage.getItem('selectedUser');
-
     if (usuarioData) {
       const usuario: Usuario = JSON.parse(usuarioData);
 
@@ -120,12 +131,14 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
   cargarImagenPerfil() {
     const selectedFile = this.avatarFile;
     if (selectedFile) {
-      this.apiService.actualizarImagenDePerfil(this.userId, selectedFile).subscribe(
-        (response) => {},
-        (error) => {
-          console.error('Error al cargar la imagen de perfil:', error);
-        }
-      );
+      this.apiService
+        .actualizarImagenDePerfil(this.userId, selectedFile)
+        .subscribe(
+          (response) => {},
+          (error) => {
+            console.error('Error al cargar la imagen de perfil:', error);
+          }
+        );
     }
   }
 
@@ -154,6 +167,7 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
         nombre: this.nombre,
         apellido: this.apellido,
         localidad: this.locationId,
+        email: this.userEmail,
         dni: this.dni,
         contacto: this.telefono,
       });
@@ -206,7 +220,9 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
               `Ya existe una persona registrada con este dni.`,
               'Atención'
             );
-            this.userDetailsForm.get('dni')?.setErrors({ dniExistsForOtherUser: true });
+            this.userDetailsForm
+              .get('dni')
+              ?.setErrors({ dniExistsForOtherUser: true });
 
             this.userDetailsForm.disable();
           } else {
@@ -246,42 +262,58 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
               name: formData.nombre,
               lastname: formData.apellido,
               dni: formData.dni,
+              userEmail: formData.email,
               location_id: locationId,
               descriptions: formData.descripcion,
               telephone: formData.contacto,
               accept_license: true,
             };
 
-            this.apiService.updatePersonAdmin(this.userId, this.personId, personData).subscribe(
-              (response) => {
-                this.toastr.success('¡Perfil actualizado correctamente!', 'Éxito');
+            this.apiService
+              .updatePersonAdmin(this.userId, this.personId, personData)
+              .subscribe(
+                (response) => {
+                  this.toastr.success(
+                    '¡Perfil actualizado correctamente!',
+                    'Éxito'
+                  );
 
-                // Actualizar los datos del perfil en el componente
-                this.nombre = formData.nombre;
-                this.apellido = formData.apellido;
-                this.dni = formData.dni;
-                this.descripcion = formData.descripcion;
-                this.telefono = formData.contacto;
-                this.locationId = locationId;
+                  // Actualizar los datos del perfil en el componente
+                  this.nombre = formData.nombre;
+                  this.apellido = formData.apellido;
+                  this.dni = formData.dni;
+                  this.descripcion = formData.descripcion;
+                  this.telefono = formData.contacto;
+                  this.locationId = locationId;
 
-                // Forzar la detección de cambios
-                this.cd.detectChanges();
+                  // Forzar la detección de cambios
+                  this.cd.detectChanges();
 
-                this.activarEdicion(false);
-                this.router.navigate(['dashboard-backoffice/perfil-productor']);
-              },
-              (error) => {
-                console.error('Error al actualizar el perfil:', error);
-                this.toastr.error('Error al actualizar el perfil.', 'Error');
-              }
-            );
+                  this.activarEdicion(false);
+                  this.router.navigate([
+                    'dashboard-backoffice/perfil-productor',
+                  ]);
+                },
+                (error) => {
+                  console.error('Error al actualizar el perfil:', error);
+                  this.toastr.error('Error al actualizar el perfil.', 'Error');
+                }
+              );
           } else {
-            console.error('No se encontraron los IDs del usuario y la persona.');
-            this.toastr.error('No se encontraron los IDs del usuario y la persona.', 'Error');
+            console.error(
+              'No se encontraron los IDs del usuario y la persona.'
+            );
+            this.toastr.error(
+              'No se encontraron los IDs del usuario y la persona.',
+              'Error'
+            );
           }
         } else {
           console.error('No se encontraron datos del usuario en localStorage.');
-          this.toastr.error('No se encontraron datos del usuario en localStorage.', 'Error');
+          this.toastr.error(
+            'No se encontraron datos del usuario en localStorage.',
+            'Error'
+          );
         }
       }
     } else {

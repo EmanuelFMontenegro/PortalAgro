@@ -15,14 +15,13 @@
               <div class="datos-nuevo-user">
                 <div class="field-container">
                   <label class="field-label" for="usuario">Usuario</label>
-                  <input matInput formControlName="usuario" id="usuario"
-                    [value]="userDetailsForm.get('usuario')?.value">
+                  <input matInput formControlName="usuario" id="usuario" autocomplete="new-username">
                 </div>
                 <div class="field-container">
                   <label class="field-label" for="password">Contraseña</label>
                   <div class="password-container">
                     <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'" id="password"
-                      [value]="userDetailsForm.get('password')?.value">
+                      autocomplete="new-password">
                     <mat-icon class="eye-icon" (click)="togglePasswordVisibility()">{{ hidePassword ? 'visibility_off' :
                       'visibility' }}</mat-icon>
                   </div>
@@ -61,7 +60,6 @@
                   <mat-checkbox formControlName="isPreActivate"></mat-checkbox>
                   <label class="field-label" for="isPreActivate">Activar cuenta</label>
                 </div>
-
               </div>
             </form>
           </mat-card-content>
@@ -71,7 +69,7 @@
             <mat-card-title>Información Adicional</mat-card-title>
           </mat-card-header>
           <mat-card-content>
-            <textarea rows="5" readonly class="texto-area">{{ userDetailsForm.get('descripcion')?.value }}</textarea>
+            <textarea matInput formControlName="descripcion" rows="5" class="texto-area"></textarea>
           </mat-card-content>
         </mat-card>
         <div class="botones-servicio">

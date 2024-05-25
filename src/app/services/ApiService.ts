@@ -69,8 +69,6 @@ export class ApiService {
     );
   }
 
-
-
   // Métodos relacionados con el backoffice (Admin-Opertator-all)
 
   loginBackoffice(username: string, password: string): Observable<any> {
@@ -191,14 +189,16 @@ export class ApiService {
     const formData = new FormData();
     formData.append('files', file);
 
-    return this.http.put(`http://localhost:8095/api/user/${userId}/profile/image`, formData);
+    return this.http.put(
+      `http://localhost:8095/api/user/${userId}/profile/image`,
+      formData
+    );
   }
 
   getProfileImage(userId: number): Observable<any> {
-    return this.http.get(
-      `${this.baseURL}/user/${userId}/profile/image`,
-      { responseType: 'blob' }
-    );
+    return this.http.get(`${this.baseURL}/user/${userId}/profile/image`, {
+      responseType: 'blob',
+    });
   }
 
   getPeopleAdmin(locationId?: number): Observable<any> {
@@ -207,19 +207,17 @@ export class ApiService {
       params = params.set('locationId', locationId.toString());
     }
 
-    return this.http.get<any>(`${this.baseURL}/dist/person`, { params: params });
+    return this.http.get<any>(`${this.baseURL}/dist/person`, {
+      params: params,
+    });
   }
-
 
   getPeopleUserAdmin(filter: any): Observable<any> {
     const url = `${this.baseURL}/dist/user/person/all`;
     return this.http.get<any>(url, { params: filter });
   }
 
-
-
-
-  getPersonByIdOperador(userId: number, personId: number): Observable<any> {
+  getPersonByIdProductor(userId: number, personId: number): Observable<any> {
     const url = `${this.baseURL}/user/${userId}/person/${personId}`;
     return this.http.get<any>(url);
   }
@@ -239,6 +237,17 @@ export class ApiService {
     return this.http.get<any>(url);
   }
 
+  // Enpoint para Productor  de actualizar usuario
+  updatePersonProductor(
+    userId: number,
+    personId: number,
+    personData: any
+  ): Observable<any> {
+    const url = `${this.baseURL}/user/${userId}/person/${personId}`;
+    return this.http.put(url, personData);
+  }
+
+  // Enpoint para Administrador de actualizar usuario
   updatePersonAdmin(
     userId: number,
     personId: number,
@@ -294,11 +303,8 @@ export class ApiService {
       .set('dimMin', dimMin ? dimMin.toString() : '')
       .set('dimMax', dimMax ? dimMax.toString() : '');
 
-      return this.http.get(`${this.baseURL}/user/field/`, { params });
-
+    return this.http.get(`${this.baseURL}/user/field/`, { params });
   }
-
-
 
   getUsersFieldsDEF(): Observable<any> {
     const params = new HttpParams()
@@ -477,9 +483,6 @@ export class ApiService {
 
     return this.http.get(url, { params });
   }
-
-
-
 
   // Agregar un lote para un operador
   addPlotOperador(

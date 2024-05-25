@@ -102,7 +102,7 @@ export class LoginComponent implements OnInit {
             const userId = decoded.userId;
             const personId = userId;
 
-            this.apiService.getPersonByIdOperador(userId, personId).subscribe(
+            this.apiService.getPersonByIdProductor(userId, personId).subscribe(
               (userData) => {
                 if (userData && userData.name) {
                   this.router.navigate(['/dashboard']);
