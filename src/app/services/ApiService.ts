@@ -147,6 +147,13 @@ export class ApiService {
     return this.http.get(`${this.baseURL}/dist/${companyId}/user/${userId}`);
   }
 
+  // **Buscar un admin user por ID******
+
+  findByIdOneSuperuser(companyId: number, userId: number): Observable<any> {
+    const url = `${this.baseURL}/dist/${companyId}/user/${userId}`;
+    return this.http.get(url);
+  }
+
   // Obtener todos los usuarios administradores de una compañía
   getAdministratorUsers(companyId: number): Observable<any> {
     return this.http.get(`${this.baseURL}/dist/${companyId}/user/all`);
@@ -217,6 +224,13 @@ export class ApiService {
     return this.http.get<any>(url, { params: filter });
   }
 
+  // mismo enpoint utilizado arriba solamente se le agrega el filtro de nombre para usarlo
+  getPeopleUserAdminWithFilter(filter: any, nombre: string): Observable<any> {
+    const url = `${this.baseURL}/dist/user/person/all`;
+    const params = { ...filter, anyNames: nombre }; // Agrega el nombre al filtro existente
+    return this.http.get<any>(url, { params });
+  }
+
   getPersonByIdProductor(userId: number, personId: number): Observable<any> {
     const url = `${this.baseURL}/user/${userId}/person/${personId}`;
     return this.http.get<any>(url);
@@ -254,7 +268,7 @@ export class ApiService {
     updatedPersonData: any
   ): Observable<any> {
     return this.http.put(
-      `${this.baseURL}/user/${userId}/person/${personId}`,
+      `${this.baseURL}/dist/user/person/${personId}`,
       updatedPersonData
     );
   }

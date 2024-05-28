@@ -36,6 +36,7 @@ export class ProductoresComponent implements OnInit {
   usuarios: { nombre: string; apellido: string; localidad: string,dni:number,email:string }[] = [];
   nombre: string = '';
   apellido: string = '';
+  name:string | null=null;
   dni: string = '';
   descriptions: string = '';
   location_id: string | null = null;
@@ -44,7 +45,7 @@ export class ProductoresComponent implements OnInit {
   filteredLocalidades: Observable<any[]> = new Observable<any[]>();
   filtroLocalidades: FormControl = new FormControl('');
   private userId: number | any;
-  public userEmail: string | null = null;
+  public email: string | null = null;
   private companyId: number | any;
 
   constructor(
@@ -65,9 +66,16 @@ export class ProductoresComponent implements OnInit {
   decodeToken(): void {
     const token = this.authService.getToken();
     if (token) {
-      const decoded = jwtDecode<CustomJwtPayload>(token);
+      const decoded: any = jwtDecode(token); // Adjust this type if necessary
+
+      // Extract user ID and email from decoded token
       this.userId = decoded.userId;
-      this.userEmail = decoded.sub;
+      this.name= decoded.name;
+      this.email = decoded.sub;
+
+         } else {
+      this.userId = null;
+      this.email = null;
     }
   }
 
@@ -75,7 +83,7 @@ export class ProductoresComponent implements OnInit {
     const decoded: DecodedToken = jwtDecode(this.authService.getToken() || '');
     if ('userId' in decoded && 'sub' in decoded && 'roles' in decoded) {
       this.userId = decoded.userId;
-      this.userEmail = decoded.sub;
+      this.email = decoded.sub;
 
       this.companyId = 1;
 
@@ -92,7 +100,7 @@ export class ProductoresComponent implements OnInit {
       }
     } else {
       this.userId = null;
-      this.userEmail = null;
+      this.email = null;
     }
   }
 
@@ -110,6 +118,7 @@ export class ProductoresComponent implements OnInit {
             email:usuario.userEmail,
             telefono:usuario.telephone,
             localidad: usuario.location.name,
+            descripcion:usuario.descriptions
 
           }));
         }
@@ -144,6 +153,8 @@ export class ProductoresComponent implements OnInit {
       loc.name.toLowerCase().includes(filterValue)
     );
   }
+
+
 
   aplicarFiltro(event: MatSelectChange) {
     const valorSeleccionado = event.value;
@@ -216,20 +227,21 @@ export class ProductoresComponent implements OnInit {
     const filter = {
       anyNames: this.nombreABuscar || this.apellidoABuscar || '',
     };
-    this.apiService
-      .getPeopleUserAdmin(filter).subscribe(
-        (data: any) => {
-          this.procesarDatosUsuarios(data);
-          if (this.usuarios.length === 0) {
-            this.toastr.info(
-              'No se encontraron productores con el nombre o apellido especificado.'
-            );
-          }
-        },
-        (error) => {
-          console.error('Error al obtener usuarios filtrados:', error);
+
+    this.apiService.getPeopleUserAdmin(filter).subscribe(
+      (data: any) => {
+        console.log("datos de filtro",data)
+        this.procesarDatosUsuarios(data);
+        if (this.usuarios.length === 0) {
+          this.toastr.info(
+            'No se encontraron productores con el nombre o apellido especificado.'
+          );
         }
-      );
+      },
+      (error) => {
+        console.error('Error al obtener usuarios filtrados:', error);
+      }
+    );
   }
 
   procesarDatosUsuarios(data: any) {
@@ -238,12 +250,24 @@ export class ProductoresComponent implements OnInit {
       this.usuarios = usuariosList.map((usuario: any) => ({
         nombre: usuario.name || '',
         apellido: usuario.lastname || '',
-        localidad: usuario.location ? usuario.location.name : '',
+        localidad: this.obtenerNombreLocalidad(usuario.location_id), // Convertir ID de localidad en su nombre
       }));
     } else {
       this.usuarios = []; // Limpiar la lista de usuarios
     }
   }
+
+  obtenerNombreLocalidad(locationId: number) {
+    // Buscar la localidad correspondiente al ID proporcionado
+    const localidad = this.localidades.find((loc) => loc.id === locationId);
+    return localidad ? localidad.name : ''; // Devolver el nombre de la localidad si se encuentra, de lo contrario, cadena vacía
+  }
+
+
+
+
+
+
 
   limpiarTexto() {
     this.Buscar = '';
@@ -272,8 +296,9 @@ export class ProductoresComponent implements OnInit {
   BtnNuevoUsuario() {
     this.router.navigate(['dashboard-backoffice/nuevo-usuario']);
   }
-  //Agregar en Ver Mas el link o ruta a la pantalla editar un Productores
+  //Agregar en Ver Mas el link o ruta a la pantalla editar un Productor
   verMas(usuarios: any) {
+
     // Guardar los datos del usuario en localStorage
     localStorage.setItem('selectedUser', JSON.stringify(usuarios));
     // Navegar al componente perfil-productor

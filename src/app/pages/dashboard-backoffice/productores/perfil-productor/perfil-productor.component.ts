@@ -14,7 +14,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ApiService } from 'src/app/services/ApiService';
 import { AuthService } from 'src/app/services/AuthService';
 import { Observable } from 'rxjs';
-import { startWith, map } from 'rxjs/operators';
+import { startWith, map, timeout } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 
@@ -27,6 +27,42 @@ interface Usuario {
   telefono: string;
   localidad: number | null;
   email: string;
+}
+
+interface Role {
+  id: number;
+  name: string;
+}
+
+interface User {
+  id: number;
+  username: string;
+  account_active: boolean;
+  accountNonLocked: boolean;
+  failedAttempts: number;
+  lockeTime: string | null;
+  role: Role;
+}
+
+interface Person {
+  id: number;
+  name: string;
+  lastname: string;
+  dni: string;
+  descriptions: string;
+  location_id: number;
+  telephone: string;
+  user: User;
+}
+
+interface ApiResponse {
+  list: Person[][];
+  pageNo: number;
+  pageSize: number;
+  pageTotal: number;
+  itemsTotal: number;
+  pageLast: boolean;
+  canEdit: boolean;
 }
 
 @Component({
@@ -61,6 +97,11 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
   contrasenaActual = '';
   contrasenaNueva = '';
   private componenteInicializado: boolean = false;
+  isTermsPopupVisible: boolean = false;
+  hidePassword = true;
+  isPasswordDisabled = true;
+  
+  showPasswordWarning = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -72,15 +113,14 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
     private cd: ChangeDetectorRef
   ) {
     this.userDetailsForm = this.formBuilder.group({
-      nombre: [''],
-      apellido: [''],
-      email: [''],
-      localidad: [''],
-      dni: [''],
-      contacto: [''],
-      descripcion: [''],
-      contrasenaActual: [''],
-      contrasenaNueva: [''],
+      email: ['', [Validators.required, Validators.email]],
+      password: [{ value: '', disabled: this.isPasswordDisabled }, Validators.required],
+      nombre: ['', Validators.required],
+      apellido: ['', Validators.required],
+      dni: ['', Validators.required],
+      descripcion: ['', Validators.required],
+      localidad: ['', Validators.required],
+      contacto: ['', Validators.required],
     });
   }
 
@@ -94,6 +134,8 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
       this.userId = usuario.id;
       this.personId = usuario.id;
 
+
+      this.UsuarioPerfil(this.userId,this.personId);
       this.cargarDatosUsuarioPerfil(usuario);
     } else {
       console.error('No se encontraron datos del usuario en localStorage.');
@@ -105,16 +147,40 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
     this.componenteInicializado = true;
   }
 
-  cargarUsuario(userId: number) {
-    this.apiService.getUserById(userId).subscribe(
-      (data) => {
+  togglePasswordVisibility(): void {
+    this.hidePassword = !this.hidePassword;
+  }
+
+  enablePasswordField(): void {
+    this.isPasswordDisabled = false;
+    this.userDetailsForm.get('password')?.enable();
+  }
+  showChangePasswordWarning(): void {
+    this.showPasswordWarning = true;
+  }
+
+  UsuarioPerfil(userId: number, personId: number): void {
+    this.apiService.getPersonByIdProductor(userId, personId).subscribe(
+      (data: Person) => {
+        if (!data) {
+          console.error('No se encontraron datos del usuario.');
+          return;
+        }
+
         this.usuario = data;
+
+        if (data.user && data.user.username) {
+          this.email = data.user.username;
+        } else {
+          console.error('No se encontró el email del usuario.');
+        }
       },
       (error) => {
         console.error('Error al cargar los datos del usuario:', error);
       }
     );
   }
+
 
   cargarDatosUsuarioPerfil(usuario: Usuario): void {
     this.userId = usuario.id;
@@ -125,7 +191,6 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
     this.descripcion = usuario.descripcion;
     this.telefono = usuario.telefono;
     this.locationId = usuario.localidad;
-    this.userEmail = usuario.email || null;
   }
 
   cargarImagenPerfil() {
@@ -167,7 +232,7 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
         nombre: this.nombre,
         apellido: this.apellido,
         localidad: this.locationId,
-        email: this.userEmail,
+        email: this.email,
         dni: this.dni,
         contacto: this.telefono,
       });
@@ -244,81 +309,57 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
     if (this.userDetailsForm.dirty) {
       if (this.validarFormulario()) {
         const formData = this.userDetailsForm.value;
-
         const usuarioData = localStorage.getItem('selectedUser');
 
         if (usuarioData) {
-          const usuario: Usuario = JSON.parse(usuarioData);
-          this.userId = usuario.id;
-          this.personId = usuario.id;
+          const usuario = JSON.parse(usuarioData);
+          const userId = usuario.id;
+          const personId = usuario.id;
+          const selectedLocation = this.localidades.find(
+            (loc) => loc.name === formData.localidad
+          );
+          const locationId = selectedLocation ? selectedLocation.id : null;
 
-          if (this.userId !== null && this.personId !== null) {
-            const selectedLocation = this.localidades.find(
-              (loc) => loc.name === formData.localidad
+          const personData = {
+            username: formData.email,
+            password: formData.password,
+            name: formData.nombre,
+            lastname: formData.apellido,
+            dni: formData.dni,
+            descriptions: formData.descripcion,
+            location_id: locationId,
+            telephone: formData.contacto,
+            isPreActivate: true,
+            isPreAcceptTherms: true,
+            isVerified: true,
+          };
+
+          this.apiService
+            .updatePersonAdmin(userId, personId, personData)
+            .subscribe(
+              (response) => {
+                this.toastr.success(
+                  '¡Perfil actualizado correctamente!',
+                  'Éxito'
+                );
+
+
+
+                this.modoEdicion=false;
+              },
+              (error) => {
+                console.error('Error al actualizar el perfil:', error);
+                this.toastr.error('Error al actualizar el perfil.', 'Error');
+              }
             );
-            const locationId = selectedLocation ? selectedLocation.id : null;
-            const personData: any = {
-              userId: this.userId,
-              name: formData.nombre,
-              lastname: formData.apellido,
-              dni: formData.dni,
-              userEmail: formData.email,
-              location_id: locationId,
-              descriptions: formData.descripcion,
-              telephone: formData.contacto,
-              accept_license: true,
-            };
-
-            this.apiService
-              .updatePersonAdmin(this.userId, this.personId, personData)
-              .subscribe(
-                (response) => {
-                  this.toastr.success(
-                    '¡Perfil actualizado correctamente!',
-                    'Éxito'
-                  );
-
-                  // Actualizar los datos del perfil en el componente
-                  this.nombre = formData.nombre;
-                  this.apellido = formData.apellido;
-                  this.dni = formData.dni;
-                  this.descripcion = formData.descripcion;
-                  this.telefono = formData.contacto;
-                  this.locationId = locationId;
-
-                  // Forzar la detección de cambios
-                  this.cd.detectChanges();
-
-                  this.activarEdicion(false);
-                  this.router.navigate([
-                    'dashboard-backoffice/perfil-productor',
-                  ]);
-                },
-                (error) => {
-                  console.error('Error al actualizar el perfil:', error);
-                  this.toastr.error('Error al actualizar el perfil.', 'Error');
-                }
-              );
-          } else {
-            console.error(
-              'No se encontraron los IDs del usuario y la persona.'
-            );
-            this.toastr.error(
-              'No se encontraron los IDs del usuario y la persona.',
-              'Error'
-            );
-          }
         } else {
-          console.error('No se encontraron datos del usuario en localStorage.');
           this.toastr.error(
-            'No se encontraron datos del usuario en localStorage.',
-            'Error'
+            'Error al actualizar el perfil.', 'Error'
           );
         }
       }
     } else {
       this.toastr.info('No se realizaron modificaciones.', 'Información');
-      this.activarEdicion(false);
     }
   }
 

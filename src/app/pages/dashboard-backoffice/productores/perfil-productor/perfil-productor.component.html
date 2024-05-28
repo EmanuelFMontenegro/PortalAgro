@@ -16,7 +16,7 @@
             <div class="titulo-perfil-avatar">
               <div class="titulo-welcome">
                 <h2>Bienvenido, {{ nombre }} {{ apellido }}</h2>
-                <p class="email">Email: {{ userEmail }}</p>
+                <p class="email">Email: {{ email }}</p>
                 <p class="email">Ciudad: {{ locationId }}</p>
               </div>
             </div>
@@ -29,8 +29,9 @@
               </button>
             </div>
             <div class="boton-chacra">
-              <button mat-raised-button class="btn-chacra" (click)="btnVerMas()" >
-                <img src="assets/img/agriculture_24dp_FILL0_wght300_GRAD0_opsz24.svg" alt="Icon Chacra" class="img-chacra">
+              <button mat-raised-button class="btn-chacra" (click)="btnVerMas()">
+                <img src="assets/img/agriculture_24dp_FILL0_wght300_GRAD0_opsz24.svg" alt="Icon Chacra"
+                  class="img-chacra">
                 Ver Chacras
               </button>
             </div>
@@ -53,11 +54,11 @@
                 <div class="field-value">{{ apellido }}</div>
                 <mat-divider></mat-divider>
               </div>
-             <div class="field-container">
-    <label class="title-input">Localidad</label>
-    <div class="field-value">{{ locationId }}</div>
-    <mat-divider></mat-divider>
-  </div>
+              <div class="field-container">
+                <label class="title-input">Localidad</label>
+                <div class="field-value">{{ locationId }}</div>
+                <mat-divider></mat-divider>
+              </div>
               <div class="field-container">
                 <label class="title-input">DNI</label>
                 <div class="field-value">{{ dni }}</div>
@@ -106,7 +107,7 @@
           </div>
           <div class="titulo-perfil-avatar">
             <h2>Bienvenido, {{ nombre }} {{ apellido }}</h2>
-            <p class="email">{{ userEmail }}</p>
+            <p class="email">{{ email }}</p>
           </div>
         </div>
 
@@ -118,18 +119,46 @@
             <form (ngSubmit)="actualizarPerfilUsuario()" [formGroup]="userDetailsForm">
               <div class="datos-users">
                 <div class="field-container">
+                  <label class="title-input" for="usuario">Usuario</label>
+                  <input matInput placeholder="Email" formControlName="email" id="usuario">
+                </div>
+
+                <div class="field-container">
+                  <label class="title-input" for="contrasena">Contraseña</label>
+                  <div class="password-container">
+                    <input
+                      matInput
+                      formControlName="password"
+                      [type]="hidePassword ? 'password' : 'text'"
+                      id="password"
+                      autocomplete="new-password"
+                      [disabled]="isPasswordDisabled"
+                      (click)="showChangePasswordWarning()">
+                    <mat-icon class="eye-icon" (click)="togglePasswordVisibility()" [style.pointer-events]="isPasswordDisabled ? 'none' : 'auto'">
+                      {{ hidePassword ? 'visibility_off' : 'visibility' }}
+                    </mat-icon>
+
+                  </div>
+                  <div class="password-warning" style="color:red" *ngIf="showPasswordWarning">Está por cambiar la contraseña</div>
+                </div>
+
+
+
+
+                <div class="field-container">
                   <label class="title-input" for="nombre">Nombre</label>
-                  <input matInput [placeholder]="nombre" formControlName="nombre" id="nombre">
+                  <input matInput placeholder="Nombre" formControlName="nombre" id="nombre">
                 </div>
 
                 <div class="field-container">
                   <label class="title-input" for="apellido">Apellido</label>
-                  <input matInput [placeholder]="apellido" formControlName="apellido" id="apellido">
+                  <input matInput placeholder="Apellido" formControlName="apellido" id="apellido">
                 </div>
 
                 <div class="field-container">
                   <label class="title-input" for="localidad">Localidad</label>
-                  <mat-select formControlName="localidad" placeholder="{{ locationId ? locationId : 'Seleccionar Localidad' }}"
+                  <mat-select formControlName="localidad"
+                    placeholder="{{ locationId ? locationId : 'Seleccionar Localidad' }}"
                     (selectionChange)="onLocalidadSelectionChange($event.value)">
                     <mat-option *ngFor="let loc of localidades" [value]="loc.name">
                       {{ loc.name }}
@@ -137,30 +166,15 @@
                   </mat-select>
                 </div>
 
-
-
                 <div class="field-container">
                   <label class="title-input" for="dni">DNI</label>
-                  <input matInput [placeholder]="dni" formControlName="dni" id="dni">
+                  <input matInput placeholder="DNI" formControlName="dni" id="dni">
                 </div>
 
                 <div class="field-container">
                   <label class="title-input" for="contacto">Contacto</label>
-                  <input matInput [placeholder]="telefono" formControlName="contacto" id="contacto">
+                  <input matInput placeholder="Contacto" formControlName="contacto" id="contacto">
                 </div>
-
-                <div class="field-container">
-                  <label class="title-input" for="contrasenaActual">Contraseña Actual</label>
-                  <input matInput type="password" placeholder="contraseña actual" formControlName="contrasenaActual"
-                    id="contrasenaActual">
-                </div>
-
-                <div class="field-container">
-                  <label class="title-input" for="contrasena-nueva">Contraseña Nueva</label>
-                  <input matInput type="password" placeholder="contraseña nueva" formControlName="contrasenaNueva"
-                    id="contrasenaNueva">
-                </div>
-
               </div>
             </form>
           </mat-card-content>
@@ -172,7 +186,7 @@
               <mat-card-title>Informacion Adicional</mat-card-title>
             </mat-card-header>
             <mat-card-content>
-              <textarea matInput rows="5" [placeholder]="descriptions" formControlName="descripcion"></textarea>
+              <textarea matInput rows="5" placeholder="descripcion" formControlName="descripcion"></textarea>
             </mat-card-content>
           </mat-card>
         </form>
