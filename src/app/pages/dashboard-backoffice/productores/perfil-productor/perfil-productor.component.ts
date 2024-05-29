@@ -14,7 +14,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ApiService } from 'src/app/services/ApiService';
 import { AuthService } from 'src/app/services/AuthService';
 import { Observable } from 'rxjs';
-import { startWith, map, timeout } from 'rxjs/operators';
+import { startWith, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 
@@ -25,7 +25,7 @@ interface Usuario {
   dni: string;
   descripcion: string;
   telefono: string;
-  localidad: number | null;
+  localidad: string;
   email: string;
 }
 
@@ -43,16 +43,23 @@ interface User {
   lockeTime: string | null;
   role: Role;
 }
-
+interface Location {
+  id: number;
+  name: string;
+  department_id: number;
+}
 interface Person {
   id: number;
+  username: string;
   name: string;
   lastname: string;
   dni: string;
   descriptions: string;
-  location_id: number;
+  location: Location;
   telephone: string;
-  user: User;
+  account_active: boolean;
+  accept_license: boolean;
+  canEdit: boolean | null;
 }
 
 interface ApiResponse {
@@ -79,13 +86,13 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
   dni: string = '';
   email: string = '';
   descriptions: string = '';
-  locationId: number | null = null;
+  location: string= '';
   telefono: string = '';
   modoEdicion: boolean = false;
   persona: any = {};
   private userId: number | any;
   private personId: number | any;
-  public userEmail: string | null = null;
+  public username: string | null = null;
   selectedLocationId: number | null = null;
   private datosUsuarioTemporal: any = {};
   filteredLocalidades: Observable<any[]> = new Observable<any[]>();
@@ -100,7 +107,6 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
   isTermsPopupVisible: boolean = false;
   hidePassword = true;
   isPasswordDisabled = true;
-  
   showPasswordWarning = false;
 
   constructor(
@@ -113,8 +119,11 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
     private cd: ChangeDetectorRef
   ) {
     this.userDetailsForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: [{ value: '', disabled: this.isPasswordDisabled }, Validators.required],
+      email: [''],
+      password: [
+        { value: '', disabled: this.isPasswordDisabled },
+        Validators.required,
+      ],
       nombre: ['', Validators.required],
       apellido: ['', Validators.required],
       dni: ['', Validators.required],
@@ -130,23 +139,24 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
     const usuarioData = localStorage.getItem('selectedUser');
     if (usuarioData) {
       const usuario: Usuario = JSON.parse(usuarioData);
-
       this.userId = usuario.id;
       this.personId = usuario.id;
-
-
-      this.UsuarioPerfil(this.userId,this.personId);
-      this.cargarDatosUsuarioPerfil(usuario);
+      this.UsuarioPerfil(this.userId, this.personId); // Llama a UsuarioPerfil aquí
     } else {
       console.error('No se encontraron datos del usuario en localStorage.');
       this.router.navigate(['dashboard-backoffice']);
     }
+
+    // Habilitar el campo de contraseña al cargar la página
+    this.enablePasswordField();
   }
+
+
 
   ngAfterViewInit(): void {
     this.componenteInicializado = true;
+    this.cd.detectChanges();
   }
-
   togglePasswordVisibility(): void {
     this.hidePassword = !this.hidePassword;
   }
@@ -155,6 +165,7 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
     this.isPasswordDisabled = false;
     this.userDetailsForm.get('password')?.enable();
   }
+
   showChangePasswordWarning(): void {
     this.showPasswordWarning = true;
   }
@@ -166,14 +177,24 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
           console.error('No se encontraron datos del usuario.');
           return;
         }
-
         this.usuario = data;
 
-        if (data.user && data.user.username) {
-          this.email = data.user.username;
-        } else {
-          console.error('No se encontró el email del usuario.');
-        }
+        // Asignamos los valores a las variables locales
+        this.email = data.username;
+        this.nombre = data.name;
+        this.apellido = data.lastname;
+        this.dni = data.dni;
+        this.descripcion = data.descriptions;
+        this.location = data.location.name; // Aquí obtenemos el ID de la ubicación
+        this.telefono = data.telephone;
+
+        // Asignamos el objeto Location completo si es necesario
+        // const location: Location = data.location;
+
+        // Log para depurar
+        console.log('Usuario data:', data);
+
+        this.cd.detectChanges();
       },
       (error) => {
         console.error('Error al cargar los datos del usuario:', error);
@@ -185,12 +206,29 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
   cargarDatosUsuarioPerfil(usuario: Usuario): void {
     this.userId = usuario.id;
     this.personId = usuario.id;
+    this.email = usuario.email;
     this.nombre = usuario.nombre;
     this.apellido = usuario.apellido;
     this.dni = usuario.dni;
     this.descripcion = usuario.descripcion;
     this.telefono = usuario.telefono;
-    this.locationId = usuario.localidad;
+    this.location = usuario.localidad;
+
+    // Log para depurar
+    console.log('Datos usuario del localStorage:', usuario);
+    console.log('Email asignado desde localStorage:', this.email);
+
+    this.userDetailsForm.patchValue({
+      email: this.email,
+      nombre: this.nombre,
+      apellido: this.apellido,
+      dni: this.dni,
+      descripcion: this.descripcion,
+      localidad: this.location,
+      contacto: this.telefono,
+    });
+
+    this.cd.detectChanges();
   }
 
   cargarImagenPerfil() {
@@ -227,13 +265,13 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
     this.modoEdicion = modoEdicion;
     if (modoEdicion) {
       this.userDetailsForm.enable();
-
       this.userDetailsForm.patchValue({
+        email: this.email,
         nombre: this.nombre,
         apellido: this.apellido,
-        localidad: this.locationId,
-        email: this.email,
         dni: this.dni,
+        descripcion: this.descripcion,
+        localidad: this.location,
         contacto: this.telefono,
       });
     } else {
@@ -342,10 +380,10 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
                   '¡Perfil actualizado correctamente!',
                   'Éxito'
                 );
+                this.modoEdicion = false;
 
-
-
-                this.modoEdicion=false;
+                // Después de actualizar el perfil, actualiza los datos del usuario
+                this.UsuarioPerfil(userId, personId);
               },
               (error) => {
                 console.error('Error al actualizar el perfil:', error);
@@ -353,9 +391,7 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
               }
             );
         } else {
-          this.toastr.error(
-            'Error al actualizar el perfil.', 'Error'
-          );
+          this.toastr.error('Error al actualizar el perfil.', 'Error');
         }
       }
     } else {
@@ -363,8 +399,9 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
     }
   }
 
+
   validarFormulario(): boolean {
-    return true;
+    return this.userDetailsForm.valid;
   }
 
   btnVerMas() {
