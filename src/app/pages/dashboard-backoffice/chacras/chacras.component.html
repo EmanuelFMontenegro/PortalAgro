@@ -63,7 +63,8 @@
     </button>
   </div>
 
-<div class="card-campos-section">
+<!-- HTML para mostrar las chacras normales de todo el sistema -->
+<div class="card-campos-section" *ngIf="!perfilCargado">
   <div class="campos-container">
     <div class="campo-card" *ngFor="let campo of campos">
       <img src="/assets/img/Chacra_{{ campo.id }}.png" alt="Campo {{ campo.id }}">
@@ -80,3 +81,25 @@
     </div>
   </div>
 </div>
+
+<!-- HTML para mostrar las chacras del usuario PerfilProductor -->
+<div class="card-campos-section" *ngIf="perfilCargado">
+  <div class="campos-container">
+    <div class="campo-card" *ngFor="let chacra of chacras">
+      <img src="/assets/img/Chacra_{{ chacra.id }}.png" alt="Chacra {{ chacra.id }}">
+      <h3>{{ chacra.name }}</h3>
+      <p>
+        <span class="campo-variable">Localidad:</span> {{ chacra.address.location.name }}
+        <img src="assets/img/location.svg" alt="Icono" class="icono_location">
+      </p>
+      <p><span class="campo-variable">Dirección:</span> {{ chacra.address.address }}</p>
+      <p><span class="campo-variable">Hectáreas:</span> {{ chacra.address.dimensions }}</p>
+      <p><span class="campo-variable">Observaciones:</span> {{ chacra.address.observations }}</p>
+      <button mat-raised-button class="ver-mas-button" (click)="verMas(chacra)">Ver Más</button>
+    </div>
+  </div>
+</div>
+
+
+
+

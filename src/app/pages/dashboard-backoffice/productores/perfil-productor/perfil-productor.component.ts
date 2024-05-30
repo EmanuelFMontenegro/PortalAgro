@@ -20,13 +20,7 @@ import { ActivatedRoute } from '@angular/router';
 
 interface Usuario {
   id: number;
-  nombre: string;
-  apellido: string;
-  dni: string;
-  descripcion: string;
-  telefono: string;
-  localidad: string;
-  email: string;
+
 }
 
 interface Role {
@@ -62,6 +56,22 @@ interface Person {
   canEdit: boolean | null;
 }
 
+interface Chacras{
+  id: number;
+  name: string;
+  address: {
+    address: string,
+    observations:string
+    location:
+    {
+    id: number,
+    name: string,
+    department_id: number
+    }
+    dimensions:number
+
+  }
+}
 interface ApiResponse {
   list: Person[][];
   pageNo: number;
@@ -90,7 +100,7 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
   telefono: string = '';
   modoEdicion: boolean = false;
   persona: any = {};
-  private userId: number | any;
+   userId: number | any;
   private personId: number | any;
   public username: string | null = null;
   selectedLocationId: number | null = null;
@@ -100,6 +110,7 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
   userDetailsForm: FormGroup;
   avatarFile: File | null = null;
   localidades: any[] = [];
+  chacras:any[]=[]
   contacto = '';
   contrasenaActual = '';
   contrasenaNueva = '';
@@ -141,13 +152,14 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
       const usuario: Usuario = JSON.parse(usuarioData);
       this.userId = usuario.id;
       this.personId = usuario.id;
-      this.UsuarioPerfil(this.userId, this.personId); // Llama a UsuarioPerfil aquí
+      this.UsuarioPerfil(this.userId, this.personId);
+
     } else {
       console.error('No se encontraron datos del usuario en localStorage.');
       this.router.navigate(['dashboard-backoffice']);
     }
 
-    // Habilitar el campo de contraseña al cargar la página
+   
     this.enablePasswordField();
   }
 
@@ -179,20 +191,16 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
         }
         this.usuario = data;
 
-        // Asignamos los valores a las variables locales
+
         this.email = data.username;
         this.nombre = data.name;
         this.apellido = data.lastname;
+        this.telefono = data.telephone;
         this.dni = data.dni;
         this.descripcion = data.descriptions;
-        this.location = data.location.name; // Aquí obtenemos el ID de la ubicación
-        this.telefono = data.telephone;
+        this.location = data.location.name;
 
-        // Asignamos el objeto Location completo si es necesario
-        // const location: Location = data.location;
 
-        // Log para depurar
-        console.log('Usuario data:', data);
 
         this.cd.detectChanges();
       },
@@ -203,33 +211,7 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
   }
 
 
-  cargarDatosUsuarioPerfil(usuario: Usuario): void {
-    this.userId = usuario.id;
-    this.personId = usuario.id;
-    this.email = usuario.email;
-    this.nombre = usuario.nombre;
-    this.apellido = usuario.apellido;
-    this.dni = usuario.dni;
-    this.descripcion = usuario.descripcion;
-    this.telefono = usuario.telefono;
-    this.location = usuario.localidad;
 
-    // Log para depurar
-    console.log('Datos usuario del localStorage:', usuario);
-    console.log('Email asignado desde localStorage:', this.email);
-
-    this.userDetailsForm.patchValue({
-      email: this.email,
-      nombre: this.nombre,
-      apellido: this.apellido,
-      dni: this.dni,
-      descripcion: this.descripcion,
-      localidad: this.location,
-      contacto: this.telefono,
-    });
-
-    this.cd.detectChanges();
-  }
 
   cargarImagenPerfil() {
     const selectedFile = this.avatarFile;
@@ -382,7 +364,7 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
                 );
                 this.modoEdicion = false;
 
-                // Después de actualizar el perfil, actualiza los datos del usuario
+
                 this.UsuarioPerfil(userId, personId);
               },
               (error) => {
@@ -404,7 +386,12 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
     return this.userDetailsForm.valid;
   }
 
-  btnVerMas() {
+  btnVerMas(userId: number) {
+    localStorage.setItem('idPerfilProd', userId.toString());
     this.router.navigate(['dashboard-backoffice/chacras']);
   }
+
+
+
+
 }

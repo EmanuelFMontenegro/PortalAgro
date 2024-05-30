@@ -2,111 +2,125 @@ $primary-color: #0F8054
 $secondary-color: #8FCA8F
 $hover-color: #32963f
 $error-color: #d9534f
+$white-color: #fffff
 $light-grey: #f4f4f4
 $dark-grey: #454545
 $medium-grey: #808080
 $border-color: #ddd
 $font-family: 'Montserrat', sans-serif
 
-.body
-  font-family: $font-family
-
-.titulo-servicios h2
-  color: $dark-grey
-  font-size: 1.5em
-  font-weight: bold
-  font-family: 'Montserrat', sans-serif
+.main-card
+  width: 100%
   padding: 20px
-  margin-left: 10px
+  border-radius: 10px
+  background-color: $white-color
+  position: relative
+  display: grid
+  grid-template-columns: 1fr
+
+
+body
+  font-family: $font-family
+  margin: 0
+  padding: 0
+  box-sizing: border-box
+
+.titulo-servicios
+  text-align: center
+  margin-bottom: 20px
+
+  h2
+    color: $dark-grey
+    font-size: 1.5em
+    font-weight: bold
+    font-family: $font-family
+    padding: 20px
+
+.botonera
+  text-align: center
+  margin-bottom: 20px
+
+  button
+    margin: 0 10px
+    background-color: $primary-color
+    color: white
+    transition: background-color 0.3s
+
+    &:hover
+      background-color: $hover-color
 
 .solicitud-servicio-form
   display: flex
   justify-content: center
   padding: 10px
   width: 100%
-  font-family: 'Montserrat', sans-serif
-
-.card
-  display: flex
-  flex-direction: column
-  align-items: flex-start
-  border: 1px solid #ddd
-  border-radius: 8px
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3)
-  padding: 20px
-  margin: auto
-  width: calc(100% - 40px)
   box-sizing: border-box
 
-  &-title
-    color: $primary-color
-    margin-bottom: 20px
+  .card
+    display: flex
+    flex-direction: column
+    align-items: flex-start
+    border: 1px solid $border-color
+    border-radius: 8px
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3)
+    padding: 20px
+    margin: 20px
+    width: 100%
+    max-width: 800px
+    box-sizing: border-box
 
-.field-container,
-.field-container-fecha
-  display: flex
-  align-items: center
-  justify-content: flex-start
-  width: 100%
-  margin-bottom: 10px
+    &-title
+      color: $primary-color
+      margin-bottom: 20px
 
-.field-label,
-.field-label-fecha
-  display: flex
-  align-items: center
-  margin-right: 20px
-  font-size: 17px
-  color: $dark-grey
+    .field-container,
+    .field-container-fecha
+      display: flex
+      align-items: center
+      justify-content: space-between
+      width: 100%
+      margin-bottom: 10px
 
-.field-input,
-.field-input-fecha,
-.field-input-obs
-  width: 40%
-  border: 1px solid #ddd
-  border-radius: 4px
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3)
-  padding: 8px
-  background-color: white
-  font-size: 0.9em
-  &:focus
-    outline: none
-    border-color: $primary-color
-    box-shadow: 0 0 5px $primary-color
+    .field-label,
+    .field-label-fecha
+      font-size: 17px
+      color: $dark-grey
+      margin-right: 20px
 
-.field-input-fecha
-  width: 40%
-  border: 1px solid #ddd
-  border-radius: 4px
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3)
-  padding: 8px
-  background-color: white
-  font-size: 14px
-  margin-left: 82px
-  color: $medium-grey
-  font-family: $font-family
-  &:focus
-    outline: none
-    border-color: $primary-color
-    box-shadow: 0 0 5px $primary-color
+    .field-input,
+    .field-input-fecha,
+    .field-input-obs
+      flex-grow: 1
+      border: 1px solid $border-color
+      border-radius: 4px
+      padding: 8px
+      background-color: white
+      font-size: 0.9em
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1)
 
-.field-input-obs
-  height: 60px
-  margin-left: 10px
+      &:focus
+        outline: none
+        border-color: $primary-color
+        box-shadow: 0 0 5px $primary-color
 
-.boton-servicio
-  display: flex
-  padding-left: 85.5%
-  align-items: center
-  width: 25%
-  margin-top: 10px
+    .field-input-obs
+      height: 60px
 
-button[mat-raised-button]
-  color: white
-  margin-top: 20px
-  background-color: $primary-color
-  transition: background-color 0.3s
+    .boton-servicio
+      display: flex
+      justify-content: space-between
+      width: 100%
+      margin-top: 10px
+
+      button
+        margin-left: 10px
+        background-color: $primary-color
+        color: white
+        transition: background-color 0.3s
+
+        &:hover
+          background-color: $hover-color
 
 .mat-datepicker-toggle .mat-icon
-  color: #3CA749
-
+  color: $primary-color
 

@@ -15,7 +15,6 @@ import { Observable } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
-
 interface CustomJwtPayload {
   userId: number;
   sub: string;
@@ -42,6 +41,9 @@ export class ChacrasComponent implements OnInit {
   apellido: string = '';
   campos: any[] = [];
   localidades: any[] = [];
+  chacra: any[] = [];
+  chacras: any[] = [];
+  perfilCargado: boolean = false;
   filteredLocalidades: Observable<any[]> = new Observable<any[]>();
   filtroLocalidades: FormControl = new FormControl('');
   mostrarInputNormal: boolean = true;
@@ -79,6 +81,14 @@ export class ChacrasComponent implements OnInit {
     this.cargarDatosDeUsuario();
     this.cargarChacras();
     this.obtenerLocalidades();
+
+    const perfilDataChacra = localStorage.getItem('idPerfilProd');
+    if (perfilDataChacra) {
+      const userId = parseInt(perfilDataChacra);
+      this.cargarChacrasUsuario(userId);
+    } else {
+      this.cargarChacras();
+    }
   }
 
   decodeToken(): void {
@@ -135,7 +145,6 @@ export class ChacrasComponent implements OnInit {
   }
 
   validarMinHectareas() {
-    // Validamos que el valor mínimo no sea mayor que el valor máximo
     if (
       this.minHectareas &&
       this.maxHectareas &&
@@ -146,7 +155,6 @@ export class ChacrasComponent implements OnInit {
   }
 
   validarMaxHectareas() {
-    // Validamos que el valor máximo no sea menor que el valor mínimo
     if (
       this.minHectareas &&
       this.maxHectareas &&
@@ -180,20 +188,49 @@ export class ChacrasComponent implements OnInit {
       this.userEmail = null;
     }
   }
+
   cargarChacras() {
-    this.apiService.getUsersFields(0, 10, 'id', 'desc').subscribe(
+    if (!this.perfilCargado) {
+      this.apiService.getUsersFields(0, 10, 'id', 'desc').subscribe(
+        (response) => {
+          if (response.list && response.list.length > 0) {
+            this.campos = response.list[0];
+          } else {
+            console.error('La lista de campos está vacía o no está definida');
+          }
+        },
+        (error) => {
+          console.error('Error al obtener campos:', error);
+        }
+      );
+    }
+  }
+
+  cargarChacrasUsuario(userId: number) {
+    this.apiService.getFields(userId).subscribe(
       (response) => {
-        if (response.list && response.list.length > 0) {
-          this.campos = response.list[0];
+        if (response && response.list && response.list.length > 0) {
+
+          const listaChacras = response.list[0];
+          this.chacras = listaChacras;
+          this.perfilCargado = true;
         } else {
-          console.error('La lista de campos está vacía o no está definida');
+          console.warn('No se encontraron datos de chacras en la respuesta:', response);
+          this.chacras = [];
+          this.toastr.info(
+            'El productor seleccionado no cuenta con chacras asociadas',
+            'Atencion !!!'
+          );
+          this.router.navigate(['dashboard-backoffice/perfil-productor']);
         }
       },
       (error) => {
-        console.error('Error al obtener campos:', error);
+        console.error('Error al cargar las chacras del usuario:', error);
+        this.chacras = [];
       }
     );
-  }
+}
+
 
   obtenerLocalidades() {
     this.apiService.getLocationMisiones('location').subscribe(
@@ -327,8 +364,6 @@ export class ChacrasComponent implements OnInit {
     const minHectareasNum = this.minHectareas;
     const maxHectareasNum = this.maxHectareas;
 
-
-
     // Llamar al servicio con el rango de hectáreas para filtrar
     this.apiService
       .getUsersFields(
@@ -377,7 +412,7 @@ export class ChacrasComponent implements OnInit {
         'id', // sortBy
         'desc', // sortDir
         true, // isActive
-        this.nombreProductor, // producerNames
+        this.nombreProductor // producerNames
         // '', // filedName
         // null, // locationId
         // null, // person_id
@@ -386,7 +421,6 @@ export class ChacrasComponent implements OnInit {
       )
       .subscribe(
         (response) => {
-
           if (response.list && response.list.length > 0) {
             this.campos = response.list[0];
           } else {
