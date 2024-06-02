@@ -27,14 +27,18 @@
         <div class="field-container">
           <mat-label class="field-label">Seleccionar Lote</mat-label>
           <mat-select class="field-input" placeholder="Lotes" [(ngModel)]="solicitud.lote" name="lote">
-            <mat-option *ngFor="let lote of lotes" [value]="lote">{{ lote }}</mat-option>
+            <mat-option *ngFor="let lote of lotes" [value]="lote.name">{{ lote.name }}</mat-option>
           </mat-select>
           <button mat-button (click)="agregarLote()">Agregar</button>
         </div>
         <div class="field-container">
           <mat-label class="field-label">Lotes Agregados</mat-label>
           <ul>
-            <li *ngFor="let lote of lotesAgregados">{{ lote }}</li>
+            <li *ngFor="let lote of lotesAgregados; let i = index;">
+              {{ lote.lote }} - {{ lote.cultivo }}
+              <button mat-icon-button (click)="eliminarLote(i)">
+                <mat-icon>delete</mat-icon>
+              </button>
           </ul>
         </div>
         <div class="field-container">

@@ -42,7 +42,7 @@ export class ServiciosComponent implements OnInit {
     fecha: null,
     observaciones: ''
   };
-  lotesAgregados: string[] = [];
+  lotesAgregados: { lote: string, cultivo: string }[] = [];
   campos: any[] = [];
   chacras: any[] = []; // Array para almacenar las chacras
   cultivos: any[] = []; // Array para almacenar los cultivos
@@ -50,7 +50,7 @@ export class ServiciosComponent implements OnInit {
   seleccchacraId: number = 0;
   public userEmail: string | null = null;
   private token: string | null = null;
-  lotes: string[] = []; // Array para almacenar los lotes filtrados por cultivo
+  lotes: { name: string, typeCrop: { name: string, id: number } }[] = [];
   servicios: string[] = ['Servicio 1', 'Servicio 2', 'Servicio 3'];
   servicioSeleccionado: string | null = null;
   servicioVisualizado: VerServicio = {
@@ -186,18 +186,33 @@ export class ServiciosComponent implements OnInit {
       this.toastr.error('Seleccione un cultivo antes de filtrar los lotes.');
       return;
     }
+
     const cultivoInt: number = parseInt(this.solicitud.cultivo);
     const chacraId = this.seleccchacraId;
+
     if (isNaN(cultivoInt)) {
       this.toastr.error('Error al convertir el ID del cultivo a número.');
       return;
     }
+
     this.apiService.getPlotsOperador(this.userId, chacraId).subscribe(
       (response) => {
         console.log('Respuesta del servicio:', response);
+
         if (response && response.list && response.list.length > 0 && Array.isArray(response.list[0])) {
           const lotesArray = response.list[0]; // Acceder al primer elemento del array list
-          this.lotes = lotesArray.map((lote: any) => lote.name); // Mapear cada lote al nombre
+
+          // Filtrar lotes por el id del cultivo seleccionado
+          this.lotes = lotesArray
+            .filter((lote: any) => lote.typeCrop && lote.typeCrop.id === cultivoInt)
+            .map((lote: any) => ({
+              name: lote.name,
+              typeCrop: {
+                name: lote.typeCrop.name,
+                id: lote.typeCrop.id
+              }
+            }));
+
           console.log("Lotes filtrados por cultivo y chacra:", this.lotes);
         } else {
           console.error('No se encontraron lotes para el cultivo seleccionado.');
@@ -214,12 +229,29 @@ export class ServiciosComponent implements OnInit {
   }
 
   agregarLote() {
-    if (this.solicitud.lote && !this.lotesAgregados.includes(this.solicitud.lote)) {
-      this.lotesAgregados.push(this.solicitud.lote);
-      this.solicitud.lote = '';
+    if (this.solicitud.lote) {
+      const loteSeleccionado = this.lotes.find(lote => lote.name === this.solicitud.lote);
+      if (loteSeleccionado) {
+        // Obtener el nombre del cultivo asociado al lote seleccionado
+        const cultivoAsociado = loteSeleccionado.typeCrop.name || '';
+
+        // Verificar si el lote ya está en la lista lotesAgregados
+        if (!this.lotesAgregados.find(l => l.lote === this.solicitud.lote)) {
+          this.lotesAgregados.push({ lote: this.solicitud.lote, cultivo: cultivoAsociado });
+          this.solicitud.lote = '';
+        } else {
+          console.log('El lote ya ha sido agregado.');
+        }
+      } else {
+        console.error('No se encontró información del lote seleccionado.');
+      }
     } else {
-      console.log('El lote ya ha sido agregado o no se ha seleccionado un lote.');
+      console.error('No se ha seleccionado un lote.');
     }
+  }
+
+  eliminarLote(index: number) {
+    this.lotesAgregados.splice(index, 1);
   }
 
   cancelar() {
