@@ -20,10 +20,8 @@ interface VerServicio {
   fecha: string;
   plantacion: string;
   hectareas: number;
-  // Puedes añadir más propiedades según sea necesario para los acordeones
 }
 
-// Interfaz para el token decodificado
 interface DecodedToken {
   emailId: string;
   userId: number;
@@ -45,19 +43,21 @@ export class ServiciosComponent implements OnInit {
     observaciones: ''
   };
   lotesAgregados: string[] = [];
+  campos: any[] = [];
+  chacras: any[] = []; // Array para almacenar las chacras
+  cultivos: any[] = []; // Array para almacenar los cultivos
   private userId: number | null = null;
+  seleccchacraId: number = 0;
   public userEmail: string | null = null;
   private token: string | null = null;
-
-  servicios: string[] = ['Servicio 1', 'Servicio 2', 'Servicio 3']; // Lista de servicios disponibles
-  servicioSeleccionado: string | null = null; // Servicio seleccionado para mostrar detalles
-
+  lotes: string[] = []; // Array para almacenar los lotes filtrados por cultivo
+  servicios: string[] = ['Servicio 1', 'Servicio 2', 'Servicio 3'];
+  servicioSeleccionado: string | null = null;
   servicioVisualizado: VerServicio = {
     nombreChacra: 'Chacra de Ejemplo',
     fecha: '2024-06-02',
     plantacion: 'Maíz',
     hectareas: 15,
-    // Puedes inicializar más propiedades según sea necesario para los acordeones
   };
 
   constructor(
@@ -73,17 +73,58 @@ export class ServiciosComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
+
+  cargarCampos() {
+    if (!this.userId) {
+      this.toastr.error('Error: No se ha identificado al usuario.', 'Error');
+      return;
+    }
+
+    this.apiService.getFields(this.userId).subscribe(
+      (response) => {
+        if (response.list && response.list.length > 0 && Array.isArray(response.list[0])) {
+          this.campos = response.list[0];
+          console.log("valores campos", this.campos);
+
+          // Verifica la estructura de cada campo antes de mapear
+          this.campos.forEach((campo, index) => {
+            console.log(`Campo ${index}:`, campo);
+          });
+
+          this.chacras = this.campos.map((campo: any) => {
+            if (campo && campo.name) {
+              console.log("Nombre del campo:", campo.name); // Depura cada nombre
+              return campo.name;
+            } else {
+              console.error("Campo sin nombre:", campo);
+              return '';
+            }
+          }).filter(name => name !== ''); // Filtra nombres vacíos
+
+          console.log("valores chacras", this.chacras);  // Extraer nombres de las chacras
+        } else {
+          console.error('La lista de campos está vacía o no está definida');
+        }
+      },
+      (error) => {
+        console.error('Error al obtener campos:', error);
+      }
+    );
+  }
 
   mostrarFormulario(formulario: string) {
     this.formularioVisible = formulario;
+    if (formulario === 'solicitar') {
+      this.cargarCampos();
+    }
   }
 
   onFechaChange(event: MatDatepickerInputEvent<Date>): void {
     this.solicitud.fecha = event.value;
   }
 
-  // Método para formatear la fecha
   formatDate(date: Date | null): string {
     if (!date) {
       return '';
@@ -108,17 +149,76 @@ export class ServiciosComponent implements OnInit {
   }
 
   aplicarChacra() {
-    // Lógica para aplicar chacra seleccionada
+    if (!this.userId || !this.solicitud.chacra) {
+      this.toastr.error('Error: No se ha seleccionado una chacra.', 'Error');
+      return;
+    }
+
+    const selectedChacra = this.campos.find(campo => campo.name === this.solicitud.chacra);
+    if (!selectedChacra) {
+      this.toastr.error('Error: Chacra seleccionada no encontrada.', 'Error');
+      return;
+    }
+
+    const chacraId = selectedChacra.id;
+    this.seleccchacraId = chacraId;
+    this.apiService.getPlotsOperador(this.userId, chacraId).subscribe(
+      (response) => {
+        if (response.list && response.list.length > 0 && Array.isArray(response.list[0])) {
+          const lotes = response.list[0];
+          this.cultivos = lotes.map((lote: any) => ({
+            id: lote.typeCrop?.id,
+            name: lote.typeCrop?.name
+          })).filter((cultivo: any) => !!cultivo.name);
+
+        } else {
+          console.error('La lista de lotes está vacía o no está definida');
+        }
+      },
+      (error) => {
+        console.error('Error al obtener lotes:', error);
+      }
+    );
   }
 
   filtrarLotes() {
-    // Lógica para filtrar lotes según el cultivo seleccionado
+    if (!this.userId || !this.solicitud.cultivo) {
+      this.toastr.error('Seleccione un cultivo antes de filtrar los lotes.');
+      return;
+    }
+    const cultivoInt: number = parseInt(this.solicitud.cultivo);
+    const chacraId = this.seleccchacraId;
+    if (isNaN(cultivoInt)) {
+      this.toastr.error('Error al convertir el ID del cultivo a número.');
+      return;
+    }
+    this.apiService.getPlotsOperador(this.userId, chacraId).subscribe(
+      (response) => {
+        console.log('Respuesta del servicio:', response);
+        if (response && response.list && response.list.length > 0 && Array.isArray(response.list[0])) {
+          const lotesArray = response.list[0]; // Acceder al primer elemento del array list
+          this.lotes = lotesArray.map((lote: any) => lote.name); // Mapear cada lote al nombre
+          console.log("Lotes filtrados por cultivo y chacra:", this.lotes);
+        } else {
+          console.error('No se encontraron lotes para el cultivo seleccionado.');
+          this.toastr.error('No se encontraron lotes para el cultivo seleccionado.');
+          this.lotes = [];
+        }
+      },
+      (error) => {
+        console.error('Error al obtener lotes por cultivo:', error);
+        this.toastr.error('Error al obtener lotes por cultivo.');
+        this.lotes = [];
+      }
+    );
   }
 
   agregarLote() {
-    if (this.solicitud.lote) {
+    if (this.solicitud.lote && !this.lotesAgregados.includes(this.solicitud.lote)) {
       this.lotesAgregados.push(this.solicitud.lote);
-      this.solicitud.lote = ''; // Limpiar el campo de lote después de agregar
+      this.solicitud.lote = '';
+    } else {
+      console.log('El lote ya ha sido agregado o no se ha seleccionado un lote.');
     }
   }
 
@@ -141,44 +241,35 @@ export class ServiciosComponent implements OnInit {
               lotes: this.lotesAgregados
             };
 
-            this.apiService.addTypeServicesAdmin(servicio).subscribe(
-              (serviceResponse: any) => {
-                this.toastr.success('Service request sent to the specific field');
-                // Handle service response if necessary
-              },
-              (serviceError: any) => {
-                this.toastr.error('Error sending service request to the specific field');
-                console.error('Error adding service to the field:', serviceError);
-                // Handle service error if necessary
-              }
-            );
+           // this.apiService.addTypeServicesAdmin(servicio).subscribe(
+           //   (serviceResponse: any) => {
+           //     this.toastr.success('Service request sent to the specific field');
+           //   },
+           //   (serviceError: any) => {
+           //     this.toastr.error('Error sending service request to the specific field');
+           //     console.error('Error adding service to the field:', serviceError);
+           //   }
+           // );
           } else {
             console.error('No field found for this user');
           }
         },
         (fieldsError: any) => {
           console.error('Error loading user fields:', fieldsError);
-          // Handle error loading fields if necessary
         }
       );
     }
   }
 
-  // Método para ver detalles del servicio seleccionado
   verServicio(): void {
-    // Implementar lógica para cargar detalles del servicio seleccionado
-    // Ejemplo básico:
     if (this.servicioSeleccionado) {
-      // Aquí deberías cargar los detalles del servicio desde tu API o estructura de datos
-      // y actualizar servicioVisualizado con los detalles correspondientes.
       this.servicioVisualizado = {
         nombreChacra: `${this.servicioSeleccionado} - Chacra`,
         fecha: '2024-06-02',
         plantacion: 'Maíz',
         hectareas: 15,
-        // Actualiza con más propiedades según sea necesario
       };
-      this.formularioVisible = 'ver'; // Mostrar sección de visualización del servicio
+      this.formularioVisible = 'ver';
     }
   }
 }

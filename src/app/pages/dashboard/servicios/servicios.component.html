@@ -14,23 +14,20 @@
         <h2 class="card-title">Solicitar Servicio</h2>
         <div class="field-container">
           <mat-label class="field-label">Seleccionar chacra</mat-label>
-          <mat-select class="field-input" placeholder="Chacras" [(ngModel)]="solicitud.chacra" name="chacra">
-            <!-- Opciones de chacras aquí -->
+          <mat-select class="field-input" placeholder="Seleccionar una Chacra" [(ngModel)]="solicitud.chacra" name="chacra" (selectionChange)="aplicarChacra()">
+            <mat-option *ngFor="let chacra of chacras" [value]="chacra">{{ chacra }}</mat-option>
           </mat-select>
-          <button mat-button (click)="aplicarChacra()">Aplicar</button>
         </div>
         <div class="field-container">
           <mat-label class="field-label">Seleccionar Cultivo</mat-label>
-          <mat-select class="field-input" placeholder="Cultivos" [(ngModel)]="solicitud.cultivo" name="cultivo"
-            (selectionChange)="filtrarLotes()">
-            <!-- Opciones de cultivos aquí -->
+          <mat-select class="field-input" placeholder="Cultivos" [(ngModel)]="solicitud.cultivo" name="cultivo" (selectionChange)="filtrarLotes()">
+            <mat-option *ngFor="let cultivo of cultivos" [value]="cultivo.id">{{ cultivo.name }}</mat-option>
           </mat-select>
-          <button mat-button (click)="filtrarLotes()">Filtrar</button>
         </div>
         <div class="field-container">
           <mat-label class="field-label">Seleccionar Lote</mat-label>
           <mat-select class="field-input" placeholder="Lotes" [(ngModel)]="solicitud.lote" name="lote">
-            <!-- Opciones de lotes aquí -->
+            <mat-option *ngFor="let lote of lotes" [value]="lote">{{ lote }}</mat-option>
           </mat-select>
           <button mat-button (click)="agregarLote()">Agregar</button>
         </div>
@@ -99,7 +96,6 @@
           <p>Datos de la visita técnica: [Datos del sistema]</p>
         </div>
       </mat-expansion-panel>
-
       <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title>
@@ -110,7 +106,6 @@
           <p>Datos de la visita de aplicación: [Datos del sistema]</p>
         </div>
       </mat-expansion-panel>
-
       <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title>
