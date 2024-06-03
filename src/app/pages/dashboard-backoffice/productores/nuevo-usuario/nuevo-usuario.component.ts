@@ -7,8 +7,6 @@ import { Observable } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { startWith, map } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-nuevo-usuario',
@@ -113,9 +111,11 @@ export class NuevoUsuarioComponent implements OnInit, AfterViewInit {
       loc.name.toLowerCase().includes(filterValue)
     );
   }
+
   cargarNuevoUsuario() {
     if (this.userDetailsForm.valid) {
       const formValues = this.userDetailsForm.value;
+
       const userData = {
         username: formValues.usuario,
         password: formValues.password,
@@ -124,7 +124,7 @@ export class NuevoUsuarioComponent implements OnInit, AfterViewInit {
         dni: formValues.dni,
         telephone: formValues.contacto,
         location_id: formValues.localidad,
-        descriptions: formValues.descripcion,  
+        descriptions: formValues.descripcion,
         isPreAcceptTherms: formValues.isPreAcceptTherms,
         isPreActivate: formValues.isPreActivate,
       };
@@ -142,11 +142,14 @@ export class NuevoUsuarioComponent implements OnInit, AfterViewInit {
           let errorMessage = 'Error al crear el usuario';
 
           if (error.code === 4002) {
-            errorMessage = 'El Email ingresa ya fue regisrado. Por favor, intente con otro email.';
+            errorMessage =
+              'El Email ingresa ya fue registrado. Por favor, intente con otro email.';
           } else if (error.code === 4023) {
-            errorMessage = 'El DNI ingresado ya fue registrado. Por favor, verifique e intente nuevamente.';
+            errorMessage =
+              'El DNI ingresado ya fue registrado. Por favor, verifique e intente nuevamente.';
           } else if (error.code === 4004) {
-            errorMessage = 'La contraseña no cumple con los requisitos de seguridad. Por favor, intente con otra.';
+            errorMessage =
+              'La contraseña no cumple con los requisitos de seguridad. Por favor, intente con otra.';
           }
 
           this.toastr.error(errorMessage, 'Atención');
@@ -155,9 +158,8 @@ export class NuevoUsuarioComponent implements OnInit, AfterViewInit {
     }
   }
 
-
   validarFormulario(): boolean {
-    return true; // Ya que no hay campos obligatorios, siempre devolvemos true
+    return true;
   }
 
   cancelar() {
