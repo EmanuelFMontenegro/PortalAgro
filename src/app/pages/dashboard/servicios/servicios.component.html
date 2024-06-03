@@ -3,7 +3,7 @@
 </div>
 
 <div class="botonera">
-  <button mat-raised-button (click)="mostrarFormulario('solicitar')">Solicitar Servicio</button>
+  <button mat-raised-button (click)="mostrarFormulario('solicitar')">Solicitar Servicio Nuevo</button>
   <button mat-raised-button (click)="mostrarFormulario('ver')">Ver Servicios</button>
 </div>
 
@@ -11,7 +11,7 @@
   <div *ngIf="formularioVisible === 'solicitar'">
     <form class="solicitud-servicio-form" (ngSubmit)="onSubmitSolicitar()">
       <div class="card">
-        <h2 class="card-title">Solicitar Servicio</h2>
+        <h2 class="card-title">Solicitar Servicio Nuevo</h2>
         <div class="field-container">
           <mat-label class="field-label">Seleccionar chacra</mat-label>
           <mat-select class="field-input" placeholder="Seleccionar una Chacra" [(ngModel)]="solicitud.chacra" name="chacra" (selectionChange)="aplicarChacra()">
@@ -44,7 +44,7 @@
         <div class="field-container">
           <mat-label class="field-label">Hectáreas</mat-label>
           <input type="number" class="field-input" [(ngModel)]="solicitud.hectareas" name="hectareas"
-            placeholder="Hectáreas">
+         placeholder="Hectáreas" min="0" (input)="validateHectareas()">
         </div>
         <div class="field-container-fecha">
           <label class="field-label-fecha">Fecha</label>

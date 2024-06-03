@@ -71,9 +71,12 @@ export class ServiciosComponent implements OnInit {
       this.userId = decoded.userId;
       this.userEmail = decoded.emailId;
     }
+    this.lotes = [];
+    this.cultivos = [];
   }
 
   ngOnInit(): void {
+    this.cargarCampos();
   }
 
   cargarCampos() {
@@ -117,10 +120,24 @@ export class ServiciosComponent implements OnInit {
   mostrarFormulario(formulario: string) {
     this.formularioVisible = formulario;
     if (formulario === 'solicitar') {
+      this.limpiarFormulario();
       this.cargarCampos();
     }
   }
 
+  limpiarFormulario() {
+    this.lotes = [];
+    this.cultivos = [];
+    this.solicitud = {
+      chacra: '',
+      cultivo: '',
+      lote: '',
+      hectareas: 0,
+      fecha: null,
+      observaciones: ''
+    };
+    this.lotesAgregados = [];
+  }
   onFechaChange(event: MatDatepickerInputEvent<Date>): void {
     this.solicitud.fecha = event.value;
   }
@@ -255,7 +272,13 @@ export class ServiciosComponent implements OnInit {
   }
 
   cancelar() {
-    this.formularioVisible = null;
+    this.limpiarFormulario();
+  }
+
+  validateHectareas(): void {
+    if (this.solicitud.hectareas < 0) {
+      this.solicitud.hectareas = 0;
+    }
   }
 
   onSubmitSolicitar(): void {
