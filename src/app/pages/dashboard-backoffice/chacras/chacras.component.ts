@@ -42,8 +42,6 @@ export class ChacrasComponent implements OnInit {
   campos: any[] = [];
   localidades: any[] = [];
   chacra: any[] = [];
-  chacras: any[] = [];
-  perfilCargado: boolean = false;
   filteredLocalidades: Observable<any[]> = new Observable<any[]>();
   filtroLocalidades: FormControl = new FormControl('');
   mostrarInputNormal: boolean = true;
@@ -81,14 +79,6 @@ export class ChacrasComponent implements OnInit {
     this.cargarDatosDeUsuario();
     this.cargarChacras();
     this.obtenerLocalidades();
-
-    const perfilDataChacra = localStorage.getItem('idPerfilProd');
-    if (perfilDataChacra) {
-      const userId = parseInt(perfilDataChacra);
-      this.cargarChacrasUsuario(userId);
-    } else {
-      this.cargarChacras();
-    }
   }
 
   decodeToken(): void {
@@ -190,47 +180,19 @@ export class ChacrasComponent implements OnInit {
   }
 
   cargarChacras() {
-    if (!this.perfilCargado) {
-      this.apiService.getUsersFields(0, 10, 'id', 'desc').subscribe(
-        (response) => {
-          if (response.list && response.list.length > 0) {
-            this.campos = response.list[0];
-          } else {
-            console.error('La lista de campos está vacía o no está definida');
-          }
-        },
-        (error) => {
-          console.error('Error al obtener campos:', error);
-        }
-      );
-    }
-  }
-
-  cargarChacrasUsuario(userId: number) {
-    this.apiService.getFields(userId).subscribe(
+    this.apiService.getUsersFields(0, 10, 'id', 'desc').subscribe(
       (response) => {
-        if (response && response.list && response.list.length > 0) {
-
-          const listaChacras = response.list[0];
-          this.chacras = listaChacras;
-          this.perfilCargado = true;
+        if (response.list && response.list.length > 0) {
+          this.campos = response.list[0];
         } else {
-          console.warn('No se encontraron datos de chacras en la respuesta:', response);
-          this.chacras = [];
-          this.toastr.info(
-            'El productor seleccionado no cuenta con chacras asociadas',
-            'Atencion !!!'
-          );
-          this.router.navigate(['dashboard-backoffice/perfil-productor']);
+          console.error('La lista de campos está vacía o no está definida');
         }
       },
       (error) => {
-        console.error('Error al cargar las chacras del usuario:', error);
-        this.chacras = [];
+        console.error('Error al obtener campos:', error);
       }
     );
-}
-
+  }
 
   obtenerLocalidades() {
     this.apiService.getLocationMisiones('location').subscribe(

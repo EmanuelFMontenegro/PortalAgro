@@ -45,6 +45,7 @@ import { NuevoUsuarioComponent } from './productores/nuevo-usuario/nuevo-usuario
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { BrowserModule } from '@angular/platform-browser';
+import { ChacrasPerfilComponent } from './chacras-perfil/chacras-perfil.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import { BrowserModule } from '@angular/platform-browser';
     DialogComponent,
     PerfilProductorComponent,
     NuevoUsuarioComponent,
+    ChacrasPerfilComponent,
   ],
   imports: [
     CommonModule,
