@@ -89,24 +89,18 @@ export class ServiciosComponent implements OnInit {
       (response) => {
         if (response.list && response.list.length > 0 && Array.isArray(response.list[0])) {
           this.campos = response.list[0];
-          console.log("valores campos", this.campos);
-
           // Verifica la estructura de cada campo antes de mapear
           this.campos.forEach((campo, index) => {
-            console.log(`Campo ${index}:`, campo);
           });
 
           this.chacras = this.campos.map((campo: any) => {
             if (campo && campo.name) {
-              console.log("Nombre del campo:", campo.name); // Depura cada nombre
               return campo.name;
             } else {
               console.error("Campo sin nombre:", campo);
               return '';
             }
           }).filter(name => name !== ''); // Filtra nombres vacíos
-
-          console.log("valores chacras", this.chacras);  // Extraer nombres de las chacras
         } else {
           console.error('La lista de campos está vacía o no está definida');
         }
@@ -150,14 +144,11 @@ export class ServiciosComponent implements OnInit {
     const localDate = new Date(
       date.getTime() + date.getTimezoneOffset() * 60 * 1000
     );
-
     const day = localDate.getDate();
     const month = localDate.getMonth() + 1;
     const year = localDate.getFullYear();
-
     const dayFormatted = this.formatNumberWithZero(day);
     const monthFormatted = this.formatNumberWithZero(month);
-
     return `${dayFormatted}/${monthFormatted}/${year}`;
   }
 
@@ -170,13 +161,11 @@ export class ServiciosComponent implements OnInit {
       this.toastr.error('Error: No se ha seleccionado una chacra.', 'Error');
       return;
     }
-
     const selectedChacra = this.campos.find(campo => campo.name === this.solicitud.chacra);
     if (!selectedChacra) {
       this.toastr.error('Error: Chacra seleccionada no encontrada.', 'Error');
       return;
     }
-
     const chacraId = selectedChacra.id;
     this.seleccchacraId = chacraId;
     this.apiService.getPlotsOperador(this.userId, chacraId).subscribe(
@@ -187,7 +176,6 @@ export class ServiciosComponent implements OnInit {
             id: lote.typeCrop?.id,
             name: lote.typeCrop?.name
           })).filter((cultivo: any) => !!cultivo.name);
-
         } else {
           console.error('La lista de lotes está vacía o no está definida');
         }
@@ -203,23 +191,16 @@ export class ServiciosComponent implements OnInit {
       this.toastr.error('Seleccione un cultivo antes de filtrar los lotes.');
       return;
     }
-
     const cultivoInt: number = parseInt(this.solicitud.cultivo);
     const chacraId = this.seleccchacraId;
-
     if (isNaN(cultivoInt)) {
       this.toastr.error('Error al convertir el ID del cultivo a número.');
       return;
     }
-
     this.apiService.getPlotsOperador(this.userId, chacraId).subscribe(
       (response) => {
-        console.log('Respuesta del servicio:', response);
-
         if (response && response.list && response.list.length > 0 && Array.isArray(response.list[0])) {
-          const lotesArray = response.list[0]; // Acceder al primer elemento del array list
-
-          // Filtrar lotes por el id del cultivo seleccionado
+          const lotesArray = response.list[0];
           this.lotes = lotesArray
             .filter((lote: any) => lote.typeCrop && lote.typeCrop.id === cultivoInt)
             .map((lote: any) => ({
@@ -229,8 +210,6 @@ export class ServiciosComponent implements OnInit {
                 id: lote.typeCrop.id
               }
             }));
-
-          console.log("Lotes filtrados por cultivo y chacra:", this.lotes);
         } else {
           console.error('No se encontraron lotes para el cultivo seleccionado.');
           this.toastr.error('No se encontraron lotes para el cultivo seleccionado.');
@@ -257,7 +236,6 @@ export class ServiciosComponent implements OnInit {
           this.lotesAgregados.push({ lote: this.solicitud.lote, cultivo: cultivoAsociado });
           this.solicitud.lote = '';
         } else {
-          console.log('El lote ya ha sido agregado.');
         }
       } else {
         console.error('No se encontró información del lote seleccionado.');
@@ -295,16 +273,6 @@ export class ServiciosComponent implements OnInit {
               hectareas: this.solicitud.hectareas,
               lotes: this.lotesAgregados
             };
-
-           // this.apiService.addTypeServicesAdmin(servicio).subscribe(
-           //   (serviceResponse: any) => {
-           //     this.toastr.success('Service request sent to the specific field');
-           //   },
-           //   (serviceError: any) => {
-           //     this.toastr.error('Error sending service request to the specific field');
-           //     console.error('Error adding service to the field:', serviceError);
-           //   }
-           // );
           } else {
             console.error('No field found for this user');
           }
