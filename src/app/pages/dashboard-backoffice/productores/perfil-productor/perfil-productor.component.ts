@@ -131,10 +131,7 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
   ) {
     this.userDetailsForm = this.formBuilder.group({
       email: [''],
-      password: [
-        { value: '', disabled: this.isPasswordDisabled },
-        Validators.required,
-      ],
+      password: [''],
       nombre: ['', Validators.required],
       apellido: ['', Validators.required],
       dni: ['', Validators.required],
@@ -159,7 +156,7 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
       this.router.navigate(['dashboard-backoffice']);
     }
 
-   
+
     this.enablePasswordField();
   }
 
@@ -190,7 +187,6 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
           return;
         }
         this.usuario = data;
-
 
         this.email = data.username;
         this.nombre = data.name;
@@ -256,6 +252,10 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
         localidad: this.location,
         contacto: this.telefono,
       });
+
+      if (this.userDetailsForm.get('password')?.value) {
+        this.showChangePasswordWarning();
+      }
     } else {
       this.userDetailsForm.disable();
     }
@@ -331,6 +331,22 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
         const formData = this.userDetailsForm.value;
         const usuarioData = localStorage.getItem('selectedUser');
 
+        // Verificar si algún campo requerido está vacío
+        if (
+          formData.nombre === '' ||
+          formData.apellido === '' ||
+          formData.dni === '' ||
+          formData.descripcion === '' ||
+          formData.localidad === '' ||
+          formData.contacto === ''
+        ) {
+          this.toastr.error(
+            'Por favor, complete todos los campos del formulario antes de actualizar el perfil.',
+            'Error'
+          );
+          return;
+        }
+
         if (usuarioData) {
           const usuario = JSON.parse(usuarioData);
           const userId = usuario.id;
@@ -342,7 +358,7 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
 
           const personData = {
             username: formData.email,
-            password: formData.password,
+            password: formData.password !== this.usuario.password ? formData.password : '',
             name: formData.nombre,
             lastname: formData.apellido,
             dni: formData.dni,
@@ -354,6 +370,8 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
             isVerified: true,
           };
 
+          const passwordChanged = formData.password !== this.usuario.password;
+
           this.apiService
             .updatePersonAdmin(userId, personId, personData)
             .subscribe(
@@ -363,13 +381,18 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
                   'Éxito'
                 );
                 this.modoEdicion = false;
-
-
                 this.UsuarioPerfil(userId, personId);
+
+                if (!passwordChanged) {
+                  this.toastr.info(
+                    'No se realizó ningún cambio en la contraseña.',
+                    'Información'
+                  );
+                }
               },
               (error) => {
                 console.error('Error al actualizar el perfil:', error);
-                this.toastr.error('Error al actualizar el perfil.', 'Error');
+                this.toastr.error('El Formulario debe ser rellano en su Totalidad.', 'Atención');
               }
             );
         } else {
@@ -382,13 +405,16 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
   }
 
 
+
+
+
   validarFormulario(): boolean {
     return this.userDetailsForm.valid;
   }
 
   btnVerMas(userId: number) {
     localStorage.setItem('idPerfilProd', userId.toString());
-    this.router.navigate(['dashboard-backoffice/chacras']);
+    this.router.navigate(['dashboard-backoffice/chacras-perfil']);
   }
 
 

@@ -124,12 +124,11 @@ export class NuevoUsuarioComponent implements OnInit, AfterViewInit {
         dni: formValues.dni,
         telephone: formValues.contacto,
         location_id: formValues.localidad,
-        descriptions: formValues.descripcion,
+        descriptions: formValues.descripcion,  
         isPreAcceptTherms: formValues.isPreAcceptTherms,
-        isPreActivate: formValues.isPreActivate, 
+        isPreActivate: formValues.isPreActivate,
       };
 
-      // Llamar al endpoint de creación de usuario
       this.apiService.crearNuevoUsuario(userData).subscribe(
         (response) => {
           this.toastr.success('Usuario creado exitosamente', 'Éxito');
@@ -138,10 +137,9 @@ export class NuevoUsuarioComponent implements OnInit, AfterViewInit {
         (errorResponse) => {
           console.error('Error al crear el usuario:', errorResponse);
 
-          // Extraer el objeto de error desde el errorResponse, dependiendo de la estructura del error
           const error = errorResponse.error || errorResponse;
 
-          let errorMessage = 'Error al crear el usuario'; // Mensaje genérico por defecto
+          let errorMessage = 'Error al crear el usuario';
 
           if (error.code === 4002) {
             errorMessage = 'El Email ingresa ya fue regisrado. Por favor, intente con otro email.';
@@ -150,17 +148,14 @@ export class NuevoUsuarioComponent implements OnInit, AfterViewInit {
           } else if (error.code === 4004) {
             errorMessage = 'La contraseña no cumple con los requisitos de seguridad. Por favor, intente con otra.';
           }
-          // Añadir más condiciones según los códigos de error específicos
 
           this.toastr.error(errorMessage, 'Atención');
         }
       );
+    }
+  }
 
 
-
-
-}
-}
   validarFormulario(): boolean {
     return true; // Ya que no hay campos obligatorios, siempre devolvemos true
   }
