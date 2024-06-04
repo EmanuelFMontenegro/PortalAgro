@@ -54,7 +54,7 @@ export class ApiService {
   //<------- Enpoint Terminos Y condiciones-------->
 
   acceptLicenseGet(userId: number, personId: number): Observable<any> {
-    const url = `http://localhost:8095/api/user/${userId}/person/${personId}/accept_license`;
+    const url = `${this.baseURL}/user/${userId}/person/${personId}/accept_license`;
     return this.http.get(url);
   }
 
@@ -197,7 +197,7 @@ export class ApiService {
     formData.append('files', file);
 
     return this.http.put(
-      `http://localhost:8095/api/user/${userId}/profile/image`,
+      `${this.baseURL}/user/${userId}/profile/image`,
       formData
     );
   }

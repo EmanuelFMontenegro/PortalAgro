@@ -45,6 +45,7 @@ import { NuevoUsuarioComponent } from './productores/nuevo-usuario/nuevo-usuario
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { BrowserModule } from '@angular/platform-browser';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -82,7 +83,8 @@ import { BrowserModule } from '@angular/platform-browser';
     ReactiveFormsModule,
     BrowserModule,
     MatIconModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    SharedModule
   ],
 })
 export class DashboardBackofficeModule {}

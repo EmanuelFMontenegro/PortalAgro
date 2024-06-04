@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { jwtDecode } from 'jwt-decode';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class AuthService {
   private userEmail: string = '';
   private userId: number | null = null;
   private field: string | null = null; // Campo adicional obtenido del token
-  private loginUrl = 'http://localhost:8095/api/auth/login'; // URL de la API para el login
+  private loginUrl = `${environment.apiUrl}/auth/login`; // URL de la API para el login
 
   constructor(private http: HttpClient) {}
 

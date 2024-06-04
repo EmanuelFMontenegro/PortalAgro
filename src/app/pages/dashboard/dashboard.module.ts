@@ -49,6 +49,7 @@ import { InformesComponent } from './informes/informes.component';
 import { CalendarioComponent } from './calendario/calendario.component';
 import { ChacrasComponent } from './chacras/chacras.component';
 import { NotificacionesComponent } from './notificaciones/notificaciones.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 const CUSTOM_DATE_FORMATS = {
   parse: {
@@ -114,6 +115,7 @@ const CUSTOM_DATE_FORMATS = {
     MatOptionModule,
     BrowserAnimationsModule,
     RouterModule,
+    SharedModule,
   ],
   providers: [{ provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS }],
 })
