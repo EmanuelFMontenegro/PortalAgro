@@ -46,6 +46,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { BrowserModule } from '@angular/platform-browser';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { ChacrasPerfilComponent } from './chacras-perfil/chacras-perfil.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +64,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
     DialogComponent,
     PerfilProductorComponent,
     NuevoUsuarioComponent,
+    ChacrasPerfilComponent,
   ],
   imports: [
     CommonModule,

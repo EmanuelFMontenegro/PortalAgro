@@ -15,7 +15,6 @@ import { Observable } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
-
 interface CustomJwtPayload {
   userId: number;
   sub: string;
@@ -42,6 +41,7 @@ export class ChacrasComponent implements OnInit {
   apellido: string = '';
   campos: any[] = [];
   localidades: any[] = [];
+  chacra: any[] = [];
   filteredLocalidades: Observable<any[]> = new Observable<any[]>();
   filtroLocalidades: FormControl = new FormControl('');
   mostrarInputNormal: boolean = true;
@@ -135,7 +135,6 @@ export class ChacrasComponent implements OnInit {
   }
 
   validarMinHectareas() {
-    // Validamos que el valor mínimo no sea mayor que el valor máximo
     if (
       this.minHectareas &&
       this.maxHectareas &&
@@ -146,7 +145,6 @@ export class ChacrasComponent implements OnInit {
   }
 
   validarMaxHectareas() {
-    // Validamos que el valor máximo no sea menor que el valor mínimo
     if (
       this.minHectareas &&
       this.maxHectareas &&
@@ -180,6 +178,7 @@ export class ChacrasComponent implements OnInit {
       this.userEmail = null;
     }
   }
+
   cargarChacras() {
     this.apiService.getUsersFields(0, 10, 'id', 'desc').subscribe(
       (response) => {
@@ -327,8 +326,6 @@ export class ChacrasComponent implements OnInit {
     const minHectareasNum = this.minHectareas;
     const maxHectareasNum = this.maxHectareas;
 
-
-
     // Llamar al servicio con el rango de hectáreas para filtrar
     this.apiService
       .getUsersFields(
@@ -377,7 +374,7 @@ export class ChacrasComponent implements OnInit {
         'id', // sortBy
         'desc', // sortDir
         true, // isActive
-        this.nombreProductor, // producerNames
+        this.nombreProductor // producerNames
         // '', // filedName
         // null, // locationId
         // null, // person_id
@@ -386,7 +383,6 @@ export class ChacrasComponent implements OnInit {
       )
       .subscribe(
         (response) => {
-
           if (response.list && response.list.length > 0) {
             this.campos = response.list[0];
           } else {

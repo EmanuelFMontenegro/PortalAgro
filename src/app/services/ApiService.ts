@@ -557,6 +557,16 @@ export class ApiService {
     );
   }
 
+  getAllPlotsByOperatorADMIN(
+    userId: number,
+    fieldId: number,
+    cropId: number
+  ): Observable<any> {
+    return this.http.get(
+      `${this.baseURL}/user/${userId}/field/${fieldId}/plot/all?crop_id=${cropId}`
+    );
+  }
+
   // < -- METODO PARA SERVICIOS -- >
 
   // GET: getAllTypeServices-OPERADOR

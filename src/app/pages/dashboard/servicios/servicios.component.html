@@ -1,32 +1,125 @@
 <div class="titulo-servicios">
   <h2>Servicios</h2>
 </div>
-<form class="solicitud-servicio-form" (ngSubmit)="onSubmit()">
-  <div class="card">
-    <h2 class="card-title">Campos</h2>
-    <div class="field-container">
-      <mat-label class="field-label">Tipo de Servicio</mat-label>
-      <mat-select class="field-input" placeholder="Servicios" [(ngModel)]="solicitud.tipoServicio" name="tipoServicio">
-        <mat-option value="Aplicación">Aplicación</mat-option>
-        <mat-option value="Servicio Topográfico">Servicio Topográfico</mat-option>
 
-      </mat-select>
-    </div>
-    <div class="field-container-fecha">
-      <label class="field-label-fecha">Fecha</label>
-      <input class="field-input-fecha" [matDatepicker]="picker" placeholder="Fecha de solicitud"
-        [value]="solicitud.fecha | date:'yyyy-MM-dd'" (dateChange)="onFechaChange($event)">
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-    </div>
+<div class="botonera">
+  <button mat-raised-button (click)="mostrarFormulario('solicitar')">Solicitar Servicio Nuevo</button>
+  <button mat-raised-button (click)="mostrarFormulario('ver')">Ver Servicios</button>
+</div>
 
-    <div class="field-container">
-      <mat-label class="field-label">Observaciones</mat-label>
-      <textarea class="field-input-obs" [(ngModel)]="solicitud.observaciones" name="observaciones"></textarea>
-    </div>
-
-    <div class="field-container boton-servicio">
-      <button mat-raised-button  style="font-size:14px;">Solicitar Servicio</button>
-    </div>
+<mat-card class="main-card">
+  <div *ngIf="formularioVisible === 'solicitar'">
+    <form class="solicitud-servicio-form" (ngSubmit)="onSubmitSolicitar()">
+      <div class="card">
+        <h2 class="card-title">Solicitar Servicio Nuevo</h2>
+        <div class="field-container">
+          <mat-label class="field-label">Seleccionar chacra</mat-label>
+          <mat-select class="field-input" placeholder="Seleccionar una Chacra" [(ngModel)]="solicitud.chacra" name="chacra" (selectionChange)="aplicarChacra()">
+            <mat-option *ngFor="let chacra of chacras" [value]="chacra">{{ chacra }}</mat-option>
+          </mat-select>
+        </div>
+        <div class="field-container">
+          <mat-label class="field-label">Seleccionar Cultivo</mat-label>
+          <mat-select class="field-input" placeholder="Cultivos" [(ngModel)]="solicitud.cultivo" name="cultivo" (selectionChange)="filtrarLotes()">
+            <mat-option *ngFor="let cultivo of cultivos" [value]="cultivo.id">{{ cultivo.name }}</mat-option>
+          </mat-select>
+        </div>
+        <div class="field-container">
+          <mat-label class="field-label">Seleccionar Lote</mat-label>
+          <mat-select class="field-input" placeholder="Lotes" [(ngModel)]="solicitud.lote" name="lote">
+            <mat-option *ngFor="let lote of lotes" [value]="lote.name">{{ lote.name }}</mat-option>
+          </mat-select>
+          <button mat-button (click)="agregarLote()">Agregar</button>
+        </div>
+        <div class="field-container">
+          <mat-label class="field-label">Lotes Agregados</mat-label>
+          <ul>
+            <li *ngFor="let lote of lotesAgregados; let i = index;">
+              {{ lote.lote }} - {{ lote.cultivo }}
+              <button mat-icon-button (click)="eliminarLote(i)">
+                <mat-icon>delete</mat-icon>
+              </button>
+          </ul>
+        </div>
+        <div class="field-container">
+          <mat-label class="field-label">Hectáreas</mat-label>
+          <input type="number" class="field-input" [(ngModel)]="solicitud.hectareas" name="hectareas"
+         placeholder="Hectáreas" min="0" (input)="validateHectareas()">
+        </div>
+        <div class="field-container-fecha">
+          <label class="field-label-fecha">Fecha</label>
+          <input class="field-input-fecha" [matDatepicker]="picker" placeholder="Fecha de solicitud"
+            [(ngModel)]="solicitud.fecha" name="fecha">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </div>
+        <div class="field-container">
+          <mat-label class="field-label">Observaciones</mat-label>
+          <textarea class="field-input-obs" [(ngModel)]="solicitud.observaciones" name="observaciones"></textarea>
+        </div>
+        <div class="field-container boton-servicio">
+          <button mat-button type="button" (click)="cancelar()">Cancelar</button>
+          <button mat-raised-button type="submit" style="font-size:14px;">Solicitar Servicio</button>
+        </div>
+      </div>
+    </form>
   </div>
-</form>
+  <div *ngIf="formularioVisible === 'ver'">
+    <div class="servicio-selector">
+      <mat-form-field appearance="fill">
+        <mat-label>Elegir servicio</mat-label>
+        <mat-select [(value)]="servicioSeleccionado">
+          <mat-option *ngFor="let servicio of servicios" [value]="servicio">
+            {{ servicio }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-raised-button (click)="verServicio()" class="boton-ver">Ver</button>
+    </div>
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Título del Servicio
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div>
+          <p>Nombre de Chacra: {{ servicioVisualizado.nombreChacra }}</p>
+          <p>Fecha: {{ servicioVisualizado.fecha }}</p>
+          <p>Plantación: {{ servicioVisualizado.plantacion }}</p>
+          <p>Hectáreas: {{ servicioVisualizado.hectareas }}</p>
+        </div>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Visita Técnica
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div>
+          <p>Datos de la visita técnica: [Datos del sistema]</p>
+        </div>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Visita de Aplicación
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div>
+          <p>Datos de la visita de aplicación: [Datos del sistema]</p>
+        </div>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Informe Final
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div>
+          <p>Datos del informe final: [Datos del sistema]</p>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+</mat-card>

@@ -16,8 +16,8 @@
             <div class="titulo-perfil-avatar">
               <div class="titulo-welcome">
                 <h2>Bienvenido, {{ nombre }} {{ apellido }}</h2>
-                <p class="email">Email: {{ email }}</p>
-                <p class="email">Ciudad: {{ locationId }}</p>
+                <!-- <p class="email">Email: {{ email }}</p> -->
+                <p class="email">Ciudad: {{ location}}</p>
               </div>
             </div>
           </div>
@@ -29,7 +29,7 @@
               </button>
             </div>
             <div class="boton-chacra">
-              <button mat-raised-button class="btn-chacra" (click)="btnVerMas()">
+              <button mat-raised-button class="btn-chacra" (click)="btnVerMas(userId)">
                 <img src="assets/img/agriculture_24dp_FILL0_wght300_GRAD0_opsz24.svg" alt="Icon Chacra"
                   class="img-chacra">
                 Ver Chacras
@@ -56,7 +56,7 @@
               </div>
               <div class="field-container">
                 <label class="title-input">Localidad</label>
-                <div class="field-value">{{ locationId }}</div>
+                <div class="field-value">{{ location }}</div>
                 <mat-divider></mat-divider>
               </div>
               <div class="field-container">
@@ -107,7 +107,7 @@
           </div>
           <div class="titulo-perfil-avatar">
             <h2>Bienvenido, {{ nombre }} {{ apellido }}</h2>
-            <p class="email">{{ email }}</p>
+            <!-- <p class="email">{{ username }}</p> -->
           </div>
         </div>
 
@@ -120,26 +120,22 @@
               <div class="datos-users">
                 <div class="field-container">
                   <label class="title-input" for="usuario">Usuario</label>
-                  <input matInput placeholder="Email" formControlName="email" id="usuario">
+                  <input matInput placeholder="Email" formControlName="email" id="email">
                 </div>
 
                 <div class="field-container">
                   <label class="title-input" for="contrasena">Contraseña</label>
                   <div class="password-container">
-                    <input
-                      matInput
-                      formControlName="password"
-                      [type]="hidePassword ? 'password' : 'text'"
-                      id="password"
-                      autocomplete="new-password"
-                      [disabled]="isPasswordDisabled"
-                      (click)="showChangePasswordWarning()">
-                    <mat-icon class="eye-icon" (click)="togglePasswordVisibility()" [style.pointer-events]="isPasswordDisabled ? 'none' : 'auto'">
+                    <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'" id="password"
+                      autocomplete="new-password" [disabled]="isPasswordDisabled" (click)="showChangePasswordWarning()">
+                    <mat-icon class="eye-icon" (click)="togglePasswordVisibility()"
+                      [style.pointer-events]="isPasswordDisabled ? 'none' : 'auto'">
                       {{ hidePassword ? 'visibility_off' : 'visibility' }}
                     </mat-icon>
 
                   </div>
-                  <div class="password-warning" style="color:red" *ngIf="showPasswordWarning">Está por cambiar la contraseña</div>
+                  <div class="password-warning" style="color:red" *ngIf="showPasswordWarning">Está por cambiar la
+                    contraseña</div>
                 </div>
 
 
@@ -158,7 +154,7 @@
                 <div class="field-container">
                   <label class="title-input" for="localidad">Localidad</label>
                   <mat-select formControlName="localidad"
-                    placeholder="{{ locationId ? locationId : 'Seleccionar Localidad' }}"
+                    placeholder="{{ location ? location: 'Seleccionar Localidad' }}"
                     (selectionChange)="onLocalidadSelectionChange($event.value)">
                     <mat-option *ngFor="let loc of localidades" [value]="loc.name">
                       {{ loc.name }}

@@ -1,0 +1,36 @@
+<div class="container">
+  <mat-card class="main-card">
+    <div class="card user-card">
+      <div class="user-content">
+        <div class="avatar">
+          <div class="avatar-circle">
+            <mat-icon class="avatar-icon">person</mat-icon>
+          </div>
+        </div>
+        <div class="titulo-perfil-avatar">
+          <div class="titulo-welcome">
+            <p class="email">Email: {{ userEmail }}</p>
+          </div>
+        </div>
+      </div>
+      <h2 class="titulo-chacra">Chacras</h2>
+    </div>
+
+    <div class="card-campos-section">
+      <div class="campos-container">
+        <div class="campo-card" *ngFor="let chacra of chacras">
+          <img src="/assets/img/Chacra_{{ chacra.id }}.png" alt="Chacra {{ chacra.id }}">
+          <h3>{{ chacra.name }}</h3>
+          <p>
+            <span class="campo-variable">Localidad:</span> {{ chacra.address.location.name }}
+            <img src="assets/img/location.svg" alt="Icono" class="icono_location">
+          </p>
+          <p><span class="campo-variable">Dirección:</span> {{ chacra.address.address }}</p>
+          <p><span class="campo-variable">Hectáreas:</span> {{ chacra.dimensions }}</p>
+          <p><span class="campo-variable">Observaciones:</span> {{ chacra.observation }}</p>
+          <button mat-raised-button class="ver-mas-button" (click)="verMas(chacra)">Ver Más</button>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>

@@ -14,6 +14,7 @@ import { InformesComponent } from './informes/informes.component';
 import { ConfiguracionComponent } from './configuracion/configuracion.component';
 import { PerfilProductorComponent } from './productores/perfil-productor/perfil-productor.component';
 import { NuevoUsuarioComponent } from './productores/nuevo-usuario/nuevo-usuario.component';
+import { ChacrasPerfilComponent } from './chacras-perfil/chacras-perfil.component';
 const routes: Routes = [
   {
     path: 'dashboard-backoffice',
@@ -26,6 +27,7 @@ const routes: Routes = [
       { path: 'perfil-productor', component: PerfilProductorComponent },
       { path: 'nuevo-usuario', component: NuevoUsuarioComponent },
       { path: 'chacras', component: ChacrasComponent },
+      { path: 'chacras-perfil', component: ChacrasPerfilComponent },
       { path: 'lotes', component: LotesComponent },
       { path: 'calendarios', component: CalendariosComponent },
       { path: 'notificacion', component: NotificacionComponent },
