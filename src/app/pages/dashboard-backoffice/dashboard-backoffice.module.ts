@@ -80,12 +80,12 @@ import { ChacrasPerfilComponent } from './chacras-perfil/chacras-perfil.componen
     MatFormFieldModule,
     MatAutocompleteModule,
     MatOptionModule,
-    MatSelectModule,
     FormsModule,
     ReactiveFormsModule,
     BrowserModule,
     MatIconModule,
     MatCheckboxModule,
+    MatSelectModule,
     SharedModule
   ],
 })

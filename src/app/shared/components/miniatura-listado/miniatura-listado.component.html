@@ -1,1 +1,11 @@
-<p>calendario works!</p>
+<div class="card-campos-section">
+  <div class="campos-container" >
+    <div class="campo-card">
+      <img src="assets/img/lote_1.svg" alt="Campo">
+      <p *ngFor="let item of dataView">
+        <span class="campo-variable">{{item?.label}}</span> {{ this.getValue(objeto,item.field)}}
+      </p>
+      <button mat-raised-button class="ver-mas-button" (click)="verMas(objeto)">Ver Más</button>
+    </div>
+  </div>
+</div>

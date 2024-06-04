@@ -1,1 +1,28 @@
-<p>configuracion works!</p>
+
+<div class="container">
+  <div class="titulo-perfil">
+    <span>Configuración </span>
+  </div>
+
+<mat-card>
+  <div class="field-container">
+
+    <mat-select class="field-input" placeholder="Seleccione un listado" (selectionChange)="cambiarConfig($event)" [(value)]="opcionSeleccionada">
+      <mat-option value="Drones" de>Lista de Drones</mat-option>
+      <mat-option value="insumos">Lista de Insumos</mat-option>
+    </mat-select>
+
+    <button mat-raised-button class="nuevoUsuario-button" (click)="nuevo()">
+      Agregar<mat-icon style="font-size: 20px; position: relative; top: 1px; right: 3px;">add</mat-icon>
+    </button>
+  </div>
+
+  <div class="listado-container">
+    <div *ngFor="let miniatura of listado">
+      <app-miniatura-listado [dataView]="dataView" [objeto]="miniatura"></app-miniatura-listado>
+    </div>
+  </div>
+</mat-card>
+
+</div>
+
