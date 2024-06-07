@@ -15,6 +15,11 @@ import { ConfiguracionComponent } from './configuracion/configuracion.component'
 import { PerfilProductorComponent } from './productores/perfil-productor/perfil-productor.component';
 import { NuevoUsuarioComponent } from './productores/nuevo-usuario/nuevo-usuario.component';
 import { ChacrasPerfilComponent } from './chacras-perfil/chacras-perfil.component';
+import { CargarChacrasComponent } from './chacras/cargar-chacras/cargar-chacras.component';
+import { ChacrasGeolocalizarComponent } from './chacras/chacras-geolocalizar/chacras-geolocalizar.component';
+import { DetalleChacraComponent } from './chacras/detalle-chacra/detalle-chacra.component';
+import { ChacrasLoteComponent } from './chacras/chacras-lote/chacras-lote.component';
+import { CargarLotesComponent } from './chacras/cargar-lotes/cargar-lotes.component';
 const routes: Routes = [
   {
     path: 'dashboard-backoffice',
@@ -28,6 +33,11 @@ const routes: Routes = [
       { path: 'nuevo-usuario', component: NuevoUsuarioComponent },
       { path: 'chacras', component: ChacrasComponent },
       { path: 'chacras-perfil', component: ChacrasPerfilComponent },
+      { path: 'detalle-chacra', component: DetalleChacraComponent },
+      { path: 'chacras-geolocalizar', component: ChacrasGeolocalizarComponent },
+      { path: 'cargar-chacras', component: CargarChacrasComponent },
+      { path: 'chacras-lote', component: ChacrasLoteComponent },
+      { path: 'cargar-lotes', component: CargarLotesComponent },
       { path: 'lotes', component: LotesComponent },
       { path: 'calendarios', component: CalendariosComponent },
       { path: 'notificacion', component: NotificacionComponent },

@@ -1,0 +1,354 @@
+$primary-color: #015E83
+$secondary-color: #8FCA8F
+$hover-color: #32963f
+$error-color: #d9534f
+$light-grey: #f4f4f4
+$dark-grey: #454545
+$medium-grey: #808080
+$white-color: #ddd
+$default: #FFFFFF
+$icon-color: #808080
+$font-family: 'Montserrat', sans-serif
+
+body
+  font-family: $font-family
+
+.titulo-bienvenida h2
+  color: $dark-grey
+  font-size: 1.5em
+  font-weight: bold
+  font-family: 'Montserrat', sans-serif
+  padding: 20px
+
+.container
+  display: flex
+  flex-direction: column
+  justify-content: center
+  margin-bottom: 10em
+
+  .card-map
+    background-color: $default
+    padding: 20px
+    border-radius: 10px
+    margin: 20px
+    width: 55%
+    margin-top: 2%
+    margin-left: 41.5%
+
+  .card-user
+    display: flex
+    background: linear-gradient(to bottom, #015E83 40%, #015E83 100%)
+    padding: 20px
+    border-radius: 30px
+    margin: 20px
+    width: 95%
+    margin-top: -12px
+    gap: 10px
+
+    &.user-card
+      display: flex
+      margin-top: 8px
+      flex-direction: row
+      align-items: center
+      gap: 20px
+
+    .avatar
+      display: flex
+      justify-content: center
+      align-items: center
+      border-radius: 50%
+      border: 3px solid $primary-color
+      width: 100px
+      height: 100px
+      background-color: white
+
+      mat-icon
+        display: contents
+        color: $primary-color
+        font-size: 70px
+
+    .flecha-doble
+      width: 2.5em
+      position: relative
+      right: 0.5em
+      bottom: 0em
+    .volver-button
+      display: flex
+      align-items: center
+      cursor: pointer
+      margin-top: 10px
+      margin-left: auto
+
+    .letra_btn_volver
+      font-size: 12px
+      font-family: $font-family
+      color: $default
+      font-weight: bold
+  p
+    font-size: 15px
+    color: $icon-color
+    font-weight: bold
+
+  .name
+    font-size: 14px
+    color: $primary-color
+    font-weight: bold
+    font-family: $font-family
+
+  .email
+    font-size: 14px
+    color: $primary-color
+    font-weight: bold
+    font-family: $font-family
+
+  .contacto
+    font-size: 14px
+    color: $primary-color
+    font-weight: bold
+    font-family: $font-family
+
+  .datos-perfil-user
+    position: relative
+    left: 1em
+
+  .email, .name, .contacto
+    font-size: 14px
+    color: $white-color
+    font-weight: bold
+    font-family: $font-family
+
+  .geo-container
+    flex-direction: column
+    align-items: center
+    margin-top: 20px
+    width: 100%
+
+  .card-search
+    background-color: #FFFFFF
+    padding: 20px
+    border-radius: 10px
+    margin: 20px
+    width: 36%
+    position: absolute
+    height: 26em
+    top: 34em
+    flex-direction: column
+    justify-content: space-between
+    display: flex
+    flex-direction: column
+
+  mat-select
+    width: 95%
+    padding: 9px
+    font-family: "Montserrat", sans-serif
+    font-size: 13px
+    color: #808080
+    font-weight: 400
+    border: 1px solid $medium-grey
+    border-radius: 4px
+    background-color: white
+    height: 17px
+    margin-top: 2%
+
+    &:focus
+      outline: none
+      white-color: $primary-color
+      box-shadow: 0 0 5px $primary-color
+
+      &:nth-child(1),
+      &:nth-child(2)
+        display: flex
+        gap: 20px
+
+  .titulo-registrar-campo
+    color: #015E83
+    font-family: "Montserrat", sans-serif
+    font-size: 1.5em
+    font-weight: bold
+    position: absolute
+    top: -8.1em
+    left: 1em
+
+  input
+    margin-right: 10px
+    padding: 10px
+    border: 1px solid $white-color
+    background-color: white
+    border-radius: 4px
+    margin-bottom: -2%
+
+  button
+    padding: 8px 18px
+    border: 1px solid transparent
+    border-radius: 5px
+    cursor: pointer
+    transition: background-color 0.3s, white-color 0.3s
+    font-family: 'Montserrat', sans-serif
+    color: $white-color
+    background-color: $secondary-color
+    font-weight: bold
+    margin-right: 10px
+
+  .botones-servicio
+    display: flex
+    gap: 15px
+    position: relative
+    top: -6.4em
+    left: 0em
+    flex-direction: column
+
+    .register-button
+      display: flow
+      background-color: $primary-color
+      color: $default
+      width: 100%
+      justify-content: space-between
+
+    .cancel-button
+      display: flow
+      background-color: $default
+      border-color: $primary-color
+      color: $primary-color
+      width: 100%
+      justify-content: space-between
+      white-color: darken($primary-color, 10%)
+
+#map
+  width: 100%
+  height: 500px
+  border-radius: 4px
+  border: 1px solid #015E83
+
+.card
+  display: flex
+  flex-direction: columns
+  width: 95%
+  border-radius: 8px
+  position: absolute
+  padding: 10px
+  top: -9em
+
+.fields-list
+  display: flex
+  flex-direction: column
+
+.card-item
+  padding: 2px 0
+  border-bottom: 1px solid #eee
+  align-items: center
+  justify-content: space-between
+  font-family: 'Montserrat', sans-serif
+  color: #333
+
+  & p
+    display: flex
+    gap: 2px
+    align-items: center
+    margin: 0
+
+  .check-icon,
+  .clear-icon
+    font-size: 16px
+    margin-left: 5px
+    margin-top: 2px
+
+  .check-icon
+    color: green
+
+  .clear-icon
+    color: red
+    margin-bottom: -8px
+
+  &:last-child
+    border-bottom: none
+
+strong
+  color: #015E83
+
+.with-dot::before
+  content: "\2022"
+  font-size: 25px
+  color: $primary-color
+  margin-right: 5px
+
+@media screen and (max-width: 768px)
+
+  .titulo-bienvenida h2
+    padding: 0
+
+  .container .name
+    font-size: 14px
+    color: $default
+
+  .container
+    flex-direction: column
+    align-items: center
+    .card
+      position: relative
+      top: -17em
+    .titulo-bienvenida
+      order: -3
+    .card-user
+      width: 86%
+      margin-bottom: 24%
+
+    .card-user .avatar
+      height: 70px
+      width: 70px
+
+    .card-user .avatar mat-icon
+      font-size: 65px
+
+    .flecha-doble
+      width: 2.5em
+      position: relative
+      right: 0.5em
+      bottom: 2em
+
+    .letra_btn_volver
+      display: none
+
+    .titulo-registrar-campo
+      margin-top: -24%
+
+    .card-search
+      width: 86%
+      margin-bottom: 25px
+      order: -1
+      height: 34vh
+      border-radius: 10px
+
+    .card-info
+      position: relative
+      bottom: 17em
+
+    .input-container input[type=text]
+      width: 100%
+      border: 1px solid #808080
+      border-radius: 4px
+      margin: 0%
+      margin-top: 6%
+
+    .input-container button[matSuffix]
+      right: -11px
+      top: 75%
+      color: #808080
+
+    .botones-servicio
+      margin-top: 23em
+
+    .register-button
+      background-color: $primary-color
+      width: 100%
+    .cancel-button
+      width: 100%
+
+  .container .card-map
+    width: 90%
+    top: 8.5em
+    left: -4em
+    position: relative
+  #map
+    width: 100%
+    order: 0
+    height: 250px

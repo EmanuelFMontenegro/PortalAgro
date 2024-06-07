@@ -1,0 +1,79 @@
+<div class="container">
+  <div class="titulo-bienvenida">
+    <span>¡Bienvenido!</span>
+  </div>
+  <div class="card user-card">
+    <div class="avatar">
+      <mat-icon>person</mat-icon>
+    </div>
+    <div class="user-info">
+      <p class="name">{{ nombre }} {{ apellido }}</p>
+      <p class="email">{{ email }}</p>
+    </div>
+    <div class="volver-button" (click)="volver()">
+      <img src="/assets/img/keyboard_double_arrow_left_24dp_FILL0_wght400_GRAD0_opsz24.svg" alt="flecha doble" class="flecha-doble">
+      <span class="letra_btn_volver">VOLVER ATRAS</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="titulo-registrar-campo">Registrar Chacra</h2>
+    <form class="solicitud-servicio-form" [formGroup]="chacraForm" (ngSubmit)=" registrarChacra(userId)">
+      <div class="campos-formulario">
+        <div class="grupo-campos">
+          <!-- Dirección -->
+          <div class="field-container">
+            <label class="field-label" for="direccion">Dirección</label>
+            <input matInput formControlName="address" placeholder="dirección del campo" required
+              (blur)="addressTouched = true">
+            <span *ngIf="chacraForm.get('address')?.hasError('required') && addressTouched" class="error-message">Este
+              campo es requerido</span>
+          </div>
+
+          <!-- Localidad -->
+          <div class="field-container">
+            <label class="field-label" for="localidad">Localidad</label>
+            <mat-select class="mat-select" formControlName="localidad" placeholder="seleccionar localidad">
+              <mat-option *ngFor="let loc of localidades" [value]="loc.id">
+                {{ loc.name }}
+              </mat-option>
+            </mat-select>
+          </div>
+
+          <!-- Nombre -->
+          <div class="field-container">
+            <label class="field-label">Nombre</label>
+            <input matInput formControlName="name" placeholder="nombre del campo" required (blur)="nameTouched = true">
+            <span *ngIf="chacraForm.get('name')?.hasError('required') && nameTouched" class="error-message">Este campo
+              es
+              requerido</span>
+          </div>
+
+          <!-- Dimensiones -->
+          <div class="field-container">
+            <label class="field-label">Dimensiones (Hectáreas)</label>
+            <input matInput formControlName="dimensions" type="number" placeholder="Ingresar valores en hectáreas"
+              required [min]="1" (blur)="dimensionsTouched = true">
+            <span *ngIf="chacraForm.get('dimensions')?.hasError('required') && dimensionsTouched"
+              class="error-message">Este campo es requerido</span>
+            <span *ngIf="chacraForm.get('dimensions')?.hasError('min') && dimensionsTouched" class="error-message">El
+              valor debe ser mayor a 0</span>
+          </div>
+
+        </div>
+
+        <div class="field-container-observaciones">
+          <label class="field-label">Observaciones</label>
+          <textarea matInput class="field-input-obs" formControlName="observation"></textarea>
+
+        </div>
+      </div>
+
+      <div class="botones-servicio">
+        <button mat-raised-button class="cancel-button" type="button" (click)="cancelar()">Cancelar</button>
+        <button mat-raised-button class="register-button" type="submit" [disabled]="!chacraForm.valid">Registrar
+          Chacra</button>
+      </div>
+    </form>
+  </div>
+</div>

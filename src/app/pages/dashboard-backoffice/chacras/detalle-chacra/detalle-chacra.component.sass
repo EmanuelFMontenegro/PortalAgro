@@ -1,11 +1,11 @@
-$primary-color: #0F8054
+$primary-color: #015E83
 $secondary-color: #8FCA8F
 $hover-color: #32963f
 $error-color: #d9534f
 $light-grey: #f4f4f4
 $dark-grey: #454545
 $medium-grey: #808080
-$border-color: #FFFFFF
+$white-color: #FFFFFF
 $icon-color: #808080
 $font-family: 'Montserrat', sans-serif
 
@@ -46,14 +46,14 @@ body
     margin-left: auto
 
   .flecha-doble
-    width: 2em
+    width: 1.5em
     position: relative
     right: 0.5em
 
   .letra_btn_volver
     font-size: 12px
     font-family: $font-family
-    color: $border-color
+    color: $white-color
     font-weight: bold
 
   mat-icon
@@ -69,7 +69,7 @@ body
     margin-top: -12px
 
     &.user-card
-      background: linear-gradient(to bottom, #3BA549 40%, #0F8054 100%)
+      background: linear-gradient(to bottom, #015E83 40%, #015E83 100%)
       display: flex
       margin-top: 8px
       flex-direction: row
@@ -87,30 +87,40 @@ body
 
         mat-icon
           display: contents
-          color: $hover-color
+          color: $primary-color
           font-size: 70px
 
-    p
-      font-family: "Montserrat", sans-serif
-      font-size: 15px
-      color: #454545
-      display: flex
-      gap: 5px
-      flex-wrap: wrap
+    // p
+    //   font-family: "Montserrat", sans-serif
+    //   font-size: 15px
+    //   color: #454545
+    //   display: flex
+    //   gap: 5px
+    //   flex-wrap: wrap
 
-    .name
-      font-family: $font-family
-      font-size: 16px
-      color: $border-color
-      font-weight: bold
-      margin-left: 5%
+    // .name
+    //   font-family: $font-family
+    //   font-size: 16px
+    //   color: $white-color
+    //   font-weight: bold
+    //   margin-left: 5%
 
-    .email
-      font-family: $font-family
-      font-size: 15px
-      color: $border-color
-      font-weight: bold
-      margin-left: 5%
+    // .email
+    //   font-family: $font-family
+    //   font-size: 15px
+    //   color: $white-color
+    //   font-weight: bold
+    //   margin-left: 5%
+
+.datos-perfil-user
+  position: relative
+  left: 1em
+
+.email, .name, .contacto
+  font-size: 14px
+  color: $white-color
+  font-weight: bold
+  font-family: $font-family
 
 .card-campo-container
   background-color: #FFFFFF
@@ -133,7 +143,7 @@ body
     margin-bottom: 55px
 
   .localidad
-    color: #3BA549
+    color: #015E83
     margin-bottom: 10px
     font-size: 15px
     font-weight: bold
@@ -144,7 +154,7 @@ body
       position: relative
       left: 5px
   .direccion
-    color: #3BA549
+    color: #015E83
     margin-bottom: 10px
     font-size: 15px
     font-weight: bold
@@ -155,7 +165,7 @@ body
       position: relative
       left: 5px
   .hectareas
-    color: #3BA549
+    color: #015E83
     margin-bottom: 10px
     font-size: 15px
     font-weight: bold
@@ -166,7 +176,7 @@ body
       position: relative
       left: 5px
   .descripcion
-    color: #3BA549
+    color: #015E83
     margin-bottom: 10px
     font-size: 15px
     font-weight: bold
@@ -198,7 +208,6 @@ body
     object-fit: cover
     width: 90%
 
-
   .card-campo-secundarias
     display: flex
     gap: 10px
@@ -208,7 +217,7 @@ body
   .foto-campo
     object-fit: cover
     width: 95%
-    border-radius: 1px solid $primary-color
+    border-radius: 1px soli #015E83
     height: 91%
 
     .campo-details-card h4,
@@ -232,14 +241,13 @@ body
     align-items: center
 
   button
-    background-color: #0F8054
-    width: 100%
+    background-color: #015E83
     color: white
     cursor: pointer
     padding: 12px 18px
     border: 1px solid transparent
     border-radius: 12px
-    transition: background-color 0.3s, border-color 0.3s
+    transition: background-color 0.3s, white-color 0.3s
     font-size: 0.7em
     font-family: "Montserrat", sans-serif
     font-weight: bold
@@ -249,19 +257,19 @@ body
     height: auto
     margin-left: 5px
     vertical-align: middle
-    fill: #0F8054
+    fill: #015E83
 
   button.geolocalizar
     width: 100%
     border-radius: 12px
     padding: 9px 18px
     background-color: white
-    border: 2px solid #0F8054
-    color: #0F8054
+    border: 2px solid #015E83
+    color: #015E83
 
   button:hover
     // background-color: #f8f8f8
-    border-color: darken($primary-color, 10%)
+    white-color: darken($primary-color, 10%)
 
 #map
   object-fit: cover

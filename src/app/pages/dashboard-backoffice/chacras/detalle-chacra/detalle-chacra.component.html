@@ -8,9 +8,10 @@
     <div class="avatar">
       <mat-icon>person</mat-icon>
     </div>
-    <div class="user-info">
-      <p class="name">{{ nombre }} {{ apellido }}</p>
-      <p class="email">{{ userEmail }}</p>
+    <div class="datos-perfil-user">
+      <p class="name">Nombre: {{ nombre }} {{ apellido }}</p>
+      <p class="email">Email: {{ email }}</p>
+      <p class="contacto">Contacto: {{ contacto }}</p>
     </div>
     <div class="volver-button" (click)="volver()">
        <img src="/assets/img/keyboard_double_arrow_left_24dp_FILL0_wght400_GRAD0_opsz24.svg" alt="flecha doble" class="flecha-doble">
@@ -29,23 +30,23 @@
     </div>
 
     <div class="campo-details-card">
-      <h4 class="title-campo-details">{{ campoSeleccionado.name }}</h4>
+      <h4 class="title-campo-details">{{ chacraSeleccionada.name }}</h4>
       <div class="details localidad">
         <span class="localidad">Localidad:</span>
-        <span class="loc_details">{{ campoSeleccionado.address.location.name }}</span>
+        <span class="loc_details">{{ chacraSeleccionada.address.location.name }}</span>
         <img src="assets/img/location.svg" alt="Icono" class="icono_location">
       </div>
       <div class="details direccion">
         <span>Dirección:</span>
-        <span class="direc_details">{{ campoSeleccionado.address.address }}</span>
+        <span class="direc_details">{{ chacraSeleccionada.address.address }}</span>
       </div>
       <div class="details hectareas">
         <span>Hectáreas:</span>
-        <span class="hect_details">{{ campoSeleccionado.dimensions }}</span>
+        <span class="hect_details">{{ chacraSeleccionada.dimensions }}</span>
       </div>
       <div class="details descripcion">
         <span>Descripción:</span>
-        <span class="desc_details" >{{ campoSeleccionado.observation }}</span>
+        <span class="desc_details" >{{ chacraSeleccionada.observation }}</span>
       </div>
       <div class="campo-buttons">
         <button class="geolocalizar" (click)="geolocalizar()">Geolocalizar <img src="assets/img/location.svg" alt="Icono" class="icono_location"></button>
@@ -55,3 +56,4 @@
 
   </div>
 </div>
+

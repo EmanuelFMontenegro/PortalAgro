@@ -15,7 +15,11 @@ import { CalendariosComponent } from './calendarios/calendarios.component';
 import { NotificacionComponent } from './notificacion/notificacion.component';
 import { PlanificacionesComponent } from './planificaciones/planificaciones.component';
 import { InformesComponent } from './informes/informes.component';
-import { ConfiguracionComponent } from './configuracion/configuracion.component';
+import { ConfiguracionComponent } from './configuracion/configuracion.component';import { ChacrasPerfilComponent } from './chacras-perfil/chacras-perfil.component';
+import { CargarChacrasComponent } from './chacras/cargar-chacras/cargar-chacras.component';
+import { ChacrasGeolocalizarComponent } from './chacras/chacras-geolocalizar/chacras-geolocalizar.component';
+import { DetalleChacraComponent } from './chacras/detalle-chacra/detalle-chacra.component';
+import { ChacrasLoteComponent } from './chacras/chacras-lote/chacras-lote.component';
 
 // Angular Material
 import { MatCardModule } from '@angular/material/card';
@@ -45,7 +49,9 @@ import { NuevoUsuarioComponent } from './productores/nuevo-usuario/nuevo-usuario
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { BrowserModule } from '@angular/platform-browser';
-import { ChacrasPerfilComponent } from './chacras-perfil/chacras-perfil.component';
+import { MatDialog } from '@angular/material/dialog';
+import { CargarLotesComponent } from './chacras/cargar-lotes/cargar-lotes.component';
+
 
 @NgModule({
   declarations: [
@@ -64,6 +70,11 @@ import { ChacrasPerfilComponent } from './chacras-perfil/chacras-perfil.componen
     PerfilProductorComponent,
     NuevoUsuarioComponent,
     ChacrasPerfilComponent,
+    CargarChacrasComponent,
+    ChacrasGeolocalizarComponent,
+    DetalleChacraComponent,
+    ChacrasLoteComponent,
+    CargarLotesComponent,
   ],
   imports: [
     CommonModule,
@@ -84,7 +95,8 @@ import { ChacrasPerfilComponent } from './chacras-perfil/chacras-perfil.componen
     ReactiveFormsModule,
     BrowserModule,
     MatIconModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatDialogModule
   ],
 })
 export class DashboardBackofficeModule {}
