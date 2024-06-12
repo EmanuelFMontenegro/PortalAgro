@@ -1,6 +1,6 @@
 <div class="container">
   <div class="titulo-perfil">
-    <span >!Bienvenido, Acá podrás gestionar, los usuarios de los Productores </span>
+    <span>!Bienvenido, Acá podrás gestionar, los usuarios de los Productores </span>
   </div>
   <mat-card class="main-card">
     <div class="card user-card">
@@ -20,62 +20,59 @@
       <h2 class="titulo-chacra">Productores</h2>
     </div>
 
-  <div class="field-container">
+    <div class="field-container">
 
-    <mat-select class="field-input" placeholder="Filtrar por" (selectionChange)="aplicarFiltro($event)">
-      <mat-option value="nombre">Nombre</mat-option>
-      <mat-option value="apellido">Apellido</mat-option>
-      <mat-option value="localidad">Localidad</mat-option>
-    </mat-select>
-
-    <input *ngIf="!mostrarMatSelectLocalidades" class="field-input" matInput [placeholder]="placeholderText"
-    [(ngModel)]="nombreABuscar" >
-
-
-    <ng-container *ngIf="mostrarMatSelectLocalidades">
-      <mat-select class="field-input" placeholder="Seleccionar Localidad" [(ngModel)]="Buscar">
-        <mat-option *ngFor="let localidad of localidades" [value]="localidad.name">{{ localidad.name }}</mat-option>
+      <mat-select class="field-input" placeholder="Filtrar por" (selectionChange)="aplicarFiltro($event)">
+        <mat-option value="nombre">Nombre</mat-option>
+        <mat-option value="apellido">Apellido</mat-option>
+        <mat-option value="localidad">Localidad</mat-option>
       </mat-select>
-    </ng-container>
 
-    <button mat-raised-button class="clear-button" (click)="limpiarTexto()">
-      Limpiar<img src="assets/img/ink_eraser_FILL0_wght400_GRAD0_opsz24.svg"
-        style="filter: invert(70%) sepia(60%) saturate(10000%) hue-rotate(130deg)" alt="IconoBorrar"></button>
+      <input *ngIf="!mostrarMatSelectLocalidades" class="field-input" matInput [placeholder]="placeholderText"
+        [(ngModel)]="nombreABuscar">
 
-    <button mat-raised-button class="active-button" (click)="activarFiltro()">Filtrar
-      <img src="assets/img/filter_alt_FILL0_wght400_GRAD0_opsz24.svg"
-        style="filter: invert(70%) sepia(60%) saturate(10000%) hue-rotate(130deg)" alt="IconoBorrar">
-    </button>
-    <button mat-raised-button class="nuevoUsuario-button" (click)="BtnNuevoUsuario()">
-      Nuevo Usuario<mat-icon style="font-size: 20px; position: relative; top: 1px; right: 3px;">add</mat-icon>
-    </button>
-  </div>
 
-  <div class="card-usuarios-productores">
-    <!-- Mostrar tarjetas de usuarios -->
-    <div class="campo-card" *ngFor="let usuario of usuarios">
+      <ng-container *ngIf="mostrarMatSelectLocalidades">
+        <mat-select class="field-input" placeholder="Seleccionar Localidad" [(ngModel)]="Buscar">
+          <mat-option *ngFor="let localidad of localidades" [value]="localidad.name">{{ localidad.name }}</mat-option>
+        </mat-select>
+      </ng-container>
 
-      <img class="img_prod" src="assets/img/avatar_prod.svg" alt="Avatar">
+      <button mat-raised-button class="clear-button" (click)="limpiarTexto()">
+        Limpiar<img src="assets/img/ink_eraser_24dp_FILL0_wght400_GRAD0_opsz24.svg" alt="IconoBorrar"></button>
 
-      <div class="user-info">
-        <p class="with-dot">
-          <span class="user-titulos">Nombre:</span>
-          <span class="card-variable">{{ usuario.nombre }}</span>
-        </p>
-        <p class="with-dot">
-          <span class="user-titulos">Apellido:</span>
-          <span class="card-variable">{{ usuario.apellido }}</span>
-        </p>
-        <p class="with-dot">
-          <span class="user-titulos">Localidad:</span>
-          <span class="card-variable">{{ usuario.localidad }}</span>
-        </p>
-      </div>
-      <div class="acciones">
-        <button mat-icon-button aria-label="verMas" class="verMas-button" (click)="verMas(usuario)">
-          <span style="color: #FFFFFF;">Ver Más</span>
-        </button>
+      <button mat-raised-button class="active-button" (click)="activarFiltro()">Filtrar
+        <img src="assets/img/filter_alt_24dp_FILL0_wght400_GRAD0_opsz24.svg" alt="IconoBorrar">
+      </button>
+      <button mat-raised-button class="nuevoUsuario-button" (click)="BtnNuevoUsuario()">
+        Nuevo Usuario<mat-icon style="font-size: 20px; position: relative; top: 1px; right: 3px;">add</mat-icon>
+      </button>
+    </div>
+
+    <div class="card-usuarios-productores">
+      <!-- Mostrar tarjetas de usuarios -->
+      <div class="campo-card" *ngFor="let usuario of usuarios">
+
+        <img class="img_prod" src="assets/img/avatar_prod.svg" alt="Avatar">
+
+        <div class="user-info">
+          <p class="with-dot">
+            <span class="user-titulos">Nombre:</span>
+            <span class="card-variable">{{ usuario.nombre }}</span>
+          </p>
+          <p class="with-dot">
+            <span class="user-titulos">Apellido:</span>
+            <span class="card-variable">{{ usuario.apellido }}</span>
+          </p>
+          <p class="with-dot">
+            <span class="user-titulos">Localidad:</span>
+            <span class="card-variable">{{ usuario.localidad }}</span>
+          </p>
+        </div>
+        <div class="acciones">
+          <button mat-icon-button aria-label="verMas" class="verMas-button" (click)="verMas(usuario)">
+            <span style="color: #FFFFFF;">Ver Más</span>
+          </button>
+        </div>
       </div>
     </div>
-  </div>
-

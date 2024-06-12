@@ -31,7 +31,7 @@ interface DatosUsuario {
 @Component({
   selector: 'app-cargar-chacras',
   templateUrl: './cargar-chacras.component.html',
-  styleUrls: ['./cargar-chacras.component.sass']
+  styleUrls: ['./cargar-chacras.component.sass'],
 })
 export class CargarChacrasComponent implements OnInit {
   nombre: string = '';
@@ -103,8 +103,6 @@ export class CargarChacrasComponent implements OnInit {
   DatosUser(userId: number, personId: number) {
     this.apiService.getPersonByIdProductor(userId, personId).subscribe(
       (response: DatosUsuario) => {
-      
-
         if (response) {
           this.nombre = response.name;
           this.apellido = response.lastname;
@@ -145,8 +143,6 @@ export class CargarChacrasComponent implements OnInit {
     );
   }
 
-
-
   registrarChacra(userId: number) {
     // Verificar si el usuario está autenticado
     if (!userId) {
@@ -164,7 +160,13 @@ export class CargarChacrasComponent implements OnInit {
       const observationControl = this.chacraForm.get('observation');
 
       // Verificar que los controles no son nulos
-      if (nameControl && dimensionsControl && addressControl && localidadControl && observationControl) {
+      if (
+        nameControl &&
+        dimensionsControl &&
+        addressControl &&
+        localidadControl &&
+        observationControl
+      ) {
         // Construir objeto campoData para enviar al backend
         const fixedGeolocation = '';
         const campoData: any = {
@@ -190,19 +192,30 @@ export class CargarChacrasComponent implements OnInit {
             // Error al registrar el campo: mostrar mensaje de error
             console.error('Error al registrar el campo:', error);
             if (error.error && error.error.message) {
-              this.toastr.error('La descripción del campo es muy grande.', 'Atención');
+              this.toastr.error(
+                'La descripción del campo es muy grande.',
+                'Atención'
+              );
             } else {
-              this.toastr.error('Error al registrar el campo. Detalles: ' + error.message, 'Error');
+              this.toastr.error(
+                'Error al registrar el campo. Detalles: ' + error.message,
+                'Error'
+              );
             }
           }
         );
       } else {
         // Al menos uno de los controles del formulario es nulo
-        console.error('Error: Al menos uno de los controles del formulario es nulo.');
+        console.error(
+          'Error: Al menos uno de los controles del formulario es nulo.'
+        );
       }
     } else {
       // El formulario no es válido: mostrar mensaje de error
-      this.toastr.error('Por favor, completa todos los campos requeridos', 'Error');
+      this.toastr.error(
+        'Por favor, completa todos los campos requeridos',
+        'Error'
+      );
     }
   }
 
@@ -211,6 +224,6 @@ export class CargarChacrasComponent implements OnInit {
   }
 
   cancelar() {
-    this.router.navigate(['dashboard-backoffice/perfil-productor']);
+    this.router.navigate(['dashboard-backoffice/chacras-perfil']);
   }
 }

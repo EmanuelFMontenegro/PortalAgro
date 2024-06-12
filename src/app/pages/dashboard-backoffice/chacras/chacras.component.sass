@@ -295,33 +295,35 @@ $font-family: 'Montserrat', sans-serif
   font-weight: bold
 
 @media screen and (max-width: 768px)
-
   .card
     display: block
     width: 100%
-    margin-left: -0.7em
+    margin-left: 0
 
   .card-campos-section
     width: 100%
 
+  .field-container
+    display: flex
+    gap: 10px
+    flex-direction: column
+
   .botones-servicio
     display: flex
-    justify-content: center
+    justify-content: space-around
     margin-top: 2%
-    margin-left: 10%
+    margin-left: 0
+  .clear-button
+    width: 100%
 
   .campo-card
-    left: -1.2em
-    width: 95%
     position: relative
+    top: 7em
+    left: -1.5em
 
   .main-card
-    width: 98%
+    width: 100% // Ajuste del ancho para pantallas móviles
 
-  // .user-content
-  //   flex-direction: column
-  //   align-items: center
-  //   gap: 10px
   .user-content
     display: none
 
@@ -331,15 +333,9 @@ $font-family: 'Montserrat', sans-serif
     text-align: center
     font-size: 17px
 
-  .titulo-perfil-avatar
+  .titulo-avatar
     margin-top: 10px
     text-align: center
-
-  .botones-servicio
-    display: flex
-    justify-content: center
-    margin-top: 2%
-    margin-left: 10%
 
   .register-button
     width: 100%
