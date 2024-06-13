@@ -2,6 +2,7 @@ import { Component, AfterViewInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Router } from '@angular/router';
+import { DashboardBackOfficeService } from './dashboard-backoffice.service';
 
 @Component({
   selector: 'app-dashboard-backoffice',
@@ -12,11 +13,21 @@ export class DashboardBackofficeComponents  implements AfterViewInit {
   @ViewChild('sidenav') sidenav!: MatSidenav;
   isScreenSmall: boolean;
 
+  titulo:string | undefined;
+  subTitulo:string | undefined;
+
   constructor(
     private breakpointObserver: BreakpointObserver,
+    public dashboardBackOffice: DashboardBackOfficeService,
     private router: Router
   ) {
     this.isScreenSmall = window.innerWidth < 768;
+    this.dashboardBackOffice.dataTitulo.subscribe(
+      data => {
+        if(data?.titulo) this.titulo = data?.titulo
+        if(data?.subTitulo) this.subTitulo = data?.subTitulo
+      }
+    )
   }
 
   ngAfterViewInit(): void {

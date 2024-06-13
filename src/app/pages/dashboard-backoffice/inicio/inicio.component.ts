@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/AuthService';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
+import { DashboardBackOfficeService } from '../dashboard-backoffice.service';
 
 interface CustomJwtPayload {
   userId: number;
@@ -59,8 +60,12 @@ export class InicioComponent implements OnInit {
     private apiService: ApiService,
     private toastr: ToastrService,
     private http: HttpClient,
-    private router: Router
-  ) {}
+    private router: Router,
+    public dashboardBackOffice: DashboardBackOfficeService)
+    {
+      this.dashboardBackOffice.dataTitulo.next({ titulo: `¡Bienvenido, ${this.nombre}  ${this.apellido} !` , subTitulo: ''})
+
+  }
 
   ngOnInit(): void {
     this.userEmail = this.authService.getUserEmail();
@@ -92,7 +97,7 @@ export class InicioComponent implements OnInit {
       this.companyId = 1;
 
       if (this.userId !== null && this.companyId !== null) {
-        
+
         this.apiService.findUserById(this.companyId,this.userId).subscribe(
           (data) => {
 

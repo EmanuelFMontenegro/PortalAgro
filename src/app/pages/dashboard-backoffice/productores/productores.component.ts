@@ -10,6 +10,7 @@ import { FormControl } from '@angular/forms';
 import { startWith, map } from 'rxjs/operators';
 import { debounceTime } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
+import { DashboardBackOfficeService } from '../dashboard-backoffice.service';
 
 interface CustomJwtPayload {
   userId: number;
@@ -53,9 +54,11 @@ export class ProductoresComponent implements OnInit {
     private apiService: ApiService,
     private toastr: ToastrService,
     private router: Router,
-    private http: HttpClient
-  ) {}
-
+    private http: HttpClient,
+    public dashboardBackOffice: DashboardBackOfficeService
+  ) {
+    this.dashboardBackOffice.dataTitulo.next({ titulo: `¡Bienvenido!, Acá podrás gestionar, los usuarios de los Productores` , subTitulo: ''})
+  }
   ngOnInit(): void {
     this.decodeToken();
     this.cargarDatosDeUsuario();

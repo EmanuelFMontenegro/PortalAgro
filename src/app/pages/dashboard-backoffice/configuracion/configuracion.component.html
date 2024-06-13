@@ -1,15 +1,12 @@
 
-<div class="container">
-  <div class="titulo-perfil">
-    <span>Configuración </span>
+  <div class="titulo-principal">
+     {{opcionSeleccionada}}
   </div>
 
-<mat-card>
   <div class="field-container">
-
     <mat-select class="field-input" placeholder="Seleccione un listado" (selectionChange)="cambiarConfig($event)" [(value)]="opcionSeleccionada">
-      <mat-option value="Drones" de>Lista de Drones</mat-option>
-      <mat-option value="insumos">Lista de Insumos</mat-option>
+      <mat-option [value]="drones" de>Lista de Drones</mat-option>
+      <mat-option [value]="insumos">Lista de Insumos</mat-option>
     </mat-select>
 
     <button mat-raised-button class="nuevoUsuario-button" (click)="nuevo()">
@@ -17,12 +14,6 @@
     </button>
   </div>
 
-  <div class="listado-container">
-    <div *ngFor="let miniatura of listado">
-      <app-miniatura-listado [dataView]="dataView" [objeto]="miniatura"></app-miniatura-listado>
-    </div>
-  </div>
-</mat-card>
+  <miniatura [dataView]="dataView" [listado]="listado"></miniatura>
 
-</div>
 

@@ -1,11 +1,26 @@
-<div class="card-campos-section">
-  <div class="campos-container" >
-    <div class="campo-card">
-      <img src="assets/img/lote_1.svg" alt="Campo">
-      <p *ngFor="let item of dataView">
-        <span class="campo-variable">{{item?.label}}</span> {{ this.getValue(objeto,item.field)}}
-      </p>
-      <button mat-raised-button class="ver-mas-button" (click)="verMas(objeto)">Ver Más</button>
+<div class="miniatura-container-general">
+  <div class="miniatura-container" >
+    <div class="miniatura" *ngFor="let miniatura of listado">
+      <ng-container *ngFor="let item of dataView" >
+
+        <!-- IMAGEN -->
+        <img src="{{item.field}}" class="img-miniatura" alt="" *ngIf="item.tipoLabel == tipoImagen" >
+
+        <!-- TITULO -->
+        <h3 *ngIf="item.tipoLabel == tipoTitulo">{{this.getValue(miniatura,item.field)}}</h3>
+
+        <!-- SUB-TITULO -->
+        <p *ngIf="item.tipoLabel == tipoSubtitulo ">{{this.getValue(miniatura,item.field)}}</p>
+
+        <!-- SPAN -->
+        <p>
+          <span *ngIf="item.tipoLabel == tipoSpan" class="campo-variable" > {{item?.label}}: </span> {{ this.getValue(miniatura,item.field)}}
+        </p>
+
+        <button *ngIf="item.tipoLabel == tipoVerMas" mat-raised-button class="ver-mas-button" (click)="verMas(miniatura, item?.label, item?.field )">Ver Más</button>
+
+      </ng-container>
+
     </div>
   </div>
 </div>

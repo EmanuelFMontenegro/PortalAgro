@@ -1,7 +1,4 @@
 <div class="container">
-  <div class="titulo-perfil">
-    <span >¡Bienvenido, Acá podrás gestionar, las chacras de los Productores</span>
-  </div>
   <mat-card class="main-card">
     <div class="card user-card">
       <div class="user-content">
@@ -76,12 +73,12 @@
       <p><span class="campo-variable">Dirección:</span> {{ campo.address.address }}</p>
       <p><span class="campo-variable">Hectarias:</span> {{ campo.dimensions}}</p>
       <p><span class="campo-variable">Descripción:</span> {{ campo.observation }}</p>
-      <!-- <p><span class="campo-variable">Dirección:</span> {{ campo.address.address }}</p> -->
       <button mat-raised-button class="ver-mas-button" (click)="verMas(campo)">Ver Más</button>
     </div>
   </div>
 </div>
 
+<miniatura [dataView]="dataView" [listado]="campos"></miniatura>
 
 
 

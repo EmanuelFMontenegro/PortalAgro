@@ -7,7 +7,27 @@ import { Injectable } from "@angular/core";
 export class UtilsService {
 
 obtenerValor(objeto: any, ruta: string) {
-  return ruta.split('.').reduce((acc, clave) => acc && acc[clave], objeto);
+  if (!ruta) {
+    return null;
+  }
+
+  const keys = ruta.split('.');
+  let value = objeto;
+
+  if(keys){
+    for (const key of keys) {
+      if (value && typeof value === 'object' && key in value) {
+        value = value[key];
+      } else {
+        return null;
+      }
+    }
+  }else{
+    value[ruta]
+  }
+
+  return value;
+}
 }
 
-}
+

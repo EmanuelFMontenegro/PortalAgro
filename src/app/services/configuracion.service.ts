@@ -19,4 +19,19 @@ import { environment } from "../../environments/environment";
       return this.http.get(url);
     }
 
+    getDronesFiltrados(pageSize: number): Observable<any>{
+      let url =  `${environment.apiUrl}/dist/drone/all?sortBy=id&sortDir=DESC&pageSize=${pageSize}&pageNo=0&nickname=op&code=3&model=&brand=&isActive=true`;
+      return this.http.get(url);
+    }
+
+    postDrone(body: any){
+      let url = `${environment.apiUrl}/dist/drone`
+      return this.http.post(url, body);
+    }
+
+    putDrone(body: any , id: number){
+      let url = `${environment.apiUrl}/dist/drone/${id}`
+      return this.http.put(url, body);
+    }
+
   }

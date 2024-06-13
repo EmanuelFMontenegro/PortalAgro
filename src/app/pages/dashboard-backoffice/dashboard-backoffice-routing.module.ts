@@ -33,7 +33,11 @@ const routes: Routes = [
       { path: 'notificacion', component: NotificacionComponent },
       { path: 'planificaciones', component: PlanificacionesComponent },
       { path: 'informes', component: InformesComponent },
-      { path: 'configuracion', component: ConfiguracionComponent },
+      {
+        path: 'configuracion',
+        canActivate: [AuthGuard],
+        loadChildren: () => import('./configuracion/configuracion.module').then(x => x.ConfiguracionModule)
+      },
       { path: '', redirectTo: 'inicio', pathMatch: 'full' },
     ],
   },

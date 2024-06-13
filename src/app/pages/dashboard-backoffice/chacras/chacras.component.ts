@@ -14,6 +14,8 @@ import {
 import { Observable } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { TipoLabel, DataView } from 'src/app/shared/components/miniatura-listado/miniatura.model';
+import { DashboardBackOfficeService } from '../dashboard-backoffice.service';
 
 interface CustomJwtPayload {
   userId: number;
@@ -52,6 +54,25 @@ export class ChacrasComponent implements OnInit {
   nombreChacra: string = '';
   nombreProductor: string = '';
 
+  dataView: DataView [] = [
+
+    // IMAGEN
+    {label: '', field: 'assets/img/lote_1.svg', tipoLabel: TipoLabel.imagen},
+
+    // TITULO
+    {label: '', field: 'name', tipoLabel: TipoLabel.titulo},
+
+    // SPAN
+    {label: 'Localidad', field: 'address.location.name', tipoLabel: TipoLabel.span},
+    {label: 'Dirección', field:'address.address', tipoLabel: TipoLabel.span },
+    {label: 'Hectarias', field:'dimensions', tipoLabel: TipoLabel.span },
+    {label: 'Descripción', field: 'observation', tipoLabel: TipoLabel.span},
+
+    // BTN VER MAS
+    {label: 'selectedUser', field: 'url DEL BTN', tipoLabel: TipoLabel.botonVermas},
+
+ ]
+
   campoData = {
     name: '',
     dimensions: '',
@@ -67,8 +88,10 @@ export class ChacrasComponent implements OnInit {
     private apiService: ApiService,
     private toastr: ToastrService,
     private router: Router,
-    private http: HttpClient
-  ) {
+    private http: HttpClient,
+    public dashboardBackOffice: DashboardBackOfficeService)
+   {
+    this.dashboardBackOffice.dataTitulo.next({ titulo: `¡Bienvenido!, Acá podrás gestionar, las chacras de los Productores` , subTitulo: ''})
     for (let i = 1; i <= 100; i++) {
       this.hectareasOptions.push(i);
     }

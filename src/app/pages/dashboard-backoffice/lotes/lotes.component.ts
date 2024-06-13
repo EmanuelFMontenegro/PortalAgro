@@ -16,6 +16,8 @@ import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../dialog/dialog.component';
 import { Router, ActivatedRoute } from '@angular/router';
+import { TipoLabel, DataView } from 'src/app/shared/components/miniatura-listado/miniatura.model';
+import { DashboardBackOfficeService, Titulo } from '../dashboard-backoffice.service';
 
 interface CustomJwtPayload {
   userId: number;
@@ -89,6 +91,21 @@ export class LotesComponent implements OnInit {
     },
   };
 
+  dataView: DataView [] = [
+
+    // IMAGEN
+    {label: '', field: 'assets/img/lote_1.svg', tipoLabel: TipoLabel.imagen},
+
+    // SPAN
+    {label: 'Nombre del Lote', field: 'name', tipoLabel: TipoLabel.span},
+    {label: 'Plantación', field:'plant_name ', tipoLabel: TipoLabel.span },
+    {label: 'Hectáreas', field:'dimensions', tipoLabel: TipoLabel.span },
+    {label: 'Descripción', field: 'descriptions', tipoLabel: TipoLabel.span},
+
+    // VER MAS
+    {label: '', field: 'dashboard-backoffice/perfil-productor', tipoLabel: TipoLabel.botonVermas},
+ ]
+
   constructor(
     private authService: AuthService,
     private apiService: ApiService,
@@ -96,8 +113,9 @@ export class LotesComponent implements OnInit {
     private http: HttpClient,
     private fb: FormBuilder,
     private router: Router,
-    private dialog: MatDialog
-  ) {
+    private dialog: MatDialog,
+    public dashboardBackOffice: DashboardBackOfficeService)
+   {
     this.loteForm = this.fb.group({
       nombre: ['', Validators.required],
       plantación: ['', Validators.required],
@@ -106,6 +124,10 @@ export class LotesComponent implements OnInit {
     });
     this.dimMin = '';
     this.dimMax = '';
+
+    let data: Titulo = { titulo: '¡Bienvenido!, Acá podrás gestionar, los lotes de los Productores' , subTitulo: ''}
+    this.dashboardBackOffice.dataTitulo.next(data)
+
   }
 
   ngOnInit(): void {
@@ -621,7 +643,7 @@ export class LotesComponent implements OnInit {
   }
 
   BtnNuevaChacra() {this.router.navigate(['dashboard-backoffice/inicio']);}
-  
+
   verMas(campo: any) {
     this.router.navigate(['dashboard-backoffice/perfil-productor']);
   }
