@@ -14,9 +14,10 @@ export class MiniaturaListadoComponent {
   constructor(private utilService: UtilsService,
               private router: Router){}
 
-  // ENTRADA
-  @Input() listado: any
-  @Input() dataView: DataView [] | undefined
+
+  @Input() listado: any // Listado de items a mostrar
+  @Input() dataView: DataView [] | undefined // configuracion para determinar que tipo de elemento mostrar por cada campo
+  @Input() productor = false; // cambia el estilo de la miniatura si es productor
 
   tipoImagen = TipoLabel.imagen
   tipoTitulo = TipoLabel.titulo

@@ -32,7 +32,7 @@ $font-family: 'Montserrat', sans-serif
   color: #454545
   font-size: 1em
   font-family: "Montserrat", sans-serif
-  margin-left: 2%
+  margin-left: 10%
   margin-top: 0.5%
 
 .main-card
@@ -63,12 +63,15 @@ $font-family: 'Montserrat', sans-serif
   margin-top: 2%
 
 .user-content
-  display: flex
+  isplay: flex
   align-items: center
   gap: 20px
+  justify-content: space-between
 
   .avatar
     position: relative
+    display: flex
+    align-items: center
 
     .avatar-circle
       width: 90px
@@ -119,7 +122,11 @@ $font-family: 'Montserrat', sans-serif
     font-size: 14px
     font-family: $font-family
 
-  .email
+  .datos-perfil-user
+    position: relative
+    left: 1em
+
+  .email, .name, .contacto
     font-size: 14px
     color: $white-color
     font-weight: bold
@@ -132,6 +139,18 @@ $font-family: 'Montserrat', sans-serif
   font-weight: bold
   margin-bottom: 20px
 
+.cargarChacra-button
+  padding: 8px 18px
+  border: 2px solid $white-color
+  border-radius: 5px
+  cursor: pointer
+  transition: background-color 0.3s, border-color 0.3s
+  font-size: 0.85em
+  font-family: 'Montserrat', sans-serif
+  font-weight: bold
+  background-color: $nuevovermas-azul
+  color: white
+  margin-right: 2em
 .field-container
   display: flex
   width: 100%
@@ -246,7 +265,7 @@ $font-family: 'Montserrat', sans-serif
   .campo-card
     padding: 20px
     border-radius: 20px
-    width: 270px
+    width: 300px
     border: 2px solid $new-azul
 
     img
@@ -276,7 +295,6 @@ $font-family: 'Montserrat', sans-serif
       height: auto
       margin-left: 5px
       vertical-align: middle
-     
 
     .campo-variable
       font-weight: bold

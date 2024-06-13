@@ -1,10 +1,10 @@
 <div class="miniatura-container-general">
   <div class="miniatura-container" >
-    <div class="miniatura" *ngFor="let miniatura of listado">
+    <div class="miniatura" *ngFor="let miniatura of listado" [ngClass]="{'estilo-productor': this.productor }">
       <ng-container *ngFor="let item of dataView" >
 
         <!-- IMAGEN -->
-        <img src="{{item.field}}" class="img-miniatura" alt="" *ngIf="item.tipoLabel == tipoImagen" >
+        <img src="{{item.field}}" [ngClass]="{'img-miniatura': !this.productor, 'img-productor': this.productor }" alt="" *ngIf="item.tipoLabel == tipoImagen" >
 
         <!-- TITULO -->
         <h3 *ngIf="item.tipoLabel == tipoTitulo">{{this.getValue(miniatura,item.field)}}</h3>

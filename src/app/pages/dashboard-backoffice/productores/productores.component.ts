@@ -8,9 +8,9 @@ import { MatSelectChange } from '@angular/material/select';
 import { Observable } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { startWith, map } from 'rxjs/operators';
-import { debounceTime } from 'rxjs/operators';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { DashboardBackOfficeService } from '../dashboard-backoffice.service';
+import { TipoLabel, DataView } from 'src/app/shared/components/miniatura-listado/miniatura.model';
 
 interface CustomJwtPayload {
   userId: number;
@@ -48,6 +48,22 @@ export class ProductoresComponent implements OnInit {
   private userId: number | any;
   public email: string | null = null;
   private companyId: number | any;
+
+  dataView: DataView [] = [
+
+    // IMAGEN
+    {label: '', field: 'assets/img/avatar_prod.svg', tipoLabel: TipoLabel.imagen},
+
+    // SPAN
+    {label: 'Nombre', field: 'nombre', tipoLabel: TipoLabel.span},
+    {label: 'Apellido', field:'apellido', tipoLabel: TipoLabel.span },
+    {label: 'Localidad', field:'localidad', tipoLabel: TipoLabel.span },
+
+    // VER MAS
+     // en lable va la key para guardar en localstorage y en field la url del btn mas
+    {label: 'selectedUser', field: 'dashboard-backoffice/perfil-productor', tipoLabel: TipoLabel.botonVermas},
+ ]
+
 
   constructor(
     private authService: AuthService,

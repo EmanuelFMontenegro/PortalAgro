@@ -98,7 +98,7 @@ export class LotesComponent implements OnInit {
 
     // SPAN
     {label: 'Nombre del Lote', field: 'name', tipoLabel: TipoLabel.span},
-    {label: 'Plantación', field:'plant_name ', tipoLabel: TipoLabel.span },
+    {label: 'Plantación', field:'plant_name', tipoLabel: TipoLabel.span },
     {label: 'Hectáreas', field:'dimensions', tipoLabel: TipoLabel.span },
     {label: 'Descripción', field: 'descriptions', tipoLabel: TipoLabel.span},
 

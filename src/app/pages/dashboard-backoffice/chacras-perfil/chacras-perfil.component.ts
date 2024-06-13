@@ -5,13 +5,33 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/AuthService';
 import { Router } from '@angular/router';
 
+interface DatosUsuario {
+  accept_license: boolean;
+  account_active: boolean;
+  canEdit: boolean | null;
+  descriptions: string;
+  dni: string;
+  id: number;
+  lastname: string;
+  location: { id: number; name: string; department_id: number };
+  name: string;
+  telephone: string;
+  username: string;
+}
+
 @Component({
   selector: 'app-chacras-perfil',
   templateUrl: './chacras-perfil.component.html',
   styleUrls: ['./chacras-perfil.component.sass'],
 })
 export class ChacrasPerfilComponent implements OnInit {
+  chacraSeleccionada: any;
   private userId: number | any;
+  private personId: number | any;
+  nombre: string | null = null;
+  apellido: string | null = null;
+  email: string | null = null;
+  contacto: string | null = null;
   public userEmail: string | null = null;
   chacras: any[] = [];
 
@@ -28,7 +48,30 @@ export class ChacrasPerfilComponent implements OnInit {
     if (perfilDataChacra) {
       const userId = parseInt(perfilDataChacra);
       this.cargarChacrasUsuario(userId);
+      this.personId = userId;
+      this.DatosUser(userId, this.personId);
     }
+  }
+
+  DatosUser(userId: number, personId: number) {
+    this.apiService.getPersonByIdProductor(userId, personId).subscribe(
+      (response: DatosUsuario) => {
+        if (response) {
+          this.nombre = response.name;
+          this.apellido = response.lastname;
+          this.email = response.username;
+          this.contacto = response.telephone;
+        } else {
+          console.warn(
+            'No se encontraron datos de la persona en la respuesta:',
+            response
+          );
+        }
+      },
+      (error) => {
+        console.error('Error al obtener los datos de la persona:', error);
+      }
+    );
   }
 
   cargarChacrasUsuario(userId: number) {
@@ -37,7 +80,7 @@ export class ChacrasPerfilComponent implements OnInit {
         if (response && response.list && response.list.length > 0) {
           const listaChacras = response.list[0];
           this.chacras = listaChacras;
-          console.table("datos de chacra de usuario perfil", this.chacras);
+      
         } else {
           console.warn(
             'No se encontraron datos de chacras en la respuesta:',
@@ -48,7 +91,7 @@ export class ChacrasPerfilComponent implements OnInit {
             'El productor seleccionado no cuenta con chacras asociadas',
             'Atención !!!'
           );
-          this.router.navigate(['dashboard-backoffice/perfil-productor']);
+          this.router.navigate(['dashboard-backoffice/cargar-chacras']);
         }
       },
       (error) => {
@@ -58,7 +101,17 @@ export class ChacrasPerfilComponent implements OnInit {
     );
   }
 
-  verMas(campo: any) {
-    // Lógica para ver más detalles sobre un campo específico
+  verMas(chacra: any): void {
+    this.chacraSeleccionada = chacra;
+    localStorage.setItem(
+      'chacraSeleccionada',
+      JSON.stringify(this.chacraSeleccionada)
+    );
+
+    this.router.navigate(['/dashboard-backoffice/detalle-chacra']);
+  }
+
+  BtnCargarChacra(): void {
+    this.router.navigate(['/dashboard-backoffice/cargar-chacras']);
   }
 }

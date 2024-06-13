@@ -1,0 +1,53 @@
+<div class="container">
+  <div class="titulo-bienvenida">
+    <h2>¡Bienvenido!</h2>
+  </div>
+  <div class="card-user">
+    <div class="avatar">
+      <mat-icon>person</mat-icon>
+    </div>
+    <div class="user-info">
+      <p class="name">{{ nombre }} {{ apellido }}</p>
+      <p class="email">{{ email }}</p>
+      <p class="contacto">Contacto: {{ contacto }}</p>
+    </div>
+    <div class="volver-button" (click)="volver()">
+      <!-- <mat-icon style="color:#FFFFFF">arrow_back</mat-icon> -->
+      <img src="/assets/img/keyboard_double_arrow_left_24dp_FILL0_wght400_GRAD0_opsz24.svg" alt="flecha doble"
+        class="flecha-doble">
+      <span class="letra_btn_volver">VOLVER ATRAS</span>
+    </div>
+  </div>
+  <div class="card-map">
+    <div class="geo-container">
+      <div #map style="height: 500px; border: 1px solid #32963f"></div>
+    </div>
+  </div>
+  <div class="card-search">
+    <h2 class="titulo-registrar-campo">Geolocalización</h2>
+    <div class="geolocation-info">
+      <div class="card" *ngIf="chacraSeleccionada">
+        <div class="card-item">
+          <p class="with-dot"><strong>Nombre Chacra:</strong> {{ chacraSeleccionada.name }}</p>
+          <p class="with-dot"><strong>Localidad:</strong> {{ chacraSeleccionada.address?.location.name }}</p>
+          <p class="with-dot"><strong>Dirección:</strong> {{ chacraSeleccionada.address.address }}</p>
+          <p class="with-dot"><strong>Hectáreas:</strong> {{ chacraSeleccionada.dimensions }}</p>
+        </div>
+
+      </div>
+      <div class="card-info">
+        <div class="search-container">
+          <mat-select placeholder="Localidades..." (selectionChange)="onSearch($event.value)">
+            <mat-option *ngFor="let localidad of filteredLocalidades | async" [value]="localidad.name">{{ localidad.name
+              }}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+    </div>
+    <div class="botones-servicio">
+      <button mat-raised-button class="register-button" type="button" (click)="userId !== null ? registerField(userId) : null">Agregar</button>
+
+      <button mat-raised-button class="cancel-button" type="button" (click)="cancelar()">Cancelar</button>
+    </div>
+  </div>
+</div>

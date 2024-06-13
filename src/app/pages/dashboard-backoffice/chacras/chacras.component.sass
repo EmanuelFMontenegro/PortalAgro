@@ -1,7 +1,7 @@
 // Variables de colores
 $primary-color: #0F8054
 $secondary-color: #8FCA8F
-$nuevotextos-azul: #015E83
+$new-color: #015E83
 $white-color: #FFFFFF
 $nuevovermas-azul: #015E85
 $hover-color: #47de5b
@@ -54,7 +54,6 @@ $font-family: 'Montserrat', sans-serif
   grid-template-columns: 1fr auto
   gap: 20px
   width: 98%
-  margin-left: 1em
 
 .botones-servicio
   display: flex
@@ -126,7 +125,7 @@ $font-family: 'Montserrat', sans-serif
     font-family: $font-family
 
 .titulo-chacra
-  color: $nuevotextos-azul
+  color: $new-color
   font-family: 'Montserrat', sans-serif
   font-size: 1.5em
   font-weight: bold
@@ -246,8 +245,8 @@ $font-family: 'Montserrat', sans-serif
   .campo-card
     padding: 20px
     border-radius: 20px
-    width: 270px
-    border: 2px solid $primary-color
+    width: 300px
+    border: 2px solid $new-color
 
     img
       max-width: 100%
@@ -295,33 +294,35 @@ $font-family: 'Montserrat', sans-serif
   font-weight: bold
 
 @media screen and (max-width: 768px)
-
   .card
     display: block
     width: 100%
-    margin-left: -0.7em
+    margin-left: 0
 
   .card-campos-section
     width: 100%
 
+  .field-container
+    display: flex
+    gap: 10px
+    flex-direction: column
+
   .botones-servicio
     display: flex
-    justify-content: center
+    justify-content: space-around
     margin-top: 2%
-    margin-left: 10%
+    margin-left: 0
+  .clear-button
+    width: 100%
 
   .campo-card
-    left: -1.2em
-    width: 95%
     position: relative
+    top: 7em
+    left: -1.5em
 
   .main-card
-    width: 98%
+    width: 100% // Ajuste del ancho para pantallas móviles
 
-  // .user-content
-  //   flex-direction: column
-  //   align-items: center
-  //   gap: 10px
   .user-content
     display: none
 
@@ -331,15 +332,9 @@ $font-family: 'Montserrat', sans-serif
     text-align: center
     font-size: 17px
 
-  .titulo-perfil-avatar
+  .titulo-avatar
     margin-top: 10px
     text-align: center
-
-  .botones-servicio
-    display: flex
-    justify-content: center
-    margin-top: 2%
-    margin-left: 10%
 
   .register-button
     width: 100%

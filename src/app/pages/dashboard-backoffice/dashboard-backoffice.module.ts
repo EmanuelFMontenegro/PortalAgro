@@ -11,12 +11,19 @@ import { CalendariosComponent } from './calendarios/calendarios.component';
 import { NotificacionComponent } from './notificacion/notificacion.component';
 import { PlanificacionesComponent } from './planificaciones/planificaciones.component';
 import { InformesComponent } from './informes/informes.component';
+import { CargarChacrasComponent } from './chacras/cargar-chacras/cargar-chacras.component';
+import { ChacrasGeolocalizarComponent } from './chacras/chacras-geolocalizar/chacras-geolocalizar.component';
+import { DetalleChacraComponent } from './chacras/detalle-chacra/detalle-chacra.component';
+import { ChacrasLoteComponent } from './chacras/chacras-lote/chacras-lote.component';
 
 import { DialogComponent } from './dialog/dialog.component';
 import { PerfilProductorComponent } from './productores/perfil-productor/perfil-productor.component';
 import { NuevoUsuarioComponent } from './productores/nuevo-usuario/nuevo-usuario.component';
 import { IMPORTS_MATERIAL, SharedModule } from 'src/app/shared/shared.module';
 import { ChacrasPerfilComponent } from './chacras-perfil/chacras-perfil.component';
+import { BrowserModule } from '@angular/platform-browser';
+import { CargarLotesComponent } from './chacras/cargar-lotes/cargar-lotes.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -34,12 +41,20 @@ import { ChacrasPerfilComponent } from './chacras-perfil/chacras-perfil.componen
     PerfilProductorComponent,
     NuevoUsuarioComponent,
     ChacrasPerfilComponent,
+    CargarChacrasComponent,
+    ChacrasGeolocalizarComponent,
+    DetalleChacraComponent,
+    ChacrasLoteComponent,
+    CargarLotesComponent,
   ],
   imports: [
     IMPORTS_MATERIAL,
     CommonModule,
     DashboardBackofficeRoutingModule,
-    SharedModule
+    SharedModule,
+    FormsModule,
+    ReactiveFormsModule,
+    BrowserModule,
   ],
 })
 export class DashboardBackofficeModule {}

@@ -1,5 +1,4 @@
 
-  <mat-card class="main-card">
     <div class="card user-card">
       <div class="user-content">
         <div class="avatar">
@@ -69,7 +68,7 @@
     </div>
 
 
-    <div class="card-campos-lotes">
+    <!-- <div class="card-campos-lotes">
       <div class="campo-card" *ngFor="let lote of loteData; let i = index">
         <img class="img_lotes" [src]="'assets/img/lote_' + (i + 1) + '.svg'" alt="Img Lote">
         <p class="with-dot">
@@ -94,6 +93,6 @@
           </button>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <miniatura [dataView]="dataView" [listado]="loteData"></miniatura>

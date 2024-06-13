@@ -30,9 +30,11 @@ export const IMPORTS_MATERIAL = [
   MatFormFieldModule,
   MatAutocompleteModule,
   MatOptionModule,
+  MatCheckboxModule,
+  MatSelectModule,
   MatIconModule,
   MatCheckboxModule,
-  MatSelectModule
+  MatDialogModule,
 ]
 
 export const IMPORT_CORE = [

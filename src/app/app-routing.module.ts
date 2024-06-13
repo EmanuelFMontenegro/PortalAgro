@@ -1,22 +1,34 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './auth/login/login.component';
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import { DashboardBackofficeComponents } from './pages/dashboard-backoffice/dashboard-backoffice.component';
-
 
 const routes: Routes = [
-{ path: 'login', component: LoginComponent },
-{
-  path: 'dashboard', component: DashboardComponent
-},
-{
-  path: 'dashboard-backoffice', component: DashboardBackofficeComponents
-},
- ];
+  {
+    path: 'auth',
+    loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
+  },
+  {
+    path: 'dashboard',
+    loadChildren: () =>
+      import('./pages/dashboard/dashboard.module').then(
+        (m) => m.DashboardModule
+      ),
+  },
+  {
+    path: 'dashboard-backoffice',
+    loadChildren: () =>
+      import('./pages/dashboard-backoffice/dashboard-backoffice.module').then(
+        (m) => m.DashboardBackofficeModule
+      ),
+  },
+  {
+    path: '',
+    redirectTo: '/auth/login',
+    pathMatch: 'full',
+  },
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
