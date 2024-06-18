@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/AuthService';
 import { jwtDecode } from 'jwt-decode';
+import { ApiService } from 'src/app/services/ApiService';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private apiService : ApiService) {}
 
   canActivate(): boolean {
     const token = this.authService.getToken();
@@ -35,6 +36,25 @@ export class AuthGuard implements CanActivate {
       return true;
     }
   }
+
+  cargarPermisosUsuario(): void {
+    this.apiService.getMyPermissions().subscribe(
+      (permisos) => {
+        // Guardar los permisos en un array
+        const permisosArray: any[] = permisos; // Aquí define el tipo correcto de permisos si es conocido
+
+        // Aquí puedes manejar la lógica de acuerdo a los permisos obtenidos
+        // Por ejemplo, podrías asignar permisosArray a una propiedad de clase para utilizarlo en otros métodos
+        console.log('Permisos del usuario:', permisosArray);
+
+        // También puedes hacer cualquier otra lógica necesaria con los permisos
+      },
+      (error) => {
+        console.error('Error al cargar permisos:', error);
+      }
+    );
+  }
+
 
   private isBackofficeUrl(): boolean {
     // Obtener la URL actual del navegador
