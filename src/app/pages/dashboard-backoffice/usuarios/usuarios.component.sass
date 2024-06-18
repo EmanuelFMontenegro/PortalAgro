@@ -1,0 +1,67 @@
+@import '../../../../assets/variables'
+
+.form-section
+  margin-bottom: 1.5em
+
+.field-container
+  display: flex
+  align-items: center
+  width: 35%
+  gap: 15px
+  font-family: 'Montserrat', sans-serif
+  margin-bottom: 2em
+
+.field-label
+  font-size: 1em
+  color: $new_color_blue
+  font-weight: bold
+  margin-right: 10px
+
+.field-input
+  flex: 1
+  height: 30px
+  padding: 0 10px
+  border: 1px solid #ddd
+  border-radius: 4px
+  font-size: 1em
+  font-family: 'Montserrat', sans-serif
+  color: #333
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1)
+
+  &:focus
+    outline: none
+    border-color: $new-color-blue-hard
+    box-shadow: 0 0 5px $new-color-blue-hard
+
+.botones-form
+  display: flex
+  justify-content: flex-end
+  margin-top: 10px
+  bottom: -40px
+  right: 20px
+
+  button
+    padding: 8px 18px
+    border: 1px solid transparent
+    border-radius: 5px
+    cursor: pointer
+    transition: background-color 0.3s, border-color 0.3s
+    font-size: 0.85em
+    font-family: 'Montserrat', sans-serif
+    font-weight: bold
+    margin-left: 10px
+
+    &.crear-button
+      width: 15%
+      background-color: $new-color-blue-hard
+      color: white
+
+    &.cancelar-button
+      width: 15%
+      background-color: white
+      color: $new-color-blue-hard
+      border-color: $new-color-blue-hard
+
+      &:hover
+        background-color: #f8f8f8
+        border-color: darken($new-color-blue-hard, 10%)

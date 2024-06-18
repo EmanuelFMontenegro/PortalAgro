@@ -20,6 +20,8 @@ import { ChacrasGeolocalizarComponent } from './chacras/chacras-geolocalizar/cha
 import { DetalleChacraComponent } from './chacras/detalle-chacra/detalle-chacra.component';
 import { ChacrasLoteComponent } from './chacras/chacras-lote/chacras-lote.component';
 import { CargarLotesComponent } from './chacras/cargar-lotes/cargar-lotes.component';
+import { UsuariosComponent } from './usuarios/usuarios.component';
+
 const routes: Routes = [
   {
     path: 'dashboard-backoffice',
@@ -29,6 +31,12 @@ const routes: Routes = [
       { path: 'inicio', component: InicioComponent },
       { path: 'servicios', component: ServiciosComponent },
       { path: 'productores', component: ProductoresComponent },
+      {
+        path: 'usuarios',
+        component: UsuariosComponent,
+        canActivate: [AuthGuard],
+        data: { permissions: ['admin'] } // Especifica el permiso requerido aquí
+      },
       { path: 'perfil-productor', component: PerfilProductorComponent },
       { path: 'nuevo-usuario', component: NuevoUsuarioComponent },
       { path: 'chacras', component: ChacrasComponent },

@@ -13,6 +13,7 @@ import { Interceptor } from 'src/app/services/Interceptor';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { FormatDatePipe } from './format-date.pipe';
 import { NgxSpinnerModule } from "ngx-spinner";
+import { SharedModule } from './shared/shared.module';
 
 
 
@@ -31,6 +32,7 @@ const routes: Routes = [];
     AuthModule,
     DashboardModule,
     DashboardBackofficeModule,
+    SharedModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: !isDevMode(),
 

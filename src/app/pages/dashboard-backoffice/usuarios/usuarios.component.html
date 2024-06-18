@@ -1,0 +1,21 @@
+<app-header-user></app-header-user>
+
+<div class="form-section">
+  <div class="field-container">
+    <label for="formType" class="field-label">Seleccionar el Usuario:</label>
+    <select class="field-input" id="formType" [(ngModel)]="selectedForm" (change)="seleccionoTipo()">
+      <option [value]="opcion" *ngFor="let opcion of opciones">{{ opcion }}</option>
+    </select>
+  </div>
+  <app-formulario
+    [formType]="selectedForm"
+    [titulo]="selectedForm"
+    [dataForm]="dataForm"
+    (formSubmitted)="onFormSubmitted($event)">
+  </app-formulario>
+</div>
+
+<div class="botones-form">
+  <button mat-raised-button class="crear-button" (click)="enviarFormulario()">Crear usuario</button>
+  <button mat-raised-button class="cancelar-button" (click)="cancelar()">Cancelar</button>
+</div>

@@ -142,21 +142,21 @@ export class NuevoUsuarioComponent implements OnInit, AfterViewInit {
           let errorMessage = 'Error al crear el usuario';
 
           if (error.code === 4002) {
-            errorMessage =
-              'El Email ingresa ya fue registrado. Por favor, intente con otro email.';
+            errorMessage = 'El Email ingresado ya fue registrado. Por favor, intente con otro email.';
           } else if (error.code === 4023) {
-            errorMessage =
-              'El DNI ingresado ya fue registrado. Por favor, verifique e intente nuevamente.';
+            errorMessage = 'El DNI ingresado ya fue registrado. Por favor, verifique e intente nuevamente.';
           } else if (error.code === 4004) {
-            errorMessage =
-              'La contraseña no cumple con los requisitos de seguridad. Por favor, intente con otra.';
+            errorMessage = 'La contraseña no cumple con los requisitos de seguridad. Por favor, intente con otra.';
+          } else if (error.code === 403) {
+            errorMessage = 'No tienes permisos suficientes para crear usuarios. Por favor, contacta a tu administrador.';
           }
 
-          this.toastr.error(errorMessage, 'Atención');
+          this.toastr.warning(errorMessage, 'Atención');
         }
       );
     }
   }
+
 
   validarFormulario(): boolean {
     return true;

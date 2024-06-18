@@ -1,8 +1,6 @@
 import { NgModule } from "@angular/core"
 import { MiniaturaListadoComponent } from "./components/miniatura-listado/miniatura-listado.component";
-import { CabeceraComponent } from './components/cabecera/cabecera.component';
 import { CommonModule } from "@angular/common";
-import { BrowserModule } from "@angular/platform-browser";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatCardModule } from "@angular/material/card";
@@ -17,6 +15,9 @@ import { MatMenuModule } from "@angular/material/menu";
 import { MatSelectModule } from "@angular/material/select";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatToolbarModule } from "@angular/material/toolbar";
+import { HeaderUserComponent } from "./components/header-user/header-user.component";
+import { FormularioComponent } from './components/formulario/formulario.component';
+
 
 export const IMPORTS_MATERIAL = [
   MatSidenavModule,
@@ -46,7 +47,8 @@ export const IMPORT_CORE = [
 @NgModule({
   declarations:[
     MiniaturaListadoComponent,
-    CabeceraComponent
+    HeaderUserComponent,
+    FormularioComponent
   ],
   imports:[
     IMPORT_CORE,
@@ -55,7 +57,9 @@ export const IMPORT_CORE = [
   exports: [
     IMPORT_CORE,
     IMPORTS_MATERIAL,
-    MiniaturaListadoComponent
+    MiniaturaListadoComponent,
+    HeaderUserComponent,
+    FormularioComponent
   ]
 })
 

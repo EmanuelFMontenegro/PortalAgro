@@ -1,0 +1,16 @@
+<div>
+  <!-- FORMULARIOS GENERALES DEL SISTEMA -->
+
+  <div class="form-container">
+    <h2>{{ titulo }}</h2>
+    <form class="form" (ngSubmit)="updateFormData()">
+      <ng-container *ngFor="let item of dataForm">
+        <label class="field-label" [for]="item.ngModel">{{ item.placeholder }}</label>
+        <input [type]="item.type" [placeholder]="item.placeholder" [(ngModel)]="formData[item.ngModel]"
+          [name]="item.name" [readonly]="item.readonly || false" [id]="item.ngModel" class="input"
+          (change)="updateFormData()">
+      </ng-container>
+      <!-- <button type="submit">Enviar</button> -->
+    </form>
+  </div>
+</div>

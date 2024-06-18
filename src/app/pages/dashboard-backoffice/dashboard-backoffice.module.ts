@@ -24,6 +24,7 @@ import { ChacrasPerfilComponent } from './chacras-perfil/chacras-perfil.componen
 import { BrowserModule } from '@angular/platform-browser';
 import { CargarLotesComponent } from './chacras/cargar-lotes/cargar-lotes.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { UsuariosComponent } from './usuarios/usuarios.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     DetalleChacraComponent,
     ChacrasLoteComponent,
     CargarLotesComponent,
+    UsuariosComponent,
   ],
   imports: [
     IMPORTS_MATERIAL,

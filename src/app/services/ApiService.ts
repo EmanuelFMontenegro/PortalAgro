@@ -16,6 +16,14 @@ export class ApiService {
 
   constructor(private http: HttpClient) {}
 
+
+  // PERMISOS DEL CUALQUIER USUARIO BACKOFFICE
+
+  getMyPermissions(): Observable<any> {
+    const url = `${this.baseURL}/role/permissions/my`;
+    return this.http.get<any>(url);
+  }
+
   // < -- Métodos de autenticación Auth -- >
 
   registrarUsuario(username: string, password: string): Observable<any> {
@@ -173,6 +181,31 @@ export class ApiService {
     return this.http.put(
       `${this.baseURL}/dist/${companyId}/user/${userId}`,
       adminData
+    );
+  }
+  // <--ENPOINTS PARA AGREGAR TECNICOS -->
+
+  registrarTecnico(data: any): Observable<any> {
+    return this.http.post(`${this.baseURL}/dist/user/technical`, data);
+  }
+
+   subirImagenLicencia(tecnicoId: number, archivo: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('imageLicense', archivo);
+
+    return this.http.put(
+      `${this.baseURL}/dist/user/technical/${tecnicoId}/img/license`,
+      formData
+    );
+  }
+
+  subirImagenMatricula(tecnicoId: number, archivo: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('imageMatricula', archivo);
+
+    return this.http.put(
+      `${this.baseURL}/dist/user/technical/${tecnicoId}/img/matricula`,
+      formData
     );
   }
 
