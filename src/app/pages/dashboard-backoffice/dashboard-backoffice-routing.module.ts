@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from 'src/app/core/guards/auth.guard';
-import { InicioComponent } from './inicio/inicio.component';
 import { DashboardBackofficeComponents } from './dashboard-backoffice.component';
+import { InicioComponent } from './inicio/inicio.component';
 import { ServiciosComponent } from './servicios/servicios.component';
 import { ProductoresComponent } from './productores/productores.component';
 import { ChacrasComponent } from './chacras/chacras.component';
@@ -21,21 +21,28 @@ import { DetalleChacraComponent } from './chacras/detalle-chacra/detalle-chacra.
 import { ChacrasLoteComponent } from './chacras/chacras-lote/chacras-lote.component';
 import { CargarLotesComponent } from './chacras/cargar-lotes/cargar-lotes.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';
+import { UsuariosFiltroComponent } from './usuarios/usuarios-filtro/usuarios-filtro.component';
 
 const routes: Routes = [
   {
     path: 'dashboard-backoffice',
     component: DashboardBackofficeComponents,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard], // Aplicar el guardia a toda la sección del dashboard
     children: [
       { path: 'inicio', component: InicioComponent },
       { path: 'servicios', component: ServiciosComponent },
       { path: 'productores', component: ProductoresComponent },
       {
+        path: 'usuarios-filtro',
+        component: UsuariosFiltroComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['ROLE_ADMIN'] }
+      },
+      {
         path: 'usuarios',
         component: UsuariosComponent,
         canActivate: [AuthGuard],
-        data: { permissions: ['admin'] } // Especifica el permiso requerido aquí
+        data: { roles: ['ROLE_ADMIN'] }
       },
       { path: 'perfil-productor', component: PerfilProductorComponent },
       { path: 'nuevo-usuario', component: NuevoUsuarioComponent },

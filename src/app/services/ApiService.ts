@@ -44,16 +44,14 @@ export class ApiService {
     );
   }
 
-  validarCredencialBackoffice(
-    username: string,
-    password: string
-  ): Observable<HttpResponse<any>> {
+  validarCredencialBackoffice(username: string, password: string): Observable<HttpResponse<any>> {
     return this.http.post<HttpResponse<any>>(
       `${this.baseURL}/dist/auth/login`, // URL corregida
       { username, password },
       { observe: 'response' } // Observar la respuesta completa
     );
   }
+
 
   refreshToken(token: string): Observable<any> {
     return this.http.post(`${this.baseURL}/auth/refresh`, { token });
@@ -168,8 +166,8 @@ export class ApiService {
   }
 
   // Agregar un nuevo administrador a una compañía
-  addAdministrator(companyId: number, adminData: any): Observable<any> {
-    return this.http.post(`${this.baseURL}/dist/${companyId}/user`, adminData);
+  addAdministrator(adminData: any): Observable<any> {
+    return this.http.post(`${this.baseURL}/dist/user/manager`, adminData);
   }
 
   // Actualizar información de un administrador por ID en una compañía
@@ -209,6 +207,16 @@ export class ApiService {
     );
   }
 
+  // <--ENPOINTS PARA AGREGAR COOPERATIVAS) -->
+
+  registrarCooperativa(data: any): Observable<any> {
+    return this.http.post(`${this.baseURL}/dist/user/cooperative`, data);
+  }
+// <--ENPOINTS PARA AGREGAR PILOTOS(OPERADORES) -->
+
+  registrarPiloto(data: any): Observable<any> {
+    return this.http.post(`${this.baseURL}/dist/user/operator`, data);
+  }
   // <--ENPOINTS DE USERS -->
 
   getUsers(): Observable<any> {
@@ -447,6 +455,19 @@ export class ApiService {
 
   getLocationID(id: number): Observable<any> {
     return this.http.get<any>(`${this.baseURL}/${id}`);
+  }
+
+  // METODOS PARA DEPARTAMENTOS
+
+  getAllDepartments(sortDir: string = 'asc', pageNo: number = 0, pageSize: number = 20, sortBy: string = 'name', provinceId: number = 2): Observable<any> {
+    const params = new HttpParams()
+      .set('sortDir', sortDir)
+      .set('pageNo', pageNo.toString())
+      .set('pageSize', pageSize.toString())
+      .set('sortBy', sortBy)
+      .set('provinceId', provinceId.toString());
+
+    return this.http.get<any>(`${this.baseURL}/department`, { params });
   }
 
   // <<<<-------METODOS DE IDIOMAS------>>>>>

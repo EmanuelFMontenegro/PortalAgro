@@ -111,9 +111,9 @@ export class LoginBackofficeComponent implements OnInit {
           error: (error) => {
             // Manejo de errores de la solicitud HTTP
             if (error.status === 401 && error.error.code === 4016) {
-              this.toastr.error('La contraseña ingresada es incorrecta.', 'Atención');
+              this.toastr.warning('La contraseña ingresada es incorrecta.', 'Atención');
             } else {
-              this.toastr.error('Ha ocurrido un error durante la autenticación. Por favor, intenta nuevamente más tarde.', 'Error');
+              this.toastr.info('Usuario no registrado o desconocido.', 'Atención');
               console.error('Error durante la autenticación:', error);
             }
           },

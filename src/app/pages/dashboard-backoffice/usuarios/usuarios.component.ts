@@ -2,21 +2,33 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/services/ApiService';
 import { ToastrService } from 'ngx-toastr';
 
+enum TipoUsuarios {
+  piloto = 'Piloto de Dron',
+  cooperativa = 'Cooperativa',
+  gerente = 'Gerente General',
+  tecnicoGeneral = 'Técnico General',
+  tecnico = 'Técnico',
+}
+
 interface DataForm {
   type: 'text' | 'file' | 'select' | 'password' | 'textarea' | 'checkbox';
   placeholder: string;
   ngModel: string;
   name: string;
+  multiple?: boolean;
   options?: { value: any; text: string }[];
   readonly?: boolean;
+  autocomplete?: 'on' | 'off';
 }
 
-enum TipoUsuarios {
-  tecnico = 'Técnico General',
-  piloto = 'Piloto de Dron',
-  cooperativa = 'Cooperativa',
-  gerente = 'Gerente General',
-  administrador = 'Administrador',
+interface Role {
+  code: number;
+  name: string;
+}
+
+interface Departamento {
+  value: number;
+  text: string;
 }
 
 @Component({
@@ -25,36 +37,76 @@ enum TipoUsuarios {
   styleUrls: ['./usuarios.component.sass'],
 })
 export class UsuariosComponent implements OnInit {
+  titulo = 'Formulario de Usuarios';
   opciones = [
-    TipoUsuarios.administrador,
     TipoUsuarios.gerente,
     TipoUsuarios.cooperativa,
+    TipoUsuarios.tecnicoGeneral,
     TipoUsuarios.tecnico,
     TipoUsuarios.piloto,
   ];
-  selectedForm = TipoUsuarios.administrador;
+  selectedForm: TipoUsuarios = TipoUsuarios.gerente;
 
   dataForm: DataForm[] = [];
-  formData: any = {
+  formData = {
     username: '',
     password: '',
-    role: 4
+    name: '',
+    lastname: '',
+    dni: '',
+    description: '',
+    role: 0,
+    departmentAssigned: [] as number[],
+    company_id: 1,
   };
-
 
   imgMatriculaFile: File | null = null;
   imgLicenciaFile: File | null = null;
   fotoFile: File | null = null;
 
-  empresas = [
-    { value: 1, text: 'AgroSustentable S.A' },
-    { value: 2, text: 'Otra Empresa' },
+  departamentos: Departamento[] = [];
+  departamentosSeleccionados: Departamento[] = [];
+
+  roles: Role[] = [
+    { code: 4, name: 'ROLE_TECHNICIAN_GENERAL' },
+    { code: 3, name: 'ROLE_TECHNICIAN_LOCATION' },
+    { code: 5, name: 'ROLE_OPERATOR' },
+    { code: 6, name: 'ROLE_COOPERATIVE' },
+    { code: 7, name: 'ROLE_PRODUCER' },
+    { code: 8, name: 'ROLE_MANAGER' },
   ];
 
   constructor(private apiService: ApiService, private toastr: ToastrService) {}
 
   ngOnInit() {
-    this.seleccionoTipo();
+    this.cargarDepartamentos();
+  }
+
+  cargarDepartamentos() {
+    this.apiService.getAllDepartments().subscribe(
+      (response) => {
+        if (response && response.list && response.list.length > 0) {
+          const departamentos = response.list[0];
+          this.departamentos = departamentos.map((dept: any) => ({
+            value: dept.id,
+            text: dept.name,
+          }));
+        } else {
+          console.error(
+            'La respuesta no contiene un array de departamentos válido:',
+            response
+          );
+          this.toastr.error(
+            'Error: La respuesta no contiene un array de departamentos válido'
+          );
+        }
+        this.seleccionoTipo();
+      },
+      (error) => {
+        console.error('Error al cargar departamentos:', error);
+        this.toastr.error('Error al cargar departamentos');
+      }
+    );
   }
 
   seleccionoTipo() {
@@ -64,12 +116,14 @@ export class UsuariosComponent implements OnInit {
         placeholder: 'Email',
         ngModel: 'username',
         name: 'username',
+        autocomplete: 'off',
       },
       {
         type: 'password',
         placeholder: 'Contraseña',
         ngModel: 'password',
         name: 'password',
+        autocomplete: 'off',
       },
       { type: 'text', placeholder: 'Nombre', ngModel: 'name', name: 'name' },
       {
@@ -88,98 +142,143 @@ export class UsuariosComponent implements OnInit {
     ];
 
     switch (this.selectedForm) {
+      case TipoUsuarios.tecnicoGeneral:
+        this.configurarFormularioTecnicoGeneral();
+        break;
       case TipoUsuarios.tecnico:
-      case TipoUsuarios.piloto:
-        this.dataForm.push(
-          {
-            type: 'text',
-            placeholder: 'Departamento Asignado',
-            ngModel: 'departmentAssigned',
-            name: 'departmentAssigned',
-          },
-          {
-            type: 'text',
-            placeholder: 'Función',
-            ngModel: 'function',
-            name: 'function',
-          },
-          {
-            type: 'text',
-            placeholder: 'Especialidad',
-            ngModel: 'specialty',
-            name: 'specialty',
-          },
-          {
-            type: 'text',
-            placeholder: 'Matrícula',
-            ngModel: 'matricula',
-            name: 'matricula',
-          },
-          {
-            type: 'file',
-            placeholder: 'Subir Matrícula',
-            ngModel: 'imgMatricula',
-            name: 'imgMatricula',
-          },
-          {
-            type: 'text',
-            placeholder: 'Licencia',
-            ngModel: 'license',
-            name: 'license',
-          },
-          {
-            type: 'file',
-            placeholder: 'Subir Licencia',
-            ngModel: 'imgLicencia',
-            name: 'imgLicencia',
-          }
-        );
+        this.configurarFormularioTecnico();
         break;
-
-      case TipoUsuarios.gerente:
-      case TipoUsuarios.administrador:
-        this.dataForm.push({
-          type: 'select',
-          placeholder: 'Empresa',
-          ngModel: 'company_id',
-          name: 'company_id',
-          options: this.empresas,
-        });
-        this.formData.company_id = 1; // ID de la compañía predeterminado: Agrosustentable
-        this.formData.role = 4; // Rol específico para administrador
-        break;
-
       case TipoUsuarios.cooperativa:
-        this.dataForm.push(
-          { type: 'text', placeholder: 'CUIT', ngModel: 'cuit', name: 'cuit' },
-          {
-            type: 'text',
-            placeholder: 'Razón Social',
-            ngModel: 'razonSocial',
-            name: 'razonSocial',
-          },
-          {
-            type: 'text',
-            placeholder: 'Dirección',
-            ngModel: 'address',
-            name: 'address',
-          },
-          {
-            type: 'text',
-            placeholder: 'Departamento Asignado',
-            ngModel: 'departmentAssigned',
-            name: 'departmentAssigned',
-          },
-          {
-            type: 'text',
-            placeholder: 'Función',
-            ngModel: 'function',
-            name: 'function',
-          }
-        );
-        this.formData.role = 6; // Rol para Cooperativa
+        this.configurarFormularioCooperativa();
+        break;
+      case TipoUsuarios.piloto:
+        this.configurarFormularioPiloto();
+        break;
+      case TipoUsuarios.gerente:
+      default:
+        this.configurarFormularioGerente();
         break;
     }
+
+    this.actualizarCamposFormulario();
+  }
+
+  configurarFormularioTecnicoGeneral() {
+    this.dataForm.push(
+      {
+        type: 'select',
+        placeholder: 'Departamento Asignado',
+        ngModel: 'departmentAssigned',
+        name: 'departmentAssigned',
+        options: this.departamentos,
+        multiple: true,
+      },
+      {
+        type: 'text',
+        placeholder: 'Función',
+        ngModel: 'function',
+        name: 'function',
+      },
+      {
+        type: 'text',
+        placeholder: 'Especialidad',
+        ngModel: 'specialty',
+        name: 'specialty',
+      }
+    );
+
+    this.formData.role =
+      this.roles.find((role) => role.name === 'ROLE_TECHNICIAN_GENERAL')
+        ?.code ?? 0;
+  }
+
+  configurarFormularioTecnico() {
+    this.configurarFormularioTecnicoGeneral();
+    this.formData.role =
+      this.roles.find((role) => role.name === 'ROLE_TECHNICIAN_LOCATION')
+        ?.code ?? 0;
+  }
+
+  configurarFormularioCooperativa() {
+    this.dataForm.push(
+      {
+        type: 'select',
+        placeholder: 'Departamento Asignado',
+        ngModel: 'departmentAssigned',
+        name: 'departmentAssigned',
+        options: this.departamentos,
+        multiple: true,
+      },
+      {
+        type: 'text',
+        placeholder: 'Función',
+        ngModel: 'function',
+        name: 'function',
+      },
+      {
+        type: 'text',
+        placeholder: 'Razón Social',
+        ngModel: 'razonSocial',
+        name: 'razonSocial',
+      },
+      {
+        type: 'text',
+        placeholder: 'Dirección',
+        ngModel: 'address',
+        name: 'address',
+      },
+      {
+        type: 'text',
+        placeholder: 'CUIT',
+        ngModel: 'cuit',
+        name: 'cuit',
+      }
+    );
+    this.formData.role =
+      this.roles.find((role) => role.name === 'ROLE_COOPERATIVE')?.code ?? 0;
+  }
+
+  configurarFormularioPiloto() {
+    this.configurarFormularioTecnico();
+    this.dataForm.push(
+      {
+        type: 'text',
+        placeholder: 'Matrícula',
+        ngModel: 'matricula',
+        name: 'matricula',
+      },
+      {
+        type: 'text',
+        placeholder: 'Licencia',
+        ngModel: 'license',
+        name: 'license',
+      }
+    );
+  }
+
+  configurarFormularioGerente() {
+    this.formData.company_id = 1;
+    this.formData.role =
+      this.roles.find((role) => role.name === 'ROLE_MANAGER')?.code ?? 0;
+  }
+
+  actualizarCamposFormulario() {
+    this.dataForm = [...this.dataForm];
+    this.actualizarDepartamentosAsignados();
+  }
+
+  actualizarDepartamentosAsignados() {
+    if (Array.isArray(this.formData.departmentAssigned)) {
+    } else {
+      this.formData.departmentAssigned = [];
+    }
+  }
+
+  removerDepartamento(dept: Departamento) {
+    this.formData.departmentAssigned = this.formData.departmentAssigned.filter(
+      (value: number) => value !== dept.value
+    );
+    this.actualizarDepartamentosAsignados();
   }
 
   onFileChange(event: any, field: string) {
@@ -195,93 +294,176 @@ export class UsuariosComponent implements OnInit {
     }
   }
 
+  updateFormData() {
+    console.log('Formulario actualizado:', this.formData);
+  }
+
   onFormSubmitted(formData: any) {
     this.formData = formData;
+
+    switch (this.selectedForm) {
+      case TipoUsuarios.tecnicoGeneral:
+        this.formData.role =
+          this.roles.find((role) => role.name === 'ROLE_TECHNICIAN_GENERAL')
+            ?.code ?? 0;
+        break;
+      case TipoUsuarios.tecnico:
+        this.formData.role =
+          this.roles.find((role) => role.name === 'ROLE_TECHNICIAN_LOCATION')
+            ?.code ?? 0;
+        break;
+      case TipoUsuarios.cooperativa:
+        this.formData.role =
+          this.roles.find((role) => role.name === 'ROLE_COOPERATIVE')?.code ??
+          0;
+        break;
+      case TipoUsuarios.piloto:
+        this.formData.role =
+          this.roles.find((role) => role.name === 'ROLE_OPERATOR')?.code ?? 0;
+        break;
+      case TipoUsuarios.gerente:
+      default:
+        this.formData.role =
+          this.roles.find((role) => role.name === 'ROLE_MANAGER')?.code ?? 0;
+        break;
+    }
+
+    this.actualizarDepartamentosAsignados();
   }
 
   enviarFormulario() {
-    const formData: any = { ...this.formData };
-
-    // Asegurarse de que departmentAssigned sea un array de números si es necesario
     if (
-      formData.departmentAssigned &&
-      !Array.isArray(formData.departmentAssigned)
+      !this.formData.username ||
+      !this.formData.password ||
+      !this.formData.name ||
+      !this.formData.lastname ||
+      !this.formData.dni
     ) {
-      formData.departmentAssigned = formData.departmentAssigned
-        .split(',')
-        .map(Number);
+      this.toastr.error('Por favor completa todos los campos obligatorios.');
+      return;
     }
 
-    this.dataForm.forEach((field) => {
-      formData[field.ngModel] = this.formData[field.ngModel];
-    });
+    let requestData: any;
 
-    formData.departmentAssigned = [12, 7]; // Asignación harcodeada
-    formData.role = 4; // Asignación del rol número 4 para administrador
-
-    if (
-      this.selectedForm === TipoUsuarios.gerente ||
-      this.selectedForm === TipoUsuarios.administrador
-    ) {
-      formData.company_id = this.formData.company_id;
-      formData.isPreActivate = true;
-      formData.autogeneratePass = false;
+    switch (this.selectedForm) {
+      case TipoUsuarios.tecnicoGeneral:
+      case TipoUsuarios.tecnico:
+        requestData = {
+          ...this.formData,
+          isPreActivate: 'true',
+          autogeneratePass: 'false',
+          role: this.formData.role,
+        };
+        this.registrarTecnico(requestData);
+        break;
+      case TipoUsuarios.cooperativa:
+        requestData = {
+          ...this.formData,
+          isPreActivate: 'true',
+          autogeneratePass: 'false',
+          role: this.formData.role,
+        };
+        this.registrarCooperativa(requestData);
+        break;
+      case TipoUsuarios.piloto:
+        requestData = {
+          ...this.formData,
+          isPreActivate: 'false',
+          autogeneratePass: 'false',
+          role: 5,
+        };
+        this.registrarPiloto(requestData);
+        break;
+      case TipoUsuarios.gerente:
+      default:
+        requestData = {
+          username: this.formData.username,
+          password: this.formData.password,
+          name: this.formData.name,
+          lastname: this.formData.lastname,
+          dni: this.formData.dni,
+          company_id: 1,
+          role: this.formData.role,
+          description: this.formData.description || 'Gerente',
+          isPreActivate: 'true',
+          autogeneratePass: 'false',
+        };
+        delete requestData.departmentAssigned;
+        this.registrarGerente(requestData);
+        break;
     }
+  }
 
-    if (this.selectedForm === TipoUsuarios.cooperativa) {
-      formData.role = 6; // Asignar el rol 6 para cooperativa
-      formData.isPreActivate = false;
-      formData.autogeneratePass = false;
-      formData.departmentAssigned = [20, 22]; // Ejemplo de asignación para cooperativa
-    }
-
-    // Limpiar campos username y password
-    formData.username = '';
-    formData.password = '';
-
-    console.log('Formulario enviado:', formData);
-    this.apiService.registrarTecnico(formData).subscribe(
+  registrarTecnico(data: any) {
+    this.apiService.registrarTecnico(data).subscribe(
       (response) => {
-        console.log('Usuario registrado:', response);
-
-        if (this.imgLicenciaFile) {
-          this.apiService
-            .subirImagenLicencia(response.id, this.imgLicenciaFile)
-            .subscribe((respLic) => {
-              console.log('Imagen de licencia subida:', respLic);
-            });
-        }
-
-        if (this.imgMatriculaFile) {
-          this.apiService
-            .subirImagenMatricula(response.id, this.imgMatriculaFile)
-            .subscribe((respMat) => {
-              console.log('Imagen de matrícula subida:', respMat);
-            });
-        }
-
-        this.toastr.success('Usuario registrado exitosamente');
+        console.log('Técnico registrado correctamente:', response);
+        this.toastr.success('Técnico registrado correctamente');
+        this.resetearFormulario();
       },
       (error) => {
-        console.error('Error al registrar usuario:', error);
-        if (error.status === 400 && error.error && error.error.code === 4002) {
-          this.toastr.error(
-            'El usuario que intenta registrar ya está registrado'
-          );
-        } else if (error.status === 403) {
-          this.toastr.error(
-            'No tienes permisos suficientes para crear usuarios. Por favor, contacta a tu administrador.'
-          );
-        } else {
-          this.toastr.error(
-            'Error al registrar usuario. Por favor, intente más tarde'
-          );
-        }
+        console.error('Error al registrar técnico:', error);
+        this.toastr.error('Error al registrar técnico');
       }
     );
   }
 
+  registrarPiloto(data: any) {
+    this.apiService.registrarPiloto(data).subscribe(
+      (response) => {
+        this.toastr.success('Piloto registrado correctamente');
+        this.resetearFormulario();
+      },
+      (error) => {
+        console.error('Error al registrar piloto:', error);
+        this.toastr.error('Error al registrar piloto');
+      }
+    );
+  }
+
+  registrarGerente(data: any) {
+    this.apiService.addAdministrator(data).subscribe(
+      (response) => {
+        this.toastr.success('Gerente registrado correctamente');
+        this.resetearFormulario();
+      },
+      (error) => {
+        console.error('Error al registrar gerente:', error);
+        this.toastr.error('Error al registrar gerente');
+      }
+    );
+  }
+
+  registrarCooperativa(data: any) {
+    this.apiService.registrarCooperativa(data).subscribe(
+      (response) => {
+        this.toastr.success('Cooperativa registrada correctamente');
+        this.resetearFormulario();
+      },
+      (error) => {
+        console.error('Error al registrar la cooperativa:', error);
+        this.toastr.error('Error al registrar la Cooperativa');
+      }
+    );
+  }
   cancelar() {
-    // Método para cancelar acción si es necesario
+    this.resetearFormulario();
+  }
+
+  resetearFormulario() {
+    const self = this as any;
+
+    this.dataForm.forEach((campo) => {
+      if (campo.type === 'file') {
+        self[campo.ngModel + 'File'] = null;
+      } else {
+        self.formData[campo.ngModel] = '';
+      }
+    });
+
+    this.formData.role = 0;
+    this.formData.departmentAssigned = [];
+    this.formData.company_id = 1;
+    this.seleccionoTipo();
   }
 }
