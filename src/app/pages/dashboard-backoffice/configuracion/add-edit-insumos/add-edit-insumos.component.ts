@@ -118,6 +118,7 @@ export class AddEditInsumosComponent {
      }
 
     }else{
+      this.form.markAllAsTouched()
       this.toastr.warning(
         'Falntan completar datos requeridos',
         'Atencion'

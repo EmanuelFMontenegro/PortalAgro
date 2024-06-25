@@ -127,6 +127,7 @@ export class AddEditDronesComponent {
      }
 
     }else{
+      this.form.markAllAsTouched()
       this.toastr.warning(
         'Falntan completar datos requeridos',
         'Atencion'
