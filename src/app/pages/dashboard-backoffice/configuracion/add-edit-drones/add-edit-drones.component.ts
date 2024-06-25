@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Dron } from 'src/app/models/dron.model';
 import { DronService } from 'src/app/services/dron.service';
 import { DashboardBackOfficeService } from '../../dashboard-backoffice.service';
+import { DialogComponent } from '../../dialog/dialog.component';
 
 @Component({
   selector: 'app-add-edit-drones',
@@ -17,6 +19,7 @@ export class AddEditDronesComponent {
     private toastr: ToastrService,
     private dronService: DronService,
     private router: Router,
+    private dialog: MatDialog,
     private activeRoute: ActivatedRoute,
     public dashboardBackOffice: DashboardBackOfficeService)
     {
@@ -65,7 +68,7 @@ export class AddEditDronesComponent {
         data => {
           this.objetoOriginal = data
           this.form.patchValue(this.objetoOriginal)
-          console.log(data)
+          this.form.disable()
         },
         error => {
           console.log(error)
@@ -79,6 +82,7 @@ export class AddEditDronesComponent {
   habilitarEdicion(){
      this.edicion = true;
      this.titulo = `Editar ${this.objeto} `
+     this.form.enable()
   }
 
   mostrarEditar(){
@@ -90,7 +94,16 @@ export class AddEditDronesComponent {
   }
 
   eliminar(){
-
+    this.dronService.delete(this.id).subscribe(
+      data =>{
+        console.log(data)
+        this.toastr.success('Eliminado con éxito', 'Éxito');
+        this.router.navigate([this.rutaBase]);
+      },
+      error =>{
+        console.log(error)
+      }
+    )
   }
 
   cancelar(){
@@ -145,6 +158,20 @@ export class AddEditDronesComponent {
         console.log(error)
       }
     )
+  }
+
+  confirmarEliminar(): void {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: '400px',
+      data: {
+        message: `¿Estás seguro que quieres eliminarlo?`,
+        showCancel: true,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) this.eliminar()
+    });
   }
 
 }

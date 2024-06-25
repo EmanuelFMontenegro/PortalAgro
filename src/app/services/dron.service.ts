@@ -28,14 +28,19 @@ import { environment } from "../../environments/environment";
       return this.http.get(url);
     }
 
-    post(body: any){
+    post(body: any): Observable<any>{
       let url = `${environment.apiUrl}/dist/drone`
       return this.http.post(url, body);
     }
 
-    put(body: any , id: number){
+    put(body: any , id: number): Observable<any>{
       let url = `${environment.apiUrl}/dist/drone/${id}`
       return this.http.put(url, body);
+    }
+
+    delete(id:number): Observable<any>{
+      let url = `${environment.apiUrl}/dist/drone/${id}`
+      return this.http.delete(url);
     }
 
   }

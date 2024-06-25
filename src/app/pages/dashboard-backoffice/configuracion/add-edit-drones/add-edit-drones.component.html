@@ -3,8 +3,8 @@
     {{titulo}}
  </div>
 
- <form [formGroup]="form">
-
+ <form class="formulario-global"  [formGroup]="form">
+  <div class="grupos" >
   <div class="field-container">
     <label class="field-label">Nombre</label>
     <input matInput [formControlName]="this.ctrlName" placeholder="" required>
@@ -67,8 +67,9 @@
   </div>
 
   <div class="botones-servicio">
-    <button mat-raised-button class="cancel-button" type="button" (click)="this.mostrarEditar() ? eliminar() : cancelar()">{{this.mostrarEditar() ? 'Eliminar' : 'Cancelar'}}</button>
+    <button mat-raised-button class="cancel-button" type="button" (click)="this.mostrarEditar() ? confirmarEliminar() : cancelar()">{{this.mostrarEditar() ? 'Eliminar' : 'Cancelar'}}</button>
     <button mat-raised-button class="register-button" type="submit" (click)="this.mostrarEditar() ? habilitarEdicion(): addEdit()">{{this.mostrarEditar() ? 'Editar' : 'Guardar cambios' }}</button>
   </div>
+</div>
 
  </form>

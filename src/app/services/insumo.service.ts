@@ -38,4 +38,9 @@ import { environment } from "../../environments/environment";
       return this.http.put(url, body);
     }
 
+    delete(id:number): Observable<any>{
+      let url = `${environment.apiUrl}/dist/supplies/${id}`
+      return this.http.delete(url);
+    }
+
   }

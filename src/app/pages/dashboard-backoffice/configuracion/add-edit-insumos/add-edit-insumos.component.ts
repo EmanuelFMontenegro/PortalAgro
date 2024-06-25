@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Insumo } from 'src/app/models/insumo.model';
 import { InsumoService } from 'src/app/services/insumo.service';
 import { DashboardBackOfficeService } from '../../dashboard-backoffice.service';
+import { DialogComponent } from '../../dialog/dialog.component';
 
 @Component({
   selector: 'app-add-edit-insumos',
@@ -17,6 +19,7 @@ export class AddEditInsumosComponent {
     private toastr: ToastrService,
     private insumoService: InsumoService,
     private router: Router,
+    private dialog: MatDialog,
     private activeRoute: ActivatedRoute,
     public dashboardBackOffice: DashboardBackOfficeService)
     {
@@ -56,6 +59,7 @@ export class AddEditInsumosComponent {
         data => {
           this.objetoOriginal = data
           this.form.patchValue(this.objetoOriginal)
+          this.form.disable()
         },
         error => {
           console.log(error)
@@ -69,6 +73,7 @@ export class AddEditInsumosComponent {
   habilitarEdicion(){
      this.edicion = true;
      this.titulo = `Editar ${this.objeto} `
+     this.form.enable()
   }
 
   mostrarEditar(){
@@ -80,7 +85,16 @@ export class AddEditInsumosComponent {
   }
 
   eliminar(){
-
+    this.insumoService.delete(this.id).subscribe(
+      data =>{
+        console.log(data)
+        this.toastr.success('Eliminado con éxito', 'Éxito');
+        this.router.navigate([this.rutaBase]);
+      },
+      error =>{
+        console.log(error)
+      }
+    )
   }
 
   cancelar(){
@@ -136,6 +150,21 @@ export class AddEditInsumosComponent {
       }
     )
   }
+
+  confirmarEliminar(): void {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: '400px',
+      data: {
+        message: `¿Estás seguro que quieres eliminarlo?`,
+        showCancel: true,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) this.eliminar()
+    });
+  }
+
 
 }
 
