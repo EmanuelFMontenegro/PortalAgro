@@ -54,6 +54,7 @@ interface Cultivo {
   styleUrls: ['./lotes.component.sass'],
 })
 export class LotesComponent implements OnInit {
+  titulo: string = 'Lotes';
   mostrarMatSelectLocalidades: boolean = false;
   localidades: any[] = [];
   cropId: string | undefined;
@@ -125,7 +126,7 @@ export class LotesComponent implements OnInit {
     this.dimMin = '';
     this.dimMax = '';
 
-    let data: Titulo = { titulo: '¡Bienvenido!, Acá podrás gestionar, los lotes de los Productores' , subTitulo: ''}
+    let data: Titulo = { titulo: '¡Bienvenido!, Acá podrás gestionar, los lotes de los Productores!' , subTitulo: ''}
     this.dashboardBackOffice.dataTitulo.next(data)
 
   }

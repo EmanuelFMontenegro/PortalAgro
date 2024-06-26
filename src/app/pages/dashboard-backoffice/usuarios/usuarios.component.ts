@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/services/ApiService';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 enum TipoUsuarios {
   piloto = 'Piloto de Dron',
@@ -76,7 +77,7 @@ export class UsuariosComponent implements OnInit {
     { code: 8, name: 'ROLE_MANAGER' },
   ];
 
-  constructor(private apiService: ApiService, private toastr: ToastrService) {}
+  constructor(private apiService: ApiService, private toastr: ToastrService,private router:Router) {}
 
   ngOnInit() {
     this.cargarDepartamentos();
@@ -448,6 +449,7 @@ export class UsuariosComponent implements OnInit {
   }
   cancelar() {
     this.resetearFormulario();
+    this.router.navigate(['dashboard-backoffice/usuarios-filtro'])
   }
 
   resetearFormulario() {

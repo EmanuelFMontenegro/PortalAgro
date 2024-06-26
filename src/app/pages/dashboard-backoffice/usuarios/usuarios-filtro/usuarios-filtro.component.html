@@ -1,8 +1,6 @@
-<app-header-user></app-header-user>
-
-
-<div class="field-container">
-  <button mat-raised-button class="nuevoUsuario-button" (click)="BtnCrearUsuarios()">
-    Crear Usuarios<mat-icon style="font-size: 20px; position: relative; top: 1px; right: 3px;">add</mat-icon>
-  </button>
-</div>
+<app-titulo-container [titulo]="titulo"></app-titulo-container>
+<app-filtros-container
+  [options]="userFilterOptions"
+  [crearUsuariosRuta]="'dashboard-backoffice/usuarios'"
+  (selectionChange)="aplicarFiltro($event)">
+</app-filtros-container>

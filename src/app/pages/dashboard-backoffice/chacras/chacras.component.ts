@@ -34,6 +34,7 @@ interface DecodedToken {
   styleUrls: ['./chacras.component.sass'],
 })
 export class ChacrasComponent implements OnInit {
+  titulo: string = 'Chacras';
   Buscar: string = '';
   placeholderText: string = 'Buscar por . . .';
   private userId: number | any;
