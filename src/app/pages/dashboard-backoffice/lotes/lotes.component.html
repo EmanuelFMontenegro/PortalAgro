@@ -1,5 +1,5 @@
 
-    <div class="card user-card">
+    <!-- <div class="card user-card">
       <div class="user-content">
         <div class="avatar">
           <div class="avatar-circle">
@@ -13,8 +13,8 @@
         </div>
       </div>
       <h2 class="titulo-chacra">Lotes</h2>
-    </div>
-
+    </div> -->
+    <app-titulo-container [titulo]="titulo"></app-titulo-container>
     <div class="field-container">
       <mat-select class="field-input" placeholder="Filtrar por" [(ngModel)]="filtroSeleccionado"
         (ngModelChange)="aplicarFiltro($event)">

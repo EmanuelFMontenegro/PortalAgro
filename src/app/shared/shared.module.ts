@@ -18,6 +18,8 @@ import { HeaderUserComponent } from './components/header-user/header-user.compon
 import { FormularioComponent } from './components/formulario/formulario.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
+import { TituloContainerComponent } from './components/titulo-container/titulo-container.component';
+import { FiltrosContainerComponent } from './components/filtros-container/filtros-container.component';
 
 export const IMPORTS_MATERIAL = [
   MatSidenavModule,
@@ -37,7 +39,7 @@ export const IMPORTS_MATERIAL = [
   MatChipsModule,
   MatCheckboxModule,
   MatDialogModule,
-  
+
 ];
 
 export const IMPORT_CORE = [CommonModule, FormsModule, ReactiveFormsModule];
@@ -47,6 +49,8 @@ export const IMPORT_CORE = [CommonModule, FormsModule, ReactiveFormsModule];
     MiniaturaListadoComponent,
     HeaderUserComponent,
     FormularioComponent,
+    TituloContainerComponent,
+    FiltrosContainerComponent,
   ],
   imports: [IMPORT_CORE, IMPORTS_MATERIAL],
   exports: [
@@ -54,7 +58,9 @@ export const IMPORT_CORE = [CommonModule, FormsModule, ReactiveFormsModule];
     IMPORTS_MATERIAL,
     MiniaturaListadoComponent,
     HeaderUserComponent,
-    FormularioComponent
+    FormularioComponent,
+    TituloContainerComponent,
+    FiltrosContainerComponent
   ],
 })
 export class SharedModule {}

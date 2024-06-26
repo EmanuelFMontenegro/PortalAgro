@@ -29,6 +29,7 @@ interface DecodedToken {
   styleUrls: ['./productores.component.sass'],
 })
 export class ProductoresComponent implements OnInit {
+  titulo: string = 'Productores';
   mostrarMatSelectLocalidades: boolean = false;
   Buscar: string = '';
   nombreABuscar: string = '';

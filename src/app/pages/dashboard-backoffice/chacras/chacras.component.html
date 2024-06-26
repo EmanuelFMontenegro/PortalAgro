@@ -1,4 +1,4 @@
-<div class="container">
+<!-- <div class="container">
     <div class="card user-card">
       <div class="user-content">
         <div class="avatar">
@@ -13,8 +13,8 @@
         </div>
       </div>
       <h2 class="titulo-chacra">Chacras</h2>
-    </div>
-
+    </div> -->
+    <app-titulo-container [titulo]="titulo"></app-titulo-container>
     <div class="field-container">
       <mat-select class="field-input" placeholder="Filtrar por" (selectionChange)="aplicarFiltro($event)">
         <mat-option value="localidad">Localidad</mat-option>
