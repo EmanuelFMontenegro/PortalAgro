@@ -1,0 +1,39 @@
+<div class="titulo-principal">
+  {{titulo}}
+</div>
+
+<form class="formulario-global"  [formGroup]="form">
+  <div class="grupos" >
+
+ <div class="field-container">
+  <label class="field-label">Nombre</label>
+  <input matInput [formControlName]="this.ctrlName" placeholder="" required>
+  <span *ngIf="form.get(this.ctrlName)?.hasError('required') && form.controls[this.ctrlName]?.touched" class="error-message">
+    Este campo es requerido</span>
+</div>
+
+<div class="field-container">
+  <label class="field-label">Código</label>
+  <input matInput [formControlName]="this.ctrlCode" placeholder="" required>
+  <span *ngIf="form.get(this.ctrlCode)?.hasError('required') && form.controls[this.ctrlCode]?.touched" class="error-message">
+    Este campo es requerido</span>
+</div>
+
+<div class="field-container">
+  <label class="field-label">Formato</label>
+  <input matInput [formControlName]="this.ctrlFormato" placeholder="" required>
+  <span *ngIf="form.get(this.ctrlFormato)?.hasError('required') && form.controls[this.ctrlFormato]?.touched" class="error-message">
+    Este campo es requerido</span>
+</div>
+
+<div class="field-container-observaciones">
+  <label class="field-label">Descripción</label>
+  <textarea matInput class="field-input-obs" [formControlName]="this.ctrlDescripcion"></textarea>
+</div>
+
+<div class="botones-servicio">
+  <button mat-raised-button class="cancel-button" type="button" (click)="this.mostrarEditar() ?  confirmarEliminar() : cancelar()">{{this.mostrarEditar() ? 'Eliminar' : 'Cancelar'}}</button>
+  <button mat-raised-button class="register-button" type="submit" (click)="this.mostrarEditar() ? habilitarEdicion(): addEdit()">{{this.mostrarEditar() ? 'Editar' : 'Guardar cambios' }}</button>
+</div>
+</div>
+</form>

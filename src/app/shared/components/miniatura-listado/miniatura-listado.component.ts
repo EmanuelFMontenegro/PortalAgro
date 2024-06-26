@@ -32,7 +32,7 @@ export class MiniaturaListadoComponent {
     if(key) localStorage.setItem(key, JSON.stringify(data));
 
     // Navegar al componente perfil-productor
-    if(ruta) this.router.navigate([ruta]);
+    if(ruta) this.router.navigate([`${ruta}/${data?.id}`]);
   }
 
   getValue(objeto:any, field: string){
