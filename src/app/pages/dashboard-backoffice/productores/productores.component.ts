@@ -21,7 +21,9 @@ interface DecodedToken {
   userId: number;
   sub: string;
   roles: string;
+  companyId: number;
 }
+
 
 @Component({
   selector: 'app-productores',
@@ -86,28 +88,27 @@ export class ProductoresComponent implements OnInit {
   decodeToken(): void {
     const token = this.authService.getToken();
     if (token) {
-      const decoded: any = jwtDecode(token); // Adjust this type if necessary
-
-      // Extract user ID and email from decoded token
+      const decoded: any = jwtDecode(token);
       this.userId = decoded.userId;
-      this.name= decoded.name;
+      this.name = decoded.name;
       this.email = decoded.sub;
-
-         } else {
+      this.companyId = decoded.companyId; 
+    } else {
       this.userId = null;
       this.email = null;
     }
   }
 
+
   cargarDatosDeUsuario() {
-    const decoded: DecodedToken = jwtDecode(this.authService.getToken() || '');
-    if ('userId' in decoded && 'sub' in decoded && 'roles' in decoded) {
-      this.userId = decoded.userId;
-      this.email = decoded.sub;
+    const token = this.authService.getToken();
+    if (token) {
+      const decoded: DecodedToken = jwtDecode(token);
+      if (decoded.userId && decoded.companyId) { // Asegúrate de tener companyId en el token
+        this.userId = decoded.userId;
+        this.companyId = decoded.companyId;
+        this.email = decoded.sub;
 
-      this.companyId = 1;
-
-      if (this.userId !== null && this.companyId !== null) {
         this.apiService.findUserById(this.companyId, this.userId).subscribe(
           (data) => {
             this.nombre = data.name;
@@ -117,39 +118,38 @@ export class ProductoresComponent implements OnInit {
             console.error('Error al obtener el nombre del usuario:', error);
           }
         );
+      } else {
+        this.userId = null;
+        this.email = null;
       }
-    } else {
-      this.userId = null;
-      this.email = null;
     }
   }
+
 
   cargarUsuarios(locationId?: number) {
     this.apiService.getPeopleAdmin(locationId).subscribe(
       (data: any) => {
-
         if (data.list && data.list.length > 0) {
           const usuariosList = data.list.flat();
           this.usuarios = usuariosList.map((usuario: any) => ({
-            id:usuario.id,
+            id: usuario.id,
             nombre: usuario.name,
             apellido: usuario.lastname,
-            dni:usuario.dni,
-            email:usuario.userEmail,
-            telefono:usuario.telephone,
+            dni: usuario.dni,
+            email: usuario.userEmail,
+            telefono: usuario.telephone,
             localidad: usuario.location.name,
-            descripcion:usuario.descriptions
-
+            descripcion: usuario.descriptions
           }));
         }
-
-
       },
       (error) => {
         console.error('Error al obtener los usuarios:', error);
+        this.toastr.error('Error al cargar usuarios', 'Error');
       }
     );
   }
+
 
   obtenerLocalidades() {
     this.apiService.getLocationMisiones('location').subscribe(

@@ -163,6 +163,6 @@ export class NuevoUsuarioComponent implements OnInit, AfterViewInit {
   }
 
   cancelar() {
-    this.router.navigate(['dashboard-backoffice/inicio']);
+    this.router.navigate(['dashboard-backoffice/productores']);
   }
 }

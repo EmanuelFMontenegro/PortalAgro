@@ -15,6 +15,7 @@ interface DecodedToken {
   userId: number;
   sub: string;
   roles: string;
+  companyId: number;
 }
 @Component({
   selector: 'app-inicio',
@@ -33,6 +34,7 @@ export class InicioComponent implements OnInit {
   nombreCampo: string = '';
   localidad: string = '';
   nombreLocalidad: string = '';
+  name:string | null=null;
   private userId: number | any;
   private companyId: number | any;
   public userEmail: string | null = null;
@@ -78,9 +80,14 @@ export class InicioComponent implements OnInit {
   decodeToken(): void {
     const token = this.authService.getToken();
     if (token) {
-      const decoded = jwtDecode<CustomJwtPayload>(token);
+      const decoded: any = jwtDecode(token);
       this.userId = decoded.userId;
+      this.name = decoded.name;
       this.userEmail = decoded.sub;
+      this.companyId = decoded.companyId;
+    } else {
+      this.userId = null;
+      this.userEmail = null;
     }
   }
 
@@ -89,34 +96,37 @@ export class InicioComponent implements OnInit {
   }
 
   DatosDeUsuarioAdmin() {
-    const decoded: DecodedToken = jwtDecode(this.authService.getToken() || '');
-    if ('userId' in decoded && 'sub' in decoded && 'roles' in decoded) {
-      this.userId = decoded.userId;
-      this.userEmail = decoded.sub;
+    const token = this.authService.getToken();
+    if (token) {
+      const decoded: DecodedToken = jwtDecode(token);
+      if ('userId' in decoded && 'sub' in decoded && 'roles' in decoded && 'companyId' in decoded) {
+        this.userId = decoded.userId;
+        this.userEmail = decoded.sub;
+        this.companyId = decoded.companyId;
 
-      this.companyId = 1;
-
-      if (this.userId !== null && this.companyId !== null) {
-
-        this.apiService.findUserById(this.companyId,this.userId).subscribe(
+        this.apiService.findUserById(this.companyId, this.userId).subscribe(
           (data) => {
-
             this.nombre = data.name;
-            this.apellido= data.lastname;
+            this.apellido = data.lastname;
+
+            // Actualizas el título después de obtener los datos del usuario
+            this.dashboardBackOffice.dataTitulo.next({
+              titulo: `¡Bienvenido, ${this.nombre} ${this.apellido}!`,
+              subTitulo: '',
+            });
           },
           (error) => {
-            console.error(
-              'Error al obtener el nombre del usuario:',
-              error
-            );
+            console.error('Error al obtener el nombre del usuario:', error);
           }
         );
+      } else {
+        this.userId = null;
+        this.userEmail = null;
+        // Manejo adicional si es necesario
       }
-    } else {
-      this.userId = null;
-      this.userEmail = null;
     }
   }
+}
 
 
-  }
+  

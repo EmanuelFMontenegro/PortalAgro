@@ -181,6 +181,27 @@ export class ApiService {
       adminData
     );
   }
+
+  // USUARIOS  genereales del Sistema
+
+  usuariosGenerales(companyId?: string, typeUser?: string): Observable<any> {
+    const url = `${this.baseURL}/dist/user/employee/all`;
+
+    // Construye los parámetros de consulta
+    let params = new HttpParams();
+    if (companyId) {
+      params = params.set('companyId', companyId);
+    }
+    if (typeUser) {
+      params = params.set('type_user', typeUser);
+    }
+
+    // Realiza la solicitud GET con los parámetros de consulta
+    return this.http.get<any>(url, { params });
+  }
+
+
+
   // <--ENPOINTS PARA AGREGAR TECNICOS -->
 
   registrarTecnico(data: any): Observable<any> {

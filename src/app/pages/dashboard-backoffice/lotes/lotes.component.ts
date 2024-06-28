@@ -16,8 +16,14 @@ import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../dialog/dialog.component';
 import { Router, ActivatedRoute } from '@angular/router';
-import { TipoLabel, DataView } from 'src/app/shared/components/miniatura-listado/miniatura.model';
-import { DashboardBackOfficeService, Titulo } from '../dashboard-backoffice.service';
+import {
+  TipoLabel,
+  DataView,
+} from 'src/app/shared/components/miniatura-listado/miniatura.model';
+import {
+  DashboardBackOfficeService,
+  Titulo,
+} from '../dashboard-backoffice.service';
 
 interface CustomJwtPayload {
   userId: number;
@@ -92,20 +98,23 @@ export class LotesComponent implements OnInit {
     },
   };
 
-  dataView: DataView [] = [
-
+  dataView: DataView[] = [
     // IMAGEN
-    {label: '', field: 'assets/img/lote_1.svg', tipoLabel: TipoLabel.imagen},
+    { label: '', field: 'assets/img/lote_1.svg', tipoLabel: TipoLabel.imagen },
 
     // SPAN
-    {label: 'Nombre del Lote', field: 'name', tipoLabel: TipoLabel.span},
-    {label: 'Plantación', field:'plant_name', tipoLabel: TipoLabel.span },
-    {label: 'Hectáreas', field:'dimensions', tipoLabel: TipoLabel.span },
-    {label: 'Descripción', field: 'descriptions', tipoLabel: TipoLabel.span},
+    { label: 'Nombre del Lote', field: 'name', tipoLabel: TipoLabel.span },
+    { label: 'Plantación', field: 'plant_name', tipoLabel: TipoLabel.span },
+    { label: 'Hectáreas', field: 'dimensions', tipoLabel: TipoLabel.span },
+    { label: 'Descripción', field: 'descriptions', tipoLabel: TipoLabel.span },
 
     // VER MAS
-    {label: '', field: 'dashboard-backoffice/perfil-productor', tipoLabel: TipoLabel.botonVermas},
- ]
+    {
+      label: '',
+      field: 'dashboard-backoffice/perfil-productor',
+      tipoLabel: TipoLabel.botonVermas,
+    },
+  ];
 
   constructor(
     private authService: AuthService,
@@ -115,8 +124,8 @@ export class LotesComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private dialog: MatDialog,
-    public dashboardBackOffice: DashboardBackOfficeService)
-   {
+    public dashboardBackOffice: DashboardBackOfficeService
+  ) {
     this.loteForm = this.fb.group({
       nombre: ['', Validators.required],
       plantación: ['', Validators.required],
@@ -126,9 +135,12 @@ export class LotesComponent implements OnInit {
     this.dimMin = '';
     this.dimMax = '';
 
-    let data: Titulo = { titulo: '¡Bienvenido!, Acá podrás gestionar, los lotes de los Productores!' , subTitulo: ''}
-    this.dashboardBackOffice.dataTitulo.next(data)
-
+    let data: Titulo = {
+      titulo:
+        '¡Bienvenido!, Acá podrás gestionar, los lotes de los Productores!',
+      subTitulo: '',
+    };
+    this.dashboardBackOffice.dataTitulo.next(data);
   }
 
   ngOnInit(): void {
@@ -197,7 +209,7 @@ export class LotesComponent implements OnInit {
   }
 
   obtenerIdLocalidadSeleccionada(): number | undefined {
-     return this.filtroLocalidades.value;
+    return this.filtroLocalidades.value;
   }
   obtenerCultivos() {
     this.apiService.getAllTypeCropOperador().subscribe(
@@ -271,8 +283,6 @@ export class LotesComponent implements OnInit {
           } else {
             this.loteData = [];
             this.toastr.info('Aún no se han agregado lotes.', 'Información');
-
-
           }
         },
         (error) => {
@@ -305,7 +315,6 @@ export class LotesComponent implements OnInit {
   processLoteData(data: Lote[]): void {
     this.apiService.getAllTypeCropOperador().subscribe(
       (typeCrops: any) => {
-        console.log('datos de los cultivos', typeCrops);
         const typeCropsMap = typeCrops.reduce((acc: any, curr: any) => {
           acc[curr.id] = curr.name;
           return acc;
@@ -643,7 +652,9 @@ export class LotesComponent implements OnInit {
     }
   }
 
-  BtnNuevaChacra() {this.router.navigate(['dashboard-backoffice/inicio']);}
+  BtnNuevaChacra() {
+    this.router.navigate(['dashboard-backoffice/inicio']);
+  }
 
   verMas(campo: any) {
     this.router.navigate(['dashboard-backoffice/perfil-productor']);
