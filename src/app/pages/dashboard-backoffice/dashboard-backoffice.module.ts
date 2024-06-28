@@ -26,7 +26,8 @@ import { CargarLotesComponent } from './chacras/cargar-lotes/cargar-lotes.compon
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { UsuariosFiltroComponent } from './usuarios/usuarios-filtro/usuarios-filtro.component';
-
+import { RenderProvincesPipe } from 'src/app/services/render-pipes.pipe';
+import { RenderDepartmentsPipe } from 'src/app/services/render-pipes.pipe';
 @NgModule({
   declarations: [
     DashboardBackofficeComponents,
@@ -50,6 +51,8 @@ import { UsuariosFiltroComponent } from './usuarios/usuarios-filtro/usuarios-fil
     CargarLotesComponent,
     UsuariosComponent,
     UsuariosFiltroComponent,
+    RenderProvincesPipe,
+    RenderDepartmentsPipe
   ],
   imports: [
     IMPORTS_MATERIAL,
@@ -60,5 +63,10 @@ import { UsuariosFiltroComponent } from './usuarios/usuarios-filtro/usuarios-fil
     ReactiveFormsModule,
     BrowserModule,
   ],
+  providers: [
+    RenderProvincesPipe,
+    RenderDepartmentsPipe
+
+  ]
 })
 export class DashboardBackofficeModule {}

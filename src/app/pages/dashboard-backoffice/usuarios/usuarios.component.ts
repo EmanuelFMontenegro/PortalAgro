@@ -416,11 +416,16 @@ export class UsuariosComponent implements OnInit {
         this.resetearFormulario();
       },
       (error) => {
-        console.error('Error al registrar piloto:', error);
-        this.toastr.error('Error al registrar piloto');
+        if (error?.error?.code === 4002) {
+          this.toastr.warning('El usuario ya fue registrado, intente con otro email');
+        } else {
+          console.error('Error al registrar piloto:', error);
+          this.toastr.error('Error al registrar piloto');
+        }
       }
     );
   }
+
 
   registrarGerente(data: any) {
     this.apiService.addAdministrator(data).subscribe(

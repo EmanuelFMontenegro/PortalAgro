@@ -14,6 +14,7 @@ interface DecodedToken {
   userId: number;
   sub: string;
   roles: string;
+  companyId: number;
 }
 @Component({
   selector: 'app-inicio',
@@ -32,6 +33,7 @@ export class InicioComponent implements OnInit {
   nombreCampo: string = '';
   localidad: string = '';
   nombreLocalidad: string = '';
+  private companyId: number | any;
   private userId: number | any;
   private personId: number | any;
   public userEmail: string | null = null;
@@ -73,11 +75,22 @@ export class InicioComponent implements OnInit {
   decodeToken(): void {
     const token = this.authService.getToken();
     if (token) {
-      const decoded = jwtDecode<CustomJwtPayload>(token);
-      this.userId = decoded.userId;
-      this.userEmail = decoded.sub;
+      try {
+        const decoded: any = jwtDecode(token);
+        this.userId = decoded.userId;
+        this.userEmail = decoded.sub;
+        this.companyId = decoded.companyId;
+      } catch (error) {
+        console.error('Error al decodificar el token:', error);
+      }
+    } else {
+      this.userId = null;
+      this.userEmail = null;
     }
   }
+
+
+
 
   BtnRegisterCampos(): void {
     this.router.navigate(['/dashboard/campo']);
@@ -107,7 +120,7 @@ export class InicioComponent implements OnInit {
     if ('userId' in decoded && 'sub' in decoded && 'roles' in decoded) {
       this.userId = decoded.userId;
       this.userEmail = decoded.sub;
-
+      this.companyId = decoded.companyId;
       this.personId = this.userId;
 
       if (this.userId !== null && this.personId !== null) {

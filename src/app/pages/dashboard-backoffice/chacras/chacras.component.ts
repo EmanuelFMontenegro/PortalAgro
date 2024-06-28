@@ -26,6 +26,7 @@ interface DecodedToken {
   userId: number;
   sub: string;
   roles: string;
+  companyId: number;
 }
 
 @Component({
@@ -108,11 +109,16 @@ export class ChacrasComponent implements OnInit {
   decodeToken(): void {
     const token = this.authService.getToken();
     if (token) {
-      const decoded = jwtDecode<CustomJwtPayload>(token);
+      const decoded: any = jwtDecode(token);
       this.userId = decoded.userId;
       this.userEmail = decoded.sub;
-    }
+      this.companyId = decoded.companyId;
+
+  } else {
+    this.userId = null;
+    this.userEmail = null;
   }
+}
 
   aplicarFiltro(event: MatSelectChange) {
     const filtros: {
@@ -179,14 +185,14 @@ export class ChacrasComponent implements OnInit {
   }
 
   cargarDatosDeUsuario() {
-    const decoded: DecodedToken = jwtDecode(this.authService.getToken() || '');
-    if ('userId' in decoded && 'sub' in decoded && 'roles' in decoded) {
-      this.userId = decoded.userId;
-      this.userEmail = decoded.sub;
+    const token = this.authService.getToken();
+    if (token) {
+      const decoded: DecodedToken = jwtDecode(token);
+      if (decoded.userId && decoded.companyId) { // Asegúrate de tener companyId en el token
+        this.userId = decoded.userId;
+        this.companyId = decoded.companyId;
+        this.userEmail = decoded.sub;
 
-      this.companyId = 1;
-
-      if (this.userId !== null && this.companyId !== null) {
         this.apiService.findUserById(this.companyId, this.userId).subscribe(
           (data) => {
             this.nombre = data.name;
@@ -196,10 +202,10 @@ export class ChacrasComponent implements OnInit {
             console.error('Error al obtener el nombre del usuario:', error);
           }
         );
+      } else {
+        this.userId = null;
+        this.userEmail = null;
       }
-    } else {
-      this.userId = null;
-      this.userEmail = null;
     }
   }
 
