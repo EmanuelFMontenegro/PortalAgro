@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Dron } from 'src/app/models/dron.model';
 import { DronService } from 'src/app/services/dron.service';
+import { PermisoService } from 'src/app/services/permisos.service';
 import { DashboardBackOfficeService } from '../../dashboard-backoffice.service';
 import { DialogComponent } from '../../dialog/dialog.component';
 
@@ -19,6 +20,7 @@ export class AddEditDronesComponent {
     private toastr: ToastrService,
     private dronService: DronService,
     private router: Router,
+    public permisoService: PermisoService,
     private dialog: MatDialog,
     private activeRoute: ActivatedRoute,
     public dashboardBackOffice: DashboardBackOfficeService)

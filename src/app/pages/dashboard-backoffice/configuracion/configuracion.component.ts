@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { PermisoBasico} from 'src/app/models/permisos.model';
 import {  ConfiguracionService } from 'src/app/services/configuracion.service';
 import { DronService } from 'src/app/services/dron.service';
 import { InsumoService } from 'src/app/services/insumo.service';
+import { PermisoService } from 'src/app/services/permisos.service';
 import { TipoLabel, DataView } from 'src/app/shared/components/miniatura-listado/miniatura.model';
 import { DashboardBackOfficeService, Titulo } from '../dashboard-backoffice.service';
 
@@ -23,6 +25,7 @@ export class ConfiguracionComponent {
   constructor( private dronService: DronService,
                private insumoService:InsumoService,
                private router: Router,
+               private permisoService: PermisoService,
                public dashboardBackOffice: DashboardBackOfficeService)
               {
                 this.dashboardBackOffice.dataTitulo.next({ titulo: 'Configuración' , subTitulo: ''})
@@ -33,6 +36,7 @@ export class ConfiguracionComponent {
   opcionSeleccionada = TiposConfiguraciones.drones
   drones = TiposConfiguraciones.drones;
   insumos = TiposConfiguraciones.insumos;
+  permisosComponente: PermisoBasico = {}
   alta: any;
 
   ngOnInit(): void {
@@ -41,6 +45,8 @@ export class ConfiguracionComponent {
 
   configDrones(){
     this.alta = TiposConfiguraciones.drones
+    if (this.permisoService.permisoUsuario?.value?.drone) this.permisosComponente = this.permisoService.permisoUsuario?.value.drone
+    console.log(this.permisosComponente)
     this.dataView = [
       {label: '', field: 'assets/img/lote_1.svg', tipoLabel: TipoLabel.imagen},
       {label: 'Nombre', field: 'nickname', tipoLabel: TipoLabel.span},
@@ -61,6 +67,7 @@ export class ConfiguracionComponent {
 
   configInsumos(){
     this.alta = TiposConfiguraciones.insumos
+    if (this.permisoService.permisoUsuario?.value?.supplies) this.permisosComponente = this.permisoService.permisoUsuario?.value.supplies
     this.dataView = [
       {label: '', field: 'assets/img/lote_3.svg', tipoLabel: TipoLabel.imagen},
       {label: 'Nombre', field: 'name', tipoLabel: TipoLabel.span},
@@ -80,6 +87,7 @@ export class ConfiguracionComponent {
   }
 
   cambiarConfig(data:any){
+    console.log(this.permisoService.permisoUsuario)
     let tipoConfig = data.value
     switch (tipoConfig) {
       case TiposConfiguraciones.drones:

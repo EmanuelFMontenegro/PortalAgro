@@ -7,7 +7,7 @@
         <img src="{{item.field}}" [ngClass]="{'img-miniatura': !this.productor, 'img-productor': this.productor }" alt="" *ngIf="item.tipoLabel == tipoImagen" >
 
         <!-- TITULO -->
-        <h3 *ngIf="item.tipoLabel == tipoTitulo">{{this.getValue(miniatura,item.field)}}</h3>
+        <h3 style="text-align:center;" *ngIf="item.tipoLabel == tipoTitulo">{{this.getValue(miniatura,item.field)}}</h3>
 
         <!-- SUB-TITULO -->
         <p *ngIf="item.tipoLabel == tipoSubtitulo ">{{this.getValue(miniatura,item.field)}}</p>
