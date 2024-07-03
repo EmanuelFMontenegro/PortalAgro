@@ -22,6 +22,7 @@ import { ChacrasLoteComponent } from './chacras/chacras-lote/chacras-lote.compon
 import { CargarLotesComponent } from './chacras/cargar-lotes/cargar-lotes.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { UsuariosFiltroComponent } from './usuarios/usuarios-filtro/usuarios-filtro.component';
+import { UsuariosActualizarComponent } from './usuarios/usuarios-actualizar/usuarios-actualizar.component';
 
 const routes: Routes = [
   {
@@ -41,6 +42,12 @@ const routes: Routes = [
       {
         path: 'usuarios',
         component: UsuariosComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['ROLE_ADMIN'] }
+      },
+      {
+        path: 'usuarios-actualizar',
+        component: UsuariosActualizarComponent,
         canActivate: [AuthGuard],
         data: { roles: ['ROLE_ADMIN'] }
       },

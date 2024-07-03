@@ -77,10 +77,15 @@ export class UsuariosComponent implements OnInit {
     { code: 8, name: 'ROLE_MANAGER' },
   ];
 
-  constructor(private apiService: ApiService, private toastr: ToastrService,private router:Router) {}
+  constructor(
+    private apiService: ApiService,
+    private toastr: ToastrService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.cargarDepartamentos();
+    this.loadDataUserType();
   }
 
   cargarDepartamentos() {
@@ -108,6 +113,44 @@ export class UsuariosComponent implements OnInit {
         this.toastr.error('Error al cargar departamentos');
       }
     );
+  }
+
+  loadDataUserType() {
+    const userType = localStorage.getItem('UserType');
+    if (userType) {
+      const userData = JSON.parse(userType);
+      const userId = userData.id;
+
+      // Llamada para obtener detalles del usuario por ID
+      this.apiService.getUserById(userId).subscribe(
+        (userDetails) => {
+          console.log('Datos del usuario:', userDetails);
+          this.fillFormData(userDetails); // Método para asignar datos al formulario
+        },
+        (error) => {
+          console.error('Error al obtener datos del usuario:', error);
+          this.toastr.error('Error al obtener datos del usuario');
+        }
+      );
+    }
+  }
+
+  fillFormData(userData: any) {
+    // Asignación de datos al formulario o variables del componente
+    this.formData.username = userData.username;
+    this.formData.name = userData.name;
+    this.formData.lastname = userData.lastname;
+    this.formData.dni = userData.dni;
+
+    // Asignación de departamentos asignados, si corresponde
+    if (userData.departmentAssigned) {
+      this.formData.departmentAssigned = userData.departmentAssigned;
+    }
+
+    // Configuración del formulario según el tipo de usuario
+
+    // Actualizar campos o realizar otras acciones necesarias
+    this.actualizarCamposFormulario();
   }
 
   seleccionoTipo() {
@@ -417,7 +460,9 @@ export class UsuariosComponent implements OnInit {
       },
       (error) => {
         if (error?.error?.code === 4002) {
-          this.toastr.warning('El usuario ya fue registrado, intente con otro email');
+          this.toastr.warning(
+            'El usuario ya fue registrado, intente con otro email'
+          );
         } else {
           console.error('Error al registrar piloto:', error);
           this.toastr.error('Error al registrar piloto');
@@ -425,7 +470,6 @@ export class UsuariosComponent implements OnInit {
       }
     );
   }
-
 
   registrarGerente(data: any) {
     this.apiService.addAdministrator(data).subscribe(
@@ -454,7 +498,7 @@ export class UsuariosComponent implements OnInit {
   }
   cancelar() {
     this.resetearFormulario();
-    this.router.navigate(['dashboard-backoffice/usuarios-filtro'])
+    this.router.navigate(['dashboard-backoffice/usuarios-filtro']);
   }
 
   resetearFormulario() {

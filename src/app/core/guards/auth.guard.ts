@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import {
+  CanActivate,
+  Router,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+} from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { jwtDecode } from 'jwt-decode';
 import { AuthService } from 'src/app/services/AuthService';
@@ -14,7 +19,10 @@ export class AuthGuard implements CanActivate {
     private toastr: ToastrService
   ) {}
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): boolean {
     const token = this.authService.getToken();
 
     if (token && !this.isTokenExpired(token)) {
@@ -22,11 +30,18 @@ export class AuthGuard implements CanActivate {
       const roles = decodedToken.roles.map((role: any) => role.authority); // Obtener los roles del usuario
 
       const isAdmin = roles.includes('ROLE_ADMIN');
-      const isUsuariosRoute = state.url.includes('/dashboard-backoffice/usuarios');
+      const isUsuariosRoute = state.url.includes(
+        '/dashboard-backoffice/usuarios'
+      );
 
       if (!isAdmin && isUsuariosRoute) {
-        console.log('Acceso denegado a usuarios para usuarios no administradores.');
-        this.toastr.warning('No tienes los permisos para ingresar a esta vista.', 'Acceso denegado');
+        console.log(
+          'Acceso denegado a usuarios para usuarios no administradores.'
+        );
+        this.toastr.warning(
+          'No tienes permisos para acceder a esta sección.',
+          'Acceso Restringido'
+        );
         this.router.navigate(['/dashboard-backoffice']);
         return false;
       }

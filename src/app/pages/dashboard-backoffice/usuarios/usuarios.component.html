@@ -1,12 +1,15 @@
 <app-header-user></app-header-user>
 
 <div class="form-section">
+  <!-- Selector de tipo de usuario -->
   <div class="field-container">
     <label for="formType" class="field-label">Seleccionar el Usuario:</label>
     <select class="field-input" id="formType" [(ngModel)]="selectedForm" (change)="seleccionoTipo()">
       <option [value]="opcion" *ngFor="let opcion of opciones">{{ opcion }}</option>
     </select>
   </div>
+
+  <!-- Componente de formulario dinámico -->
   <app-formulario
     [formType]="selectedForm"
     [titulo]="selectedForm"
@@ -15,11 +18,10 @@
   </app-formulario>
 </div>
 
+<!-- Botones del formulario -->
 <div class="botones-form">
   <button mat-raised-button class="crear-button" (click)="enviarFormulario()">Crear usuario</button>
   <button mat-raised-button class="cancelar-button" (click)="cancelar()">Cancelar</button>
 </div>
-
-
 
 
