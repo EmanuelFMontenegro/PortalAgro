@@ -1,21 +1,15 @@
-<app-header-user></app-header-user>
+<app-header-user
+  [selectedName]="formData.name || null"
+  [selectedEmail]="formData.userResponseDTO?.username || null"
+  [selectedRole]="formData.userResponseDTO?.role?.name || null"
+></app-header-user>
 
-<div class="form-container">
-  <div class="field-container">
-    <!-- Componente de formulario dinámico -->
-    <form>
-      <ng-container *ngFor="let field of dataForm">
-        <div class="field-group">
-          <label class="field-label">{{ field.placeholder }}</label>
-          <input [type]="field.type" [placeholder]="field.placeholder" [(ngModel)]="formData[field.ngModel]" [name]="field.name" class="field-input">
-        </div>
-      </ng-container>
-    </form>
-  </div>
-</div>
+<!-- Integración del formulario dinámico utilizando FormularioComponent -->
+<app-formulario [titulo]="'Actualizar Usuario'" [dataForm]="dataForm" (formSubmitted)="enviarFormulario()">
+</app-formulario>
 
 <!-- Botones del formulario -->
 <div class="botones-form">
-  <button mat-raised-button class="crear-button" (click)="enviarFormulario()">Actualizar usuario</button>
+  <button mat-raised-button class="crear-button" type="submit">Actualizar usuario</button>
   <button mat-raised-button class="cancelar-button" (click)="cancelar()">Cancelar</button>
 </div>

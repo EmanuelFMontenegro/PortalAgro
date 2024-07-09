@@ -38,6 +38,7 @@ interface Departamento {
   styleUrls: ['./usuarios.component.sass'],
 })
 export class UsuariosComponent implements OnInit {
+  departamentoVacio = false;
   titulo = 'Formulario de Usuarios';
   opciones = [
     TipoUsuarios.gerente,
@@ -55,7 +56,6 @@ export class UsuariosComponent implements OnInit {
     name: '',
     lastname: '',
     dni: '',
-    description: '',
     role: 0,
     departmentAssigned: [] as number[],
     company_id: 1,
@@ -136,7 +136,6 @@ export class UsuariosComponent implements OnInit {
   }
 
   fillFormData(userData: any) {
-    // Asignación de datos al formulario o variables del componente
     this.formData.username = userData.username;
     this.formData.name = userData.name;
     this.formData.lastname = userData.lastname;
@@ -146,8 +145,6 @@ export class UsuariosComponent implements OnInit {
     if (userData.departmentAssigned) {
       this.formData.departmentAssigned = userData.departmentAssigned;
     }
-
-    // Configuración del formulario según el tipo de usuario
 
     // Actualizar campos o realizar otras acciones necesarias
     this.actualizarCamposFormulario();
@@ -177,12 +174,6 @@ export class UsuariosComponent implements OnInit {
         name: 'lastname',
       },
       { type: 'text', placeholder: 'DNI', ngModel: 'dni', name: 'dni' },
-      {
-        type: 'textarea',
-        placeholder: 'Descripción',
-        ngModel: 'description',
-        name: 'description',
-      },
     ];
 
     switch (this.selectedForm) {
@@ -387,6 +378,15 @@ export class UsuariosComponent implements OnInit {
       return;
     }
 
+    // Verificación del campo de departamento
+    if (this.selectedForm !== TipoUsuarios.gerente && this.formData.departmentAssigned.length === 0) {
+      this.toastr.error('El campo Departamento Asignado es obligatorio.','Atención !!!');
+      this.departamentoVacio = true; // Bandera para mostrar mensaje en el HTML
+      return;
+    } else {
+      this.departamentoVacio = false; // Resetea la bandera si el campo está lleno
+    }
+
     let requestData: any;
 
     switch (this.selectedForm) {
@@ -428,7 +428,6 @@ export class UsuariosComponent implements OnInit {
           dni: this.formData.dni,
           company_id: 1,
           role: this.formData.role,
-          description: this.formData.description || 'Gerente',
           isPreActivate: 'true',
           autogeneratePass: 'false',
         };
@@ -437,6 +436,7 @@ export class UsuariosComponent implements OnInit {
         break;
     }
   }
+
 
   registrarTecnico(data: any) {
     this.apiService.registrarTecnico(data).subscribe(

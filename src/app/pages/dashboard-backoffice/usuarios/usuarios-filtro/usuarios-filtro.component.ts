@@ -101,6 +101,7 @@ export class UsuariosFiltroComponent implements OnInit {
       label: 'UserType',
       field: 'dashboard-backoffice/usuarios-actualizar',
       tipoLabel: TipoLabel.botonVermas,
+
     },
   ];
 
@@ -116,14 +117,14 @@ export class UsuariosFiltroComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('DataView inicial:', this.dataView);
+
     this.traerUsuariosGenerales();
   }
 
   traerUsuariosGenerales() {
     this.apiService.usuariosGenerales().subscribe(
       (response) => {
-        console.log('Usuarios generales:', response);
+
         if (response.list && response.list.length > 0) {
           this.usuarios = response.list[0];
 
@@ -137,13 +138,13 @@ export class UsuariosFiltroComponent implements OnInit {
               .map((departamento) => departamento.name)
               .join(', ');
 
-            usuario.typeUser = this.mapTypeUser(usuario.typeUser);
+            // usuario.typeUser = this.mapTypeUser(usuario.typeUser);
 
             // Set color based on user type
             usuario.color = this.getColorForUserType(usuario.typeUser);
           });
 
-          console.log('Usuarios procesados:', this.usuarios);
+
         } else {
           console.error('La respuesta del servidor no contiene datos válidos.');
         }
@@ -167,24 +168,24 @@ export class UsuariosFiltroComponent implements OnInit {
       case 'Cooperativa':
         return '$cooperativa';
       default:
-        return ''; // Maneja el caso por defecto o devuelve un color predeterminado
+        return '';
     }
   }
+    // BLOQUE de codigo para setear nombre de perfiles a español !!!
+  // mapTypeUser(typeUser: string): string {
+  //   const typeMapping: { [key: string]: string } = {
+  //     SUPERUSER: 'Super Admin',
+  //     ADMINISTRATOR: 'Admin',
+  //     MANAGEMENT:'Gerente General',
+  //     TECHNICAL: 'Técnico',
+  //     OPERATOR: 'Piloto',
+  //     COOPERATIVE: 'Cooperativa',
 
-  mapTypeUser(typeUser: string): string {
-    const typeMapping: { [key: string]: string } = {
-      SUPERUSER: 'Super Admin',
-      ADMINISTRATOR: 'Admin',
-      MANAGEMENT:'Gerente General',
-      TECHNICAL: 'Técnico',
-      OPERATOR: 'Piloto',
-      COOPERATIVE: 'Cooperativa',
-
-    };
-    return typeMapping[typeUser] || typeUser;
-  }
+  //   };
+  //   return typeMapping[typeUser] || typeUser;
+  // }
   aplicarFiltro(filtroSeleccionado: string) {
-    console.log('Filtro seleccionado:', filtroSeleccionado);
+
   }
 
   BtnCrearUsuarios() {

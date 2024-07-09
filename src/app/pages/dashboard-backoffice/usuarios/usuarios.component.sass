@@ -32,11 +32,20 @@
     outline: none
     border-color: $new-color-blue-hard
     box-shadow: 0 0 5px $new-color-blue-hard
+    
+.form-group
+  margin-bottom: 1rem
+
+  &.has-error select
+    border: 1px solid red
+
+  .text-danger
+    color: red
+    font-size: 0.875rem
 
 .mat-select-container
   width: 35%
   margin-top: 5px
-
 
 .botones-form
   display: flex
