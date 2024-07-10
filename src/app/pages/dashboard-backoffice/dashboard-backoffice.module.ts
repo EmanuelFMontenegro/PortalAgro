@@ -27,7 +27,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { UsuariosFiltroComponent } from './usuarios/usuarios-filtro/usuarios-filtro.component';
 import { RenderProvincesPipe } from 'src/app/services/render-pipes.pipe';
-import { RenderDepartmentsPipe } from 'src/app/services/render-pipes.pipe';
+import { CalendarPopupComponent } from 'src/app/shared/components/calendar-popup/calendar-popup.component';
 @NgModule({
   declarations: [
     DashboardBackofficeComponents,
@@ -37,6 +37,7 @@ import { RenderDepartmentsPipe } from 'src/app/services/render-pipes.pipe';
     ChacrasComponent,
     LotesComponent,
     CalendariosComponent,
+    CalendarPopupComponent,
     NotificacionComponent,
     PlanificacionesComponent,
     InformesComponent,
@@ -51,8 +52,7 @@ import { RenderDepartmentsPipe } from 'src/app/services/render-pipes.pipe';
     CargarLotesComponent,
     UsuariosComponent,
     UsuariosFiltroComponent,
-    RenderProvincesPipe,
-    RenderDepartmentsPipe
+    RenderProvincesPipe
   ],
   imports: [
     IMPORTS_MATERIAL,
@@ -64,9 +64,7 @@ import { RenderDepartmentsPipe } from 'src/app/services/render-pipes.pipe';
     BrowserModule,
   ],
   providers: [
-    RenderProvincesPipe,
-    RenderDepartmentsPipe
-
+    RenderProvincesPipe
   ]
 })
 export class DashboardBackofficeModule {}

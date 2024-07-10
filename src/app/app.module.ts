@@ -11,9 +11,9 @@ import { ToastrModule } from 'ngx-toastr';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Interceptor } from 'src/app/services/Interceptor';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { FormatDatePipe } from './format-date.pipe';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { SharedModule } from './shared/shared.module';
+import { CommonModule } from '@angular/common';
 
 
 
@@ -24,6 +24,7 @@ const routes: Routes = [];
 @NgModule({
   declarations: [AppComponent],
   imports: [
+    CommonModule,
     BrowserModule,
     NgxSpinnerModule.forRoot (),
     RouterModule.forRoot(routes),

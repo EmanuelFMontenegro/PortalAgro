@@ -20,7 +20,8 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { TituloContainerComponent } from './components/titulo-container/titulo-container.component';
 import { FiltrosContainerComponent } from './components/filtros-container/filtros-container.component';
-
+import { CalendarComponent } from './components/calendar/calendar.component';
+import { FullCalendarModule } from '@fullcalendar/angular';
 export const IMPORTS_MATERIAL = [
   MatSidenavModule,
   MatListModule,
@@ -43,7 +44,7 @@ export const IMPORTS_MATERIAL = [
 ];
 
 export const IMPORT_CORE = [CommonModule, FormsModule, ReactiveFormsModule];
-
+export const CALENDAR = [FullCalendarModule];
 @NgModule({
   declarations: [
     MiniaturaListadoComponent,
@@ -51,16 +52,19 @@ export const IMPORT_CORE = [CommonModule, FormsModule, ReactiveFormsModule];
     FormularioComponent,
     TituloContainerComponent,
     FiltrosContainerComponent,
+    CalendarComponent
+    
   ],
-  imports: [IMPORT_CORE, IMPORTS_MATERIAL],
+  imports: [IMPORT_CORE, IMPORTS_MATERIAL, CALENDAR],
   exports: [
     IMPORT_CORE,
-    IMPORTS_MATERIAL,
+    IMPORTS_MATERIAL, 
     MiniaturaListadoComponent,
     HeaderUserComponent,
     FormularioComponent,
     TituloContainerComponent,
-    FiltrosContainerComponent
+    FiltrosContainerComponent,
+    CalendarComponent
   ],
 })
 export class SharedModule {}
