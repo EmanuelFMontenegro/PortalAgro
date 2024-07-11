@@ -16,6 +16,7 @@ import { CalendarioComponent } from './calendario/calendario.component';
 import { ChacrasComponent } from './chacras/chacras.component';
 import { NotificacionesComponent } from './notificaciones/notificaciones.component';
 import { AuthGuard } from 'src/app/core/guards/auth.guard';
+import { NuevoServicioComponent } from './servicios/nuevo-servicio/nuevo-servicio.component';
 
 const routes: Routes = [
   {
@@ -35,11 +36,12 @@ const routes: Routes = [
       { path: 'configuracion', component: ConfiguracionComponent},
       { path: 'perfil', component: PerfilComponent},
       { path: '', redirectTo: 'inicio', pathMatch: 'full' },
-      { path: 'servicios', component: ServiciosComponent },
+      { path: 'nuevo-servicio', component: NuevoServicioComponent },
       { path: 'informes', component: InformesComponent },
       { path: 'calendario', component: CalendarioComponent },
       { path: 'chacras', component: ChacrasComponent },
       { path: 'notificaciones', component: NotificacionesComponent },
+
     ]
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' },

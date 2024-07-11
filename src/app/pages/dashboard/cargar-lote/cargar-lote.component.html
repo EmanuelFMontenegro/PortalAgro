@@ -1,20 +1,13 @@
 <div class="container">
-  <div class="titulo-bienvenida">
-    <span>¡Bienvenido!</span>
+  <div class="header-container2">
+    <h2 class="title2">Cargar nuevo lote</h2>
+    <button class="back-button2" (click)="volver()"> << Volver Atrás</button>
   </div>
-
-  <div class="card user-card">
-    <div class="avatar">
-      <mat-icon>person</mat-icon>
-    </div>
-    <div class="user-info">
-      <p class="name">{{ nombre }} {{ apellido }}</p>
-      <p class="email">{{ userEmail }}</p>
-    </div>
+  <div class="subheader-container">
+    <h2 class="subtitle">Chacra: {{ camposlect }}</h2>
   </div>
 
   <div class="card">
-    <h2 class="titulo-registrar-lote">Cargar Lotes</h2>
     <form class="solicitud-servicio-form" [formGroup]="loteForm">
       <div class="campos-formulario">
         <div class="grupo-campos">
@@ -28,7 +21,7 @@
               </mat-option>
             </mat-select>
           </div>
-      
+
 
         <!-- Dimensiones -->
         <div class="field-container">

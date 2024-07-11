@@ -23,231 +23,117 @@ $font-family: 'Montserrat', sans-serif
   font-size: 1.2em
   font-family: "Montserrat", sans-serif
   margin-left: 1%
-  margin-top: 0.5%
+  margin-top: 2%
   font-weight: bold
 
-.titulo-chacra
-  color: #0F8054
+.titulo-welcome
+  color: #454545
+  font-size: 1em
   font-family: "Montserrat", sans-serif
-  font-size: 1.5em
-  font-weight: bold
-  margin-left: 0.5em
-  margin-bottom: 0px
+  margin-left: 2%
+  margin-top: 0.5%
 
-.main-card
-  width: 100%
-  padding: 20px
-  border-radius: 10px
-  background-color: $white-color
+.row
+  display: flex
+  flex-wrap: wrap
   position: relative
-  display: grid
-  grid-template-columns: 1fr
+  top: 1em
+  right: 1em
+  left: 1em
+  gap: 30px
+  align-items: center
 
 .card
-  background: linear-gradient(to bottom, #3BA549 40%, #0F8054 100%)
-  padding: 10px
-  border-radius: 30px
-  border: 2px solid #ccc
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3)
-  display: grid
-  grid-template-columns: 1fr auto
-  gap: 20px
-  width: 98%
-  margin-left: 1em
+  margin: 10px
+  width: 20em
+  height: 160px
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4)
+  position: relative
+  left: 6em
 
-.user-content
-  display: flex
-  align-items: center
-  gap: 20px
+.card
+  position: relative
+  overflow: hidden
 
-  .avatar
-    position: relative
+  &::after
+    content: ""
+    position: absolute
+    top: 50%
+    left: 50%
+    width: 200%
+    height: 200%
+    background-color: #015E85
+    transition: width 0.3s ease-out, height 0.3s ease-out, opacity 0.3s ease-out
+    border-radius: 50%
+    z-index: 0
+    transform: translate(-50%, -50%)
+    opacity: 0
 
-    .avatar-circle
-      width: 90px
-      height: 90px
-      border-radius: 50%
-      display: flex
-      align-items: center
-      justify-content: center
-      border: 2px solid #808080
-      background-color: white
-      position: relative
+  &:active::after
+    width: 300%
+    height: 300%
+    opacity: 1
 
-      .avatar-icon
-        font-size: 60px
-        border-radius: 50%
-        color: $secondary-color
-        width: 100%
-        height: 100%
-        display: flex
-        justify-content: center
-        align-items: center
+.icono-card
+  height: auto
+  width: 20%
+  top: 50%
+  right: 14em
+  position: absolute
+  transform: translateY(-50%)
 
-      .avatar-circle img
-        width: 100%
-        height: 100%
-        object-fit: cover
-        border-radius: 50%
+.card-title
+  position: absolute
+  left: 55%
+  top: 50%
+  transform: translate(-50%, -50%)
+  margin: 0
+  font-size: 20px
+  font-family: $font-family
+  color: $new-color
 
-      mat-icon
-        height: unset
-        width: unset
-        color: white
-        font-size: 16px
-        overflow: none
-
-      .edit-avatar-button
-        display: flex
-        position: absolute
-        bottom: 0
-        right: 0
-        background-color: $primary-color
-        padding: 3px
-        border-radius: 50%
-        cursor: pointer
-
-  .titulo-perfil-avatar
-    color: $white-color
-    font-size: 14px
-    font-family: $font-family
-
-  .email
-    font-size: 14px
-    color: $white-color
-    font-weight: bold
-    font-family: $font-family
-
-.botones-servicio
-  display: flex
-  justify-content: flex-end
-  align-items: center
-  margin-top: 45%
-
-.register-button
-  padding: 8px 18px
-  border: 2px solid $white-color
-  border-radius: 5px
-  cursor: pointer
-  transition: background-color 0.3s, border-color 0.3s
-  font-size: 0.85em
-  font-family: 'Montserrat', sans-serif
-  font-weight: bold
-  background-color: $primary-color
-  color: white
-  margin-right: 2em
-
-.card-campos-section
-  background-color: $white-color
-  padding: 20px
-  border-radius: 10px
-  margin-top: 16px
-  overflow: auto
-
-  .titulo-campos
-    color: $primary-color
-    font-size: 1.5em
-    margin-bottom: 20px
-    font-family: $font-family
-
-  .campos-container
-    display: grid
-    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr))
-    gap: 16px
-
-  .campo-card
-    background-color: $white-color
-    padding: 17px
-    border-radius: 10px
-    border: 1px solid $border-card
-    font-family: $font-family
-
-    img
-      max-width: 100%
-      border-radius: 8px
-      margin-bottom: 10px
-
-    h3
-      color: $hard-black
-      font-size: 1.2em
-      margin-bottom: 8px
-      font-family: $font-family
-      width: 20em
-
-    p
-      color: $hard-black
-      margin-bottom: 10px
-      overflow: hidden
-      display: -webkit-box
-      -webkit-line-clamp: 3
-      -webkit-box-orient: vertical
-      text-overflow: ellipsis
-      text-align: justify
-
-    .icono_location
-      width: 20px
-      height: auto
-      margin-left: 5px
-      vertical-align: middle
-
-    .campo-variable
-      font-weight: bold
-      font-family: $font-family
-
-    .ver-mas-button
-      background-color: $primary-color
-      width: 100%
-      color: white
-      cursor: pointer
-      padding: 8px 18px
-      border: 1px solid transparent
-      border-radius: 5px
-      transition: background-color 0.3s, border-color 0.3s
-      font-size: 0.85em
-      font-family: 'Montserrat', sans-serif
-      font-weight: bold
+.card-title-down
+  position: absolute
+  left: 55%
+  top: 50%
+  transform: translate(-50%, -50%)
+  margin: 0
+  font-size: 20px
+  font-family: $font-family
+  color: $new-color
 
 @media screen and (max-width: 768px)
-
-  .card
-    display: block
-    width: 100%
-    margin-left: -0.7em
-
-  .card-campos-section
-    width: 100%
-
-  .campo-card
-    left: -1.2em
-    width: 95%
-    position: relative
-
-  .main-card
-    width: 98%
-
-  .user-content
-    // flex-direction: column
-    // align-items: center
-    gap: 10px
+  .container
+    grid-template-columns: 1fr
+    margin-left: 1%
+    margin-right: 1%
 
   .titulo-perfil
-    font-size: 1.2em
-    margin-left: 14%
+    margin-left: 0
+    margin-top: 2%
+    text-align: center
 
-  .titulo-perfil-avatar h2
-    color: $white-color
-    font-size: 14px
-    font-family: "Montserrat", sans-serif
+  .titulo-welcome
+    font-size: 0.8em
+    margin-left: 5%
+    margin-top: 0.5%
 
-  .botones-servicio
-    display: flex
-    justify-content: center
-    margin-top: 5%
-    margin-left: 44%
-    position: absolute
+  .row
+    right: 1em
 
-  .register-button
-    margin-top: 10px
-    margin-left: 17px
+  .card
+    left: 0
+    right: 0
     position: relative
-    left: 13px
+
+  .icono-card
+    top: 50%
+    right: auto
+    left: 10px
+    transform: translateY(-50%)
+
+  .card-title, .card-title-down
+    left: 53%
+    top: 54%
+    transform: translate(-50%, -50%)
+    font-size: 16px

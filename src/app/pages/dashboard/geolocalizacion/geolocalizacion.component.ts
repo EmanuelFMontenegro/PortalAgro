@@ -561,7 +561,7 @@ export class GeolocalizacionComponent implements AfterViewInit {
       .subscribe(
         (response: any) => {
           this.toastr.success('Geolocalización actualizada con éxito', 'Éxito');
-          this.router.navigate(['dashboard/inicio']);
+          this.router.navigate(['dashboard/chacras']);
         },
         (error: any) => {
           this.toastr.error('Error al actualizar la geolocalización', 'Error');
@@ -570,10 +570,10 @@ export class GeolocalizacionComponent implements AfterViewInit {
   }
 
   volver() {
-    this.router.navigate(['dashboard/inicio']);
+    this.router.navigate(['dashboard/chacras']);
   }
   cancelar() {
-    this.router.navigate(['dashboard/inicio']);
+    this.router.navigate(['dashboard/chacras']);
   }
 
   onMapClick(e: L.LeafletMouseEvent): void {

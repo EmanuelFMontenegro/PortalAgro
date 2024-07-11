@@ -59,6 +59,7 @@ export class CargarLoteComponent implements OnInit {
   persona: any = {};
   plantations: any[] = [];
   loteForm: FormGroup;
+  camposlect: any;
   FieldId: number;
   filteredPlantations: Observable<any[]> = new Observable<any[]>();
   filtroPlantations = new FormControl('');
@@ -98,6 +99,15 @@ export class CargarLoteComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const campoSeleccionadoParam = localStorage.getItem('campoSeleccionado');
+    const campoSeleccionado = campoSeleccionadoParam
+      ? JSON.parse(campoSeleccionadoParam)
+      : null;
+    if (campoSeleccionado) {
+      this.camposlect = campoSeleccionado.name;
+      const campoId = campoSeleccionado.id;
+      this.FieldId = campoId;
+    }
     this.cargarDatosDeUsuario();
     this.userEmail = this.authService.getUserEmail();
     this.decodeToken();
@@ -329,9 +339,11 @@ export class CargarLoteComponent implements OnInit {
   }
 
 
-
+  volver() {
+    this.router.navigate(['dashboard/chacras']);
+  }
 
   cancelar() {
-    this.router.navigate(['dashboard/inicio']);
+    this.router.navigate(['dashboard/chacras']);
   }
 }

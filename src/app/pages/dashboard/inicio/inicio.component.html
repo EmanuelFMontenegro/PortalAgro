@@ -1,42 +1,64 @@
 <div class="container">
   <div class="titulo-perfil">
-    <span class="titulo-perfil">¡Bienvenido!</span>
+    <span class="titulo-perfil">¡Bienvenido, {{ nombre }} {{ apellido }}!</span>
   </div>
-  <mat-card class="main-card">
-    <div class="card user-card">
-      <div class="user-content">
-        <div class="avatar">
-          <div class="avatar-circle">
-            <mat-icon class="avatar-icon">person</mat-icon>
-          </div>
-        </div>
-        <div class="titulo-perfil-avatar">
-          <div class="titulo-welcome">
-            <h2>{{ nombre }} {{ apellido }}</h2>
-            <p class="email">Email: {{ userEmail }}</p>
-            <p class="email">Localidad: {{ location }}</p>
-          </div>
-        </div>
-      </div>
-      <div class="botones-servicio">
-        <button mat-raised-button class="register-button" (click)="BtnRegisterCampos()">Registrar Chacra</button>
-      </div>
-    </div>
-    <h2 class="titulo-chacra">Chacras</h2>
-    <div class="card-campos-section">
-      <h2 class="titulo-campos"></h2>
-      <div class="campos-container">
-        <div class="campo-card" *ngFor="let campo of campos">
-          <img src="/assets/img/Chacra_{{ campo.id }}.png" alt="Campo {{ campo.id }}">
-          <h3>{{ campo.name }}</h3>
-          <p>
-            <span class="campo-variable">Localidad:</span> {{ campo.address.location.name }}
-            <img src="assets/img/location.svg" alt="Icono" class="icono_location">
-          </p>
-          <p><span class="campo-variable">Hectarias:</span> {{ campo.dimensions }}</p>
-          <p><span class="campo-variable">Dirección:</span> {{ campo.address.address }}</p>
-          <p><span class="campo-variable">Descripción</span> {{ campo.observation }}</p>
-          <button mat-raised-button class="ver-mas-button" (click)="verMas(campo)">Ver Más</button>
+  <div class="titulo-welcome">
+    <p>
+      Acá podrás gestionar tus actividades.
+    </p>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4" (click)="navigateTo('servicios')">
+      <div class="card">
+        <div class="card-body">
+          <img src="assets/img/drone-15-svgrepo-com.svg" alt="Solicitud y Servicios"
+            class="icono-card">
+          <h5 class="card-title">Solicitudes y Servicios</h5>
         </div>
       </div>
     </div>
+    <div class="col-md-4" (click)="navigateTo('chacras')">
+      <div class="card">
+        <div class="card-body">
+          <img src="assets/img/agriculture_24dp_FILL0_wght300_GRAD0_opsz24.svg" alt="Chacras" class="icono-card">
+          <h5 class="card-title">Chacras</h5>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4" (click)="navigateTo('calendario')">
+      <div class="card">
+        <div class="card-body">
+          <img src="assets/img/calendar_month_24dp_FILL0_wght300_GRAD0_opsz24.svg" alt="Calendario" class="icono-card">
+          <h5 class="card-title">Calendario</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4" (click)="navigateTo('notificaciones')">
+      <div class="card">
+        <div class="card-body">
+          <img src="assets/img/rubric_24dp_FILL0_wght300_GRAD0_opsz24.svg" alt="Notificaciones" class="icono-card">
+          <h5 class="card-title-down">Notificaciones</h5>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4" (click)="navigateTo('informes')">
+      <div class="card">
+        <div class="card-body">
+          <img src="assets/img/leaderboard_24dp_FILL0_wght300_GRAD0_opsz24.svg" alt="Informes" class="icono-card">
+          <h5 class="card-title-down">Informes</h5>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4" (click)="navigateTo('perfil')">
+      <div class="card">
+        <div class="card-body">
+          <img src="assets/img/leaderboard_24dp_FILL0_wght300_GRAD0_opsz24.svg" alt="Perfil" class="icono-card">
+          <h5 class="card-title-down">Perfil</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

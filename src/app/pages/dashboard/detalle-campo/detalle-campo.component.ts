@@ -121,7 +121,7 @@ export class DetalleCampoComponent implements OnInit, AfterViewInit {
   }
 
   volver() {
-    this.router.navigate(['dashboard/inicio']);
+    this.router.navigate(['dashboard/chacras']);
   }
 
   verLotes() {

@@ -1,35 +1,16 @@
 <div class="container">
-  <div class="titulo-bienvenida">
-    <span>¡Bienvenido!</span>
+  <div class="header-container2">
+    <h2 class="title2">Listado de Lotes</h2>
+    <button class="back-button2" (click)="volver()"> << Volver Atrás</button>
+  </div>
+  <div class="search-container">
+    <input type="text" class="search-input" placeholder="Buscar...">
+    <button class="back-button2" (click)="cargarLotes()"> + Cargar Lote</button>
+  </div>
+  <div class="subheader-container">
+    <h2 class="subtitle">Chacra: {{ camposlect }}</h2>
   </div>
   <mat-card class="main-card">
-    <div class="card user-card">
-      <div class="avatar">
-        <mat-icon>person</mat-icon>
-      </div>
-      <div class="user-info">
-        <p class="name">{{ nombre }} {{ apellido }}</p>
-        <p class="email">{{ userEmail }}</p>
-      </div>
-      <div class="volver-button" (click)="volver()">
-        <!-- <mat-icon style="color:#FFFFFF">arrow_back</mat-icon> -->
-        <img src="/assets/img/keyboard_double_arrow_left_24dp_FILL0_wght400_GRAD0_opsz24.svg" alt="flecha doble"
-          class="flecha-doble">
-        <span class="letra-icon" style="color:#FFFFFF">VOLVER ATRAS</span>
-      </div>
-    </div>
-
-
-
-    <div class="card-campos-section">
-      <h2 class="titulo-campo">Lotes</h2>
-      <div class="letra_btn">
-        <button mat-raised-button (click)="cargarLotes()" class="plus-icon">
-          Cargar
-          <mat-icon style="font-size: 20px;">add</mat-icon>
-        </button>
-      </div>
-    </div>
     <div class="card-campos-lotes">
       <div class="campo-card" *ngFor="let lote of loteData; let i = index">
         <img class="img_lotes" [src]="'assets/img/Lote_' + (i + 1) + '.png'" alt="Img Lote">
@@ -60,8 +41,6 @@
             <span style="color:#FFFFFF;">Eliminar</span>
           </button>
         </div>
-
-
       </div>
     </div>
   </mat-card>
