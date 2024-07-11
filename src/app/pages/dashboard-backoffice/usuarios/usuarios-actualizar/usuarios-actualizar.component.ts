@@ -114,6 +114,7 @@ export class UsuariosActualizarComponent implements OnInit {
       dni: userData.dni || '',
       userResponseDTO: {
         id: userData.userResponseDTO?.id || 0,
+        username: userData.userResponseDTO?.username || '',
         email: userData.userResponseDTO?.email || '',
         account_active: userData.userResponseDTO?.account_active || false,
         accountNonLocked: userData.userResponseDTO?.accountNonLocked || true,
@@ -121,7 +122,6 @@ export class UsuariosActualizarComponent implements OnInit {
         lockeTime: userData.userResponseDTO?.lockeTime || null,
         role: {
           name: userData.userResponseDTO?.role?.name || '',
-          username: userData.userResponseDTO?.username || '',
         },
       },
       departmentAssigned: userData.departmentAssigned || [],
