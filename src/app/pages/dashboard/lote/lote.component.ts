@@ -59,6 +59,7 @@ export class LoteComponent {
   FieldId: number = 0;
   localidades: any[] = [];
   loteData: Lote[] = [];
+  camposlect: any;
   filteredLocalidades: Observable<any[]> = new Observable<any[]>();
   filtroLocalidades = new FormControl('');
   private userId: number | any;
@@ -107,6 +108,7 @@ export class LoteComponent {
       ? JSON.parse(campoSeleccionadoParam)
       : null;
     if (campoSeleccionado) {
+      this.camposlect = campoSeleccionado.name;
       const campoId = campoSeleccionado.id;
       this.FieldId = campoId;
     }
@@ -314,13 +316,14 @@ export class LoteComponent {
   }
 
   volver() {
-    this.router.navigate(['dashboard/inicio']);
+    this.router.navigate(['dashboard/chacras']);
   }
+
   editarLote(lote: Lote): void {
     this.modoEdicion = true;
     localStorage.setItem('plotId', lote.id.toString());
     localStorage.setItem('plotData', JSON.stringify(lote));
-    localStorage.setItem('previousPlantation', lote.typeCrop.name); 
+    localStorage.setItem('previousPlantation', lote.typeCrop.name);
     this.router.navigate(['dashboard/cargar-lote']);
 }
 

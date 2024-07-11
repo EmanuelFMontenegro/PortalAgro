@@ -1,0 +1,68 @@
+<div class="container">
+  <div class="header-container2">
+    <h2 class="title2">Solicitar Nuevos Servicios</h2>
+    <button class="back-button2" (click)="volver()"> << Volver Atrás</button>
+  </div>
+  <div class="search-container">
+    <button class="back-button2" (click)="notificar()"> Limpiar</button>
+  </div>
+  <div class="subheader-container">
+    <h2 class="subtitle">Para comenzar seleccionar una chacra</h2>
+  </div>
+  <mat-card class="main-card">
+    <div class="card-uno">
+      <div class="field-container">
+        <mat-label class="field-label">Seleccionar chacra</mat-label>
+        <mat-select class="field-input" placeholder="Seleccionar una Chacra" [(ngModel)]="solicitud.chacra" name="chacra" (selectionChange)="aplicarChacra()">
+          <mat-option *ngFor="let chacra of chacras" [value]="chacra">{{ chacra }}</mat-option>
+        </mat-select>
+      </div>
+      <div class="field-container">
+        <mat-label class="field-label">Seleccionar Cultivo</mat-label>
+        <mat-select class="field-input" placeholder="Cultivos" [(ngModel)]="solicitud.cultivo" name="cultivo" (selectionChange)="filtrarLotes()">
+          <mat-option *ngFor="let cultivo of cultivos" [value]="cultivo.id">{{ cultivo.name }}</mat-option>
+        </mat-select>
+      </div>
+      <div class="field-container">
+        <mat-label class="field-label">Seleccionar Lote</mat-label>
+        <mat-select class="field-input" placeholder="Lotes" [(ngModel)]="solicitud.lote" name="lote">
+          <mat-option *ngFor="let lote of lotes" [value]="lote.name">{{ lote.name }}</mat-option>
+        </mat-select>
+        <button mat-button (click)="agregarLote()">Agregar</button>
+      </div>
+    </div>
+    <div class="card-dos">
+      <mat-label class="field-label">Lotes Agregados</mat-label>
+      <ul>
+        <li *ngFor="let lote of lotesAgregados; let i = index;">
+          {{ lote.lote }} - {{ lote.cultivo }}
+          <button mat-icon-button (click)="eliminarLote(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+      </ul>
+    </div>
+    <div class="card-tres">
+      <mat-label class="field-label">Hectáreas</mat-label>
+      <input type="number" class="field-input" [(ngModel)]="solicitud.hectareas" name="hectareas"
+      placeholder="Hectáreas" min="0" (input)="validateHectareas()">
+      <label class="field-label-fecha">Fecha</label>
+          <input class="field-input-fecha" [matDatepicker]="picker" placeholder="Fecha de solicitud"
+            [(ngModel)]="solicitud.fecha" name="fecha">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+    </div>
+    <div class="card-cuatro">
+      <mat-label class="field-label">Observaciones</mat-label>
+      <textarea class="field-input-obs" [(ngModel)]="solicitud.observaciones" name="observaciones"></textarea>
+
+    </div>
+    <div class="card-cinco">
+
+    </div>
+    <div class="card-botones">
+      <button class="back-button2" (click)="cancelar()">Cancelar</button>
+      <button class="back-button2" style="font-size:14px;">Solicitar Servicio</button>
+
+    </div>
+  </mat-card>
+</div>

@@ -14,6 +14,9 @@ import { GeolocalizacionComponent } from './geolocalizacion/geolocalizacion.comp
 import { ConfiguracionComponent } from './configuracion/configuracion.component';
 import { PerfilComponent } from './perfil/perfil.component';
 import { ReportesComponent } from './reportes/reportes.component';
+import { NuevoServicioComponent } from './servicios/nuevo-servicio/nuevo-servicio.component';
+
+
 
 
 // Angular Material
@@ -81,6 +84,7 @@ const CUSTOM_DATE_FORMATS = {
     InformesComponent,
     CalendarioComponent,
     ChacrasComponent,
+    NuevoServicioComponent,
     NotificacionesComponent,
   ],
   imports: [

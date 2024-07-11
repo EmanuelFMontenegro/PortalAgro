@@ -194,7 +194,7 @@ export class CampoComponent implements OnInit {
             // Éxito: mostrar mensaje y redirigir
             this.toastr.success('Campo registrado con éxito', 'Éxito');
             this.campoForm.reset();
-            this.router.navigate(['dashboard/inicio']);
+            this.router.navigate(['dashboard/chacras']);
           },
           (error) => {
             // Error al registrar el campo: mostrar mensaje de error
@@ -227,6 +227,6 @@ export class CampoComponent implements OnInit {
 
 
   cancelar() {
-    this.router.navigate(['dashboard/inicio']);
+    this.router.navigate(['dashboard/chacras']);
   }
 }

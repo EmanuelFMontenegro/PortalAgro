@@ -12,6 +12,39 @@ $font-family: 'Montserrat', sans-serif
 body
   font-family: $font-family
 
+.header-container2
+  display: flex
+  justify-content: space-between
+  align-items: center
+  padding: 10px
+
+
+.title2
+  margin: 0
+  font-size: 1.5em
+  color: #454545
+
+.back-button2
+  padding: 10px 20px
+  font-size: 0.8em
+  font-family: $font-family
+  background-color: #0F8054
+  color: white
+  border: none
+  border-radius: 10px
+  cursor: pointer
+
+
+.back-button2:hover
+  background-color: #32963f
+
+
+.container
+  color: $dark-grey
+  font-size: 1.2em
+  font-family: $font-family
+  margin: 1em 0.5em 1em 0.5em
+
 .titulo-bienvenida
   color: $dark-grey
   font-size: 1.2em
@@ -34,9 +67,10 @@ body
   color: #454545
   font-size: 1.4em
   font-family: "Montserrat", sans-serif
-  margin-top: 31px
-  margin-left: 17px
-  margin-bottom: 5em
+  margin-top: 1em
+  margin-left: 0.5em
+  margin-right: 0.5em
+  margin-bottom: 1em
 
   .volver-button
     display: flex
@@ -143,6 +177,7 @@ body
       color: $medium-grey
       position: relative
       left: 5px
+
   .direccion
     color: #3BA549
     margin-bottom: 10px
@@ -154,6 +189,7 @@ body
       color: $medium-grey
       position: relative
       left: 5px
+
   .hectareas
     color: #3BA549
     margin-bottom: 10px
@@ -165,6 +201,7 @@ body
       color: $medium-grey
       position: relative
       left: 5px
+
   .descripcion
     color: #3BA549
     margin-bottom: 10px
@@ -176,6 +213,7 @@ body
       color: $medium-grey
       position: relative
       left: 5px
+
   .card-main-card
     display: flex
     grid-template-columns: 1fr
@@ -269,6 +307,17 @@ body
   border: 1px solid $dark-grey
 
 @media screen and (max-width: 768px)
+
+  .header-container2
+    flex-direction: column
+    align-items: center
+
+
+  .title2,
+  .back-button2
+    margin: 5px 0
+    text-align: center
+
   #map
     width: 100%
     height: 300px

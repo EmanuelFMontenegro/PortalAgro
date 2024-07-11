@@ -1,12 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { ApiService } from 'src/app/services/ApiService';
-import { AuthService } from 'src/app/services/AuthService';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from 'src/app/services/AuthService';
 import { Router, ActivatedRoute } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
+import { Observable } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { switchMap } from 'rxjs/operators';
 
-// Interfaz para la solicitud de servicio
+
+interface CustomJwtPayload {
+  userId: number;
+  sub: string;
+}
+
+interface DecodedToken {
+  userId: number;
+  emailId: string;
+  sub: string;
+  roles: string;
+}
+
 interface SolicitudServicio {
   chacra: string;
   cultivo: string;
@@ -23,17 +39,14 @@ interface VerServicio {
   hectareas: number;
 }
 
-interface DecodedToken {
-  emailId: string;
-  userId: number;
-}
-
 @Component({
-  selector: 'app-servicios',
-  templateUrl: './servicios.component.html',
-  styleUrls: ['./servicios.component.sass'],
+  selector: 'app-nuevo-servicio',
+  templateUrl: './nuevo-servicio.component.html',
+  styleUrls: ['./nuevo-servicio.component.sass']
 })
-export class ServiciosComponent implements OnInit {
+export class NuevoServicioComponent implements OnInit {
+
+  placeholderText: string = 'Buscar por . . .';
   formularioVisible: string | null = null;
   solicitud: SolicitudServicio = {
     chacra: '',
@@ -58,17 +71,17 @@ export class ServiciosComponent implements OnInit {
     nombreChacra: 'Chacra de Ejemplo',
     fecha: '2024-06-02',
     plantacion: 'Maíz',
-    hectareas: 15,
-  };
+    hectareas: 15,};
 
   constructor(
-    private apiService: ApiService,
     private authService: AuthService,
+    private apiService: ApiService,
+    private toastr: ToastrService,
+    private http: HttpClient,
     private router: Router,
     private route: ActivatedRoute,
-    private toastr: ToastrService
-  ) {
-    this.token = this.authService.getToken();
+    private dialog: MatDialog,
+  ){this.token = this.authService.getToken();
     if (this.token) {
       const decoded: DecodedToken = jwtDecode(this.token);
       this.userId = decoded.userId;
@@ -77,7 +90,6 @@ export class ServiciosComponent implements OnInit {
     this.lotes = [];
     this.cultivos = [];
   }
-
   ngOnInit(): void {
     this.cargarCampos();
   }
@@ -300,4 +312,22 @@ export class ServiciosComponent implements OnInit {
       this.formularioVisible = 'ver';
     }
   }
+
+  volver() {
+    this.router.navigate(['dashboard/inicio']);
+  }
+
+  notificar(){
+
+  }
+  limpiar(){
+
+  }
+  buscar(){
+
+  }
+  generar(){
+
+  }
+
 }

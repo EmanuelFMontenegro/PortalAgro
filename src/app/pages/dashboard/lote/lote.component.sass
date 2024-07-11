@@ -5,6 +5,7 @@ $error-color: #F54C51
 $light-grey: #f4f4f4
 $dark-grey: #454545
 $hard-black: #1E1E1E
+$white-color: #FFFFFF
 $medium-grey: #808080
 $border-color: #FFFFFF
 $btn_cards: #3B7AF6
@@ -16,131 +17,81 @@ body
   margin: 0
   padding: 0
 
-.titulo-bienvenida
-  color: $dark-grey
-  font-size: 1.4em
-  margin-top: 25px
-  margin-left: 17px
-  font-weight: bold
+.header-container2
+  display: flex
+  justify-content: space-between
+  align-items: center
+  padding: 10px
+
+.title2
+  margin: 0
+  font-size: 1.5em
+  color: #454545
+
+.back-button2
+  padding: 10px 20px
+  font-size: 0.8em
   font-family: $font-family
+  background-color: $primary-color
+  color: white
+  border: none
+  border-radius: 10px
+  cursor: pointer
+
+.back-button2:hover
+  background-color: $hover-color
+
+.subheader-container
+  display: flex
+  justify-content: flex-start
+  align-items: center
+  padding: 10px
+  padding-top: 1em
+
+.subtitle
+  margin: 0
+  font-size: 1.1em
+  color: $primary-color
+
+.search-container
+  display: flex
+  justify-content: space-between
+  align-items: center
+  padding: 10px 5px 15px 5px
+  padding-top: 1em
+
+.search-input
+  flex-grow: 1
+  padding: 10px
+  margin-right: 10px
+  border: 1px solid #ddd
+  border-radius: 5px
+  font-size: 1em
+  max-width: calc(90% - 150px)
 
 .container
-  display: flex
-  flex-direction: column
-  justify-content: center
+  color: $dark-grey
+  font-size: 1.2em
+  font-family: $font-family
+  margin: 1em 0.5em 1em 0.5em
 
 .main-card
   width: 100%
   padding: 20px
   border-radius: 10px
-  background-color: rgba(255, 255, 255, 0.5)
-  margin: 0 auto
-  position: relative
+  background-color: $white-color
+  margin: 0 auto 18% auto
   display: grid
   grid-template-columns: 1fr
-  margin-bottom: 18%
   box-shadow: none
-
-.card
-  padding: 20px
-  border-radius: 10px
-  display: grid
-  grid-template-columns: 1fr auto
-  gap: 20px
-
-.card
-  background-color: $light-grey
-  padding: 20px
-  border-radius: 30px
-  margin: 20px
-  width: 97%
-  margin-left: 1em
-  position: relative
-
-  &.user-card
-    background: linear-gradient(to bottom, #3BA549 40%, #0F8054 100%)
-    display: flex
-    margin-top: 8px
-    flex-direction: row
-    align-items: center
-    gap: 20px
-
-    .avatar
-      display: flex
-      justify-content: center
-      align-items: center
-      border-radius: 50%
-      border: 3px solid $primary-color
-      width: 90px
-      height: 90px
-      background-color: white
-
-      mat-icon
-        display: contents
-        color: #3CA749
-        font-size: 70px
-
-    p
-      font-size: 15px
-      color: $icon-color
-      font-weight: bold
-
-    .email
-      font-size: 14px
-      color: $border-color
-      font-weight: bold
-
-    .name
-      font-size: 18px
-      color: $border-color
-      font-weight: bold
-
-  .volver-button
-    position: absolute
-    top: 60px
-    right: 10px
-    display: flex
-    align-items: center
-    cursor: pointer
-    font-family: $font-family
-    font-size: 12px
-    font-weight: bold
-
-  .flecha-doble
-    width: 3em
-    position: relative
-    right: 1em
-
-  mat-icon
-    margin-right: 5px
-
-.card-campos-section
-  color: $primary-color
-  padding: 22px
-  border-radius: 10px
-  margin-top: -2em
-  display: flex
-  gap: 10px
-  justify-content: space-between
 
 .card-campos-lotes
   background-color: #FFFFFF
-  padding: 20px
   border-radius: 10px
   display: grid
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr))
   gap: 20px
-
-  .titulo-campo
-    color: $primary-color
-    font-size: 1.4em
-    margin-bottom: 20px
-    font-family: $font-family
-
-  .campos-container
-    display: grid
-    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr))
-    gap: 16px
+  justify-items: center
 
 .campo-card
   padding: 20px
@@ -167,6 +118,7 @@ body
   color: $hard-black
   font-weight: bold
   white-space: nowrap
+
 .campo-variable
   font-size: 15px
   margin-left: 1px
@@ -201,13 +153,6 @@ body
   width: 35%
   height: auto
 
-  &:hover
-    border-color: $border-color
-
-.edit-button mat-icon,
-.delete-button mat-icon
-  vertical-align: middle
-
 .delete-button
   font-size: 12px
   font-weight: bold
@@ -217,64 +162,29 @@ body
   width: 36%
   height: auto
 
-.letra_btn
-  display: flex
-  justify-content: space-between
-
-.titulo-lote
-  color: $primary-color
-  font-family: 'Montserrat', sans-serif
-  font-size: 1.6em
-  font-weight: bold
-  margin-bottom: 20px
-
-.plus-icon
-  background-color: $primary-color
-  font-family: 'Montserrat', sans-serif
-  font-size: 1em
-  color: white
-  font-weight: bold
-  margin-top: 15px
-
-  .solicitud-servicio-form
-    .lote-formulario
-      display: flex
-      justify-content: space-between
-
-      .grupo-lotes
-        width: 50%
-
-  & mat-icon
-    font-size: 18px
-
 @media screen and (max-width: 768px)
-  .card
-    width: 86%
-    position: relative
-    right: 0.8em
 
-  .main-card
-    width: 100%
-    padding: 4px
-    border-radius: 10px
+  .header-container2
+    flex-direction: column
+    align-items: center
 
-  .letra-icon
-    display: none
+  .title2,
+  .back-button2
+    margin: 5px 0
+    text-align: center
 
-  .card.user-card .avatar
-    width: 90px
-    height: 80px
+  .subheader-container
+    justify-content: center
 
-  .card.user-card .name
-    font-size: 14px
-    color: #FFFFFF
-    font-weight: bold
+  .subtitle,
+  .search-input
+    margin: 5px 0
+    text-align: center
 
-  .flecha-doble
-    width: 3em
-    position: relative
-    right: 0em
-    top: -4em
+  .search-input
+    margin-right: 0
+    max-width: 100%
 
-  .card-lotes-section
-    width: 80%
+  .search-container
+    flex-direction: column
+    align-items: center
