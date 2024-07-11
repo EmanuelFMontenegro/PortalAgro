@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit, ViewEncapsulation } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
+
 export interface DataForm {
   type: 'text' | 'file' | 'select' | 'password' | 'textarea' | 'checkbox';
   placeholder: string;
@@ -17,16 +18,19 @@ export interface DataForm {
   selector: 'app-formulario',
   templateUrl: './formulario.component.html',
   styleUrls: ['./formulario.component.sass'],
-  encapsulation:ViewEncapsulation.None,
+  encapsulation: ViewEncapsulation.None,
 })
 export class FormularioComponent implements OnInit {
   separatorKeysCodes: number[] = [ENTER, COMMA];
+  @Input() formData: any;
+  @Input() dataForm: any;
+  @Input() fields: DataForm[] = [];
+  @Output() formSubmitted = new EventEmitter<any>();
   @Input() formType: string = '';
   @Input() titulo: string = '';
-  @Input() dataForm: DataForm[] = [];
-  formData: any = {};
 
-  @Output() formSubmitted = new EventEmitter<any>();
+
+
 
   ngOnInit() {
     this.initializeFormData();
@@ -34,9 +38,7 @@ export class FormularioComponent implements OnInit {
 
   initializeFormData() {
     this.formData = {};
-    this.dataForm.forEach(field => {
-      this.formData[field.ngModel] = '';
-    });
+
   }
 
   updateFormData() {
@@ -54,13 +56,12 @@ export class FormularioComponent implements OnInit {
   updateSelectedDepartments(event: any, ngModel: string) {
     this.formData[ngModel] = event.value;
   }
-   getDescripcionDepartament(idDepartament: number , listadoDepartament: any){
 
+  getDescripcionDepartament(idDepartament: number, listadoDepartament: any) {
+    return listadoDepartament.find((departamento: any) => departamento.value == idDepartament).text;
+  }
 
-       return listadoDepartament.find((departamento:any)=>departamento.value==idDepartament).text
-   }
-
-   addDepartment(event: MatChipInputEvent, modelName: string): void {
+  addDepartment(event: MatChipInputEvent, modelName: string): void {
     const input = event.input;
     const value = event.value;
 
@@ -77,6 +78,7 @@ export class FormularioComponent implements OnInit {
 
     this.updateFormData();  // Si necesitas actualizar los datos en tu modelo principal
   }
+
   removeDepartment(department: string, modelName: string) {
     // Implementa la lógica para remover un departamento
     this.formData[modelName] = this.formData[modelName].filter((dep: string) => dep !== department);

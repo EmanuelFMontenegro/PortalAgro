@@ -1,7 +1,7 @@
 <div class="form-container">
   <h2>{{ titulo }}</h2>
   <form class="form" (ngSubmit)="updateFormData()">
-    <ng-container *ngFor="let item of dataForm">
+    <div class="form-group" *ngFor="let item of dataForm">
       <label class="field-label" [for]="item.ngModel">{{ item.placeholder }}</label>
 
       <!-- Campo de texto o contraseña -->
@@ -20,17 +20,15 @@
         (change)="updateFormData()"></textarea>
 
       <!-- Campo de selección usando mat-select -->
-
-
       <ng-container *ngIf="item.type === 'select'">
         <mat-form-field>
-          <mat-select placeholder="seleccione departamento" [(ngModel)]="formData[item.ngModel]" [name]="item.name" [id]="item.ngModel"
+          <mat-select placeholder="Seleccione departamento" [(ngModel)]="formData[item.ngModel]" [name]="item.name" [id]="item.ngModel"
             (selectionChange)="updateFormData()" [multiple]="item.multiple || false" class="full-width">
             <mat-option *ngFor="let option of item.options" [value]="option.value">
               {{ option.text }}
             </mat-option>
           </mat-select>
-          <mat-chip-grid #chipGrid >
+          <mat-chip-grid #chipGrid>
             <mat-chip-row *ngFor="let department of formData[item.ngModel]"
               (removed)="removeDepartment(department,item.ngModel)">
               {{ getDescripcionDepartament(department,item.options) }}
@@ -44,16 +42,9 @@
         </mat-form-field>
       </ng-container>
 
-
-
-
-
       <!-- Campo de checkbox -->
       <input *ngIf="item.type === 'checkbox'" type="checkbox" [(ngModel)]="formData[item.ngModel]" [name]="item.name"
         [readonly]="item.readonly || false" [id]="item.ngModel" class="input" (change)="updateFormData()">
-    </ng-container>
-
-
-
+    </div>
   </form>
 </div>

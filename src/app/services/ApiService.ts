@@ -176,6 +176,7 @@ export class ApiService {
     const url = `${this.baseURL}/dist/1/user/manager/${id}`;
     return this.http.get<any>(url);
   }
+
   updateManagerDetails(managerId: number, userData: any): Observable<any> {
     return this.http.put(
       `${this.baseURL}/dist/user/manager/${managerId}`,

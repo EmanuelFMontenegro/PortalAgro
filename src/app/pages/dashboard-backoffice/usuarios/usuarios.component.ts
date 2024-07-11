@@ -479,7 +479,12 @@ export class UsuariosComponent implements OnInit {
       },
       (error) => {
         console.error('Error al registrar gerente:', error);
-        this.toastr.error('Error al registrar gerente');
+
+        if (error.error && error.error.code === 4002) {
+          this.toastr.error('El usuario ya existe, prueba con otro Email');
+        } else {
+          this.toastr.error('Error al registrar gerente');
+        }
       }
     );
   }
