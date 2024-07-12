@@ -7,7 +7,6 @@
     <button mat-icon-button class="close-sidebar-btn" (click)="closeSidenav()" *ngIf="isScreenSmall">
       <mat-icon style="color: #47de5b;">arrow_back</mat-icon>
     </button>
-
     <mat-nav-list class="btn_nav">
       <a mat-list-item routerLink="/dashboard/inicio" class="nav-item" (click)="closeSidenav()">
         <img src="assets/img/home_24dp_FILL0_wght300_GRAD0_opsz24.svg" alt="Home" class="nav-item-icon">
@@ -82,11 +81,11 @@
         <button mat-menu-item (click)="cerrarSesion()">Cerrar Sesión</button>
       </mat-menu>
     </mat-toolbar>
-
-    <router-outlet></router-outlet>
+    <mat-card class="mat-card-principal">
+      <router-outlet></router-outlet>
+    </mat-card>
 
   </mat-sidenav-content>
-
 </mat-sidenav-container>
 
 <mat-card class="card-footer">
