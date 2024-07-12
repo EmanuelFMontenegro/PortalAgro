@@ -7,36 +7,40 @@ import { environment } from "../../environments/environment";
     providedIn: 'root'
   })
 
-  export class ConfiguracionService {
+  export class DronService {
 
     private empresaCotizar = new BehaviorSubject<any>(null);
     getEmprezaCotizar = this.empresaCotizar.asObservable();
-
     constructor(private http: HttpClient){}
 
-    getDrones(): Observable<any>{
+    getAll(): Observable<any>{
       let url =  `${environment.apiUrl}/dist/drone/all`;
       return this.http.get(url);
     }
 
-    getDron(id:number): Observable<any>{
+    get(id:number): Observable<any>{
       let url =  `${environment.apiUrl}/dist/drone/${id}`;
       return this.http.get(url);
     }
 
-    getDronesFiltrados(pageSize: number): Observable<any>{
+    getFiltrados(pageSize: number): Observable<any>{
       let url =  `${environment.apiUrl}/dist/drone/all?sortBy=id&sortDir=DESC&pageSize=${pageSize}&pageNo=0&nickname=op&code=3&model=&brand=&isActive=true`;
       return this.http.get(url);
     }
 
-    postDrone(body: any){
+    post(body: any): Observable<any>{
       let url = `${environment.apiUrl}/dist/drone`
       return this.http.post(url, body);
     }
 
-    putDrone(body: any , id: number){
+    put(body: any , id: number): Observable<any>{
       let url = `${environment.apiUrl}/dist/drone/${id}`
       return this.http.put(url, body);
+    }
+
+    delete(id:number): Observable<any>{
+      let url = `${environment.apiUrl}/dist/drone/${id}`
+      return this.http.delete(url);
     }
 
   }

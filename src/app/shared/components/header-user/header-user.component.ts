@@ -6,6 +6,7 @@ interface DecodedToken {
   userId: number;
   sub: string;
   name: string;
+  lastname: string;
   role: string;
 }
 
@@ -16,10 +17,12 @@ interface DecodedToken {
 })
 export class HeaderUserComponent implements OnInit, OnChanges {
   @Input() selectedName: string | null = null;
+  @Input() selectedLastName: string | null = null;
   @Input() selectedEmail: string | null = null;
   @Input() selectedRole: string | null = null;
 
   name: string | null = null;
+  lastname: string | null = null;
   email: string | null = null;
   role: string | null = null;
 
@@ -32,6 +35,9 @@ export class HeaderUserComponent implements OnInit, OnChanges {
   ngOnChanges(): void {
     if (this.selectedName !== undefined && this.selectedName !== null) {
       this.name = this.selectedName;
+    }
+    if (this.selectedLastName !== undefined && this.selectedLastName !== null) {
+      this.lastname = this.selectedLastName;
     }
     if (this.selectedEmail !== undefined && this.selectedEmail !== null) {
       this.email = this.selectedEmail;
@@ -48,6 +54,9 @@ export class HeaderUserComponent implements OnInit, OnChanges {
       if (this.selectedName === undefined || this.selectedName === null) {
         this.name = decoded.name;
       }
+      if (this.selectedLastName === undefined || this.selectedLastName === null) {
+        this.lastname = decoded.lastname;
+      }
       if (this.selectedEmail === undefined || this.selectedEmail === null) {
         this.email = decoded.sub;
       }
@@ -56,6 +65,7 @@ export class HeaderUserComponent implements OnInit, OnChanges {
       }
     } else {
       this.name = this.selectedName ?? null;
+      this.lastname = this.selectedLastName ?? null;
       this.email = this.selectedEmail ?? null;
       this.role = this.translateRole(this.selectedRole ?? null);
     }

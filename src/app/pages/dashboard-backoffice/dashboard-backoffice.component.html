@@ -1,4 +1,4 @@
-<mat-sidenav-container class="sidenav-container">
+<mat-sidenav-container class="sidenav-container" *ngIf="!this.cargandoPermisos else mostrarSpinner">
   <mat-sidenav #sidenav [mode]="isScreenSmall ? 'over' : 'side'" [opened]="!isScreenSmall" class="sidenav">
     <!-- Contenido del sidenav -->
     <div class="logo-container">
@@ -113,6 +113,11 @@
 
   </mat-sidenav-content>
 </mat-sidenav-container>
+
+<ng-template #mostrarSpinner>
+  <div class="spinner"> ACA VA EL SPINNER</div>
+</ng-template>
+
 
 
 <mat-card class="card-footer">

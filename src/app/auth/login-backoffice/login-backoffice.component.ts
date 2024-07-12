@@ -11,6 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 import { DashboardComponent } from 'src/app/pages/dashboard/dashboard.component';
 import { PrimerRegistroComponent } from 'src/app/auth/primerRegistro/primerRegistro.component';
 import { jwtDecode } from 'jwt-decode';
+import { PermisoService } from 'src/app/services/permisos.service';
 
 export function usernameValidator(
   control: FormControl
@@ -47,6 +48,7 @@ export class LoginBackofficeComponent implements OnInit {
   constructor(
     private apiService: ApiService,
     private router: Router,
+    private permisoService: PermisoService,
     private toastr: ToastrService
   ) {
     Validators.required,
@@ -88,7 +90,7 @@ export class LoginBackofficeComponent implements OnInit {
       this.apiService
         .validarCredencialBackoffice(username, password)
         .subscribe({
-          next: (response) => {
+          next: async (response) => {
             if (
               response.status === 200 &&
               response.body &&
@@ -96,7 +98,11 @@ export class LoginBackofficeComponent implements OnInit {
             ) {
               // Usuario autenticado correctamente
               localStorage.setItem('token', response.body.token);
-              this.router.navigate(['/dashboard-backoffice']);
+              await this.permisoService.getPermisos()
+
+              // PARA DERIBAR SI ES dashboard-backoffice o dashboard
+                this.router.navigate(['/dashboard-backoffice']);
+
               this.mostrarMensajeExitoso();
               this.login.reset();
             } else {

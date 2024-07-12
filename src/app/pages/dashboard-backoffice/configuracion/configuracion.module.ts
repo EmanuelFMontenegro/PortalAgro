@@ -2,12 +2,14 @@ import { NgModule } from "@angular/core";
 import { SharedModule } from "src/app/shared/shared.module";
 import { ConfiguracionRoutingModule } from "./configuracion-routing.module";
 import { ConfiguracionComponent } from "./configuracion.component";
-import { ConfiguracionAddEditComponent } from './configuracion-add-edit/configuracion-add-edit.component';
+import { AddEditDronesComponent } from './add-edit-drones/add-edit-drones.component';
+import { AddEditInsumosComponent } from './add-edit-insumos/add-edit-insumos.component';
 
 @NgModule({
   declarations: [
     ConfiguracionComponent,
-    ConfiguracionAddEditComponent,
+    AddEditDronesComponent,
+    AddEditInsumosComponent,
   ],
   imports: [
     ConfiguracionRoutingModule,

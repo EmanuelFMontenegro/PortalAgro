@@ -3,74 +3,46 @@ import { Router } from '@angular/router';
 import { ApiService } from 'src/app/services/ApiService';
 import { ToastrService } from 'ngx-toastr';
 import { DashboardBackOfficeService } from '../../dashboard-backoffice.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from '../../dialog/dialog.component';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { MatChipInputEvent } from '@angular/material/chips';
 
-interface DataForm {
-  type: 'text' | 'file' | 'select' | 'password' | 'textarea' | 'checkbox';
-  placeholder: string;
-  ngModel: string;
-  name: string;
-}
+type UserType =
+  | 'administrator'
+  | 'superuser'
+  | 'technical'
+  | 'operator'
+  | 'cooperative'
+  | 'manager';
 
-interface User {
-  id: number;
-  name: string;
-  lastname: string;
-  dni: string;
-  userResponseDTO: UserResponseDTO;
-  departmentAssigned?: any[];
-  account_active?: boolean;
-  company?: any;
-  typeUser?: string;
-  provinciasAsignadas?: string;
-  departamentosAsignados?: string;
-  color?: string;
-  [key: string]: any;
-}
-
-interface UserResponseDTO {
-  id: number;
-  username: string;
-  email: string;
-  account_active: boolean;
-  accountNonLocked: boolean;
-  failedAttempts: number;
-  lockeTime: any; // Ajusta este tipo según el tipo real en tu API
-  role: Role;
-  [key: string]: any;
-}
-
-interface Role {
-  name: string;
-  [key: string]: any;
-}
-
+  interface Departamento {
+    id: number;
+    name: string;
+  }
 @Component({
   selector: 'app-usuarios-actualizar',
   templateUrl: './usuarios-actualizar.component.html',
   styleUrls: ['./usuarios-actualizar.component.sass'],
 })
 export class UsuariosActualizarComponent implements OnInit {
-  dataForm: DataForm[] = [];
-  formData: Partial<User> = {
-    userResponseDTO: {
-      id: 0,
-      username: '',
-      email: '',
-      account_active: false,
-      accountNonLocked: true,
-      failedAttempts: 0,
-      lockeTime: null,
-      role: {
-        name: '',
-      },
-    },
-  };
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+  departamentoVacio = false;
+  userForm: FormGroup = this.fb.group({});
+  formData: any = {};
+  userType: UserType | null = null;
+  departamentos: Departamento[] = [];
+  departamentosSeleccionados: Departamento[] = [];
+  item: any;
 
   constructor(
+    private fb: FormBuilder,
     private router: Router,
     private apiService: ApiService,
     private toastr: ToastrService,
-    public dashboardBackOffice: DashboardBackOfficeService
+    public dashboardBackOffice: DashboardBackOfficeService,
+    private dialog: MatDialog // Inyecta MatDialog
   ) {
     this.dashboardBackOffice.dataTitulo.next({
       titulo: '¡Acá podrás Actualizar a los usuarios del Sistema!',
@@ -79,94 +51,136 @@ export class UsuariosActualizarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getUserManager();
+    this.initForm();
+    this.getUserDetails();
+    this.cargarDepartamentos();
   }
 
-  getUserManager() {
-    const userType = localStorage.getItem('UserType');
-    if (userType) {
-      const userTypeObject = JSON.parse(userType);
-      const userId = userTypeObject.id;
+  initForm() {
+    this.userForm = this.fb.group({
+      name: [''],
+      lastname: [''],
+      dni: [''],
+      username: [''],
+      email: [''],
+      password: [''],
+      departmentAssigned: [] as number[],
+      assignedDepartment: [''],
+      function: [''],
+      specialty: [''],
+      businessName: [''],
+      address: [''],
+      cuit: [''],
+      registration: [''],
+      license: [''],
+    });
+  }
 
-      this.apiService.getManagerById(userId).subscribe(
-        (userDetails: any) => {
-          console.log(
-            'Datos del usuario Manager obtenidos con el Enpoint:',
-            userDetails
-          ); // Log de detalles del usuario obtenidos
-          this.fillFormData(userDetails);
-        },
-        (error) => {
-          console.error('Error al obtener usuario:', error);
-          this.toastr.error('Error al obtener usuario');
-        }
-      );
+  getUserDetails() {
+    const storedUserType = localStorage.getItem('UserType');
+    if (storedUserType) {
+      const userTypeObject = JSON.parse(storedUserType);
+      const userType = userTypeObject.typeUser.toLowerCase();
+
+      if (userType === 'management') {
+        this.userType = 'manager';
+      } else {
+        this.userType = userType as UserType;
+      }
+
+      console.log('El tipo de usuario seteado:', this.userType);
+      console.log('userTypeObject:', userTypeObject);
+      console.log('userId:', userTypeObject.id);
+
+      const userId = userTypeObject.id;
+      const companyId = userTypeObject.companyId;
+
+      if (this.userType === 'manager') {
+        this.apiService.getManagerById(userId).subscribe(
+          (userDetails: any) => {
+            console.log(
+              'Datos del usuario Manager obtenidos con el Endpoint:',
+              userDetails
+            );
+            this.fillForm(userDetails, true);
+          },
+          (error) => {
+            console.error('Error al obtener usuario:', error);
+            this.toastr.error('Error al obtener usuario');
+          }
+        );
+      } else if (
+        this.userType === 'administrator' ||
+        this.userType === 'superuser'
+      ) {
+        this.openDialog();
+      } else if (
+        ['technical', 'operator', 'cooperative'].includes(this.userType)
+      ) {
+        this.apiService
+          .getUserByRoleAndId(
+            this.userType as 'technical' | 'operator' | 'cooperative',
+            userId
+          )
+          .subscribe(
+            (userDetails: any) => {
+              console.log(
+                `Datos del usuario ${this.userType} obtenidos con el Endpoint:`,
+                userDetails
+              );
+              this.fillForm(userDetails, false);
+            },
+            (error) => {
+              console.error('Error al obtener usuario:', error);
+              this.toastr.error('Error al obtener usuario');
+            }
+          );
+      } else {
+        console.error('Tipo de usuario no válido:', this.userType);
+        this.toastr.error('Tipo de usuario no válido.');
+      }
     } else {
       this.toastr.error('No se encontró UserType en el almacenamiento local.');
     }
   }
 
-  fillFormData(userData: any) {
-    this.formData = {
-      id: userData.id || null,
-      name: userData.name || '',
-      lastname: userData.lastname || '',
-      dni: userData.dni || '',
-      userResponseDTO: {
-        id: userData.userResponseDTO?.id || 0,
+  fillForm(userData: any, isManager: boolean) {
+    if (isManager) {
+      this.userForm.patchValue({
+        name: userData.name || '',
+        lastname: userData.lastname || '',
+        dni: userData.dni || '',
         username: userData.userResponseDTO?.username || '',
-        email: userData.userResponseDTO?.email || '',
-        account_active: userData.userResponseDTO?.account_active || false,
-        accountNonLocked: userData.userResponseDTO?.accountNonLocked || true,
-        failedAttempts: userData.userResponseDTO?.failedAttempts || 0,
-        lockeTime: userData.userResponseDTO?.lockeTime || null,
-        role: {
-          name: userData.userResponseDTO?.role?.name || '',
-        },
-      },
-      departmentAssigned: userData.departmentAssigned || [],
-      account_active: userData.account_active || false,
-      company: userData.company || {},
-      typeUser: userData.typeUser || '',
-      provinciasAsignadas: userData.provinciasAsignadas || '',
-      departamentosAsignados: userData.departamentosAsignados || '',
-      color: userData.color || '',
-    };
+        email: userData.userResponseDTO?.username || '',
+        password: '',
+      });
+    } else {
+      this.userForm.patchValue({
+        name: userData.name || '',
+        lastname: userData.lastname || '',
+        dni: userData.dni || '',
+        username: userData.user?.username || '',
+        email: userData.user?.username || '',
+        password: '',
+        assignedDepartment: userData.departmentAssigned || '',
+        function: userData.function || '',
+        specialty: userData.specialty || '',
+        businessName: userData.businessName || '',
+        address: userData.address || '',
+        cuit: userData.cuit || '',
+        registration: userData.matricula || '',
+        license: userData.license || '',
+      });
+    }
 
-    // Verificar contenido de formData
     console.log(
       'Datos del usuario en formData que se manda al formulario:',
-      this.formData
+      this.userForm.value
     );
-
-    this.actualizarCamposFormulario();
-  }
-
-  actualizarCamposFormulario() {
-    this.dataForm = [
-      { type: 'text', placeholder: 'Nombre', ngModel: 'name', name: 'name' },
-      {
-        type: 'text',
-        placeholder: 'Apellido',
-        ngModel: 'lastname',
-        name: 'lastname',
-      },
-      { type: 'text', placeholder: 'DNI', ngModel: 'dni', name: 'dni' },
-      {
-        type: 'text',
-        placeholder: 'Email',
-        ngModel: 'userResponseDTO.email',
-        name: 'email',
-      }, // Campo para el email del usuario manager
-    ];
-
-    // Verificar configuración de dataForm
-    console.log('Configuración de dataForm actualizado:', this.dataForm);
   }
 
   enviarFormulario() {
-    console.log('Formulario enviado:', this.formData);
-    // Implementa lógica para enviar formulario al API
+    // Lógica para enviar el formulario
   }
 
   cancelar() {
@@ -175,7 +189,83 @@ export class UsuariosActualizarComponent implements OnInit {
   }
 
   resetearFormulario() {
-    this.formData = {};
-    this.dataForm = [];
+    this.userForm.reset();
+  }
+
+  openDialog() {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: '400px',
+      disableClose: true,
+      closeOnNavigation: false,
+      data: {
+        message: 'No tiene autorización para ver esta información.',
+        buttonText: 'Aceptar',
+        showCancel: false,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('Dialog cerrado con resultado:', result);
+      if (result) {
+        this.router.navigate(['dashboard-backoffice/usuarios-filtro']);
+      }
+    });
+  }
+
+  getDescripcionDepartament(idDepartament: number, listadoDepartament: any) {
+    return listadoDepartament.find((departamento: any) => departamento.value == idDepartament).text;
+  }
+  cargarDepartamentos() {
+    this.apiService.getAllDepartments().subscribe(
+      (response) => {
+        if (response && response.list && response.list.length > 0) {
+          const departamentos = response.list[0];
+          this.departamentos = departamentos.map((dept: any) => ({
+            value: dept.id,
+            text: dept.name,
+          }));
+        } else {
+          console.error(
+            'La respuesta no contiene un array de departamentos válido:',
+            response
+          );
+          this.toastr.error(
+            'Error: La respuesta no contiene un array de departamentos válido'
+          );
+        }
+            },
+      (error) => {
+        console.error('Error al cargar departamentos:', error);
+        this.toastr.error('Error al cargar departamentos');
+      }
+    );
+  }
+  actualizarDepartamentosAsignados() {
+    if (Array.isArray(this.formData.departmentAssigned)) {
+    } else {
+      this.formData.departmentAssigned = [];
+    }
+  }
+
+  addDepartment(event: MatChipInputEvent, modelName: string): void {
+    const input = event.input;
+    const value = event.value;
+
+    // Añadir el chip al array de departamentos si no está vacío
+    if ((value || '').trim()) {
+      this.formData[modelName] = this.formData[modelName] || [];
+      this.formData[modelName].push(value.trim());
+    }
+
+    // Limpiar el valor de entrada
+    if (input) {
+      input.value = '';
+    }
+
+
+  }
+  removeDepartment(department: string, modelName: string) {
+    // Implementa la lógica para remover un departamento
+    this.formData[modelName] = this.formData[modelName].filter((dep: string) => dep !== department);
   }
 }

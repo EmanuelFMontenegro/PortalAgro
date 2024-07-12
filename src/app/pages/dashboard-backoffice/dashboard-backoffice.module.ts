@@ -29,6 +29,7 @@ import { UsuariosFiltroComponent } from './usuarios/usuarios-filtro/usuarios-fil
 import { RenderProvincesPipe } from 'src/app/services/render-pipes.pipe';
 import { RenderDepartmentsPipe } from 'src/app/services/render-pipes.pipe';
 import { UsuariosActualizarComponent } from './usuarios/usuarios-actualizar/usuarios-actualizar.component';
+
 @NgModule({
   declarations: [
     DashboardBackofficeComponents,
@@ -37,6 +38,7 @@ import { UsuariosActualizarComponent } from './usuarios/usuarios-actualizar/usua
     ProductoresComponent,
     ChacrasComponent,
     LotesComponent,
+    CalendariosComponent,
     CalendariosComponent,
     NotificacionComponent,
     PlanificacionesComponent,

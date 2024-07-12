@@ -1,0 +1,75 @@
+
+  <div class="titulo-principal">
+    {{titulo}}
+ </div>
+
+ <form class="formulario-global"  [formGroup]="form">
+  <div class="grupos" >
+  <div class="field-container">
+    <label class="field-label">Nombre</label>
+    <input matInput [formControlName]="this.ctrlName" placeholder="" required>
+    <span *ngIf="form.get(this.ctrlName)?.hasError('required') && form.controls[this.ctrlName]?.touched" class="error-message">
+      Este campo es requerido</span>
+  </div>
+
+  <div class="field-container">
+    <label class="field-label">Función</label>
+    <input matInput [formControlName]="this.ctrlFuncion" placeholder="" required>
+    <span *ngIf="form.get(this.ctrlFuncion)?.hasError('required') && form.controls[this.ctrlFuncion]?.touched" class="error-message">
+      Este campo es requerido</span>
+  </div>
+
+  <div class="field-container">
+    <label class="field-label">Marca</label>
+    <input matInput [formControlName]="this.ctrlMarca" placeholder="" required>
+    <span *ngIf="form.get(this.ctrlMarca)?.hasError('required') && form.controls[this.ctrlMarca]?.touched" class="error-message">
+      Este campo es requerido</span>
+  </div>
+
+  <div class="field-container">
+    <label class="field-label">Modelo</label>
+    <input matInput [formControlName]="this.ctrlModel" placeholder="" required>
+    <span *ngIf="form.get(this.ctrlModel)?.hasError('required') && form.controls[this.ctrlModel]?.touched" class="error-message">
+      Este campo es requerido</span>
+  </div>
+
+  <div class="field-container">
+    <label class="field-label">Nro de serie</label>
+    <input matInput [formControlName]="this.ctrlSerie" placeholder="" required>
+    <span *ngIf="form.get(this.ctrlSerie)?.hasError('required') && form.controls[this.ctrlSerie]?.touched" class="error-message">
+      Este campo es requerido</span>
+  </div>
+
+  <div class="field-container">
+    <label class="field-label">Matrícula Anac</label>
+    <input matInput [formControlName]="this.ctrlMatricula" placeholder="" required>
+    <span *ngIf="form.get(this.ctrlMatricula)?.hasError('required') && form.controls[this.ctrlMatricula]?.touched" class="error-message">
+      Este campo es requerido</span>
+  </div>
+
+  <div class="field-container">
+    <label class="field-label">Poliza</label>
+    <input matInput [formControlName]="this.ctrlPoliza" placeholder="" required>
+    <span *ngIf="form.get(this.ctrlPoliza)?.hasError('required') && form.controls[this.ctrlPoliza]?.touched" class="error-message">
+      Este campo es requerido</span>
+  </div>
+
+  <div class="field-container">
+    <label class="field-label">Código</label>
+    <input matInput [formControlName]="this.ctrlCode" placeholder="" required>
+    <span *ngIf="form.get(this.ctrlCode)?.hasError('required') && form.controls[this.ctrlCode]?.touched" class="error-message">
+      Este campo es requerido</span>
+  </div>
+
+  <div class="field-container-observaciones">
+    <label class="field-label">Descripción</label>
+    <textarea matInput class="field-input-obs" [formControlName]="this.ctrlDescripcion"></textarea>
+  </div>
+
+  <div class="botones-servicio">
+    <button mat-raised-button class="cancel-button" type="button" (click)="this.mostrarEditar() ? confirmarEliminar() : cancelar()">{{this.mostrarEditar() ? 'Eliminar' : 'Cancelar'}}</button>
+    <button mat-raised-button class="register-button" type="submit" (click)="this.mostrarEditar() ? habilitarEdicion(): addEdit()">{{this.mostrarEditar() ? 'Editar' : 'Guardar cambios' }}</button>
+  </div>
+</div>
+
+ </form>

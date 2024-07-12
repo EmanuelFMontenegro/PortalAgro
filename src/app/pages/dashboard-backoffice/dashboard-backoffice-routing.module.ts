@@ -37,19 +37,19 @@ const routes: Routes = [
         path: 'usuarios-filtro',
         component: UsuariosFiltroComponent,
         canActivate: [AuthGuard],
-        data: { roles: ['ROLE_ADMIN'] }
+        data: { roles: ['ROLE_ADMIN'] },
       },
       {
         path: 'usuarios',
         component: UsuariosComponent,
         canActivate: [AuthGuard],
-        data: { roles: ['ROLE_ADMIN'] }
+        data: { roles: ['ROLE_ADMIN'] },
       },
       {
-        path: 'usuarios-actualizar',
+        path: 'usuarios-actualizar/:id',
         component: UsuariosActualizarComponent,
         canActivate: [AuthGuard],
-        data: { roles: ['ROLE_ADMIN'] }
+        data: { roles: ['ROLE_ADMIN'] },
       },
       { path: 'perfil-productor', component: PerfilProductorComponent },
       { path: 'nuevo-usuario', component: NuevoUsuarioComponent },
@@ -68,7 +68,10 @@ const routes: Routes = [
       {
         path: 'configuracion',
         canActivate: [AuthGuard],
-        loadChildren: () => import('./configuracion/configuracion.module').then(x => x.ConfiguracionModule)
+        loadChildren: () =>
+          import('./configuracion/configuracion.module').then(
+            (x) => x.ConfiguracionModule
+          ),
       },
       { path: '', redirectTo: 'inicio', pathMatch: 'full' },
     ],
