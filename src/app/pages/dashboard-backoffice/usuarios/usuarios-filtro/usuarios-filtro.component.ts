@@ -139,7 +139,7 @@ export class UsuariosFiltroComponent implements OnInit {
               .join(', ');
 
             // usuario.typeUser = this.mapTypeUser(usuario.typeUser);
-
+            // validar permisos para futuro
             // Set color based on user type
             usuario.color = this.getColorForUserType(usuario.typeUser);
           });

@@ -21,7 +21,7 @@
 
       <!-- Campo de selección usando mat-select -->
       <ng-container *ngIf="item.type === 'select'">
-        <mat-form-field>
+        <!-- <mat-form-field> -->
           <mat-select placeholder="Seleccione departamento" [(ngModel)]="formData[item.ngModel]" [name]="item.name" [id]="item.ngModel"
             (selectionChange)="updateFormData()" [multiple]="item.multiple || false" class="full-width">
             <mat-option *ngFor="let option of item.options" [value]="option.value">
@@ -39,7 +39,7 @@
             <input [matChipInputFor]="chipGrid" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
               (matChipInputTokenEnd)="addDepartment($event, item.ngModel)" />
           </mat-chip-grid>
-        </mat-form-field>
+        <!-- </mat-form-field> -->
       </ng-container>
 
       <!-- Campo de checkbox -->

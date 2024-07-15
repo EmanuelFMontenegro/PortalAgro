@@ -164,7 +164,7 @@ export class PrimerRegistroComponent implements OnInit, AfterViewInit {
 
     // Llamar al endpoint de actualización del perfil
     this.apiService
-      .updatePersonAdmin(this.userId, this.personId, personData)
+      . updatePersonProductor(this.userId, this.personId, personData)
       .subscribe(
         (response) => {
           this.toastr.success(

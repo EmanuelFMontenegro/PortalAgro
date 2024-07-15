@@ -20,6 +20,7 @@ export class HeaderUserComponent implements OnInit, OnChanges {
   @Input() selectedLastName: string | null = null;
   @Input() selectedEmail: string | null = null;
   @Input() selectedRole: string | null = null;
+  @Input() departmentNames: string[] | null = null;
 
   name: string | null = null;
   lastname: string | null = null;

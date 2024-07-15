@@ -29,6 +29,7 @@ import { UsuariosFiltroComponent } from './usuarios/usuarios-filtro/usuarios-fil
 import { RenderProvincesPipe } from 'src/app/services/render-pipes.pipe';
 import { RenderDepartmentsPipe } from 'src/app/services/render-pipes.pipe';
 import { UsuariosActualizarComponent } from './usuarios/usuarios-actualizar/usuarios-actualizar.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
   declarations: [
@@ -64,6 +65,7 @@ import { UsuariosActualizarComponent } from './usuarios/usuarios-actualizar/usua
     DashboardBackofficeRoutingModule,
     SharedModule,
     FormsModule,
+    MatAutocompleteModule,
     ReactiveFormsModule,
     BrowserModule,
   ],

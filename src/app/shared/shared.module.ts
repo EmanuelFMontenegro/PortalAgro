@@ -23,6 +23,7 @@ import { FiltrosContainerComponent } from './components/filtros-container/filtro
 import { CalendarComponent } from './components/calendar/calendar.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarPopupComponent } from './components/calendar-popup/calendar-popup.component';
+
 export const IMPORTS_MATERIAL = [
   MatSidenavModule,
   MatListModule,
@@ -41,7 +42,6 @@ export const IMPORTS_MATERIAL = [
   MatChipsModule,
   MatCheckboxModule,
   MatDialogModule,
-
 ];
 
 export const IMPORT_CORE = [CommonModule, FormsModule, ReactiveFormsModule];
@@ -54,8 +54,7 @@ export const CALENDAR = [FullCalendarModule];
     TituloContainerComponent,
     FiltrosContainerComponent,
     CalendarComponent,
-    CalendarPopupComponent
-
+    CalendarPopupComponent,
   ],
   imports: [IMPORT_CORE, IMPORTS_MATERIAL, CALENDAR],
   exports: [
@@ -66,7 +65,7 @@ export const CALENDAR = [FullCalendarModule];
     FormularioComponent,
     TituloContainerComponent,
     FiltrosContainerComponent,
-    CalendarComponent
+    CalendarComponent,
   ],
 })
 export class SharedModule {}
