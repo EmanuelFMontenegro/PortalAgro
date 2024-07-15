@@ -7,7 +7,7 @@
     <input type="text" class="search-input" placeholder="Buscar...">
     <button class="back-button2" (click)="BtnRegisterCampos()">Registrar Chacra</button>
   </div>
-  <mat-card class="main-card">
+  <div class="main-card">
     <div class="card-campos-section">
       <h2 class="titulo-campos"></h2>
       <div class="campos-container">
@@ -21,10 +21,11 @@
           <p><span class="campo-variable">Hectarias:</span> {{ campo.dimensions }}</p>
           <p><span class="campo-variable">Dirección:</span> {{ campo.address.address }}</p>
           <p><span class="campo-variable">Descripción</span> {{ campo.observation }}</p>
-          <button mat-raised-button class="ver-mas-button" (click)="verMas(campo)">Geolocalización</button>
+          <button mat-raised-button class="ver-mas-button" (click)="verMas(campo)">Ver Geolocalización</button>
           <button mat-raised-button class="ver-mas-button-second" (click)="verLotes(campo)">Ver Lotes</button>
 
         </div>
       </div>
     </div>
-  <mat-card/>
+  </div>
+</div>
