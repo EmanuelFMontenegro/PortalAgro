@@ -19,7 +19,7 @@ export class DashboardComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.breakpointObserver
-      .observe([Breakpoints.Handset])
+      .observe(['(max-width: 720px)'])
       .subscribe((result) => {
         this.isScreenSmall = result.matches;
       });

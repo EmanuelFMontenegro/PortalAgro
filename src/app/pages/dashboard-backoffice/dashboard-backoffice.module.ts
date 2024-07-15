@@ -41,6 +41,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     LotesComponent,
     CalendariosComponent,
     CalendariosComponent,
+
     NotificacionComponent,
     PlanificacionesComponent,
     InformesComponent,

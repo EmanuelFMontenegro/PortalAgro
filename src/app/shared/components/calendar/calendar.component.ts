@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { EventInput } from '@fullcalendar/core';
 import { CalendarOptions, EventClickArg, EventApi } from '@fullcalendar/core';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -8,6 +8,8 @@ import listPlugin from '@fullcalendar/list';
 import esLocale from '@fullcalendar/core/locales/es';
 import { MatDialog } from '@angular/material/dialog';
 import { CalendarPopupComponent } from 'src/app/shared/components/calendar-popup/calendar-popup.component';
+import { HostListener } from '@angular/core';
+
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
@@ -15,30 +17,28 @@ import { CalendarPopupComponent } from 'src/app/shared/components/calendar-popup
 })
 export class CalendarComponent implements OnInit {
   @Input() events!: EventInput[];
-  calendarOptions: CalendarOptions = {
-    plugins: [
-      interactionPlugin,
-      dayGridPlugin,
-      timeGridPlugin,
-      listPlugin,
-    ],
-    headerToolbar: {
-      left: 'prev,next',
-      center: 'title',
-      right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-    },
-    initialView: 'dayGridMonth',
-    weekends: true, 
-    selectable: true, 
-    selectMirror: true,
-    dayMaxEvents: true,
-    locale: esLocale,
-    longPressDelay: 1,
-    eventClick: this.handleEventClick.bind(this)
-  };
+  calendarOptions: CalendarOptions;
   currentEvents: EventApi[] = [];
 
-  constructor(private changeDetector: ChangeDetectorRef,public dialogRef: MatDialog) {}
+  constructor(public dialogRef: MatDialog) {
+    this.calendarOptions = {
+      plugins: [
+        interactionPlugin,
+        dayGridPlugin,
+        timeGridPlugin,
+        listPlugin,
+      ],
+      initialView: 'dayGridMonth',
+      weekends: true, 
+      selectable: true, 
+      selectMirror: true,
+      dayMaxEvents: true,
+      locale: esLocale,
+      longPressDelay: 1,
+      eventClick: this.handleEventClick.bind(this)
+    };
+    this.setupCalendarOptions(window.innerWidth);
+  }
 
   ngOnInit() {
     this.calendarOptions.events = this.events;
@@ -54,5 +54,17 @@ export class CalendarComponent implements OnInit {
       }
     });
  
+  }
+  setupCalendarOptions(width: number) {
+    const isMobile = width < 600;
+    this.calendarOptions.headerToolbar={
+      left: 'prev,next today',
+      center: (!isMobile? 'title' : ''),
+      right: (isMobile ? 'dayGridMonth,listDay' : 'dayGridMonth,timeGridWeek,timeGridDay,listWeek')
+    }
+  }
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.setupCalendarOptions(event.target.innerWidth);
   }
 }
