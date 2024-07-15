@@ -19,7 +19,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { DialogComponent } from './dialog/dialog.component';
 import { PerfilProductorComponent } from './productores/perfil-productor/perfil-productor.component';
 import { NuevoUsuarioComponent } from './productores/nuevo-usuario/nuevo-usuario.component';
-import { IMPORTS_MATERIAL} from 'src/app/shared/shared.module';
+import { IMPORTS_MATERIAL } from 'src/app/shared/shared.module';
 import { ChacrasPerfilComponent } from './chacras-perfil/chacras-perfil.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { CargarLotesComponent } from './chacras/cargar-lotes/cargar-lotes.component';
@@ -27,7 +27,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { UsuariosFiltroComponent } from './usuarios/usuarios-filtro/usuarios-filtro.component';
 import { RenderProvincesPipe } from 'src/app/services/render-pipes.pipe';
-import { CalendarPopupComponent } from 'src/app/shared/components/calendar-popup/calendar-popup.component';
+import { RenderDepartmentsPipe } from 'src/app/services/render-pipes.pipe';
+import { UsuariosActualizarComponent } from './usuarios/usuarios-actualizar/usuarios-actualizar.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+
 @NgModule({
   declarations: [
     DashboardBackofficeComponents,
@@ -37,7 +40,7 @@ import { CalendarPopupComponent } from 'src/app/shared/components/calendar-popup
     ChacrasComponent,
     LotesComponent,
     CalendariosComponent,
-    CalendarPopupComponent,
+    CalendariosComponent,
     NotificacionComponent,
     PlanificacionesComponent,
     InformesComponent,
@@ -52,7 +55,9 @@ import { CalendarPopupComponent } from 'src/app/shared/components/calendar-popup
     CargarLotesComponent,
     UsuariosComponent,
     UsuariosFiltroComponent,
-    RenderProvincesPipe
+    RenderProvincesPipe,
+    RenderDepartmentsPipe,
+    UsuariosActualizarComponent,
   ],
   imports: [
     IMPORTS_MATERIAL,
@@ -60,11 +65,10 @@ import { CalendarPopupComponent } from 'src/app/shared/components/calendar-popup
     DashboardBackofficeRoutingModule,
     SharedModule,
     FormsModule,
+    MatAutocompleteModule,
     ReactiveFormsModule,
     BrowserModule,
   ],
-  providers: [
-    RenderProvincesPipe
-  ]
+  providers: [RenderProvincesPipe, RenderDepartmentsPipe],
 })
 export class DashboardBackofficeModule {}

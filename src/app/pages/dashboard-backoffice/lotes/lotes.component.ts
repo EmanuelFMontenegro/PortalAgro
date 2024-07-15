@@ -145,7 +145,6 @@ export class LotesComponent implements OnInit {
 
   ngOnInit(): void {
     this.decodeToken();
-    //this.cargarDatosDeUsuario();
     this.obtenerLocalidades();
     this.obtenerCultivos();
     this.filtrarPorCultivo();
@@ -161,30 +160,6 @@ export class LotesComponent implements OnInit {
     }
   }
 
-  // cargarDatosDeUsuario() {
-  //   const decoded: DecodedToken = jwtDecode(this.authService.getToken() || '');
-  //   if ('userId' in decoded && 'sub' in decoded && 'roles' in decoded) {
-  //     this.userId = decoded.userId;
-  //     this.userEmail = decoded.sub;
-
-  //     this.companyId = 1;
-
-  //     if (this.userId !== null && this.companyId !== null) {
-  //       this.apiService.findUserById(this.companyId, this.userId).subscribe(
-  //         (data) => {
-  //           this.nombre = data.name;
-  //           this.apellido = data.lastname;
-  //         },
-  //         (error) => {
-  //           console.error('Error al obtener el nombre del usuario:', error);
-  //         }
-  //       );
-  //     }
-  //   } else {
-  //     this.userId = null;
-  //     this.userEmail = null;
-  //   }
-  // }
 
   obtenerLocalidades() {
     this.apiService.getLocationMisiones('location').subscribe(

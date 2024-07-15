@@ -38,6 +38,7 @@ interface Departamento {
   styleUrls: ['./usuarios.component.sass'],
 })
 export class UsuariosComponent implements OnInit {
+  departamentoVacio = false;
   titulo = 'Formulario de Usuarios';
   opciones = [
     TipoUsuarios.gerente,
@@ -55,7 +56,6 @@ export class UsuariosComponent implements OnInit {
     name: '',
     lastname: '',
     dni: '',
-    description: '',
     role: 0,
     departmentAssigned: [] as number[],
     company_id: 1,
@@ -77,10 +77,15 @@ export class UsuariosComponent implements OnInit {
     { code: 8, name: 'ROLE_MANAGER' },
   ];
 
-  constructor(private apiService: ApiService, private toastr: ToastrService,private router:Router) {}
+  constructor(
+    private apiService: ApiService,
+    private toastr: ToastrService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.cargarDepartamentos();
+    this.loadDataUserType();
   }
 
   cargarDepartamentos() {
@@ -110,6 +115,41 @@ export class UsuariosComponent implements OnInit {
     );
   }
 
+  loadDataUserType() {
+    const userType = localStorage.getItem('UserType');
+    if (userType) {
+      const userData = JSON.parse(userType);
+      const userId = userData.id;
+
+      // Llamada para obtener detalles del usuario por ID
+      this.apiService.getUserById(userId).subscribe(
+        (userDetails) => {
+          console.log('Datos del usuario:', userDetails);
+          this.fillFormData(userDetails); // Método para asignar datos al formulario
+        },
+        (error) => {
+          console.error('Error al obtener datos del usuario:', error);
+          this.toastr.error('Error al obtener datos del usuario');
+        }
+      );
+    }
+  }
+
+  fillFormData(userData: any) {
+    this.formData.username = userData.username;
+    this.formData.name = userData.name;
+    this.formData.lastname = userData.lastname;
+    this.formData.dni = userData.dni;
+
+    // Asignación de departamentos asignados, si corresponde
+    if (userData.departmentAssigned) {
+      this.formData.departmentAssigned = userData.departmentAssigned;
+    }
+
+    // Actualizar campos o realizar otras acciones necesarias
+    this.actualizarCamposFormulario();
+  }
+
   seleccionoTipo() {
     this.dataForm = [
       {
@@ -134,12 +174,6 @@ export class UsuariosComponent implements OnInit {
         name: 'lastname',
       },
       { type: 'text', placeholder: 'DNI', ngModel: 'dni', name: 'dni' },
-      {
-        type: 'textarea',
-        placeholder: 'Descripción',
-        ngModel: 'description',
-        name: 'description',
-      },
     ];
 
     switch (this.selectedForm) {
@@ -344,6 +378,15 @@ export class UsuariosComponent implements OnInit {
       return;
     }
 
+    // Verificación del campo de departamento
+    if (this.selectedForm !== TipoUsuarios.gerente && this.formData.departmentAssigned.length === 0) {
+      this.toastr.error('El campo Departamento Asignado es obligatorio.','Atención !!!');
+      this.departamentoVacio = true; // Bandera para mostrar mensaje en el HTML
+      return;
+    } else {
+      this.departamentoVacio = false; // Resetea la bandera si el campo está lleno
+    }
+
     let requestData: any;
 
     switch (this.selectedForm) {
@@ -385,7 +428,6 @@ export class UsuariosComponent implements OnInit {
           dni: this.formData.dni,
           company_id: 1,
           role: this.formData.role,
-          description: this.formData.description || 'Gerente',
           isPreActivate: 'true',
           autogeneratePass: 'false',
         };
@@ -394,6 +436,7 @@ export class UsuariosComponent implements OnInit {
         break;
     }
   }
+
 
   registrarTecnico(data: any) {
     this.apiService.registrarTecnico(data).subscribe(
@@ -417,7 +460,9 @@ export class UsuariosComponent implements OnInit {
       },
       (error) => {
         if (error?.error?.code === 4002) {
-          this.toastr.warning('El usuario ya fue registrado, intente con otro email');
+          this.toastr.warning(
+            'El usuario ya fue registrado, intente con otro email'
+          );
         } else {
           console.error('Error al registrar piloto:', error);
           this.toastr.error('Error al registrar piloto');
@@ -425,7 +470,6 @@ export class UsuariosComponent implements OnInit {
       }
     );
   }
-
 
   registrarGerente(data: any) {
     this.apiService.addAdministrator(data).subscribe(
@@ -435,7 +479,12 @@ export class UsuariosComponent implements OnInit {
       },
       (error) => {
         console.error('Error al registrar gerente:', error);
-        this.toastr.error('Error al registrar gerente');
+
+        if (error.error && error.error.code === 4002) {
+          this.toastr.error('El usuario ya existe, prueba con otro Email');
+        } else {
+          this.toastr.error('Error al registrar gerente');
+        }
       }
     );
   }
@@ -454,7 +503,7 @@ export class UsuariosComponent implements OnInit {
   }
   cancelar() {
     this.resetearFormulario();
-    this.router.navigate(['dashboard-backoffice/usuarios-filtro'])
+    this.router.navigate(['dashboard-backoffice/usuarios-filtro']);
   }
 
   resetearFormulario() {

@@ -16,8 +16,9 @@ interface User {
   account_active: boolean;
   company: Company;
   typeUser: string;
-  provinciasAsignadas?: string; // Añadido para acumulación dinámica
-  departamentosAsignados?: string; // Añadido para acumulación dinámica
+  provinciasAsignadas?: string;
+  departamentosAsignados?: string;
+  color?: string;
 }
 
 interface Company {
@@ -40,7 +41,8 @@ interface Department {
 
 interface ExtendedDataView extends DataView {
   customPipe?: string;
-  value?: string; // Ensure 'value' property is defined
+  value?: string;
+  color?: string; // Ensure 'value' property is defined
 }
 
 @Component({
@@ -62,23 +64,23 @@ export class UsuariosFiltroComponent implements OnInit {
   ];
 
   public dataView: ExtendedDataView[] = [
-    // IMAGEN (ejemplo estático)
+    // **IMAGEN (ejemplo estático)
     {
       label: '',
       field: 'assets/img/avatar_prod.svg',
       tipoLabel: TipoLabel.imagen,
     },
 
-    // SPAN
+    // **SPAN
     { label: 'Nombre', field: 'name', tipoLabel: TipoLabel.span },
     { label: 'Apellido', field: 'lastname', tipoLabel: TipoLabel.span },
     { label: 'DNI', field: 'dni', tipoLabel: TipoLabel.span },
     { label: 'Tipo de Usuario', field: 'typeUser', tipoLabel: TipoLabel.span },
 
-    // COMPAÑIA
-    { label: 'Compañía', field: 'company.name', tipoLabel: TipoLabel.span },
+    // **COMPAÑIA
+    { label: 'Empresa', field: 'company.name', tipoLabel: TipoLabel.span },
 
-    // PROVINCIAS
+    // **PROVINCIAS
     {
       label: 'Provincias',
       field: 'provinciasAsignadas',
@@ -86,7 +88,7 @@ export class UsuariosFiltroComponent implements OnInit {
       value: '',
     },
 
-    // DEPARTAMENOS
+    // **DEPARTAMENOS
     {
       label: 'Departamentos',
       field: 'departamentosAsignados',
@@ -94,12 +96,12 @@ export class UsuariosFiltroComponent implements OnInit {
       value: '',
     },
 
-    // VER MÁS (ejemplo estático)
-
+    // **VER MÁS BTN
     {
-      label: 'Ver Más',
-      field: 'dashboard-backoffice/perfil-productor',
+      label: 'UserType',
+      field: 'dashboard-backoffice/usuarios-actualizar',
       tipoLabel: TipoLabel.botonVermas,
+
     },
   ];
 
@@ -115,21 +117,20 @@ export class UsuariosFiltroComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('DataView inicial:', this.dataView);
+
     this.traerUsuariosGenerales();
   }
 
   traerUsuariosGenerales() {
     this.apiService.usuariosGenerales().subscribe(
       (response) => {
-        console.log('Usuarios generales:', response);
+
         if (response.list && response.list.length > 0) {
           this.usuarios = response.list[0];
 
-
           this.usuarios.forEach((usuario) => {
             usuario.provinciasAsignadas = usuario.company.provinces
-              .filter((provincia) => provincia.name !== 'No asignado') // Filtra 'No asignado'
+              .filter((provincia) => provincia.name !== 'No asignado')
               .map((provincia) => provincia.name)
               .join(', ');
 
@@ -137,11 +138,13 @@ export class UsuariosFiltroComponent implements OnInit {
               .map((departamento) => departamento.name)
               .join(', ');
 
-
-            usuario.typeUser = this.mapTypeUser(usuario.typeUser);
+            // usuario.typeUser = this.mapTypeUser(usuario.typeUser);
+            // validar permisos para futuro
+            // Set color based on user type
+            usuario.color = this.getColorForUserType(usuario.typeUser);
           });
 
-          console.log('Usuarios procesados:', this.usuarios);
+
         } else {
           console.error('La respuesta del servidor no contiene datos válidos.');
         }
@@ -151,19 +154,37 @@ export class UsuariosFiltroComponent implements OnInit {
       }
     );
   }
-  mapTypeUser(typeUser: string): string {
-    const typeMapping: { [key: string]: string } = {
-      SUPERUSER: 'Super Admin',
-      ADMINISTRATOR: 'Admin',
-      TECHNICAL: 'Técnico',
-      OPERATOR: 'Piloto',
-      COOPERATIVE: 'Cooperativa',
-      // Añadir más mapeos según sea necesario
-    };
-    return typeMapping[typeUser] || typeUser;
+
+  getColorForUserType(typeUser: string): string {
+    switch (typeUser) {
+      case 'Super Admin':
+        return '$super-administrador'; // Reemplaza con la variable SCSS correcta si es necesario
+      case 'Admin':
+        return '$administrador';
+      case 'Técnico':
+        return '$tecnico';
+      case 'Piloto':
+        return '$piloto';
+      case 'Cooperativa':
+        return '$cooperativa';
+      default:
+        return '';
+    }
   }
+    // BLOQUE de codigo para setear nombre de perfiles a español !!!
+  // mapTypeUser(typeUser: string): string {
+  //   const typeMapping: { [key: string]: string } = {
+  //     SUPERUSER: 'Super Admin',
+  //     ADMINISTRATOR: 'Admin',
+  //     MANAGEMENT:'Gerente General',
+  //     TECHNICAL: 'Técnico',
+  //     OPERATOR: 'Piloto',
+  //     COOPERATIVE: 'Cooperativa',
+
+  //   };
+  //   return typeMapping[typeUser] || typeUser;
+  // }
   aplicarFiltro(filtroSeleccionado: string) {
-    console.log('Filtro seleccionado:', filtroSeleccionado);
 
   }
 

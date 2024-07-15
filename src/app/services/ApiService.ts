@@ -170,6 +170,42 @@ export class ApiService {
     return this.http.post(`${this.baseURL}/dist/user/manager`, adminData);
   }
 
+  // MANAGER FOR ID
+
+  getManagerById(id: number): Observable<any> {
+    const url = `${this.baseURL}/dist/1/user/manager/${id}`;
+    return this.http.get<any>(url);
+  }
+
+  updateManagerDetails(managerId: number, userData: any): Observable<any> {
+    return this.http.put(
+      `${this.baseURL}/dist/user/manager/${managerId}`,
+      userData
+    );
+  }
+  updateManagerPassword(managerId: number, password: string, confirmPassword: string): Observable<any> {
+    const requestData = {
+      password,
+      confirmPassword
+    };
+
+    return this.http.put(
+      `${this.baseURL}/dist/user/manager/${managerId}/password`,
+      requestData
+    );
+  }
+  // TODOS LOS ROLES-----
+
+  getUserByRoleAndId(role: 'technical' | 'operator' | 'cooperative', id: number): Observable<any> {
+    const url = `${this.baseURL}/dist/user/${role}/${id}`;
+    return this.http.get<any>(url);
+  }
+
+  updateManager(id: number, user: any): Observable<any> {
+    return this.http.put(`${this.baseURL}/${id}`, user);
+  }
+
+
   // Actualizar información de un administrador por ID en una compañía
   updateAdministrator(
     companyId: number,

@@ -39,7 +39,7 @@ export class DashboardBackofficeComponents implements AfterViewInit {
   async getPermisos() {
     await this.permisoService.getPermisos()
     this.cargandoPermisos = false;
-    console.log(this.permisoService.permisoUsuario.value)
+   
   }
 
   ngAfterViewInit(): void {

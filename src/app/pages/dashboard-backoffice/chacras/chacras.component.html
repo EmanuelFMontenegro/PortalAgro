@@ -1,19 +1,4 @@
-<!-- <div class="container">
-    <div class="card user-card">
-      <div class="user-content">
-        <div class="avatar">
-          <div class="avatar-circle">
-            <mat-icon class="avatar-icon">person</mat-icon>
-          </div>
-        </div>
-        <div class="titulo-perfil-avatar">
-          <div class="titulo-welcome">
-            <p class="email">Email: {{ userEmail }}</p>
-          </div>
-        </div>
-      </div>
-      <h2 class="titulo-chacra">Chacras</h2>
-    </div> -->
+
     <app-titulo-container [titulo]="titulo"></app-titulo-container>
     <div class="field-container">
       <mat-select class="field-input" placeholder="Filtrar por" (selectionChange)="aplicarFiltro($event)">
