@@ -29,7 +29,7 @@
   border-radius: 4px
   font-size: 1em
   font-family: 'Montserrat', sans-serif
-  color: #333
+  color: $new_color_blue
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1)
   width: 100%
 
@@ -75,3 +75,12 @@
 
 .list-chip-grid
   width: 100%
+
+.mat-mdc-form-field:not(.mat-form-field-no-animations) .mdc-text-field__input
+  display: none
+
+.mat-mdc-form-field
+  width: 100%
+
+.mdc-text-field--filled:not(.mdc-text-field--disabled)
+    /* background-color: var(--mdc-filled-text-field-container-color);
