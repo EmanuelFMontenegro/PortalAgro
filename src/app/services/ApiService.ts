@@ -201,8 +201,27 @@ export class ApiService {
     return this.http.get<any>(url);
   }
 
-  updateManager(id: number, user: any): Observable<any> {
-    return this.http.put(`${this.baseURL}/${id}`, user);
+  // Actualizar todos los usuarios del backoofice
+
+  private roles = {
+    technical: 4,
+    operator: 5,
+    cooperative: 6 // Supongamos que el ID de cooperative es 6
+  };
+  updateAllUser(userData: any, userType: 'technical' | 'operator' | 'cooperative'): Observable<any> {
+    const url = `${this.baseURL}/dist/user/${userType}`;
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    // Agregamos el role al objeto userData basado en el userType
+    if (this.roles[userType]) {
+      userData.role = this.roles[userType];
+    } else {
+      throw new Error('Tipo de usuario no válido');
+    }
+
+    return this.http.post<any>(url, JSON.stringify(userData), { headers });
   }
 
 

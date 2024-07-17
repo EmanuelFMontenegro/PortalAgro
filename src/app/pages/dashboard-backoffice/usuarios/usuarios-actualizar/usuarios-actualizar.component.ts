@@ -355,13 +355,6 @@ export class UsuariosActualizarComponent implements OnInit {
         this.userForm.get('password')?.value &&
         this.userForm.get('confirmPassword')?.value;
 
-      console.log('Update Password:', updatePassword);
-      console.log('Password:', this.userForm.get('password')?.value);
-      console.log(
-        'Confirm Password:',
-        this.userForm.get('confirmPassword')?.value
-      );
-
       // Llamar al servicio para actualizar los detalles del manager
       this.apiService.updateManagerDetails(this.id!, userData).subscribe(
         (response) => {
@@ -388,7 +381,6 @@ export class UsuariosActualizarComponent implements OnInit {
           }
         },
         (error) => {
-          console.error('Error al actualizar datos:', error);
           this.toastr.error('Error al actualizar datos');
         }
       );
