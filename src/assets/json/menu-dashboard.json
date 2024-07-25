@@ -1,0 +1,41 @@
+{
+    "menuItems": [
+      {
+        "icon": "home.svg",
+        "name": "Inicio",
+        "route": "/dashboard/inicio"
+      },
+      {
+        "icon": "services.svg",
+        "name": "Solicitudes y Servicios",
+        "route": "/dashboard/servicios"
+      },
+      {
+        "icon": "ranchs.svg",
+        "name": "Chacras",
+        "route": "/dashboard/chacras"
+      },
+      {
+        "icon": "calendar.svg",
+        "name": "Calendario",
+        "route": "/dashboard/calendario"
+      },
+      {
+        "icon": "notifications.svg",
+        "name": "Notificaciones",
+        "route": "/dashboard/notificaciones"
+        
+      },
+      {
+        "icon": "report.svg",
+        "name": "Informes",
+        "route": "/dashboard/informes"
+      },
+      {
+        "icon": "profile.svg",
+        "name": "Perfil",
+        "route": "/dashboard/perfil"
+      }
+    ]
+  }
+  

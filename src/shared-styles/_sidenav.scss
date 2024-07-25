@@ -1,0 +1,53 @@
+.ContainerS { 
+    @include flexbox(column);
+    height: calc(100vh - 80px);  
+
+    &__menu {
+        width: 262px;
+        @include box-shadow(1px, 0);
+        background-color: $default;
+        &__logo {
+            @include padding(10px, 10px, 46px);
+            background-color: $default;
+
+            &--img {
+                max-height: 60px;
+                margin-bottom: 20px;
+            }
+        }
+
+        mat-nav-list {
+            padding-top: 55px;
+        }
+
+        &__list {
+            &--item {
+                margin-top: 6px;
+                @include font(17px, 600);
+                &:hover {
+                    cursor: pointer;
+                }
+                &__container {
+                    @include flexbox(row, flex-start, center);
+                    &-icon { 
+                        margin-right: 5px;
+                        width: 25px;
+                    }
+                }    
+            }
+        }
+        &__logo {
+            @include position(absolute, null, null, 10px);
+            @include padding(0);
+            width: 100%;
+            text-align: center;
+        }
+    }
+    &__content {
+        @include flexbox(row);
+        background-color: $default;
+        &__card {
+            padding-top: 32px;
+        }
+    }
+}
