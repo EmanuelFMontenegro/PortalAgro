@@ -33,6 +33,7 @@
             "styles": [
               "src/custom-theme.scss",
               "src/styles.sass",
+              "src/shared-styles/_main.scss",
               "node_modules/ngx-toastr/toastr.css",
               "node_modules/ngx-spinner/animations/ball-scale-multiple.css"
             ],

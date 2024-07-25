@@ -53,7 +53,6 @@ import { CalendarioComponent } from './calendario/calendario.component';
 import { ChacrasComponent } from './chacras/chacras.component';
 import { NotificacionesComponent } from './notificaciones/notificaciones.component';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { CalendarPopupComponent } from 'src/app/shared/components/calendar-popup/calendar-popup.component';
 
 const CUSTOM_DATE_FORMATS = {
   parse: {
