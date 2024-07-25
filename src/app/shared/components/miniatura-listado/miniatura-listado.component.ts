@@ -25,6 +25,8 @@ export class MiniaturaListadoComponent {
   tipoSpan = TipoLabel.span
   tipoIcon = TipoLabel.icon
   tipoVerMas = TipoLabel.botonVermas
+  tipoEditar = TipoLabel.botonEditar
+
 
 
   verMas(data: any, key?: any, ruta?: any){
@@ -34,7 +36,14 @@ export class MiniaturaListadoComponent {
     // Navegar al componente perfil-productor
     if(ruta) this.router.navigate([`${ruta}/${data?.id}`]);
   }
+  
+  Editar(data: any, key?: any, ruta?: any){
+    // Guardar los datos del usuario en localStorage
+    if(key) localStorage.setItem(key, JSON.stringify(data));
 
+    // Navegar al componente perfil-productor
+    if(ruta) this.router.navigate([`${ruta}/${data?.id}`]);
+  }
   getValue(objeto:any, field: string){
     return this.utilService.obtenerValor(objeto,field)
   }

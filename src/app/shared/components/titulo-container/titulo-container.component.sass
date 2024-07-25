@@ -4,7 +4,11 @@
   display: grid
   grid-template-columns: 1fr
   grid-template-rows: auto
-  
+  padding: 15px
+
+  @media (max-width: 768px)
+    padding: 10px
+
 .titulo-container
   color: $new-color-blue
   font-family: 'Montserrat', sans-serif
@@ -12,10 +16,21 @@
   font-weight: bold
   margin-bottom: 20px
 
+  @media (max-width: 768px)
+    font-size: 1.2em
+    margin-bottom: 15px
+    display: flex
+    justify-content: center
+
 .titulo-perfil
   color: $dark-grey
   font-size: 1.2em
-  font-family: "Montserrat", sans-serif
+  font-family: 'Montserrat', sans-serif
   margin-left: 1%
   margin-top: 0.5%
   font-weight: bold
+
+  @media (max-width: 768px)
+    font-size: 1em
+    margin-left: 0.5%
+    margin-top: 0.3%

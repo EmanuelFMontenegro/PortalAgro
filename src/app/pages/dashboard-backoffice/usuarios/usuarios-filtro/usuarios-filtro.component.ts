@@ -6,7 +6,12 @@ import {
   DataView,
 } from 'src/app/shared/components/miniatura-listado/miniatura.model';
 import { ApiService } from 'src/app/services/ApiService';
-
+import { PageEvent, MatPaginatorModule } from '@angular/material/paginator';
+import { JsonPipe } from '@angular/common';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 interface User {
   id: number;
   name: string;
@@ -54,6 +59,15 @@ export class UsuariosFiltroComponent implements OnInit {
   titulo: string = 'Usuarios';
   usuarios: User[] = [];
   usuariosGenerales: User[] = [];
+  length = 0;
+  pageSize = 12;
+  pageIndex = 0;
+  pageSizeOptions = [6, 12, 24];
+  showPageSizeOptions = true;
+  showFirstLastButtons = true;
+  disabled = false;
+
+  pageEvent: PageEvent | undefined;
 
   userFilterOptions = [
     { value: 'gerenteGeneral', label: 'Gerente General' },
@@ -96,12 +110,17 @@ export class UsuariosFiltroComponent implements OnInit {
       value: '',
     },
 
-    // **VER MÁS BTN
+    // **BTN EDITAR PEFIL
     {
       label: 'UserType',
       field: 'dashboard-backoffice/usuarios-actualizar',
+      tipoLabel: TipoLabel.botonEditar,
+    },
+    // **BTN VER MÁS
+    {
+      label: 'UserType',
+      field: 'dashboard-backoffice/usuarios-filtro',
       tipoLabel: TipoLabel.botonVermas,
-
     },
   ];
 
@@ -117,42 +136,61 @@ export class UsuariosFiltroComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    this.traerUsuariosGenerales();
+    this.traerUsuariosGenerales(this.pageIndex, this.pageSize);
   }
 
-  traerUsuariosGenerales() {
-    this.apiService.usuariosGenerales().subscribe(
-      (response) => {
+  handlePageEvent(e: PageEvent) {
+    this.pageEvent = e;
+    this.length = e.length;
+    this.pageSize = e.pageSize;
+    this.pageIndex = e.pageIndex;
+    this.traerUsuariosGenerales(this.pageIndex, this.pageSize);
+  }
 
-        if (response.list && response.list.length > 0) {
-          this.usuarios = response.list[0];
+  handlePageSizeChange() {
+    this.pageIndex = 0;
+    this.traerUsuariosGenerales(this.pageIndex, this.pageSize);
+  }
 
-          this.usuarios.forEach((usuario) => {
-            usuario.provinciasAsignadas = usuario.company.provinces
-              .filter((provincia) => provincia.name !== 'No asignado')
-              .map((provincia) => provincia.name)
-              .join(', ');
+  setPageSizeOptions(setPageSizeOptionsInput: string) {
+    if (setPageSizeOptionsInput) {
+      this.pageSizeOptions = setPageSizeOptionsInput
+        .split(',')
+        .map((str) => +str);
+    }
+  }
 
-            usuario.departamentosAsignados = usuario.departmentAssigned
-              .map((departamento) => departamento.name)
-              .join(', ');
+  traerUsuariosGenerales(pageIndex: number, pageSize: number) {
+    this.apiService
+      .usuariosGenerales(undefined, undefined, pageIndex, pageSize)
+      .subscribe(
+        (response) => {
+          if (response.list && response.list.length > 0) {
+            this.usuarios = response.list[0];
 
-            // usuario.typeUser = this.mapTypeUser(usuario.typeUser);
-            // validar permisos para futuro
-            // Set color based on user type
-            usuario.color = this.getColorForUserType(usuario.typeUser);
-          });
+            this.usuarios.forEach((usuario) => {
+              usuario.provinciasAsignadas = usuario.company.provinces
+                .filter((provincia) => provincia.name !== 'No asignado')
+                .map((provincia) => provincia.name)
+                .join(', ');
 
+              usuario.departamentosAsignados = usuario.departmentAssigned
+                .map((departamento) => departamento.name)
+                .join(', ');
 
-        } else {
-          console.error('La respuesta del servidor no contiene datos válidos.');
+              usuario.typeUser = this.mapTypeUser(usuario.typeUser);
+              usuario.color = this.getColorForUserType(usuario.typeUser);
+            });
+          } else {
+            console.error(
+              'La respuesta del servidor no contiene datos válidos.'
+            );
+          }
+        },
+        (error) => {
+          console.error('Error al obtener usuarios generales:', error);
         }
-      },
-      (error) => {
-        console.error('Error al obtener usuarios generales:', error);
-      }
-    );
+      );
   }
 
   getColorForUserType(typeUser: string): string {
@@ -171,22 +209,19 @@ export class UsuariosFiltroComponent implements OnInit {
         return '';
     }
   }
-    // BLOQUE de codigo para setear nombre de perfiles a español !!!
-  // mapTypeUser(typeUser: string): string {
-  //   const typeMapping: { [key: string]: string } = {
-  //     SUPERUSER: 'Super Admin',
-  //     ADMINISTRATOR: 'Admin',
-  //     MANAGEMENT:'Gerente General',
-  //     TECHNICAL: 'Técnico',
-  //     OPERATOR: 'Piloto',
-  //     COOPERATIVE: 'Cooperativa',
-
-  //   };
-  //   return typeMapping[typeUser] || typeUser;
-  // }
-  aplicarFiltro(filtroSeleccionado: string) {
-
+  // BLOQUE de codigo para setear nombre de perfiles a español !!!
+  mapTypeUser(typeUser: string): string {
+    const typeMapping: { [key: string]: string } = {
+      SUPERUSER: 'Super Admin',
+      ADMINISTRATOR: 'Administrador',
+      MANAGEMENT: 'Gerente General',
+      TECHNICAL: 'Técnico',
+      OPERATOR: 'Piloto',
+      COOPERATIVE: 'Cooperativa',
+    };
+    return typeMapping[typeUser] || typeUser;
   }
+  aplicarFiltro(filtroSeleccionado: string) {}
 
   BtnCrearUsuarios() {
     this.router.navigate(['dashboard-backoffice/usuarios']);

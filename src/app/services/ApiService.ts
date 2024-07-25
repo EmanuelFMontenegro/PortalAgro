@@ -16,7 +16,6 @@ export class ApiService {
 
   constructor(private http: HttpClient) {}
 
-
   // PERMISOS DEL CUALQUIER USUARIO BACKOFFICE
 
   getMyPermissions(): Observable<any> {
@@ -44,14 +43,16 @@ export class ApiService {
     );
   }
 
-  validarCredencialBackoffice(username: string, password: string): Observable<HttpResponse<any>> {
+  validarCredencialBackoffice(
+    username: string,
+    password: string
+  ): Observable<HttpResponse<any>> {
     return this.http.post<HttpResponse<any>>(
       `${this.baseURL}/dist/auth/login`, // URL corregida
       { username, password },
       { observe: 'response' } // Observar la respuesta completa
     );
   }
-
 
   refreshToken(token: string): Observable<any> {
     return this.http.post(`${this.baseURL}/auth/refresh`, { token });
@@ -183,10 +184,14 @@ export class ApiService {
       userData
     );
   }
-  updateManagerPassword(managerId: number, password: string, confirmPassword: string): Observable<any> {
+  updateManagerPassword(
+    managerId: number,
+    password: string,
+    confirmPassword: string
+  ): Observable<any> {
     const requestData = {
       password,
-      confirmPassword
+      confirmPassword,
     };
 
     return this.http.put(
@@ -196,34 +201,85 @@ export class ApiService {
   }
   // TODOS LOS ROLES-----
 
-  getUserByRoleAndId(role: 'technical' | 'operator' | 'cooperative', id: number): Observable<any> {
+  getUserByRoleAndId(
+    role: 'technical' | 'operator' | 'cooperative',
+    id: number
+  ): Observable<any> {
     const url = `${this.baseURL}/dist/user/${role}/${id}`;
     return this.http.get<any>(url);
   }
 
-  // Actualizar todos los usuarios del backoofice
+  //TECHNICAL AND PASSWORD USER
 
-  private roles = {
-    technical: 4,
-    operator: 5,
-    cooperative: 6 // Supongamos que el ID de cooperative es 6
-  };
-  updateAllUser(userData: any, userType: 'technical' | 'operator' | 'cooperative'): Observable<any> {
-    const url = `${this.baseURL}/dist/user/${userType}`;
+  updateTechnicalDetails(id: number, userData: any): Observable<any> {
+    return this.http.put(`${this.baseURL}/dist/user/technical/${id}`, userData);
+  }
+
+  updateTechnicalPassword(
+    id: number,
+    password: string,
+    confirmPassword: string
+  ): Observable<any> {
+    const passwordData = {
+      password: password,
+      confirmPassword: confirmPassword,
+    };
+    return this.http.put(
+      `${this.baseURL}/dist/user/technical/${id}/password`,
+      passwordData
+    );
+  }
+
+  //OPERATOR AND PASSWORD USER (PILOTO)
+
+  updateOperator(id: number, operatorData: any): Observable<any> {
+    const url = `${this.baseURL}/dist/user/operator/${id}`; // Construye la URL con el ID del operador
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
 
-    // Agregamos el role al objeto userData basado en el userType
-    if (this.roles[userType]) {
-      userData.role = this.roles[userType];
-    } else {
-      throw new Error('Tipo de usuario no válido');
-    }
-
-    return this.http.post<any>(url, JSON.stringify(userData), { headers });
+    return this.http.put<any>(url, operatorData, { headers });
   }
 
+  updateOperatorPassword(
+    id: number,
+    password: string,
+    confirmPassword: string
+  ): Observable<any> {
+    const passwordData = {
+      password: password,
+      confirmPassword: confirmPassword,
+    };
+    return this.http.put(
+      `${this.baseURL}/dist/user/technical/${id}/password`,
+      passwordData
+    );
+  }
+
+  //COOPERTATIVE AND PASSWORD USER
+  updateCooperative(id: number, cooperativeData: any): Observable<any> {
+    const url = `${this.baseURL}/dist/user/cooperative/${id}`; // Construye la URL con el ID de la cooperativa
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.put<any>(url, cooperativeData, { headers });
+  }
+
+  updateCooperativePassword(
+    id: number,
+    password: string,
+    confirmPassword: string
+  ): Observable<any> {
+    const passwordData = {
+      password: password,
+      confirmPassword: confirmPassword,
+    };
+    return this.http.put<any>(
+      `${this.baseURL}/dist/user/cooperative/${id}/password`,
+      passwordData
+    );
+  }
 
   // Actualizar información de un administrador por ID en una compañía
   updateAdministrator(
@@ -239,10 +295,14 @@ export class ApiService {
 
   // USUARIOS  genereales del Sistema
 
-  usuariosGenerales(companyId?: string, typeUser?: string): Observable<any> {
+  usuariosGenerales(
+    companyId?: string,
+    typeUser?: string,
+    pageIndex: number = 0,
+    pageSize: number = 12
+  ): Observable<any> {
     const url = `${this.baseURL}/dist/user/employee/all`;
 
-    // Construye los parámetros de consulta
     let params = new HttpParams();
     if (companyId) {
       params = params.set('companyId', companyId);
@@ -251,11 +311,11 @@ export class ApiService {
       params = params.set('type_user', typeUser);
     }
 
-    // Realiza la solicitud GET con los parámetros de consulta
+    params = params.set('pageNo', pageIndex.toString());
+    params = params.set('pageSize', pageSize.toString());
+
     return this.http.get<any>(url, { params });
   }
-
-
 
   // <--ENPOINTS PARA AGREGAR TECNICOS -->
 
@@ -263,7 +323,7 @@ export class ApiService {
     return this.http.post(`${this.baseURL}/dist/user/technical`, data);
   }
 
-   subirImagenLicencia(tecnicoId: number, archivo: File): Observable<any> {
+  subirImagenLicencia(tecnicoId: number, archivo: File): Observable<any> {
     const formData = new FormData();
     formData.append('imageLicense', archivo);
 
@@ -288,7 +348,7 @@ export class ApiService {
   registrarCooperativa(data: any): Observable<any> {
     return this.http.post(`${this.baseURL}/dist/user/cooperative`, data);
   }
-// <--ENPOINTS PARA AGREGAR PILOTOS(OPERADORES) -->
+  // <--ENPOINTS PARA AGREGAR PILOTOS(OPERADORES) -->
 
   registrarPiloto(data: any): Observable<any> {
     return this.http.post(`${this.baseURL}/dist/user/operator`, data);
@@ -535,7 +595,13 @@ export class ApiService {
 
   // METODOS PARA DEPARTAMENTOS
 
-  getAllDepartments(sortDir: string = 'asc', pageNo: number = 0, pageSize: number = 20, sortBy: string = 'name', provinceId: number = 2): Observable<any> {
+  getAllDepartments(
+    sortDir: string = 'asc',
+    pageNo: number = 0,
+    pageSize: number = 20,
+    sortBy: string = 'name',
+    provinceId: number = 2
+  ): Observable<any> {
     const params = new HttpParams()
       .set('sortDir', sortDir)
       .set('pageNo', pageNo.toString())

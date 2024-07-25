@@ -1,7 +1,13 @@
 <app-titulo-container [titulo]="titulo"></app-titulo-container>
-<app-filtros-container
-  [options]="userFilterOptions"
-  [crearUsuariosRuta]="'dashboard-backoffice/usuarios'"
+<app-filtros-container [options]="userFilterOptions" [crearUsuariosRuta]="'dashboard-backoffice/usuarios'"
   (selectionChange)="aplicarFiltro($event)">
 </app-filtros-container>
 <miniatura [productor]="true" [dataView]="dataView" [listado]="usuarios"></miniatura>
+
+
+
+<div class="paginator-container">
+  <mat-paginator [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
+    (page)="handlePageEvent($event)" [showFirstLastButtons]="showFirstLastButtons">
+  </mat-paginator>
+</div>

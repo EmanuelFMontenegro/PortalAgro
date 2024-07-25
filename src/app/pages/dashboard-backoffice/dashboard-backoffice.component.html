@@ -21,7 +21,8 @@
         <img src="assets/img/person_24dp_FILL0_wght300_GRAD0_opsz24.svg" alt="Productores" class="nav-item-icon">
         Productores
       </a>
-      <a mat-list-item routerLink="/dashboard-backoffice/usuarios-filtro" class="nav-item" (click)="closeSidenavIfSmall()">
+      <a mat-list-item routerLink="/dashboard-backoffice/usuarios-filtro" class="nav-item"
+        (click)="closeSidenavIfSmall()">
         <img src="assets/img/group_add_24dp_FILL0_wght400_GRAD0_opsz24.svg" alt="Usuarios" class="nav-item-icon">
         Usuarios
       </a>
@@ -115,8 +116,17 @@
 </mat-sidenav-container>
 
 <ng-template #mostrarSpinner>
-  <div class="spinner"> ACA VA EL SPINNER</div>
+  <div *ngIf="cargandoValidacion" class="overlay">
+    <div class="lds-ellipsis">
+      Cargando...
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
 </ng-template>
+
 
 
 

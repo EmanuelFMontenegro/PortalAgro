@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/services/ApiService';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 enum TipoUsuarios {
   piloto = 'Piloto de Dron',
@@ -38,6 +39,7 @@ interface Departamento {
   styleUrls: ['./usuarios.component.sass'],
 })
 export class UsuariosComponent implements OnInit {
+  activarSpinner: boolean = false;
   departamentoVacio = false;
   titulo = 'Formulario de Usuarios';
   opciones = [
@@ -80,7 +82,8 @@ export class UsuariosComponent implements OnInit {
   constructor(
     private apiService: ApiService,
     private toastr: ToastrService,
-    private router: Router
+    private router: Router,
+    private spinner: NgxSpinnerService
   ) {}
 
   ngOnInit() {
@@ -219,6 +222,18 @@ export class UsuariosComponent implements OnInit {
         placeholder: 'Especialidad',
         ngModel: 'specialty',
         name: 'specialty',
+      },
+      {
+        type: 'text',
+        placeholder: 'Matrícula',
+        ngModel: 'matricula',
+        name: 'matricula',
+      },
+      {
+        type: 'text',
+        placeholder: 'Licencia',
+        ngModel: 'license',
+        name: 'license',
       }
     );
 
@@ -275,20 +290,6 @@ export class UsuariosComponent implements OnInit {
 
   configurarFormularioPiloto() {
     this.configurarFormularioTecnico();
-    this.dataForm.push(
-      {
-        type: 'text',
-        placeholder: 'Matrícula',
-        ngModel: 'matricula',
-        name: 'matricula',
-      },
-      {
-        type: 'text',
-        placeholder: 'Licencia',
-        ngModel: 'license',
-        name: 'license',
-      }
-    );
   }
 
   configurarFormularioGerente() {
@@ -379,8 +380,14 @@ export class UsuariosComponent implements OnInit {
     }
 
     // Verificación del campo de departamento
-    if (this.selectedForm !== TipoUsuarios.gerente && this.formData.departmentAssigned.length === 0) {
-      this.toastr.error('El campo Departamento Asignado es obligatorio.','Atención !!!');
+    if (
+      this.selectedForm !== TipoUsuarios.gerente &&
+      this.formData.departmentAssigned.length === 0
+    ) {
+      this.toastr.error(
+        'El campo Departamento Asignado es obligatorio.',
+        'Atención !!!'
+      );
       this.departamentoVacio = true; // Bandera para mostrar mensaje en el HTML
       return;
     } else {
@@ -437,13 +444,15 @@ export class UsuariosComponent implements OnInit {
     }
   }
 
-
   registrarTecnico(data: any) {
+    this.activarSpinner = true;
     this.apiService.registrarTecnico(data).subscribe(
       (response) => {
         console.log('Técnico registrado correctamente:', response);
+        this.activarSpinner = false;
         this.toastr.success('Técnico registrado correctamente');
         this.resetearFormulario();
+        this.router.navigate(['dashboard-backoffice/usuarios-filtro']);
       },
       (error) => {
         console.error('Error al registrar técnico:', error);
@@ -453,10 +462,13 @@ export class UsuariosComponent implements OnInit {
   }
 
   registrarPiloto(data: any) {
+    this.activarSpinner = true;
     this.apiService.registrarPiloto(data).subscribe(
       (response) => {
+        this.activarSpinner = false;
         this.toastr.success('Piloto registrado correctamente');
         this.resetearFormulario();
+        this.router.navigate(['dashboard-backoffice/usuarios-filtro']);
       },
       (error) => {
         if (error?.error?.code === 4002) {
@@ -472,10 +484,13 @@ export class UsuariosComponent implements OnInit {
   }
 
   registrarGerente(data: any) {
+    this.activarSpinner = true;
     this.apiService.addAdministrator(data).subscribe(
       (response) => {
+        this.activarSpinner = false;
         this.toastr.success('Gerente registrado correctamente');
         this.resetearFormulario();
+        this.router.navigate(['dashboard-backoffice/usuarios-filtro']);
       },
       (error) => {
         console.error('Error al registrar gerente:', error);
@@ -490,10 +505,13 @@ export class UsuariosComponent implements OnInit {
   }
 
   registrarCooperativa(data: any) {
+    this.activarSpinner = true;
     this.apiService.registrarCooperativa(data).subscribe(
       (response) => {
+        this.activarSpinner = false;
         this.toastr.success('Cooperativa registrada correctamente');
         this.resetearFormulario();
+        this.router.navigate(['dashboard-backoffice/usuarios-filtro']);
       },
       (error) => {
         console.error('Error al registrar la cooperativa:', error);

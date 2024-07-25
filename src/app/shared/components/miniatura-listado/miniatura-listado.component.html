@@ -18,6 +18,7 @@
         </p>
 
         <button *ngIf="item.tipoLabel == tipoVerMas" mat-raised-button class="ver-mas-button" (click)="verMas(miniatura, item?.label, item?.field )">Ver Más</button>
+        <button *ngIf="item.tipoLabel == tipoEditar" mat-raised-button class="editar-button" (click)="Editar(miniatura, item?.label, item?.field )">Editar</button>
 
       </ng-container>
 

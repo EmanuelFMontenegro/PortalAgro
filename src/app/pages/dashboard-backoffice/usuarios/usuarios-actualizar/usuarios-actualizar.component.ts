@@ -3,7 +3,13 @@ import { Router } from '@angular/router';
 import { ApiService } from 'src/app/services/ApiService';
 import { ToastrService } from 'ngx-toastr';
 import { DashboardBackOfficeService } from '../../dashboard-backoffice.service';
-import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormArray,
+  Validators,
+  AbstractControl,
+} from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../../dialog/dialog.component';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
@@ -13,6 +19,8 @@ import { Observable } from 'rxjs';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { ElementRef, ViewChild } from '@angular/core';
 import { MatSelectChange } from '@angular/material/select';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { Subscription } from 'rxjs';
 
 type UserType =
   | 'administrator'
@@ -30,21 +38,38 @@ interface Role {
   code: number;
   name: string;
 }
-interface User {
+export interface User {
   id: number;
-  username: string;
-  account_active: boolean;
-  accountNonLocked: boolean;
-  failedAttempts: number;
-  lockeTime: string | null;
-  role: {
+  name: string;
+  lastname: string;
+  dni: string;
+  telephone: string;
+  function: string;
+  specialty: string;
+  matricula?: string;
+  urlImageMatricula?: string;
+  license: string;
+  urlImageLicense?: string;
+  departmentAssigned: number[];
+  descriptions?: string;
+  company_id: number;
+  user: {
     id: number;
-    name: string;
-    permissions: { name: string }[];
-    typeRole: number;
-    active: boolean;
+    username: string;
+    account_active: boolean;
+    accountNonLocked: boolean;
+    failedAttempts: number;
+    lockeTime?: string;
+    role: {
+      id: number;
+      name: string;
+      permissions: { name: string }[];
+      typeRole: number;
+      active: boolean;
+    };
   };
 }
+
 @Component({
   selector: 'app-usuarios-actualizar',
   templateUrl: './usuarios-actualizar.component.html',
@@ -68,6 +93,7 @@ export class UsuariosActualizarComponent implements OnInit {
   dni: string = '';
   password: string = '';
   confirmPassword: string = '';
+  activarSpinner: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -75,7 +101,8 @@ export class UsuariosActualizarComponent implements OnInit {
     private apiService: ApiService,
     private toastr: ToastrService,
     public dashboardBackOffice: DashboardBackOfficeService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private spinner: NgxSpinnerService
   ) {
     this.dashboardBackOffice.dataTitulo.next({
       titulo: '¡Acá podrás Actualizar a los usuarios del Sistema!',
@@ -86,28 +113,41 @@ export class UsuariosActualizarComponent implements OnInit {
   ngOnInit(): void {
     this.initForm();
     this.getUserDetails();
-    this.getDepartmentNames();
     this.cargarDepartamentos();
+    this.getDepartmentNames();
   }
 
   initForm() {
     this.userForm = this.fb.group({
-      name: [''],
-      lastname: [''],
-      dni: [''],
-      username: [''],
-      password: [''],
-      confirmPassword: [''],
+      name: ['', Validators.required],
+      lastname: ['', Validators.required],
+      username: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
+      confirmPassword: ['', [Validators.required, this.matchPasswords]],
+      dni: ['', [Validators.required, Validators.pattern('^[0-9]{8}$')]], // Ejemplo de validación para DNI
+      telephone: ['', [Validators.required, Validators.pattern('^[0-9]{8}$')]],
       departmentAssigned: this.fb.array([]),
       assignedDepartment: [''],
       function: [''],
       specialty: [''],
-      businessName: [''],
+      razonSocial: [''],
       address: [''],
-      cuit: [''],
-      registration: [''],
+      cuit: ['', [Validators.required, Validators.pattern('^[0-9]{11}$')]], // Ejemplo de validación para CUIT
+      matricula: [''],
       license: [''],
     });
+  }
+
+  // Validador personalizado para confirmar la contraseña
+  matchPasswords(control: AbstractControl): { [key: string]: boolean } | null {
+    const formGroup = control.parent as FormGroup;
+    if (formGroup) {
+      const password = formGroup.get('password')?.value;
+      if (password !== control.value) {
+        return { passwordsMismatch: true };
+      }
+    }
+    return null;
   }
 
   getUserDetails() {
@@ -115,12 +155,33 @@ export class UsuariosActualizarComponent implements OnInit {
     if (storedUserType) {
       const userTypeObject = JSON.parse(storedUserType);
       this.id = userTypeObject.id;
-      const userType = userTypeObject.typeUser.toLowerCase();
+      const userType = userTypeObject.typeUser.trim().toLowerCase(); // Normalización del tipo de usuario
 
-      if (userType === 'management') {
-        this.userType = 'manager';
-      } else {
-        this.userType = userType as UserType;
+      console.log('Lo que trae del localStorage del usuario:', userType);
+
+      // Normalización del tipo de usuario
+      switch (userType) {
+        case 'gerente general':
+          this.userType = 'manager';
+          break;
+        case 'técnico':
+          this.userType = 'technical';
+          break;
+        case 'piloto':
+          this.userType = 'operator';
+          break;
+        case 'super admin':
+          this.userType = 'superuser';
+          break;
+        case 'administrador':
+          this.userType = 'administrator';
+          break;
+        case 'cooperativa':
+          this.userType = 'cooperative';
+          break;
+        default:
+          this.userType = userType as UserType; // Asignar tipo de usuario directamente si es válido
+          break;
       }
 
       console.log('El tipo de usuario seteado:', this.userType);
@@ -171,65 +232,92 @@ export class UsuariosActualizarComponent implements OnInit {
         this.toastr.error('Tipo de usuario no válido.');
       }
     } else {
-      this.toastr.error('No se encontró UserType en el almacenamiento local.');
+      this.toastr.error('No se encontró ningún perfil de usuario.');
     }
   }
 
   fillForm(userData: any, isManager: boolean) {
     const user = isManager ? userData.userResponseDTO : userData.user;
-
+    console.log('User Data:', userData); // Verifica que `userData` contiene la información esperada
+    console.log('User:', user); // Verifica el contenido de `user`
     this.userForm.patchValue({
       name: userData.name || '',
       lastname: userData.lastname || '',
       dni: userData.dni || '',
-      username: user?.username || '',
+      username: user.username,
       password: '',
+      role: userData.role || '',
+      telephone: userData.telephone,
       departmentAssigned: userData.departmentAssigned || [],
       function: userData.function || '',
       specialty: userData.specialty || '',
-      businessName: userData.businessName || '',
+      razonSocial: userData.razonSocial || '',
       address: userData.address || '',
       cuit: userData.cuit || '',
-      registration: userData.matricula || '',
+      matricula: userData.matricula || '',
       license: userData.license || '',
     });
 
-    this.departamentosSeleccionados = (userData.departmentAssigned || [])
-      .map(
-        (id: number) =>
-          this.departamentos.find(
-            (dept: Departamento) => dept.id === id
-          ) as Departamento
-      )
-      .filter((dept: Departamento | undefined) => dept !== undefined);
+    const existingDeptIds = new Set(
+      this.departamentosSeleccionados.map((d) => d.id)
+    );
+    const newSelectedDepts = (userData.departmentAssigned || [])
+      .filter((deptId: number) => !existingDeptIds.has(deptId))
+      .map((deptId: number) => {
+        const selectedDept = this.departamentos.find(
+          (dept) => dept.id === deptId
+        );
+        return selectedDept
+          ? { id: selectedDept.id, name: selectedDept.name }
+          : null;
+      })
+      .filter((dept: Departamento | null) => dept !== null) as Departamento[];
 
-    console.log(
-      'Datos del usuario en formData que se manda al formulario:',
-      this.userForm.value
+    this.departamentosSeleccionados = [
+      ...this.departamentosSeleccionados,
+      ...newSelectedDepts,
+    ];
+
+    const departmentArray = this.userForm.get(
+      'departmentAssigned'
+    ) as FormArray;
+    departmentArray.clear();
+    this.departamentosSeleccionados.forEach((dept) =>
+      departmentArray.push(this.fb.group(dept))
     );
   }
 
   getDepartmentNames(): string[] {
-    return this.departamentosSeleccionados.map((dept) => dept.name);
+    return (this.userForm.get('departmentAssigned') as FormArray).controls.map(
+      (control) => {
+        const deptId = control.value.id;
+        const selectedDept = this.departamentos.find(
+          (dept) => dept.id === deptId
+        );
+        return selectedDept ? selectedDept.name : '';
+      }
+    );
   }
 
-  getDepartamentosNoSeleccionados(): Departamento[] {
-    return this.departamentos.filter(
+  onDepartmentsSelectionChange(event: MatSelectChange): void {
+    const selectedDepartments = event.value as Departamento[];
+    const newSelectedDepts = selectedDepartments.filter(
       (dept) =>
         !this.departamentosSeleccionados.some(
           (selectedDept) => selectedDept.id === dept.id
         )
     );
-  }
-
-  onDepartmentsSelectionChange(event: MatSelectChange) {
-    const selectedDepartments = event.value as Departamento[];
-
-    if (!Array.isArray(selectedDepartments)) {
-      this.departamentosSeleccionados.push(selectedDepartments);
-    } else {
-      this.departamentosSeleccionados.push(...selectedDepartments);
-    }
+    this.departamentosSeleccionados = [
+      ...this.departamentosSeleccionados,
+      ...newSelectedDepts,
+    ];
+    const departmentArray = this.userForm.get(
+      'departmentAssigned'
+    ) as FormArray;
+    departmentArray.clear();
+    this.departamentosSeleccionados.forEach((dept) =>
+      departmentArray.push(this.fb.group(dept))
+    );
   }
 
   getSelectedDepartmentsText(): string {
@@ -307,13 +395,12 @@ export class UsuariosActualizarComponent implements OnInit {
     const value = event.option.viewValue;
     // Aquí debes ajustar 'id' según tus necesidades
     this.departamentosSeleccionados.push({ id: 0, name: value.trim() });
-    this.departmentInput.nativeElement.value = ''; // Limpiar el input después de la selección
+    this.departmentInput.nativeElement.value = '';
   }
 
   addDepartment(event: MatChipInputEvent): void {
     const input = event.input;
     const value = (event.value || '').trim();
-
     if (value) {
       const newDepartment = {
         id: this.departamentosSeleccionados.length + 1,
@@ -324,45 +411,123 @@ export class UsuariosActualizarComponent implements OnInit {
         .get('departmentAssigned')
         ?.setValue([...this.departamentosSeleccionados]);
     }
-
     if (input) {
       input.value = '';
     }
-
     this.departmentCtrl.setValue(null);
   }
 
-  remove(department: any): void {
-    const index = this.departamentosSeleccionados.indexOf(department);
+  removeDepartment(department: Departamento): void {
+    // Eliminar del array de departamentos seleccionados
+    const index = this.departamentosSeleccionados.findIndex(
+      (d) => d.id === department.id
+    );
     if (index >= 0) {
       this.departamentosSeleccionados.splice(index, 1);
-      this.userForm
-        .get('departmentAssigned')
-        ?.setValue([...this.departamentosSeleccionados]);
+      // Actualizar el FormArray
+      const departmentArray = this.userForm.get(
+        'departmentAssigned'
+      ) as FormArray;
+      const formGroupIndex = departmentArray.controls.findIndex(
+        (control: any) => control.value.id === department.id
+      );
+      if (formGroupIndex >= 0) {
+        departmentArray.removeAt(formGroupIndex);
+      }
     }
   }
+  getDepartamentosNoSeleccionados(): Departamento[] {
+    return this.departamentos.filter(
+      (dept) =>
+        !this.departamentosSeleccionados.some(
+          (selectedDept) => selectedDept.id === dept.id
+        )
+    );
+  }
+
+  updateAllUsers(): void {
+    if (!this.userForm.touched) {
+      this.toastr.warning(
+        'Para actualizar la información, por favor modifique al menos un campo del formulario.'
+      );
+      return;
+    } else {
+      // Lógica para actualizar usuarios
+      console.log('Actualizar usuarios');
+    }
+
+    const storedUserType = localStorage.getItem('UserType');
+
+    if (storedUserType) {
+      const userTypeObject = JSON.parse(storedUserType);
+      this.id = userTypeObject.id;
+      let userType = userTypeObject.typeUser.toLowerCase().trim();
+
+      // Ajustar el tipo de usuario si es necesario
+      if (userType === 'gerente general') {
+        userType = 'manager';
+      } else if (userType === 'técnico') {
+        // Normalizar 'Técnico' a 'technical'
+        userType = 'technical';
+      } else if (userType === 'cooperativa') {
+        // Normalizar 'cooperativa' a 'cooperative'
+        userType = 'cooperative';
+      } else if (userType === 'piloto') {
+        userType = 'operator';
+      }
+
+      // Llamar al método adecuado basado en el tipo de usuario
+      switch (userType) {
+        case 'manager':
+          this.actualizarManager();
+          break;
+        case 'technical':
+          this.actualizarTechnical();
+          break;
+        case 'operator':
+          this.actualizarOperator();
+          break;
+        case 'cooperative':
+          this.actualizarCooperative();
+          break;
+        default:
+          console.error('Tipo de usuario inexistente:', userType);
+      }
+    } else {
+      console.error('No se encontró el tipo de usuario en localStorage');
+    }
+  }
+
   actualizarManager() {
     // Verificar si el formulario es válido
-    if (this.userForm.valid) {
-      const userData = {
-        ...this.userForm.value,
-        company_id: this.formData.company?.id || 1,
-        role: this.getRoleIdByName(this.formData.role?.name || '') || 1,
-      };
 
-      // Verificar si se deben actualizar las contraseñas
-      const updatePassword =
-        this.userForm.get('password')?.value &&
-        this.userForm.get('confirmPassword')?.value;
+    const userData = {
+      ...this.userForm.value,
+      company_id: this.formData.company?.id || 1,
+      role: this.getRoleIdByName(this.formData.role?.name || '') || 8,
+    };
 
-      // Llamar al servicio para actualizar los detalles del manager
-      this.apiService.updateManagerDetails(this.id!, userData).subscribe(
-        (response) => {
-          this.toastr.success('Datos actualizados exitosamente');
-          this.router.navigate(['dashboard-backoffice/usuarios-filtro']);
+    // Verificar si se deben actualizar las contraseñas
+    const updatePassword =
+      this.userForm.get('password')?.value &&
+      this.userForm.get('confirmPassword')?.value;
 
-          // Verificar y enviar la contraseña si corresponde
-          if (updatePassword) {
+    // Llamar al servicio para actualizar los detalles del manager
+    this.apiService.updateManagerDetails(this.id!, userData).subscribe(
+      (response) => {
+        console.log('Datos actualizados del manager:', response);
+        this.toastr.success('Datos actualizados exitosamente');
+        this.router.navigate(['dashboard-backoffice/usuarios-filtro']);
+
+        // Verificar y enviar la contraseña si corresponde
+        if (updatePassword) {
+          // Verificar si las contraseñas coinciden
+          if (
+            this.userForm.get('password')?.value !==
+            this.userForm.get('confirmPassword')?.value
+          ) {
+            this.toastr.error('Las contraseñas no coinciden');
+          } else {
             this.apiService
               .updateManagerPassword(
                 this.id!,
@@ -379,14 +544,201 @@ export class UsuariosActualizarComponent implements OnInit {
                 }
               );
           }
-        },
-        (error) => {
-          this.toastr.error('Error al actualizar datos');
         }
-      );
-    } else {
-      this.toastr.error('Por favor, completa correctamente el formulario');
-    }
+      },
+      (error) => {
+        this.handleUpdateError(error);
+      }
+    );
+  }
+
+  actualizarTechnical() {
+    const companyId = this.formData.company?.id || 2;
+    const selectedRole = this.userForm.get('role')?.value;
+    const roleId = selectedRole ? selectedRole.id : 3;
+
+    const departmentAssignedIds =
+      this.userForm
+        .get('departmentAssigned')
+        ?.value.map((dept: any) => dept.id) || [];
+
+    console.log('IDs de departamentos asignados:', departmentAssignedIds);
+
+    const userData = {
+      ...this.userForm.value,
+      company_id: companyId,
+      role: roleId,
+      departmentAssigned: departmentAssignedIds,
+      matricula: this.userForm.get('matricula')?.value || '',
+      license: this.userForm.get('license')?.value || '',
+    };
+
+    console.log('Datos del usuario a actualizar completo:', userData);
+
+    const updatePassword =
+      this.userForm.get('password')?.value &&
+      this.userForm.get('confirmPassword')?.value;
+
+    this.apiService.updateTechnicalDetails(this.id!, userData).subscribe(
+      (response) => {
+        console.log('Datos actualizados del técnico:', response);
+        this.toastr.success('Datos actualizados exitosamente');
+        this.router.navigate(['dashboard-backoffice/usuarios-filtro']);
+
+        if (updatePassword) {
+          if (
+            this.userForm.get('password')?.value !==
+            this.userForm.get('confirmPassword')?.value
+          ) {
+            this.toastr.error('Las contraseñas no coinciden');
+          } else {
+            this.apiService
+              .updateTechnicalPassword(
+                this.id!,
+                this.userForm.get('password')?.value,
+                this.userForm.get('confirmPassword')?.value
+              )
+              .subscribe(
+                () => {
+                  this.toastr.success('Contraseña actualizada exitosamente');
+                },
+                (error) => {
+                  console.error('Error al actualizar contraseña:', error);
+                  this.toastr.error('Error al actualizar la contraseña');
+                }
+              );
+          }
+        }
+      },
+      (error) => {
+        this.handleUpdateError(error);
+      }
+    );
+  }
+
+  actualizarOperator(): void {
+    const companyId = this.userForm.get('company_id')?.value || 2;
+    const selectedRole = this.userForm.get('role')?.value;
+    const roleId = selectedRole ? selectedRole.id : 5;
+
+    const departmentAssignedIds =
+      this.userForm
+        .get('departmentAssigned')
+        ?.value.map((dept: any) => dept.id) || [];
+
+    const userData = {
+      ...this.userForm.value,
+      company_id: companyId,
+      role: roleId,
+      departmentAssigned: departmentAssignedIds,
+      matricula: this.userForm.get('matricula')?.value || '',
+      license: this.userForm.get('license')?.value || '',
+    };
+
+    console.log('Datos del operador a actualizar completo:', userData);
+
+    const updatePassword =
+      this.userForm.get('password')?.value &&
+      this.userForm.get('confirmPassword')?.value;
+
+    this.apiService.updateOperator(this.id!, userData).subscribe(
+      (response) => {
+        console.log('Datos actualizados del operador:', response);
+        this.toastr.success('Datos actualizados exitosamente');
+        this.router.navigate(['dashboard-backoffice/usuarios-filtro']);
+
+        if (updatePassword) {
+          if (
+            this.userForm.get('password')?.value !==
+            this.userForm.get('confirmPassword')?.value
+          ) {
+            this.toastr.error('Las contraseñas no coinciden');
+          } else {
+            this.apiService
+              .updateOperatorPassword(
+                this.id!,
+                this.userForm.get('password')?.value,
+                this.userForm.get('confirmPassword')?.value
+              )
+              .subscribe(
+                () => {
+                  this.toastr.success('Contraseña actualizada exitosamente');
+                },
+                (error) => {
+                  console.error('Error al actualizar contraseña:', error);
+                  this.toastr.error('Error al actualizar la contraseña');
+                }
+              );
+          }
+        }
+      },
+      (error) => {
+        console.error('Error al actualizar los datos del operador:', error);
+        this.toastr.error('Error al actualizar los datos del operador');
+      }
+    );
+  }
+
+  actualizarCooperative(): void {
+    const companyId = this.userForm.get('company_id')?.value || 2;
+    const selectedRole = this.userForm.get('role')?.value;
+    const roleId = selectedRole ? selectedRole.id : 6;
+
+    const departmentAssignedIds = this.departamentosSeleccionados.map(
+      (dept) => dept.id
+    );
+
+    const cooperativeData = {
+      ...this.userForm.value,
+      company_id: companyId,
+      role: roleId,
+      departmentAssigned: departmentAssignedIds,
+      cuit: this.userForm.get('cuit')?.value || '',
+      razonSocial: this.userForm.get('razonSocial')?.value || '',
+      address: this.userForm.get('address')?.value || '',
+    };
+
+    console.log(
+      'Datos de la cooperativa a actualizar completo:',
+      cooperativeData
+    );
+
+    this.apiService.updateCooperative(this.id!, cooperativeData).subscribe(
+      (response) => {
+        console.log('Datos actualizados de la cooperativa:', response);
+        this.toastr.success('Datos actualizados exitosamente');
+
+        const password = this.userForm.get('password')?.value;
+        const confirmPassword = this.userForm.get('confirmPassword')?.value;
+
+        if (password && confirmPassword) {
+          if (password !== confirmPassword) {
+            this.toastr.error('Las contraseñas no coinciden');
+          } else {
+            this.apiService
+              .updateCooperativePassword(this.id!, password, confirmPassword)
+              .subscribe(
+                () => {
+                  this.toastr.success('Contraseña actualizada exitosamente');
+                },
+                (error) => {
+                  console.error('Error al actualizar la contraseña:', error);
+                  this.toastr.error('Error al actualizar la contraseña');
+                }
+              );
+          }
+        }
+
+        this.router.navigate(['dashboard-backoffice/usuarios-filtro']);
+      },
+      (error) => {
+        console.error(
+          'Error al actualizar los datos de la cooperativa:',
+          error
+        );
+        this.toastr.error('Error al actualizar los datos de la cooperativa');
+      }
+    );
   }
 
   handleUpdateError(error: any) {
@@ -418,10 +770,12 @@ export class UsuariosActualizarComponent implements OnInit {
   }
 
   // Función para obtener el ID del rol por nombre
-  getRoleIdByName(roleName: string): number | undefined {
-    const role = this.roles.find((r) => r.name === roleName);
-    return role ? role.code : undefined;
+  getRoleIdByName(roleName: string): number | null {
+    const role = this.roles.find((r) => r.name.toLowerCase() === roleName.toLowerCase());
+    return role ? role.code : null;
   }
+
+
 
   // Array de roles
   roles: Role[] = [

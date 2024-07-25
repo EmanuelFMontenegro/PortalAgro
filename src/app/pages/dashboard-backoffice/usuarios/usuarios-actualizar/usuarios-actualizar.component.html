@@ -2,8 +2,9 @@
   [selectedName]="userForm.get('name')?.value || null"
   [selectedLastName]="userForm.get('lastname')?.value || null"
   [selectedEmail]="userForm.get('username')?.value || null"
-  [departmentNames]="getDepartmentNames()">
+  [selectedRole]="userType ? getRoleIdByName(userType) : null">
 </app-header-user>
+
 
 
 
@@ -12,15 +13,7 @@
     <div class="field-container">
       <div class="field-group">
         <label class="field-label">Email</label>
-        <input type="email" placeholder="Email" formControlName="username" class="field-input">
-      </div>
-      <div class="field-group">
-        <label class="field-label">Contraseña</label>
-        <input type="password" placeholder="Contraseña" formControlName="password" class="field-input">
-      </div>
-      <div class="field-group">
-        <label class="field-label">Confirmar Contraseña</label>
-        <input type="password" placeholder="Confirmar Contraseña" formControlName="confirmPassword" class="field-input">
+        <input type="email" placeholder="Email" formControlName="username" class="field-input" autocomplete="off">
       </div>
       <div class="field-group">
         <label class="field-label">Nombre</label>
@@ -34,7 +27,19 @@
         <label class="field-label">DNI</label>
         <input type="text" placeholder="DNI" formControlName="dni" class="field-input">
       </div>
-
+      <div class="field-group">
+        <label class="field-label">CONTACTO</label>
+        <input type="text" placeholder="Teléfono" formControlName="telephone" class="field-input">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Contraseña</label>
+        <input type="password" placeholder="Contraseña" formControlName="password" class="field-input"
+          autocomplete="off">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Confirmar Contraseña</label>
+        <input type="password" placeholder="Confirmar Contraseña" formControlName="confirmPassword" class="field-input">
+      </div>
 
       <div *ngIf="userType === 'cooperative'">
         <div class="field-group">
@@ -42,7 +47,8 @@
           <mat-form-field class="list-chip-grid">
             <mat-label>Departamentos</mat-label>
             <mat-chip-grid #chipGrid>
-              <mat-chip-row *ngFor="let department of departamentosSeleccionados" (removed)="remove(department)">
+              <mat-chip-row *ngFor="let department of departamentosSeleccionados"
+                (removed)="removeDepartment(department)">
                 {{ department.name }}
                 <button matChipRemove>
                   <mat-icon>cancel</mat-icon>
@@ -53,15 +59,16 @@
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="addDepartment($event)" />
             <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
               <mat-option *ngFor="let department of filteredDepartments | async" [value]="department">
-                {{department.name}}
+                {{ department.name }}
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
-
           <label class="field-label">Asignar Nuevos Departamentos</label>
-          <mat-select class="field-input" placeholder="Aca podras agregar departamentos"
-            (selectionChange)="onDepartmentsSelectionChange($event)">
-            <mat-option *ngFor="let dept of departamentos" [value]="dept">{{ dept.name }}</mat-option>
+          <mat-select class="field-input" placeholder="Aquí podrás agregar departamentos" [formControl]="departmentCtrl"
+            (selectionChange)="onDepartmentsSelectionChange($event)" multiple>
+            <mat-option *ngFor="let dept of getDepartamentosNoSeleccionados()" [value]="dept">
+              {{ dept.name }}
+            </mat-option>
           </mat-select>
         </div>
 
@@ -71,7 +78,7 @@
         </div>
         <div class="field-group">
           <label class="field-label">Razón Social</label>
-          <input type="text" placeholder="Razón Social" formControlName="businessName" class="field-input">
+          <input type="text" placeholder="Razón Social" formControlName="razonSocial" class="field-input">
         </div>
         <div class="field-group">
           <label class="field-label">Dirección</label>
@@ -89,7 +96,8 @@
           <mat-form-field class="list-chip-grid">
             <mat-label>Departamentos</mat-label>
             <mat-chip-grid #chipGrid>
-              <mat-chip-row *ngFor="let department of departamentosSeleccionados" (removed)="remove(department)">
+              <mat-chip-row *ngFor="let department of departamentosSeleccionados"
+                (removed)="removeDepartment(department)">
                 {{ department.name }}
                 <button matChipRemove>
                   <mat-icon>cancel</mat-icon>
@@ -100,69 +108,77 @@
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="addDepartment($event)" />
             <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
               <mat-option *ngFor="let department of filteredDepartments | async" [value]="department">
-                {{department.name}}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-
-          <label class="field-label">Asignar Nuevos Departamentos</label>
-          <mat-select class="field-input" placeholder="Aca podras agregar departamentos"
-            (selectionChange)="onDepartmentsSelectionChange($event)">
-            <mat-option *ngFor="let dept of departamentos" [value]="dept">{{ dept.name }}</mat-option>
-          </mat-select>
-        </div>
-        <div class="field-group">
-          <label class="field-label">Función</label>
-          <input type="text" placeholder="Función" formControlName="function" class="field-input">
-        </div>
-        <div class="field-group">
-          <label class="field-label">Especialidad</label>
-          <input type="text" placeholder="Especialidad" formControlName="specialty" class="field-input">
-        </div>
-      </div>
-
-      <div *ngIf="userType === 'operator'">
-        <div class="field-group">
-          <label class="field-label">Departamentos Asignados</label>
-          <mat-form-field class="list-chip-grid">
-            <mat-label>Departamentos</mat-label>
-            <mat-chip-grid #chipGrid>
-              <mat-chip-row *ngFor="let department of departamentosSeleccionados" (removed)="remove(department)">
                 {{ department.name }}
-                <button matChipRemove>
-                  <mat-icon>cancel</mat-icon>
-                </button>
-              </mat-chip-row>
-            </mat-chip-grid>
-            <input #departmentInput [formControl]="departmentCtrl" [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
-              [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="addDepartment($event)" />
-            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-              <mat-option *ngFor="let department of filteredDepartments | async" [value]="department">
-                {{department.name}}
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
 
           <label class="field-label">Asignar Nuevos Departamentos</label>
-          <mat-select class="field-input" placeholder="Aca podras agregar departamentos"
-            (selectionChange)="onDepartmentsSelectionChange($event)">
-            <mat-option *ngFor="let dept of departamentos" [value]="dept">{{ dept.name }}</mat-option>
+          <mat-select class="field-input" placeholder="Aquí podrás agregar departamentos" [formControl]="departmentCtrl"
+            (selectionChange)="onDepartmentsSelectionChange($event)" multiple>
+            <mat-option *ngFor="let dept of getDepartamentosNoSeleccionados()" [value]="dept">
+              {{ dept.name }}
+            </mat-option>
           </mat-select>
         </div>
         <div class="field-group">
           <label class="field-label">Función</label>
           <input type="text" placeholder="Función" formControlName="function" class="field-input">
         </div>
-      </div>
-
-      <div *ngIf="userType === 'operator'">
         <div class="field-group">
           <label class="field-label">Especialidad</label>
           <input type="text" placeholder="Especialidad" formControlName="specialty" class="field-input">
         </div>
         <div class="field-group">
           <label class="field-label">Matrícula</label>
-          <input type="text" placeholder="Matrícula" formControlName="registration" class="field-input">
+          <input type="text" placeholder="Matrícula" formControlName="matricula" class="field-input">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Licencia</label>
+          <input type="text" placeholder="Licencia" formControlName="license" class="field-input">
+        </div>
+      </div>
+      <div *ngIf="userType === 'operator'">
+        <div class="field-group">
+          <label class="field-label">Departamentos Asignados</label>
+          <mat-form-field class="list-chip-grid">
+            <mat-label>Departamentos</mat-label>
+            <mat-chip-grid #chipGrid>
+              <mat-chip-row *ngFor="let department of departamentosSeleccionados"
+                (removed)="removeDepartment(department)">
+                {{ department.name }}
+                <button matChipRemove>
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </mat-chip-row>
+            </mat-chip-grid>
+            <input #departmentInput [formControl]="departmentCtrl" [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="addDepartment($event)" />
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+              <mat-option *ngFor="let department of filteredDepartments | async" [value]="department">
+                {{ department.name }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <label class="field-label">Asignar Nuevos Departamentos</label>
+          <mat-select class="field-input" placeholder="Aquí podrás agregar departamentos" [formControl]="departmentCtrl"
+            (selectionChange)="onDepartmentsSelectionChange($event)" multiple>
+            <mat-option *ngFor="let dept of getDepartamentosNoSeleccionados()" [value]="dept">
+              {{ dept.name }}
+            </mat-option>
+          </mat-select>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Función</label>
+          <input type="text" placeholder="Función" formControlName="function" class="field-input">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Especialidad</label>
+          <input type="text" placeholder="Especialidad" formControlName="specialty" class="field-input">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Matrícula</label>
+          <input type="text" placeholder="Matrícula" formControlName="matricula" class="field-input">
         </div>
         <div class="field-group">
           <label class="field-label">Licencia</label>
@@ -172,8 +188,11 @@
     </div>
   </form>
 </div>
-
 <div class="botones-form">
-  <button mat-raised-button class="crear-button" (click)="actualizarManager()">Actualizar usuario</button>
+  <button mat-raised-button class="crear-button" (click)="updateAllUsers()">Actualizar usuario</button>
   <button mat-raised-button class="cancelar-button" (click)="cancelar()">Cancelar</button>
 </div>
+
+
+
+<!-- [disabled]="!userForm.touched" -->

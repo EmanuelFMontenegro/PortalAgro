@@ -9,11 +9,20 @@
     </select>
   </div>
 
+  <!-- Componente dinámico Spinner -->
+  <div *ngIf="activarSpinner" class="overlay">
+
+    <div *ngIf="activarSpinner" class="lds-ellipsis">
+      Cargando...
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+
   <!-- Componente de formulario dinámico -->
-  <app-formulario
-    [formType]="selectedForm"
-    [titulo]="selectedForm"
-    [dataForm]="dataForm"
+  <app-formulario [formType]="selectedForm" [titulo]="selectedForm" [dataForm]="dataForm"
     (formSubmitted)="onFormSubmitted($event)">
   </app-formulario>
 </div>
@@ -23,5 +32,3 @@
   <button mat-raised-button class="crear-button" (click)="enviarFormulario()">Crear usuario</button>
   <button mat-raised-button class="cancelar-button" (click)="cancelar()">Cancelar</button>
 </div>
-
-

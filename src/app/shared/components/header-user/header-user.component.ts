@@ -19,13 +19,22 @@ export class HeaderUserComponent implements OnInit, OnChanges {
   @Input() selectedName: string | null = null;
   @Input() selectedLastName: string | null = null;
   @Input() selectedEmail: string | null = null;
-  @Input() selectedRole: string | null = null;
+  @Input() selectedRole: number | null = null; // Recibe el roleId
   @Input() departmentNames: string[] | null = null;
 
   name: string | null = null;
   lastname: string | null = null;
   email: string | null = null;
   role: string | null = null;
+
+  private roleMapping = new Map<number, string>([
+    [1, 'ROLE_SUPERUSER'],
+    [2, 'ROLE_ADMINISTRATOR'],
+    [3, 'ROLE_MANAGER'],
+    [4, 'ROLE_TECHNICAL'],
+    [5, 'ROLE_OPERATOR'],
+    [6, 'ROLE_COOPERATIVE'],
+  ]);
 
   constructor(private authService: AuthService) {}
 
@@ -34,61 +43,69 @@ export class HeaderUserComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(): void {
-    if (this.selectedName !== undefined && this.selectedName !== null) {
-      this.name = this.selectedName;
-    }
-    if (this.selectedLastName !== undefined && this.selectedLastName !== null) {
-      this.lastname = this.selectedLastName;
-    }
-    if (this.selectedEmail !== undefined && this.selectedEmail !== null) {
-      this.email = this.selectedEmail;
-    }
-    if (this.selectedRole !== undefined && this.selectedRole !== null) {
-      this.role = this.translateRole(this.selectedRole);
-    }
+    this.updateUserData();
   }
 
   private setAuthenticatedUserData(): void {
     const token = this.authService.getToken();
     if (token) {
       const decoded: DecodedToken = jwtDecode(token);
-      if (this.selectedName === undefined || this.selectedName === null) {
-        this.name = decoded.name;
-      }
-      if (this.selectedLastName === undefined || this.selectedLastName === null) {
-        this.lastname = decoded.lastname;
-      }
-      if (this.selectedEmail === undefined || this.selectedEmail === null) {
-        this.email = decoded.sub;
-      }
-      if (this.selectedRole === undefined || this.selectedRole === null) {
-        this.role = this.translateRole(decoded.role);
-      }
+      this.name = this.selectedName ?? decoded.name;
+      this.lastname = this.selectedLastName ?? decoded.lastname;
+      this.email = this.selectedEmail ?? decoded.sub;
+
+      // Convert `number` to `string` if necessary
+      const roleAsString: string | null = typeof this.selectedRole === 'number'
+        ? this.roleMapping.get(this.selectedRole) || null
+        : this.selectedRole;
+
+      this.role = this.translateRole(roleAsString ?? decoded.role);
     } else {
-      this.name = this.selectedName ?? null;
-      this.lastname = this.selectedLastName ?? null;
-      this.email = this.selectedEmail ?? null;
-      this.role = this.translateRole(this.selectedRole ?? null);
+      this.updateUserData();
     }
   }
 
-  private translateRole(role: string | null): string | null {
-    if (!role) return null;
-    switch (role) {
-      case 'SUPERUSER':
+
+  private updateUserData(): void {
+    console.log('Update User Data:', {
+      selectedName: this.selectedName,
+      selectedLastName: this.selectedLastName,
+      selectedEmail: this.selectedEmail,
+      selectedRole: this.selectedRole,
+    });
+
+    this.name = this.selectedName ?? null;
+    this.lastname = this.selectedLastName ?? null;
+    this.email = this.selectedEmail ?? null;
+    this.role = this.selectedRole ? this.roleMapping.get(this.selectedRole) || 'Unknown' : null;
+
+    console.log('Updated User Data:', { name: this.name, lastname: this.lastname, email: this.email, role: this.role });
+  }
+
+
+  private translateRole(role: string | number | null): string | null {
+    if (role === null) return null;
+
+    // Convert `number` to `string` if needed
+    const roleName = typeof role === 'number' ? this.roleMapping.get(role) : role;
+
+    switch (roleName) {
+      case 'ROLE_SUPERUSER':
         return 'Super Admin';
-      case 'ADMINISTRATOR':
+      case 'ROLE_ADMINISTRATOR':
         return 'Admin';
       case 'ROLE_MANAGER':
         return 'Gerente General';
-      case 'TECHNICAL':
+      case 'ROLE_TECHNICAL':
         return 'Técnico';
-      case 'OPERATOR':
+      case 'ROLE_OPERATOR':
         return 'Piloto';
-      case 'COOPERATIVE':
+      case 'ROLE_COOPERATIVE':
         return 'Cooperativa';
       default:
-        return role;
+        return roleName || null; // Return null if roleName is undefined
     }
   }
+
+
 }

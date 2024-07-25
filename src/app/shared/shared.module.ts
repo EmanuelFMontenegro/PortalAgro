@@ -23,6 +23,7 @@ import { FiltrosContainerComponent } from './components/filtros-container/filtro
 import { CalendarComponent } from './components/calendar/calendar.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarPopupComponent } from './components/calendar-popup/calendar-popup.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
 export const IMPORTS_MATERIAL = [
   MatSidenavModule,
   MatListModule,
@@ -41,6 +42,7 @@ export const IMPORTS_MATERIAL = [
   MatChipsModule,
   MatCheckboxModule,
   MatDialogModule,
+  MatPaginatorModule,
 ];
 
 export const IMPORT_CORE = [CommonModule, FormsModule, ReactiveFormsModule];
@@ -54,7 +56,7 @@ export const CALENDAR = [FullCalendarModule];
     FiltrosContainerComponent,
     CalendarComponent,
     CalendarPopupComponent
-  
+
   ],
   imports: [IMPORT_CORE, IMPORTS_MATERIAL, CALENDAR],
   exports: [

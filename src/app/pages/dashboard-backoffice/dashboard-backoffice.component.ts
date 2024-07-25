@@ -4,6 +4,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Router } from '@angular/router';
 import { DashboardBackOfficeService } from './dashboard-backoffice.service';
 import { PermisoService } from 'src/app/services/permisos.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-dashboard-backoffice',
@@ -13,7 +14,7 @@ import { PermisoService } from 'src/app/services/permisos.service';
 export class DashboardBackofficeComponents implements AfterViewInit {
   @ViewChild('sidenav') sidenav!: MatSidenav;
   isScreenSmall: boolean;
-
+  cargandoValidacion: boolean = false;
   titulo: string | undefined;
   subTitulo: string | undefined;
   cargandoPermisos = true;
@@ -21,7 +22,8 @@ export class DashboardBackofficeComponents implements AfterViewInit {
     private breakpointObserver: BreakpointObserver,
     public permisoService: PermisoService,
     public dashboardBackOffice: DashboardBackOfficeService,
-    private router: Router
+    private router: Router,
+    private spinner: NgxSpinnerService
   ) {
     this.isScreenSmall = window.innerWidth < 768;
     this.dashboardBackOffice.dataTitulo.subscribe(
@@ -39,7 +41,8 @@ export class DashboardBackofficeComponents implements AfterViewInit {
   async getPermisos() {
     await this.permisoService.getPermisos()
     this.cargandoPermisos = false;
-   
+
+
   }
 
   ngAfterViewInit(): void {
