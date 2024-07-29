@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from 'src/app/core/guards/auth.guard';
 import { DashboardBackofficeComponents } from './dashboard-backoffice.component';
 import { InicioComponent } from './inicio/inicio.component';
-import { ServiciosComponent } from './servicios/servicios.component';
 import { ProductoresComponent } from './productores/productores.component';
 import { ChacrasComponent } from './chacras/chacras.component';
 import { LotesComponent } from './lotes/lotes.component';
@@ -11,7 +10,6 @@ import { CalendariosComponent } from './calendarios/calendarios.component';
 import { NotificacionComponent } from './notificacion/notificacion.component';
 import { PlanificacionesComponent } from './planificaciones/planificaciones.component';
 import { InformesComponent } from './informes/informes.component';
-import { ConfiguracionComponent } from './configuracion/configuracion.component';
 import { PerfilProductorComponent } from './productores/perfil-productor/perfil-productor.component';
 import { NuevoUsuarioComponent } from './productores/nuevo-usuario/nuevo-usuario.component';
 import { ChacrasPerfilComponent } from './chacras-perfil/chacras-perfil.component';
@@ -31,7 +29,14 @@ const routes: Routes = [
     canActivate: [AuthGuard], // Aplicar el guardia a toda la sección del dashboard
     children: [
       { path: 'inicio', component: InicioComponent },
-      { path: 'servicios', component: ServiciosComponent },
+      {
+        path: 'servicios',
+        canActivate: [AuthGuard],
+        loadChildren: () =>
+          import('../servicios/servicios.module').then(
+            (x) => x.ServiciosModule
+          ),
+      },
       { path: 'productores', component: ProductoresComponent },
       {
         path: 'usuarios-filtro',
@@ -73,6 +78,7 @@ const routes: Routes = [
             (x) => x.ConfiguracionModule
           ),
       },
+
       { path: '', redirectTo: 'inicio', pathMatch: 'full' },
     ],
   },

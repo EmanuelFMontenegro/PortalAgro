@@ -1,0 +1,71 @@
+<div class="container card-normal">
+
+    <div class="header-container2 en-linea">
+      <h2 class="title2">Solicitar Nuevos Servicios</h2>
+      <button class="back-button2 r-button" (click)="volver()"> << Volver Atrás</button>
+    </div>
+
+    <div class="subheader-container en-linea w-100">
+      <h4 class="subtitle">Para comenzar seleccionar una chacra</h4>
+      <div class="search-container r-button button-seleccionar" *ngIf="this.form.controls[this.ctrlChacra].value !== null">
+        <button class="back-button2 register-button" (click)="limpiarSeleccion()"> Limpiar selección</button>
+      </div>
+    </div>
+
+    <form [formGroup]="form" *ngIf="form">
+      <mat-card class="main-card">
+      <div class="card-uno">
+        <div class="en-linea">
+          <div class="field-container w-80">
+            <mat-label class="field-label">Chacra</mat-label>
+            <mat-select class="field-input" [formControlName]="this.ctrlChacra" placeholder="Seleccionar una chacra" name="chacra">
+              <mat-option *ngFor="let chacra of chacras" [value]="chacra.id">{{ chacra?.name }}</mat-option>
+            </mat-select>
+          </div>
+          <div class="field-container w-20 text-r">
+          <button class="back-button2" [disabled]="this.form.controls[this.ctrlChacra].value == null" (click)="seleccionarChacra()"> Seleccionar</button>
+          </div>
+        </div>
+        <div class="en-linea" *ngIf="this.form.controls[this.ctrlChacra]?.value && this.lotes?.length">
+        <div class="field-container w-80" >
+          <mat-label class="field-label">Cultivo</mat-label>
+          <mat-select class="field-input"  [formControlName]="this.ctrlCultivo"  placeholder="Seleccione un cultivo" name="cultivo">
+            <mat-option *ngFor="let cultivo of cultivos" [value]="cultivo.id">{{ cultivo.name }}</mat-option>
+          </mat-select>
+        </div>
+        <div class="field-container w-20 text-r">
+          <button class="back-button2" [disabled]="this.form.controls[this.ctrlCultivo].value == null" (click)="seleccionarCultivo()"> Seleccionar</button>
+        </div>
+       </div>
+        <div class="field-container" *ngIf="this.form.controls[this.ctrlCultivo]?.value">
+          <mat-label class="field-label">Lotes</mat-label>
+          <mat-select [multiple]="true"  class="field-input"  [formControlName]="this.ctrlLote"  placeholder="Seleccione los lotes" name="lote">
+            <mat-option *ngFor="let lote of lotes" [value]="lote.id">{{ lote?.name }}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <div class="en-linea">
+      <div class="field-container w-50">
+        <mat-label class="field-label">Hectáreas</mat-label>
+        <input type="number" [formControlName]="this.ctrlHectareas"  class="field-input" name="hectareas"
+        placeholder="Hectáreas" min="0" >
+      </div>
+      <div class="field-container  w-50">
+        <mat-checkbox [formControlName]="this.ctrlConAgua">Abastecimiento de agua</mat-checkbox>
+      </div>
+
+    </div>
+    <div class="field-container w-100">
+      <mat-label class="field-label">Observaciones</mat-label>
+      <textarea [formControlName]="this.ctrlObservaciones" class="w-100"  name="observaciones"></textarea>
+    </div>
+
+      <div class="card-botones">
+        <button class="back-button2  cancel-button" (click)="cancelar()">Cancelar</button>
+        <button class="back-button2 register-button" style="font-size:14px;" [disabled]="this.form.invalid" (click)="solicitarServicio()">Solicitar Servicio</button>
+
+      </div>
+    </mat-card>
+   </form>
+  </div>

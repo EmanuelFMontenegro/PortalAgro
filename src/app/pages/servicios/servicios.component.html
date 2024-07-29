@@ -1,0 +1,22 @@
+
+
+
+  <div class="field-container">
+    <mat-select class="field-input" placeholder="Seleccione un listado" (selectionChange)="cambiarConfig($event)" [(value)]="opcionSeleccionada">
+
+    </mat-select>
+
+    <button mat-raised-button class="back-button2" (click)="nuevo()" >Solicitar
+    <mat-icon style="font-size: 20px; position: relative; top: 1px; right: 3px;"> </mat-icon>
+    </button>
+  </div>
+
+  <ng-container *ngIf="this.listado.length else listadoVacio">
+    <miniatura [dataView]="dataView" [listado]="listado"></miniatura>
+  </ng-container>
+
+  <ng-template #listadoVacio>
+    <p>No posee solicitud de servicios</p>
+  </ng-template>
+
+
