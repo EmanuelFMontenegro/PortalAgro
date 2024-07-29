@@ -1,0 +1,48 @@
+.paginator
+  color:$new_color_blue
+  display: flex
+  align-items: center
+  padding: 0 8px
+  flex-wrap: wrap-reverse
+  width: 100%
+  min-height: var(--mat-paginator-container-size)
+  justify-content: center
+
+  @media (max-width: 600px)
+    font-size: 14px
+    padding: 4px
+    // Ajusta el tamaño de fuente y el padding en dispositivos móviles
+
+  &-page-size
+    display: inline-flex
+    align-items: center
+    z-index: 1000 // Verifica que no haya conflictos con otros elementos
+
+    &
+      font-size: 12px // Ajusta el tamaño de fuente en móviles
+
+  &-page-size-label
+    margin-right: 8px
+
+    &
+      font-size: 12px // Ajusta el tamaño de fuente en móviles
+
+  &-range-label
+    margin: 0 16px
+
+    &
+      margin: 0 8px
+      font-size: 12px // Ajusta el tamaño de fuente en móviles
+
+  &-icon-button
+    margin: 0 8px
+
+    &
+      margin: 0 4px // Ajusta el margen en dispositivos móviles
+
+.mat-select-trigger
+  display: flex
+  align-items: center
+
+  @media (max-width: 600px)
+    font-size: 14px // Ajusta el tamaño de fuente para móviles
