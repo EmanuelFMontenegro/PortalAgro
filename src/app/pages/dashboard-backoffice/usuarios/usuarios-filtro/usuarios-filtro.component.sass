@@ -29,35 +29,25 @@
   &:active
     transform: translateY(2px)
 
-.paginator-container
+.paginator
+  color:$new_color_blue
   display: flex
-  justify-content: center
   align-items: center
-  margin-top: 16px
-  position: relative
-  z-index: 1
-
-  @media (max-width: 600px)
-    flex-direction: column
-    align-items: stretch // Asegura que el contenido se ajuste correctamente
-
-.mat-paginator
-  display: flex
-  justify-content: center
-  align-items: center
-  margin-top: 16px
-  padding: 8px
-  background-color: white
+  padding: 0 8px
+  flex-wrap: wrap-reverse
   width: 100%
+  min-height: var(--mat-paginator-container-size)
+  justify-content: center
 
   @media (max-width: 600px)
     font-size: 14px
     padding: 4px
+    // Ajusta el tamaño de fuente y el padding en dispositivos móviles
 
   &-page-size
     display: inline-flex
     align-items: center
-    z-index: 1000
+    z-index: 1000 // Verifica que no haya conflictos con otros elementos
 
     &
       font-size: 12px // Ajusta el tamaño de fuente en móviles
@@ -66,20 +56,20 @@
     margin-right: 8px
 
     &
-      font-size: 12px
+      font-size: 12px // Ajusta el tamaño de fuente en móviles
 
   &-range-label
     margin: 0 16px
 
     &
       margin: 0 8px
-      font-size: 12px
+      font-size: 12px // Ajusta el tamaño de fuente en móviles
 
   &-icon-button
     margin: 0 8px
 
     &
-      margin: 0 4px
+      margin: 0 4px // Ajusta el margen en dispositivos móviles
 
 .mat-select-trigger
   display: flex

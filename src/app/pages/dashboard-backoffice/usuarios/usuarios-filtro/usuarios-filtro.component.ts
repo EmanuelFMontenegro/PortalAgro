@@ -60,6 +60,7 @@ export class UsuariosFiltroComponent implements OnInit {
   usuarios: User[] = [];
   usuariosGenerales: User[] = [];
   length = 0;
+  pageSizeLabel: string = 'Items por página:';
   pageSize = 12;
   pageIndex = 0;
   pageSizeOptions = [6, 12, 24];
@@ -136,19 +137,26 @@ export class UsuariosFiltroComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.restorePaginationState();
     this.traerUsuariosGenerales(this.pageIndex, this.pageSize);
   }
 
   handlePageEvent(e: PageEvent) {
+    console.log('Page Event:', e);
     this.pageEvent = e;
     this.length = e.length;
     this.pageSize = e.pageSize;
     this.pageIndex = e.pageIndex;
+    console.log('Length:', this.length);
+    console.log('Page Size:', this.pageSize);
+    console.log('Page Index:', this.pageIndex);
+    this.savePaginationState();
     this.traerUsuariosGenerales(this.pageIndex, this.pageSize);
   }
 
   handlePageSizeChange() {
     this.pageIndex = 0;
+    this.savePaginationState();
     this.traerUsuariosGenerales(this.pageIndex, this.pageSize);
   }
 
@@ -165,8 +173,9 @@ export class UsuariosFiltroComponent implements OnInit {
       .usuariosGenerales(undefined, undefined, pageIndex, pageSize)
       .subscribe(
         (response) => {
-          if (response.list && response.list.length > 0) {
-            this.usuarios = response.list[0];
+          if (response && response.list && response.list.length > 0) {
+            this.usuarios = response.list[0]; // Asume que `response.list` es un array de arrays, ajusta si es necesario
+            this.length = response.totalCount || 0; // Asegúrate de que `totalCount` sea correcto o inicializa a 0
 
             this.usuarios.forEach((usuario) => {
               usuario.provinciasAsignadas = usuario.company.provinces
@@ -182,6 +191,8 @@ export class UsuariosFiltroComponent implements OnInit {
               usuario.color = this.getColorForUserType(usuario.typeUser);
             });
           } else {
+            this.usuarios = []; // Asegúrate de que `usuarios` esté vacío si no hay datos
+            this.length = 0; // Asegúrate de que `length` esté en 0 si no hay datos
             console.error(
               'La respuesta del servidor no contiene datos válidos.'
             );
@@ -189,6 +200,8 @@ export class UsuariosFiltroComponent implements OnInit {
         },
         (error) => {
           console.error('Error al obtener usuarios generales:', error);
+          this.usuarios = []; // Limpia `usuarios` en caso de error
+          this.length = 0; // Asegúrate de que `length` esté en 0 en caso de error
         }
       );
   }
@@ -224,6 +237,23 @@ export class UsuariosFiltroComponent implements OnInit {
   aplicarFiltro(filtroSeleccionado: string) {}
 
   BtnCrearUsuarios() {
+    localStorage.setItem('pageIndex', this.pageIndex.toString());
+    localStorage.setItem('pageSize', this.pageSize.toString());
+
     this.router.navigate(['dashboard-backoffice/usuarios']);
+  }
+  private savePaginationState() {
+    localStorage.setItem('pageIndex', this.pageIndex.toString());
+    localStorage.setItem('pageSize', this.pageSize.toString());
+  }
+
+  private restorePaginationState() {
+    const savedPageIndex = localStorage.getItem('pageIndex');
+    const savedPageSize = localStorage.getItem('pageSize');
+    this.pageIndex = savedPageIndex ? parseInt(savedPageIndex, 10) : 0;
+    this.pageSize = savedPageSize ? parseInt(savedPageSize, 10) : 12;
+  }
+  checkPaginationState() {
+    alert(`PageIndex: ${this.pageIndex}, PageSize: ${this.pageSize}`);
   }
 }

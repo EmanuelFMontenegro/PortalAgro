@@ -104,6 +104,7 @@ export class UsuariosActualizarComponent implements OnInit {
     private dialog: MatDialog,
     private spinner: NgxSpinnerService
   ) {
+
     this.dashboardBackOffice.dataTitulo.next({
       titulo: '¡Acá podrás Actualizar a los usuarios del Sistema!',
       subTitulo: '',

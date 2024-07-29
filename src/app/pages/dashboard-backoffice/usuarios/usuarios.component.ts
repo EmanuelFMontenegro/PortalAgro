@@ -59,6 +59,7 @@ export class UsuariosComponent implements OnInit {
     lastname: '',
     dni: '',
     role: 0,
+    telephone: '',
     departmentAssigned: [] as number[],
     company_id: 1,
   };
@@ -143,7 +144,7 @@ export class UsuariosComponent implements OnInit {
     this.formData.name = userData.name;
     this.formData.lastname = userData.lastname;
     this.formData.dni = userData.dni;
-
+    this.formData.telephone = userData.telephone;
     // Asignación de departamentos asignados, si corresponde
     if (userData.departmentAssigned) {
       this.formData.departmentAssigned = userData.departmentAssigned;
@@ -177,6 +178,12 @@ export class UsuariosComponent implements OnInit {
         name: 'lastname',
       },
       { type: 'text', placeholder: 'DNI', ngModel: 'dni', name: 'dni' },
+      {
+        type: 'text',
+        placeholder: 'Contacto',
+        ngModel: 'telephone',
+        name: 'telephone',
+      },
     ];
 
     switch (this.selectedForm) {
@@ -373,7 +380,8 @@ export class UsuariosComponent implements OnInit {
       !this.formData.password ||
       !this.formData.name ||
       !this.formData.lastname ||
-      !this.formData.dni
+      !this.formData.dni ||
+      !this.formData.telephone
     ) {
       this.toastr.error('Por favor completa todos los campos obligatorios.');
       return;
@@ -433,6 +441,7 @@ export class UsuariosComponent implements OnInit {
           name: this.formData.name,
           lastname: this.formData.lastname,
           dni: this.formData.dni,
+          telephone: this.formData.telephone,
           company_id: 1,
           role: this.formData.role,
           isPreActivate: 'true',
@@ -456,7 +465,15 @@ export class UsuariosComponent implements OnInit {
       },
       (error) => {
         console.error('Error al registrar técnico:', error);
-        this.toastr.error('Error al registrar técnico');
+        this.activarSpinner = false;
+
+        if (error.error && error.error.code === 4002) {
+          this.toastr.error(
+            'El usuario ya está registrado. Por favor, intente con otro email.'
+          );
+        } else {
+          this.toastr.error('Error al registrar técnico');
+        }
       }
     );
   }
@@ -494,11 +511,13 @@ export class UsuariosComponent implements OnInit {
       },
       (error) => {
         console.error('Error al registrar gerente:', error);
-
+        this.activarSpinner = false;
         if (error.error && error.error.code === 4002) {
           this.toastr.error('El usuario ya existe, prueba con otro Email');
+          this.activarSpinner = false;
         } else {
           this.toastr.error('Error al registrar gerente');
+          this.activarSpinner = false;
         }
       }
     );
@@ -520,7 +539,7 @@ export class UsuariosComponent implements OnInit {
     );
   }
   cancelar() {
-    this.resetearFormulario();
+    // this.resetearFormulario();
     this.router.navigate(['dashboard-backoffice/usuarios-filtro']);
   }
 
