@@ -23,6 +23,8 @@ import { FiltrosContainerComponent } from './components/filtros-container/filtro
 import { CalendarComponent } from './components/calendar/calendar.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarPopupComponent } from './components/calendar-popup/calendar-popup.component';
+import { ToolbarComponent } from './components/toolbar/toolbar.component';
+import { FooterComponent } from './components/footer/footer.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { PaginadorComponent } from './components/paginador/paginador.component';
 export const IMPORTS_MATERIAL = [
@@ -57,8 +59,9 @@ export const CALENDAR = [FullCalendarModule];
     FiltrosContainerComponent,
     CalendarComponent,
     CalendarPopupComponent,
-    PaginadorComponent
-
+    ToolbarComponent,
+    FooterComponent,
+    PaginadorComponent,
   ],
   imports: [IMPORT_CORE, IMPORTS_MATERIAL, CALENDAR],
   exports: [
@@ -70,7 +73,9 @@ export const CALENDAR = [FullCalendarModule];
     TituloContainerComponent,
     FiltrosContainerComponent,
     CalendarComponent,
-    CalendarPopupComponent
-  ]
+    CalendarPopupComponent,
+    ToolbarComponent,
+    FooterComponent,
+  ],
 })
 export class SharedModule {}

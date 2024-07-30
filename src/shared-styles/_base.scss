@@ -1,0 +1,24 @@
+body {
+    font-family: $font-family;
+  }
+  
+  .mat-icon {
+    height: 40px;
+    width: 40px;
+  }
+  
+  .search-input {
+    width: 300px;
+    padding: 10px 30px 10px 10px;
+    border: 1px solid $border-color;
+    border-radius: 10px;
+    background-image: url("/assets/img/search.svg");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+  
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+  }

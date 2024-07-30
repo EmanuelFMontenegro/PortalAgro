@@ -3,6 +3,7 @@ import { ApiService } from 'src/app/services/ApiService';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { forkJoin } from 'rxjs';
 
 enum TipoUsuarios {
   piloto = 'Piloto de Dron',
@@ -52,16 +53,18 @@ export class UsuariosComponent implements OnInit {
   selectedForm: TipoUsuarios = TipoUsuarios.gerente;
 
   dataForm: DataForm[] = [];
-  formData = {
+  formData: any = {
     username: '',
     password: '',
     name: '',
     lastname: '',
     dni: '',
-    role: 0,
+    role: null,
     telephone: '',
-    departmentAssigned: [] as number[],
-    company_id: 1,
+    departmentAssigned: [],
+    company_id: null,
+    imgLicenciaFile: null,
+    imgMatriculaFile: null,
   };
 
   imgMatriculaFile: File | null = null;
@@ -128,7 +131,6 @@ export class UsuariosComponent implements OnInit {
       // Llamada para obtener detalles del usuario por ID
       this.apiService.getUserById(userId).subscribe(
         (userDetails) => {
-          console.log('Datos del usuario:', userDetails);
           this.fillFormData(userDetails); // Método para asignar datos al formulario
         },
         (error) => {
@@ -242,6 +244,18 @@ export class UsuariosComponent implements OnInit {
         ngModel: 'license',
         name: 'license',
       }
+      // {
+      //   type: 'file',
+      //   placeholder: 'Foto de Licencia',
+      //   ngModel: 'fotoLicencia',
+      //   name: 'fotoLicencia',
+      // },
+      // {
+      //   type: 'file',
+      //   placeholder: 'Foto de Matrícula',
+      //   ngModel: 'fotoMatricula',
+      //   name: 'fotoMatricula',
+      // }
     );
 
     this.formData.role =
@@ -324,19 +338,6 @@ export class UsuariosComponent implements OnInit {
     this.actualizarDepartamentosAsignados();
   }
 
-  onFileChange(event: any, field: string) {
-    if (event.target.files && event.target.files.length) {
-      const file = event.target.files[0];
-      if (field === 'imgMatricula') {
-        this.imgMatriculaFile = file;
-      } else if (field === 'imgLicencia') {
-        this.imgLicenciaFile = file;
-      } else if (field === 'foto') {
-        this.fotoFile = file;
-      }
-    }
-  }
-
   updateFormData() {
     console.log('Formulario actualizado:', this.formData);
   }
@@ -404,6 +405,16 @@ export class UsuariosComponent implements OnInit {
 
     let requestData: any;
 
+    // Encuentra el rol basado en el tipo de usuario seleccionado
+    const selectedRole = this.roles.find(
+      (role) => role.name === this.getRoleName(this.selectedForm)
+    );
+
+    if (!selectedRole) {
+      this.toastr.error('Rol no encontrado.');
+      return;
+    }
+
     switch (this.selectedForm) {
       case TipoUsuarios.tecnicoGeneral:
       case TipoUsuarios.tecnico:
@@ -411,7 +422,7 @@ export class UsuariosComponent implements OnInit {
           ...this.formData,
           isPreActivate: 'true',
           autogeneratePass: 'false',
-          role: this.formData.role,
+          role: selectedRole.code,
         };
         this.registrarTecnico(requestData);
         break;
@@ -420,7 +431,7 @@ export class UsuariosComponent implements OnInit {
           ...this.formData,
           isPreActivate: 'true',
           autogeneratePass: 'false',
-          role: this.formData.role,
+          role: selectedRole.code,
         };
         this.registrarCooperativa(requestData);
         break;
@@ -429,7 +440,7 @@ export class UsuariosComponent implements OnInit {
           ...this.formData,
           isPreActivate: 'false',
           autogeneratePass: 'false',
-          role: 5,
+          role: selectedRole.code,
         };
         this.registrarPiloto(requestData);
         break;
@@ -443,7 +454,7 @@ export class UsuariosComponent implements OnInit {
           dni: this.formData.dni,
           telephone: this.formData.telephone,
           company_id: 1,
-          role: this.formData.role,
+          role: selectedRole.code,
           isPreActivate: 'true',
           autogeneratePass: 'false',
         };
@@ -453,20 +464,79 @@ export class UsuariosComponent implements OnInit {
     }
   }
 
+  getRoleName(tipoUsuario: TipoUsuarios): string {
+    switch (tipoUsuario) {
+      case TipoUsuarios.tecnicoGeneral:
+        return 'ROLE_TECHNICIAN_GENERAL';
+      case TipoUsuarios.tecnico:
+        return 'ROLE_TECHNICIAN_LOCATION';
+      case TipoUsuarios.cooperativa:
+        return 'ROLE_COOPERATIVE';
+      case TipoUsuarios.piloto:
+        return 'ROLE_OPERATOR';
+      case TipoUsuarios.gerente:
+      default:
+        return 'ROLE_MANAGER';
+    }
+  }
+
   registrarTecnico(data: any) {
     this.activarSpinner = true;
+
+    // Realiza el registro del técnico
     this.apiService.registrarTecnico(data).subscribe(
       (response) => {
-        console.log('Técnico registrado correctamente:', response);
-        this.activarSpinner = false;
-        this.toastr.success('Técnico registrado correctamente');
-        this.resetearFormulario();
-        this.router.navigate(['dashboard-backoffice/usuarios-filtro']);
+        const tecnicoId = response.id;
+        const observables = [];
+
+        // Si hay una imagen de licencia, la sube
+        if (this.formData.imgLicenciaFile) {
+          observables.push(
+            this.apiService.subirImagenLicencia(
+              tecnicoId,
+              this.formData.imgLicenciaFile
+            )
+          );
+        }
+
+        // Si hay una imagen de matrícula, la sube
+        if (this.formData.imgMatriculaFile) {
+          observables.push(
+            this.apiService.subirImagenMatricula(
+              tecnicoId,
+              this.formData.imgMatriculaFile
+            )
+          );
+        }
+
+        // Si hay imágenes para subir, usa forkJoin para esperar a que se completen todas las solicitudes
+        if (observables.length > 0) {
+          forkJoin(observables).subscribe(
+            () => {
+              this.activarSpinner = false;
+              this.toastr.success('Técnico registrado correctamente');
+              this.resetearFormulario();
+              this.router.navigate(['dashboard-backoffice/usuarios-filtro']);
+            },
+            (error) => {
+              console.error('Error al subir las imágenes:', error);
+              this.activarSpinner = false;
+              this.toastr.error('Error al subir las imágenes');
+            }
+          );
+        } else {
+          // Si no hay imágenes para subir, simplemente completa el proceso
+          this.activarSpinner = false;
+          this.toastr.success('Técnico registrado correctamente');
+          this.resetearFormulario();
+          this.router.navigate(['dashboard-backoffice/usuarios-filtro']);
+        }
       },
       (error) => {
         console.error('Error al registrar técnico:', error);
         this.activarSpinner = false;
 
+        // Maneja errores específicos
         if (error.error && error.error.code === 4002) {
           this.toastr.error(
             'El usuario ya está registrado. Por favor, intente con otro email.'
@@ -476,6 +546,16 @@ export class UsuariosComponent implements OnInit {
         }
       }
     );
+  }
+
+  onFileChange(event: any, fieldName: string) {
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
+      console.log(`File selected for ${fieldName}:`, file);
+      this.formData[fieldName] = file;
+      this.updateFormData(); // Emite los datos del formulario si es necesario
+    } else {
+    }
   }
 
   registrarPiloto(data: any) {

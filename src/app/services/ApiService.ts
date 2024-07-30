@@ -325,23 +325,22 @@ export class ApiService {
 
   subirImagenLicencia(tecnicoId: number, archivo: File): Observable<any> {
     const formData = new FormData();
-    formData.append('imageLicense', archivo);
-
+    formData.append('imageLicense', archivo); // Nombre del campo ajustado a lo que el backend espera
     return this.http.put(
-      `${this.baseURL}/dist/user/technical/${tecnicoId}/img/license`,
+      `${this.baseURL}/api/dist/user/technical/${tecnicoId}/img/license`, // Ajusta la ruta a la que el backend espera
       formData
     );
   }
 
   subirImagenMatricula(tecnicoId: number, archivo: File): Observable<any> {
     const formData = new FormData();
-    formData.append('imageMatricula', archivo);
-
+    formData.append('imageMatricula', archivo); // Nombre del campo ajustado a lo que el backend espera
     return this.http.put(
-      `${this.baseURL}/dist/user/technical/${tecnicoId}/img/matricula`,
+      `${this.baseURL}/api/dist/user/technical/${tecnicoId}/img/matricula`, // Ajusta la ruta a la que el backend espera
       formData
     );
   }
+
 
   // <--ENPOINTS PARA AGREGAR COOPERATIVAS) -->
 

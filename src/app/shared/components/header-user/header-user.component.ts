@@ -55,9 +55,10 @@ export class HeaderUserComponent implements OnInit, OnChanges {
       this.email = this.selectedEmail ?? decoded.sub;
 
       // Convert `number` to `string` if necessary
-      const roleAsString: string | null = typeof this.selectedRole === 'number'
-        ? this.roleMapping.get(this.selectedRole) || null
-        : this.selectedRole;
+      const roleAsString: string | null =
+        typeof this.selectedRole === 'number'
+          ? this.roleMapping.get(this.selectedRole) || null
+          : this.selectedRole;
 
       this.role = this.translateRole(roleAsString ?? decoded.role);
     } else {
@@ -65,29 +66,22 @@ export class HeaderUserComponent implements OnInit, OnChanges {
     }
   }
 
-
   private updateUserData(): void {
-    console.log('Update User Data:', {
-      selectedName: this.selectedName,
-      selectedLastName: this.selectedLastName,
-      selectedEmail: this.selectedEmail,
-      selectedRole: this.selectedRole,
-    });
-
     this.name = this.selectedName ?? null;
     this.lastname = this.selectedLastName ?? null;
     this.email = this.selectedEmail ?? null;
-    this.role = this.selectedRole ? this.roleMapping.get(this.selectedRole) || 'Unknown' : null;
+    this.role = this.selectedRole
+      ? this.roleMapping.get(this.selectedRole) || 'Unknown'
+      : null;
 
-    console.log('Updated User Data:', { name: this.name, lastname: this.lastname, email: this.email, role: this.role });
   }
-
 
   private translateRole(role: string | number | null): string | null {
     if (role === null) return null;
 
     // Convert `number` to `string` if needed
-    const roleName = typeof role === 'number' ? this.roleMapping.get(role) : role;
+    const roleName =
+      typeof role === 'number' ? this.roleMapping.get(role) : role;
 
     switch (roleName) {
       case 'ROLE_SUPERUSER':
@@ -106,6 +100,4 @@ export class HeaderUserComponent implements OnInit, OnChanges {
         return roleName || null; // Return null if roleName is undefined
     }
   }
-
-
 }

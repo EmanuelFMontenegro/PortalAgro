@@ -104,7 +104,6 @@ export class UsuariosActualizarComponent implements OnInit {
     private dialog: MatDialog,
     private spinner: NgxSpinnerService
   ) {
-
     this.dashboardBackOffice.dataTitulo.next({
       titulo: '¡Acá podrás Actualizar a los usuarios del Sistema!',
       subTitulo: '',
@@ -158,8 +157,6 @@ export class UsuariosActualizarComponent implements OnInit {
       this.id = userTypeObject.id;
       const userType = userTypeObject.typeUser.trim().toLowerCase(); // Normalización del tipo de usuario
 
-      console.log('Lo que trae del localStorage del usuario:', userType);
-
       // Normalización del tipo de usuario
       switch (userType) {
         case 'gerente general':
@@ -185,19 +182,11 @@ export class UsuariosActualizarComponent implements OnInit {
           break;
       }
 
-      console.log('El tipo de usuario seteado:', this.userType);
-      console.log('userTypeObject:', userTypeObject);
-      console.log('userId:', userTypeObject.id);
-
       const userId = userTypeObject.id;
 
       if (this.userType === 'manager') {
         this.apiService.getManagerById(userId).subscribe(
           (userDetails: any) => {
-            console.log(
-              'Datos del usuario Manager obtenidos con el Endpoint:',
-              userDetails
-            );
             this.fillForm(userDetails, true);
           },
           (error) => {
@@ -217,10 +206,7 @@ export class UsuariosActualizarComponent implements OnInit {
           )
           .subscribe(
             (userDetails: any) => {
-              console.log(
-                `Datos del usuario ${this.userType} obtenidos con el Endpoint:`,
-                userDetails
-              );
+
               this.fillForm(userDetails, false);
             },
             (error) => {
@@ -239,8 +225,7 @@ export class UsuariosActualizarComponent implements OnInit {
 
   fillForm(userData: any, isManager: boolean) {
     const user = isManager ? userData.userResponseDTO : userData.user;
-    console.log('User Data:', userData); // Verifica que `userData` contiene la información esperada
-    console.log('User:', user); // Verifica el contenido de `user`
+
     this.userForm.patchValue({
       name: userData.name || '',
       lastname: userData.lastname || '',
@@ -385,7 +370,7 @@ export class UsuariosActualizarComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log('Dialog cerrado con resultado:', result);
+
       if (result) {
         this.router.navigate(['dashboard-backoffice/usuarios-filtro']);
       }
@@ -454,7 +439,7 @@ export class UsuariosActualizarComponent implements OnInit {
       return;
     } else {
       // Lógica para actualizar usuarios
-      console.log('Actualizar usuarios');
+
     }
 
     const storedUserType = localStorage.getItem('UserType');
@@ -516,7 +501,7 @@ export class UsuariosActualizarComponent implements OnInit {
     // Llamar al servicio para actualizar los detalles del manager
     this.apiService.updateManagerDetails(this.id!, userData).subscribe(
       (response) => {
-        console.log('Datos actualizados del manager:', response);
+
         this.toastr.success('Datos actualizados exitosamente');
         this.router.navigate(['dashboard-backoffice/usuarios-filtro']);
 
@@ -563,7 +548,7 @@ export class UsuariosActualizarComponent implements OnInit {
         .get('departmentAssigned')
         ?.value.map((dept: any) => dept.id) || [];
 
-    console.log('IDs de departamentos asignados:', departmentAssignedIds);
+
 
     const userData = {
       ...this.userForm.value,
@@ -574,7 +559,7 @@ export class UsuariosActualizarComponent implements OnInit {
       license: this.userForm.get('license')?.value || '',
     };
 
-    console.log('Datos del usuario a actualizar completo:', userData);
+
 
     const updatePassword =
       this.userForm.get('password')?.value &&
@@ -582,7 +567,7 @@ export class UsuariosActualizarComponent implements OnInit {
 
     this.apiService.updateTechnicalDetails(this.id!, userData).subscribe(
       (response) => {
-        console.log('Datos actualizados del técnico:', response);
+
         this.toastr.success('Datos actualizados exitosamente');
         this.router.navigate(['dashboard-backoffice/usuarios-filtro']);
 
@@ -636,7 +621,7 @@ export class UsuariosActualizarComponent implements OnInit {
       license: this.userForm.get('license')?.value || '',
     };
 
-    console.log('Datos del operador a actualizar completo:', userData);
+
 
     const updatePassword =
       this.userForm.get('password')?.value &&
@@ -644,7 +629,7 @@ export class UsuariosActualizarComponent implements OnInit {
 
     this.apiService.updateOperator(this.id!, userData).subscribe(
       (response) => {
-        console.log('Datos actualizados del operador:', response);
+
         this.toastr.success('Datos actualizados exitosamente');
         this.router.navigate(['dashboard-backoffice/usuarios-filtro']);
 
@@ -699,14 +684,11 @@ export class UsuariosActualizarComponent implements OnInit {
       address: this.userForm.get('address')?.value || '',
     };
 
-    console.log(
-      'Datos de la cooperativa a actualizar completo:',
-      cooperativeData
-    );
+
 
     this.apiService.updateCooperative(this.id!, cooperativeData).subscribe(
       (response) => {
-        console.log('Datos actualizados de la cooperativa:', response);
+        
         this.toastr.success('Datos actualizados exitosamente');
 
         const password = this.userForm.get('password')?.value;
@@ -772,11 +754,11 @@ export class UsuariosActualizarComponent implements OnInit {
 
   // Función para obtener el ID del rol por nombre
   getRoleIdByName(roleName: string): number | null {
-    const role = this.roles.find((r) => r.name.toLowerCase() === roleName.toLowerCase());
+    const role = this.roles.find(
+      (r) => r.name.toLowerCase() === roleName.toLowerCase()
+    );
     return role ? role.code : null;
   }
-
-
 
   // Array de roles
   roles: Role[] = [

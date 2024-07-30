@@ -14,11 +14,6 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { SharedModule } from './shared/shared.module';
 import { CommonModule } from '@angular/common';
-
-
-
-
-
 const routes: Routes = [];
 
 @NgModule({

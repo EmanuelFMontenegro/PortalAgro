@@ -1,0 +1,90 @@
+@include respond-between(569px, 1440px) {
+  .footer__content {
+    margin-left: 0;
+  }
+  .ellipse_white,
+  .footer__logo img {
+    display: none;
+  }
+}
+@include respond-max(768px) {
+  .ellipse_white {
+    width: 100%;
+    @include position(absolute, 0);
+  }
+  img {
+    width: 100%;
+  }
+  .ellipse_green {
+    width: 100%;
+    @include position(absolute, null, 0, 0);
+  }
+  .agrotech_logo {
+    @include position(absolute);
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+  .qr_logo {
+    @include position(absolute, auto, auto, 69px, 22px);
+  }
+  .footer {
+    &__content {
+      margin: 0;
+      flex-direction: column;
+    }
+    &__logo {
+      margin-bottom: 52px;
+    }
+    &__contact {
+      padding-top: 32px;
+      padding-left: 0;
+      align-items: center;
+      ul { 
+        padding-left: 22px;
+      }
+      h2 {
+        @include font(18px);
+        padding-left: 0;
+      }
+      span {
+        @include font(12px);
+        text-wrap: pretty;
+      }
+    }
+    &__social {
+      text-align: center;
+      padding: 10px 0 70px;
+      h2 {
+        padding-left: 0;
+        @include font(18px);
+      }
+      &--links {
+        justify-content: center;
+        gap: 20px;
+      }
+    }
+    &__bottom {
+      margin-top: 0;
+      flex-direction: column-reverse;
+      gap: 0;
+      &--cop > p {
+        @include font(12px);
+        padding: 0 12px;
+      }
+    }
+    &__developed {
+      width: 100%;
+      justify-content: flex-end;
+      margin: 0 32px 0 0;
+      padding-bottom: 12px;
+      span {
+        @include font(12px);
+      }
+      img {
+        width: 95px;
+        height: 35px;
+      }
+    }
+  }
+}
