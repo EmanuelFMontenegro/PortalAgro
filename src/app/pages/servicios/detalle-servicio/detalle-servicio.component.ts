@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-detalle-servicio',
@@ -7,10 +8,17 @@ import { Component } from '@angular/core';
 })
 export class DetalleServicioComponent {
 
-  constructor(){
+  constructor(
+    private router: Router){}
 
+  urlBase = '';
+  backOffice = false;
+
+  ngOnInit(): void {
+    this.urlBase =  this.backOffice ? 'dashboard-backoffice' : 'dashboard'
   }
 
-
-
+  volver() {
+    this.router.navigate([this.urlBase + '/servicios']);
+  }
 }

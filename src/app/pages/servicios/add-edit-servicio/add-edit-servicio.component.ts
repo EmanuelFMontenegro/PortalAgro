@@ -50,6 +50,7 @@ export class AddEditServicioComponent {
   urlBase = '';
   edit = false;
   lotes: any[] = []
+  lotesOriginales: any[] = []
   chacras: any[] = []
   cultivos: any[] = []
   private userId: number | any;
@@ -113,12 +114,28 @@ export class AddEditServicioComponent {
 
   seleccionarCultivo() {
     let cultivoId = this.form.controls[this.ctrlCultivo]?.value
-    if(cultivoId )  this.form.controls[this.ctrlCultivo].disable()
+    let crop_id:number = cultivoId
+    this.lotes = this.lotesOriginales.filter(x => x.typeCrop.id == crop_id)
+
+    console.log(this.lotes,this.lotesOriginales)
+    if(this.lotes.length){
+      this.form.controls[this.ctrlCultivo].disable()
+    }else{
+      this.toastr.info('Aún no has agregado ningún lote para este tipo de cultivos.', 'Información');
+    }
+
   }
 
   solicitarServicio() {
-    console.log(this.form.getRawValue())
-    let solicitud = this.form.getRawValue();
+
+    if(this.form.invalid){
+      this.toastr.info('Faltan campos requeridos', 'Información');
+      this.form.markAllAsTouched()
+      return;
+    }
+
+    let solicitud:any = this.form.getRawValue();
+    solicitud.dateOfService = "31/08/2024 15:38"
     if(!this.backOffice){
       this.postServicioByProductor(solicitud)
     }else{
@@ -166,9 +183,10 @@ export class AddEditServicioComponent {
           const lotsArray: any[][] = response.list[0];
           const data: any[] = lotsArray.reduce((acc, curr) => acc.concat(curr), []);
           this.form.controls[this.ctrlChacra].disable()
-          this.lotes = data
+          this.lotesOriginales = data
         } else {
           this.lotes = []
+          this.lotesOriginales = []
           this.toastr.info('Aún no has agregado ningún lote.', 'Información');
         }
       },
@@ -181,7 +199,8 @@ export class AddEditServicioComponent {
   postServicio(servicio:any) {
     this.servicioService.postServicio(servicio).subscribe(
       data => {
-        console.log(data)
+        this.toastr.success('Solicitud agregada con éxito', 'Éxito');
+        this.volver()
       }
     )
   }
@@ -191,7 +210,8 @@ export class AddEditServicioComponent {
     delete servicio.productor_id
     this.servicioService.postServicioByProductor(servicio,productorId).subscribe(
       data => {
-        console.log(data)
+        this.toastr.success('Solicitud agregada con éxito', 'Éxito');
+        this.volver()
       }
     )
   }
@@ -201,6 +221,18 @@ export class AddEditServicioComponent {
   }
 
   cancelar() {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: '400px',
+      data: {
+        titulo: 'Cancelar solicitud',
+        message: `¿Desea cancelar la solicitud y volver atrás?`,
+        showCancel: true,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result) this.volver()
+    });
   }
 
   limpiarSeleccion() {

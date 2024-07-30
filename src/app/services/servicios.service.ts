@@ -46,7 +46,7 @@ import { environment } from "../../environments/environment";
     }
 
     postServicioByProductor(body: any, productorId: number){
-      let url = `${environment.apiUrl}/user/${productorId}/service`
+      let url = `${environment.apiUrl}/user/service`
       return this.http.post(url, body);
     }
 

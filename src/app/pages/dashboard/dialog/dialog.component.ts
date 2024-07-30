@@ -8,11 +8,13 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 })
 export class DialogComponent {
   showCancel: boolean;
+  titulo = '¿Confirmar Eliminación?'
   constructor(
     public dialogRef: MatDialogRef<DialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.showCancel = data.showCancel;
+    if(data.titulo) this.titulo = data.titulo
   }
 
 }

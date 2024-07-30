@@ -12,26 +12,23 @@
   border: 1px solid transparent;
   border-radius: 5px;
   cursor: pointer;
+  background-color: #0F8054;
+  color: white;
   transition: background-color 0.3s, border-color 0.3s;
-  font-size: 0.85em;
+  font-size: 1em !important;
   font-family: 'Montserrat', sans-serif;
   font-weight: bold;
   margin-left: 10px;
-
-  .register-button{
-    background-color: $primary-color;
-    width: 15%;
-    color: $border-color;
-  }
-
-  .cancel-button{
-  background-color: white;
-  color: $primary-color;
-  border-color: $primary-color;
-  width: 15%;
-  }
-
 }
+
+
+.cancel-button{
+background-color: white !important;
+color: #0F8054;
+border: 1px solid gray !important;
+width: 15%;
+}
+
 
 .main-card {
   background-color: $border-color;
