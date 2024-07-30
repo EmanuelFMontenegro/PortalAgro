@@ -1,1 +1,84 @@
 /* Estructura para componentes cards, buttons, etc */
+
+.title2 {
+  margin: 0;
+  font-size: 1.5em;
+  color: #454545;
+
+}
+
+.back-button2{
+  padding: 8px 18px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #0F8054;
+  color: white;
+  transition: background-color 0.3s, border-color 0.3s;
+  font-size: 1em !important;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+
+.cancel-button{
+background-color: white !important;
+color: #0F8054;
+border: 1px solid gray !important;
+width: 15%;
+}
+
+
+.main-card {
+  background-color: $border-color;
+  padding: 20px;
+  border-radius: 10px;
+  margin: 20px;
+  width: 95%;
+  margin-top: -10px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 2em;
+}
+
+.field-container {
+  margin-bottom: 10px;
+}
+
+.en-linea{
+  display: inline-flex;
+  width: 100%;
+}
+
+
+.text-r{
+  text-align: right;
+}
+
+.field-label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 0.9em;
+  color: $dark-grey;
+  font-weight: bold;
+}
+
+.field-input {
+  width: 90%;
+  border: 1px solid $border-color;
+  border-radius: 4px;
+  padding: 8px;
+  background-color: white;
+  font-size: 0.9em;
+  color: $dark-grey;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+}
+
+.card-normal{
+  margin: 15px 20px;
+}

@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { DashboardBackofficeComponents } from './dashboard-backoffice.component';
 import { DashboardBackofficeRoutingModule } from './dashboard-backoffice-routing.module';
 import { InicioComponent } from './inicio/inicio.component';
-import { ServiciosComponent } from './servicios/servicios.component';
 import { ProductoresComponent } from './productores/productores.component';
 import { ChacrasComponent } from './chacras/chacras.component';
 import { LotesComponent } from './lotes/lotes.component';
@@ -35,7 +34,6 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
   declarations: [
     DashboardBackofficeComponents,
     InicioComponent,
-    ServiciosComponent,
     ProductoresComponent,
     ChacrasComponent,
     LotesComponent,

@@ -9,12 +9,10 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
 import { InicioComponent } from './inicio/inicio.component';
 import { CampoComponent } from './campo/campo.component';
-import { ServiciosComponent } from './servicios/servicios.component';
 import { GeolocalizacionComponent } from './geolocalizacion/geolocalizacion.component';
 import { ConfiguracionComponent } from './configuracion/configuracion.component';
 import { PerfilComponent } from './perfil/perfil.component';
 import { ReportesComponent } from './reportes/reportes.component';
-import { NuevoServicioComponent } from './servicios/nuevo-servicio/nuevo-servicio.component';
 
 
 
@@ -69,7 +67,6 @@ const CUSTOM_DATE_FORMATS = {
 @NgModule({
   declarations: [
     InicioComponent,
-    ServiciosComponent,
     GeolocalizacionComponent,
     ConfiguracionComponent,
     PerfilComponent,
@@ -84,7 +81,6 @@ const CUSTOM_DATE_FORMATS = {
     InformesComponent,
     CalendarioComponent,
     ChacrasComponent,
-    NuevoServicioComponent,
     NotificacionesComponent
   ],
   imports: [

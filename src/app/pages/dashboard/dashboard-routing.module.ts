@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { InicioComponent } from './inicio/inicio.component';
-import { ServiciosComponent } from './servicios/servicios.component';
 import { GeolocalizacionComponent } from './geolocalizacion/geolocalizacion.component';
 import { ConfiguracionComponent } from './configuracion/configuracion.component';
 import { PerfilComponent } from './perfil/perfil.component';
@@ -16,7 +15,6 @@ import { CalendarioComponent } from './calendario/calendario.component';
 import { ChacrasComponent } from './chacras/chacras.component';
 import { NotificacionesComponent } from './notificaciones/notificaciones.component';
 import { AuthGuard } from 'src/app/core/guards/auth.guard';
-import { NuevoServicioComponent } from './servicios/nuevo-servicio/nuevo-servicio.component';
 
 const routes: Routes = [
   {
@@ -31,12 +29,18 @@ const routes: Routes = [
       { path: 'detalle-campo', component: DetalleCampoComponent},
       { path: 'lote', component: LoteComponent},
       { path :'cargar-lote', component: CargarLoteComponent},
-      { path: 'servicios', component: ServiciosComponent},
+      {
+        path: 'servicios',
+        canActivate: [AuthGuard],
+        loadChildren: () =>
+          import('../servicios/servicios.module').then(
+            (x) => x.ServiciosModule
+          ),
+      },
       { path: 'campo', component: CampoComponent},
       { path: 'configuracion', component: ConfiguracionComponent},
       { path: 'perfil', component: PerfilComponent},
       { path: '', redirectTo: 'inicio', pathMatch: 'full' },
-      { path: 'nuevo-servicio', component: NuevoServicioComponent },
       { path: 'informes', component: InformesComponent },
       { path: 'calendario', component: CalendarioComponent },
       { path: 'chacras', component: ChacrasComponent },
