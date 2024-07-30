@@ -29,8 +29,8 @@ export class AddEditServicioComponent {
 
   // controlNames
   ctrlProductor = 'productor_id';
-  ctrlChacra = 'typeCrop_id';
-  ctrlCultivo = 'field_id';
+  ctrlChacra = 'field_id';
+  ctrlCultivo = 'typeCrop_id';
   ctrlLote = 'plots';
   ctrlHectareas = 'hectare';
   ctrlConAgua = 'withWater'
@@ -43,7 +43,7 @@ export class AddEditServicioComponent {
     [this.ctrlChacra]: new FormControl(null, Validators.required),
     [this.ctrlCultivo]: new FormControl(null, Validators.required),
     [this.ctrlLote]: new FormControl(null, Validators.required),
-    [this.ctrlHectareas]: new FormControl(0),
+    [this.ctrlHectareas]: new FormControl(1),
     [this.ctrlConAgua]: new FormControl(false),
     [this.ctrlObservaciones]: new FormControl(''),
   })
