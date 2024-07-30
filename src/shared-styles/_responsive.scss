@@ -1,10 +1,24 @@
-@include respond-between(569px, 1440px) {
-  .footer__content {
-    margin-left: 0;
+@include respond-between(569px, 768px) {
+    .footer__content {
+      margin-left: 0;
+    }
+    .ellipse_white {
+      display: none;
+    }
   }
-  .ellipse_white,
-  .footer__logo img {
-    display: none;
+@include respond-max(1280px){
+  .ContainerS {
+      &__menu {
+          &__logo {
+              img {
+                  width: 40px !important;
+                  height: 60px !important; 
+              }
+          }
+          mat-nav-list {
+              padding-top: 22px !important;
+          }
+      }
   }
 }
 @include respond-max(768px) {
