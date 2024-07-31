@@ -10,10 +10,11 @@
   </div> 
     <div class="qr_logo">
     <img src="assets/img/afip.png"/>
-  </div>  
+  </div>   
   <div class="footer__content">
       <div class="footer__logo">
-      <img [src]="isMobile ? 'assets/img/footer/logo_sustentable_mobile.svg' : 'assets/img/footer/logo_sustentable_mobile.svg'">
+      <img *ngIf="!whiteLogo"  [src]="isMobile ? 'assets/img/footer/logo_sustentable_mobile.svg' : 'assets/img/footer/logo_sustentable_mobile.svg'">
+      <img *ngIf="whiteLogo"  src="assets/img/logo_agro_white.png">
     </div> 
     <div class="footer__contact">
       <h2>Contacto</h2>

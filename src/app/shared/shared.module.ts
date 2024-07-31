@@ -27,6 +27,7 @@ import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { PaginadorComponent } from './components/paginador/paginador.component';
+import { MatTabsModule } from '@angular/material/tabs';
 export const IMPORTS_MATERIAL = [
   MatSidenavModule,
   MatListModule,
@@ -46,6 +47,7 @@ export const IMPORTS_MATERIAL = [
   MatCheckboxModule,
   MatDialogModule,
   MatPaginatorModule,
+  MatTabsModule
 ];
 
 export const IMPORT_CORE = [CommonModule, FormsModule, ReactiveFormsModule];
@@ -62,6 +64,8 @@ export const CALENDAR = [FullCalendarModule];
     ToolbarComponent,
     FooterComponent,
     PaginadorComponent,
+    FooterComponent
+
   ],
   imports: [IMPORT_CORE, IMPORTS_MATERIAL, CALENDAR],
   exports: [

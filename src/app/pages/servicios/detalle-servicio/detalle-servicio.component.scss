@@ -1,0 +1,95 @@
+.r-button{
+  position: absolute;
+  right: 0;
+}
+
+mat-tab-group {
+  margin: 16px;
+}
+
+mat-tab {
+  padding: 16px;
+}
+
+
+.tab-base{
+  border: 1.5px solid #0F8054;
+  border-radius: 5px;
+  width: auto;
+  min-height: 400px;
+  margin-top: 35px;
+  padding: 20px;
+  position: relative;
+}
+
+.label{
+  border: 1.5px solid #0F8054;
+  border-radius: 5px;
+  width: auto;
+  box-shadow: 0 2px 11px rgba(0, 0, 0, 0.4);
+  margin-top: 35px;
+  padding: 15px 10px;
+}
+
+.label-estado{
+  position: absolute;
+  top: -20px;
+  left: 15px;
+  border-radius: 4px;
+  width: auto;
+  padding: 12px 20px;
+  color:white;
+  background-color: #0F8054;
+}
+
+.titulo-subra{
+  text-align: center;
+  width: max-content;
+  padding-bottom: 5px;
+  border-bottom: 2px solid #0F8054;
+}
+
+.containers {
+  display: flex;
+  justify-content: space-around;
+}
+
+.label2 {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  position: relative;
+  width: 100%;
+}
+
+
+.date {
+  margin-top: 8px;
+  text-align: right;
+}
+
+.separacion{
+  width: 50px;
+}
+
+.mb-15{
+  margin: 10px 0px;
+}
+
+.btn-volver{
+  position: absolute;
+  right: 10px;
+  top: 7px;
+  font-size: 12px !important;
+}
+
+.btn-grande{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  text-align: center;
+}
+
+
+

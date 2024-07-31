@@ -1,0 +1,39 @@
+<div class="tab-base shadow">
+   <div class="label-estado"><strong>Estado: </strong>{{this.servicio?.status?.name}}</div>
+
+   <div class="label w-100">
+    <strong>Localidad:</strong> {{this.servicio?.location?.name}}
+    <div style="float: right;">
+      <strong>Fecha Solicitada:</strong>  {{this.servicio?.createdDate}}
+    </div>
+   </div>
+
+   <div class="containers">
+    <div class="label label2">
+      <div class="titulo-subra">
+        Asistencia Técnica
+      </div>
+
+      <div class="mb-15"><strong>Técnico:</strong>Cristian P.</div>
+      <div class="mb-15"><strong>Piloto:</strong> Emanuel C.</div>
+
+    </div>
+    <div class="separacion">  </div>
+    <div class="label label2">
+      <div class="en-linea">
+        <div class="titulo-subra">
+          Detalles
+        </div>
+
+        <button class="back-button2 btn-volver" >Ver lotes</button>
+      </div>
+
+      <div class="mb-15"><strong>Chacra:</strong> ID {{this.servicio?.field_id}}</div>
+      <div class="mb-15"><strong>Hectáreas:</strong> {{this.servicio?.hectare}}</div>
+      <div class="mb-15"><strong>Plantación:</strong>{{this.servicio?.cropDescripcion}}</div>
+    </div>
+  </div>
+
+</div>
+
+
