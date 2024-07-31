@@ -11,8 +11,8 @@
         (change)="updateFormData()">
 
       <!-- Campo de archivo  IMAGEN-->
-      <!-- <input *ngIf="item.type === 'file'" type="file" (change)="onFileChange($event, item.ngModel)" [name]="item.name"
-        [id]="item.ngModel" class="input"> -->
+      <input *ngIf="item.type === 'file'" type="file" (change)="onFileChange($event, item.ngModel)" [name]="item.name"
+        [id]="item.ngModel" class="input">
 
       <!-- Campo de texto multilínea -->
       <textarea *ngIf="item.type === 'textarea'" [placeholder]="item.placeholder" [(ngModel)]="formData[item.ngModel]"
@@ -21,8 +21,9 @@
 
       <!-- Campo de selección usando mat-select -->
       <ng-container *ngIf="item.type === 'select'">
-        <mat-select placeholder="Seleccione departamento" [(ngModel)]="formData[item.ngModel]" [name]="item.name" [id]="item.ngModel"
-          (selectionChange)="updateFormData()" [multiple]="item.multiple || false" class="full-width">
+        <mat-select placeholder="Seleccione departamento" [(ngModel)]="formData[item.ngModel]" [name]="item.name"
+          [id]="item.ngModel" (selectionChange)="updateFormData()" [multiple]="item.multiple || false"
+          class="full-width">
           <mat-option *ngFor="let option of item.options" [value]="option.value">
             {{ option.text }}
           </mat-option>

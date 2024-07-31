@@ -243,19 +243,19 @@ export class UsuariosComponent implements OnInit {
         placeholder: 'Licencia',
         ngModel: 'license',
         name: 'license',
+      },
+      {
+        type: 'file',
+        placeholder: 'Foto de Licencia',
+        ngModel: 'fotoLicencia',
+        name: 'fotoLicencia',
+      },
+      {
+        type: 'file',
+        placeholder: 'Foto de Matrícula',
+        ngModel: 'fotoMatricula',
+        name: 'fotoMatricula',
       }
-      // {
-      //   type: 'file',
-      //   placeholder: 'Foto de Licencia',
-      //   ngModel: 'fotoLicencia',
-      //   name: 'fotoLicencia',
-      // },
-      // {
-      //   type: 'file',
-      //   placeholder: 'Foto de Matrícula',
-      //   ngModel: 'fotoMatricula',
-      //   name: 'fotoMatricula',
-      // }
     );
 
     this.formData.role =
@@ -376,6 +376,7 @@ export class UsuariosComponent implements OnInit {
   }
 
   enviarFormulario() {
+    // Verificar campos obligatorios
     if (
       !this.formData.username ||
       !this.formData.password ||
@@ -403,8 +404,6 @@ export class UsuariosComponent implements OnInit {
       this.departamentoVacio = false; // Resetea la bandera si el campo está lleno
     }
 
-    let requestData: any;
-
     // Encuentra el rol basado en el tipo de usuario seleccionado
     const selectedRole = this.roles.find(
       (role) => role.name === this.getRoleName(this.selectedForm)
@@ -414,6 +413,9 @@ export class UsuariosComponent implements OnInit {
       this.toastr.error('Rol no encontrado.');
       return;
     }
+
+    // Define los datos de la solicitud según el tipo de usuario
+    let requestData: any;
 
     switch (this.selectedForm) {
       case TipoUsuarios.tecnicoGeneral:
@@ -426,6 +428,7 @@ export class UsuariosComponent implements OnInit {
         };
         this.registrarTecnico(requestData);
         break;
+
       case TipoUsuarios.cooperativa:
         requestData = {
           ...this.formData,
@@ -435,6 +438,7 @@ export class UsuariosComponent implements OnInit {
         };
         this.registrarCooperativa(requestData);
         break;
+
       case TipoUsuarios.piloto:
         requestData = {
           ...this.formData,
@@ -444,6 +448,7 @@ export class UsuariosComponent implements OnInit {
         };
         this.registrarPiloto(requestData);
         break;
+
       case TipoUsuarios.gerente:
       default:
         requestData = {
@@ -464,6 +469,7 @@ export class UsuariosComponent implements OnInit {
     }
   }
 
+
   getRoleName(tipoUsuario: TipoUsuarios): string {
     switch (tipoUsuario) {
       case TipoUsuarios.tecnicoGeneral:
@@ -483,69 +489,54 @@ export class UsuariosComponent implements OnInit {
   registrarTecnico(data: any) {
     this.activarSpinner = true;
 
-    // Realiza el registro del técnico
     this.apiService.registrarTecnico(data).subscribe(
       (response) => {
         const tecnicoId = response.id;
-        const observables = [];
-
-        // Si hay una imagen de licencia, la sube
-        if (this.formData.imgLicenciaFile) {
-          observables.push(
-            this.apiService.subirImagenLicencia(
-              tecnicoId,
-              this.formData.imgLicenciaFile
-            )
-          );
-        }
-
-        // Si hay una imagen de matrícula, la sube
-        if (this.formData.imgMatriculaFile) {
-          observables.push(
-            this.apiService.subirImagenMatricula(
-              tecnicoId,
-              this.formData.imgMatriculaFile
-            )
-          );
-        }
-
-        // Si hay imágenes para subir, usa forkJoin para esperar a que se completen todas las solicitudes
-        if (observables.length > 0) {
-          forkJoin(observables).subscribe(
-            () => {
-              this.activarSpinner = false;
-              this.toastr.success('Técnico registrado correctamente');
-              this.resetearFormulario();
-              this.router.navigate(['dashboard-backoffice/usuarios-filtro']);
-            },
-            (error) => {
-              console.error('Error al subir las imágenes:', error);
-              this.activarSpinner = false;
-              this.toastr.error('Error al subir las imágenes');
-            }
-          );
-        } else {
-          // Si no hay imágenes para subir, simplemente completa el proceso
-          this.activarSpinner = false;
-          this.toastr.success('Técnico registrado correctamente');
-          this.resetearFormulario();
-          this.router.navigate(['dashboard-backoffice/usuarios-filtro']);
-        }
+        this.subirImagenes(tecnicoId);
       },
       (error) => {
         console.error('Error al registrar técnico:', error);
         this.activarSpinner = false;
-
-        // Maneja errores específicos
-        if (error.error && error.error.code === 4002) {
-          this.toastr.error(
-            'El usuario ya está registrado. Por favor, intente con otro email.'
-          );
-        } else {
-          this.toastr.error('Error al registrar técnico');
-        }
+        this.toastr.error('Error al registrar técnico');
       }
     );
+  }
+
+  subirImagenes(tecnicoId: number) {
+    const observables = [];
+
+    if (this.formData.imgLicenciaFile) {
+      observables.push(
+        this.apiService.subirImagenLicencia(tecnicoId, this.formData.imgLicenciaFile)
+      );
+    }
+
+    if (this.formData.imgMatriculaFile) {
+      observables.push(
+        this.apiService.subirImagenMatricula(tecnicoId, this.formData.imgMatriculaFile)
+      );
+    }
+
+    if (observables.length > 0) {
+      forkJoin(observables).subscribe(
+        () => {
+          this.activarSpinner = false;
+          this.toastr.success('Técnico registrado correctamente');
+          this.resetearFormulario();
+          this.router.navigate(['dashboard-backoffice/usuarios-filtro']);
+        },
+        (error) => {
+          console.error('Error al subir las imágenes:', error);
+          this.activarSpinner = false;
+          this.toastr.error('Error al subir las imágenes');
+        }
+      );
+    } else {
+      this.activarSpinner = false;
+      this.toastr.success('Técnico registrado correctamente');
+      this.resetearFormulario();
+      this.router.navigate(['dashboard-backoffice/usuarios-filtro']);
+    }
   }
 
   onFileChange(event: any, fieldName: string) {
