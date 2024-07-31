@@ -5,4 +5,22 @@
     <button class="back-button2 r-button" (click)="volver()"> << Volver Atrás</button>
   </div>
 
+  <mat-tab-group>
+    <mat-tab label="Solicitud">
+      <app-tab-solicitud></app-tab-solicitud>
+    </mat-tab>
+    <mat-tab label="Datos Técnicos">
+      <app-tab-datos-tecnicos></app-tab-datos-tecnicos>
+    </mat-tab>
+    <mat-tab label="Datos de App">
+      <app-tab-datos-app></app-tab-datos-app>
+    </mat-tab>
+    <mat-tab label="Informes">
+      <app-tab-informes></app-tab-informes>
+    </mat-tab>
+    <mat-tab label="Eventos">
+      <app-tab-eventos></app-tab-eventos>
+    </mat-tab>
+  </mat-tab-group>
+
 </div>
