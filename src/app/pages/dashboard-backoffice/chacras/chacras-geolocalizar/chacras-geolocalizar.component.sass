@@ -131,7 +131,7 @@ body
     width: 36%
     position: absolute
     height: 26em
-    top: 34em
+    top: 31em
     flex-direction: column
     justify-content: space-between
     display: flex
@@ -166,16 +166,21 @@ body
     font-size: 1.5em
     font-weight: bold
     position: absolute
-    top: -8.1em
+    top: -8.5em
     left: 1em
+
+  .title-lat-lon
+    color: $primary-color
+    font-family: $font-family
+    font-weight: bold
 
   input
     margin-right: 10px
     padding: 10px
-    border: 1px solid $white-color
+    border: 1px solid $primary-color
     background-color: white
     border-radius: 4px
-    margin-bottom: -2%
+    margin-bottom: 2%
 
   button
     padding: 8px 18px
@@ -194,7 +199,7 @@ body
     gap: 15px
     position: relative
     top: -6.4em
-    left: 0em
+    left: -1em
     flex-direction: column
 
     .register-button
@@ -226,7 +231,7 @@ body
   border-radius: 8px
   position: absolute
   padding: 10px
-  top: -9em
+  top: -8em
 
 .fields-list
   display: flex
@@ -270,6 +275,12 @@ strong
   font-size: 25px
   color: $primary-color
   margin-right: 5px
+
+.mat-mdc-radio-button .mdc-radio__native-control:enabled:checked+.mdc-radio__background .mdc-radio__outer-circle
+  border-color: #015E85
+
+.mat-mdc-radio-button .mdc-radio__native-control:enabled:checked+.mdc-radio__background .mdc-radio__inner-circle
+  background-color: #015E85
 
 @media screen and (max-width: 768px)
 

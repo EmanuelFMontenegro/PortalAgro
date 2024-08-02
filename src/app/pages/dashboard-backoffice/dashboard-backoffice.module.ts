@@ -29,7 +29,7 @@ import { RenderProvincesPipe } from 'src/app/services/render-pipes.pipe';
 import { RenderDepartmentsPipe } from 'src/app/services/render-pipes.pipe';
 import { UsuariosActualizarComponent } from './usuarios/usuarios-actualizar/usuarios-actualizar.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-
+import { MatRadioModule } from '@angular/material/radio';
 @NgModule({
   declarations: [
     DashboardBackofficeComponents,
@@ -39,7 +39,6 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     LotesComponent,
     CalendariosComponent,
     CalendariosComponent,
-
     NotificacionComponent,
     PlanificacionesComponent,
     InformesComponent,
@@ -67,7 +66,11 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatAutocompleteModule,
     ReactiveFormsModule,
     BrowserModule,
+    MatRadioModule,
   ],
-  providers: [RenderProvincesPipe, RenderDepartmentsPipe],
-})
+  providers: [
+    RenderProvincesPipe,
+    RenderDepartmentsPipe],
+
+  })
 export class DashboardBackofficeModule {}

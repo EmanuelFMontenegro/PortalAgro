@@ -48,8 +48,11 @@ export class FormularioComponent implements OnInit {
   onFileChange(event: any, fieldName: string) {
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
-      this.formData[fieldName] = file;
-      console.log('File selected:', file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.formData[fieldName] = e.target?.result; // Almacena la imagen en formData
+      };
+      reader.readAsDataURL(file);
     }
   }
 

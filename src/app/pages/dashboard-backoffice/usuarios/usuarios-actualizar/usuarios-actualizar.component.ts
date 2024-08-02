@@ -688,7 +688,7 @@ export class UsuariosActualizarComponent implements OnInit {
 
     this.apiService.updateCooperative(this.id!, cooperativeData).subscribe(
       (response) => {
-        
+
         this.toastr.success('Datos actualizados exitosamente');
 
         const password = this.userForm.get('password')?.value;

@@ -1,7 +1,8 @@
 <div class="container">
   <div class="header-container2">
     <h2 class="title2">Geolocalización</h2>
-    <button class="back-button2" (click)="volver()"> << Volver Atrás</button>
+    <button class="back-button2" (click)="volver()">
+      << Volver Atrás</button>
   </div>
 
   <div class="card-campo-container">
@@ -12,46 +13,53 @@
     </div>
 
     <div class="card-search">
-      <h4 class="title-campo-details">Chacra seleccionada</h4>
+      <h2 class="titulo-registrar-campo">Geolocalización</h2>
       <div class="geolocation-info">
-        <div class="card" *ngIf="campoSeleccionado">
+        <!-- Botones de radio para seleccionar el tipo de geolocalización -->
+        <mat-radio-group class="custom-radio" [(ngModel)]="opcionGeolocalizacion">
+          <mat-radio-button value="localidad">Autogeolocalizar por Localidad.</mat-radio-button>
+          <mat-radio-button value="manual">Geolocalizar por Coordenadas.</mat-radio-button>
+        </mat-radio-group>
+
+
+        <!-- Mostrar la información de la chacra siempre -->
+        <div class="card">
           <div class="card-item">
-            <div class="titulo-detalle">
-              <span>Chacra:</span>
-              <span class="valor-detalle">{{ campoSeleccionado.name }}</span>
-            </div>
-            <div class="titulo-detalle">
-              <span>Localidad:</span>
-              <span class="valor-detalle">{{ campoSeleccionado.address?.location.name }}</span>
-            </div>
-            <div class="titulo-detalle">
-              <span>Dirección:</span>
-              <span class="valor-detalle">{{ campoSeleccionado.address.address }}</span>
-            </div>
-            <div class="titulo-detalle">
-              <span>Hectáreas:</span>
-              <span class="valor-detalle">{{ campoSeleccionado.dimensions }}</span>
-            </div>
+            <p class="with-dot"><strong>Nombre Chacra:</strong> {{ campoSeleccionado.name }}</p>
+            <p class="with-dot"><strong>Localidad:</strong> {{ campoSeleccionado.address?.location.name }}</p>
+            <p class="with-dot"><strong>Dirección:</strong> {{ campoSeleccionado.address.address }}</p>
+            <p class="with-dot"><strong>Hectáreas:</strong> {{ campoSeleccionado.dimensions }}</p>
           </div>
         </div>
 
-        <div class="card-info">
-          <div class="title-campo-details">
-            <h5>Seleccionar una localidad</h5>
+
+        <!-- Mat Select para elegir localidades solo cuando se selecciona "localidad" -->
+        <div class="card-info" *ngIf="opcionGeolocalizacion === 'localidad'">
+          <div class="search-container">
             <mat-select placeholder="Localidades..." (selectionChange)="onSearch($event.value)">
-              <mat-option *ngFor="let localidad of filteredLocalidades | async" [value]="localidad.name">{{ localidad.name
-                }}</mat-option>
+              <mat-option *ngFor="let localidad of filteredLocalidades | async" [value]="localidad.name">
+                {{ localidad.name }}
+              </mat-option>
             </mat-select>
           </div>
         </div>
+        <!-- Mostrar formulario de coordenadas manuales solo si se selecciona "manual" -->
+        <div *ngIf="opcionGeolocalizacion === 'manual'">
+          <mat-label>Latitud</mat-label>
+          <input matInput id="manualLatitude" type="number" step="any" [(ngModel)]="latitud"
+            (change)="onManualCoordinatesChange()">
+          <mat-label>Longitud</mat-label>
+          <input matInput id="manualLongitude" type="number" step="any" [(ngModel)]="longitud"
+            (change)="onManualCoordinatesChange()">
 
-        <div class="campo-buttons">
-          <button mat-raised-button class="cancel-button" type="button" (click)="cancelar()">Cancelar</button>
-          <button mat-raised-button class="register-button" type="button" (click)="registerField()">Agregar</button>
-
+          <!-- <button mat-raised-button (click)="searchByCoordinates()">Buscar</button> -->
         </div>
       </div>
+      <div class="campo-buttons">
+        <button mat-raised-button class="cancel-button" type="button" (click)="cancelar()">Cancelar</button>
+        <button mat-raised-button class="register-button" type="button" (click)="registerField()">Agregar</button>
 
+      </div>
     </div>
 
   </div>

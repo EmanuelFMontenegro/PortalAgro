@@ -51,6 +51,7 @@ import { CalendarioComponent } from './calendario/calendario.component';
 import { ChacrasComponent } from './chacras/chacras.component';
 import { NotificacionesComponent } from './notificaciones/notificaciones.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { MatRadioModule } from '@angular/material/radio';
 
 const CUSTOM_DATE_FORMATS = {
   parse: {
@@ -116,6 +117,7 @@ const CUSTOM_DATE_FORMATS = {
     BrowserAnimationsModule,
     RouterModule,
     SharedModule,
+    MatRadioModule
   ],
   providers: [{ provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS }],
 })

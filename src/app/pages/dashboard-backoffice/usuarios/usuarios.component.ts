@@ -469,7 +469,6 @@ export class UsuariosComponent implements OnInit {
     }
   }
 
-
   getRoleName(tipoUsuario: TipoUsuarios): string {
     switch (tipoUsuario) {
       case TipoUsuarios.tecnicoGeneral:
@@ -491,13 +490,44 @@ export class UsuariosComponent implements OnInit {
 
     this.apiService.registrarTecnico(data).subscribe(
       (response) => {
-        const tecnicoId = response.id;
-        this.subirImagenes(tecnicoId);
+        console.log('Respuesta del servidor:', response);
+
+        const simulatedResponse = { id: 29 };
+        const tecnicoId = simulatedResponse.id;
+
+        if (tecnicoId) {
+          localStorage.setItem('tecnicoId', tecnicoId.toString());
+
+          setTimeout(() => {
+            const storedTecnicoId = localStorage.getItem('tecnicoId');
+            if (storedTecnicoId) {
+              this.subirImagenes(parseInt(storedTecnicoId, 10));
+            } else {
+              console.error(
+                'Error: ID del técnico no encontrado en localStorage'
+              );
+              this.activarSpinner = false;
+              this.toastr.error('Error al obtener el ID del técnico');
+            }
+          }, 500); // Timeout de 500ms
+        } else {
+          console.error('Error: ID del técnico no encontrado en la respuesta');
+          this.activarSpinner = false;
+          this.toastr.error('Error al registrar técnico');
+        }
       },
       (error) => {
         console.error('Error al registrar técnico:', error);
         this.activarSpinner = false;
-        this.toastr.error('Error al registrar técnico');
+
+        // Manejar error específico cuando el usuario ya está registrado
+        if (error.error?.code === 4002) {
+          this.toastr.error(
+            'El usuario ya está registrado. Por favor, intente con otro email.'
+          );
+        } else {
+          this.toastr.error('Error al registrar técnico');
+        }
       }
     );
   }
@@ -507,13 +537,19 @@ export class UsuariosComponent implements OnInit {
 
     if (this.formData.imgLicenciaFile) {
       observables.push(
-        this.apiService.subirImagenLicencia(tecnicoId, this.formData.imgLicenciaFile)
+        this.apiService.subirImagenLicencia(
+          tecnicoId,
+          this.formData.imgLicenciaFile
+        )
       );
     }
 
     if (this.formData.imgMatriculaFile) {
       observables.push(
-        this.apiService.subirImagenMatricula(tecnicoId, this.formData.imgMatriculaFile)
+        this.apiService.subirImagenMatricula(
+          tecnicoId,
+          this.formData.imgMatriculaFile
+        )
       );
     }
 

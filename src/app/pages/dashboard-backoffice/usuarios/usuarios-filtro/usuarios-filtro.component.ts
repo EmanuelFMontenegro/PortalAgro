@@ -63,7 +63,7 @@ export class UsuariosFiltroComponent implements OnInit {
   pageSizeLabel: string = 'Items por página:';
   pageSize = 12;
   pageIndex = 0;
-  pageSizeOptions = [6, 12, 24];
+  pageSizeOptions = [6, 12, 24, 36];
   showPageSizeOptions = true;
   showFirstLastButtons = true;
   disabled = false;

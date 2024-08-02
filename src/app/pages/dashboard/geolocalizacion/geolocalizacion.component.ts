@@ -76,6 +76,11 @@ interface DecodedToken {
   styleUrls: ['./geolocalizacion.component.sass'],
 })
 export class GeolocalizacionComponent implements AfterViewInit {
+  manualCoordinates: { latitude: number; longitude: number } | null = null;
+  showManualCoordinatesInput: boolean = false;
+  opcionGeolocalizacion: string = '';
+  latitud: number | null = null;
+  longitud: number | null = null;
   filteredLocalidades: Observable<any[]> = new Observable<any[]>();
   filtroLocalidades = new FormControl('');
   campoSeleccionado: any = {};
@@ -184,6 +189,49 @@ export class GeolocalizacionComponent implements AfterViewInit {
     }
   }
 
+  updateManualCoordinates(latitude: number, longitude: number): void {
+    if (isNaN(latitude) || isNaN(longitude)) {
+      this.toastr.error(
+        'Las coordenadas proporcionadas no son válidas.',
+        'Error'
+      );
+      return;
+    }
+
+    this.manualCoordinates = { latitude, longitude };
+    this.map.setView([latitude, longitude], 13);
+    this.addMarker([latitude, longitude]);
+  }
+
+  onManualCoordinatesChange(): void {
+    const latitude = parseFloat(
+      (<HTMLInputElement>document.getElementById('manualLatitude'))?.value ||
+        '0'
+    );
+    const longitude = parseFloat(
+      (<HTMLInputElement>document.getElementById('manualLongitude'))?.value ||
+        '0'
+    );
+
+    this.updateManualCoordinates(latitude, longitude);
+  }
+
+  searchByCoordinates(): void {
+    if (this.latitud && this.longitud && this.map) {
+      this.map.setView([this.latitud, this.longitud], 16);
+      this.addMarker([this.latitud, this.longitud]);
+    }
+  }
+
+  toggleManualCoordinates(value: string): void {
+    this.showManualCoordinatesInput = value === 'manual';
+    this.opcionGeolocalizacion = value;
+  }
+  setOpcionGeolocalizacion(opcion: string): void {
+    this.opcionGeolocalizacion = opcion;
+    this.showManualCoordinatesInput = opcion === 'manual';
+  }
+
   searchFieldLocation(fieldArray: FieldArray): void {
     const geolocation = fieldArray.geolocation;
 
@@ -284,35 +332,17 @@ export class GeolocalizacionComponent implements AfterViewInit {
   }
 
   private initializeMap(): void {
-    const latitudInicial = -27.362137;
-    const longitudInicial = -55.900875;
-    const zoomInicial = 4;
+    if (this.mapContainer) {
+      this.map = L.map(this.mapContainer.nativeElement).setView(
+        [0, 0], // Coordenadas iniciales, se actualizarán más tarde
+        13 // Zoom inicial
+      );
 
-    // Límites geográficos de Argentina
-    const southWest = L.latLng(-55.25, -75); // Latitud mínima, Longitud mínima
-    const northEast = L.latLng(-21.75, -53.5); // Latitud máxima, Longitud máxima
-    const bounds = L.latLngBounds(southWest, northEast);
-
-    // Utiliza el contenedor específico del mapa para el selector
-    this.map = L.map(this.mapContainer.nativeElement, {
-      center: [latitudInicial, longitudInicial],
-      zoom: zoomInicial,
-      maxBounds: bounds, // Establecer límites para el mapa
-      maxZoom: 18, // Limitar el zoom máximo para evitar ver más allá de Argentina
-      minZoom: 5, // Limitar el zoom mínimo para mantener la visualización de Argentina
-    });
-
-    // Agrega solo la capa de relieve de Stadia Maps
-    L.tileLayer(
-      'https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-      {
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution:
-          'Imágenes satelitales &copy; <a href="https://www.esri.com/">Esri</a>',
-      }
-    ).addTo(this.map);
-
-    this.map.on('click', this.onMapClick.bind(this));
-    this.cdr.detectChanges();
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      }).addTo(this.map);
+    }
   }
 
   cargarDatosDeUsuario() {
@@ -411,44 +441,87 @@ export class GeolocalizacionComponent implements AfterViewInit {
       .openPopup();
   }
 
-  loadInitialGeolocation(): void {
-    if (this.userId !== null && this.fieldId !== undefined) {
-      this.apiService.getGeolocationField(this.userId, this.fieldId).subscribe(
-        (response: any) => {
-          if (response && response.geolocation) {
-            const geoData = response.geolocation;
-            if (
-              geoData.latitude !== undefined &&
-              geoData.longitude !== undefined
-            ) {
-              this.addMarker([geoData.latitude, geoData.longitude]);
-              this.map.setView([geoData.latitude, geoData.longitude], 200);
+  private loadInitialGeolocation(): void {
+    if (navigator.geolocation) {
+      this.toastr.info('Obteniendo tu ubicación actual...');
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+          const accuracy = position.coords.accuracy;
+
+          this.toastr.success(
+            `Ubicación obtenida con precisión de ${accuracy} metros.`
+          );
+
+          if (this.map) {
+            let zoomLevel;
+            if (accuracy < 50) {
+              zoomLevel = 18;
+            } else if (accuracy < 100) {
+              zoomLevel = 16;
             } else {
+              zoomLevel = 14;
             }
-          } else {
-            this.toastr.info(
-              'Existen Campos sin Geolocalizar, Por Favor actualizalos.',
-              'Información'
-            );
+
+            this.map.setView([lat, lon], zoomLevel);
+
+            if (this.currentMarker) {
+              console.log('Actualizando marcador con nuevas coordenadas');
+              this.currentMarker.setLatLng([lat, lon]);
+            } else {
+              console.log('Añadiendo nuevo marcador con coordenadas');
+              this.currentMarker = L.marker([lat, lon], {
+                draggable: true,
+              }).addTo(this.map);
+            }
           }
         },
         (error) => {
-          console.error('Error al cargar la geolocalización:', error);
-          this.toastr.info('No cuenta con campos para actualizar.', 'Atención');
+          console.error('Error al obtener la geolocalización:', error);
+          this.toastr.warning(
+            'No se pudo obtener la geolocalización. El mapa no puede ser centrado.'
+          );
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0,
         }
+      );
+    } else {
+      console.error('La geolocalización no está soportada por este navegador.');
+      this.toastr.warning(
+        'La geolocalización no está soportada por este navegador.'
       );
     }
   }
 
   private addMarker(coords: [number, number]): void {
     if (coords && !isNaN(coords[0]) && !isNaN(coords[1])) {
-      this.currentMarker = L.marker(coords).addTo(this.map);
-      this.currentMarker.bindPopup('Ubicación seleccionada').openPopup();
-    } else {
-      this.toastr.error(
-        'Coordenadas no válidas para la geolocalización',
-        'Error'
+      if (this.currentMarker) {
+        this.map.removeLayer(this.currentMarker);
+      }
+
+      this.currentMarker = L.marker(coords, { draggable: true }).addTo(
+        this.map
       );
+
+      this.currentMarker.on('drag', (event: L.LeafletEvent) => {
+        const dragEndEvent = event as L.DragEndEvent;
+        const position = event.target.getLatLng();
+        this.latitud = position.lat;
+        this.longitud = position.lng;
+        console.log('Coordenadas al arrastrar:', this.latitud, this.longitud);
+      });
+
+      this.currentMarker.on('dragend', (event: L.DragEndEvent) => {
+        const position = event.target.getLatLng();
+        this.latitud = position.lat;
+        this.longitud = position.lng;
+        console.log('Marcador soltado en:', this.latitud, this.longitud);
+      });
     }
   }
 
@@ -471,21 +544,46 @@ export class GeolocalizacionComponent implements AfterViewInit {
     const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
       query
     )}&bounded=1&viewbox=${boundingBox}`;
+
     this.http.get<any[]>(url).subscribe(
       (results) => {
         if (results && results.length > 0) {
           const firstResult = results[0];
           this.map.setView([firstResult.lat, firstResult.lon], 13);
+
+          // Si ya existe un marcador, lo eliminamos
           if (this.currentMarker) {
             this.map.removeLayer(this.currentMarker);
           }
-          this.currentMarker = L.marker([
-            firstResult.lat,
-            firstResult.lon,
-          ]).addTo(this.map);
+
+          // Añadimos un nuevo marcador en la ubicación encontrada, y lo hacemos draggable
+          this.currentMarker = L.marker([firstResult.lat, firstResult.lon], {
+            draggable: true,
+          }).addTo(this.map);
+
+          // Añadimos un popup al marcador
           this.currentMarker
             .bindPopup(`Ubicación encontrada: ${query}`)
             .openPopup();
+
+          // Manejo del evento dragend para actualizar la ubicación al arrastrar el marcador
+          this.currentMarker.on('dragend', (event: L.DragEndEvent) => {
+            if (this.currentMarker) {
+              const position = this.currentMarker.getLatLng();
+              this.currentMarker.setLatLng(position);
+              this.map.panTo(position);
+
+              // Guardar la nueva ubicación
+              const finalLat = position.lat;
+              const finalLon = position.lng;
+              console.log(
+                `Nueva ubicación seleccionada: Latitud ${finalLat}, Longitud ${finalLon}`
+              );
+
+              this.cdr.detectChanges();
+            }
+          });
+
           this.cdr.detectChanges();
         } else {
           this.toastr.info(
@@ -502,6 +600,7 @@ export class GeolocalizacionComponent implements AfterViewInit {
       }
     );
   }
+
   updateGeolocation(item: FieldData): void {
     const misionesCoordinates: GeolocationData = {
       latitude: -27.3671, // Latitud de Misiones

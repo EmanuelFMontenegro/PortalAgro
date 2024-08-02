@@ -48,3 +48,28 @@ mat-select
   padding: 8px
   border-radius: 4px
   height: 5px
+
+.botones-imagen
+  display: flex
+
+.custom-file-upload
+  display: inline-block
+  padding: 8px 16px
+  font-size: 14px
+  font-weight: bold
+  color: #fff
+  background-color: $new-color-blue-hard
+  border-radius: 4px
+  cursor: pointer
+  text-align: center
+  position: relative
+
+  input[type="file"]
+    position: absolute
+    width: 100%
+    height: 100%
+    opacity: 0
+    cursor: pointer
+
+  &:hover
+    background-color: #0056b3

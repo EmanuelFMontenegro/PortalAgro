@@ -10,9 +10,23 @@
         [readonly]="item.readonly || false" [id]="item.ngModel" class="input" autocomplete="new-password"
         (change)="updateFormData()">
 
-      <!-- Campo de archivo  IMAGEN-->
-      <input *ngIf="item.type === 'file'" type="file" (change)="onFileChange($event, item.ngModel)" [name]="item.name"
-        [id]="item.ngModel" class="input">
+      <!-- Campo de archivo IMAGEN -->
+      <div class="botones-imagen">
+        <div *ngIf="item.type === 'file'">
+          <label class="custom-file-upload">
+            <input type="file" (change)="onFileChange($event, item.ngModel)" [name]="item.name" [id]="item.ngModel"
+              accept="image/*">
+            Subir Imagen
+          </label>
+          <mat-card *ngIf="formData[item.ngModel]" class="image-upload-card">
+            <mat-card-content>
+              <img [src]="formData[item.ngModel]" alt="Imagen cargada" class="uploaded-image" />
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+
+
 
       <!-- Campo de texto multilínea -->
       <textarea *ngIf="item.type === 'textarea'" [placeholder]="item.placeholder" [(ngModel)]="formData[item.ngModel]"
@@ -30,8 +44,8 @@
         </mat-select>
         <mat-chip-grid #chipGrid>
           <mat-chip-row *ngFor="let department of formData[item.ngModel]"
-            (removed)="removeDepartment(department,item.ngModel)">
-            {{ getDescripcionDepartament(department,item.options) }}
+            (removed)="removeDepartment(department, item.ngModel)">
+            {{ getDescripcionDepartament(department, item.options) }}
             <button matChipRemove [attr.aria-label]="'remove ' + department">
               <mat-icon>cancel</mat-icon>
             </button>
