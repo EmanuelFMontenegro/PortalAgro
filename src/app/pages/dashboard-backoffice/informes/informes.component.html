@@ -1,1 +1,40 @@
-<p>informes works!</p>
+<!-- contenedor general 
+ (uno para head, buscar y para body ) -->
+ <div *ngIf="campos">
+  <mat-list>
+    <mat-list-item>
+      <span matListItemTitle>Chacras:</span>
+      <span matListItemMeta>{{ campos }}</span>
+    </mat-list-item>
+    <mat-list-item>
+      <span matListItemTitle>Lotes:</span>
+      <span matListItemMeta>{{ loteDataLength }}</span>
+    </mat-list-item>
+    <mat-list-item>
+      <span matListItemTitle>Plantaciones:</span>
+      <span matListItemMeta>{{ typeCropOperators.length }}</span>
+    </mat-list-item>
+  </mat-list>
+</div>
+
+<h4>Seleccionar Productores</h4>
+<mat-form-field>
+  <mat-label>Productor</mat-label>
+  <mat-select>
+    <mat-option *ngFor="let productor of usuarios" >
+      {{productor.name}} {{productor.lastName}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<div class="chart-wrapper">
+  <canvas baseChart
+    [data]="pieChartData"
+    [type]="'pie'"
+    [options]="pieChartOptions">
+  </canvas>
+</div>
+
+
+
+
