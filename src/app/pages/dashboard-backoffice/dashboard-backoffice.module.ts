@@ -30,6 +30,11 @@ import { RenderDepartmentsPipe } from 'src/app/services/render-pipes.pipe';
 import { UsuariosActualizarComponent } from './usuarios/usuarios-actualizar/usuarios-actualizar.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatRadioModule } from '@angular/material/radio';
+import { NgChartsModule } from 'ng2-charts';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+
 @NgModule({
   declarations: [
     DashboardBackofficeComponents,
@@ -67,6 +72,10 @@ import { MatRadioModule } from '@angular/material/radio';
     ReactiveFormsModule,
     BrowserModule,
     MatRadioModule,
+    NgChartsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
   ],
   providers: [
     RenderProvincesPipe,
