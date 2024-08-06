@@ -1,0 +1,60 @@
+{
+    "menuItems": [
+      {
+        "icon": "home.svg",
+        "name": "Inicio",
+        "route": "/dashboard-backoffice/inicio"
+      },
+      {
+        "icon": "services.svg",
+        "name": "Solicitudes y Servicios",
+        "route": "/dashboard-backoffice/servicios"
+      },
+      {
+        "icon": "users.svg",
+        "name": "Productores",
+        "route": "/dashboard-backoffice/productores"
+      },
+      {
+        "icon": "users.svg",
+        "name": "Usuarios",
+        "route": "/dashboard-backoffice/usuarios-filtro"
+      },
+      {
+        "icon": "ranchs.svg",
+        "name": "Chacras",
+        "route": "/dashboard-backoffice/chacras"
+      },
+      {
+        "icon": "lots.svg",
+        "name": "Lotes",
+        "route": "/dashboard-backoffice/lotes"
+      },
+      {
+        "icon": "calendar.svg",
+        "name": "Calendario",
+        "route": "/dashboard-backoffice/calendario"
+      },
+      {
+        "icon": "notifications.svg",
+        "name": "Notificaciones",
+        "route": "/dashboard-backoffice/notificaciones"
+      },
+      {
+        "icon": "planning.svg",
+        "name": "Planificaciones",
+        "route": "/dashboard-backoffice/planificaciones"
+      },
+      {
+        "icon": "report.svg",
+        "name": "Informes",
+        "route": "/dashboard-backoffice/informes"
+      },
+      {
+        "icon": "settings.svg",
+        "name": "Configuración",
+        "route": "/dashboard-backoffice/configuracion"
+      }
+    ]
+  }
+  
