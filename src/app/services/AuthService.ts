@@ -6,7 +6,7 @@ import { jwtDecode } from 'jwt-decode';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private userEmail: string = '';
@@ -19,13 +19,17 @@ export class AuthService {
   // Método para iniciar sesión
   login(username: string, password: string): Observable<any> {
     return this.http.post<any>(this.loginUrl, { username, password }).pipe(
-      map(response => {
+      map((response) => {
         const token = response?.token;
         if (token) {
           localStorage.setItem('token', token); // Almacenar el token en localStorage
 
           // Decodificar el token y almacenar los datos
-          const decodedToken = jwtDecode<{ email: string, userId: number, field: string }>(token);
+          const decodedToken = jwtDecode<{
+            email: string;
+            userId: number;
+            field: string;
+          }>(token);
           console.log('Decoded Token:', decodedToken);
           this.userEmail = decodedToken.email;
           console.log('Email del usuario:', this.userEmail); // Log del email
@@ -34,7 +38,11 @@ export class AuthService {
           this.field = decodedToken.field; // Almacenar el campo adicional
 
           // Devolver los datos relevantes
-          return { email: decodedToken.email, id: decodedToken.userId, field: decodedToken.field };
+          return {
+            email: decodedToken.email,
+            id: decodedToken.userId,
+            field: decodedToken.field,
+          };
         } else {
           return null;
         }
@@ -74,5 +82,12 @@ export class AuthService {
   clearToken(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('campoSeleccionado'); // O sessionStorage si prefieres
+  }
+
+  // Configurar listener para borrar localStorage al cerrar la aplicación
+  private setupUnloadListener(): void {
+    window.addEventListener('beforeunload', () => {
+      localStorage.clear(); // Borrar todos los datos del localStorage
+    });
   }
 }

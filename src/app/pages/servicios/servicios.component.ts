@@ -25,7 +25,7 @@ export class ServiciosComponent {
     public dashboardBackOffice: DashboardBackOfficeService) {
     this.dashboardBackOffice.dataTitulo.next({ titulo: 'Solicitudes y servicios', subTitulo: '' })
   }
-  urlBase = ''
+  urlBase = 'dashboard-backoffice'
   opcionSeleccionada: any
   listado: any[] = []
   dataView: DataView[] = []
@@ -141,7 +141,7 @@ export class ServiciosComponent {
   }
 
   nuevo() {
-    this.router.navigate([this.urlBase + '/servicios/nuevo']);
+    this.router.navigate([this.urlBase + '/servicios/add-edt-servicio']);
   }
 
   getCultivos() {

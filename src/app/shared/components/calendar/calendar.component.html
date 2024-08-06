@@ -1,9 +1,9 @@
 <div class='demo-app'>
-    <div class='demo-app-main'>
-      <full-calendar  [options]='calendarOptions'>
-        <ng-template #eventContent let-arg> 
-          <p class="calendar-label">{{ arg.event.title }}</p>
-        </ng-template>
-      </full-calendar>
-    </div>
+  <div class='demo-app-main'>
+    <full-calendar [options]='calendarOptions'>
+      <ng-template #eventContent let-arg>
+        <p class="calendar-label">{{ arg.event.title }}</p>
+      </ng-template>
+    </full-calendar>
   </div>
+</div>

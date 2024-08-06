@@ -9,7 +9,7 @@ export class CalendarPopupComponent {
   constructor(public dialogRef: MatDialogRef<CalendarPopupComponent>, @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
     console.log(data.event?.title);
 
-  }   
+  }
   onCancel(): void {
     this.dialogRef.close();
   }

@@ -16,6 +16,7 @@ interface DecodedToken {
   styleUrls: ['./header-user.component.sass'],
 })
 export class HeaderUserComponent implements OnInit, OnChanges {
+  @Input() titulo: string = 'Usuarios Generales del Sistema'; // Valor predeterminado
   @Input() selectedName: string | null = null;
   @Input() selectedLastName: string | null = null;
   @Input() selectedEmail: string | null = null;
@@ -54,7 +55,6 @@ export class HeaderUserComponent implements OnInit, OnChanges {
       this.lastname = this.selectedLastName ?? decoded.lastname;
       this.email = this.selectedEmail ?? decoded.sub;
 
-      // Convert `number` to `string` if necessary
       const roleAsString: string | null =
         typeof this.selectedRole === 'number'
           ? this.roleMapping.get(this.selectedRole) || null
@@ -73,13 +73,11 @@ export class HeaderUserComponent implements OnInit, OnChanges {
     this.role = this.selectedRole
       ? this.roleMapping.get(this.selectedRole) || 'Unknown'
       : null;
-
   }
 
   private translateRole(role: string | number | null): string | null {
     if (role === null) return null;
 
-    // Convert `number` to `string` if needed
     const roleName =
       typeof role === 'number' ? this.roleMapping.get(role) : role;
 
@@ -97,7 +95,7 @@ export class HeaderUserComponent implements OnInit, OnChanges {
       case 'ROLE_COOPERATIVE':
         return 'Cooperativa';
       default:
-        return roleName || null; // Return null if roleName is undefined
+        return roleName || null;
     }
   }
 }

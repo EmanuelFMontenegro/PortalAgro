@@ -12,7 +12,24 @@
     </div>
     <div class="popup-dialog-content-title">
       <div class="popup-dialog-content-title-label">Hora:</div>
-      <div class="popup-dialog-content-title-value">{{data.event?.start | date: 'dd/MM/yyyy'}}</div>
+      <div class="popup-dialog-content-title-value">{{data.event?.start | date: 'HH:mm'}}</div>
+    </div>
+
+    <div class="popup-dialog-content-title" *ngIf="data.event?.extendedProps.campoNombre">
+      <div class="popup-dialog-content-title-label">Campo Nombre:</div>
+      <div class="popup-dialog-content-title-value">{{data.event?.extendedProps.campoNombre}}</div>
+    </div>
+    <div class="popup-dialog-content-title" *ngIf="data.event?.extendedProps.tipoCultivo">
+      <div class="popup-dialog-content-title-label">Tipo de Cultivo:</div>
+      <div class="popup-dialog-content-title-value">{{data.event?.extendedProps.tipoCultivo}}</div>
+    </div>
+    <div class="popup-dialog-content-title" *ngIf="data.event?.extendedProps.hectares">
+      <div class="popup-dialog-content-title-label">Hectares del campo cargada:</div>
+      <div class="popup-dialog-content-title-value">{{data.event?.extendedProps.hectares}}</div>
+    </div>
+    <div class="popup-dialog-content-title" *ngIf="data.event?.extendedProps.lotes">
+      <div class="popup-dialog-content-title-label">Lotes:</div>
+      <div class="popup-dialog-content-title-value">{{data.event?.extendedProps.lotes}}</div>
     </div>
     <div class="popup-dialog-content-title">
       <div class="popup-dialog-content-title-label">Descripción:</div>
@@ -20,6 +37,8 @@
     </div>
   </div>
 </div>
+
+
 <div mat-dialog-actions class="botones-servicio center">
   <button mat-button (click)="onCancel()" class="cancel-button">Salir</button>
-</div> 
+</div>
