@@ -1,9 +1,9 @@
-<footer class="footer">
+<footer class="footer"   [ngStyle]="{'background-color': background}">
      <div class="ellipse_white">
-      <img [src]="isMobile ? 'assets/img/footer/ellipse_white_mobile.svg' : 'assets/img/footer/ellipse_white.svg'">
+      <img [src]="isMobile ? ellipses.top : ellipses.left">
   </div>    
   <div class="ellipse_green">
-    <img [src]="isMobile ? 'assets/img/footer/ellipse_green_mobile.svg' : 'assets/img/footer/ellipse_green.svg'">
+    <img [src]="isMobile ? ellipses.bottom : ellipses.right">
   </div>
     <div class="agrotech_logo">
     <img [src]="isMobile ? 'assets/img/footer/logo_AGROtech_blanco.svg' : 'assets/img/footer/logo_AGROtech_blanco_mobile.svg'">

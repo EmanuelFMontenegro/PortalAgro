@@ -1,14 +1,17 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html'
 })
 export class FooterComponent {
+  @Input() svgPath?: string;
+  @Input() ellipses?: any;
+  @Input() background?: string;
   isMobile = false;
-  whiteLogo= false;
-
+  whiteLogo= false; 
+ 
   constructor(breakpoints : BreakpointObserver) { 
     breakpoints.observe(['(max-width: 768px)','(min-width: 569px)']).subscribe(result => {
       this.isMobile = result.breakpoints['(max-width: 768px)'];
