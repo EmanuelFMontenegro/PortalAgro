@@ -11,17 +11,17 @@
         "route": "/dashboard-backoffice/servicios"
       },
       {
-        "icon": "users.svg",
+        "icon": "User.svg",
         "name": "Productores",
         "route": "/dashboard-backoffice/productores"
       },
       {
-        "icon": "users.svg",
+        "icon": "User.svg",
         "name": "Usuarios",
         "route": "/dashboard-backoffice/usuarios-filtro"
       },
       {
-        "icon": "ranchs.svg",
+        "icon": "ranch.svg",
         "name": "Chacras",
         "route": "/dashboard-backoffice/chacras"
       },

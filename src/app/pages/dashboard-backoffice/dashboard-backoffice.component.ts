@@ -63,7 +63,7 @@ export class DashboardBackofficeComponents implements AfterViewInit {
   }
 
   loadMenu(): void {
-    this.http.get<any>('../../assets/json/menu-dashboard.json').subscribe(data => {
+    this.http.get<any>('../../assets/json/menu-dashboard-bo.json').subscribe(data => {
       this.menuItems = data.menuItems;
     });
   } 
