@@ -12,16 +12,12 @@ export class AppComponent {
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', Validators.required),
   });
-  ngOnInit() {
-    setupUnloadListener();
-  }
+  ngOnInit() {}
+
   iniciarSesion() {
     if (this.loginForm.valid) {
       // Implementar lógica de inicio de sesión aquí
-      console.log(
-        'Formulario de inicio de sesión válido',
-        this.loginForm.value
-      );
+      console.log('Inicio de Sesión Correcto !!!', this.loginForm.value);
     }
   }
 }

@@ -5,7 +5,7 @@ import {
   HttpHandler,
   HttpEvent,
   HttpResponse,
-  HttpErrorResponse // Agregar importación para manejar errores HTTP
+  HttpErrorResponse, // Agregar importación para manejar errores HTTP
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -19,7 +19,7 @@ export class Interceptor implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token'); // Cambiar a sessionStorage -antes localstorage
 
     // Verificar si la solicitud es para recuperar la contraseña
     const isPasswordRecoveryRequest = request.url.includes(

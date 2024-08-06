@@ -27,21 +27,14 @@ export class AuthGuard implements CanActivate {
 
     if (token && !this.isTokenExpired(token)) {
       const decodedToken: any = jwtDecode(token);
-      const roles = decodedToken.roles.map((role: any) => role.authority); // Obtener los roles del usuario
+      const roles = decodedToken.roles?.map((role: any) => role.authority) || []; // Obtener los roles del usuario
 
       const isAdmin = roles.includes('ROLE_ADMIN');
-      const isUsuariosRoute = state.url.includes(
-        '/dashboard-backoffice/usuarios'
-      );
+      const isUsuariosRoute = state.url.includes('/dashboard-backoffice/usuarios');
 
       if (!isAdmin && isUsuariosRoute) {
-        console.log(
-          'Acceso denegado a usuarios para usuarios no administradores.'
-        );
-        this.toastr.warning(
-          'No tienes permisos para acceder a esta sección.',
-          'Acceso Restringido'
-        );
+        console.log('Acceso denegado a usuarios para usuarios no administradores.');
+        this.toastr.warning('No tienes permisos para acceder a esta sección.', 'Acceso Restringido');
         this.router.navigate(['/dashboard-backoffice']);
         return false;
       }
@@ -57,10 +50,12 @@ export class AuthGuard implements CanActivate {
   private isTokenExpired(token: string): boolean {
     try {
       const decoded = jwtDecode<any>(token);
+      console.log('Token decodificado:', decoded); // Para verificar el contenido del token
       const now = Date.now().valueOf() / 1000;
 
       return decoded.exp < now;
     } catch (error) {
+      console.error('Error al decodificar el token:', error); // Manejar el error de decodificación
       return true;
     }
   }

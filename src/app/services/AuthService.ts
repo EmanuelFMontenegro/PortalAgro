@@ -5,6 +5,13 @@ import { map } from 'rxjs/operators';
 import { jwtDecode } from 'jwt-decode';
 import { environment } from 'src/environments/environment';
 
+interface DecodedToken {
+  email: string;
+  userId: number;
+  field: string;
+  exp: number; // Agrega el campo de expiración
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -22,22 +29,16 @@ export class AuthService {
       map((response) => {
         const token = response?.token;
         if (token) {
-          localStorage.setItem('token', token); // Almacenar el token en localStorage
-
-          // Decodificar el token y almacenar los datos
-          const decodedToken = jwtDecode<{
-            email: string;
-            userId: number;
-            field: string;
-          }>(token);
-          console.log('Decoded Token:', decodedToken);
+          sessionStorage.setItem('token', token); // Cambiado a sessionStorage
+          const decodedToken = jwtDecode<DecodedToken>(token); // Usa la interfaz DecodedToken
           this.userEmail = decodedToken.email;
-          console.log('Email del usuario:', this.userEmail); // Log del email
           this.userId = decodedToken.userId;
-          console.log('ID del usuario:', this.userId); // Log del ID de usuario
-          this.field = decodedToken.field; // Almacenar el campo adicional
+          this.field = decodedToken.field;
 
-          // Devolver los datos relevantes
+          // Guardar el tiempo de expiración del token en sessionStorage
+          const expirationTime = decodedToken.exp * 1000; // Expiration time in milliseconds
+          sessionStorage.setItem('tokenExpiration', expirationTime.toString());
+
           return {
             email: decodedToken.email,
             id: decodedToken.userId,
@@ -49,6 +50,7 @@ export class AuthService {
       })
     );
   }
+
 
   // Método para obtener el email del usuario
   getUserEmail(): string {
@@ -65,29 +67,26 @@ export class AuthService {
     return this.field;
   }
 
-  // Método para obtener el token almacenado
+  // Método para obtener el token almacenado con verificación de expiración
   getToken(): string | null {
-    return localStorage.getItem('token');
+    const tokenExpiration = sessionStorage.getItem('tokenExpiration');
+    if (tokenExpiration) {
+      const currentTime = new Date().getTime();
+      if (currentTime > parseInt(tokenExpiration, 10)) {
+        // Token ha expirado
+        this.logout();
+        return null;
+      }
+    }
+    return sessionStorage.getItem('token');
   }
 
   // Método para cerrar la sesión
   logout(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('campoSeleccionado'); // Eliminar datos del campo
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('tokenExpiration');
     this.userEmail = '';
     this.userId = null;
     this.field = null;
-  }
-
-  clearToken(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('campoSeleccionado'); // O sessionStorage si prefieres
-  }
-
-  // Configurar listener para borrar localStorage al cerrar la aplicación
-  private setupUnloadListener(): void {
-    window.addEventListener('beforeunload', () => {
-      localStorage.clear(); // Borrar todos los datos del localStorage
-    });
   }
 }
