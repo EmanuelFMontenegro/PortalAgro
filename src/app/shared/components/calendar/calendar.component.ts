@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, HostListener, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  HostListener,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { EventInput } from '@fullcalendar/core';
 import { CalendarOptions, EventClickArg, EventApi } from '@fullcalendar/core';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -12,7 +19,7 @@ import { CalendarPopupComponent } from 'src/app/shared/components/calendar-popup
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
-  styleUrls: ['./calendar.component.sass']
+  styleUrls: ['./calendar.component.sass'],
 })
 export class CalendarComponent implements OnInit, OnChanges {
   @Input() events!: EventInput[];
@@ -21,12 +28,7 @@ export class CalendarComponent implements OnInit, OnChanges {
 
   constructor(public dialogRef: MatDialog) {
     this.calendarOptions = {
-      plugins: [
-        interactionPlugin,
-        dayGridPlugin,
-        timeGridPlugin,
-        listPlugin,
-      ],
+      plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin],
       initialView: 'dayGridMonth',
       weekends: true,
       selectable: true,
@@ -35,8 +37,9 @@ export class CalendarComponent implements OnInit, OnChanges {
       locale: esLocale,
       longPressDelay: 1,
       eventClick: this.handleEventClick.bind(this),
-      events: this.events // Asigna los eventos aquí
+      events: this.events, // Asigna los eventos aquí
     };
+
     this.setupCalendarOptions(window.innerWidth);
   }
 
@@ -46,15 +49,20 @@ export class CalendarComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['events'] && changes['events'].currentValue) {
+      console.log(
+        'Eventos recibidos en CalendarComponent:',
+        changes['events'].currentValue
+      );
       this.calendarOptions.events = changes['events'].currentValue;
     }
   }
 
   handleEventClick(clickInfo: EventClickArg) {
+    console.log('Evento clicado:', clickInfo.event);
     this.dialogRef.open(CalendarPopupComponent, {
       data: {
-        event: clickInfo.event
-      }
+        event: clickInfo.event,
+      },
     });
   }
 
@@ -62,8 +70,10 @@ export class CalendarComponent implements OnInit, OnChanges {
     const isMobile = width < 600;
     this.calendarOptions.headerToolbar = {
       left: 'prev,next today',
-      center: (!isMobile ? 'title' : ''),
-      right: (isMobile ? 'dayGridMonth,listDay' : 'dayGridMonth,timeGridWeek,timeGridDay,listWeek')
+      center: !isMobile ? 'title' : '',
+      right: isMobile
+        ? 'dayGridMonth,listDay'
+        : 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
     };
   }
 

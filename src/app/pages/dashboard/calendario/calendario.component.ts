@@ -31,33 +31,55 @@ export class CalendarioComponent implements OnInit {
     this.apiService.calendarProducer().subscribe(
       (response) => {
         console.log('Respuesta del endpoint:', response);
-        if (response && response.list && response.list.length > 0) {
-          this.events = response.list[0].map((event: any) => {
-            // Extract additional details from description
-            const descriptionParts = event.description.split('. ');
-            const campoNombre = descriptionParts.find((part: string) => part.startsWith('Campo Nombre:'))?.replace('Campo Nombre:', '').trim();
-            const tipoCultivo = descriptionParts.find((part: string) => part.startsWith('Tipo de Cultivo:'))?.replace('Tipo de Cultivo:', '').trim();
-            const hectares = descriptionParts.find((part: string) => part.startsWith('Hectares del campo cargada:'))?.replace('Hectares del campo cargada:', '').trim();
-            const lotes = descriptionParts.find((part: string) => part.startsWith('Lotes:'))?.replace('Lotes:', '').trim();
+        if (response && Array.isArray(response.list)) {
+          this.events = response.list.map((event: any) => {
+            let campoNombre = '';
+            let tipoCultivo = '';
+            let hectares = '';
+            let lotes = '';
+
+            if (event.description) {
+              const descriptionParts = event.description.split('. ');
+              campoNombre =
+                descriptionParts
+                  .find((part: string) => part.startsWith('Campo Nombre:'))
+                  ?.replace('Campo Nombre:', '')
+                  .trim() || '';
+              tipoCultivo =
+                descriptionParts
+                  .find((part: string) => part.startsWith('Tipo de Cultivo:'))
+                  ?.replace('Tipo de Cultivo:', '')
+                  .trim() || '';
+              hectares =
+                descriptionParts
+                  .find((part: string) =>
+                    part.startsWith('Hectares del campo cargada:')
+                  )
+                  ?.replace('Hectares del campo cargada:', '')
+                  .trim() || '';
+              lotes =
+                descriptionParts
+                  .find((part: string) => part.startsWith('Lotes:'))
+                  ?.replace('Lotes:', '')
+                  .trim() || '';
+            }
 
             return {
               id: event.id,
               title: event.title,
-              start: moment(event.dateEvent, 'DD/MM/YYYY HH:mm').toISOString(),
-              end: moment(event.dateEvent, 'DD/MM/YYYY HH:mm')
-                .add(1, 'hours')
-                .toISOString(),
+              start: moment(event.start).toISOString(),
+              end: moment(event.end).toISOString(),
               extendedProps: {
                 campoNombre,
                 tipoCultivo,
                 hectares,
-                lotes
-              }
+                lotes,
+              },
             };
           });
           console.log('Eventos mapeados:', this.events);
         } else {
-          console.warn('La respuesta no contiene eventos válidos');
+          console.warn('La lista de eventos está vacía');
         }
       },
       (error) => {
@@ -65,7 +87,6 @@ export class CalendarioComponent implements OnInit {
       }
     );
   }
-
 
   onDateClick(event: any): void {
     this.eventClick.emit(event);

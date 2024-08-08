@@ -174,24 +174,7 @@ export class ApiService {
 
   // CALENDAR PRODUCER
   calendarProducer(): Observable<any> {
-    // Configura la fecha de inicio como el primer día del mes actual a las 06:00
-    const startDate = moment()
-      .startOf('month')
-      .set({ hour: 6, minute: 0, second: 0 })
-      .format('DD/MM/YYYY HH:mm');
-    // Configura la fecha de fin como el último día del mes actual a las 06:00
-    const endDate = moment()
-      .endOf('month')
-      .set({ hour: 6, minute: 0, second: 0 })
-      .format('DD/MM/YYYY HH:mm');
-
-    // Codificar las fechas para la URL
-    const formattedFromDate = encodeURIComponent(startDate);
-    const formattedToDate = encodeURIComponent(endDate);
-
-    // Construir la URL completa con parámetros
-    const url = `${this.baseURL}/user/service/calendar/all?fromDate=${formattedFromDate}&toDate=${formattedToDate}`;
-
+    const url = `${this.baseURL}/user/service/calendar/all`;
     return this.http.get<any>(url);
   }
 
