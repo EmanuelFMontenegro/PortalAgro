@@ -94,28 +94,35 @@ export class ServiciosComponent {
       .pipe(map((response: any) => this.convertirValores(response.list[0])))
       .subscribe(
         (data: any) => {
+          console.log("Datos después de convertirValores:", data); // Verifica la estructura de los datos
           if (data?.length > 0) {
             this.lotesOriginal = data;
             this.listado = data;
+            console.log("Listado final:", this.listado); // Verifica cómo se ve el listado antes de mostrarlo
           }
         },
-        (error) => {}
+        (error) => {
+          console.error('Error al obtener servicios:', error);
+        }
       );
   }
+
 
   ///// REVISAR SI ELIMINAR  /////////////
 
   convertirValores(valores: any) {
-    // await this.getChacras()
+    console.log('Valores antes de la transformación:', valores);
     if (valores?.length) {
       valores.forEach((lote: any) => {
         lote.cantidadLotes = lote.plots.length;
-        lote.cropDescripcion = this.getDescripcionPlantacion(lote.typeCrop_id);
-        // lote.nombreChacra = this.getDescripcionChacra(lote.field_id)
+        lote.cropDescripcion = this.getDescripcionPlantacion(lote.typeCrop.id);
+        lote.nombreChacra = this.getDescripcionChacra(lote.field.id); // Asegúrate de usar los IDs correctos
       });
     }
+    console.log('Valores después de la transformación:', valores);
     return valores;
   }
+
 
   getDescripcionPlantacion(crop_id: number) {
     return this.cultivos.find((cultivo) => cultivo.id == crop_id).name;

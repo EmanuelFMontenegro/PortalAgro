@@ -30,9 +30,11 @@ export class CalendarioComponent implements OnInit {
   ServiciosCalendario(): void {
     this.apiService.calendarProducer().subscribe(
       (response) => {
-        console.log('Respuesta del endpoint:', response);
+        console.log('Respuesta del endpoint:', response); // Verifica la estructura de la respuesta
         if (response && Array.isArray(response.list)) {
-          this.events = response.list.map((event: any) => {
+          // Asegúrate de que 'list' contiene los datos esperados
+          this.events = response.list.flat().map((event: any) => {
+            // Usa flat() si 'list' es un array de arrays
             let campoNombre = '';
             let tipoCultivo = '';
             let hectares = '';
@@ -67,8 +69,8 @@ export class CalendarioComponent implements OnInit {
             return {
               id: event.id,
               title: event.title,
-              start: moment(event.start).toISOString(),
-              end: moment(event.end).toISOString(),
+              start: moment(event.dateOfService).toISOString(), // Asegúrate de usar 'dateOfService'
+              end: moment(event.dateOfService).add(1, 'hour').toISOString(), // Establece una duración por defecto
               extendedProps: {
                 campoNombre,
                 tipoCultivo,
@@ -77,7 +79,7 @@ export class CalendarioComponent implements OnInit {
               },
             };
           });
-          console.log('Eventos mapeados:', this.events);
+          console.log('Eventos mapeados:', this.events); // Verifica la estructura final de los eventos
         } else {
           console.warn('La lista de eventos está vacía');
         }

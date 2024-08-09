@@ -30,7 +30,7 @@ export class DashboardComponent implements AfterViewInit {
     top: 'assets/img/footer/ellipse_white_mobile.svg',
     right: 'assets/img/footer/ellipse_green.svg',
     bottom: 'assets/img/footer/ellipse_green_mobile.svg'
-  } 
+  }
   background = '#3BA549'
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -49,10 +49,9 @@ export class DashboardComponent implements AfterViewInit {
       .observe(['(max-width: 720px)'])
       .subscribe((result) => {
         this.isScreenSmall = result.matches;
-        console.log(this.isScreenSmall)
         this.sidenav.mode = this.isScreenSmall ? 'over' : 'side';
       });
-      
+
   }
 
   toggleSidenav() {
@@ -70,7 +69,7 @@ export class DashboardComponent implements AfterViewInit {
     this.http.get<any>('../../assets/json/menu-dashboard.json').subscribe(data => {
       this.menuItems = data.menuItems;
     });
-  } 
+  }
   onSidenavToggle(opened: boolean): void {
     if (!opened) {
       this.sidenavService.changeState(false);
