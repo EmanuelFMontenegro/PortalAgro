@@ -97,11 +97,11 @@ export class LoginBackofficeComponent implements OnInit {
               response.body.token
             ) {
               // Usuario autenticado correctamente
-              localStorage.setItem('token', response.body.token);
-              await this.permisoService.getPermisos()
+              sessionStorage.setItem('token', response.body.token); // Cambiado a sessionStorage
+              await this.permisoService.getPermisos();
 
-              // PARA DERIBAR SI ES dashboard-backoffice o dashboard
-                this.router.navigate(['/dashboard-backoffice']);
+              // PARA DIRIGIR A dashboard-backoffice o dashboard
+              this.router.navigate(['/dashboard-backoffice']);
 
               this.mostrarMensajeExitoso();
               this.login.reset();
@@ -117,9 +117,15 @@ export class LoginBackofficeComponent implements OnInit {
           error: (error) => {
             // Manejo de errores de la solicitud HTTP
             if (error.status === 401 && error.error.code === 4016) {
-              this.toastr.warning('La contraseña ingresada es incorrecta.', 'Atención');
+              this.toastr.warning(
+                'La contraseña ingresada es incorrecta.',
+                'Atención'
+              );
             } else {
-              this.toastr.info('Usuario no registrado o desconocido.', 'Atención');
+              this.toastr.info(
+                'Usuario no registrado o desconocido.',
+                'Atención'
+              );
               console.error('Error durante la autenticación:', error);
             }
           },
@@ -133,7 +139,6 @@ export class LoginBackofficeComponent implements OnInit {
       }, 0);
     }
   }
-
 
   mostrarMensajeExitoso() {
     this.toastr.info('Portal AgroSustetable AgroTech.', 'Bienvenido', {

@@ -40,5 +40,6 @@ const routes: Routes = [];
     { provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true },
   ],
   bootstrap: [AppComponent],
+  
 })
 export class AppModule {}

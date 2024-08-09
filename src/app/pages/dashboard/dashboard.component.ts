@@ -52,7 +52,6 @@ export class DashboardComponent implements AfterViewInit {
       .observe(['(max-width: 720px)'])
       .subscribe((result) => {
         this.isScreenSmall = result.matches;
-        console.log(this.isScreenSmall)
         this.sidenav.mode = this.isScreenSmall ? 'over' : 'side';
       });
 

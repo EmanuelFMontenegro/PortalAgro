@@ -8,6 +8,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
+import moment from 'moment';
 @Injectable({
   providedIn: 'root',
 })
@@ -169,6 +170,12 @@ export class ApiService {
   // Agregar un nuevo administrador a una compañía
   addAdministrator(adminData: any): Observable<any> {
     return this.http.post(`${this.baseURL}/dist/user/manager`, adminData);
+  }
+
+  // CALENDAR PRODUCER
+  calendarProducer(): Observable<any> {
+    const url = `${this.baseURL}/user/service/calendar/all`;
+    return this.http.get<any>(url);
   }
 
   // MANAGER FOR ID
@@ -340,7 +347,6 @@ export class ApiService {
       formData
     );
   }
-
 
   // <--ENPOINTS PARA AGREGAR COOPERATIVAS) -->
 

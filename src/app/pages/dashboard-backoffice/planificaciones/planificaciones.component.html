@@ -1,1 +1,27 @@
-<p>planificaciones works!</p>
+<app-header-user [titulo]="'Planificación de Rutas'"></app-header-user>
+
+<div class="map-container">
+  <div class="inputs">
+
+    <mat-label>Latitud Inicial</mat-label>
+    <input matInput [(ngModel)]="latStart" type="number" step="any">
+
+
+    <mat-label>Longitud Incial</mat-label>
+    <input matInput [(ngModel)]="lngStart" type="number" step="any">
+
+    
+
+    <mat-label>Latitud Final</mat-label>
+    <input matInput [(ngModel)]="latEnd" type="number" step="any">
+
+
+    <mat-label>Longitud Final</mat-label>
+    <input matInput [(ngModel)]="lngEnd" type="number" step="any">
+
+
+    <button mat-raised-button color="primary" (click)="loadRoute()">Crear Ruta</button>
+  </div>
+
+  <div id="map" class="map"></div>
+</div>

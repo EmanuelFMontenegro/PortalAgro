@@ -23,6 +23,7 @@ interface DecodedToken {
   userId: number;
   sub: string;
   roles: string;
+  exp: number;
 }
 @Component({
   selector: 'app-login',
@@ -96,12 +97,21 @@ export class LoginComponent implements OnInit {
       this.apiService.validarCredenciales(username, password).subscribe({
         next: (response) => {
           if (response.status === 200 && response.body && response.body.token) {
-            localStorage.setItem('token', response.body.token);
+            const token = response.body.token;
+            const decoded: DecodedToken = jwtDecode(token);
 
-            const decoded: DecodedToken = jwtDecode(response.body.token);
+            // Calcular la hora de expiración del token y guardarla en sessionStorage
+            const expirationTime = decoded.exp * 1000; // Expiration time in milliseconds
+            sessionStorage.setItem('token', token);
+            sessionStorage.setItem(
+              'tokenExpiration',
+              expirationTime.toString()
+            ); // Save expiration time
+
             const userId = decoded.userId;
             const personId = userId;
-
+            console.log('datos del userId', userId);
+            console.log('person id', personId);
             this.apiService.getPersonByIdProductor(userId, personId).subscribe(
               (userData) => {
                 if (userData && userData.name) {
@@ -157,7 +167,7 @@ export class LoginComponent implements OnInit {
           } else if (err.status === 400 && err.error.code === 4016) {
             this.toastr.error(
               'Error de contraseña. Por favor intenta de nuevo.',
-              'Atencion'
+              'Atención'
             );
           } else if (err.status === 401 && err.error.code === 4001) {
             this.toastr.warning(

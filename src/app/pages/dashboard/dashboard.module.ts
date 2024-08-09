@@ -53,6 +53,8 @@ import { NotificacionesComponent } from './notificaciones/notificaciones.compone
 import { SharedModule } from 'src/app/shared/shared.module';
 import { MatRadioModule } from '@angular/material/radio';
 
+
+
 const CUSTOM_DATE_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -82,7 +84,8 @@ const CUSTOM_DATE_FORMATS = {
     InformesComponent,
     CalendarioComponent,
     ChacrasComponent,
-    NotificacionesComponent
+    NotificacionesComponent,
+    
   ],
   imports: [
     CommonModule,
