@@ -55,6 +55,7 @@ export class ChacrasComponent implements OnInit {
   hectareasOption: string = 'min-max';
   nombreChacra: string = '';
   nombreProductor: string = '';
+  userLogeed = this.authService.userLogeed;
 
   dataView: DataView [] = [
 
@@ -110,10 +111,10 @@ export class ChacrasComponent implements OnInit {
     const token = this.authService.getToken();
     if (token) {
       const decoded: any = jwtDecode(token);
+
       this.userId = decoded.userId;
       this.userEmail = decoded.sub;
       this.companyId = decoded.companyId;
-
   } else {
     this.userId = null;
     this.userEmail = null;

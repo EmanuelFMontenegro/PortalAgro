@@ -4,11 +4,13 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { jwtDecode } from 'jwt-decode';
 import { environment } from 'src/environments/environment';
+import { UserToken } from '../models/auth.models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  public userLogeed: UserToken | undefined;
   private userEmail: string = '';
   private userId: number | null = null;
   private field: string | null = null; // Campo adicional obtenido del token
@@ -23,6 +25,8 @@ export class AuthService {
         const token = response?.token;
         if (token) {
           localStorage.setItem('token', token); // Almacenar el token en localStorage
+
+          this.getUserLogeed() // una vez guardado el token en el local ya se puede obtener el usuario
 
           // Decodificar el token y almacenar los datos
           const decodedToken = jwtDecode<{ email: string, userId: number, field: string }>(token);
@@ -40,6 +44,20 @@ export class AuthService {
         }
       })
     );
+  }
+
+  /** Devuelve el usuario que está logueado actualmente en el sistema a travez del token */
+  getUserLogeed(): UserToken | undefined{
+    let token = localStorage.getItem('token');
+    if(token){
+      try { // si falla la decodificación
+        const decoded: any = jwtDecode(token);
+        this.userLogeed = decoded;
+      } catch (error) {
+        console.error('Error al decodificar el token:', error);
+      }
+    }
+    return this.userLogeed
   }
 
   // Método para obtener el email del usuario
@@ -66,6 +84,7 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('campoSeleccionado'); // Eliminar datos del campo
+    this.userLogeed = undefined;
     this.userEmail = '';
     this.userId = null;
     this.field = null;

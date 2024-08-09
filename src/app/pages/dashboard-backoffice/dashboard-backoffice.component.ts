@@ -4,6 +4,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { Router } from '@angular/router';
 import { SidenavService } from 'src/app/services/sidenav.service';
 import { HttpClient } from '@angular/common/http';
+import { AuthService } from 'src/app/services/AuthService';
 interface Ellipses {
   left: string;
   top: string;
@@ -32,8 +33,10 @@ export class DashboardBackofficeComponents implements AfterViewInit {
     private breakpointObserver: BreakpointObserver,
     private router: Router,
     private http: HttpClient,
+    private authService: AuthService,
     private sidenavService: SidenavService
   ) {
+    this.authService.getUserLogeed()
     this.loadMenu();
     this.sidenavService.sidenavOpen$.subscribe(open => {
       this.sidenavOpened = open;
@@ -48,7 +51,7 @@ export class DashboardBackofficeComponents implements AfterViewInit {
         console.log(this.isScreenSmall)
         this.sidenav.mode = this.isScreenSmall ? 'over' : 'side';
       });
-      
+
   }
 
   toggleSidenav() {
@@ -66,7 +69,7 @@ export class DashboardBackofficeComponents implements AfterViewInit {
     this.http.get<any>('../../assets/json/menu-dashboard-bo.json').subscribe(data => {
       this.menuItems = data.menuItems;
     });
-  } 
+  }
   onSidenavToggle(opened: boolean): void {
     if (!opened) {
       this.sidenavService.changeState(false);
