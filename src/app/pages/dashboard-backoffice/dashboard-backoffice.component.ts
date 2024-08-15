@@ -14,21 +14,21 @@ interface Ellipses {
 @Component({
   selector: 'app-dashboard-backoffice',
   templateUrl: './dashboard-backoffice.component.html',
-  styleUrls: ['./dashboard-backoffice.component.sass']
+  styleUrls: ['./dashboard-backoffice.component.sass'],
 })
 export class DashboardBackofficeComponents implements AfterViewInit {
   @ViewChild('sidenav') sidenav!: MatSidenav;
   sidenavOpened: boolean = false;
   isScreenSmall = false;
   menuItems: any[] = [];
-  svgPath = 'menu'
+  svgPath = 'menu';
   ellipses: Ellipses = {
     left: 'assets/img/footer/ellipse_white.svg',
     top: 'assets/img/footer/ellipse_white_mobile.svg',
     right: 'assets/img/footer/ellipse_blue.svg',
-    bottom: 'assets/img/footer/ellipse_blue_mobile.svg'
-  }
-  background = '#015E83'
+    bottom: 'assets/img/footer/ellipse_blue_mobile.svg',
+  };
+  background = '#015E83';
   constructor(
     private breakpointObserver: BreakpointObserver,
     private router: Router,
@@ -36,9 +36,9 @@ export class DashboardBackofficeComponents implements AfterViewInit {
     private authService: AuthService,
     private sidenavService: SidenavService
   ) {
-    this.authService.getUserLogeed()
+    this.authService.getUserLogeed();
     this.loadMenu();
-    this.sidenavService.sidenavOpen$.subscribe(open => {
+    this.sidenavService.sidenavOpen$.subscribe((open) => {
       this.sidenavOpened = open;
     });
   }
@@ -48,10 +48,8 @@ export class DashboardBackofficeComponents implements AfterViewInit {
       .observe(['(max-width: 720px)'])
       .subscribe((result) => {
         this.isScreenSmall = result.matches;
-        console.log(this.isScreenSmall)
         this.sidenav.mode = this.isScreenSmall ? 'over' : 'side';
       });
-
   }
 
   toggleSidenav() {
@@ -66,9 +64,11 @@ export class DashboardBackofficeComponents implements AfterViewInit {
   }
 
   loadMenu(): void {
-    this.http.get<any>('../../assets/json/menu-dashboard-bo.json').subscribe(data => {
-      this.menuItems = data.menuItems;
-    });
+    this.http
+      .get<any>('../../assets/json/menu-dashboard-bo.json')
+      .subscribe((data) => {
+        this.menuItems = data.menuItems;
+      });
   }
   onSidenavToggle(opened: boolean): void {
     if (!opened) {
@@ -93,6 +93,3 @@ export class DashboardBackofficeComponents implements AfterViewInit {
     return permiso
   } */
 }
-
-
-

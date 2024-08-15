@@ -19,7 +19,7 @@
   </div>
   <div class="card-map">
     <div class="geo-container">
-      <div #map style="height: 500px; border: 1px solid #32963f"></div>
+      <div #map style="height: 500px; border: 1px solid #015E83"></div>
     </div>
   </div>
   <div class="card-search">
@@ -27,12 +27,16 @@
     <div class="geolocation-info">
       <!-- Botones de radio para seleccionar el tipo de geolocalización -->
       <mat-radio-group class="custom-radio" [(ngModel)]="opcionGeolocalizacion">
-        <mat-radio-button value="localidad">Autogeolocalizar por Localidad.</mat-radio-button>
-        <mat-radio-button value="manual">Geolocalizar por Coordenadas.</mat-radio-button>
+        <mat-radio-button value="localidad" (change)="toggleManualCoordinates($event.value)">Autogeolocalizar por
+          Localidad.</mat-radio-button>
+        <mat-radio-button value="manual" (change)="toggleManualCoordinates($event.value)">Geolocalizar por
+          Coordenadas.</mat-radio-button>
       </mat-radio-group>
 
+
+
       <!-- Mostrar formulario de coordenadas manuales solo si se selecciona "manual" -->
-      <div *ngIf="opcionGeolocalizacion === 'manual'">
+      <div class="coordenadas" *ngIf="opcionGeolocalizacion === 'manual'">
         <mat-label>Latitud</mat-label>
         <input matInput id="manualLatitude" type="number" step="any" [(ngModel)]="latitud"
           (change)="onManualCoordinatesChange()">
@@ -70,4 +74,5 @@
       <button mat-raised-button class="cancel-button" type="button" (click)="cancelar()">Cancelar</button>
     </div>
   </div>
+
 </div>

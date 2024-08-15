@@ -1,0 +1,35 @@
+@import '../../../../../assets/variables';
+@import '../../../../../shared-styles/mixins';
+
+.field-container {
+  display: flex;
+  margin-bottom: 14em;
+  flex-direction: column;
+  right: 0.5em;
+  align-items: flex-end;
+}
+
+.nuevoUsuario-button {
+  padding: 6px 18px;
+  border: 2px solid #FFFFFF;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s;
+  font-size: 0.85em;
+  gap: 10px;
+  width: 15%;
+  font-family: "Montserrat", sans-serif;
+  font-weight: bold;
+  background-color: #015E83;
+  color: white;
+  margin-right: 2em;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: center;
+
+  &:active {
+    transform: translateY(2px);
+  }
+}
+

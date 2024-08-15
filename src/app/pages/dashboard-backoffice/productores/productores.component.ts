@@ -10,7 +10,10 @@ import { FormControl } from '@angular/forms';
 import { startWith, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { DashboardBackOfficeService } from '../dashboard-backoffice.service';
-import { TipoLabel, DataView } from 'src/app/shared/components/miniatura-listado/miniatura.model';
+import {
+  TipoLabel,
+  DataView,
+} from 'src/app/shared/components/miniatura-listado/miniatura.model';
 
 interface CustomJwtPayload {
   userId: number;
@@ -24,7 +27,6 @@ interface DecodedToken {
   companyId: number;
 }
 
-
 @Component({
   selector: 'app-productores',
   templateUrl: './productores.component.html',
@@ -37,10 +39,16 @@ export class ProductoresComponent implements OnInit {
   nombreABuscar: string = '';
   apellidoABuscar: string = '';
   placeholderText: string = 'Buscar por . . .';
-  usuarios: { nombre: string; apellido: string; localidad: string,dni:number,email:string }[] = [];
+  usuarios: {
+    nombre: string;
+    apellido: string;
+    localidad: string;
+    dni: number;
+    email: string;
+  }[] = [];
   nombre: string = '';
   apellido: string = '';
-  name:string | null=null;
+  name: string | null = null;
   dni: string = '';
   descriptions: string = '';
   location_id: string | null = null;
@@ -52,21 +60,27 @@ export class ProductoresComponent implements OnInit {
   public email: string | null = null;
   private companyId: number | any;
 
-  dataView: DataView [] = [
-
+  dataView: DataView[] = [
     // IMAGEN
-    {label: '', field: 'assets/img/avatar_prod.svg', tipoLabel: TipoLabel.imagen},
+    {
+      label: '',
+      field: 'assets/img/avatar_prod.svg',
+      tipoLabel: TipoLabel.imagen,
+    },
 
     // SPAN
-    {label: 'Nombre', field: 'nombre', tipoLabel: TipoLabel.span},
-    {label: 'Apellido', field:'apellido', tipoLabel: TipoLabel.span },
-    {label: 'Localidad', field:'localidad', tipoLabel: TipoLabel.span },
-
+    { label: 'Nombre', field: 'nombre', tipoLabel: TipoLabel.span },
+    { label: 'Apellido', field: 'apellido', tipoLabel: TipoLabel.span },
+    { label: 'Localidad', field: 'localidad', tipoLabel: TipoLabel.span },
+    { label: 'Descripcion', field: 'descripcion', tipoLabel: TipoLabel.span },
     // VER MAS
-     // en lable va la key para guardar en localstorage y en field la url del btn mas
-    {label: 'selectedUser', field: 'dashboard-backoffice/perfil-productor', tipoLabel: TipoLabel.botonVermas},
- ]
-
+    // en lable va la key para guardar en localstorage y en field la url del btn mas
+    {
+      label: 'selectedUser',
+      field: 'dashboard-backoffice/perfil-productor',
+      tipoLabel: TipoLabel.botonVermas,
+    },
+  ];
 
   constructor(
     private authService: AuthService,
@@ -76,7 +90,10 @@ export class ProductoresComponent implements OnInit {
     private http: HttpClient,
     public dashboardBackOffice: DashboardBackOfficeService
   ) {
-    this.dashboardBackOffice.dataTitulo.next({ titulo: `¡Bienvenido!, Acá podrás gestionar, los usuarios de los Productores` , subTitulo: ''})
+    this.dashboardBackOffice.dataTitulo.next({
+      titulo: `¡Bienvenido!, Acá podrás gestionar, los usuarios de los Productores`,
+      subTitulo: '',
+    });
   }
   ngOnInit(): void {
     this.decodeToken();
@@ -92,23 +109,21 @@ export class ProductoresComponent implements OnInit {
       this.userId = decoded.userId;
       this.name = decoded.name;
       this.email = decoded.sub;
-      this.companyId = decoded.companyId; 
+      this.companyId = decoded.companyId;
     } else {
       this.userId = null;
       this.email = null;
     }
   }
 
-
   cargarDatosDeUsuario() {
     const token = this.authService.getToken();
     if (token) {
       const decoded: DecodedToken = jwtDecode(token);
-      if (decoded.userId && decoded.companyId) { // Asegúrate de tener companyId en el token
+      if (decoded.userId && decoded.companyId) {
         this.userId = decoded.userId;
         this.companyId = decoded.companyId;
         this.email = decoded.sub;
-
         this.apiService.findUserById(this.companyId, this.userId).subscribe(
           (data) => {
             this.nombre = data.name;
@@ -125,7 +140,6 @@ export class ProductoresComponent implements OnInit {
     }
   }
 
-
   cargarUsuarios(locationId?: number) {
     this.apiService.getPeopleAdmin(locationId).subscribe(
       (data: any) => {
@@ -139,7 +153,7 @@ export class ProductoresComponent implements OnInit {
             email: usuario.userEmail,
             telefono: usuario.telephone,
             localidad: usuario.location.name,
-            descripcion: usuario.descriptions
+            descripcion: usuario.descriptions,
           }));
         }
       },
@@ -149,7 +163,6 @@ export class ProductoresComponent implements OnInit {
       }
     );
   }
-
 
   obtenerLocalidades() {
     this.apiService.getLocationMisiones('location').subscribe(
@@ -173,8 +186,6 @@ export class ProductoresComponent implements OnInit {
       loc.name.toLowerCase().includes(filterValue)
     );
   }
-
-
 
   aplicarFiltro(event: MatSelectChange) {
     const valorSeleccionado = event.value;
@@ -250,7 +261,7 @@ export class ProductoresComponent implements OnInit {
 
     this.apiService.getPeopleUserAdmin(filter).subscribe(
       (data: any) => {
-        console.log("datos de filtro",data)
+        console.log('datos de filtro', data);
         this.procesarDatosUsuarios(data);
         if (this.usuarios.length === 0) {
           this.toastr.info(
@@ -283,12 +294,6 @@ export class ProductoresComponent implements OnInit {
     return localidad ? localidad.name : ''; // Devolver el nombre de la localidad si se encuentra, de lo contrario, cadena vacía
   }
 
-
-
-
-
-
-
   limpiarTexto() {
     this.Buscar = '';
     this.nombreABuscar = '';
@@ -318,7 +323,6 @@ export class ProductoresComponent implements OnInit {
   }
   //Agregar en Ver Mas el link o ruta a la pantalla editar un Productor
   verMas(usuarios: any) {
-
     // Guardar los datos del usuario en localStorage
     localStorage.setItem('selectedUser', JSON.stringify(usuarios));
     // Navegar al componente perfil-productor

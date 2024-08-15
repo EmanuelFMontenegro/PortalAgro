@@ -137,6 +137,9 @@ body
     display: flex
     flex-direction: column
 
+  .coordenas
+    position: relative
+    bottom: 8em
   mat-select
     width: 95%
     padding: 9px
@@ -198,7 +201,7 @@ body
     display: flex
     gap: 15px
     position: relative
-    top: -6.4em
+    top: -5.4em
     left: -1em
     flex-direction: column
 
@@ -276,13 +279,21 @@ strong
   color: $primary-color
   margin-right: 5px
 
+.geolocation-info mat-radio-group
+  display: flex
+  flex-direction: column
+
+.manual-coordinates
+  position: relative
+  margin-top: -7em
+
 .mat-mdc-radio-button .mdc-radio__native-control:enabled:checked+.mdc-radio__background .mdc-radio__outer-circle
   border-color: #015E85
 
 .mat-mdc-radio-button .mdc-radio__native-control:enabled:checked+.mdc-radio__background .mdc-radio__inner-circle
   background-color: #015E85
 
-@media screen and (max-width: 768px)
+@media screen and (max-width: 768px) and (max-width: 1024px)
 
   .titulo-bienvenida h2
     padding: 0
@@ -294,9 +305,7 @@ strong
   .container
     flex-direction: column
     align-items: center
-    .card
-      position: relative
-      top: -17em
+
     .titulo-bienvenida
       order: -3
     .card-user
@@ -320,7 +329,7 @@ strong
       display: none
 
     .titulo-registrar-campo
-      margin-top: -24%
+      margin-top: -25%
 
     .card-search
       width: 86%
@@ -329,9 +338,23 @@ strong
       height: 34vh
       border-radius: 10px
 
+    .geolocation-info mat-radio-group
+      position: relative
+      bottom: 9em
+
+    .card
+      margin-top: -9em
+
+    .coordenadas
+      position: relative
+      top: -9em
+
     .card-info
       position: relative
       bottom: 17em
+
+    mat-select
+      margin-top: 12em
 
     .input-container input[type=text]
       width: 100%
@@ -346,8 +369,8 @@ strong
       color: #808080
 
     .botones-servicio
-      margin-top: 22.2em
-
+      margin-top: 29em
+      left: -0.3em
     .register-button
       background-color: $primary-color
       width: 100%
@@ -356,7 +379,7 @@ strong
 
   .container .card-map
     width: 90%
-    top: 6.5em
+    top: 16em
     left: -4em
     position: relative
   #map

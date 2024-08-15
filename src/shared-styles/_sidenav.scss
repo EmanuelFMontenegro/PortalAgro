@@ -11,41 +11,38 @@
     }
   }
 
-.ContainerS { 
+.ContainerS {
     @include flexbox(column);
-    height: calc(100vh - 80px);  
+    min-height: calc(100vh - 80px);
+
 
     &__menu {
         width: 262px;
-        @include box-shadow(1px, 0); 
+        @include box-shadow(1px, 0);
         &__logo {
-            @include position(absolute, null, null, 10px);
+            @include position(relative, null, null, 10px);
             width: 100%;
             text-align: center;
             img {
                 width: 70px;
-                height: 90px; 
+                height: 90px;
             }
-        }
-
-        mat-nav-list {
-            padding-top: 55px;
         }
 
         &__list {
             &--item {
-                margin-top: 6px;
+
                 @include font(17px, 600);
                 &:hover {
                     cursor: pointer;
                 }
                 &__container {
                     @include flexbox(row, flex-start, center);
-                    &-icon { 
+                    &-icon {
                         margin-right: 5px;
                         width: 25px;
                     }
-                }    
+                }
             }
         }
     }
@@ -53,7 +50,8 @@
         @include flexbox(row);
         background-color: $default;
         &__card {
-            padding-top: 32px;
+            padding-top: 1px;
         }
     }
+
 }

@@ -1,38 +1,38 @@
 {
     "menuItems": [
       {
-        "icon": "home_24dp_3BA549_FILL0_wght400_GRAD0_opsz24.svg",
+        "icon": "home.svg",
         "name": "Inicio",
         "route": "/dashboard/inicio"
       },
       {
-        "icon": "drone-15-svgrepo-com _verde.svg",
+        "icon": "servicio.svg",
         "name": "Solicitudes y Servicios",
         "route": "/dashboard/servicios"
       },
       {
-        "icon": "agriculture_24dp_3BA549_FILL0_wght400_GRAD0_opsz24.svg",
+        "icon": "chacras.svg",
         "name": "Chacras",
         "route": "/dashboard/chacras"
       },
       {
-        "icon": "calendar_month_24dp_3BA549_FILL0_wght400_GRAD0_opsz24.svg",
+        "icon": "calendario.svg",
         "name": "Calendario",
         "route": "/dashboard/calendario"
       },
       {
-        "icon": "notifications_active_24dp_3BA549_FILL0_wght400_GRAD0_opsz24.svg",
+        "icon": "notificaciones.svg",
         "name": "Notificaciones",
         "route": "/dashboard/notificaciones"
 
       },
       {
-        "icon": "leaderboard_24dp_3BA549_FILL0_wght400_GRAD0_opsz24.svg",
+        "icon": "informes.svg",
         "name": "Informes",
         "route": "/dashboard/informes"
       },
       {
-        "icon": "person_24dp_3BA549_FILL0_wght400_GRAD0_opsz24.svg",
+        "icon": "usuario.svg",
         "name": "Perfil",
         "route": "/dashboard/perfil"
       }

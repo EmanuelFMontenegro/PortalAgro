@@ -138,8 +138,6 @@ export class CargarLotesComponent implements OnInit {
 
     this.apiService.getPersonByIdProductor(userId, this.personId).subscribe(
       (response: DatosUsuario) => {
-        console.log(response);
-
         if (response) {
           this.nombre = response.name;
           this.apellido = response.lastname;

@@ -1,5 +1,4 @@
-
-    <!-- <div class="card user-card">
+<!-- <div class="card user-card">
       <div class="user-content">
         <div class="avatar">
           <div class="avatar-circle">
@@ -14,61 +13,61 @@
       </div>
       <h2 class="titulo-chacra">Lotes</h2>
     </div> -->
-    <app-titulo-container [titulo]="titulo"></app-titulo-container>
-    <div class="field-container">
-      <mat-select class="field-input" placeholder="Filtrar por" [(ngModel)]="filtroSeleccionado"
-        (ngModelChange)="aplicarFiltro($event)">
-        <mat-option value="localidad">Localidad</mat-option>
-        <mat-option value="productor">Productor</mat-option>
-        <mat-option value="cultivo">Cultivo</mat-option>
-        <mat-option value="hectareas">Hectáreas</mat-option>
-      </mat-select>
+<app-titulo-container [titulo]="titulo"></app-titulo-container>
+<div class="field-container">
+  <mat-select class="field-input" placeholder="Filtrar por" [(ngModel)]="filtroSeleccionado"
+    (ngModelChange)="aplicarFiltro($event)">
+    <mat-option value="localidad">Localidad</mat-option>
+    <mat-option value="productor">Productor</mat-option>
+    <mat-option value="cultivo">Cultivo</mat-option>
+    <mat-option value="hectareas">Hectáreas</mat-option>
+  </mat-select>
 
-      <ng-container *ngIf="filtroSeleccionado === 'localidad'">
-        <mat-select class="field-input" placeholder="Seleccionar localidad" [(ngModel)]="idLocalidadSeleccionada">
-          <mat-option *ngFor="let localidad of localidades" [value]="localidad.id">{{ localidad.name }}</mat-option>
-        </mat-select>
-      </ng-container>
-
-
-
-      <ng-container *ngIf="filtroSeleccionado === 'productor'">
-        <input class="field-input" matInput [placeholder]="'Buscar por productor'" [(ngModel)]="nombreProductor">
-      </ng-container>
-
-      <ng-container *ngIf="filtroSeleccionado === 'cultivo'">
-        <mat-select class="field-input" placeholder="Seleccionar cultivo" [(ngModel)]="cropId">
-          <mat-option *ngFor="let cultivo of cultivos" [value]="cultivo.id">{{ cultivo.name }}</mat-option>
-        </mat-select>
-      </ng-container>
+  <ng-container *ngIf="filtroSeleccionado === 'localidad'">
+    <mat-select class="field-input" placeholder="Seleccionar localidad" [(ngModel)]="idLocalidadSeleccionada">
+      <mat-option *ngFor="let localidad of localidades" [value]="localidad.id">{{ localidad.name }}</mat-option>
+    </mat-select>
+  </ng-container>
 
 
 
+  <ng-container *ngIf="filtroSeleccionado === 'productor'">
+    <input class="field-input" matInput [placeholder]="'Buscar por productor'" [(ngModel)]="nombreProductor">
+  </ng-container>
 
-      <ng-container *ngIf="filtroSeleccionado === 'hectareas'">
-        <input class="field-input" matInput type="number" placeholder="Min" [(ngModel)]="minHectareas"
-          (blur)="validarMinHectareas()">
-        <input class="field-input" matInput type="number" placeholder="Max" [(ngModel)]="maxHectareas"
-          (blur)="validarMaxHectareas()">
-      </ng-container>
-
-
-
-      <!-- Botones para limpiar y filtrar -->
-      <button mat-raised-button class="clear-button" (click)="limpiarTexto()">Limpiar
-        <img src="assets/img/ink_eraser_24dp_FILL0_wght400_GRAD0_opsz24.svg" alt="IconoBorrar">
-      </button>
-
-      <button mat-raised-button class="active-button" (click)="filtrar()">Filtrar
-        <img src="assets/img/filter_alt_24dp_FILL0_wght400_GRAD0_opsz24.svg" alt="IconoBorrar">
-      </button>
-
-      <button mat-raised-button class="nuevaChacra-button" (click)="BtnNuevaChacra()">Volver al Inicio
-      </button>
-    </div>
+  <ng-container *ngIf="filtroSeleccionado === 'cultivo'">
+    <mat-select class="field-input" placeholder="Seleccionar cultivo" [(ngModel)]="cropId">
+      <mat-option *ngFor="let cultivo of cultivos" [value]="cultivo.id">{{ cultivo.name }}</mat-option>
+    </mat-select>
+  </ng-container>
 
 
-    <!-- <div class="card-campos-lotes">
+
+
+  <ng-container *ngIf="filtroSeleccionado === 'hectareas'">
+    <input class="field-input" matInput type="number" placeholder="Min" [(ngModel)]="minHectareas"
+      (blur)="validarMinHectareas()">
+    <input class="field-input" matInput type="number" placeholder="Max" [(ngModel)]="maxHectareas"
+      (blur)="validarMaxHectareas()">
+  </ng-container>
+
+
+
+  <!-- Botones para limpiar y filtrar -->
+  <button mat-raised-button class="clear-button" (click)="limpiarTexto()">Limpiar
+    <img src="assets/img/limpiar.svg" alt="IconoBorrar">
+  </button>
+
+  <button mat-raised-button class="active-button" (click)="filtrar()">Filtrar
+    <img src="assets/img/filtrar.svg" alt="IconoFiltrar">
+  </button>
+
+  <button mat-raised-button class="nuevaChacra-button" (click)="BtnNuevaChacra()">Volver al Inicio
+  </button>
+</div>
+
+
+<!-- <div class="card-campos-lotes">
       <div class="campo-card" *ngFor="let lote of loteData; let i = index">
         <img class="img_lotes" [src]="'assets/img/lote_' + (i + 1) + '.svg'" alt="Img Lote">
         <p class="with-dot">
@@ -95,4 +94,4 @@
       </div>
     </div> -->
 
-    <miniatura [dataView]="dataView" [listado]="loteData"></miniatura>
+<miniatura [dataView]="dataView" [listado]="loteData"></miniatura>

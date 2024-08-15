@@ -15,6 +15,7 @@
 
   .miniatura-container
     display: grid
+    // grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr))
     grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr))
     gap: 16px
 
@@ -48,15 +49,14 @@
       width: auto
 
   .miniatura
-    padding: 20px
+    padding: 15px
     border-radius: 20px
     width: 270px
-    border: 2px solid $primary-color
+    border: 2px solid $new-color-blue-hard
 
     @media (max-width: 768px)
       padding: 15px
       width: auto
-      margin-top: 7em
 
     span
       font-weight: bold
@@ -84,6 +84,7 @@
       font-size: 0.85em
       font-family: "Montserrat", sans-serif
       font-weight: bold
+      margin-top: 1em
 
       @media (max-width: 768px)
         font-size: 0.75em
@@ -101,8 +102,8 @@
       font-size: 0.85em
       font-family: "Montserrat", sans-serif
       font-weight: bold
-      margin-bottom: 1em
-      
+      margin-top: 1em
+
       @media (max-width: 768px)
         font-size: 0.75em
         padding: 6px 15px

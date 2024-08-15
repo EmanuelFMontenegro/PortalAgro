@@ -118,7 +118,6 @@ export class ChacrasLoteComponent {
     if (chacraSeleccionadaString !== null) {
       const chacraSeleccionada = JSON.parse(chacraSeleccionadaString);
       this.FieldId = chacraSeleccionada.id;
-      console.log('el fieldId del locastorage', this.FieldId);
     } else {
       console.error(
         'No se encontró la chacra seleccionada en el localStorage.'
@@ -281,8 +280,7 @@ export class ChacrasLoteComponent {
   }
 
   loadDataLote(FieldId: number, userId: number): void {
-    console.log('lo que trae del usuario para cargar lostes', FieldId, userId);
-    if (userId && FieldId) {
+     if (userId && FieldId) {
       this.apiService.getPlotsOperador(userId, FieldId).subscribe(
         (response: any) => {
           if (response?.list && response.list.length > 0) {

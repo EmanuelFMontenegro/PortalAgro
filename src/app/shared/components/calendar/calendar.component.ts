@@ -49,10 +49,6 @@ export class CalendarComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['events'] && changes['events'].currentValue) {
-      console.log(
-        'Eventos recibidos en CalendarComponent:',
-        changes['events'].currentValue
-      );
       this.calendarOptions.events = changes['events'].currentValue;
     }
   }

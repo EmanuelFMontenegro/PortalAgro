@@ -12,7 +12,7 @@
           &__logo {
               img {
                   width: 40px !important;
-                  height: 60px !important; 
+                  height: 60px !important;
               }
           }
           mat-nav-list {
@@ -27,7 +27,7 @@
     @include position(absolute, 0);
   }
   img {
-    width: 100%;
+    // width: 100%;
   }
   .ellipse_green {
     width: 100%;
@@ -49,12 +49,13 @@
     }
     &__logo {
       margin-bottom: 52px;
+
     }
     &__contact {
       padding-top: 32px;
       padding-left: 0;
       align-items: center;
-      ul { 
+      ul {
         padding-left: 22px;
       }
       h2 {
