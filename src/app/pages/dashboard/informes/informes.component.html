@@ -1,64 +1,7 @@
-<!-- <div class="informes">
-<div class="container"> -->
-  <!-- <div class="header-container2">
-    <h2 class="title2">Informes</h2>
-    <button class="back-button2" (click)="volver()"> << Volver Atrás</button>
-  </div>
-  <div class="search-container">
-    <input type="text" class="search-input" placeholder="Buscar...">
-    <button class="back-button2" (click)="buscar()"> Buscar</button>
-    <button class="back-button2" (click)="limpiar()"> Limpiar</button>
-    <button class="back-button2" (click)="generar()"> + Nuevo</button>
-  </div>
-  <div class="subheader-container">
-    <h2 class="subtitle">Colocar subtitulo o sacar:</h2>
-  </div> -->
-
-
-  <!-- <mat-card class="main-card">
-    <h2>Detalle de chacras</h2>
-    <p>Cantidad de chacras</p>
-    <p>{{campoTabla.length}}</p>
-    <div class="card-notificaciones" *ngIf="datosCargados">
-      <canvas baseChart
-        [data]="barChartData"
-        [options]="barChartOptions"
-        [plugins]="barChartPlugins"
-        [legend]="barChartLegend"
-        [type]="'bar'"
-        height="400"
-        width="400">
-      </canvas>
-    </div>
-  </mat-card>
-  <mat-card>
-    <h2>Informacion</h2>
-    <p>chacra</p>
-    <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-
-      <ng-container matColumnDef="name">
-        <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
-      </ng-container>
-    
-      <ng-container matColumnDef="plantacion">
-        <mat-header-cell *matHeaderCellDef> Plantación </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.plantacion.name}} </mat-cell>
-      </ng-container>
-    
-      <ng-container matColumnDef="dimension">
-        <mat-header-cell *matHeaderCellDef> Dimensión </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.dimension}} </mat-cell>
-      </ng-container>
-    
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-    </mat-table>
-  </mat-card> -->
-
   <div class="informes">
- 
- 
+    <div class="header-container2">
+      <h2 class="title2">Informes</h2>
+    </div>
    
     <div class="div-container-buttons">
       <mat-grid-list [cols]="isScreenSmall ? 3 : 4" rowHeight="100" [gutterSize]="isScreenSmall ? '8px' : '50px'">
@@ -80,7 +23,7 @@
               </div>
            
               <div class="col-right">
-                <img src="assets/img/img-chacra-verde.svg" alt="Logo" class="img-info" />
+                <img *ngIf="!isScreenSmall" src="assets/img/img-chacra-verde.svg" alt="Logo" class="img-info" />
               </div>
             </div>
           </button>
@@ -103,7 +46,7 @@
               </div>
            
               <div class="col-right">
-                <img src="assets/img/img-plantaciones.svg" alt="Logo" class="img-info" />
+                <img *ngIf="!isScreenSmall" src="assets/img/img-plantaciones.svg" alt="Logo" class="img-info" />
               </div>
             </div>
           </button>
@@ -126,7 +69,7 @@
               </div>
            
               <div class="col-right">
-                <img src="assets/img/img-chacra-verde.svg" alt="Logo" class="img-info" />
+                <img *ngIf="!isScreenSmall" src="assets/img/img-chacra-verde.svg" alt="Logo" class="img-info" />
               </div>
             </div>
           </button>
@@ -142,6 +85,7 @@
             baseChart
             [data]="barChartData"
             [options]="barChartOptions"
+            [legend]="false"
             [type]="'bar'">
           </canvas>
           <canvas *ngIf="showBarChart === 2"
@@ -150,9 +94,17 @@
             [options]="pieChartOptions"
             [type]="'pie'">
           </canvas>
+          <canvas *ngIf="showBarChart === 3"
+            baseChart
+            [data]="pieChartDataHectareas"
+            [options]="pieChartOptionsHectareas"
+            [type]="'pie'">
+          </canvas>
         </mat-grid-tile>
+
         <mat-grid-tile>
           <div class="table-container">
+            
             <p class="titulo-table" *ngIf="dataSourceBar.data.length>0 && showBarChart===1" >Chacra: {{chacras[datasetIndex].name}}</p>
               <table mat-table [dataSource]="dataSourceBar" class="mat-elevation-z8" *ngIf="showBarChart === 1">
                 <!-- Definición de la columna 'name' -->
@@ -177,8 +129,8 @@
               <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
    
-            <p class="titulo-table" *ngIf="dataSourcePie.data.length>0 && showBarChart===2">Plantación: {{objetoPlantaciones[datasetIndexPie].name}}</p>
-            <table mat-table [dataSource]="dataSourcePie" class="mat-elevation-z8" *ngIf="showBarChart === 2">
+            <p class="titulo-table" *ngIf="dataSourcePie.data.length>0 && showBarChart===2 || showBarChart === 3">Plantación: {{objetoPlantaciones[datasetIndexPie].name}}</p>
+            <table mat-table [dataSource]="dataSourcePie" class="mat-elevation-z8" *ngIf="showBarChart === 2 || showBarChart === 3">
                 <!-- Definición de la columna 'chacra' -->
                 <ng-container matColumnDef="chacra">
                   <th mat-header-cell *matHeaderCellDef> Chacra </th>

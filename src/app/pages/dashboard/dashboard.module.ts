@@ -121,12 +121,12 @@ const CUSTOM_DATE_FORMATS = {
     RouterModule,
     SharedModule,
     MatRadioModule,
-    NgChartsModule,
     MatGridListModule,
     MatButtonModule,
     MatDividerModule,
     MatIconModule,
-    MatTableModule
+    MatTableModule,
+    NgChartsModule,
   ],
   providers: [{ provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS }],
 })
