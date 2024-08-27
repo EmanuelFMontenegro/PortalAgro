@@ -52,6 +52,9 @@ import { ChacrasComponent } from './chacras/chacras.component';
 import { NotificacionesComponent } from './notificaciones/notificaciones.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { MatRadioModule } from '@angular/material/radio';
+import { NgChartsModule } from 'ng2-charts';
+import {MatGridListModule} from '@angular/material/grid-list';
+import { MatDividerModule } from '@angular/material/divider';
 
 
 
@@ -120,7 +123,13 @@ const CUSTOM_DATE_FORMATS = {
     BrowserAnimationsModule,
     RouterModule,
     SharedModule,
-    MatRadioModule
+    MatRadioModule,
+    MatGridListModule,
+    MatButtonModule,
+    MatDividerModule,
+    MatIconModule,
+    MatTableModule,
+    NgChartsModule,
   ],
   providers: [{ provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS }],
 })

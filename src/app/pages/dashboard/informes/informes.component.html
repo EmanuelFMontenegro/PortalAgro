@@ -1,20 +1,160 @@
-<div class="container">
-  <div class="header-container2">
-    <h2 class="title2">Informes</h2>
-    <button class="back-button2" (click)="volver()"> << Volver Atrás</button>
-  </div>
-  <div class="search-container">
-    <input type="text" class="search-input" placeholder="Buscar...">
-    <button class="back-button2" (click)="buscar()"> Buscar</button>
-    <button class="back-button2" (click)="limpiar()"> Limpiar</button>
-    <button class="back-button2" (click)="generar()"> + Nuevo</button>
-  </div>
-  <div class="subheader-container">
-    <h2 class="subtitle">Colocar subtitulo o sacar:</h2>
-  </div>
-  <mat-card class="main-card">
-    <div class="card-notificaciones">
-
+  <div class="informes">
+    <div class="header-container2">
+      <h2 class="title2">Informes</h2>
     </div>
-  </mat-card>
-</div>
+   
+    <div class="div-container-buttons">
+      <mat-grid-list [cols]="isScreenSmall ? 3 : 4" rowHeight="100" [gutterSize]="isScreenSmall ? '8px' : '50px'">
+        <mat-grid-tile>
+          <button
+            disabled = "{{buttonsDisabled}}"
+            mat-button
+            (click)="onButtonClick(1)"
+            [ngClass]="{'selected-button': selectedButtonId === 1}"
+            class="aligned-left-button"
+          >
+            <div class="col-container">
+              <div class="col-left">
+                Chacras
+                <p>
+                  <mat-icon style="color: #3BA549;">arrow_upward</mat-icon>
+                  {{chacras.length!=0? chacras.length : 'cargando..'}}
+                </p>
+              </div>
+           
+              <div class="col-right">
+                <img *ngIf="!isScreenSmall" src="assets/img/img-chacra-verde.svg" alt="Logo" class="img-info" />
+              </div>
+            </div>
+          </button>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <button
+            disabled = "{{buttonsDisabled}}"
+            mat-button
+            (click)="onButtonClick(2)"
+            [ngClass]="{'selected-button': selectedButtonId === 2}"
+            class="aligned-left-button"
+          >
+            <div class="col-container">
+              <div class="col-left">
+                Plantaciones
+                <p>
+                  <mat-icon style="color: #3BA549;">arrow_upward</mat-icon>
+                  {{objetoPlantaciones.length!=0? objetoPlantaciones.length : 'cargando..'}}
+                </p>
+              </div>
+           
+              <div class="col-right">
+                <img *ngIf="!isScreenSmall" src="assets/img/img-plantaciones.svg" alt="Logo" class="img-info" />
+              </div>
+            </div>
+          </button>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <button
+            disabled = "{{buttonsDisabled}}"
+            mat-button
+            (click)="onButtonClick(3)"
+            [ngClass]="{'selected-button': selectedButtonId === 3}"
+            class="aligned-left-button"
+          >
+            <div class="col-container">
+              <div class="col-left">
+                Hectáreas
+                <p>
+                  <mat-icon style="color: #3BA549;">arrow_upward</mat-icon>
+                  {{hectareasTotal!=0? hectareasTotal : 'cargando..'}}
+                </p>
+              </div>
+           
+              <div class="col-right">
+                <img *ngIf="!isScreenSmall" src="assets/img/img-chacra-verde.svg" alt="Logo" class="img-info" />
+              </div>
+            </div>
+          </button>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </div>
+   
+   
+    <div class="div-container-charts">
+      <mat-grid-list [cols]="isScreenSmall ? 1 : 2"  rowHeight="50vh"  gutterSize="10px">
+        <mat-grid-tile>
+          <canvas *ngIf="showBarChart === 1"
+            baseChart
+            [data]="barChartData"
+            [options]="barChartOptions"
+            [legend]="false"
+            [type]="'bar'">
+          </canvas>
+          <canvas *ngIf="showBarChart === 2"
+            baseChart
+            [data]="pieChartData"
+            [options]="pieChartOptions"
+            [type]="'pie'">
+          </canvas>
+          <canvas *ngIf="showBarChart === 3"
+            baseChart
+            [data]="pieChartDataHectareas"
+            [options]="pieChartOptionsHectareas"
+            [type]="'pie'">
+          </canvas>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <div class="table-container">
+            
+            <p class="titulo-table" *ngIf="dataSourceBar.data.length>0 && showBarChart===1" >Chacra: {{chacras[datasetIndex].name}}</p>
+              <table mat-table [dataSource]="dataSourceBar" class="mat-elevation-z8" *ngIf="showBarChart === 1">
+                <!-- Definición de la columna 'name' -->
+                <ng-container matColumnDef="name">
+                  <th mat-header-cell *matHeaderCellDef> Nombre </th>
+                  <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                </ng-container>
+           
+                <!-- Definición de la columna 'typeCropName' -->
+                <ng-container matColumnDef="typeCropName">
+                  <th mat-header-cell *matHeaderCellDef> Plantación </th>
+                  <td mat-cell *matCellDef="let element"> {{element.plantacion.name}} </td>
+                </ng-container>
+           
+                <!-- Definición de la columna 'dimensions' -->
+                <ng-container matColumnDef="dimensions">
+                  <th mat-header-cell *matHeaderCellDef> Hectáreas </th>
+                  <td mat-cell *matCellDef="let element"> {{element.dimension}} </td>
+                </ng-container>
+   
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+   
+            <p class="titulo-table" *ngIf="dataSourcePie.data.length>0 && showBarChart===2 || showBarChart === 3">Plantación: {{objetoPlantaciones[datasetIndexPie].name}}</p>
+            <table mat-table [dataSource]="dataSourcePie" class="mat-elevation-z8" *ngIf="showBarChart === 2 || showBarChart === 3">
+                <!-- Definición de la columna 'chacra' -->
+                <ng-container matColumnDef="chacra">
+                  <th mat-header-cell *matHeaderCellDef> Chacra </th>
+                  <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                </ng-container>
+           
+                <!-- Definición de la columna 'lote' -->
+                <ng-container matColumnDef="lote">
+                  <th mat-header-cell *matHeaderCellDef> Lote </th>
+                  <td mat-cell *matCellDef="let element"> {{element.lote.name}} </td>
+                </ng-container>
+           
+                <!-- Definición de la columna 'hectárea' -->
+                <ng-container matColumnDef="hectárea">
+                  <th mat-header-cell *matHeaderCellDef> Hectáreas </th>
+                  <td mat-cell *matCellDef="let element"> {{element.lote.size}} </td>
+                </ng-container>
+         
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+   
+          </div>              
+        </mat-grid-tile>    
+      </mat-grid-list>
+    </div>
+  </div>
