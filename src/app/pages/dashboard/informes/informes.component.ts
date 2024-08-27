@@ -339,7 +339,7 @@ export class InformesComponent {
 
   public barChartData: ChartConfiguration<'bar'>['data'] = {
     labels: [],
-    datasets:[{data:[], backgroundColor: this.colors, label:'Hectareas '}]
+    datasets:[{data:[], backgroundColor: this.colors, label:'Hectáreas'}]
   };
 
 
@@ -405,7 +405,7 @@ export class InformesComponent {
  
     this.pieChartDataHectareas = {
       labels: this.objetoPlantaciones.map(item => item.name),
-      datasets: [{ data: this.objetoPlantaciones.map(item => item.totalSize), backgroundColor: backgroundColors, label:'Hecareas ' }]
+      datasets: [{ data: this.objetoPlantaciones.map(item => item.totalSize), backgroundColor: backgroundColors, label:'Hectáreas' }]
     };
   }
 
