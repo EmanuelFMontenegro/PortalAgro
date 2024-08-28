@@ -1,40 +1,156 @@
-<!-- contenedor general 
- (uno para head, buscar y para body ) -->
- <div *ngIf="campos">
-  <mat-list>
-    <mat-list-item>
-      <span matListItemTitle>Chacras:</span>
-      <span matListItemMeta>{{ campos }}</span>
-    </mat-list-item>
-    <mat-list-item>
-      <span matListItemTitle>Lotes:</span>
-      <span matListItemMeta>{{ loteDataLength }}</span>
-    </mat-list-item>
-    <mat-list-item>
-      <span matListItemTitle>Plantaciones:</span>
-      <span matListItemMeta>{{ typeCropOperators.length }}</span>
-    </mat-list-item>
-  </mat-list>
+<!-- contenedor general (uno para head, buscar y para body) -->
+<div class="informes">
+  
+  <!-- Contenedor para seleccionar productores -->
+  <div class="div-container">
+    <h4>Seleccionar Productores</h4>
+    <mat-form-field appearance="outline" class="custom-form-field" style="color: #015E83;">
+      <mat-label>Productor</mat-label>
+      <mat-select [(ngModel)]="selectedProductorId" (selectionChange)="onProductorChange($event.value)">
+        <mat-option *ngFor="let productor of usuarios" [value]="productor.id">
+          {{productor.name}} {{productor.lastName}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <!-- Contenedor para botones -->
+  <div class="div-container-buttons">
+    <mat-grid-list [cols]="isScreenSmall ? 3 : 4" rowHeight="100" [gutterSize]="isScreenSmall ? '8px' : '50px'">
+      <mat-grid-tile>
+        <button
+          disabled="{{buttonsDisabled}}" 
+          mat-button 
+          (click)="onButtonClick(1)" 
+          [ngClass]="{'selected-button': selectedButtonId === 1}"
+          class="aligned-left-button"
+        >
+          <div class="col-container">
+            <div class="col-left">
+              Chacras
+              <p>
+                <mat-icon style="color: #015E83;">arrow_upward</mat-icon>{{buttonsDisabled ? '-' : chacrasLength}}
+              </p>
+            </div>
+            <div class="col-right">
+              <img *ngIf="!isScreenSmall" src="assets/img/img-chacra-azul.svg" alt="Logo" class="img-info" />
+            </div>
+          </div>
+        </button>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <button
+          disabled="{{buttonsDisabled}}"
+          mat-button 
+          (click)="onButtonClick(2)" 
+          [ngClass]="{'selected-button': selectedButtonId === 2}"
+          class="aligned-left-button"
+        >
+          <div class="col-container">
+            <div class="col-left">
+              Plantaciones
+              <p>
+                <mat-icon style="color: #015E83;">arrow_upward</mat-icon>{{buttonsDisabled ? '-' : plantacionesLength}}
+              </p>
+            </div>
+            <div class="col-right">
+              <img *ngIf="!isScreenSmall" src="assets/img/img-plantaciones.svg" alt="Logo" class="img-info" />
+            </div>
+          </div>
+        </button>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <button
+          disabled="{{buttonsDisabled}}"
+          mat-button 
+          (click)="onButtonClick(3)" 
+          [ngClass]="{'selected-button': selectedButtonId === 3}"
+          class="aligned-left-button"
+        >
+          <div class="col-container">
+            <div class="col-left">
+              Hectáreas
+              <p>
+                <mat-icon style="color: #015E83;">arrow_upward</mat-icon>{{buttonsDisabled ? '-' : totalDimensionSum}}
+              </p>
+            </div>
+            <div class="col-right">
+              <img *ngIf="!isScreenSmall" src="assets/img/img-chacra-azul.svg" alt="Logo" class="img-info" />
+            </div>
+          </div>
+        </button>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+
+  <!-- Contenedor para gráficos y tablas -->
+  <div class="div-container-charts">
+    <mat-grid-list [cols]="isScreenSmall ? 1 : 2" rowHeight="50vh" gutterSize="10px">
+      <mat-grid-tile>
+        <canvas *ngIf="selectedButtonId === 1"
+          baseChart
+          [data]="barChartData"
+          [options]="barChartOptions"
+          [type]="'bar'"
+          [legend]="false">
+        </canvas>
+        <canvas *ngIf="selectedButtonId === 2"
+          baseChart
+          [data]="pieChartData"
+          [options]="pieChartOptions"
+          [type]="'pie'">
+        </canvas>
+        <canvas *ngIf="selectedButtonId === 3"
+          baseChart
+          [data]="pieChartDataHectareas"
+          [options]="pieChartHectareasOptions"
+          [type]="'pie'">
+        </canvas>
+      </mat-grid-tile>
+      <mat-grid-tile *ngIf="selectedButtonId !== 0">
+        <div class="table-container">
+          <p class="titulo-table" *ngIf="selectedButtonId === 1">Información de chacra: {{selectedFieldName ? selectedFieldName : 'seleccionar del gráfico'}}</p>
+          <p class="titulo-table" *ngIf="selectedButtonId === 2">Información de plantación: {{selectedPlantationName ? selectedPlantationName : 'seleccionar del gráfico'}}</p>
+          <p class="titulo-table" *ngIf="selectedButtonId === 3">Información de Hectárea: {{selectedPlantationNameHectarea ? selectedPlantationNameHectarea : 'seleccionar del gráfico'}}</p>
+          
+          <!-- Tabla de chacras -->
+          <table mat-table [dataSource]="dataSource" *ngIf="selectedButtonId === 1">
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef> Nombre </th>
+              <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+            </ng-container>
+            <ng-container matColumnDef="typeCropName">
+              <th mat-header-cell *matHeaderCellDef> Plantación </th>
+              <td mat-cell *matCellDef="let element"> {{element.plantacion.name}} </td>
+            </ng-container>
+            <ng-container matColumnDef="dimensions">
+              <th mat-header-cell *matHeaderCellDef> Hectáreas </th>
+              <td mat-cell *matCellDef="let element"> {{element.dimension}} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+
+          <!-- Tabla de plantaciones y hectáreas -->
+          <table mat-table [dataSource]="dataSourcePie" *ngIf="(selectedButtonId === 2 || selectedButtonId === 3)">
+            <ng-container matColumnDef="chacra">
+              <th mat-header-cell *matHeaderCellDef> Chacra </th>
+              <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+            </ng-container>
+            <ng-container matColumnDef="lote">
+              <th mat-header-cell *matHeaderCellDef> Lote </th>
+              <td mat-cell *matCellDef="let element"> {{element.lote.name}} </td>
+            </ng-container>
+            <ng-container matColumnDef="hectárea">
+              <th mat-header-cell *matHeaderCellDef> Hectáreas </th>
+              <td mat-cell *matCellDef="let element"> {{element.lote.size}} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+
+        </div>              
+      </mat-grid-tile>    
+    </mat-grid-list>
+  </div>
 </div>
-
-<h4>Seleccionar Productores</h4>
-<mat-form-field>
-  <mat-label>Productor</mat-label>
-  <mat-select>
-    <mat-option *ngFor="let productor of usuarios" >
-      {{productor.name}} {{productor.lastName}}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
-
-<div class="chart-wrapper">
-  <canvas baseChart
-    [data]="pieChartData"
-    [type]="'pie'"
-    [options]="pieChartOptions">
-  </canvas>
-</div>
-
-
-
-
