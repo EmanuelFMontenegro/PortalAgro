@@ -4,7 +4,7 @@ import { PageEvent } from '@angular/material/paginator';
 @Component({
   selector: 'app-paginador',
   templateUrl: './paginador.component.html',
-  styleUrls: ['./paginador.component.sass'],
+  styleUrls: ['./paginador.component.scss'],
 })
 export class PaginadorComponent {
   @Input() length: number = 0;

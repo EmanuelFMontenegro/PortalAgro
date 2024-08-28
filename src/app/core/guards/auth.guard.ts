@@ -27,7 +27,8 @@ export class AuthGuard implements CanActivate {
 
     if (token && !this.isTokenExpired(token)) {
       const decodedToken: any = jwtDecode(token);
-      const roles = decodedToken.roles.map((role: any) => role.authority); // Obtener los roles del usuario
+      const roles =
+        decodedToken.roles?.map((role: any) => role.authority) || []; // Obtener los roles del usuario
 
       const isAdmin = roles.includes('ROLE_ADMIN');
       const isUsuariosRoute = state.url.includes(
@@ -48,7 +49,6 @@ export class AuthGuard implements CanActivate {
 
       return true; // Permitir acceso si cumple con las condiciones
     } else {
-      console.log('Token inválido o expirado, redirigiendo al login.');
       this.router.navigate(['/dashboard-backoffice/login']);
       return false;
     }
@@ -61,6 +61,7 @@ export class AuthGuard implements CanActivate {
 
       return decoded.exp < now;
     } catch (error) {
+      console.error('Error al decodificar el token:', error); // Manejar el error de decodificación
       return true;
     }
   }

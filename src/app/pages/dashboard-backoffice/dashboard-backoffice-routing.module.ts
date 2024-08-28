@@ -56,7 +56,7 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         data: { roles: ['ROLE_ADMIN'] },
       },
-      { path: 'perfil-productor', component: PerfilProductorComponent },
+      { path: 'perfil-productor/:id', component: PerfilProductorComponent },
       { path: 'nuevo-usuario', component: NuevoUsuarioComponent },
       { path: 'chacras', component: ChacrasComponent },
       { path: 'chacras-perfil', component: ChacrasPerfilComponent },

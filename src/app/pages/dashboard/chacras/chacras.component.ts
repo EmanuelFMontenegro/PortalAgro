@@ -24,6 +24,7 @@ interface DecodedToken {
 })
 
 export class ChacrasComponent implements OnInit {
+  userLogeed=this.authService.userLogeed;
   currentYear: number = new Date().getFullYear();
   nombre: string = '';
   apellido: string = '';
@@ -35,10 +36,10 @@ export class ChacrasComponent implements OnInit {
   nombreCampo: string = '';
   localidad: string = '';
   nombreLocalidad: string = '';
-  private companyId: number | any;
-  private userId: number | any;
-  private personId: number | any;
-  public userEmail: string | null = null;
+  // private companyId: number | any;
+  // private userId: number | any;
+  // private personId: number | any;
+  // public userEmail: string | null = null;
   localidades: any[] = [];
   campos: any[] = [];
   campoData = {
@@ -67,29 +68,29 @@ export class ChacrasComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.userEmail = this.authService.getUserEmail();
-    this.decodeToken();
+    // this.userEmail = this.authService.getUserEmail();
+    // this.decodeToken();
     this.campoData.geolocation = '';
     this.cargarCampos();
     this.cargarDatosDeUsuario();
   }
 
-  decodeToken(): void {
-    const token = this.authService.getToken();
-    if (token) {
-      try {
-        const decoded: any = jwtDecode(token);
-        this.userId = decoded.userId;
-        this.userEmail = decoded.sub;
-        this.companyId = decoded.companyId;
-      } catch (error) {
-        console.error('Error al decodificar el token:', error);
-      }
-    } else {
-      this.userId = null;
-      this.userEmail = null;
-    }
-  }
+  // decodeToken(): void {
+  //   const token = this.authService.getToken();
+  //   if (token) {
+  //     try {
+  //       const decoded: any = jwtDecode(token);
+  //       this.userId = decoded.userId;
+  //       this.userEmail = decoded.sub;
+  //       this.companyId = decoded.companyId;
+  //     } catch (error) {
+  //       console.error('Error al decodificar el token:', error);
+  //     }
+  //   } else {
+  //     this.userId = null;
+  //     this.userEmail = null;
+  //   }
+  // }
 
 
 
@@ -99,12 +100,12 @@ export class ChacrasComponent implements OnInit {
   }
 
   cargarCampos() {
-    if (!this.userId) {
+    if (!this.userLogeed?.userId) {
       this.toastr.error('Error: No se ha identificado al usuario.', 'Error');
       return;
     }
 
-    this.apiService.getFields(this.userId).subscribe(
+    this.apiService.getFields(this.userLogeed?.userId).subscribe(
       (response) => {
         if (response.list && response.list.length > 0) {
           this.campos = response.list[0];
@@ -118,14 +119,11 @@ export class ChacrasComponent implements OnInit {
     );
   }
   cargarDatosDeUsuario() {
-    const decoded: DecodedToken = jwtDecode(this.authService.getToken() || '');
-    if ('userId' in decoded && 'sub' in decoded && 'roles' in decoded) {
-      this.userId = decoded.userId;
-      this.userEmail = decoded.sub;
-      this.companyId = decoded.companyId;
-      this.personId = this.userId;
+    // const decoded: DecodedToken = jwtDecode(this.authService.getToken() || '');
 
-      if (this.userId !== null && this.personId !== null) {
+
+       console.log("datos del dekoden",this.userLogeed)
+      if (this.userLogeed!.userId== null) {
         this.apiService.getLocationMisiones('location').subscribe(
           (localidades) => {
             this.localidades = localidades;
@@ -133,7 +131,7 @@ export class ChacrasComponent implements OnInit {
             let nombreLocalidad: string = '';
 
             this.apiService
-              .getPersonByIdProductor(this.userId, this.personId)
+              .getPersonByIdProductor(this.userLogeed!.userId, this.userLogeed!.userId)
               .subscribe(
                 (data) => {
                   const localidad = this.localidades.find(
@@ -161,10 +159,7 @@ export class ChacrasComponent implements OnInit {
           }
         );
       }
-    } else {
-      this.userId = null;
-      this.userEmail = null;
-    }
+
   }
 
   geolocalizar() {
@@ -178,13 +173,13 @@ export class ChacrasComponent implements OnInit {
   }
 
   registrarCampo(): void {
-    if (!this.userId) {
+    if (!this.userLogeed?.userId) {
       this.toastr.error('Error: No se ha identificado al usuario.', 'Error');
       return;
     }
 
     if (this.isValidForm()) {
-      this.apiService.addField(this.userId, this.campoData).subscribe(
+      this.apiService.addField(this.userLogeed?.userId, this.campoData).subscribe(
         () => {
           this.toastr.success('Campo registrado con éxito', 'Éxito');
           this.campoData = {

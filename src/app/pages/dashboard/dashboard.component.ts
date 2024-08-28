@@ -4,22 +4,43 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { SidenavService } from 'src/app/services/sidenav.service';
+import { AuthService } from 'src/app/services/AuthService';
+interface Ellipses {
+  left: string;
+  top: string;
+  right: string;
+  bottom: string;
+}
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.sass']
 })
+
+
+
 export class DashboardComponent implements AfterViewInit {
   @ViewChild('sidenav') sidenav!: MatSidenav;
   sidenavOpened: boolean = false;
   isScreenSmall = false;
   menuItems: any[] = [];
+  svgPath = 'menu'
+  ellipses: Ellipses = {
+    left: 'assets/img/footer/ellipse_white.svg',
+    top: 'assets/img/footer/ellipse_white_mobile.svg',
+    right: 'assets/img/footer/ellipse_green.svg',
+    bottom: 'assets/img/footer/ellipse_green_mobile.svg'
+  }
+  background = '#3BA549'
   constructor(
     private breakpointObserver: BreakpointObserver,
     private router: Router,
+    private authService: AuthService,
     private http: HttpClient,
     private sidenavService: SidenavService
   ) {
+    this.authService.getUserLogeed()
     this.loadMenu();
     this.sidenavService.sidenavOpen$.subscribe(open => {
       this.sidenavOpened = open;
@@ -31,10 +52,9 @@ export class DashboardComponent implements AfterViewInit {
       .observe(['(max-width: 720px)'])
       .subscribe((result) => {
         this.isScreenSmall = result.matches;
-        console.log(this.isScreenSmall)
         this.sidenav.mode = this.isScreenSmall ? 'over' : 'side';
       });
-      
+
   }
 
   toggleSidenav() {

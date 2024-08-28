@@ -6,36 +6,35 @@
         "route": "/dashboard/inicio"
       },
       {
-        "icon": "services.svg",
+        "icon": "servicio.svg",
         "name": "Solicitudes y Servicios",
         "route": "/dashboard/servicios"
       },
       {
-        "icon": "ranchs.svg",
+        "icon": "chacras.svg",
         "name": "Chacras",
         "route": "/dashboard/chacras"
       },
       {
-        "icon": "calendar.svg",
+        "icon": "calendario.svg",
         "name": "Calendario",
         "route": "/dashboard/calendario"
       },
       {
-        "icon": "notifications.svg",
+        "icon": "notificaciones.svg",
         "name": "Notificaciones",
         "route": "/dashboard/notificaciones"
-        
+
       },
       {
-        "icon": "report.svg",
+        "icon": "informes.svg",
         "name": "Informes",
         "route": "/dashboard/informes"
       },
       {
-        "icon": "profile.svg",
+        "icon": "usuario.svg",
         "name": "Perfil",
         "route": "/dashboard/perfil"
       }
     ]
   }
-  

@@ -236,16 +236,9 @@ export class ChacrasGeolocalizarComponent implements AfterViewInit {
   }
 
   onManualCoordinatesChange(): void {
-    const latitude = parseFloat(
-      (<HTMLInputElement>document.getElementById('manualLatitude'))?.value ||
-        '0'
-    );
-    const longitude = parseFloat(
-      (<HTMLInputElement>document.getElementById('manualLongitude'))?.value ||
-        '0'
-    );
-
-    this.updateManualCoordinates(latitude, longitude);
+    if (this.latitud !== null && this.longitud !== null) {
+      this.updateManualCoordinates(this.latitud, this.longitud);
+    }
   }
 
   searchByCoordinates(): void {
@@ -256,9 +249,11 @@ export class ChacrasGeolocalizarComponent implements AfterViewInit {
   }
 
   toggleManualCoordinates(value: string): void {
-    this.showManualCoordinatesInput = value === 'manual';
+    console.log('Selected value:', value);
     this.opcionGeolocalizacion = value;
+    this.showManualCoordinatesInput = value === 'manual';
   }
+
   setOpcionGeolocalizacion(opcion: string): void {
     this.opcionGeolocalizacion = opcion;
     this.showManualCoordinatesInput = opcion === 'manual';
@@ -382,8 +377,6 @@ export class ChacrasGeolocalizarComponent implements AfterViewInit {
 
     this.apiService.getPersonByIdProductor(userId, personId).subscribe(
       (response: DatosUsuario) => {
-        console.log(response);
-
         if (response) {
           this.nombre = response.name;
           this.apellido = response.lastname;
@@ -663,8 +656,6 @@ export class ChacrasGeolocalizarComponent implements AfterViewInit {
 
   registerField(userId: number): void {
     // Verificar si userId es válido y chacraSeleccionada está definida
-    console.log('userId recibido:', userId);
-    console.log('chacraSeleccionada recibida:', this.chacraSeleccionada);
 
     if (!userId || !this.chacraSeleccionada) {
       console.error('Datos de campo no seleccionados o inválidos.');
@@ -711,7 +702,6 @@ export class ChacrasGeolocalizarComponent implements AfterViewInit {
   }
 
   volver() {
-  
     this.router.navigate(['dashboard-backoffice/chacras-perfil']);
   }
 

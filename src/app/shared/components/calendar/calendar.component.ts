@@ -1,4 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  HostListener,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { EventInput } from '@fullcalendar/core';
 import { CalendarOptions, EventClickArg, EventApi } from '@fullcalendar/core';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -8,61 +15,64 @@ import listPlugin from '@fullcalendar/list';
 import esLocale from '@fullcalendar/core/locales/es';
 import { MatDialog } from '@angular/material/dialog';
 import { CalendarPopupComponent } from 'src/app/shared/components/calendar-popup/calendar-popup.component';
-import { HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
-  styleUrls: ['./calendar.component.sass']
+  styleUrls: ['./calendar.component.sass'],
 })
-export class CalendarComponent implements OnInit {
+export class CalendarComponent implements OnInit, OnChanges {
   @Input() events!: EventInput[];
   calendarOptions: CalendarOptions;
   currentEvents: EventApi[] = [];
 
   constructor(public dialogRef: MatDialog) {
     this.calendarOptions = {
-      plugins: [
-        interactionPlugin,
-        dayGridPlugin,
-        timeGridPlugin,
-        listPlugin,
-      ],
+      plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin],
       initialView: 'dayGridMonth',
-      weekends: true, 
-      selectable: true, 
+      weekends: true,
+      selectable: true,
       selectMirror: true,
       dayMaxEvents: true,
       locale: esLocale,
       longPressDelay: 1,
-      eventClick: this.handleEventClick.bind(this)
+      eventClick: this.handleEventClick.bind(this),
+      events: this.events, // Asigna los eventos aquí
     };
+
     this.setupCalendarOptions(window.innerWidth);
   }
 
   ngOnInit() {
-    this.calendarOptions.events = this.events;
-    this.events.forEach(event => {
-      event.backgroundColor = '#3788d8';
-    })
+    // La asignación de eventos se realizará en ngOnChanges
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['events'] && changes['events'].currentValue) {
+      this.calendarOptions.events = changes['events'].currentValue;
+    }
   }
 
   handleEventClick(clickInfo: EventClickArg) {
+    console.log('Evento clicado:', clickInfo.event);
     this.dialogRef.open(CalendarPopupComponent, {
       data: {
-        event: clickInfo.event
-      }
+        event: clickInfo.event,
+      },
     });
- 
   }
+
   setupCalendarOptions(width: number) {
     const isMobile = width < 600;
-    this.calendarOptions.headerToolbar={
+    this.calendarOptions.headerToolbar = {
       left: 'prev,next today',
-      center: (!isMobile? 'title' : ''),
-      right: (isMobile ? 'dayGridMonth,listDay' : 'dayGridMonth,timeGridWeek,timeGridDay,listWeek')
-    }
+      center: !isMobile ? 'title' : '',
+      right: isMobile
+        ? 'dayGridMonth,listDay'
+        : 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
+    };
   }
+
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.setupCalendarOptions(event.target.innerWidth);

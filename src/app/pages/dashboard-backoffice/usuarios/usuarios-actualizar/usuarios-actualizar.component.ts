@@ -11,7 +11,7 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogComponent } from '../../dialog/dialog.component';
+import { DialogComponent } from '../../../../shared/components/dialog/dialog.component';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { FormControl } from '@angular/forms';
@@ -206,7 +206,6 @@ export class UsuariosActualizarComponent implements OnInit {
           )
           .subscribe(
             (userDetails: any) => {
-
               this.fillForm(userDetails, false);
             },
             (error) => {
@@ -370,7 +369,6 @@ export class UsuariosActualizarComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-
       if (result) {
         this.router.navigate(['dashboard-backoffice/usuarios-filtro']);
       }
@@ -439,7 +437,6 @@ export class UsuariosActualizarComponent implements OnInit {
       return;
     } else {
       // Lógica para actualizar usuarios
-
     }
 
     const storedUserType = localStorage.getItem('UserType');
@@ -501,7 +498,6 @@ export class UsuariosActualizarComponent implements OnInit {
     // Llamar al servicio para actualizar los detalles del manager
     this.apiService.updateManagerDetails(this.id!, userData).subscribe(
       (response) => {
-
         this.toastr.success('Datos actualizados exitosamente');
         this.router.navigate(['dashboard-backoffice/usuarios-filtro']);
 
@@ -548,8 +544,6 @@ export class UsuariosActualizarComponent implements OnInit {
         .get('departmentAssigned')
         ?.value.map((dept: any) => dept.id) || [];
 
-
-
     const userData = {
       ...this.userForm.value,
       company_id: companyId,
@@ -559,15 +553,12 @@ export class UsuariosActualizarComponent implements OnInit {
       license: this.userForm.get('license')?.value || '',
     };
 
-
-
     const updatePassword =
       this.userForm.get('password')?.value &&
       this.userForm.get('confirmPassword')?.value;
 
     this.apiService.updateTechnicalDetails(this.id!, userData).subscribe(
       (response) => {
-
         this.toastr.success('Datos actualizados exitosamente');
         this.router.navigate(['dashboard-backoffice/usuarios-filtro']);
 
@@ -621,15 +612,12 @@ export class UsuariosActualizarComponent implements OnInit {
       license: this.userForm.get('license')?.value || '',
     };
 
-
-
     const updatePassword =
       this.userForm.get('password')?.value &&
       this.userForm.get('confirmPassword')?.value;
 
     this.apiService.updateOperator(this.id!, userData).subscribe(
       (response) => {
-
         this.toastr.success('Datos actualizados exitosamente');
         this.router.navigate(['dashboard-backoffice/usuarios-filtro']);
 
@@ -684,11 +672,8 @@ export class UsuariosActualizarComponent implements OnInit {
       address: this.userForm.get('address')?.value || '',
     };
 
-
-
     this.apiService.updateCooperative(this.id!, cooperativeData).subscribe(
       (response) => {
-
         this.toastr.success('Datos actualizados exitosamente');
 
         const password = this.userForm.get('password')?.value;

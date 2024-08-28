@@ -10,26 +10,26 @@
   </ng-container>
 
   <!-- Input para productor -->
-  <input *ngIf="selectedFilter === 'productor'" class="field-input" matInput
-    placeholder="Buscar por Productor" [(ngModel)]="nombreProductor">
+  <input *ngIf="selectedFilter === 'productor'" class="field-input" matInput placeholder="Buscar por Productor"
+    [(ngModel)]="nombreProductor">
 
   <!-- Input para nombre de chacra -->
   <input *ngIf="selectedFilter === 'nombreChacra'" class="field-input" matInput
     placeholder="Buscar por Nombre de Chacra" [(ngModel)]="nombreChacra">
 
   <!-- Mat-select para seleccionar localidad -->
-  <mat-select *ngIf="selectedFilter === 'localidad'" class="field-input"
-    placeholder="Seleccionar Localidad" [(ngModel)]="localidadSeleccionada">
+  <mat-select *ngIf="selectedFilter === 'localidad'" class="field-input" placeholder="Seleccionar Localidad"
+    [(ngModel)]="localidadSeleccionada">
     <mat-option *ngFor="let localidad of localidades" [value]="localidad.name">{{ localidad.name }}</mat-option>
   </mat-select>
 
   <!-- Botones para limpiar y filtrar -->
   <button mat-raised-button class="clear-button" (click)="limpiarTexto()">Limpiar
-    <img src="assets/img/ink_eraser_24dp_FILL0_wght400_GRAD0_opsz24.svg" alt="IconoBorrar">
+    <img src="assets/img/limpiar.svg" alt="IconoBorrar">
   </button>
 
   <button mat-raised-button class="active-button" (click)="activarFiltro()">Filtrar
-    <img src="assets/img/filter_alt_24dp_FILL0_wght400_GRAD0_opsz24.svg" alt="IconoBorrar">
+    <img src="assets/img/filtrar.svg" alt="IconoFiltrar">
   </button>
 
 

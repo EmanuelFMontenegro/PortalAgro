@@ -1,11 +1,8 @@
 .footer {
     min-height: 184px;
- 
     @include position(relative);
-    background-color: #3BA549;
     color: white;
     padding: 0;
-  
     &__content {
       margin: 0 190px 0 138px;
       @include position(relative);

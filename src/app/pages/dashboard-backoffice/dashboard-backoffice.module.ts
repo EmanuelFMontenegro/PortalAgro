@@ -15,7 +15,7 @@ import { ChacrasGeolocalizarComponent } from './chacras/chacras-geolocalizar/cha
 import { DetalleChacraComponent } from './chacras/detalle-chacra/detalle-chacra.component';
 import { ChacrasLoteComponent } from './chacras/chacras-lote/chacras-lote.component';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { DialogComponent } from './dialog/dialog.component';
+import { DialogComponent } from '../../shared/components/dialog/dialog.component';
 import { PerfilProductorComponent } from './productores/perfil-productor/perfil-productor.component';
 import { NuevoUsuarioComponent } from './productores/nuevo-usuario/nuevo-usuario.component';
 import { IMPORTS_MATERIAL } from 'src/app/shared/shared.module';
@@ -77,9 +77,6 @@ import { MatInputModule } from '@angular/material/input';
     MatSelectModule,
     MatInputModule,
   ],
-  providers: [
-    RenderProvincesPipe,
-    RenderDepartmentsPipe],
-
-  })
+  providers: [RenderProvincesPipe, RenderDepartmentsPipe],
+})
 export class DashboardBackofficeModule {}

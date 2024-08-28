@@ -1,0 +1,61 @@
+@import '../../../../assets/variables';
+@import '../../../../shared-styles/mixins';
+
+.paginator {
+  color: $new_color_blue;
+  @include flexbox(row, center, center);
+  @include padding(0, 8px);
+  flex-wrap: wrap-reverse;
+  min-height: var(--mat-paginator-container-size);
+  // align-items: center;
+  // justify-content: center;
+
+  @include respond-max(600px) {
+    @include font(14px);
+    @include padding(4px);
+
+  }
+
+  &-page-size {
+    @include flexbox(row, center, center);
+    z-index: 1000;
+
+    & {
+      @include font(12px);
+    }
+  }
+
+  &-page-size-label {
+    margin-right: 8px;
+
+    & {
+      @include font(12px);
+  }
+
+  &-range-label {
+    @include padding(0, 16px);
+
+    & {
+      @include padding(0, 8px);
+      @include font(12px);
+  }
+
+  &-icon-button {
+    @include padding(0, 8px);
+
+    & {
+      @include padding(0, 4px);
+    }
+  }
+
+
+.mat-select-trigger {
+  @include flexbox(row, center, center);
+
+  @include respond-max(600px) {
+    @include font(14px);
+  }
+  }
+}
+}
+}

@@ -14,7 +14,7 @@ import {
 import { startWith, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogComponent } from '../dialog/dialog.component';
+import { DialogComponent } from '../../../shared/components/dialog/dialog.component';
 import { Router, ActivatedRoute } from '@angular/router';
 import {
   TipoLabel,
@@ -159,7 +159,6 @@ export class LotesComponent implements OnInit {
       this.userEmail = decoded.sub;
     }
   }
-
 
   obtenerLocalidades() {
     this.apiService.getLocationMisiones('location').subscribe(
