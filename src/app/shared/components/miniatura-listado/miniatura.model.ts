@@ -8,6 +8,7 @@ export enum TipoLabel {
   botonVermas = 'vermas',
   botonEditar = 'editar',
   botonesABM = 'abm',
+  texto = 'texto'
 }
 
 export interface DataView {

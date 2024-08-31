@@ -5,28 +5,40 @@
     <h2 class="title2">Solicitudes y servicios</h2>
   </div>
   <br>
-  <div class="field-container">
+  <div class="field-container" >
     <div class="en-linea">
       <div class="field-container w-50">
-        <mat-select class="field-input" placeholder="Seleccione un tipo de plantación" [(value)]="opcionSeleccionada">
-          <mat-option *ngFor="let cultivo of cultivos" [value]="cultivo.id">{{ cultivo.name }}</mat-option>
+        <mat-select class="field-input" placeholder="Seleccione un tipo de plantación" (selectionChange)="filtrar()" [(value)]="opcionSeleccionada">
+          <mat-option *ngFor="let cultivo of cultivos" [value]="cultivo.id">
+            <mat-icon matTooltip="Limpiar" (click)="limpiarSeleccion()" *ngIf="cultivo.id === opcionSeleccionada" class="limpiarSeleccion" (click)="limpiarSeleccion()">
+             close
+            </mat-icon>
+            {{ cultivo.name }}
+          </mat-option>
         </mat-select>
       </div>
       <div class="field-container text-c">
-        <button mat-raised-button class="back-button2" (click)="filtrar()" >Filtrar
-          </button>
+        <!-- <button mat-raised-button class="back-button2" (click)="filtrar()" >Filtrar
+          </button> -->
         <button mat-raised-button class="back-button2" (click)="nuevo()" >Solicitar
           </button>
       </div>
     </div>
   </div>
 
+  <strong *ngIf="this.listado.length"> Resultados encontrados ({{this.listado.length}})</strong>
+
   <ng-container *ngIf="this.listado.length else listadoVacio">
     <miniatura [dataView]="dataView" [listado]="listado"></miniatura>
   </ng-container>
 
   <ng-template #listadoVacio>
-    <p>No posee solicitud de servicios</p>
+    <p *ngIf="!this.lotesOriginal.length else noHayResultados">
+      No posee solicitud de servicios
+    </p>
+    <ng-template #noHayResultados>
+      <p>No se encontraron resultados</p>
+    </ng-template >
   </ng-template>
 
 </div>

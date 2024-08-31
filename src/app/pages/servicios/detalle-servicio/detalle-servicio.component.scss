@@ -13,13 +13,25 @@ mat-tab {
 
 
 .tab-base{
-  border: 1.5px solid #0F8054;
-  border-radius: 5px;
   width: auto;
   min-height: 400px;
   margin-top: 35px;
   padding: 20px;
   position: relative;
+}
+
+.titulo-mini-card{
+  position: relative;
+}
+
+.border-base{
+  padding: 10px;
+  .mini-card{
+    padding: 15px 10px;
+    border: 1.5px solid #0F8054;
+    border-radius: 5px;
+    box-shadow: 0 2px 11px rgba(0, 0, 0, 0.4);
+  }
 }
 
 .label{

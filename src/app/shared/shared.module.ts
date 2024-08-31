@@ -28,6 +28,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { PaginadorComponent } from './components/paginador/paginador.component';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatTooltipModule } from '@angular/material/tooltip';
 export const IMPORTS_MATERIAL = [
   MatSidenavModule,
   MatListModule,
@@ -47,7 +48,8 @@ export const IMPORTS_MATERIAL = [
   MatCheckboxModule,
   MatDialogModule,
   MatPaginatorModule,
-  MatTabsModule
+  MatTabsModule,
+  MatTooltipModule
 ];
 
 export const IMPORT_CORE = [CommonModule, FormsModule, ReactiveFormsModule];

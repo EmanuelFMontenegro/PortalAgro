@@ -14,7 +14,7 @@
 
         <!-- SPAN -->
         <p *ngIf="item.tipoLabel == tipoSpan">
-          <span  class="campo-variable" > {{item?.label}}: </span> {{ this.getValue(miniatura,item.field)}}
+          <span  class="campo-variable" > {{item?.label}}: </span> {{ this.getValue(miniatura,item.field) ?? ' --- '}}
         </p>
 
         <button *ngIf="item.tipoLabel == tipoVerMas" mat-raised-button class="ver-mas-button" (click)="verMas(miniatura, item?.label, item?.field )">Ver Más</button>

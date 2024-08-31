@@ -9,6 +9,8 @@ import { ApiService } from 'src/app/services/ApiService';
 import { AuthService } from 'src/app/services/AuthService';
 import { jwtDecode } from 'jwt-decode';
 import { ToastrService } from 'ngx-toastr';
+import { ServicioInterno } from '../servicios-interno.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-add-edit-servicio',
@@ -22,6 +24,7 @@ export class AddEditServicioComponent {
     private apiService: ApiService,
     private dialog: MatDialog,
     private toastr: ToastrService,
+    private servicioInterno: ServicioInterno,
     private authService: AuthService,
     public dashboardBackOffice: DashboardBackOfficeService) {
     this.dashboardBackOffice.dataTitulo.next({ titulo: this.edit ? 'Editar servicio' : 'Nuevo servicio', subTitulo: '' })
@@ -53,26 +56,59 @@ export class AddEditServicioComponent {
   lotesOriginales: any[] = []
   chacras: any[] = []
   cultivos: any[] = []
+  productores: any [] = [];
   private userId: number | any;
+  subscription = new Subscription()
 
   ngOnInit(): void {
     this.getDatosBasicos()
   }
 
-  getDatosBasicos() {
-    this.decodeToken();
-    this.getCultivos();
-
-    // si es backoffice debe seleccionar primero el productor para que respete el flujo
-    this.backOffice ? this.getProductores(): this.getChacrasProductor()
-    this.urlBase =  this.backOffice ? 'dashboard-backoffice' : 'dashboard'
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe()
   }
 
-  setUrlBase(){
+  getDatosBasicos() {
+    this.servicioInterno.comprobarUrlBackOffice()
 
+
+    // si es backoffice debe seleccionar primero el productor para que respete el flujo
+    this.subscription.add(
+      this.servicioInterno.backOffice$.subscribe(
+        (value: boolean) => this.backOffice = value
+      )
+    )
+
+    if(this.backOffice){
+      this.getProductores()
+      this.urlBase = 'dashboard-backoffice'
+    }else{
+      this.decodeToken();
+      this.getChacrasProductor()
+      this.urlBase = 'dashboard'
+    }
+
+    this.getCultivos();
+    console.log(this.form.value)
+  }
+
+  seleccionarProductor(){
+    this.userId = this.form.controls[this.ctrlProductor]?.value
+    if(this.userId){
+       this.form.controls[this.ctrlProductor].disable()
+       this.getChacrasProductor()
+      }
   }
 
   getProductores(){
+    this.apiService.getPeopleAdmin().subscribe(
+      (productores: any) => {
+        this.productores = productores.list[0];
+      },
+      (error) => {
+        console.error('Error al cargar los productores:', error);
+      }
+    );
 
   }
 
@@ -116,8 +152,6 @@ export class AddEditServicioComponent {
     let cultivoId = this.form.controls[this.ctrlCultivo]?.value
     let crop_id:number = cultivoId
     this.lotes = this.lotesOriginales.filter(x => x.typeCrop.id == crop_id)
-
-    console.log(this.lotes,this.lotesOriginales)
     if(this.lotes.length){
       this.form.controls[this.ctrlCultivo].disable()
     }else{
@@ -130,6 +164,7 @@ export class AddEditServicioComponent {
 
     if(this.form.invalid){
       this.toastr.info('Faltan campos requeridos', 'Información');
+      console.log(this.form.value)
       this.form.markAllAsTouched()
       return;
     }
@@ -148,8 +183,9 @@ export class AddEditServicioComponent {
       (response) => {
         if (response.list && response.list.length > 0) {
           this.chacras = response.list[0];
+          this.form.controls[this.ctrlProductor].disable()
         } else {
-          console.error('La lista de campos está vacía o no está definida');
+            this.toastr.info('Este producto no posee chacras.', 'Información');
         }
       },
       (error) => {
@@ -254,6 +290,11 @@ export class AddEditServicioComponent {
         this.form.controls[this.ctrlCultivo].enable()
         this.form.controls[this.ctrlLote].setValue(null)
         this.form.controls[this.ctrlLote].enable()
+        if(this.userId){
+          this.form.controls[this.ctrlProductor].setValue(null)
+          this.form.controls[this.ctrlProductor].enable()
+          this.userId = null;
+        }
       }
     });
 

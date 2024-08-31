@@ -13,6 +13,9 @@ export class DetalleServicioService {
   getServicio(){
     let servicio =  localStorage.getItem('servicio');
     if(servicio) this.servicio = JSON.parse(servicio);
+    console.log(this.servicio)
   }
+
+
 
 }

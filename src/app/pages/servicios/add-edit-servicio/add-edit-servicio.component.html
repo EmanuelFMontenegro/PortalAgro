@@ -12,10 +12,19 @@
     <form [formGroup]="form" *ngIf="form">
       <mat-card class="main-card">
       <div class="card-uno">
-        <div class="search-container button-seleccionar" *ngIf="this.form.controls[this.ctrlChacra].value !== null">
+        <div class="search-container button-seleccionar" *ngIf="this.form.controls[this.ctrlChacra].value !== null || (this.form.controls[this.ctrlProductor]?.value && this.backOffice)">
           <button class="back-button2 register-button" (click)="limpiarSeleccion()"> Limpiar selección</button>
         </div>
-        <div class="en-linea">
+        <div class="en-linea" *ngIf="this.backOffice">
+          <div class="field-container w-100">
+            <mat-label class="field-label">Productor</mat-label>
+            <mat-select class="field-input" [formControlName]="this.ctrlProductor" placeholder="Seleccionar un productor" name="productor" (selectionChange)="seleccionarProductor()">
+              <mat-option *ngFor="let productor of productores" [value]="productor.id">{{ productor?.name + ' ' + productor?.lastname }}</mat-option>
+            </mat-select>
+          <mat-error *ngIf="form.controls[this.ctrlProductor]?.invalid && form.controls[this.ctrlProductor]?.touched">* Campo requerido</mat-error>
+          </div>
+        </div>
+        <div class="en-linea" *ngIf="this.form.controls[this.ctrlProductor]?.value || !this.backOffice">
           <div class="field-container w-100">
             <mat-label class="field-label">Chacra</mat-label>
             <mat-select class="field-input" [formControlName]="this.ctrlChacra" placeholder="Seleccionar una chacra" name="chacra" (selectionChange)="seleccionarChacra()">
@@ -23,9 +32,6 @@
             </mat-select>
           <mat-error *ngIf="form.controls[this.ctrlChacra]?.invalid && form.controls[this.ctrlChacra]?.touched">* Campo requerido</mat-error>
           </div>
-          <!-- <div class="field-container w-20 text-r">
-          <button class="back-button2" [disabled]="this.form.controls[this.ctrlChacra].value == null" > Seleccionar</button>
-          </div> -->
         </div>
         <div class="en-linea" *ngIf="this.form.controls[this.ctrlChacra]?.value && this.lotesOriginales?.length">
         <div class="field-container w-100" >
@@ -35,9 +41,6 @@
           </mat-select>
           <mat-error  *ngIf="form.controls[this.ctrlCultivo]?.invalid && form.controls[this.ctrlCultivo]?.touched" >* Campo requerido</mat-error>
         </div>
-        <!-- <div class="field-container w-20 text-r">
-          <button class="back-button2" [disabled]="this.form.controls[this.ctrlCultivo].value == null" > Seleccionar</button>
-        </div> -->
        </div>
         <div class="field-container" *ngIf="this.form.controls[this.ctrlCultivo]?.value && this.lotes?.length">
           <mat-label class="field-label">Lotes</mat-label>
