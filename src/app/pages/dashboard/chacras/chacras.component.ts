@@ -17,13 +17,33 @@ interface DecodedToken {
   companyId: number;
 }
 
+
+interface Chacra{
+  value: string;
+  viewValue: string;
+}
 @Component({
   selector: 'app-chacras',
-  templateUrl: './chacras.component.html',
-  styleUrls: ['./chacras.component.sass']
+  templateUrl: './chacras.component.html'
 })
 
 export class ChacrasComponent implements OnInit {
+  chacras: Chacra[] = [
+    {value: 'steak-0', viewValue: 'Steak'},
+    {value: 'pizza-1', viewValue: 'Pizza'},
+    {value: 'tacos-2', viewValue: 'Tacos'},
+  ];
+  tempCampos = [
+    {'id': 1, 'name': 'Campo 1', 'location': 'Misiones', 'dimensions': '50 hectáreas', 'description': ' Este campo de 50 hectáreas Este campo de 50 hectáreas Este campo de 50 hectáreas Este campo de 50 hectáreas Este campo de 50 hectáreas Este campo de 50 hectáreas, ubicado en la pintoresca región de Misiones, ofrece suelos fértiles y un clima ideal para la agricultura. Con vistas panorámicas a las colinas circundantes, es un lugar perfecto para la tranquilidad y la productividad.'},
+    {'id': 2, 'name': 'Campo 2', 'location': 'Misiones', 'dimensions': '50 hectáreas', 'description': 'Este campo de 50 hectáreas, ubicado en la pintoresca región de Misiones, ofrece suelos fértiles y un clima ideal para la agricultura. Con vistas panorámicas a las colinas circundantes, es un lugar perfecto para la tranquilidad y la productividad.'},
+    {'id': 3, 'name': 'Campo 3', 'location': 'Misiones', 'dimensions': '50 hectáreas', 'description': 'Este campo de 50 hectáreas, ubicado en la pintoresca región de Misiones, ofrece suelos fértiles y un clima ideal para la agricultura. Con vistas panorámicas a las colinas circundantes, es un lugar perfecto para la tranquilidad y la productividad.'},
+    {'id': 4, 'name': 'Campo 4', 'location': 'Misiones', 'dimensions': '50 hectáreas', 'description': 'Este campo de 50 hectáreas, ubicado en la pintoresca región de Misiones, ofrece suelos fértiles y un clima ideal para la agricultura. Con vistas panorámicas a las colinas circundantes, es un lugar perfecto para la tranquilidad y la productividad.'},
+    {'id': 5, 'name': 'Campo 5', 'location': 'Misiones', 'dimensions': '50 hectáreas', 'description': ' es un lugar perfecto para la tranquilidad y la productividad.'},
+    {'id': 6, 'name': 'Campo 6', 'location': 'Misiones', 'dimensions': '50 hectáreas', 'description': 'Este campo de 50 hectáreas, ubicado en la pintoresca región de Misiones, ofrece suelos fértiles y un clima ideal para la agricultura. Con vistas panorámicas a las colinas circundantes, es un lugar perfecto para la tranquilidad y la productividad.'},
+  ]
+  description: string = 'Este campo de 50 hectáreas, ubicado en la pintoresca región de Misiones, ofrece suelos fértiles y un clima ideal para la agricultura. Con vistas panorámicas a las colinas circundantes, es un lugar perfecto para la tranquilidad y la productividad.';
+  searchText: string = '';
+  options: string[] = ['Option 1', 'Option 2', 'Option 3'];
   userLogeed=this.authService.userLogeed;
   currentYear: number = new Date().getFullYear();
   nombre: string = '';
@@ -36,10 +56,6 @@ export class ChacrasComponent implements OnInit {
   nombreCampo: string = '';
   localidad: string = '';
   nombreLocalidad: string = '';
-  // private companyId: number | any;
-  // private userId: number | any;
-  // private personId: number | any;
-  // public userEmail: string | null = null;
   localidades: any[] = [];
   campos: any[] = [];
   campoData = {
@@ -92,7 +108,25 @@ export class ChacrasComponent implements OnInit {
   //   }
   // }
 
+  onSearch() {
+    // Implement your search logic here
+    console.log('Searching for:', this.searchText);
+  }
 
+  clearFilters() {
+    // Implement your clear filters logic here
+    console.log('Clearing filters');
+  }
+
+  applyFilters() {
+    // Implement your apply filters logic here
+    console.log('Applying filters');
+  }
+
+  newRanch() {
+    // Implement your new ranch logic here
+    this.router.navigate(['/dashboard/campo']);
+  }
 
 
   BtnRegisterCampos(): void {

@@ -20,7 +20,7 @@ interface DecodedToken {
 @Component({
   selector: 'app-detalle-campo',
   templateUrl: './detalle-campo.component.html',
-  styleUrls: ['./detalle-campo.component.sass']
+  styleUrls: ['./detalle-campo.component.scss']
 })
 export class DetalleCampoComponent implements OnInit, AfterViewInit {
   public userEmail: string | null = null;

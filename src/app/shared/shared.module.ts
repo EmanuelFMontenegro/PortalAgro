@@ -28,6 +28,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { PaginadorComponent } from './components/paginador/paginador.component';
 import { MatTabsModule } from '@angular/material/tabs';
+import { HeaderInnerComponent } from './components/header-inner/header-inner.component';
 export const IMPORTS_MATERIAL = [
   MatSidenavModule,
   MatListModule,
@@ -64,7 +65,8 @@ export const CALENDAR = [FullCalendarModule];
     ToolbarComponent,
     FooterComponent,
     PaginadorComponent,
-    FooterComponent
+    FooterComponent,
+    HeaderInnerComponent
 
   ],
   imports: [IMPORT_CORE, IMPORTS_MATERIAL, CALENDAR],
@@ -80,6 +82,7 @@ export const CALENDAR = [FullCalendarModule];
     CalendarPopupComponent,
     ToolbarComponent,
     FooterComponent,
+    HeaderInnerComponent
   ],
 })
 export class SharedModule {}

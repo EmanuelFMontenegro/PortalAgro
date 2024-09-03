@@ -24,7 +24,8 @@ $Portal-Productores-theme: mat.define-light-theme((
     primary: $Portal-Productores-primary,
     accent: $Portal-Productores-accent,
     warn: $Portal-Productores-warn,
-  )
+  ),
+  density: -2,
 ));
 
 // Include theme styles for core and each component used in your app.
@@ -34,3 +35,11 @@ $Portal-Productores-theme: mat.define-light-theme((
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+// Estilos para los border radius de los inputs 
+.mdc-text-field--outlined {
+  --mdc-outlined-text-field-container-shape: 8px !important;
+  border-radius: 8px !important;
+  box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.25);
+}
+ 

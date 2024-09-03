@@ -1,41 +1,24 @@
-<div class="container">
-  <div class="header-container2">
-    <h2 class="title2">Detalle de Chacra</h2>
-    <button class="back-button2" (click)="volver()"> << Volver Atrás</button>
-  </div>
-
-  <div class="card-campo-container">
-    <div class="campo-card">
-      <div id="map" class="campo-image-container" *ngIf="mostrarMapaPrincipal"></div>
-      <div class="campo-image-container" *ngIf="mostrarImagenPrincipal">
-        <img src="/assets/img/imagen_no_geolocation.png" alt="Campo Image" class="campo-image">
-      </div>
+<div class="mainStructure">
+  <app-header-inner [title]="'Detalle de Chacra'" [backButton]="true"></app-header-inner>
+  <div class="ContainerLocation">
+    <div class="ContainerLocation-map">
+      <div id="map" *ngIf="mostrarMapaPrincipal"></div>
+      <div  *ngIf="mostrarImagenPrincipal">
+        <img src="/assets/img/imagen_no_geolocation.png">
     </div>
-
-    <div class="campo-details-card">
-      <h4 class="title-campo-details">{{ campoSeleccionado.name }}</h4>
-      <div class="details localidad">
-        <span class="localidad">Localidad:</span>
-        <span class="loc_details">{{ campoSeleccionado.address.location.name }}</span>
-        <img src="assets/img/location.svg" alt="Icono" class="icono_location">
-      </div>
-      <div class="details direccion">
-        <span>Dirección:</span>
-        <span class="direc_details">{{ campoSeleccionado.address.address }}</span>
-      </div>
-      <div class="details hectareas">
-        <span>Hectáreas:</span>
-        <span class="hect_details">{{ campoSeleccionado.dimensions }}</span>
-      </div>
-      <div class="details descripcion">
-        <span>Descripción:</span>
-        <span class="desc_details" >{{ campoSeleccionado.observation }}</span>
-      </div>
-      <div class="campo-buttons">
-        <button class="geolocalizar" (click)="geolocalizar()">Editar Geolocalizar <img src="assets/img/location.svg" alt="Icono" class="icono_location"></button>
-      </div>
+    <div>
     </div>
-
   </div>
-
+  <div class="ContainerLocation-chacra">
+    <h4 class="ContainerLocation-chacra-h4">{{ campoSeleccionado.name }}</h4>
+      <div class="ContainerLocation-chacra-details grow-1 ">
+        <p> <strong>Localidad :</strong> {{ campoSeleccionado.address.location.name }}  <img src="assets/img/location.svg" alt="Icono" class="icono_location"></p>
+        <p> <strong>Dirección : </strong> {{ campoSeleccionado.address.address }} </p>
+        <p> <strong>Hectáreas : </strong> {{ campoSeleccionado.dimensions }} </p>
+        <p> <strong>Descripción : </strong>  {{ campoSeleccionado.observation }} </p>
+      </div>
+        <div class="ContainerLocation-chacra-buttons">
+        <button class="primary-button-auto size-48 basis-300"  mat-raised-button (click)="geolocalizar()">Editar Geolocalización</button>
+      </div>
+  </div>
 </div>

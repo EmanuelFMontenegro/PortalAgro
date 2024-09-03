@@ -1,0 +1,17 @@
+@import 'src/shared-styles/mixins.scss';
+
+.mainStructure-title {
+      padding-bottom: 10px;
+      @include flexbox(row, space-between, center);
+       h2 {
+        @include font(20px, 600, #454545);  
+      }  
+      button {
+        @include flexbox(row, center, center);
+        @include font(14px, 600, #0F8054);
+      }
+      button:hover{
+        background-color: #0f80558e !important;
+        color: #fff !important;
+      }
+       }

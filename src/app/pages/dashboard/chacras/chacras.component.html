@@ -1,31 +1,45 @@
-<div class="container">
-  <div class="header-container2">
-    <h2 class="title2">Listado de Chacras</h2>
-    <button class="back-button2" (click)="volver()"> << Volver Atrás</button>
-  </div>
-  <div class="search-container">
-    <input type="text" class="search-input" placeholder="Buscar...">
-    <button class="back-button2" (click)="BtnRegisterCampos()">Registrar Chacra</button>
-  </div>
-  <div class="main-card">
-    <div class="card-campos-section">
-      <h2 class="titulo-campos"></h2>
-      <div class="campos-container">
-        <div class="campo-card" *ngFor="let campo of campos">
-          <img src="/assets/img/Chacra_{{ campo.id }}.png" alt="Campo {{ campo.id }}">
-          <h3>{{ campo.name }}</h3>
-          <p>
-            <span class="campo-variable">Localidad:</span> {{ campo.address.location.name }}
-            <img src="assets/img/location.svg" alt="Icono" class="icono_location">
-          </p>
-          <p><span class="campo-variable">Hectarias:</span> {{ campo.dimensions }}</p>
-          <p><span class="campo-variable">Dirección:</span> {{ campo.address.address }}</p>
-          <p><span class="campo-variable">Descripción</span> {{ campo.observation }}</p>
-          <button mat-raised-button class="ver-mas-button" (click)="verMas(campo)">Ver Geolocalización</button>
-          <button mat-raised-button class="ver-mas-button-second" (click)="verLotes(campo)">Ver Lotes</button>
-
-        </div>
-      </div>
+<div class="mainStructure"> 
+ <app-header-inner [title]="'Chacras'" [backButton]="true"></app-header-inner>
+  <div class="search-bar">
+    <div class="search-bar-picker grow-1">
+      <mat-form-field appearance="outline" style="width: 100%;">
+        <mat-label>Ejemplos</mat-label>
+        <mat-select>
+          <mat-option *ngFor="let option of options" [value]="option">{{ option }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="search-bar-input-text grow-3" style="border-radius: 8px !important;">
+      <mat-form-field appearance="outline" style="width: 100%;">
+        <mat-label>Texto...</mat-label>
+        <input class="mat-elevation-z0" matInput [(ngModel)]="searchText" (keyup.enter)="onSearch()">
+      </mat-form-field>
+    </div>
+    <div class="search-bar-buttons">
+      <button class="secondary-button-auto grow-1 size-48" mat-raised-button><mat-icon>clear</mat-icon>Limpiar</button>
+      <button class="secondary-button-auto grow-1 size-48"  mat-raised-button><mat-icon>filter_list</mat-icon>Filtrar</button>
+      <button class="primary-button-auto grow-1 size-48" mat-raised-button (click)="newRanch()">Registrar Chacras</button>
     </div>
   </div>
+    <div class="cardContainerNoCentered">
+      <div class="cardCustomized" *ngFor="let campo of campos">
+        <img class="cardCustomized-img"   src="assets/img/Chacra_{{ campo.id }}.png" alt="Chacra {{ campo.id }}"  >
+        <div class="cardCustomized-header">
+          <h3 class="cardCustomized-header-title">{{ campo.name }}</h3>
+          <p class="cardCustomized-header-subtitle">
+            <span>Localidad:</span> {{ campo.location }}
+            <img src="assets/img/location.svg" alt="Icono"  ></p>
+             
+        </div>
+        <div class="cardCustomized-content">
+          <div class="cardCustomized-content-description">
+            <p>{{campo.description}}  </p>
+          </div>
+        </div>
+        <div class="cardCustomized-buttons"> 
+          <button class="primary-button"  mat-raised-button appearance="outline"  (click)="verMas(campo)">Ver Más</button>
+        </div>
+    </div>
+  </div>  
 </div>
+ 
