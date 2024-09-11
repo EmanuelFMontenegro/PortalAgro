@@ -1,6 +1,7 @@
 .r-button{
   position: absolute;
   right: 0;
+  top: 35px;
 }
 
 mat-tab-group {
@@ -45,7 +46,7 @@ mat-tab {
 
 .label-estado{
   position: absolute;
-  top: -20px;
+  top: 15px;
   left: 15px;
   border-radius: 4px;
   width: auto;
@@ -88,9 +89,20 @@ mat-tab {
   margin: 10px 0px;
 }
 
+.mb-10{
+  margin-bottom: 10px;
+}
+
 .btn-volver{
   position: absolute;
   right: 10px;
+  top: 7px;
+  font-size: 12px !important;
+}
+
+.btn-cargar{
+  position: absolute;
+  right: 0px;
   top: 7px;
   font-size: 12px !important;
 }
@@ -99,9 +111,30 @@ mat-tab {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100px;
+  height: 60px;
   text-align: center;
 }
+
+.container-icon{
+  height: 50px;
+}
+
+.div-datos{
+  min-height: 400px;
+
+  .title-datos{
+    height: 50px;
+    border-bottom: 1px solid gray;
+    font-size: 1.4rem;
+    font-weight: 600;
+  }
+
+  .body-datos{
+    height: 100%;
+    min-height: 200px;
+  }
+}
+
 
 
 

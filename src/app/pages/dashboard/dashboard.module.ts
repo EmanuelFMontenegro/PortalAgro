@@ -85,7 +85,7 @@ const CUSTOM_DATE_FORMATS = {
     CalendarioComponent,
     ChacrasComponent,
     NotificacionesComponent,
-    
+
   ],
   imports: [
     CommonModule,

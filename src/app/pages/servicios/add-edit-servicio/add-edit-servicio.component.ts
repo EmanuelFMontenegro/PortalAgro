@@ -31,7 +31,7 @@ export class AddEditServicioComponent {
   }
 
   // controlNames
-  ctrlProductor = 'productor_id';
+  ctrlProductor = 'producer_id';
   ctrlChacra = 'field_id';
   ctrlCultivo = 'typeCrop_id';
   ctrlLote = 'plots';
@@ -170,7 +170,7 @@ export class AddEditServicioComponent {
     }
 
     let solicitud:any = this.form.getRawValue();
-    solicitud.dateOfService = "31/08/2024 15:38"
+    // solicitud.dateOfService = "30/09/2024 15:38"
     if(!this.backOffice){
       this.postServicioByProductor(solicitud)
     }else{

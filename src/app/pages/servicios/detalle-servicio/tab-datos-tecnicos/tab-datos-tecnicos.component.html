@@ -1,45 +1,71 @@
 <div class="tab-base shadow">
-  <div class="label-estado"><strong>Estado: </strong>{{this.servicio?.status?.name}}</div>
-  <strong style="float: right;">Hectáreas totales:  {{this.servicio?.hectare}}</strong>
- <br>
- <br>
-  <div class="containers label">
-   <div class="label2">
-    <strong>Técnico</strong>
-    Emanuel C
-   </div>
-   <div class="separacion"></div>
-   <div class="label2">
-    <strong>Estado de la plantación</strong>
-    ---
-   </div>
-   <div class="separacion"></div>
-   <div class="label2">
-    <strong>Estado de la chacra</strong>
-    ---
-   </div>
-   <div class="separacion"></div>
-   <div class="label2">
-    <strong>Visita técnica</strong>
-    {{this.servicio?.dateOfService}}
-   </div>
- </div>
+  <ng-container *ngIf="displayTecnico == display">
+    <div class="label-estado"><strong>Estado: </strong>{{this.datosTecnico?.status?.name}}</div>
+    <strong style="float: right;">Hectáreas totales: {{this.datosTecnico?.hectare}}</strong>
+    <br>
+    <br>
+  </ng-container>
 
- <br>
- <br>
+  <ng-container [ngSwitch]="display">
 
- <div class="containers ">
-  <div class="label2">
-    <button class="back-button2 btn-grande label2" >INSUMOS</button>
-  </div>
-  <div class="separacion"></div>
-  <div class="label2">
-    <button class="back-button2 btn-grande label2" >IMÁGENES</button>
-  </div>
-  <div class="separacion"></div>
-  <div class="label2">
-    <button class="back-button2 btn-grande label2" >OBSERVACIONES</button>
-  </div>
-</div>
+    <ng-container *ngSwitchCase="tipo.insumos">
+       <app-lista-insumos (btnVolver)="setBtnVolver($event)"></app-lista-insumos>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="tipo.imagenes">
+      <app-lista-imagenes (btnVolver)="setBtnVolver($event)"></app-lista-imagenes>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="tipo.editarDatos">
+     <app-editar-datos (btnVolver)="setBtnVolver($event)"></app-editar-datos>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="tipo.tecnico">
+      <div class="row">
+        <div class="col-12 border-base">
+          <div class="mini-card">
+            <div class="row">
+              <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                <img class="container-icon" src="../../../../../assets/icons-servicio/support-agent.svg" alt="tecnico">
+                <div class="mb-15"><strong>Técnico</strong></div>
+                <p>{{this.datosTecnico?.employee?.name}}</p>
+              </div>
+              <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                <img class="container-icon" src="../../../../../assets/icons-servicio/solar_phone-bold.svg" alt="tecnico">
+                <div class="mb-15"><strong>Contacto</strong></div>
+                <p>  <a href="tel:{{this.datosTecnico?.employee?.telephone}}" *ngIf="this.datosTecnico?.employee?.telephone">{{this.datosTecnico?.employee?.telephone}}</a></p>
+              </div>
+              <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                <img class="container-icon" src="../../../../../assets/icons-servicio/tabler_truck.svg" alt="tecnico">
+                <div class="mb-15"><strong>Visita técnica</strong></div>
+                <p>{{this.datosTecnico?.dateOfVisit ?? 'No establecida'}} </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <br>
+      <br>
+
+      <div class="row">
+        <div class="col-12 col-sm-12 col-md-6 col-lg-8 col-xl-8">
+          <textarea appearance="outline" floatLabel="always" placeholder="Observaciones" matInput class="observaciones" ></textarea>
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+          <button class="back-button2 btn-grande label2" (click)="this.mostrarInsumos()">INSUMOS</button>
+          <br>
+          <button class="back-button2 btn-grande label2" (click)="this.mostrarImagenes()">IMÁGENES</button>
+          <br>
+          <button class="back-button2 btn-grande label2" (click)="this.editarDatos()">EDITAR DATOS</button>
+
+        </div>
+      </div>
+     </ng-container>
+
+    <ng-container *ngSwitchDefault>
+    </ng-container>
+
+  </ng-container>
 
 </div>

@@ -1,0 +1,16 @@
+<div class="div-datos">
+  <div class="title-datos">
+  Editar Datos
+   <button *ngIf="mostrarListado" class="back-button2 " (click)="openABM()"> Editar</button>
+  </div>
+  <div class="body-datos">
+
+  DATOS SIN EDITAR
+
+      <button  class="back-button2" (click)="cancelar()"> Cancelar</button>
+      <button  class="back-button2" (click)="aceptar()"> Aceptar</button>
+
+  </div>
+
+  <button *ngIf="mostrarListado"  class="back-button2" (click)="volver()">  Volver Atrás</button>
+</div>

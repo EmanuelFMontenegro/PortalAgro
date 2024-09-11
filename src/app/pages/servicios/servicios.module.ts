@@ -11,6 +11,12 @@ import { TabDatosTecnicosComponent } from './detalle-servicio/tab-datos-tecnicos
 import { TabDatosAppComponent } from './detalle-servicio/tab-datos-app/tab-datos-app.component';
 import { TabInformesComponent } from './detalle-servicio/tab-informes/tab-informes.component';
 import { TabEventosComponent } from './detalle-servicio/tab-eventos/tab-eventos.component';
+import { AsignarPilotoComponent } from './detalle-servicio/tab-solicitud/asignar-piloto/asignar-piloto.component';
+import { AsignarTecnicoComponent } from './detalle-servicio/tab-solicitud/asignar-tecnico/asignar-tecnico.component';
+import { VerLotesComponent } from './detalle-servicio/tab-solicitud/ver-lotes/ver-lotes.component';
+import { ListaInsumosComponent } from './detalle-servicio/tab-datos-tecnicos/lista-insumos/lista-insumos.component';
+import { ListaImagenesComponent } from './detalle-servicio/tab-datos-tecnicos/lista-imagenes/lista-imagenes.component';
+import { EditarDatosComponent } from './detalle-servicio/tab-datos-tecnicos/editar-datos/editar-datos.component';
 
 
 @NgModule({
@@ -22,7 +28,12 @@ import { TabEventosComponent } from './detalle-servicio/tab-eventos/tab-eventos.
     TabDatosTecnicosComponent,
     TabDatosAppComponent,
     TabInformesComponent,
-    TabEventosComponent
+    TabEventosComponent,
+    AsignarPilotoComponent,
+    AsignarTecnicoComponent,
+    ListaInsumosComponent,
+    ListaImagenesComponent,
+    EditarDatosComponent,
   ],
   imports: [
     CommonModule,
