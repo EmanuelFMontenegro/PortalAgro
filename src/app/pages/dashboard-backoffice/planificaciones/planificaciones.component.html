@@ -1,27 +1,59 @@
-<app-header-user [titulo]="'Planificación de Rutas'"></app-header-user>
+<div class="container">
+  <app-header-user [titulo]="'Planificación de Rutas'"></app-header-user>
+  <div class="map-table-container">
+    <div class="table-container">
+      <table mat-table [dataSource]="servicios" class="mat-elevation-z8">
 
-<div class="map-container">
-  <div class="inputs">
+        <!-- Número Column -->
+        <ng-container matColumnDef="nro">
+          <th mat-header-cell *matHeaderCellDef> Nro </th>
+          <td mat-cell *matCellDef="let servicio"> {{servicio.nro}} </td>
+        </ng-container>
 
-    <mat-label>Latitud Inicial</mat-label>
-    <input matInput [(ngModel)]="latStart" type="number" step="any">
+        <!-- Nombre Column -->
+        <ng-container matColumnDef="nombre">
+          <th mat-header-cell *matHeaderCellDef> Nombre </th>
+          <td mat-cell *matCellDef="let servicio"> {{servicio.nombre}} </td>
+        </ng-container>
 
+        <!-- Localidad Column -->
+        <ng-container matColumnDef="localidad">
+          <th mat-header-cell *matHeaderCellDef> Localidad </th>
+          <td mat-cell *matCellDef="let servicio"> {{servicio.localidad}} </td>
+        </ng-container>
 
-    <mat-label>Longitud Incial</mat-label>
-    <input matInput [(ngModel)]="lngStart" type="number" step="any">
+        <!-- Cultivo Column -->
+        <ng-container matColumnDef="cultivo">
+          <th mat-header-cell *matHeaderCellDef> Cultivo </th>
+          <td mat-cell *matCellDef="let servicio"> {{servicio.cultivo}} </td>
+        </ng-container>
 
-    
+        <!-- Acciones Column -->
+        <ng-container matColumnDef="estado">
+          <th mat-header-cell *matHeaderCellDef> Estado </th>
+          <td mat-cell *matCellDef="let servicio">
+            <!-- Botón para cambiar el estado -->
+            <button mat-raised-button [ngStyle]="{
+              'background-color': servicio.estado === 'SOLICITADA' ? '#015E85' : '#4CAF50',
+              'color': 'white', 'fontWeight': 'bold'
+            }" (click)="cambiarEstado(servicio)">
+              {{ servicio.estado }}
+            </button>
 
-    <mat-label>Latitud Final</mat-label>
-    <input matInput [(ngModel)]="latEnd" type="number" step="any">
+            <!-- Checkbox para seleccionar el servicio -->
+            <mat-checkbox (change)="seleccionarChacra($event, servicio)" color="primary"></mat-checkbox>
+          </td>
+        </ng-container>
 
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
 
-    <mat-label>Longitud Final</mat-label>
-    <input matInput [(ngModel)]="lngEnd" type="number" step="any">
+      <!-- Botón para crear ruta -->
+      <button class="button_crear" mat-raised-button (click)="crearRuta()">Crear Ruta</button>
+    </div>
 
-
-    <button mat-raised-button color="primary" (click)="loadRoute()">Crear Ruta</button>
+    <!-- Mapa -->
+    <div id="map" class="map"></div>
   </div>
-
-  <div id="map" class="map"></div>
 </div>

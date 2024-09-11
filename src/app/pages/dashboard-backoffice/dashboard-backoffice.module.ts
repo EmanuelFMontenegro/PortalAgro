@@ -39,6 +39,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
   declarations: [
@@ -82,10 +83,11 @@ import { MatTableModule } from '@angular/material/table';
     MatSelectModule,
     MatInputModule,
     MatGridListModule,
-    MatButtonModule, 
-    MatDividerModule, 
+    MatButtonModule,
+    MatDividerModule,
     MatIconModule,
     MatTableModule,
+    MatExpansionModule
   ],
   providers: [RenderProvincesPipe, RenderDepartmentsPipe],
 })
