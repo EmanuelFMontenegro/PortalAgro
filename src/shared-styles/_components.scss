@@ -89,9 +89,41 @@
 
 //los estilos de arriba aun no se donde se usan, los dejo por si acaso pero los borro mas adelante si no se usan
 // ==============================================================        Customs         =========================================================
+.dot::before {
+  content: '';
+  position: absolute;  
+  width: 6px;
+  height: 6px;
+  background-color: #65B438;
+  border-radius: 50%;
+  left:5px; 
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+}
+
+.relative{
+  position:relative;
+  
+}
+
+.font-16{
+  font-size: 16px !important;
+}
+
+.margin-block-12{
+  margin-block: 12px;
+}
+.margin-inline-12{
+  margin-inline: 12px;
+}
 
 .grow-1 {
   flex-grow: 1;
+}
+
+.grow-2{
+  flex-grow: 2;
 }
 
 .grow-3{
@@ -110,6 +142,9 @@
 }
 .border-primary{
   border: 1px solid #0F8054 !important;
+}
+.margin-btm{
+  margin-bottom: 15px !important;
 }
 // ==============================================================        Botones        =========================================================
 
@@ -150,7 +185,18 @@
   border:none;
 }
 
+.basic-warning{ 
+  @include clean-btn(#FF0000, #fff, 100%);
+}
 
+.basic-blue{ 
+  @include clean-btn(#3B7AF6, #fff, 100%);
+}
+
+.dialog-button {
+  @include custom-btn(155px);
+}
+ 
 // ==============================================================        Searchbar       =========================================================
 .search-bar { 
   font-size: 14px;
@@ -187,7 +233,7 @@
 
 .cardCustomized {
   @include flexbox(column, center, left);
-  @include custom-card(340px, 430px, 10px);
+  @include custom-card(340px, 470px, 10px);
   border: 1px solid #929497;
 
   // Contenedor para Card de Chacras
@@ -196,7 +242,7 @@
   //                 [ CONTENT ]
   //                 [ BUTTONS ] 
   &-img {
-    height: 250px !important;
+    height: 205px !important;
     max-width: 100%;
     border-radius: 16px;
   }
@@ -210,33 +256,68 @@
     }
 
     &-subtitle {
-      margin: 0px;
-      color: #232323;
-      font-size: 12px;
-
+      margin:9px 0px; 
+      font-size: 10px;
+      @include font(10px, 500,#232323);
       >span {
-        @include font(12px, 600);
-      }
-    }
-  }
-
-  &-content {
-    &-description {
-      >p {
-        color: #232323;
-        font-size: 10px;
+        @include font(10px, 600);
       }
     }
   }
 
   &-buttons {
     margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     width: 100%;
   }
 
   // END Contenedor para Card de Chacras
   //Contenedor para Cards de Lotes
   
+}
+.cardContainerNoCenteredLote {
+  @include grid-center-autofill(240px, 1fr, 25px, 15px);
+}
+.LoteCard{
+  @include flexbox(column, center, left);
+  @include custom-card(220px, 300px, 10px);
+  border: 1px solid #929497;
+  &-img {
+    height: 115px !important;
+    max-width: 100%;
+    border-radius: 16px;
+  }
+  &-header {
+    &-title {
+      margin-top: 12px;
+      margin-bottom: 3px;
+      color: #232323;
+      font-size: 20px;
+    }
+
+    &-subtitle {
+      position: relative;
+      margin:9px 0px; 
+      font-size: 10px;
+      padding-left: 12px;
+      @include font(10px, 500,#232323);
+      >span {
+        
+        @include font(10px, 600);
+      }
+      
+    }
+    
+  }
+  &-buttons {
+    margin-top: auto;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    width: 100%;
+  }
 }
 
 
@@ -264,6 +345,7 @@
 //inputs de formularios
 .FormInput {
   @include FormInput(auto, 0.5rem, 1px solid #ccc, 8px, 12px, 4px 4px 6px 0px rgba(0, 0, 0, 0.25), #45454580);
+  
 }
 //textarea de formularios
 .FormTextarea {
@@ -289,7 +371,34 @@
           display: flex;
           flex-direction: row;
           justify-content: center;
+          align-items: flex-end;
           gap: 30px;
       }
   }
 }
+
+.location-map{
+  border-radius: 20px;
+  width: 100%;
+  height: 400px;
+}
+
+.Radio-container{
+  margin:12px;
+  &-group{
+    display:flex; flex-direction: column;gap: 10px;
+  }
+}
+
+
+
+
+
+
+// ==============================================================  Dialog =============================================
+.cdk-overlay-pane {
+  border-radius: 16px ; 
+  overflow: hidden ; 
+  padding: 0;
+}
+ 

@@ -68,7 +68,6 @@ export class DetalleCampoComponent implements OnInit, AfterViewInit {
         const geolocationData = this.campoSeleccionado.geolocation.split(',').map(parseFloat);
         const latitude = geolocationData[0];
         const longitude = geolocationData[1];
-
         const map = L.map(mapElement).setView([latitude, longitude], 15);
         L.tileLayer('https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}').addTo(map);
         L.marker([latitude, longitude]).addTo(map).bindPopup('Ubicación del campo').openPopup();

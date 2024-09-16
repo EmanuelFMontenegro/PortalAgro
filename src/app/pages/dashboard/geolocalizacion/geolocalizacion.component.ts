@@ -72,8 +72,7 @@ interface DecodedToken {
 
 @Component({
   selector: 'app-geolocalizacion',
-  templateUrl: './geolocalizacion.component.html',
-  styleUrls: ['./geolocalizacion.component.sass'],
+  templateUrl: './geolocalizacion.component.html'
 })
 export class GeolocalizacionComponent implements AfterViewInit {
   manualCoordinates: { latitude: number; longitude: number } | null = null;

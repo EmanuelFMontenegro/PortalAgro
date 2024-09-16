@@ -57,7 +57,7 @@
   max-height: $height;
   width: $width;
   height: $height;
-  border-radius: 12px;
+  border-radius: 24px;
   padding: $padding;
   box-shadow: 1px 1px 8px 0px rgba(0, 0, 0, 0.25);
   transition: all 0.3s;
@@ -85,7 +85,7 @@
 @mixin font($size, $weight: normal, $color: inherit) {
   font-size: $size;
   font-weight: $weight;
-  color : $color ;
+  color : $color !important;
 
 }
 
@@ -114,6 +114,28 @@
   max-width: $width;
   border: 1px solid $border !important ;
 }
+
+@mixin custom-btn($width: auto){ 
+  flex: 1;
+  font-weight: 600;
+  font-size: 16px;
+  border-radius: 8px !important;
+  max-width: $width;
+  height: 40px !important;
+  margin: 0 auto !important;
+
+}
+@mixin clean-btn($color, $bg-color, $width : auto) {
+  color: $color !important;
+  background-color: $bg-color !important;
+  font-size: 14px;
+  width: $width;
+  max-width: $width;
+  &:hover {
+    background-color: $bg-color !important;
+    color: $color !important;
+  }
+}
 //CUSTOMS INPUTS
 
 @mixin FormInput($width, $padding, $border, $radius, $size, $shadow, $placeholder) {
@@ -123,6 +145,7 @@
   border-radius: $radius;
   font-size: $size;
   box-shadow: $shadow;
+  padding: 0.8rem;
   &::placeholder {
     color: $placeholder;
   }

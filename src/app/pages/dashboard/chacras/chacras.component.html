@@ -29,15 +29,16 @@
           <p class="cardCustomized-header-subtitle">
             <span>Localidad:</span> {{ campo.location }}
             <img src="assets/img/location.svg" alt="Icono"  ></p>
-             
-        </div>
-        <div class="cardCustomized-content">
-          <div class="cardCustomized-content-description">
-            <p>{{campo.description}}  </p>
-          </div>
+            <p class="cardCustomized-header-subtitle">
+              <span>Heactareas:</span> {{ campo.dimensions }}
+            </p>
+            <p class="cardCustomized-header-subtitle">
+              <span>Descripción:</span> {{ campo.observation }}
+            </p>
         </div>
         <div class="cardCustomized-buttons"> 
-          <button class="primary-button"  mat-raised-button appearance="outline"  (click)="verMas(campo)">Ver Más</button>
+          <button class="primary-button"  mat-raised-button appearance="outline"  (click)="verLotes(campo)">Ver Lotes</button>
+          <button class="secondary-button border-primary"  mat-raised-button appearance="outline"  (click)="verMas(campo)">Ver Geolocalización</button>
         </div>
     </div>
   </div>  

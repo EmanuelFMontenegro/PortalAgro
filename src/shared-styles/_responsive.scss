@@ -144,5 +144,25 @@
             padding-left: 0;
           
         }
+        
     }
+    //Contenedor de Cards Chacras
+    .cardContainerNoCentered {
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+    .cardCustomized{
+      width: 280px;
+      padding: 10px;
+          &-buttons{
+              gap: 10px;
+          }
+  }
+  //fix para map de geolocation
+  .location-map{
+    height: 300px;
+  }
+  //dialog 
+  .dialog-actions{
+    gap: 12px;
+  }
 }
