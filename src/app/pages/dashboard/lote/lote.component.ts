@@ -43,7 +43,6 @@ interface Lote {
 @Component({
   selector: 'app-lote',
   templateUrl: './lote.component.html',
-  styleUrls: ['./lote.component.sass'],
 })
 export class LoteComponent {
   @Output() campoSeleccionadoCambio = new EventEmitter<any>();
@@ -229,15 +228,22 @@ export class LoteComponent {
         'Error'
       );
     }
-  }
+  } 
 
   confirmarBorrado(lote: any): void {
-    const dialogRef = this.dialog.open(DialogComponent, {
-      width: '400px',
+    const dialogRef = this.dialog.open(DialogComponent, { 
+      width: '465px',
       data: {
-        message: `¿Estás seguro que quieres eliminar el lote ${lote.name}?`,
+        message: `¿Seguro quieres eliminar el ${lote.name}?`,
         value: lote,
         showCancel: true,
+        borderRadius : '16px',
+        borderTop : '#F33036',
+        borderTitle : '#FB6065',
+        cancelBtnColor : '#F33036',
+        cancelBtnBorder : '#F33036',
+        confirmBtnBackground : '#F33036',
+        confirmBtnColor : '#fff'
       },
     });
 

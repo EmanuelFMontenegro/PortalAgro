@@ -1,46 +1,26 @@
-<div class="container">
-  <div class="header-container2">
-    <h2 class="title2">Cargar nuevo lote</h2>
-    <button class="back-button2" (click)="volver()"> << Volver Atrás</button>
-  </div>
-  <div class="subheader-container">
-    <h2 class="subtitle">Chacra: {{ camposlect }}</h2>
-  </div>
-
-  <div class="card">
-    <form class="solicitud-servicio-form" [formGroup]="loteForm">
-      <div class="campos-formulario">
-        <div class="grupo-campos">
-          <!-- Plantacion -->
-          <div class="field-container">
-            <label class="field-label" for="plantacion">Plantación</label>
-            <mat-select class="mat-select" formControlName="plantation"
-              [placeholder]="AnteriorPlantationName ? AnteriorPlantationName : 'Seleccionar plantación'">
-              <mat-option *ngFor="let planta of plantations" [value]="planta.id">
-                {{ planta.name }}
-              </mat-option>
-            </mat-select>
-          </div>
-
-
-        <!-- Dimensiones -->
-        <div class="field-container">
-          <label class="field-label">Dimensiones (Hectáreas)</label>
-          <input matInput formControlName="dimensions" type="number" placeholder="Ingresar valores en hectáreas">
-        </div>
-      </div>
-
-      <div class="field-container-observaciones">
-        <label class="field-label">Observaciones</label>
-        <textarea matInput class="field-input-obs" formControlName="observation"></textarea>
-      </div>
-  </div>
-
-  <div class="botones-servicio">
-    <button mat-raised-button class="cancel-button" type="button" (click)="cancelar()">Cancelar</button>
-    <button mat-raised-button class="register-button" type="submit"
-      (click)="currentPlotId ? actualizarLote() : cargarLotes()">{{ buttonText }}</button>
-  </div>
+<div class="mainStructure">
+  <app-header-inner [title]="'Lotes'" [backButton]="true"></app-header-inner>
+  <form class="FullForm" [formGroup]="loteForm">
+    <div class="FullForm-control">
+      <label class="FormLabel" for="plantacion">Plantación</label>
+      <select class="FormInput" formControlName="plantation">
+        <option *ngFor="let planta of plantations" [value]="planta.id">
+          {{ planta.name }}
+        </option>
+      </select>
+    </div>
+    <div class="FullForm-control">
+      <label class="FormLabel">Dimensiones (Hectáreas)</label>
+      <input class="FormInput" matInput formControlName="dimensions" type="number"
+        placeholder="Ingresar valores en hectáreas" />
+    </div>
+    <div class="FullForm-control">
+      <label class="FormLabel">Observaciones</label>
+      <textarea matInput class="FormTextarea" formControlName="observation"></textarea>
+    </div>
+    <div class="FullForm-buttonsToRight">
+      <button mat-button   class="secondary-button-custom size-48" type="button" (click)="cancelar()">Cancelar</button>
+      <button  mat-raised-button appearance="outline"  class="primary-button-custom size-48"  type="submit" [disabled]="!loteForm.valid" (click)="currentPlotId ? actualizarLote() : cargarLotes()">{{ buttonText }}</button>
+  </div> 
   </form>
-</div>
 </div>

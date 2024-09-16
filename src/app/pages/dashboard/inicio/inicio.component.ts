@@ -19,7 +19,7 @@ interface DecodedToken {
 @Component({
   selector: 'app-inicio',
   templateUrl: './inicio.component.html',
-  styleUrls: ['./inicio.component.sass'],
+  styleUrls: ['./inicio.component.scss']
 })
 export class InicioComponent implements OnInit {
   currentYear: number = new Date().getFullYear();
@@ -38,6 +38,7 @@ export class InicioComponent implements OnInit {
   private personId: number | any;
   public userEmail: string | null = null;
   localidades: any[] = [];
+  homeItems: any[] = [];
   constructor(
     private authService: AuthService,
     private apiService: ApiService,
@@ -50,6 +51,7 @@ export class InicioComponent implements OnInit {
     this.userEmail = this.authService.getUserEmail();
     this.decodeToken();
     this.cargarDatosDeUsuario();
+    this.loadMenu();
   }
 
   decodeToken(): void {
@@ -121,5 +123,13 @@ export class InicioComponent implements OnInit {
       this.userId = null;
       this.userEmail = null;
     }
+  }
+
+
+  loadMenu(): void {
+    this.http.get<any>('../../assets/json/home-dashboard.json').subscribe(data => {
+      this.homeItems = data.homeItems;
+      console.log(this.homeItems);
+    });
   }
 }

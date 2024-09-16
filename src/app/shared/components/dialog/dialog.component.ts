@@ -16,12 +16,14 @@ export class DialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<DialogComponent>
   ) {
+    console.log(data)
     if (data && data.message) {
       this.message = data.message;
       this.title = data.title || 'Acceso Restringido !!!';
       this.buttonText = data.buttonText || 'Aceptar';
       this.showCancel = data.showCancel !== undefined ? data.showCancel : true;
-    }
+    } 
+    
   }
 
   aceptarClick() {

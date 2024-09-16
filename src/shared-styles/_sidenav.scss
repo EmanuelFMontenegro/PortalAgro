@@ -1,7 +1,5 @@
 @import 'src/shared-styles/mixins.scss';
 
-
-
 @include respond-between(769px, 1440px) {
     .footer__content {
       margin-left: 0;
@@ -13,9 +11,9 @@
 
 .ContainerS {
     @include flexbox(column);
+    
+    height: calc(100vh - 80px);
     min-height: calc(100vh - 80px);
-
-
     &__menu {
         width: 262px;
         @include box-shadow(1px, 0);
@@ -30,14 +28,20 @@
         }
 
         &__list {
+            flex: 1;
+            gap: 15px 0px !important;
+            display: flex !important;
+            flex-direction: column !important;
             &--item {
 
-                @include font(17px, 600);
+                
                 &:hover {
                     cursor: pointer;
+
                 }
                 &__container {
                     @include flexbox(row, flex-start, center);
+                    @include font(18px, 600,#454545);
                     &-icon {
                         margin-right: 5px;
                         width: 25px;
@@ -48,10 +52,21 @@
     }
     &__content {
         @include flexbox(row);
+        
         background-color: $default;
         &__card {
-            padding-top: 1px;
+            width: calc(100% - 5rem); 
+            margin-left: 2rem; 
+            padding: 1rem;
         }
     }
 
 }
+
+@media screen and (max-width: 768px) {
+    .ContainerS__content__card{
+        width: 100%;
+        margin-left: 0;
+        padding: 0;
+    }
+  }

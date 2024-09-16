@@ -41,8 +41,7 @@ interface Lote {
 
 @Component({
   selector: 'app-cargar-lote',
-  templateUrl: './cargar-lote.component.html',
-  styleUrls: ['./cargar-lote.component.sass'],
+  templateUrl: './cargar-lote.component.html'
 })
 export class CargarLoteComponent implements OnInit {
   currentPlotId: number | null = null;

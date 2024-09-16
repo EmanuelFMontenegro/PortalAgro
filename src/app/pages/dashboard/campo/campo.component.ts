@@ -28,7 +28,6 @@ interface DecodedToken {
 @Component({
   selector: 'app-campo',
   templateUrl: './campo.component.html',
-  styleUrls: ['./campo.component.sass'],
 })
 export class CampoComponent implements OnInit {
   nombre: string = '';
@@ -78,7 +77,7 @@ export class CampoComponent implements OnInit {
       name: ['', Validators.required],
       dimensions: ['', [Validators.required, Validators.min(1)]],
       observation: [''],
-    });
+    }); 
   }
 
   ngOnInit(): void {
@@ -158,6 +157,7 @@ export class CampoComponent implements OnInit {
   }
 
   registrarCampo(): void {
+    console.log('Registrando campo...');
     // Verificar si el usuario está autenticado
     if (!this.userId) {
       this.toastr.error('Error: No se ha identificado al usuario.', 'Error');

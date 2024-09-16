@@ -3,6 +3,9 @@
 <mat-sidenav-container class="ContainerS" >
   <!-- Inicio Menu Lateral -->
   <mat-sidenav class="ContainerS__menu" #sidenav [mode]="isScreenSmall ? 'over' : 'side'" [opened]="(!isScreenSmall || sidenavOpened)" (openedChange)="onSidenavToggle($event)">
+    <div style="display: flex;
+    flex-direction: column;
+    height: 100%;">
     <mat-nav-list class="ContainerS__menu__list">
       <a mat-list-item class="ContainerS__menu__list--item" *ngFor="let item of menuItems" [routerLink]="item.route"  (click)="toggleSidenav()">
         <div class="ContainerS__menu__list--item__container"><img class="ContainerS__menu__list--item__container-icon" src="assets/menu/{{ item.icon }}" alt="{{ item.name }}" >
@@ -13,12 +16,13 @@
     <div class="ContainerS__menu__logo" >
       <img src="assets/img/empresa_b.png">
     </div>
+  </div>
   </mat-sidenav>
   <!-- Fin Menu Lateral -->
   <!-- Inicio content -->
   <mat-sidenav-content class="ContainerS__content"> 
        <!-- Inicio Router -->
-     <div class="ContainerS__content__card">
+     <div class="ContainerS__content__card"> 
       <router-outlet></router-outlet>
      </div> 
      <!-- Fin Router -->

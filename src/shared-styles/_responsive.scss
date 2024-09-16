@@ -25,13 +25,17 @@
   .ellipse_white {
     width: 100%;
     @include position(absolute, 0);
+    img {
+      width: 100%;
   }
-  img {
-    // width: 100%;
   }
+ 
   .ellipse_green {
     width: 100%;
     @include position(absolute, null, 0, 0);
+    img {
+      width: 100%;
+  }
   }
   .agrotech_logo {
     @include position(absolute);
@@ -59,11 +63,11 @@
         padding-left: 22px;
       }
       h2 {
-        @include font(18px);
+        @include font(18px, 700, #fff);
         padding-left: 0;
       }
       span {
-        @include font(12px);
+        @include font(12px, 400, #fff);
         text-wrap: pretty;
       }
     }
@@ -72,7 +76,7 @@
       padding: 10px 0 70px;
       h2 {
         padding-left: 0;
-        @include font(18px);
+        @include font(18px, 700, #fff);
       }
       &--links {
         justify-content: center;
@@ -84,7 +88,7 @@
       flex-direction: column-reverse;
       gap: 0;
       &--cop > p {
-        @include font(12px);
+        @include font(12px, 400, #fff);
         padding: 0 12px;
       }
     }
@@ -94,12 +98,71 @@
       margin: 0 32px 0 0;
       padding-bottom: 12px;
       span {
-        @include font(12px);
+        @include font(12px, 400, #fff);
       }
       img {
         width: 95px;
         height: 35px;
       }
     }
+  }
+}
+
+@include mobile{
+  //Contenedor principal
+  .mainStructure{
+    padding: 10px 10px 50px 10px;
+    &-title{
+        padding-left:0px;
+        text-align: center;
+        
+    }
+  }
+  //Contenedor de Inicio
+  .cardHome {
+          gap: 15px;
+          &-content {
+              margin: 0;
+              flex-direction: column;
+              gap: 12px;
+              max-height: 150px;
+              min-height: 150px;
+              img{
+                  padding:0;
+              }
+              h2{
+                  font-size: 22px;
+                  margin-top: 0;
+              }
+          }
+      }
+      // Card Location y Detalle de Chacra 
+      .ContainerLocation{ 
+        flex-direction: column;
+        padding: 10px 5px;
+        &-chacra{
+            padding-left: 0;
+          
+        }
+        
+    }
+    //Contenedor de Cards Chacras
+    .cardContainerNoCentered {
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+    .cardCustomized{
+      width: 280px;
+      padding: 10px;
+          &-buttons{
+              gap: 10px;
+          }
+  }
+  //fix para map de geolocation
+  .location-map{
+    height: 300px;
+  }
+  //dialog 
+  .dialog-actions{
+    gap: 12px;
   }
 }

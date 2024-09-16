@@ -1,4 +1,8 @@
 /* Estructura para componentes cards, buttons, etc */
+//ocultamos el scrollbar
+::-webkit-scrollbar {
+  display: none;
+}
 
 .title2 {
   margin: 0;
@@ -7,7 +11,7 @@
 
 }
 
-.back-button2{
+.back-button2 {
   padding: 8px 18px;
   border: 1px solid transparent;
   border-radius: 5px;
@@ -22,11 +26,11 @@
 }
 
 
-.cancel-button{
-background-color: white !important;
-color: #0F8054;
-border: 1px solid gray !important;
-width: 15%;
+.cancel-button {
+  background-color: white !important;
+  color: #0F8054;
+  border: 1px solid gray !important;
+  width: 15%;
 }
 
 
@@ -50,13 +54,13 @@ width: 15%;
   margin-bottom: 10px;
 }
 
-.en-linea{
+.en-linea {
   display: inline-flex;
   width: 100%;
 }
 
 
-.text-r{
+.text-r {
   text-align: right;
 }
 
@@ -79,6 +83,322 @@ width: 15%;
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
 }
 
-.card-normal{
+.card-normal {
   margin: 15px 20px;
 }
+
+//los estilos de arriba aun no se donde se usan, los dejo por si acaso pero los borro mas adelante si no se usan
+// ==============================================================        Customs         =========================================================
+.dot::before {
+  content: '';
+  position: absolute;  
+  width: 6px;
+  height: 6px;
+  background-color: #65B438;
+  border-radius: 50%;
+  left:5px; 
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+}
+
+.relative{
+  position:relative;
+  
+}
+
+.font-16{
+  font-size: 16px !important;
+}
+
+.margin-block-12{
+  margin-block: 12px;
+}
+.margin-inline-12{
+  margin-inline: 12px;
+}
+
+.grow-1 {
+  flex-grow: 1;
+}
+
+.grow-2{
+  flex-grow: 2;
+}
+
+.grow-3{
+  flex-grow: 3;
+}
+.size-48 {
+  height: 48px !important;
+}
+
+.basis{
+  flex-basis: 0;
+}
+
+.basis-300{
+  flex-basis: 300px;
+}
+.border-primary{
+  border: 1px solid #0F8054 !important;
+}
+.margin-btm{
+  margin-bottom: 15px !important;
+}
+// ==============================================================        Botones        =========================================================
+
+.primary-button {
+  @include button(#fff, #0F8054, 100%);
+}
+
+.secondary-button{
+  @include button(#0F8054, #fff, 100%);
+}
+
+.primary-button-custom{
+  @include button(#fff, #0F8054, 290px);
+}
+
+.secondary-button-custom{
+  @include button(#0F8054, #fff, 290px,#3CA749); 
+  
+}
+
+.primary-button-auto {
+  @include button(#fff, #0F8054, auto);
+}
+
+.secondary-button-auto {
+  @include button(#0F8054, #fff, auto);
+  background-color: #fff !important; 
+  border:none;
+}
+
+.primary-button-240 {
+  @include button(#fff, #0F8054, 240px);
+  
+}
+.secondary-button-240 {
+  @include button(#0F8054, #fff, 240px,#3CA749);
+  background-color: #fff !important; 
+  border:none;
+}
+
+.basic-warning{ 
+  @include clean-btn(#FF0000, #fff, 100%);
+}
+
+.basic-blue{ 
+  @include clean-btn(#3B7AF6, #fff, 100%);
+}
+
+.dialog-button {
+  @include custom-btn(155px);
+}
+ 
+// ==============================================================        Searchbar       =========================================================
+.search-bar { 
+  font-size: 14px;
+  @include flex-wrap(10px,1);
+  padding-bottom: 20px;
+  &-picker {
+    mat-form-field {
+      width: 100%;
+    }
+  }
+  &-input-text {
+    border-radius: 8px;
+    mat-form-field {
+      width: 100%;
+    }
+  }
+  &-buttons {
+    @include flex-wrap(10px,1); 
+  }
+}
+
+
+ 
+
+// ==============================================================  Chacra =========================================================
+
+// Layout principal de contenedor de chacras,servicios adicionales,lotes 
+// proporciona un grid modulable usando la funcion grid-center-autofill de mixins.scss
+.cardContainerNoCentered {
+  @include grid-center-autofill(350px, 1fr, 25px, 15px);
+}
+
+//Presets de cards, con distintas conf de estilos en un mismo contenedor
+
+.cardCustomized {
+  @include flexbox(column, center, left);
+  @include custom-card(340px, 470px, 10px);
+  border: 1px solid #929497;
+
+  // Contenedor para Card de Chacras
+  //                 [ IMG ] 
+  //                 [ HEADER ]
+  //                 [ CONTENT ]
+  //                 [ BUTTONS ] 
+  &-img {
+    height: 205px !important;
+    max-width: 100%;
+    border-radius: 16px;
+  }
+
+  &-header {
+    &-title {
+      margin-top: 12px;
+      margin-bottom: 3px;
+      color: #232323;
+      font-size: 20px;
+    }
+
+    &-subtitle {
+      margin:9px 0px; 
+      font-size: 10px;
+      @include font(10px, 500,#232323);
+      >span {
+        @include font(10px, 600);
+      }
+    }
+  }
+
+  &-buttons {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+  }
+
+  // END Contenedor para Card de Chacras
+  //Contenedor para Cards de Lotes
+  
+}
+.cardContainerNoCenteredLote {
+  @include grid-center-autofill(240px, 1fr, 25px, 15px);
+}
+.LoteCard{
+  @include flexbox(column, center, left);
+  @include custom-card(220px, 300px, 10px);
+  border: 1px solid #929497;
+  &-img {
+    height: 115px !important;
+    max-width: 100%;
+    border-radius: 16px;
+  }
+  &-header {
+    &-title {
+      margin-top: 12px;
+      margin-bottom: 3px;
+      color: #232323;
+      font-size: 20px;
+    }
+
+    &-subtitle {
+      position: relative;
+      margin:9px 0px; 
+      font-size: 10px;
+      padding-left: 12px;
+      @include font(10px, 500,#232323);
+      >span {
+        
+        @include font(10px, 600);
+      }
+      
+    }
+    
+  }
+  &-buttons {
+    margin-top: auto;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    width: 100%;
+  }
+}
+
+
+// ==============================================================  Formularios =========================================================
+//Form container para Formularios
+.FullForm {
+  @include flexbox(column, center, center); 
+  &-control {
+    @include flex-column();
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+  &-buttonsToRight{ 
+    @include flexbox(row, flex-end, center);
+    gap: 10px;
+    width: 100%;
+    margin-top: 1rem;
+  }
+}
+//labels de formularios
+.FormLabel {
+  @include font(16px, 500, #45454580);
+  margin-bottom: 12px;
+}
+//inputs de formularios
+.FormInput {
+  @include FormInput(auto, 0.5rem, 1px solid #ccc, 8px, 12px, 4px 4px 6px 0px rgba(0, 0, 0, 0.25), #45454580);
+  
+}
+//textarea de formularios
+.FormTextarea {
+  @include FormTextArea(auto, 0.5rem, 1px solid #ccc, 8px, 14px, 4px 4px 6px 0px rgba(0, 0, 0, 0.25), #45454580,170px);
+  min-height: 170px;
+}
+
+// ==============================================================  Location Card =============================================
+
+.ContainerLocation { 
+  @include grid-autofit(300px, 1fr, 25px, 15px);
+  @include border-radius-color(#000, 20px); 
+  padding: 20px; 
+  &-chacra { 
+      @include flexbox(column, flex-start, normal);
+      padding-left: 24px;
+      &-details {
+          > p {
+              font-size: 12px;
+          }
+      }
+      &-buttons { 
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: flex-end;
+          gap: 30px;
+      }
+  }
+}
+
+.location-map{
+  border-radius: 20px;
+  width: 100%;
+  height: 400px;
+}
+
+.Radio-container{
+  margin:12px;
+  &-group{
+    display:flex; flex-direction: column;gap: 10px;
+  }
+}
+
+
+
+
+
+
+// ==============================================================  Dialog =============================================
+.cdk-overlay-pane {
+  border-radius: 16px ; 
+  overflow: hidden ; 
+  padding: 0;
+}
+ 

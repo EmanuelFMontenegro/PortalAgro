@@ -1,67 +1,46 @@
-<div class="container">
-  <div class="header-container2">
-    <h2 class="title2">Geolocalización</h2>
-    <button class="back-button2" (click)="volver()">
-      << Volver Atrás</button>
-  </div>
-
-  <div class="card-campo-container">
-    <div class="card-map">
-      <div class="geo-container">
-        <div #map style="height: 95%; width:95%; border-radius: 5px; border: 1px solid #32963f"></div>
+<div class="mainStructure">
+  <app-header-inner [title]="'Geolocalización'" [backButton]="true"></app-header-inner>
+  <div class="ContainerLocation">
+    <div class="ContainerLocation-map">
+          <div #map class="location-map"></div>
       </div>
-    </div>
-
-    <div class="card-search">
-      <h2 class="titulo-registrar-campo">Geolocalización</h2>
-      <div class="geolocation-info">
-        <!-- Botones de radio para seleccionar el tipo de geolocalización -->
-        <mat-radio-group class="custom-radio" [(ngModel)]="opcionGeolocalizacion">
-          <mat-radio-button value="localidad">Autogeolocalizar por Localidad.</mat-radio-button>
-          <mat-radio-button value="manual">Geolocalizar por Coordenadas.</mat-radio-button>
-        </mat-radio-group>
-
-
-        <!-- Mostrar la información de la chacra siempre -->
-        <div class="card">
-          <div class="card-item">
-            <p class="with-dot"><strong>Nombre Chacra:</strong> {{ campoSeleccionado.name }}</p>
-            <p class="with-dot"><strong>Localidad:</strong> {{ campoSeleccionado.address?.location.name }}</p>
-            <p class="with-dot"><strong>Dirección:</strong> {{ campoSeleccionado.address.address }}</p>
-            <p class="with-dot"><strong>Hectáreas:</strong> {{ campoSeleccionado.dimensions }}</p>
-          </div>
+      <div class="ContainerLocation-chacra">
+        <div class="ContainerLocation-chacra-details grow-1">
+          <p class="font-16 margin-block-12 relative dot"><strong class="margin-inline-12">Nombre Chacra:</strong> {{ campoSeleccionado.name }}</p>
+            <p class="font-16 margin-block-12 relative dot"><strong class="margin-inline-12">Localidad:</strong> {{ campoSeleccionado.address?.location.name }}</p>
+            <p class="font-16 margin-block-12 relative dot"><strong class="margin-inline-12">Dirección:</strong> {{ campoSeleccionado.address.address }}</p>
+            <p class="font-16 margin-block-12 relative dot"><strong class="margin-inline-12">Hectáreas:</strong> {{ campoSeleccionado.dimensions }} m2</p>
         </div>
-
-
-        <!-- Mat Select para elegir localidades solo cuando se selecciona "localidad" -->
-        <div class="card-info" *ngIf="opcionGeolocalizacion === 'localidad'">
-          <div class="search-container">
-            <mat-select placeholder="Localidades..." (selectionChange)="onSearch($event.value)">
+        <div class="grow-3">
+          <div class="Radio-container">
+          <mat-radio-group class="Radio-container-group"  [(ngModel)]="opcionGeolocalizacion">
+            <mat-radio-button value="localidad">Auto geolocalizar por localidad</mat-radio-button>
+            <mat-radio-button value="manual">Geolocalizar por coordenadas</mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div  *ngIf="opcionGeolocalizacion === 'localidad'">
+          <div class="FullForm-control">
+            <mat-select class="FormInput" style="width: 92%"   placeholder="Localidades..." (selectionChange)="onSearch($event.value)">
               <mat-option *ngFor="let localidad of filteredLocalidades | async" [value]="localidad.name">
                 {{ localidad.name }}
               </mat-option>
             </mat-select>
           </div>
+          </div>
+        <div  *ngIf="opcionGeolocalizacion === 'manual'"> 
+          <div class="FullForm-control">
+          <input  placeholder="Latitud"  class="FormInput" matInput id="manualLatitude"    [(ngModel)]="latitud"
+            (change)="onManualCoordinatesChange()"> </div>
+            <div class="FullForm-control">
+            <input  placeholder="Longitud" class="FormInput" matInput id="manualLongitude"   [(ngModel)]="longitud"
+            (change)="onManualCoordinatesChange()"></div>
         </div>
-        <!-- Mostrar formulario de coordenadas manuales solo si se selecciona "manual" -->
-        <div *ngIf="opcionGeolocalizacion === 'manual'">
-          <mat-label>Latitud</mat-label>
-          <input matInput id="manualLatitude" type="number" step="any" [(ngModel)]="latitud"
-            (change)="onManualCoordinatesChange()">
-          <mat-label>Longitud</mat-label>
-          <input matInput id="manualLongitude" type="number" step="any" [(ngModel)]="longitud"
-            (change)="onManualCoordinatesChange()">
-
-          <!-- <button mat-raised-button (click)="searchByCoordinates()">Buscar</button> -->
+        </div>  
+        <div class="ContainerLocation-chacra-buttons">
+          <button mat-button class="secondary-button-custom size-48" type="button" (click)="cancelar()">Cancelar</button>
+        <button mat-raised-button class="primary-button-custom size-48" type="button" (click)="registerField()">Agregar</button>
         </div>
-      </div>
-      <div class="campo-buttons">
-        <button mat-raised-button class="cancel-button" type="button" (click)="cancelar()">Cancelar</button>
-        <button mat-raised-button class="register-button" type="button" (click)="registerField()">Agregar</button>
-
-      </div>
+        </div>
     </div>
-
   </div>
-
-</div>
+ 
