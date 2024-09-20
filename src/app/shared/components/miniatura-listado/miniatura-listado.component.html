@@ -14,12 +14,13 @@
 
         <!-- SPAN -->
         <p *ngIf="item.tipoLabel == tipoSpan">
-          <span  class="campo-variable" > {{item?.label}}: </span> {{ this.getValue(miniatura,item.field)}}
+          <span  class="campo-variable" > {{item?.label}}: </span> {{ this.getValue(miniatura,item.field) ?? ' --- '}}
         </p>
 
         <button *ngIf="item.tipoLabel == tipoVerMas" mat-raised-button class="ver-mas-button" (click)="verMas(miniatura, item?.label, item?.field )">Ver Más</button>
         <button *ngIf="item.tipoLabel == tipoEditar" mat-raised-button class="editar-button" (click)="Editar(miniatura, item?.label, item?.field )">Editar</button>
-
+        <button *ngIf="item.tipoLabel == tipoEditarDevolviendo" mat-raised-button class="editar-button" (click)="EditarDelviendo(item)">Editar</button>
+        <div *ngIf="item.tipoLabel == tipoEliminar" class="btn-eliminar" (click)="eliminar(this.getValue(miniatura,item.field))">Eliminar</div>
       </ng-container>
 
     </div>

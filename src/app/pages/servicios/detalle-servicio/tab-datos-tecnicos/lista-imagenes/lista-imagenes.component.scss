@@ -1,0 +1,26 @@
+.listadoVacio{
+  text-align: center;
+  width: 100%;
+  margin-top: 50px;
+  font-weight: 400;
+  font-size: 16px;
+}
+
+
+button {
+  background-color: #4CAF50; /* Color de fondo verde */
+  color: white; /* Texto blanco */
+  border: none; /* Sin borde */
+  padding: 10px 20px; /* Espaciado interno */
+  text-align: center; /* Alineación del texto */
+  text-decoration: none; /* Sin subrayado */
+  display: inline-block; /* Mostrar en línea */
+  font-size: 16px; /* Tamaño de fuente */
+  margin: 4px 2px; /* Espaciado alrededor */
+  cursor: pointer; /* Cursor de mano */
+  border-radius: 4px; /* Bordes redondeados */
+}
+
+button:hover {
+  background-color: #45a049; /* Color de fondo al pasar el ratón */
+}

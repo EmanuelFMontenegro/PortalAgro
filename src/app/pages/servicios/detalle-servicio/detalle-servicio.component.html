@@ -1,25 +1,42 @@
 <div class="container card-normal">
 
-  <div class="header-container2 en-linea">
-    <h2 class="title2">Detalle de servicio</h2>
-    <button class="back-button2 r-button" (click)="volver()"> << Volver Atrás</button>
+
+  <div class="row">
+    <div class="col-12 mb-10">
+      <div class="header-container2 en-linea">
+      <h2 class="title2">Detalle de servicio</h2>
+      <button class="back-button2 r-button" (click)="volver()"> << Volver Atrás</button>
+     </div>
+    </div>
+    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+      <strong>Chacra: </strong> {{ this.servicio?.field?.name }}
+    </div>
+    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+      <strong>Servicio Número: </strong> {{ this.servicio?.id }}
+    </div>
+    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+      <strong>Productor: </strong> {{ this.servicio?.producer?.name + '  ' + this.servicio?.producer?.lastname}}
+    </div>
+    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+      <strong>Contacto: </strong> {{ this.servicio?.field?.telephone ?? '--'  }}
+    </div>
   </div>
 
-  <mat-tab-group>
+  <mat-tab-group (selectedTabChange)="onTabChange($event)" *ngIf="this.servicio">
     <mat-tab label="Solicitud">
-      <app-tab-solicitud></app-tab-solicitud>
+      <app-tab-solicitud *ngIf="this.indiceTab == 0"></app-tab-solicitud>
     </mat-tab>
-    <mat-tab label="Datos Técnicos">
-      <app-tab-datos-tecnicos></app-tab-datos-tecnicos>
+    <mat-tab label="Datos Técnicos" *ngIf="this.tecnicoAsignado">
+      <app-tab-datos-tecnicos *ngIf="this.indiceTab == 1"></app-tab-datos-tecnicos>
     </mat-tab>
-    <mat-tab label="Datos de App">
-      <app-tab-datos-app></app-tab-datos-app>
+    <mat-tab label="Datos de App" *ngIf="this.pilotoAsignado">
+      <app-tab-datos-app *ngIf="this.indiceTab == 2"></app-tab-datos-app>
     </mat-tab>
     <mat-tab label="Informes">
-      <app-tab-informes></app-tab-informes>
+      <app-tab-informes *ngIf="this.indiceTab == 3"></app-tab-informes>
     </mat-tab>
     <mat-tab label="Eventos">
-      <app-tab-eventos></app-tab-eventos>
+      <app-tab-eventos *ngIf="this.indiceTab == 4"></app-tab-eventos>
     </mat-tab>
   </mat-tab-group>
 

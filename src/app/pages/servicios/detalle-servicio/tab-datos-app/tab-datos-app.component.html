@@ -1,47 +1,78 @@
 <div class="tab-base shadow">
-  <div class="label-estado"><strong>Estado: </strong>{{this.servicio?.status?.name}}</div>
-  <strong style="float: right;">Hectáreas totales:  {{this.servicio?.hectare}}</strong>
- <br>
- <br>
-  <div class="containers">
-      <div class="containers ">
-        <div class="label2">
-          <strong>Técnico</strong>
-          Cristian <P></P>
-         </div>
-         <div class="separacion"></div>
-         <div class="label2">
-          <strong>Estado de la plantación</strong>
-          ---
-         </div>
-         <div class="separacion"></div>
-         <div class="label2">
-          <button class="back-button2 btn-grande label2" >DRONE</button>
+  <ng-container *ngIf="displayApp == display">
+    <div class="label-estado"><strong>Estado: </strong>{{this.datosApp?.status?.name}}</div>
+    <strong style="float: right;">Hectáreas totales: {{this.datosApp?.hectare}}</strong>
+    <br>
+    <br>
+  </ng-container>
+
+  <ng-container [ngSwitch]="display">
+
+    <ng-container *ngSwitchCase="tipo.insumos">
+       <app-lista-insumos-app (btnVolver)="setBtnVolver($event)"></app-lista-insumos-app>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="tipo.imagenes">
+      <app-lista-imagenes-app (btnVolver)="setBtnVolver($event)"></app-lista-imagenes-app>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="tipo.editarDatos">
+     <app-editar-datos-app (btnVolver)="setBtnVolver($event)"></app-editar-datos-app>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="tipo.tareasDrone">
+      <app-tareas-del-drone (btnVolver)="setBtnVolver($event)"></app-tareas-del-drone>
+     </ng-container>
+
+    <ng-container *ngSwitchCase="tipo.app">
+      <div class="row">
+        <div class="col-12 border-base">
+          <div class="mini-card">
+            <div class="row">
+              <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 tx-center">
+                <img class="container-icon" src="../../../../../assets/icons-servicio/carbon_drone.svg" alt="drone" >
+                <div class="mb-15"><strong>Piloto</strong></div>
+                <p>{{this.datosApp?.employee?.name}}</p>
+              </div>
+              <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 tx-center">
+                <img class="container-icon" src="../../../../../assets/icons-servicio/solar_phone-bold.svg" alt="tecnico">
+                <div class="mb-15"><strong>Contacto</strong></div>
+                <p>  <a href="tel:{{this.datosApp?.employee?.telephone}}" *ngIf="this.datosApp?.employee?.telephone">{{this.datosApp?.employee?.telephone}}</a></p>
+              </div>
+              <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 tx-center">
+                <img class="container-icon" src="../../../../../assets/icons-servicio/tabler_truck.svg" alt="tecnico">
+                <div class="mb-15"><strong>Visita técnica</strong></div>
+                <p>{{this.datosApp?.dateOfVisit ?? 'No establecida'}} </p>
+              </div>
+              <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 tx-center">
+                <button class="back-button2 btn-grande label2" (click)="this.tareasDrone()">Tareas del drone</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-    <div class="separacion"></div>
-    <div class="label2 label">
-      <div class="titulo-subra">
-      Hectáreas: {{this.servicio?.hectare}}
-    </div>
-    </div>
- </div>
- <br>
- <br>
+      <br>
+      <br>
 
- <div class="containers ">
-  <div class="label2">
-    <button class="back-button2 btn-grande label2" >INSUMOS</button>
-  </div>
-  <div class="separacion"></div>
-  <div class="label2">
-    <button class="back-button2 btn-grande label2" >IMÁGENES</button>
-  </div>
-  <div class="separacion"></div>
-  <div class="label2">
-    <button class="back-button2 btn-grande label2" >OBSERVACIONES</button>
-  </div>
-</div>
+      <div class="row">
+        <div class="col-12 col-sm-12 col-md-6 col-lg-8 col-xl-8">
+          <textarea [formControl]="ctrlObservaciones" appearance="outline" floatLabel="always" placeholder="Observaciones" matInput class="observaciones h-100" ></textarea>
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+          <button class="back-button2 btn-grande label2" (click)="this.mostrarInsumos()">INSUMOS</button>
+          <br>
+          <button class="back-button2 btn-grande label2" (click)="this.mostrarImagenes()">IMÁGENES</button>
+          <br>
+          <button class="back-button2 btn-grande label2" (click)="this.editarDatos()">EDITAR DATOS</button>
+
+        </div>
+      </div>
+     </ng-container>
+
+    <ng-container *ngSwitchDefault>
+    </ng-container>
+
+  </ng-container>
 
 </div>

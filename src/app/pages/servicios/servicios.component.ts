@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { DashboardBackOfficeService } from '../dashboard-backoffice/dashboard-backoffice.service';
 import {
   TipoLabel,
@@ -8,14 +8,16 @@ import { ServiciosService } from 'src/app/services/servicios.service';
 import { Router } from '@angular/router';
 import { ApiService } from 'src/app/services/ApiService';
 import { ToastrService } from 'ngx-toastr';
-import { map } from 'rxjs';
+import { map, Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/AuthService';
 import { jwtDecode } from 'jwt-decode';
+import { ServicioInterno } from './servicios-interno.service';
 
 @Component({
   selector: 'app-servicios',
   templateUrl: './servicios.component.html',
   styleUrls: ['./servicios.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ServiciosComponent {
   constructor(
@@ -24,12 +26,14 @@ export class ServiciosComponent {
     private authService: AuthService,
     private router: Router,
     private toastr: ToastrService,
+    private servicioInterno: ServicioInterno,
     public dashboardBackOffice: DashboardBackOfficeService
   ) {
     this.dashboardBackOffice.dataTitulo.next({
       titulo: 'Solicitudes y servicios',
       subTitulo: '',
     });
+    this.servicioInterno.comprobarUrlBackOffice()
   }
   urlBase = '';
   opcionSeleccionada: any;
@@ -38,12 +42,26 @@ export class ServiciosComponent {
   lotesOriginal: any[] = [];
   cultivos: any[] = [];
   backOffice = false;
+  subscription = new Subscription()
 
   chacras: any[] = []; // ELIMINAR
 
   ngOnInit(): void {
+    this.isBackOffice()
     this.setUrlVerMas();
     this.backOffice ? this.getServicios() : this.getServiciosByProductor();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe()
+  }
+
+  isBackOffice(){
+    this.subscription.add(
+      this.servicioInterno.backOffice$.subscribe(
+        (value: boolean) => this.backOffice = value
+      )
+    )
   }
 
   setUrlVerMas() {
@@ -51,41 +69,37 @@ export class ServiciosComponent {
     this.urlBase = this.backOffice ? 'dashboard-backoffice' : 'dashboard';
     this.dataView = [
       { label: 'Estado', field: 'status.name', tipoLabel: TipoLabel.span },
-      { label: 'Chacra', field: 'nombreChacra', tipoLabel: TipoLabel.span },
       {
-        label: 'Plantación',
-        field: 'cropDescripcion',
+        label: 'Solicitado',
+        field: 'dateOfService',
         tipoLabel: TipoLabel.span,
       },
-      { label: 'Lotes', field: 'cantidadLotes', tipoLabel: TipoLabel.span },
-      { label: 'Hectarias', field: 'hectare', tipoLabel: TipoLabel.span },
+      { label: 'Chacra', field: 'field.name', tipoLabel: TipoLabel.span },
+      { label: 'PLantación', field: 'typeCrop.name', tipoLabel: TipoLabel.span },
+      { label: 'Hectáreas', field: 'hectare', tipoLabel: TipoLabel.span },
       {
-        label: 'Localidad de la chacra',
+        label: 'Localidad',
         field: 'location.name',
         tipoLabel: TipoLabel.span,
       },
       {
-        label: 'Tecnico asignado',
-        field: 'jobOperator',
+        label: 'Tecnico',
+        field: 'jobTechnical.employee.name',
         tipoLabel: TipoLabel.span,
       },
       {
-        label: 'Contacto técnico',
-        field: 'jobTechnical',
+        label: 'Piloto',
+        field: 'jobOperator.employee.name',
         tipoLabel: TipoLabel.span,
       },
-      {
-        label: 'Piloto asignado',
-        field: 'function',
-        tipoLabel: TipoLabel.span,
-      },
-      { label: 'Contacto piloto', field: 'brand', tipoLabel: TipoLabel.span },
       {
         label: 'servicio',
         field: this.urlBase + '/servicios/',
         tipoLabel: TipoLabel.botonVermas,
       },
     ];
+
+    if(this.backOffice) this.dataView.splice(3, 0,  { label: 'Productor',  field: 'producer.lastname',  tipoLabel: TipoLabel.span});
   }
 
   getServiciosByProductor() {
@@ -94,11 +108,9 @@ export class ServiciosComponent {
       .pipe(map((response: any) => this.convertirValores(response.list[0])))
       .subscribe(
         (data: any) => {
-          console.log("Datos después de convertirValores:", data); // Verifica la estructura de los datos
           if (data?.length > 0) {
             this.lotesOriginal = data;
             this.listado = data;
-            console.log("Listado final:", this.listado); // Verifica cómo se ve el listado antes de mostrarlo
           }
         },
         (error) => {
@@ -111,7 +123,6 @@ export class ServiciosComponent {
   ///// REVISAR SI ELIMINAR  /////////////
 
   convertirValores(valores: any) {
-    console.log('Valores antes de la transformación:', valores);
     if (valores?.length) {
       valores.forEach((lote: any) => {
         lote.cantidadLotes = lote.plots.length;
@@ -119,7 +130,6 @@ export class ServiciosComponent {
         lote.nombreChacra = this.getDescripcionChacra(lote.field.id); // Asegúrate de usar los IDs correctos
       });
     }
-    console.log('Valores después de la transformación:', valores);
     return valores;
   }
 
@@ -159,7 +169,6 @@ export class ServiciosComponent {
   getServicios() {
     this.serviciosService.getServicios().subscribe(
       (data) => {
-        console.log(data);
         if (data?.list[0].length > 0) {
           this.lotesOriginal = data?.list[0];
           this.listado = data?.list[0];
@@ -174,8 +183,15 @@ export class ServiciosComponent {
       this.toastr.info('Selecione un tipo de cultivo.', 'Información');
     } else {
       let crop_id: number = this.opcionSeleccionada;
-      this.listado = this.lotesOriginal.filter((x) => x.typeCrop_id == crop_id);
+      this.listado = this.lotesOriginal.filter((x) => x.typeCrop.id== crop_id);
     }
+  }
+
+  limpiarSeleccion(){
+    this.listado = this.lotesOriginal;
+    setTimeout(() => {
+      this.opcionSeleccionada = null;
+    }, 50);
   }
 
   nuevo() {

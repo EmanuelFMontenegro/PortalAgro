@@ -87,6 +87,20 @@
   margin: 15px 20px;
 }
 
+.h-100{
+  height: 100%;
+}
+
+.observaciones{
+  // height: 100%;
+  width: 100%;
+  border: 1px solid gray;
+  border-radius: 4px;
+  padding: 8px;
+  background-color: white;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+}
+
 //los estilos de arriba aun no se donde se usan, los dejo por si acaso pero los borro mas adelante si no se usan
 // ==============================================================        Customs         =========================================================
 .dot::before {

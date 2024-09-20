@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatOptionModule } from '@angular/material/core';
+import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -29,6 +29,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { PaginadorComponent } from './components/paginador/paginador.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { HeaderInnerComponent } from './components/header-inner/header-inner.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+
 export const IMPORTS_MATERIAL = [
   MatSidenavModule,
   MatListModule,
@@ -48,7 +51,12 @@ export const IMPORTS_MATERIAL = [
   MatCheckboxModule,
   MatDialogModule,
   MatPaginatorModule,
-  MatTabsModule
+  MatTabsModule,
+  MatTooltipModule,
+    MatDatepickerModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatNativeDateModule,
 ];
 
 export const IMPORT_CORE = [CommonModule, FormsModule, ReactiveFormsModule];

@@ -1,0 +1,27 @@
+<div class="borderDialog">
+  <div class="miniBar">
+   <strong> Editar insumo</strong>
+  </div>
+  <div class="body-dialog">
+
+      <div [formGroup]="form">
+
+        <div class="field-container w-50">
+          <mat-label class="field-label">Sobrantes</mat-label>
+          <input type="number" [formControlName]="this.ctrlSobrantes" placeholder="Sobrantes"  class="field-input" name="sobrantes"
+          placeholder="Hectáreas" min="1" max="999999" >
+          <mat-error *ngIf="form.controls[this.ctrlSobrantes]?.invalid && form.controls[this.ctrlSobrantes]?.touched" >* Campo requerido</mat-error>
+        </div>
+
+        <br>
+        <button class="back-button2" (click)="editarInsumo()">Gaurdar</button>
+      </div>
+
+
+     <ng-template #spinner>
+      <br><br>
+      <strong>CARGANDO DATOS...</strong>
+      <br><br>
+     </ng-template>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+<div class="div-datos">
+  <div class="title-datos">
+    Insumos
+  </div>
+  <div class="body-datos">
+
+      <ng-container *ngIf="this.listadoInsumos?.length else listadoVacio">
+       <miniatura [dataView]="dataView" (btnEditarDevolverObjeto)="this.dialogEditar($event)" [listado]="listadoInsumos"></miniatura>
+      </ng-container>
+
+         <ng-template #listadoVacio>
+          <div class="listadoVacio">
+           No contiene elementos
+          </div>
+       </ng-template>
+
+
+  </div>
+
+  <button *ngIf="mostrarListado"  class="back-button2" (click)="volver()">  Volver Atrás</button>
+</div>

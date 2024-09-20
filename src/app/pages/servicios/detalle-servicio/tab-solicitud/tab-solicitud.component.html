@@ -1,39 +1,88 @@
-<div class="tab-base shadow">
-   <div class="label-estado"><strong>Estado: </strong>{{this.servicio?.status?.name}}</div>
-
-   <div class="label w-100">
-    <strong>Localidad:</strong> {{this.servicio?.location?.name}}
-    <div style="float: right;">
-      <strong>Fecha Solicitada:</strong>  {{this.servicio?.createdDate}}
-    </div>
-   </div>
-
-   <div class="containers">
-    <div class="label label2">
-      <div class="titulo-subra">
-        Asistencia Técnica
+<div class="tab-base">
+  <div class="row">
+    <div class="col-3" *ngIf=" display == tipoDisplay.solicitud">
+      <div class="label-estado">
+        <strong>Estado: </strong>{{ this.servicio?.status?.name }}
       </div>
-
-      <div class="mb-15"><strong>Técnico:</strong>Cristian P.</div>
-      <div class="mb-15"><strong>Piloto:</strong> Emanuel C.</div>
-
     </div>
-    <div class="separacion">  </div>
-    <div class="label label2">
-      <div class="en-linea">
-        <div class="titulo-subra">
-          Detalles
+
+    <ng-container [ngSwitch]="display">
+
+      <ng-container *ngSwitchCase="tipoDisplay.solicitud">
+
+        <div class="col-4">
+          <div class="field-container w-100">
+            <mat-select placeholder="Cambiar estado" class="field-input" name="productor">
+              <mat-option *ngFor="let estado of detalleServicioService.estados" [value]="estado.id">{{ estado?.name }}</mat-option>
+            </mat-select>
+          </div>
         </div>
 
-        <button class="back-button2 btn-volver" >Ver lotes</button>
-      </div>
+        <div class="col-12 border-base">
+          <div class="mini-card">
+            <strong>Localidad:</strong> {{ this.servicio?.location?.name }}
+            <div style="float: right">
+              <strong>Fecha Solicitada:</strong> {{ this.servicio?.dateOfService }}
+            </div>
+          </div>
+        </div>
 
-      <div class="mb-15"><strong>Chacra:</strong> ID {{this.servicio?.field_id}}</div>
-      <div class="mb-15"><strong>Hectáreas:</strong> {{this.servicio?.hectare}}</div>
-      <div class="mb-15"><strong>Plantación:</strong>{{this.servicio?.cropDescripcion}}</div>
-    </div>
+        <div class="col-12">
+          <div class="row">
+
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 border-base">
+              <div class="mini-card">
+              <div class="titulo-subra mb-10">Asistencia Técnica</div>
+              <div class="row">
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 tx-center">
+                  <img class="container-icon" src="../../../../../assets/icons-servicio/support-agent.svg" alt="tecnico" >
+                  <div class="mb-15"><strong>Técnico</strong></div>
+                  <p>{{this.servicio?.jobTechnical ? this.servicio?.jobTechnical.employee?.lastname +' '+this.servicio?.jobTechnical.employee?.name  :'Sin asignar'}}</p>
+                  <p>  <a href="tel:{{this.servicio?.jobTechnical?.employee?.telephone}}" *ngIf="this.servicio?.jobTechnical">{{this.servicio?.jobTechnical?.employee?.telephone}}</a></p>
+                  <button class="back-button2" (click)="asignarTecnico()">Asignar</button>
+              </div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 tx-center">
+                    <img class="container-icon" src="../../../../../assets/icons-servicio/carbon_drone.svg" alt="drone" >
+                    <div class="mb-15"><strong>Piloto</strong> </div>
+                    <p>{{this.servicio?.jobOperator ? this.servicio?.jobOperator.employee?.lastname +' '+this.servicio?.jobOperator.employee?.name  : 'Sin asignar'}}</p>
+                    <p> <a href="tel:{{this.servicio?.jobOperator?.employee?.telephone}}" *ngIf="this.servicio?.jobOperator">{{this.servicio?.jobOperator?.employee?.telephone}}</a></p>
+                    <button class="back-button2" (click)="asignarPiloto()">Asignar</button>
+                </div>
+              </div>
+            </div>
+            </div>
+
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 border-base">
+              <div class="mini-card h-100">
+              <div class="en-linea titulo-mini-card mb-10">
+                <div class="titulo-subra">Detalles</div>
+                <button class="back-button2 btn-volver" (click)="verLotes()">Ver lotes</button>
+              </div>
+               <br>
+               <br>
+              <div class="bloque-centrado">
+                <div class="mb-15">
+                  <strong>Chacra: </strong> {{ this.servicio?.field.name }}
+                </div>
+                <div class="mb-15">
+                  <strong>Hectáreas:  </strong> {{ this.servicio?.hectare }}
+                </div>
+                <div class="mb-15">
+                  <strong>Plantación:  </strong>{{ this.servicio?.typeCrop.name }}
+                </div>
+              </div>
+
+            </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="tipoDisplay.lotes">
+          <app-ver-lotes (btnVolver)="setBtnVolver($event)" [listadoLotes]="this.servicio.plots"></app-ver-lotes>
+      </ng-container>
+
+    </ng-container>
+
   </div>
-
 </div>
-
-
