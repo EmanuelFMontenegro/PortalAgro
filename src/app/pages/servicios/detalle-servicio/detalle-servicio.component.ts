@@ -13,10 +13,7 @@ export class DetalleServicioComponent {
 
   constructor(
     private detalleServicioService: DetalleServicioService,
-    private router: Router){
-      this.detalleServicioService.getServicio();
-      this.servicio = this.detalleServicioService.servicio;
-    }
+    private router: Router){}
 
   subscription = new Subscription()
   urlBase = '';
@@ -24,31 +21,41 @@ export class DetalleServicioComponent {
   servicio: any
   tecnicoAsignado:any;
   pilotoAsignado:any;
+  indiceTab = 0;
 
   ngOnInit(): void {
     this.urlBase =  this.backOffice ? 'dashboard-backoffice' : 'dashboard'
-    this.detalleServicioService.actualizarDatosServicio();
     this.detalleServicioService.getEstados()
+    this.getDatosServicio();
+  }
 
-    // TÉCNICO
-    this.subscription.add(
-      this.detalleServicioService.tecnico$.subscribe(
-        (valor: any) => {
-          this.tecnicoAsignado = valor
-          console.log(this.tecnicoAsignado)
-        }
-      )
-    )
+  async getDatosServicio(){
+   await this.detalleServicioService.getServicio()
+   this.servicio = this.detalleServicioService.servicio;
+   this.subscribirPiloto();
+   this.subscribirTecnico();
+  }
 
-    // PILOTO
+  subscribirTecnico(){
+   this.subscription.add(
+    this.detalleServicioService.tecnico$.subscribe(
+      (valor: any) => {
+        this.tecnicoAsignado = valor
+      }
+    ))
+  }
+
+  subscribirPiloto(){
     this.subscription.add(
       this.detalleServicioService.piloto$.subscribe(
         (valor: any) => {
           this.pilotoAsignado = valor
-          console.log(this.pilotoAsignado)
         }
-      )
-    )
+      ))
+  }
+
+  onTabChange(indice: any){
+    this.indiceTab = indice.index;
   }
 
   volver() {

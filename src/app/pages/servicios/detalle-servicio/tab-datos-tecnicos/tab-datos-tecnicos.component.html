@@ -25,17 +25,17 @@
         <div class="col-12 border-base">
           <div class="mini-card">
             <div class="row">
-              <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+              <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 tx-center">
                 <img class="container-icon" src="../../../../../assets/icons-servicio/support-agent.svg" alt="tecnico">
                 <div class="mb-15"><strong>Técnico</strong></div>
                 <p>{{this.datosTecnico?.employee?.name}}</p>
               </div>
-              <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+              <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 tx-center">
                 <img class="container-icon" src="../../../../../assets/icons-servicio/solar_phone-bold.svg" alt="tecnico">
                 <div class="mb-15"><strong>Contacto</strong></div>
                 <p>  <a href="tel:{{this.datosTecnico?.employee?.telephone}}" *ngIf="this.datosTecnico?.employee?.telephone">{{this.datosTecnico?.employee?.telephone}}</a></p>
               </div>
-              <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+              <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 tx-center">
                 <img class="container-icon" src="../../../../../assets/icons-servicio/tabler_truck.svg" alt="tecnico">
                 <div class="mb-15"><strong>Visita técnica</strong></div>
                 <p>{{this.datosTecnico?.dateOfVisit ?? 'No establecida'}} </p>
@@ -50,7 +50,7 @@
 
       <div class="row">
         <div class="col-12 col-sm-12 col-md-6 col-lg-8 col-xl-8">
-          <textarea appearance="outline" floatLabel="always" placeholder="Observaciones" matInput class="observaciones" ></textarea>
+          <textarea [formControl]="ctrlObservaciones" appearance="outline" floatLabel="always" placeholder="Observaciones" matInput class="observaciones h-100" ></textarea>
         </div>
         <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
           <button class="back-button2 btn-grande label2" (click)="this.mostrarInsumos()">INSUMOS</button>

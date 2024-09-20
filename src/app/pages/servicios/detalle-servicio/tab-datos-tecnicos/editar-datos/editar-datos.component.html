@@ -1,16 +1,81 @@
 <div class="div-datos">
   <div class="title-datos">
-  Editar Datos
-   <button *ngIf="mostrarListado" class="back-button2 " (click)="openABM()"> Editar</button>
+    Editar Datos
+   <button *ngIf="!editar" class="back-button2 btn-cargar" (click)="editarDatos()"> Editar</button>
   </div>
   <div class="body-datos">
+      <div class="formulario" [formGroup]="form">
+<div class="row">
+        <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+          <div class="field-container w-100">
+            <mat-label class="field-label">Hectáreas totales</mat-label>
+            <input type="number" [formControlName]="ctrl_hectare" placeholder="Litros" class="field-input" name="hectareas"
+            placeholder="Hectáreas" min="1" max="999999" >
+            <mat-error *ngIf="form.controls[ctrl_hectare]?.invalid && form.controls[ctrl_hectare]?.touched" >* Campo requerido</mat-error>
+          </div>
+        </div>
 
-  DATOS SIN EDITAR
+        <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+          <div class="field-container" >
+            <mat-label class="field-label">Plantación</mat-label>
+            <mat-select class="field-input"  [formControlName]="ctrl_typeCrop_id"  placeholder="Seleccionar" name="cultivo">
+              <mat-option *ngFor="let cultivo of tiposPlantacion" [value]="cultivo.id">{{ cultivo.name }}</mat-option>
+            </mat-select>
+            <mat-error  *ngIf="form.controls[ctrl_typeCrop_id]?.invalid && form.controls[ctrl_typeCrop_id]?.touched" >* Campo requerido</mat-error>
+          </div>
+        </div>
 
-      <button  class="back-button2" (click)="cancelar()"> Cancelar</button>
-      <button  class="back-button2" (click)="aceptar()"> Aceptar</button>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+          <div class="field-container w-100" >
+            <mat-label class="field-label">Abastecimiento de agua</mat-label>
+            <mat-select class="field-input"  [formControlName]="ctrl_withWater "  placeholder="Seleccionar" name="cultivo">
+              <mat-option *ngFor="let agua of abastecimientoAgua" [value]="agua.value">{{ agua.descripcion }}</mat-option>
+            </mat-select>
+            <mat-error  *ngIf="form.controls[ctrl_withWater ]?.invalid && form.controls[ctrl_withWater ]?.touched" >* Campo requerido</mat-error>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+          <div class="field-container w-100" >
+            <mat-label class="field-label">Prioridad</mat-label>
+            <mat-select class="field-input"  [formControlName]="ctrl_priority"  placeholder="Seleccionar" name="prioridad">
+              <mat-option *ngFor="let cultivo of listaPrioridades" [value]="cultivo.id">{{ cultivo.name }}</mat-option>
+            </mat-select>
+            <mat-error  *ngIf="form.controls[ctrl_priority]?.invalid && form.controls[ctrl_priority]?.touched" >* Campo requerido</mat-error>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+          <div class="field-container w-100" >
+            <mat-label class="field-label">Horario recomendado</mat-label>
+            <mat-select class="field-input"  [formControlName]="ctrl_recommendedTime"  placeholder="Seleccionar" name="prioridad">
+              <mat-option *ngFor="let hora of listadoHorarios" [value]="hora">{{ hora}}</mat-option>
+            </mat-select>
+            <mat-error  *ngIf="form.controls[ctrl_recommendedTime]?.invalid && form.controls[ctrl_recommendedTime]?.touched" >* Campo requerido</mat-error>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+          <mat-label class="field-label">Fecha de visita</mat-label>
+          <mat-form-field class="width-full" appearance="outline">
+          <input placeholder="Seleccione una fecha" matInput  [min]="minDate" [matDatepicker]="dpDesde"
+                [formControlName]="ctrl_dateOfVisit" autocomplete="off">
+             <mat-datepicker-toggle matPrefix [for]="dpDesde"></mat-datepicker-toggle>
+             <mat-datepicker #dpDesde startView="multi-year"></mat-datepicker>
+            </mat-form-field>
+        </div>
+
+       <div class="col-12">
+          <mat-label class="field-label">Observaciones</mat-label>
+          <textarea  [formControlName]="this.ctrl_recommendObservation"  placeholder="Descripción"  matInput class="observaciones" ></textarea>
+        </div>
+ </div>
+      </div>
+
+      <button  *ngIf="editar"   class="back-button2" (click)="cancelar()"> Cancelar</button>
+      <button  *ngIf="editar"   class="back-button2" (click)="aceptar()"> Cargar datos técnicos</button>
 
   </div>
 
-  <button *ngIf="mostrarListado"  class="back-button2" (click)="volver()">  Volver Atrás</button>
+  <button  *ngIf="!editar" class="back-button2" (click)="volver()">  Volver Atrás</button>
 </div>

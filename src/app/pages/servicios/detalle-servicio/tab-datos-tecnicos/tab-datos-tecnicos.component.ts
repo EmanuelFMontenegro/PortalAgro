@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { DetalleServicioService } from '../detalle-servicio.service';
 
 
@@ -20,8 +22,10 @@ export class TabDatosTecnicosComponent {
   display = TiposDisplayTecnico.tecnico;
   tipo = TiposDisplayTecnico;
   displayTecnico = TiposDisplayTecnico.tecnico
+  ctrlObservaciones = new FormControl('observaciones', null)
+  subscripcion = new Subscription()
 
-  constructor(  public detalleServicioService: DetalleServicioService,){
+  constructor( public detalleServicioService: DetalleServicioService,){
     this.detalleServicioService.getServicio();
     this.servicio = this.detalleServicioService.servicio;
   }
@@ -32,8 +36,9 @@ export class TabDatosTecnicosComponent {
 
   async recuperarDatosDelTecnico(){
    await this.detalleServicioService.getDatosTecnico()
-     this.datosTecnico = this.detalleServicioService.datosTecnico
-     console.log("lOS DATOS DEL TEC", this.datosTecnico)
+     this.datosTecnico = this.detalleServicioService?.datosTecnico
+     this.ctrlObservaciones.setValue(this.datosTecnico?.recommendObservation)
+     this.ctrlObservaciones.disable()
   }
 
   mostrarInsumos(){
@@ -49,8 +54,13 @@ export class TabDatosTecnicosComponent {
   }
 
   setBtnVolver(valor: any){
-    console.log(valor)
     this.display = valor;
+    this.datosTecnico = this.detalleServicioService?.datosTecnico
+    this.ctrlObservaciones.setValue(this.datosTecnico?.recommendObservation)
+  }
+
+  ngOnDestroy(): void {
+
   }
 
 }

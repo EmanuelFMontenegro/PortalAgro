@@ -89,7 +89,6 @@ export class AddEditServicioComponent {
     }
 
     this.getCultivos();
-    console.log(this.form.value)
   }
 
   seleccionarProductor(){
@@ -164,7 +163,6 @@ export class AddEditServicioComponent {
 
     if(this.form.invalid){
       this.toastr.info('Faltan campos requeridos', 'Información');
-      console.log(this.form.value)
       this.form.markAllAsTouched()
       return;
     }

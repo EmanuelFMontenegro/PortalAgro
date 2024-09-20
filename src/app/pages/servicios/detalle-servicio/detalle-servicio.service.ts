@@ -17,6 +17,7 @@ export class DetalleServicioService {
   datosTecnico:any;
   datosPiloto:any;
   servicio:any;
+  servicioId: any;
   estados:any;
   prioridades: any;
 
@@ -29,29 +30,42 @@ export class DetalleServicioService {
 
   cleanVariable(){
     this.servicio = null;
+    this.servicioId = null;
     this.tecnico.next(null);
     this.piloto.next(null);
   }
 
-  getServicio(){
-    let servicio =  localStorage.getItem('servicio');
-    if(servicio){
-      this.servicio = JSON.parse(servicio);
+  async getServicio(){
+      await this.getIdLocal();
+      await this.actualizarDatosServicio()
+      localStorage.setItem('servicio', JSON.stringify(this.servicio) )
       this.setPiloto(this.servicio?.jobOperator)
       this.setTecnico(this.servicio?.jobTechnical)
-    }
+  }
+
+  getIdLocal(){
+    return new Promise<any>((resolve)=>{
+      let servicio =  localStorage.getItem('servicio');
+      if(servicio){
+        let servicioCache = JSON.parse(servicio)
+        this.servicioId = servicioCache.id
+      }
+      resolve(true)
+    })
   }
 
   actualizarDatosServicio(){
-    let idServicio = this.servicio.id
-    this.serviciosService.getServicio(idServicio).subscribe(
-      data =>{
-        this.servicio = data;
-      },
-      error =>{
-
-      }
-    )
+    return new Promise<any>((resolve)=>{
+      this.serviciosService.getServicio(this.servicioId).subscribe(
+        data =>{
+          this.servicio = data;
+          resolve(this.servicio)
+        },
+        error =>{
+            resolve(null)
+        }
+      )
+    })
   }
 
   getEstados(){
@@ -80,7 +94,6 @@ export class DetalleServicioService {
   }
 
   // DATOS TECNICO
-
   getDatosTecnico(){
     return new Promise<any>((resolve)=>{
       this.serviciosService.getTecnico(this.servicio.id).subscribe(
@@ -94,7 +107,17 @@ export class DetalleServicioService {
   }
 
 
-  // DATOS PILOTO
-
+// DATOS PILOTO
+ getDatosApp(){
+  return new Promise<any>((resolve)=>{
+    this.serviciosService.getApp(this.servicio.id).subscribe(
+      data=> {
+        this.datosPiloto = data
+        resolve(this.datosPiloto)
+      },
+      error => { resolve(null)}
+    )
+  })
+}
 
 }

@@ -13,10 +13,15 @@ import { TabInformesComponent } from './detalle-servicio/tab-informes/tab-inform
 import { TabEventosComponent } from './detalle-servicio/tab-eventos/tab-eventos.component';
 import { AsignarPilotoComponent } from './detalle-servicio/tab-solicitud/asignar-piloto/asignar-piloto.component';
 import { AsignarTecnicoComponent } from './detalle-servicio/tab-solicitud/asignar-tecnico/asignar-tecnico.component';
-import { VerLotesComponent } from './detalle-servicio/tab-solicitud/ver-lotes/ver-lotes.component';
 import { ListaInsumosComponent } from './detalle-servicio/tab-datos-tecnicos/lista-insumos/lista-insumos.component';
 import { ListaImagenesComponent } from './detalle-servicio/tab-datos-tecnicos/lista-imagenes/lista-imagenes.component';
 import { EditarDatosComponent } from './detalle-servicio/tab-datos-tecnicos/editar-datos/editar-datos.component';
+import { VerLotesComponent } from './detalle-servicio/tab-solicitud/ver-lotes/ver-lotes.component';
+import { EditarDatosAppComponent } from './detalle-servicio/tab-datos-app/editar-datos-app/editar-datos-app.component';
+import { ListaImagenesAppComponent } from './detalle-servicio/tab-datos-app/lista-imagenes-app/lista-imagenes-app.component';
+import { ListaInsumosAppComponent } from './detalle-servicio/tab-datos-app/lista-insumos-app/lista-insumos-app.component';
+import { TareasDelDroneComponent } from './detalle-servicio/tab-datos-app/tareas-del-drone/tareas-del-drone.component';
+import { DialogEditarInsumoComponent } from './detalle-servicio/tab-datos-app/lista-insumos-app/dialog-editar-insumo/dialog-editar-insumo.component';
 
 
 @NgModule({
@@ -34,6 +39,12 @@ import { EditarDatosComponent } from './detalle-servicio/tab-datos-tecnicos/edit
     ListaInsumosComponent,
     ListaImagenesComponent,
     EditarDatosComponent,
+    VerLotesComponent,
+    EditarDatosAppComponent,
+    ListaImagenesAppComponent,
+    ListaInsumosAppComponent,
+    TareasDelDroneComponent,
+    DialogEditarInsumoComponent,
   ],
   imports: [
     CommonModule,

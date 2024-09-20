@@ -1,6 +1,7 @@
 import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ToastrService } from 'ngx-toastr';
 import { TecnicoService } from 'src/app/services/tecnico.service';
 
 @Component({
@@ -10,27 +11,23 @@ import { TecnicoService } from 'src/app/services/tecnico.service';
   encapsulation: ViewEncapsulation.None
 })
 export class AsignarTecnicoComponent {
-  producer_id: any;
-
   listadoTecnicos: any;
 
   //ctrlNames
-  producer = 'producer_id';
   tecnico_id = 'tecnico_id';
 
   public form: FormGroup = new FormGroup({
-    [this.producer]: new FormControl(this.data.producer_id, Validators.required),
     [this.tecnico_id]: new FormControl(null, Validators.required),
   })
 
   constructor(public dialogRef: MatDialogRef<AsignarTecnicoComponent>,
+    private toastr: ToastrService,
     private tecnicoService: TecnicoService,
-    @Inject(MAT_DIALOG_DATA) public data: any) {
-    this.producer_id = this.data.producer_id
-  }
+    @Inject(MAT_DIALOG_DATA) public data: any) {}
 
   ngOnInit(): void {
     this.getTecnicos();
+    if(this.data.servicio?.jobOperator) this.form.controls[this.tecnico_id].setValue(this.data.servicio?.jobtechnical?.id)
   }
 
   getTecnicos() {
@@ -43,13 +40,23 @@ export class AsignarTecnicoComponent {
     )
   }
 
-  asignarTecnico() {
-    if (this.form.valid) {
+  asignarTecnicos() {
+    if (this.form.invalid) {
       this.form.markAllAsTouched()
       return;
     }
 
-    this.form
+    let datos = this.form.getRawValue()
+    this.tecnicoService.asignarTecnico(this.data.servicio.id, datos.tecnico_id).subscribe(
+      data =>{
+        this.toastr.success(data?.message ?? 'Técnico asignado con éxito', 'Éxito');
+        this.dialogRef.close(true)
+      },
+      error =>{
+        this.toastr.error(error.error?.message ?? 'Error asignando técnico', 'Error');
+      }
+    )
+
   }
 
 }

@@ -1,31 +1,27 @@
-import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatTableModule } from '@angular/material/table';
+import { Component, EventEmitter,Input, Output } from '@angular/core';
+import { TipoLabel } from 'src/app/shared/components/miniatura-listado/miniatura.model';
+import { TiposDisplaySolicitud } from '../tab-solicitud.component';
 
 @Component({
   selector: 'app-ver-lotes',
   templateUrl: './ver-lotes.component.html',
   styleUrls: ['./ver-lotes.component.scss'],
-  standalone: true,
-  imports: [MatTableModule],
 })
 export class VerLotesComponent {
-  dataSource: any;
-  mostrarLotes: boolean;
 
-  displayedColumns = ['nombre', 'hectareas']
-
-  constructor(public dialogRef: MatDialogRef<VerLotesComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any){
-      this.dataSource = {};
-      this.dataSource.data = this.data.plots
-      console.log(this.data.plots)
-      this.mostrarLotes = true;
-    }
+  @Output() btnVolver = new EventEmitter<any>();
 
 
+  @Input() listadoLotes: any;
+  dataView = [
+    {label: 'Nombre', field: 'name', tipoLabel: TipoLabel.span},
+    {label: 'Hectáreas', field:'dimensions', tipoLabel: TipoLabel.span },
+  ]
 
+  constructor(){}
 
-
+  volver(){
+    this.btnVolver.emit(TiposDisplaySolicitud.solicitud)
+  }
 
 }

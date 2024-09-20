@@ -1,13 +1,23 @@
 <div class="div-datos">
   <div class="title-datos">
     Insumos
-   <button *ngIf="mostrarListado" class="back-button2 btn-cargar" (click)="openABM()"> Cargar Insumos</button>
+    <button *ngIf="mostrarListado" class="back-button2 btn-cargar" (click)="openABM()"> Cargar Insumos</button>
   </div>
   <div class="body-datos">
 
     <ng-container *ngIf="mostrarListado else abm">
-         <miniatura [dataView]="dataView" [listado]="listadoInsumos"></miniatura>
-    </ng-container>
+
+      <ng-container *ngIf="this.listadoInsumos?.length else listadoVacio">
+       <miniatura [dataView]="dataView" (btnEliminar)="dialogConfirmacionEliminar($event)" [listado]="listadoInsumos"></miniatura>
+      </ng-container>
+
+         <ng-template #listadoVacio>
+          <div class="listadoVacio">
+           No contiene elementos
+          </div>
+       </ng-template>
+
+        </ng-container>
 
     <ng-template #abm>
 
@@ -23,14 +33,14 @@
 
         <div class="field-container w-50">
           <mat-label class="field-label">Dosis</mat-label>
-          <input type="number" [formControlName]="this.ctrlDosis"  class="field-input" name="dosis"
+          <input type="number" [formControlName]="this.ctrlDosis" placeholder="Dosis"  class="field-input" name="dosis"
           placeholder="Hectáreas" min="1" max="999999" >
           <mat-error *ngIf="form.controls[this.ctrlDosis]?.invalid && form.controls[this.ctrlDosis]?.touched" >* Campo requerido</mat-error>
         </div>
 
         <div class="field-container w-50">
           <mat-label class="field-label">Litros por hectárea</mat-label>
-          <input type="number" [formControlName]="this.ctrlHectarea"  class="field-input" name="hectareas"
+          <input type="number" [formControlName]="this.ctrlHectarea" placeholder="Litros" class="field-input" name="hectareas"
           placeholder="Hectáreas" min="1" max="999999" >
           <mat-error *ngIf="form.controls[this.ctrlHectarea]?.invalid && form.controls[this.ctrlHectarea]?.touched" >* Campo requerido</mat-error>
         </div>

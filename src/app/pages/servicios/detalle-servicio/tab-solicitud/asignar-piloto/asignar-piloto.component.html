@@ -3,13 +3,13 @@
    <strong> Asignar Piloto</strong>
   </div>
   <div class="body-dialog">
-    <ng-container *ngIf="this.listadoTecnicos?.length else spinner">
+    <ng-container *ngIf="this.listadoPilotos?.length else spinner">
       <div [formGroup]="form">
 
         <div class="field-container w-100">
           <mat-label class="field-label">Piloto</mat-label>
           <mat-select class="field-input" [formControlName]="piloto_id" placeholder="Seleccionar un piloto" name="piloto">
-            <mat-option *ngFor="let tecnico of listadoTecnicos" [value]="tecnico.id">{{ tecnico?.name + ' ' + tecnico?.lastname }}</mat-option>
+            <mat-option *ngFor="let piloto of listadoPilotos" [value]="piloto.id">{{ piloto?.name + ' ' + piloto?.lastname }}</mat-option>
           </mat-select>
         <mat-error *ngIf="form.controls[piloto_id]?.invalid && form.controls[piloto_id]?.touched">* Campo requerido</mat-error>
         </div>

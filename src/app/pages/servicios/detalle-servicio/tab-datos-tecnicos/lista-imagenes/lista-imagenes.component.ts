@@ -1,4 +1,10 @@
 import { Component, EventEmitter, Output } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { InsumoService } from 'src/app/services/insumo.service';
+import { ServiciosService } from 'src/app/services/servicios.service';
+import { TipoLabel } from 'src/app/shared/components/miniatura-listado/miniatura.model';
+import { DetalleServicioService } from '../../detalle-servicio.service';
 import { TiposDisplayTecnico } from '../tab-datos-tecnicos.component';
 
 @Component({
@@ -9,29 +15,116 @@ import { TiposDisplayTecnico } from '../tab-datos-tecnicos.component';
 export class ListaImagenesComponent {
 
   mostrarListado = true;
+  listadoTiposInsumos: any;
+  listadoImagenes: any;
+  servicio: any;
+
+  // controlName
+  ctrlTitle = "title"
+  ctrlDescription = "description"
+  ctrlimageJob = "imageJob"
+
+  public form: FormGroup = new FormGroup({
+    [this.ctrlTitle]: new FormControl(null, Validators.required),
+    [this.ctrlDescription]: new FormControl(null),
+    [this.ctrlimageJob]: new FormControl(null, Validators.required),
+  })
+
+  dataView = [
+    { label: 'Titulo', field: 'title', tipoLabel: TipoLabel.span },
+    { label: 'Descripción', field: 'description', tipoLabel: TipoLabel.span },
+    { label: 'Ver Imágenes', field: 'dashboard-backoffice/configuracion/insumo', tipoLabel: TipoLabel.botonVermas },
+    { label: 'Eliminar', field: 'id', tipoLabel: TipoLabel.botonEliminar },
+  ]
+
   @Output() btnVolver = new EventEmitter<any>();
 
-  constructor(){
+  constructor(
+    private toastr: ToastrService,
+    private serviciosService: ServiciosService,
+    private detalleService: DetalleServicioService,
+    private insumosService: InsumoService
+  ) {
 
   }
 
   ngOnInit(): void {
+    this.servicio = this.detalleService.servicio;
+    this.getImagenes()
+  }
+
+  disabledUpload(){
 
   }
 
-  openABM(){
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length) {
+      const file = input.files[0];
+      this.form.controls[this.ctrlimageJob].setValue(file)
+    }
+  }
+
+  getImagenes() {
+    this.serviciosService.getImagenesTecnico(this.servicio.id).subscribe(
+      (data: any) => {
+        this.listadoImagenes = data.list[0]
+      },
+      error => {
+
+      }
+    )
+  }
+
+  eliminarImagen(valor: any) {
+
+    this.serviciosService.deleteInsumosTecnico(this.servicio.id, valor).subscribe(
+      (data: any) => {
+        this.toastr.info(data?.message ?? 'Imagen eliminada exitosamente', 'Éxito');
+        this.getImagenes()
+      },
+      error => {
+        this.toastr.info(error.error?.message ?? 'Error eliminando imagen', 'Información');
+        console.log("ERROR ELIMINADO", error)
+      }
+    )
+  }
+
+  adjuntarImagen(){
+
+  }
+
+  openABM() {
     this.mostrarListado = false;
   }
 
-  cancelar(){
-     this.mostrarListado = true;
+  cancelar() {
+    this.mostrarListado = true;
   }
 
-  volver(){
+  volver() {
     this.btnVolver.emit(TiposDisplayTecnico.tecnico)
   }
 
-  aceptar(){
+  aceptar() {
+
+    if (this.form.invalid) {
+      this.toastr.info('Faltan campos requeridos', 'Información');
+      this.form.markAllAsTouched()
+      return;
+    }
+
+
+    this.serviciosService.postImagenTecnico(this.servicio.id, this.form.getRawValue()).subscribe(
+      (data: any) => {
+        this.toastr.info(data?.message ?? 'Imagen cargada exitosamente', 'Éxito');
+        this.cancelar()
+        this.getImagenes()
+      },
+      error => {
+        this.toastr.info(error.error.message ?? 'Error agregando imagen', 'Información');
+      }
+    )
 
   }
 

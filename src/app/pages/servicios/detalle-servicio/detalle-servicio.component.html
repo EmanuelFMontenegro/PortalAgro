@@ -22,21 +22,21 @@
     </div>
   </div>
 
-  <mat-tab-group>
+  <mat-tab-group (selectedTabChange)="onTabChange($event)" *ngIf="this.servicio">
     <mat-tab label="Solicitud">
-      <app-tab-solicitud></app-tab-solicitud>
+      <app-tab-solicitud *ngIf="this.indiceTab == 0"></app-tab-solicitud>
     </mat-tab>
     <mat-tab label="Datos Técnicos" *ngIf="this.tecnicoAsignado">
-      <app-tab-datos-tecnicos></app-tab-datos-tecnicos>
+      <app-tab-datos-tecnicos *ngIf="this.indiceTab == 1"></app-tab-datos-tecnicos>
     </mat-tab>
     <mat-tab label="Datos de App" *ngIf="this.pilotoAsignado">
-      <app-tab-datos-app></app-tab-datos-app>
+      <app-tab-datos-app *ngIf="this.indiceTab == 2"></app-tab-datos-app>
     </mat-tab>
     <mat-tab label="Informes">
-      <app-tab-informes></app-tab-informes>
+      <app-tab-informes *ngIf="this.indiceTab == 3"></app-tab-informes>
     </mat-tab>
     <mat-tab label="Eventos">
-      <app-tab-eventos></app-tab-eventos>
+      <app-tab-eventos *ngIf="this.indiceTab == 4"></app-tab-eventos>
     </mat-tab>
   </mat-tab-group>
 

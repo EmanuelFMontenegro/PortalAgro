@@ -7,6 +7,8 @@ export enum TipoLabel {
   icon = 'icon',
   botonVermas = 'vermas',
   botonEditar = 'editar',
+  botonEditarDevolverObjeto = 'editarDevolverObjeto',
+  botonEliminar = 'eliminar',
   botonesABM = 'abm',
   texto = 'texto'
 }

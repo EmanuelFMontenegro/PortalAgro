@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { UtilsService } from '../../utils/utils.service';
 
@@ -18,6 +18,9 @@ export class MiniaturaListadoComponent {
   @Input() listado: any // Listado de items a mostrar
   @Input() dataView: DataView [] | undefined // configuracion para determinar que tipo de elemento mostrar por cada campo
   @Input() productor = false; // cambia el estilo de la miniatura si es productor
+  @Output() btnEliminar = new EventEmitter<any>();
+  @Output() btnEditarDevolverObjeto = new EventEmitter<any>();
+
 
   tipoImagen = TipoLabel.imagen
   tipoTitulo = TipoLabel.titulo
@@ -26,8 +29,16 @@ export class MiniaturaListadoComponent {
   tipoIcon = TipoLabel.icon
   tipoVerMas = TipoLabel.botonVermas
   tipoEditar = TipoLabel.botonEditar
+  tipoEditarDevolviendo = TipoLabel.botonEditarDevolverObjeto // en lugar de redirigir devuelve el objeto
+  tipoEliminar = TipoLabel.botonEliminar
 
+  eliminar(datoEliminar: any){
+    this.btnEliminar.emit(datoEliminar)
+  }
 
+  EditarDelviendo(objeto: any){
+   this.btnEditarDevolverObjeto.emit(objeto)
+  }
 
   verMas(data: any, key?: any, ruta?: any){
     // Guardar los datos del usuario en localStorage
@@ -36,13 +47,17 @@ export class MiniaturaListadoComponent {
     // Navegar al componente perfil-productor
     if(ruta) this.router.navigate([`${ruta}/${data?.id}`]);
   }
-  
+
   Editar(data: any, key?: any, ruta?: any){
     // Guardar los datos del usuario en localStorage
     if(key) localStorage.setItem(key, JSON.stringify(data));
 
     // Navegar al componente perfil-productor
     if(ruta) this.router.navigate([`${ruta}/${data?.id}`]);
+  }
+
+  editarDevolviendoObjeto(datoEditar: any){
+    this.btnEliminar.emit(datoEditar)
   }
   getValue(objeto:any, field: string){
     return this.utilService.obtenerValor(objeto,field)

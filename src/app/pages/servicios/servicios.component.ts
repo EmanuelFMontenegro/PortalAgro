@@ -57,7 +57,6 @@ export class ServiciosComponent {
   }
 
   isBackOffice(){
-    console.log(this.router.url)
     this.subscription.add(
       this.servicioInterno.backOffice$.subscribe(
         (value: boolean) => this.backOffice = value
@@ -109,11 +108,9 @@ export class ServiciosComponent {
       .pipe(map((response: any) => this.convertirValores(response.list[0])))
       .subscribe(
         (data: any) => {
-          console.log("Datos después de convertirValores:", data); // Verifica la estructura de los datos
           if (data?.length > 0) {
             this.lotesOriginal = data;
             this.listado = data;
-            console.log("Listado final:", this.listado); // Verifica cómo se ve el listado antes de mostrarlo
           }
         },
         (error) => {
@@ -126,7 +123,6 @@ export class ServiciosComponent {
   ///// REVISAR SI ELIMINAR  /////////////
 
   convertirValores(valores: any) {
-    console.log('Valores antes de la transformación:', valores);
     if (valores?.length) {
       valores.forEach((lote: any) => {
         lote.cantidadLotes = lote.plots.length;
@@ -134,7 +130,6 @@ export class ServiciosComponent {
         lote.nombreChacra = this.getDescripcionChacra(lote.field.id); // Asegúrate de usar los IDs correctos
       });
     }
-    console.log('Valores después de la transformación:', valores);
     return valores;
   }
 
@@ -174,7 +169,6 @@ export class ServiciosComponent {
   getServicios() {
     this.serviciosService.getServicios().subscribe(
       (data) => {
-        console.log(data);
         if (data?.list[0].length > 0) {
           this.lotesOriginal = data?.list[0];
           this.listado = data?.list[0];
@@ -189,7 +183,6 @@ export class ServiciosComponent {
       this.toastr.info('Selecione un tipo de cultivo.', 'Información');
     } else {
       let crop_id: number = this.opcionSeleccionada;
-      console.log(this.lotesOriginal.filter((x) => x.typeCrop.id  == crop_id))
       this.listado = this.lotesOriginal.filter((x) => x.typeCrop.id== crop_id);
     }
   }

@@ -11,16 +11,12 @@ import { PilotosService } from 'src/app/services/pilotos.service';
   encapsulation: ViewEncapsulation.None
 })
 export class AsignarPilotoComponent {
-  producer_id: any;
-
-  listadoTecnicos: any;
+  listadoPilotos: any;
 
   //ctrlNames
-  producer = 'producer_id';
   piloto_id = 'piloto_id';
 
   public form: FormGroup = new FormGroup({
-    // [this.producer]: new FormControl(this.data.producer_id, Validators.required),
     [this.piloto_id]: new FormControl(null, Validators.required),
   })
 
@@ -31,13 +27,13 @@ export class AsignarPilotoComponent {
 
     ngOnInit(): void {
       this.getPilotos();
+      if(this.data.servicio?.jobOperator) this.form.controls[this.piloto_id].setValue(this.data.servicio?.jobOperator?.id)
     }
 
     getPilotos() {
-
       this.pilotosService.getAll_backOffice().subscribe(
         data => {
-          this.listadoTecnicos = data.list[0]
+          this.listadoPilotos = data.list[0]
         },
         error => {}
       )
@@ -50,15 +46,13 @@ export class AsignarPilotoComponent {
       }
 
       let datos = this.form.getRawValue()
-      console.log(this.data.servicio.id, datos.piloto_id)
       this.pilotosService.asignarPiloto(this.data.servicio.id, datos.piloto_id).subscribe(
         data =>{
-          console.log(data)
           this.toastr.success(data?.message ?? 'Piloto asignado con éxito', 'Éxito');
           this.dialogRef.close(true)
         },
         error =>{
-          this.toastr.success(error.error?.message ?? 'Error asignando piloto', 'Información');
+          this.toastr.error(error.error?.message ?? 'Error asignando piloto', 'Error');
         }
       )
 

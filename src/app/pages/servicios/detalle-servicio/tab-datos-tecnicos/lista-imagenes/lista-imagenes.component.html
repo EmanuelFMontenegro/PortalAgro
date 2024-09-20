@@ -1,17 +1,45 @@
 <div class="div-datos">
   <div class="title-datos">
-  Imágenes
-   <button *ngIf="mostrarListado" class="back-button2 btn-cargar" (click)="openABM()"> Cargar Imágenes</button>
+    Imágenes
+   <button *ngIf="mostrarListado" class="back-button2 btn-cargar" (click)="openABM()"> Cargar Insumos</button>
   </div>
   <div class="body-datos">
 
     <ng-container *ngIf="mostrarListado else abm">
-      listado imagenes
+         <ng-container *ngIf="this.listadoImagenes?.length else listadoVacio">
+          <miniatura [dataView]="dataView" (btnEliminar)="eliminarImagen($event)" [listado]="listadoImagenes"></miniatura>
+         </ng-container>
+
+        <ng-template #listadoVacio>
+           <div class="listadoVacio">
+            No contiene elementos
+           </div>
+        </ng-template>
+
     </ng-container>
 
     <ng-template #abm>
 
-      ABM imagenes
+      <div class="formulario" [formGroup]="form">
+
+        <div class="field-container w-100">
+          <mat-label class="field-label">Título</mat-label>
+          <input type="text" [formControlName]="this.ctrlTitle" class="field-input" name="titulo" placeholder="Título">
+          <mat-error *ngIf="form.controls[this.ctrlTitle]?.invalid && form.controls[this.ctrlTitle]?.touched" >* Campo requerido</mat-error>
+        </div>
+
+        <div class="col-12 col-sm-12 col-md-6 col-lg-8 col-xl-8">
+          <mat-label class="field-label">Descripción</mat-label>
+          <textarea  [formControlName]="this.ctrlDescription"  placeholder="Descripción"  matInput class="observaciones" ></textarea>
+        </div>
+
+        <button *ngIf="mostrarListado"  class="back-button2" (click)="adjuntarImagen()">  Subir Archivo</button>
+
+        <input type="file" (change)="onFileSelected($event)" #fileInput style="display: none;" />
+
+        <!-- Botón para activar el input de archivo -->
+        <button (click)="fileInput.click()">Subir Archivo</button>
+      </div>
 
       <button  class="back-button2" (click)="cancelar()"> Cancelar</button>
       <button  class="back-button2" (click)="aceptar()"> Aceptar</button>
