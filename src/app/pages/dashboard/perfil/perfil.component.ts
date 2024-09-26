@@ -37,8 +37,7 @@ interface UserData {
 
 @Component({
   selector: 'app-perfil',
-  templateUrl: './perfil.component.html',
-  styleUrls: ['./perfil.component.sass'],
+  templateUrl: './perfil.component.html', 
 })
 export class PerfilComponent implements OnInit, AfterViewInit {
 selectedImage: string | ArrayBuffer | null = null;
