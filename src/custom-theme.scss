@@ -43,3 +43,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.25);
 }
  
+.dashboard-theme {
+  --primary: #0F8054;
+}
+
+.backoffice-theme {
+  --primary: #015E83;
+}
