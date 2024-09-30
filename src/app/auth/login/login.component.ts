@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { ApiService } from 'src/app/services/ApiService';
 import { ToastrService } from 'ngx-toastr';
 import { jwtDecode } from 'jwt-decode';
+import { ThemeService } from 'src/app/services/theme.service';
 
 export function usernameValidator(
   control: FormControl
@@ -45,7 +46,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private apiService: ApiService,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private themeService: ThemeService
   ) {
     Validators.required,
       Validators.email,
@@ -70,6 +72,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.adjustCardSize(false);
+    this.themeService.setTheme('dashboard');
   }
 
   togglePasswordVisibility(): void {

@@ -16,7 +16,7 @@
   border: 1px solid transparent;
   border-radius: 5px;
   cursor: pointer;
-  background-color: #0F8054;
+  background-color: var(--primary);
   color: white;
   transition: background-color 0.3s, border-color 0.3s;
   font-size: 1em !important;
@@ -28,7 +28,7 @@
 
 .cancel-button {
   background-color: white !important;
-  color: #0F8054;
+  color: var(--primary);
   border: 1px solid gray !important;
   width: 15%;
 }
@@ -103,16 +103,15 @@
 
 //los estilos de arriba aun no se donde se usan, los dejo por si acaso pero los borro mas adelante si no se usan
 // ==============================================================        Customs         =========================================================
-.dot::before {
-  content: '';
-  position: absolute;  
-  width: 6px;
-  height: 6px;
-  background-color: #65B438;
-  border-radius: 50%;
-  left:5px; 
-  top: 50%;
-  transform: translate(-50%, -50%);
+.dot::before { 
+  content: '.';
+  color: var(--primary) !important;
+  font-size: 52px;
+  line-height: 40px;
+  top: -25px;
+  position: absolute;
+  display: block;
+  left: 0px;
 
 }
 
@@ -132,6 +131,10 @@
   margin-inline: 12px;
 }
 
+.margin-btm-6{
+  margin-bottom: 6px !important;
+}
+
 .grow-1 {
   flex-grow: 1;
 }
@@ -147,6 +150,18 @@
   height: 48px !important;
 }
 
+
+.size-40 {
+  height: 40px !important;
+}
+
+.size-50{
+  height: 50px !important;
+}
+.scroll-y {
+  overflow-y: scroll;
+
+}
 .basis{
   flex-basis: 0;
 }
@@ -155,46 +170,50 @@
   flex-basis: 300px;
 }
 .border-primary{
-  border: 1px solid #0F8054 !important;
+  border: 1px solid var(--primary) !important;
 }
 .margin-btm{
   margin-bottom: 15px !important;
 }
+
+.margin-btm-0{
+  margin-bottom: 0px !important;
+}
 // ==============================================================        Botones        =========================================================
 
 .primary-button {
-  @include button(#fff, #0F8054, 100%);
+  @include button(#fff, var(--primary), 100%);
 }
 
 .secondary-button{
-  @include button(#0F8054, #fff, 100%);
+  @include button(var(--primary), #fff, 100%);
 }
 
 .primary-button-custom{
-  @include button(#fff, #0F8054, 290px);
+  @include button(#fff, var(--primary), 290px);
 }
 
 .secondary-button-custom{
-  @include button(#0F8054, #fff, 290px,#3CA749); 
+  @include button(var(--primary), #fff, 290px,#3CA749); 
   
 }
 
 .primary-button-auto {
-  @include button(#fff, #0F8054, auto);
+  @include button(#fff, var(--primary), auto);
 }
 
 .secondary-button-auto {
-  @include button(#0F8054, #fff, auto);
+  @include button(var(--primary), #fff, auto);
   background-color: #fff !important; 
   border:none;
 }
 
 .primary-button-240 {
-  @include button(#fff, #0F8054, 240px);
+  @include button(#fff, var(--primary), 240px);
   
 }
 .secondary-button-240 {
-  @include button(#0F8054, #fff, 240px,#3CA749);
+  @include button(--primary, #fff, 240px,#3CA749);
   background-color: #fff !important; 
   border:none;
 }
@@ -247,7 +266,7 @@
 
 .cardCustomized {
   @include flexbox(column, center, left);
-  @include custom-card(340px, 470px, 10px);
+  @include custom-card(340px, 490px, 10px);
   border: 1px solid #929497;
 
   // Contenedor para Card de Chacras
@@ -271,14 +290,13 @@
 
     &-subtitle {
       margin:9px 0px; 
-      font-size: 10px;
-      @include font(10px, 500,#232323);
+      overflow-y: scroll; 
+      @include font(1rem, 500,#232323);
       >span {
-        @include font(10px, 600);
+        @include font(1rem, 600);
       }
     }
   }
-
   &-buttons {
     margin-top: auto;
     display: flex;
@@ -292,14 +310,14 @@
   
 }
 .cardContainerNoCenteredLote {
-  @include grid-center-autofill(240px, 1fr, 25px, 15px);
+  @include grid-center-autofill(280px, 1fr, 25px, 15px);
 }
 .LoteCard{
   @include flexbox(column, center, left);
-  @include custom-card(220px, 300px, 10px);
+  @include custom-card(280px, 390px, 10px);
   border: 1px solid #929497;
   &-img {
-    height: 115px !important;
+    height: 145px !important;
     max-width: 100%;
     border-radius: 16px;
   }
@@ -316,10 +334,10 @@
       margin:9px 0px; 
       font-size: 10px;
       padding-left: 12px;
-      @include font(10px, 500,#232323);
+      @include font(1rem, 500,#232323);
       >span {
         
-        @include font(10px, 600);
+        @include font(1rem, 600);
       }
       
     }
@@ -416,3 +434,102 @@
   padding: 0;
 }
  
+
+
+// ==============================================================  Profile =============================================
+
+.profileContainer{
+  @include flexbox(column, start, start);
+  gap: 20px;
+  padding: 15px;
+  &-detail{
+    position: relative;
+    @include flexbox(row, start, center); 
+    width: 100%;
+    gap: 20px;
+    padding: 20px;
+    border-radius: 18px;
+    background-image: linear-gradient(180deg, var(--primary) 7.5%, var(--primary) 95%); 
+    &-editar{
+      cursor: pointer;
+      @include font(1rem, 600, #fff);
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      &-button{
+        background-color: inherit;
+        border: none;
+      }
+    }
+    &-avatar{
+      border-radius: 50%;
+      > img {
+        width: 105px;
+        height: 105px;
+      }  
+    }
+    &-info{ 
+      @include flexbox(column, start, start); 
+      margin-right: 30px;
+       &-name, &-mail {
+        flex-shrink: 1; 
+        overflow-wrap: anywhere; 
+        @include font(1.5rem, 600, #fff); 
+      }
+      &-mail {
+        @include font(1rem, 500, #fff);
+      }
+    }
+  } 
+  &-personalData{
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    width: 100%;
+    &-title{
+      padding : 15px 15px 15px 37px;
+      @include font(1.1rem, 600, #fff);
+      background-color: var(--primary);
+      border-radius: 8px 8px 0px 0px;
+    }
+   &-content{
+    @include flexbox(row, flex-start);
+    flex-wrap: wrap; 
+    padding: 30px;
+    gap: 20px 65px;
+    @include font(1rem, 500, #454545);
+  &-item {
+    @include flexbox(column, flex-start, flex-start); 
+    box-sizing: border-box; 
+    flex-basis: calc(50% - 33px);
+    flex-shrink: 1; 
+    min-width: 280px;
+    margin-bottom: 20px;
+    gap: 10px;
+    &-title {
+      @include font(1rem, 600, #000);
+    }
+    &-value {
+      width: 100%;
+      @include font(1rem, 500, #464A53);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+    }
+  } 
+   }
+  } 
+  &-aditionalData{
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    width: 100%;
+    &-title{
+      padding : 15px 15px 15px 37px;
+      @include font(1.1rem, 600, #fff);
+      background-color: var(--primary);
+      border-radius: 8px 8px 0px 0px;
+    }
+    &-content{
+      padding: 15px; 
+      @include font(0.9rem, 500, #464A5380);
+    }
+  }
+}
+

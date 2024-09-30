@@ -165,4 +165,34 @@
   .dialog-actions{
     gap: 12px;
   }
+
+  //Perfil
+  .profileContainer {
+    &-detail{
+      &-avatar{
+        > img {
+          width: 85px;
+          height: 85px;
+        }  
+      }
+      &-info{  
+        &-name, &-mail {
+          @include font(1rem, 600, #fff); 
+        }
+        &-mail {
+          @include font(0.8rem, 500, #fff);
+        }
+      }
+    }
+    &-personalData {
+      &-content {
+        &-item{
+          flex-basis: 100%;
+          min-width: 200px;
+        }
+      }
+    }
+  }
 }
+
+ 

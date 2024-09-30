@@ -12,6 +12,7 @@ import { DashboardComponent } from 'src/app/pages/dashboard/dashboard.component'
 import { PrimerRegistroComponent } from 'src/app/auth/primerRegistro/primerRegistro.component';
 import { jwtDecode } from 'jwt-decode';
 import { PermisoService } from 'src/app/services/permisos.service';
+import { ThemeService } from 'src/app/services/theme.service';
 
 export function usernameValidator(
   control: FormControl
@@ -49,7 +50,8 @@ export class LoginBackofficeComponent implements OnInit {
     private apiService: ApiService,
     private router: Router,
     private permisoService: PermisoService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private themeService: ThemeService
   ) {
     Validators.required,
       Validators.email,
@@ -75,6 +77,7 @@ export class LoginBackofficeComponent implements OnInit {
 
   ngOnInit(): void {
     this.adjustCardSize(false);
+    this.themeService.setTheme('dashboard');
   }
   togglePasswordVisibility(): void {
     this.passwordVisible = !this.passwordVisible;

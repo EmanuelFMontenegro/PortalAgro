@@ -8,10 +8,10 @@
       }  
       button {
         @include flexbox(row, center, center);
-        @include font(14px, 600, #0F8054);
+        @include font(14px, 600, var(--primary));
       }
       button:hover{
-        background-color: #0f80558e !important;
+        background-color: var(--primary)  !important;
         color: #fff !important;
       }
        }
