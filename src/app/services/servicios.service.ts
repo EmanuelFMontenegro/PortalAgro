@@ -69,6 +69,21 @@ import { Piloto } from "../models/servicios.models";
       return this.http.put(url, body);
     }
 
+    getDronesTask(idServicio:number){
+      let url =  `${environment.apiUrl}/dist/service/${idServicio}/joboperator/dronetask/all`;
+      return this.http.get(url);
+    }
+
+    postDroneTask(idServicio:number, body: any){
+      let url = `${environment.apiUrl}/dist/service/${idServicio}/joboperator/dronetask`;
+      return this.http.post(url, body);
+    }
+
+    putDroneTask(idServicio:number, body: any, taskId: number){
+      let url = `${environment.apiUrl}/dist/service/${idServicio}/joboperator/dronetask/${taskId}`;
+      return this.http.put(url, body);
+    }
+
     getPriporidades(): Observable<any>{
       let url =  `${environment.apiUrl}/priority/all`
       return this.http.get(url);

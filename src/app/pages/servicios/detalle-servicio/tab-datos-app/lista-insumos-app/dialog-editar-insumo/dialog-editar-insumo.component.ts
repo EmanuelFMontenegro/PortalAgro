@@ -11,7 +11,7 @@ import { TiposDisplayApp } from '../../tab-datos-app.component';
 @Component({
   selector: 'app-dialog-editar-insumo',
   templateUrl: './dialog-editar-insumo.component.html',
-  styleUrls: ['./dialog-editar-insumo.component.sass']
+  styleUrls: ['./dialog-editar-insumo.component.scss']
 })
 export class DialogEditarInsumoComponent {
 
@@ -21,7 +21,7 @@ export class DialogEditarInsumoComponent {
   insumo:any;
 
   // controlName
-  ctrlSobrantes = "doseToBeApplied"
+  ctrlSobrantes = "surplus"
 
   public form: FormGroup = new FormGroup({
     [this.ctrlSobrantes]: new FormControl(null, Validators.required),
