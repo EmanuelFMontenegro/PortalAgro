@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { PermisosUsuario } from 'src/app/models/permisos.model';
+import { AuthService } from 'src/app/services/AuthService';
 import { DetalleServicioService } from '../detalle-servicio.service';
 
 
@@ -24,14 +26,17 @@ export class TabDatosTecnicosComponent {
   displayTecnico = TiposDisplayTecnico.tecnico
   ctrlObservaciones = new FormControl('observaciones', null)
   subscripcion = new Subscription()
+  editarDatosTecnicos = false;
 
-  constructor( public detalleServicioService: DetalleServicioService,){
+  constructor( public detalleServicioService: DetalleServicioService,
+    private authService: AuthService){
     this.detalleServicioService.getServicio();
     this.servicio = this.detalleServicioService.servicio;
   }
 
   ngOnInit(): void {
     this.recuperarDatosDelTecnico()
+    this.editarDatosTecnicos = this.detalleServicioService.permisos?.jobTechnical?.WRITE ?? false;
   }
 
   async recuperarDatosDelTecnico(){

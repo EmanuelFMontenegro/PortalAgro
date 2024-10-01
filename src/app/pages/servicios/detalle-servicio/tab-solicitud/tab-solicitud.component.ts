@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { UserToken } from 'src/app/models/auth.models';
+import { PermisosUsuario } from 'src/app/models/permisos.model';
+import { AuthService } from 'src/app/services/AuthService';
 import { DetalleServicioService } from '../detalle-servicio.service';
 import { AsignarPilotoComponent } from './asignar-piloto/asignar-piloto.component';
 import { AsignarTecnicoComponent } from './asignar-tecnico/asignar-tecnico.component';
@@ -19,10 +22,19 @@ export class TabSolicitudComponent {
   servicio: any
   display = TiposDisplaySolicitud.solicitud;
   tipoDisplay = TiposDisplaySolicitud
+  asigPiloto = false;
+  asigTecnico = false;
+
 
   constructor(  public detalleServicioService: DetalleServicioService,
+    public authService: AuthService,
     private dialog: MatDialog,){
     this.servicio = this.detalleServicioService.servicio;
+  }
+
+  ngOnInit(): void {
+    this.asigPiloto = this.detalleServicioService.permisos?.requestservice?.CREATE ?? false;
+    this.asigTecnico = this.detalleServicioService.permisos?.requestservice?.CREATE ?? false;
   }
 
   asignarPiloto(){

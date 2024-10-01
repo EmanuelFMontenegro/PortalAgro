@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
+import { PermisosUsuario } from 'src/app/models/permisos.model';
 import { DialogComponent } from 'src/app/pages/dashboard/dialog/dialog.component';
 import { InsumoService } from 'src/app/services/insumo.service';
 import { ServiciosService } from 'src/app/services/servicios.service';
@@ -37,7 +38,6 @@ export class ListaInsumosComponent {
     {label: 'Dosis', field:'doseToBeApplied', tipoLabel: TipoLabel.span },
     {label: 'Litros por hectárea', field:'hectaresPerLiter', tipoLabel: TipoLabel.span },
     {label: 'Ver insumos', field: 'dashboard-backoffice/configuracion/insumo', tipoLabel: TipoLabel.botonVermas},
-    {label: 'Eliminar', field: 'id', tipoLabel: TipoLabel.botonEliminar},
   ]
 
   @Output() btnVolver = new EventEmitter<any>();
@@ -49,13 +49,18 @@ export class ListaInsumosComponent {
     private detalleService: DetalleServicioService,
     private insumosService: InsumoService
   ){
-
   }
 
   ngOnInit(): void {
     this.servicio = this.detalleService.servicio;
+    this.setMiniaturas()
     this.getInsumos()
     this.getTiposInsumos()
+  }
+
+  setMiniaturas(){
+   if(this.detalleService.permisos?.jobTechnical?.WRITE)
+   this.dataView.push({label: 'Eliminar', field: 'id', tipoLabel: TipoLabel.botonEliminar})
   }
 
   getInsumos(){

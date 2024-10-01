@@ -25,7 +25,6 @@ export class ListaInsumosAppComponent {
     {label: 'Dosis', field:'doseToBeApplied', tipoLabel: TipoLabel.span },
     {label: 'Litros por hectárea', field:'hectaresPerLiter', tipoLabel: TipoLabel.span },
     {label: 'Sobrantes', field:'surplus', tipoLabel: TipoLabel.span },
-    {label: 'Editar', field: 'id', tipoLabel: TipoLabel.botonEditarDevolverObjeto},
   ]
 
   @Output() btnVolver = new EventEmitter<any>();
@@ -41,7 +40,13 @@ export class ListaInsumosAppComponent {
   ngOnInit(): void {
     this.servicio = this.detalleService.servicio;
     this.getInsumos()
-    // this.getTiposInsumos()
+    this.setMiniaturas()
+  }
+
+  setMiniaturas(){
+    if(this.detalleService.permisos?.jobOperator?.CREATE){
+     this.dataView.push({label: 'Editar', field: 'id', tipoLabel: TipoLabel.botonEditarDevolverObjeto})
+    }
   }
 
   getInsumos(){

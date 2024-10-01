@@ -25,6 +25,8 @@ export class TabDatosAppComponent {
   displayApp= TiposDisplayApp.app
   ctrlObservaciones = new FormControl('observaciones', null)
   subscripcion = new Subscription()
+  editarDatosApp = false;
+  tareasDroneApp = false;
 
   constructor( public detalleServicioService: DetalleServicioService,){
     this.detalleServicioService.getServicio();
@@ -33,6 +35,8 @@ export class TabDatosAppComponent {
 
   ngOnInit(): void {
     this.recuperarDatosDeApp()
+    this.editarDatosApp = this.detalleServicioService.permisos?.jobOperator?.WRITE ?? false
+    this.tareasDroneApp = this.detalleServicioService.permisos?.jobOperator?.WRITE ?? false
   }
 
   async recuperarDatosDeApp(){

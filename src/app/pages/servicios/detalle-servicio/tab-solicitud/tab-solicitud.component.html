@@ -39,14 +39,14 @@
                   <div class="mb-15"><strong>Técnico</strong></div>
                   <p>{{this.servicio?.jobTechnical ? this.servicio?.jobTechnical.employee?.lastname +' '+this.servicio?.jobTechnical.employee?.name  :'Sin asignar'}}</p>
                   <p>  <a href="tel:{{this.servicio?.jobTechnical?.employee?.telephone}}" *ngIf="this.servicio?.jobTechnical">{{this.servicio?.jobTechnical?.employee?.telephone}}</a></p>
-                  <button class="back-button2" (click)="asignarTecnico()">Asignar</button>
+                  <button *ngIf="asigTecnico" class="back-button2" (click)="asignarTecnico()">Asignar</button>
               </div>
                 <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 tx-center">
                     <img class="container-icon" src="../../../../../assets/icons-servicio/carbon_drone.svg" alt="drone" >
                     <div class="mb-15"><strong>Piloto</strong> </div>
                     <p>{{this.servicio?.jobOperator ? this.servicio?.jobOperator.employee?.lastname +' '+this.servicio?.jobOperator.employee?.name  : 'Sin asignar'}}</p>
                     <p> <a href="tel:{{this.servicio?.jobOperator?.employee?.telephone}}" *ngIf="this.servicio?.jobOperator">{{this.servicio?.jobOperator?.employee?.telephone}}</a></p>
-                    <button class="back-button2" (click)="asignarPiloto()">Asignar</button>
+                    <button *ngIf="asigPiloto" class="back-button2" (click)="asignarPiloto()">Asignar</button>
                 </div>
               </div>
             </div>

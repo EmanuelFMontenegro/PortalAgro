@@ -34,7 +34,6 @@ export class ListaImagenesComponent {
     { label: 'Titulo', field: 'title', tipoLabel: TipoLabel.span },
     { label: 'Descripción', field: 'description', tipoLabel: TipoLabel.span },
     { label: 'Ver Imágenes', field: 'dashboard-backoffice/configuracion/insumo', tipoLabel: TipoLabel.botonVermas },
-    { label: 'Eliminar', field: 'id', tipoLabel: TipoLabel.botonEliminar },
   ]
 
   @Output() btnVolver = new EventEmitter<any>();
@@ -51,7 +50,13 @@ export class ListaImagenesComponent {
   ngOnInit(): void {
     this.servicio = this.detalleService.servicio;
     this.getImagenes()
+    this.setMiniaturas();
   }
+
+  setMiniaturas(){
+    if(this.detalleService.permisos?.jobTechnical?.WRITE)
+    this.dataView.push({ label: 'Eliminar', field: 'id', tipoLabel: TipoLabel.botonEliminar })
+   }
 
   disabledUpload(){
 

@@ -1,5 +1,7 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
+import { PermisosUsuario } from "src/app/models/permisos.model";
+import { AuthService } from "src/app/services/AuthService";
 import { EstadosService } from "src/app/services/estados.services";
 import { ServiciosService } from "src/app/services/servicios.service";
 
@@ -20,9 +22,11 @@ export class DetalleServicioService {
   servicioId: any;
   estados:any;
   prioridades: any;
+  permisos: PermisosUsuario | null = null
 
   constructor(
     private estadoService:EstadosService,
+    private authService: AuthService,
     private serviciosService:ServiciosService){
       this.tecnico$ = this.tecnico.asObservable();
       this.piloto$ = this.piloto.asObservable();
@@ -52,6 +56,11 @@ export class DetalleServicioService {
       }
       resolve(true)
     })
+  }
+
+  async getUserConPermisos(){
+    await this.authService.getUserWithPermisos()
+    this.permisos = this.authService.userWithPermissions?.value?.permisos
   }
 
   actualizarDatosServicio(){

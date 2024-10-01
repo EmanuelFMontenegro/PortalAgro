@@ -1,6 +1,7 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/services/AuthService';
 import { DetalleServicioService } from './detalle-servicio.service';
 
 @Component({
@@ -13,6 +14,7 @@ export class DetalleServicioComponent {
 
   constructor(
     private detalleServicioService: DetalleServicioService,
+    public authService: AuthService,
     private router: Router){}
 
   subscription = new Subscription()
@@ -27,6 +29,11 @@ export class DetalleServicioComponent {
     this.urlBase =  this.backOffice ? 'dashboard-backoffice' : 'dashboard'
     this.detalleServicioService.getEstados()
     this.getDatosServicio();
+    this.getUser()
+  }
+
+  async getUser(){
+    this.detalleServicioService.getUserConPermisos()
   }
 
   async getDatosServicio(){

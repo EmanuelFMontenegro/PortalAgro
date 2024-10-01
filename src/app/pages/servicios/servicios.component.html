@@ -20,7 +20,7 @@
       <div class="field-container text-c">
         <!-- <button mat-raised-button class="back-button2" (click)="filtrar()" >Filtrar
           </button> -->
-        <button mat-raised-button class="back-button2" (click)="nuevo()" >Solicitar
+        <button *ngIf="crearServicio" mat-raised-button class="back-button2" (click)="nuevo()" >Solicitar
           </button>
       </div>
     </div>

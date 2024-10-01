@@ -6,6 +6,7 @@ export interface UserToken{
  roles: RolToken []
  sub: string;
  userId: number;
+ permisos: any;
 }
 
 export interface RolToken{
