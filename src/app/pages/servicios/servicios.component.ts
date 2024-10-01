@@ -12,6 +12,7 @@ import { map, Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/AuthService';
 import { jwtDecode } from 'jwt-decode';
 import { ServicioInterno } from './servicios-interno.service';
+import { PermisosUsuario } from 'src/app/models/permisos.model';
 
 @Component({
   selector: 'app-servicios',
@@ -43,6 +44,7 @@ export class ServiciosComponent {
   cultivos: any[] = [];
   backOffice = false;
   subscription = new Subscription()
+  crearServicio = false;
 
   chacras: any[] = []; // ELIMINAR
 
@@ -50,10 +52,16 @@ export class ServiciosComponent {
     this.isBackOffice()
     this.setUrlVerMas();
     this.backOffice ? this.getServicios() : this.getServiciosByProductor();
+    this.getUserConPermisos()
   }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe()
+  }
+
+  async getUserConPermisos(){
+    await this.authService.getUserWithPermisos()
+    this.crearServicio = this.authService.userWithPermissions?.value?.permisos.requestservice.CREATE
   }
 
   isBackOffice(){

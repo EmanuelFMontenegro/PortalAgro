@@ -5,16 +5,7 @@
   </div>
   <div class="body-datos">
       <div class="formulario" [formGroup]="form">
-<div class="row">
-        <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
-          <div class="field-container w-100">
-            <mat-label class="field-label">Hectáreas totales</mat-label>
-            <input type="number" [formControlName]="ctrl_hectare" placeholder="Litros" class="field-input" name="hectareas"
-            placeholder="Hectáreas" min="1" max="999999" >
-            <mat-error *ngIf="form.controls[ctrl_hectare]?.invalid && form.controls[ctrl_hectare]?.touched" >* Campo requerido</mat-error>
-          </div>
-        </div>
-
+  <div class="row">
         <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
           <mat-label class="field-label">Fecha de visita</mat-label>
           <mat-form-field class="width-full" appearance="outline">

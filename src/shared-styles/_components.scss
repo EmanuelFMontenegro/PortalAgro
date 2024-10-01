@@ -103,7 +103,7 @@
 
 //los estilos de arriba aun no se donde se usan, los dejo por si acaso pero los borro mas adelante si no se usan
 // ==============================================================        Customs         =========================================================
-.dot::before { 
+.dot::before {
   content: '.';
   color: var(--primary) !important;
   font-size: 52px;
@@ -117,7 +117,7 @@
 
 .relative{
   position:relative;
-  
+
 }
 
 .font-16{
@@ -194,8 +194,8 @@
 }
 
 .secondary-button-custom{
-  @include button(var(--primary), #fff, 290px,#3CA749); 
-  
+  @include button(var(--primary), #fff, 290px,#3CA749);
+
 }
 
 .primary-button-auto {
@@ -204,34 +204,34 @@
 
 .secondary-button-auto {
   @include button(var(--primary), #fff, auto);
-  background-color: #fff !important; 
+  background-color: #fff !important;
   border:none;
 }
 
 .primary-button-240 {
   @include button(#fff, var(--primary), 240px);
-  
+
 }
 .secondary-button-240 {
   @include button(--primary, #fff, 240px,#3CA749);
-  background-color: #fff !important; 
+  background-color: #fff !important;
   border:none;
 }
 
-.basic-warning{ 
+.basic-warning{
   @include clean-btn(#FF0000, #fff, 100%);
 }
 
-.basic-blue{ 
+.basic-blue{
   @include clean-btn(#3B7AF6, #fff, 100%);
 }
 
 .dialog-button {
   @include custom-btn(155px);
 }
- 
+
 // ==============================================================        Searchbar       =========================================================
-.search-bar { 
+.search-bar {
   font-size: 14px;
   @include flex-wrap(10px,1);
   padding-bottom: 20px;
@@ -247,16 +247,16 @@
     }
   }
   &-buttons {
-    @include flex-wrap(10px,1); 
+    @include flex-wrap(10px,1);
   }
 }
 
 
- 
+
 
 // ==============================================================  Chacra =========================================================
 
-// Layout principal de contenedor de chacras,servicios adicionales,lotes 
+// Layout principal de contenedor de chacras,servicios adicionales,lotes
 // proporciona un grid modulable usando la funcion grid-center-autofill de mixins.scss
 .cardContainerNoCentered {
   @include grid-center-autofill(350px, 1fr, 25px, 15px);
@@ -270,10 +270,10 @@
   border: 1px solid #929497;
 
   // Contenedor para Card de Chacras
-  //                 [ IMG ] 
+  //                 [ IMG ]
   //                 [ HEADER ]
   //                 [ CONTENT ]
-  //                 [ BUTTONS ] 
+  //                 [ BUTTONS ]
   &-img {
     height: 205px !important;
     max-width: 100%;
@@ -289,8 +289,8 @@
     }
 
     &-subtitle {
-      margin:9px 0px; 
-      overflow-y: scroll; 
+      margin:9px 0px;
+      overflow-y: scroll;
       @include font(1rem, 500,#232323);
       >span {
         @include font(1rem, 600);
@@ -307,7 +307,7 @@
 
   // END Contenedor para Card de Chacras
   //Contenedor para Cards de Lotes
-  
+
 }
 .cardContainerNoCenteredLote {
   @include grid-center-autofill(280px, 1fr, 25px, 15px);
@@ -331,17 +331,17 @@
 
     &-subtitle {
       position: relative;
-      margin:9px 0px; 
+      margin:9px 0px;
       font-size: 10px;
       padding-left: 12px;
       @include font(1rem, 500,#232323);
       >span {
-        
+
         @include font(1rem, 600);
       }
-      
+
     }
-    
+
   }
   &-buttons {
     margin-top: auto;
@@ -356,13 +356,13 @@
 // ==============================================================  Formularios =========================================================
 //Form container para Formularios
 .FullForm {
-  @include flexbox(column, center, center); 
+  @include flexbox(column, center, center);
   &-control {
     @include flex-column();
     width: 100%;
     margin-bottom: 1rem;
   }
-  &-buttonsToRight{ 
+  &-buttonsToRight{
     @include flexbox(row, flex-end, center);
     gap: 10px;
     width: 100%;
@@ -377,7 +377,7 @@
 //inputs de formularios
 .FormInput {
   @include FormInput(auto, 0.5rem, 1px solid #ccc, 8px, 12px, 4px 4px 6px 0px rgba(0, 0, 0, 0.25), #45454580);
-  
+
 }
 //textarea de formularios
 .FormTextarea {
@@ -387,11 +387,11 @@
 
 // ==============================================================  Location Card =============================================
 
-.ContainerLocation { 
+.ContainerLocation {
   @include grid-autofit(300px, 1fr, 25px, 15px);
-  @include border-radius-color(#000, 20px); 
-  padding: 20px; 
-  &-chacra { 
+  @include border-radius-color(#000, 20px);
+  padding: 20px;
+  &-chacra {
       @include flexbox(column, flex-start, normal);
       padding-left: 24px;
       &-details {
@@ -399,7 +399,7 @@
               font-size: 12px;
           }
       }
-      &-buttons { 
+      &-buttons {
           display: flex;
           flex-direction: row;
           justify-content: center;
@@ -429,11 +429,11 @@
 
 // ==============================================================  Dialog =============================================
 .cdk-overlay-pane {
-  border-radius: 16px ; 
-  overflow: hidden ; 
+  border-radius: 16px ;
+  overflow: hidden ;
   padding: 0;
 }
- 
+
 
 
 // ==============================================================  Profile =============================================
@@ -444,12 +444,12 @@
   padding: 15px;
   &-detail{
     position: relative;
-    @include flexbox(row, start, center); 
+    @include flexbox(row, start, center);
     width: 100%;
     gap: 20px;
     padding: 20px;
     border-radius: 18px;
-    background-image: linear-gradient(180deg, var(--primary) 7.5%, var(--primary) 95%); 
+    background-image: linear-gradient(180deg, var(--primary) 7.5%, var(--primary) 95%);
     &-editar{
       cursor: pointer;
       @include font(1rem, 600, #fff);
@@ -466,21 +466,21 @@
       > img {
         width: 105px;
         height: 105px;
-      }  
+      }
     }
-    &-info{ 
-      @include flexbox(column, start, start); 
+    &-info{
+      @include flexbox(column, start, start);
       margin-right: 30px;
        &-name, &-mail {
-        flex-shrink: 1; 
-        overflow-wrap: anywhere; 
-        @include font(1.5rem, 600, #fff); 
+        flex-shrink: 1;
+        overflow-wrap: anywhere;
+        @include font(1.5rem, 600, #fff);
       }
       &-mail {
         @include font(1rem, 500, #fff);
       }
     }
-  } 
+  }
   &-personalData{
     border: 1px solid rgba(0, 0, 0, 0.3);
     border-radius: 8px;
@@ -493,15 +493,15 @@
     }
    &-content{
     @include flexbox(row, flex-start);
-    flex-wrap: wrap; 
+    flex-wrap: wrap;
     padding: 30px;
     gap: 20px 65px;
     @include font(1rem, 500, #454545);
   &-item {
-    @include flexbox(column, flex-start, flex-start); 
-    box-sizing: border-box; 
+    @include flexbox(column, flex-start, flex-start);
+    box-sizing: border-box;
     flex-basis: calc(50% - 33px);
-    flex-shrink: 1; 
+    flex-shrink: 1;
     min-width: 280px;
     margin-bottom: 20px;
     gap: 10px;
@@ -513,9 +513,9 @@
       @include font(1rem, 500, #464A53);
       border-bottom: 1px solid rgba(0, 0, 0, 0.5);
     }
-  } 
+  }
    }
-  } 
+  }
   &-aditionalData{
     border: 1px solid rgba(0, 0, 0, 0.3);
     border-radius: 8px;
@@ -527,7 +527,7 @@
       border-radius: 8px 8px 0px 0px;
     }
     &-content{
-      padding: 15px; 
+      padding: 15px;
       @include font(0.9rem, 500, #464A5380);
     }
   }

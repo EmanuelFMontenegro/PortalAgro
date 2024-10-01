@@ -57,7 +57,7 @@
           <br>
           <button class="back-button2 btn-grande label2" (click)="this.mostrarImagenes()">IMÁGENES</button>
           <br>
-          <button class="back-button2 btn-grande label2" (click)="this.editarDatos()">EDITAR DATOS</button>
+          <button *ngIf="editarDatosTecnicos" class="back-button2 btn-grande label2" (click)="this.editarDatos()">EDITAR DATOS</button>
 
         </div>
       </div>

@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { jwtDecode } from 'jwt-decode';
 import { environment } from 'src/environments/environment';
 import { UserToken } from '../models/auth.models';
+import { PermisoService } from './permisos.service';
 
 interface DecodedToken {
   email: string;
@@ -17,13 +18,15 @@ interface DecodedToken {
   providedIn: 'root',
 })
 export class AuthService {
-  public userLogeed: UserToken | undefined;
+  public userLogeed: UserToken | null = null;;
   private userEmail: string = '';
   private userId: number | null = null;
   private field: string | null = null; // Campo adicional obtenido del token
   private loginUrl = `${environment.apiUrl}/auth/login`; // URL de la API para el login
+  public  userWithPermissions = new BehaviorSubject<UserToken | null>(null);
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,
+    private permisoService: PermisoService) { }
 
   // Método para iniciar sesión
   login(username: string, password: string): Observable<any> {
@@ -54,18 +57,32 @@ export class AuthService {
   }
 
   /** Devuelve el usuario que está logueado actualmente en el sistema a travez del token */
-  getUserLogeed(): UserToken | undefined {
+  getUserLogeed(): UserToken | null {
     let token = sessionStorage.getItem('token');
-    if (token) {
-      try {
-        // si falla la decodificación
-        const decoded: any = jwtDecode(token);
-        this.userLogeed = decoded;
-      } catch (error) {
-        console.error('Error al decodificar el token:', error);
-      }
+
+    if (!token) {
+      return null;
     }
-    return this.userLogeed;
+
+    try {
+      // si falla la decodificación
+      const decoded: any = jwtDecode(token);
+      this.userLogeed = decoded;
+      return this.userLogeed;
+    } catch (error) {
+      console.error('Error al decodificar el token:', error);
+      return null;
+    }
+  }
+
+  async getUserWithPermisos() {
+    let user: UserToken | null = this.getUserLogeed();
+
+    // permisos
+    let permisos = await this.permisoService.getPermisos()
+    if(user) user.permisos = permisos
+
+    this.userWithPermissions.next(user)
   }
 
   // Método para obtener el email del usuario
@@ -101,7 +118,7 @@ export class AuthService {
   logout(): void {
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('tokenExpiration');
-    this.userLogeed = undefined;
+    this.userLogeed = null;
     this.userEmail = '';
     this.userId = null;
     this.field = null;

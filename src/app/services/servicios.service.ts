@@ -13,11 +13,6 @@ export class ServiciosService {
 
   constructor(private http: HttpClient) {}
 
-  getServicios(): Observable<any> {
-    let url = `${environment.apiUrl}/dist/service/all`;
-    return this.http.get(url);
-  }
-
     getServiciosByProductor(): Observable<any>{
       let url =  `${environment.apiUrl}/user/service/all`;
       return this.http.get(url);
@@ -28,14 +23,12 @@ export class ServiciosService {
       return this.http.get(url);
     }
 
-
     postServicioByProductor(body: any, productorId: number){
       let url = `${environment.apiUrl}/user/service`
       return this.http.post(url, body);
     }
 
     // BACK OFFICE
-
 
     getAllStatus(): Observable<any> {
       let url = `${environment.apiUrl}/status/all`;
@@ -51,6 +44,16 @@ export class ServiciosService {
 
     getStatusById(id: number): Observable<any> {
       let url = `${environment.apiUrl}/status/${id}`;
+      return this.http.get(url);
+    }
+
+    getServicios(): Observable<any>{
+      let url =  `${environment.apiUrl}/dist/service/all`;
+      return this.http.get(url);
+    }
+
+    getServiciosFiltrados(pageSize: number): Observable<any>{
+      let url =  `${environment.apiUrl}/dist/service/all?sortBy=id&sortDir=DESC&pageSize=${pageSize}&pageNo=0&nickname=op&code=3&model=&brand=&isActive=true`;
       return this.http.get(url);
     }
 
@@ -84,6 +87,21 @@ export class ServiciosService {
 
     putDatosTecnico(idServicio:number, body: any){
       let url =  `${environment.apiUrl}/dist/service/${idServicio}/jobtechnical`;
+      return this.http.put(url, body);
+    }
+
+    getDronesTask(idServicio:number){
+      let url =  `${environment.apiUrl}/dist/service/${idServicio}/joboperator/dronetask/all`;
+      return this.http.get(url);
+    }
+
+    postDroneTask(idServicio:number, body: any){
+      let url = `${environment.apiUrl}/dist/service/${idServicio}/joboperator/dronetask`;
+      return this.http.post(url, body);
+    }
+
+    putDroneTask(idServicio:number, body: any, taskId: number){
+      let url = `${environment.apiUrl}/dist/service/${idServicio}/joboperator/dronetask/${taskId}`;
       return this.http.put(url, body);
     }
 
@@ -154,4 +172,5 @@ export class ServiciosService {
       return this.http.put(url, body);
     }
 
-}
+
+  }

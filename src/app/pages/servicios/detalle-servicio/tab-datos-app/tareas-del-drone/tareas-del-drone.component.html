@@ -1,1 +1,65 @@
-<p>tareas-del-drone works!</p>
+<div class="div-datos">
+  <div class="title-datos">
+    Tareas del drone
+  </div>
+  <div class="body-datos">
+      <div class="formulario" [formGroup]="form">
+<div class="row">
+  <div class="col-12">
+    <div class="field-container" >
+      <mat-label class="field-label">Drone</mat-label>
+      <mat-select class="field-input"  [formControlName]="ctrl_droneAssigned"  placeholder="Seleccionar drone" name="drone">
+        <mat-option *ngFor="let cultivo of listadoDrones" [value]="cultivo.id">{{ cultivo.nickname }}</mat-option>
+      </mat-select>
+      <mat-error  *ngIf="form.controls[ctrl_droneAssigned]?.invalid && form.controls[ctrl_droneAssigned]?.touched" >* Campo requerido</mat-error>
+    </div>
+  </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+          <div class="field-container w-100" >
+            <mat-label class="field-label">Insumo</mat-label>
+            <mat-select class="field-input"  [formControlName]="ctrl_productInput"  placeholder="Seleccionar" name="insumo">
+              <mat-option *ngFor="let agua of listaInsumos" [value]="agua.productInput.id">{{ agua.productInput.name + ' ('+ agua.productInput.description +')' }}</mat-option>
+            </mat-select>
+            <mat-error  *ngIf="form.controls[ctrl_productInput]?.invalid && form.controls[ctrl_productInput]?.touched" >* Campo requerido</mat-error>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+          <div class="field-container w-100">
+            <mat-label class="field-label">Hectáreas</mat-label>
+            <input type="number" [formControlName]="ctrl_hectare" placeholder="Litros" class="field-input" name="hectareas"
+            placeholder="Hectáreas" min="1" max="999999" >
+            <mat-error *ngIf="form.controls[ctrl_hectare]?.invalid && form.controls[ctrl_hectare]?.touched" >* Campo requerido</mat-error>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+          <mat-label class="field-label">Hora de inicio</mat-label>
+          <mat-form-field class="width-full" appearance="outline">
+          <input placeholder="Seleccione una hora" matInput  [min]="minDate" [matDatepicker]="dpDesde"
+                [formControlName]="ctrl_intHour" autocomplete="off">
+             <mat-datepicker-toggle matPrefix [for]="dpDesde"></mat-datepicker-toggle>
+             <mat-datepicker #dpDesde startView="multi-year"></mat-datepicker>
+            </mat-form-field>
+        </div>
+
+        <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+          <mat-label class="field-label">Hora de fin</mat-label>
+          <mat-form-field class="width-full" appearance="outline">
+          <input placeholder="Seleccione una hora" matInput  [min]="minDate" [matDatepicker]="dpHasta"
+                [formControlName]="ctrl_endHour" autocomplete="off">
+             <mat-datepicker-toggle matPrefix [for]="dpHasta"></mat-datepicker-toggle>
+             <mat-datepicker #dpHasta startView="multi-year"></mat-datepicker>
+            </mat-form-field>
+        </div>
+
+       <div class="col-12">
+          <mat-label class="field-label">Observaciones</mat-label>
+          <textarea  [formControlName]="this.ctrl_observation"  placeholder="Descripción"  matInput class="observaciones" ></textarea>
+        </div>
+ </div>
+      </div>
+      <button class="back-button2" (click)="cancelar()"> Cancelar</button>
+      <button class="back-button2" (click)="aceptar()"> Aceptar</button>
+  </div>
+</div>

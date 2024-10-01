@@ -25,17 +25,14 @@ export class ListaInsumosAppComponent {
     {label: 'Dosis', field:'doseToBeApplied', tipoLabel: TipoLabel.span },
     {label: 'Litros por hectárea', field:'hectaresPerLiter', tipoLabel: TipoLabel.span },
     {label: 'Sobrantes', field:'surplus', tipoLabel: TipoLabel.span },
-    {label: 'Editar', field: 'id', tipoLabel: TipoLabel.botonEditarDevolverObjeto},
   ]
 
   @Output() btnVolver = new EventEmitter<any>();
 
   constructor(
-    private toastr: ToastrService,
     private serviciosService: ServiciosService,
     private dialog: MatDialog,
     private detalleService: DetalleServicioService,
-    private insumosService: InsumoService
   ){
 
   }
@@ -43,7 +40,13 @@ export class ListaInsumosAppComponent {
   ngOnInit(): void {
     this.servicio = this.detalleService.servicio;
     this.getInsumos()
-    // this.getTiposInsumos()
+    this.setMiniaturas()
+  }
+
+  setMiniaturas(){
+    if(this.detalleService.permisos?.jobOperator?.CREATE){
+     this.dataView.push({label: 'Editar', field: 'id', tipoLabel: TipoLabel.botonEditarDevolverObjeto})
+    }
   }
 
   getInsumos(){
@@ -67,37 +70,6 @@ export class ListaInsumosAppComponent {
       if (result) this.getInsumos()
     });
   }
-
-  // eliminarInsumo(valor:any){
-  //   this.serviciosService.deleteInsumosTecnico(this.servicio.id, valor).subscribe(
-  //     (data:any )=>{
-  //       this.toastr.info(data?.message ?? 'Insumo eliminado exitosamente', 'Éxito');
-  //       this.getInsumos()
-  //     },
-  //     error =>{
-  //       this.toastr.info(error.error?.message ?? 'Error eliminando insumo', 'Información');
-  //       console.log("ERROR ELIMINADO", error)
-  //     }
-  //   )
-  // }
-
-  // getTiposInsumos(){
-  //  this.insumosService.getAll().subscribe(
-  //   data => {
-  //     this.listadoTiposInsumos = data.list[0]
-  //     console.log(data)
-  //   },
-  //   error => {}
-  //  )
-  // }
-
-  // openABM(){
-  //   this.mostrarListado = false;
-  // }
-
-  // cancelar(){
-  //    this.mostrarListado = true;
-  // }
 
   volver(){
     this.btnVolver.emit(TiposDisplayApp.app)

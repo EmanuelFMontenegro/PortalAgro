@@ -38,4 +38,7 @@ export interface PermisosUsuario{
   profile?: PermisoBasico
   drone?:PermisoBasico
   supplies?:PermisoBasico
+  requestservice?:PermisoBasico
+  jobTechnical?:PermisoBasico
+  jobOperator?:PermisoBasico
 }

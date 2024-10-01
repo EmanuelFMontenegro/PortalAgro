@@ -101,7 +101,6 @@ export class LoginBackofficeComponent implements OnInit {
             ) {
               // Usuario autenticado correctamente
               sessionStorage.setItem('token', response.body.token); // Cambiado a sessionStorage
-              await this.permisoService.getPermisos();
 
               // PARA DIRIGIR A dashboard-backoffice o dashboard
               this.router.navigate(['/dashboard-backoffice']);

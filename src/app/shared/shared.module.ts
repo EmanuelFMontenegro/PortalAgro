@@ -20,17 +20,17 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { TituloContainerComponent } from './components/titulo-container/titulo-container.component';
 import { FiltrosContainerComponent } from './components/filtros-container/filtros-container.component';
-import { CalendarComponent } from './components/calendar/calendar.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
-import { CalendarPopupComponent } from './components/calendar-popup/calendar-popup.component';
-import { ToolbarComponent } from './components/toolbar/toolbar.component';
-import { FooterComponent } from './components/footer/footer.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { PaginadorComponent } from './components/paginador/paginador.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { HeaderInnerComponent } from './components/header-inner/header-inner.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { CalendarComponent } from './components/calendar/calendar.component';
+import { ToolbarComponent } from './components/toolbar/toolbar.component';
+import { CalendarPopupComponent } from './components/calendar-popup/calendar-popup.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { PaginadorComponent } from './components/paginador/paginador.component';
 
 export const IMPORTS_MATERIAL = [
   MatSidenavModule,
