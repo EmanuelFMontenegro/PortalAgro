@@ -172,5 +172,9 @@ export class ServiciosService {
       return this.http.put(url, body);
     }
 
+    deleteTareaDrone(idServicio: number , idTask: number){
+      let url =  `${environment.apiUrl}/dist/service/${idServicio}/joboperator/dronetask/${idTask}`;
+      return this.http.delete(url);
+    }
 
   }

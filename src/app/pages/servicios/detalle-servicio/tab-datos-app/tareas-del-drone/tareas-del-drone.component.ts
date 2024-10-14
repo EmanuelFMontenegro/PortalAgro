@@ -1,10 +1,13 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import moment from 'moment';
 import { ToastrService } from 'ngx-toastr';
+import { DialogComponent } from 'src/app/pages/dashboard/dialog/dialog.component';
 import { ApiService } from 'src/app/services/ApiService';
 import { DronService } from 'src/app/services/dron.service';
 import { ServiciosService } from 'src/app/services/servicios.service';
+import { TipoLabel } from 'src/app/shared/components/miniatura-listado/miniatura.model';
 import { DetalleServicioService } from '../../detalle-servicio.service';
 import { TiposDisplayTecnico } from '../../tab-datos-tecnicos/tab-datos-tecnicos.component';
 import { TiposDisplayApp } from '../tab-datos-app.component';
@@ -24,6 +27,17 @@ export class TareasDelDroneComponent {
   listadoHorarios: any[] = this.getHoras()
   abastecimientoAgua: any[] = [{ descripcion: 'SI', value: true }, { descripcion: 'NO', value: false }]
   minDate = new Date()
+  tareasDroneApp = false;
+  mostrarListado = true;
+
+  dataView = [
+    {label: 'Insumo', field: 'productInput.name', tipoLabel: TipoLabel.span},
+    {label: 'Hectareas', field:'hectare', tipoLabel: TipoLabel.span },
+    {label: 'Hora de incio', field:'intHour', tipoLabel: TipoLabel.span },
+    {label: 'Hora de fin', field:'endHour', tipoLabel: TipoLabel.span },
+    {label: 'Observaciones', field:'observation', tipoLabel: TipoLabel.span },
+    {label: 'Ver insumos', field: 'dashboard-backoffice/configuracion/insumo', tipoLabel: TipoLabel.botonVermas},
+  ]
 
   // controlName
   ctrl_droneAssigned = 'droneAssigned'
@@ -45,13 +59,22 @@ export class TareasDelDroneComponent {
 
   constructor(private toastr: ToastrService,
     private serviciosService: ServiciosService,
+    private dialog: MatDialog,
     private droneService:DronService,
-    private detalleService: DetalleServicioService){}
+    private detalleService: DetalleServicioService){
+      this.tareasDroneApp = this.detalleService.permisos?.jobOperator?.WRITE ?? false
+    }
 
   ngOnInit(): void {
     this.servicio = this.detalleService.servicio;
     this.getDatosTask()
+    this.setMiniaturas()
   }
+
+  setMiniaturas(){
+    if(this.detalleService.permisos?.jobTechnical?.WRITE)
+    this.dataView.push({label: 'Eliminar', field: 'id', tipoLabel: TipoLabel.botonEliminar})
+   }
 
   async getDatosTask(){
     await this.getTaskDrone()
@@ -99,12 +122,11 @@ export class TareasDelDroneComponent {
 
   cancelar() {
     this.form.disable()
-    this.btnVolver.emit(TiposDisplayApp.app)
+    this.mostrarListado = true;
   }
 
   volver() {
-    this.form.disable()
-    this.btnVolver.emit(TiposDisplayTecnico.tecnico)
+    this.btnVolver.emit(TiposDisplayApp.app)
   }
 
   getInsumos() {
@@ -115,6 +137,39 @@ export class TareasDelDroneComponent {
       }
     )
   }
+
+  openABM() {
+    this.mostrarListado = false;
+  }
+
+  dialogConfirmacionEliminar(valor:any){
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: '400px',
+      data: {
+        titulo: 'Eliminar Tarea',
+        message: `¿Desea eliminar la tarea?`,
+        showCancel: true,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result) this.eliminarInsumo(valor)
+    });
+  }
+
+  eliminarInsumo(valor:any){
+    this.serviciosService.deleteTareaDrone(this.servicio.id, valor).subscribe(
+      (data:any )=>{
+        this.toastr.info(data?.message ?? 'tarea eliminada exitosamente', 'Éxito');
+        this.getInsumos()
+      },
+      error =>{
+        this.toastr.info(error.error?.message ?? 'Error eliminando tarea', 'Información');
+        console.log("ERROR ELIMINADO TAREA", error)
+      }
+    )
+  }
+
 
   getTaskDrone() {
     return new Promise<any>((resolve)=>{

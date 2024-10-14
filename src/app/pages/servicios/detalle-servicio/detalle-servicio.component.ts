@@ -2,6 +2,7 @@ import { Component, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/AuthService';
+import { ServicioInterno } from '../servicios-interno.service';
 import { DetalleServicioService } from './detalle-servicio.service';
 
 @Component({
@@ -14,19 +15,19 @@ export class DetalleServicioComponent {
 
   constructor(
     private detalleServicioService: DetalleServicioService,
+    private servicioInterno: ServicioInterno,
     public authService: AuthService,
     private router: Router){}
 
   subscription = new Subscription()
   urlBase = '';
-  backOffice = false;
   servicio: any
   tecnicoAsignado:any;
   pilotoAsignado:any;
   indiceTab = 0;
 
   ngOnInit(): void {
-    this.urlBase =  this.backOffice ? 'dashboard-backoffice' : 'dashboard'
+    this.urlBase =  this.servicioInterno.backOffice.value ? 'dashboard-backoffice' : 'dashboard'
     this.detalleServicioService.getEstados()
     this.getDatosServicio();
     this.getUser()
@@ -66,6 +67,7 @@ export class DetalleServicioComponent {
   }
 
   volver() {
+    console.log(this.urlBase+ "LA NASE ESSSSSSSSSS")
     this.router.navigate([this.urlBase + '/servicios']);
   }
 
