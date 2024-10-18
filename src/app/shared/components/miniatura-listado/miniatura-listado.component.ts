@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { UtilsService } from '../../utils/utils.service';
 
@@ -6,8 +6,8 @@ import { TipoLabel, DataView } from './miniatura.model';
 
 @Component({
   selector: 'miniatura',
-  templateUrl: './miniatura-listado.component.html',
-  styleUrls: ['./miniatura-listado.component.sass']
+  templateUrl: './miniatura-listado.component.html', 
+  styleUrls: ['./miniatura-listado.component.sass'],
 })
 export class MiniaturaListadoComponent {
 
@@ -29,6 +29,8 @@ export class MiniaturaListadoComponent {
   tipoIcon = TipoLabel.icon
   tipoVerMas = TipoLabel.botonVermas
   tipoEditar = TipoLabel.botonEditar
+  tipoGeolocalizar = TipoLabel.botonGeo
+  tipoVerLote = TipoLabel.botonVerLote
   tipoEditarDevolviendo = TipoLabel.botonEditarDevolverObjeto // en lugar de redirigir devuelve el objeto
   tipoEliminar = TipoLabel.botonEliminar
 
@@ -61,5 +63,12 @@ export class MiniaturaListadoComponent {
   }
   getValue(objeto:any, field: string){
     return this.utilService.obtenerValor(objeto,field)
+  }
+
+  verGeo(data: any, key?: any, ruta?: any){
+    this.router.navigate([`/mapa/${data?.id}`]);
+  }
+  verLote(data: any, key?: any, ruta?: any){
+    this.router.navigate([`/lote/${data?.id}`]);
   }
 }

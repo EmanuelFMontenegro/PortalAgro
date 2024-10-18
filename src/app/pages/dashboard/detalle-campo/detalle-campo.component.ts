@@ -24,7 +24,7 @@ interface DecodedToken {
 })
 export class DetalleCampoComponent implements OnInit, AfterViewInit {
   public userEmail: string | null = null;
-  private userId: number | any;
+  private userId: number | any; 
   private personId: number | any;
   public campoSeleccionado: any = {};
   mostrarMapaPrincipal: boolean = false;

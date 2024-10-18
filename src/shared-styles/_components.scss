@@ -165,7 +165,7 @@
 .basis{
   flex-basis: 0;
 }
-
+ 
 .basis-300{
   flex-basis: 300px;
 }
@@ -178,6 +178,10 @@
 
 .margin-btm-0{
   margin-bottom: 0px !important;
+}
+
+.width-50{
+  width: 50%;
 }
 // ==============================================================        Botones        =========================================================
 
@@ -240,14 +244,27 @@
       width: 100%;
     }
   }
-  &-input-text {
+  &-picker2 {
+    flex-basis: 260px;
+    mat-form-field {
+      width: 100%;
+    }
+  }
+  &-input2{
+    flex-basis:360px;
+ 
+  }
+  &-input-text { 
     border-radius: 8px;
     mat-form-field {
       width: 100%;
     }
   }
   &-buttons {
-    @include flex-wrap(10px,1);
+    @include flex-wrap(10px,1); 
+  }
+  &-buttons2{
+    @include flex-wrap(10px,1); 
   }
 }
 
@@ -260,6 +277,9 @@
 // proporciona un grid modulable usando la funcion grid-center-autofill de mixins.scss
 .cardContainerNoCentered {
   @include grid-center-autofill(350px, 1fr, 25px, 15px);
+}
+.cardContainerNoCenteredProductor{
+  @include grid-center-autofill(270px, 1fr, 25px, 15px);
 }
 
 //Presets de cards, con distintas conf de estilos en un mismo contenedor
@@ -303,12 +323,57 @@
     flex-direction: column;
     gap: 20px;
     width: 100%;
+    
   }
 
   // END Contenedor para Card de Chacras
   //Contenedor para Cards de Lotes
 
 }
+
+.ProductorCard{
+  @include flexbox(column, center, left);
+  @include custom-card(270px, 320px, 10px);
+  position: relative;
+  border-top: 70px solid #015E83;
+  &-img {
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    max-width: 120px;
+    height: 79px;
+    border-radius: 16px;
+  }
+  &-header {
+    padding-top: 30px;
+    &-title {
+      margin-top: 12px;
+      margin-bottom: 3px;
+      color: #232323;
+      font-size: 20px;
+    }
+
+    &-subtitle {
+      margin:9px 0px; 
+      overflow-y: scroll; 
+      @include font(1rem, 500,#232323);
+      >span {
+        @include font(1rem, 600);
+      }
+    }
+  }
+  &-buttons {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    
+  }
+}
+
+
 .cardContainerNoCenteredLote {
   @include grid-center-autofill(280px, 1fr, 25px, 15px);
 }
@@ -376,9 +441,15 @@
 }
 //inputs de formularios
 .FormInput {
-  @include FormInput(auto, 0.5rem, 1px solid #ccc, 8px, 12px, 4px 4px 6px 0px rgba(0, 0, 0, 0.25), #45454580);
-
+  @include FormInput(100%, 0.5rem, 1px solid #ccc, 8px, 12px, 4px 4px 6px 0px rgba(0, 0, 0, 0.25), #45454580);
+  
 }
+
+.formInputNumber{
+  @include FormInput(auto, 0.5rem, 1px solid #ccc, 8px, 12px, 4px 4px 6px 0px rgba(0, 0, 0, 0.25), #45454580);
+}
+
+
 //textarea de formularios
 .FormTextarea {
   @include FormTextArea(auto, 0.5rem, 1px solid #ccc, 8px, 14px, 4px 4px 6px 0px rgba(0, 0, 0, 0.25), #45454580,170px);
@@ -461,6 +532,17 @@
         border: none;
       }
     }
+    &-verChacraBottom{
+      cursor: pointer;
+      @include font(1rem, 600, #fff);
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      &-button{
+        background-color: inherit;
+        border: none;
+      }
+    }
     &-avatar{
       border-radius: 50%;
       > img {
@@ -468,9 +550,9 @@
         height: 105px;
       }
     }
-    &-info{
-      @include flexbox(column, start, start);
-      margin-right: 30px;
+    &-info{ 
+      @include flexbox(column, start, start); 
+      margin-right: 24px;
        &-name, &-mail {
         flex-shrink: 1;
         overflow-wrap: anywhere;
@@ -532,4 +614,16 @@
     }
   }
 }
+
+/* @media screen and (max-width: 1090px) {
+  .profileContainer-personalData-content-item {
+    flex-basis: 100%;  
+    max-width: 100%;  
+  }
+} */
+/* @media screen and (max-width: 600px) {
+  .profileContainer-personalData-content-item {
+    min-width: 100%;  
+  }
+} */
 

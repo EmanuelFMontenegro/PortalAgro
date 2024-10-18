@@ -15,10 +15,6 @@ import {
   DataView,
 } from 'src/app/shared/components/miniatura-listado/miniatura.model';
 
-interface CustomJwtPayload {
-  userId: number;
-  sub: string;
-}
 
 interface DecodedToken {
   userId: number;
@@ -30,15 +26,10 @@ interface DecodedToken {
 @Component({
   selector: 'app-productores',
   templateUrl: './productores.component.html',
-  styleUrls: ['./productores.component.sass'],
 })
 export class ProductoresComponent implements OnInit {
-  titulo: string = 'Productores';
-  mostrarMatSelectLocalidades: boolean = false;
+  options: string[] = ['NombreProductor', 'ApellidoProductor', 'Localidad'];
   Buscar: string = '';
-  nombreABuscar: string = '';
-  apellidoABuscar: string = '';
-  placeholderText: string = 'Buscar por . . .';
   usuarios: {
     nombre: string;
     apellido: string;
@@ -48,46 +39,25 @@ export class ProductoresComponent implements OnInit {
   }[] = [];
   nombre: string = '';
   apellido: string = '';
-  name: string | null = null;
-  dni: string = '';
-  descriptions: string = '';
-  location_id: string | null = null;
-  telephone: string = '';
-  localidades: any[] = [];
-  filteredLocalidades: Observable<any[]> = new Observable<any[]>();
-  filtroLocalidades: FormControl = new FormControl('');
+  name: string | null = null; 
+  location_id: string | null = null; 
+  localidades: any[] = []; 
   private userId: number | any;
   public email: string | null = null;
   private companyId: number | any;
-
   dataView: DataView[] = [
-    // IMAGEN
-    {
-      label: '',
-      field: 'assets/img/avatar_prod.svg',
-      tipoLabel: TipoLabel.imagen,
-    },
-
-    // SPAN
+    {label: '', field: 'assets/img/avatar_prod.svg', tipoLabel: TipoLabel.imagen},
     { label: 'Nombre', field: 'nombre', tipoLabel: TipoLabel.span },
     { label: 'Apellido', field: 'apellido', tipoLabel: TipoLabel.span },
     { label: 'Localidad', field: 'localidad', tipoLabel: TipoLabel.span },
     { label: 'Descripcion', field: 'descripcion', tipoLabel: TipoLabel.span },
-    // VER MAS
-    // en lable va la key para guardar en localstorage y en field la url del btn mas
-    {
-      label: 'selectedUser',
-      field: 'dashboard-backoffice/perfil-productor',
-      tipoLabel: TipoLabel.botonVermas,
-    },
+    { label: 'selectedUser', field: 'dashboard-backoffice/perfil-productor', tipoLabel: TipoLabel.botonVermas },
   ];
 
   constructor(
     private authService: AuthService,
     private apiService: ApiService,
     private toastr: ToastrService,
-    private router: Router,
-    private http: HttpClient,
     public dashboardBackOffice: DashboardBackOfficeService
   ) {
     this.dashboardBackOffice.dataTitulo.next({
@@ -168,11 +138,6 @@ export class ProductoresComponent implements OnInit {
     this.apiService.getLocationMisiones('location').subscribe(
       (localidades) => {
         this.localidades = localidades;
-
-        this.filteredLocalidades = this.filtroLocalidades.valueChanges.pipe(
-          startWith(''),
-          map((value: string) => this.filtrarLocalidades(value || ''))
-        );
       },
       (error) => {
         console.error('Error al obtener las localidades', error);
@@ -180,44 +145,26 @@ export class ProductoresComponent implements OnInit {
     );
   }
 
-  private filtrarLocalidades(value: string): any[] {
-    const filterValue = value.toLowerCase();
-    return this.localidades.filter((loc) =>
-      loc.name.toLowerCase().includes(filterValue)
-    );
-  }
-
-  aplicarFiltro(event: MatSelectChange) {
-    const valorSeleccionado = event.value;
-
-    switch (valorSeleccionado) {
-      case 'nombre':
-        this.placeholderText = 'Buscar por nombre';
-        this.mostrarMatSelectLocalidades = false;
-        this.filtrarPorNombreOApellido();
+  onFilter(filtro: any) {
+    switch (filtro.tipo) {
+      case 'Buscar por Localidad':
+        this.filtrarPorLocalidad(filtro.valor);
         break;
-      case 'apellido':
-        this.placeholderText = 'Buscar por apellido';
-        this.mostrarMatSelectLocalidades = false;
-        this.filtrarPorNombreOApellido();
+      case 'Buscar por Nombre':
+        this.filtrarPorNombreOApellido(filtro.valor);
         break;
-      case 'localidad':
-        this.placeholderText = 'Buscar por localidad';
-        this.mostrarMatSelectLocalidades = true;
-        break;
-      default:
-        this.placeholderText = '';
-        this.mostrarMatSelectLocalidades = false;
+      case 'Buscar por Apellido':
+        this.filtrarPorNombreOApellido(filtro.valor);
         break;
     }
   }
 
-  filtrarPorLocalidad() {
-    if (!this.Buscar) {
+  filtrarPorLocalidad(buscar: string) {
+    if (!buscar) {
       return;
     }
     const localidadSeleccionada = this.localidades.find(
-      (loc) => loc.name === this.Buscar
+      (loc) => loc.name === buscar
     );
     if (!localidadSeleccionada) {
       return;
@@ -237,7 +184,6 @@ export class ProductoresComponent implements OnInit {
             this.toastr.info('No existen productores para esta localidad.');
           }
         } else {
-          // Limpiar la lista de usuarios
           this.usuarios = [];
         }
       },
@@ -250,18 +196,16 @@ export class ProductoresComponent implements OnInit {
     );
   }
 
-  filtrarPorNombreOApellido() {
-    if (!this.nombreABuscar && !this.apellidoABuscar) {
+  filtrarPorNombreOApellido(nombre? : string, apellido? : string) {
+    if (!nombre && !apellido) {
       return;
     }
-
     const filter = {
-      anyNames: this.nombreABuscar || this.apellidoABuscar || '',
+      anyNames: nombre || apellido || '',
     };
 
     this.apiService.getPeopleUserAdmin(filter).subscribe(
       (data: any) => {
-        console.log('datos de filtro', data);
         this.procesarDatosUsuarios(data);
         if (this.usuarios.length === 0) {
           this.toastr.info(
@@ -293,39 +237,8 @@ export class ProductoresComponent implements OnInit {
     const localidad = this.localidades.find((loc) => loc.id === locationId);
     return localidad ? localidad.name : ''; // Devolver el nombre de la localidad si se encuentra, de lo contrario, cadena vacía
   }
-
-  limpiarTexto() {
-    this.Buscar = '';
-    this.nombreABuscar = '';
-    this.apellidoABuscar = '';
-
+  clearFilter(){
     this.cargarUsuarios();
-  }
 
-  activarFiltro() {
-    if (
-      !this.mostrarMatSelectLocalidades &&
-      (this.nombreABuscar || this.apellidoABuscar)
-    ) {
-      this.filtrarPorNombreOApellido();
-    } else if (this.mostrarMatSelectLocalidades && !this.Buscar) {
-    } else {
-      if (this.mostrarMatSelectLocalidades) {
-        this.filtrarPorLocalidad();
-      } else {
-        this.filtrarPorNombreOApellido();
-      }
-    }
-  }
-  //Agregar en Ver Mas el link o ruta a la pantalla agregar nuevos Productores
-  BtnNuevoUsuario() {
-    this.router.navigate(['dashboard-backoffice/nuevo-usuario']);
-  }
-  //Agregar en Ver Mas el link o ruta a la pantalla editar un Productor
-  verMas(usuarios: any) {
-    // Guardar los datos del usuario en localStorage
-    localStorage.setItem('selectedUser', JSON.stringify(usuarios));
-    // Navegar al componente perfil-productor
-    this.router.navigate(['dashboard-backoffice/perfil-productor']);
   }
 }

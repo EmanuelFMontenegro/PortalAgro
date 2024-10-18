@@ -30,10 +30,10 @@
               "src/assets",
               "src/manifest.webmanifest"
             ],
-            "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+            "styles": [ 
               "src/custom-theme.scss",
               "src/styles.sass",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/shared-styles/_main.scss",
               "node_modules/ngx-toastr/toastr.css",
               "node_modules/ngx-spinner/animations/ball-scale-multiple.css"

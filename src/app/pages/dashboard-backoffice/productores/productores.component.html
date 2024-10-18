@@ -1,33 +1,10 @@
-
-<app-titulo-container [titulo]="titulo"></app-titulo-container>
-<div class="field-container">
-
-  <mat-select class="field-input" placeholder="Filtrar por" (selectionChange)="aplicarFiltro($event)">
-    <mat-option value="nombre">Nombre</mat-option>
-    <mat-option value="apellido">Apellido</mat-option>
-    <mat-option value="localidad">Localidad</mat-option>
-  </mat-select>
-
-  <input *ngIf="!mostrarMatSelectLocalidades" class="field-input" matInput [placeholder]="placeholderText"
-    [(ngModel)]="nombreABuscar">
-
-
-  <ng-container *ngIf="mostrarMatSelectLocalidades">
-    <mat-select class="field-input" placeholder="Seleccionar Localidad" [(ngModel)]="Buscar">
-      <mat-option *ngFor="let localidad of localidades" [value]="localidad.name">{{ localidad.name }}</mat-option>
-    </mat-select>
-  </ng-container>
-
-  <button mat-raised-button class="clear-button" (click)="limpiarTexto()">
-    Limpiar<img src="assets/img/limpiar.svg" alt="IconoBorrar"></button>
-
-  <button mat-raised-button class="active-button" (click)="activarFiltro()">Filtrar
-    <img src="assets/img/filtrar.svg" alt="IconoBorrar">
-  </button>
-  <button mat-raised-button class="nuevoUsuario-button" (click)="BtnNuevoUsuario()">
-    Nuevo Usuario<mat-icon style="font-size: 20px; position: relative; top: 1px; right: 3px;">add</mat-icon>
-  </button>
+<div class="mainStructure">
+<app-header-inner [title]="'Productores'" [backButton]="true"></app-header-inner>
+ <app-searchbar (filter)="onFilter($event)" (clearFilter)="clearFilter()" 
+ [options]="options" 
+ [localidadesOptions]="localidades"
+ [placeholder]="'Buscar por Productor'"
+ [btnAdd]="'Productor'" ></app-searchbar>
+<!--  <miniatura [productor]="true" [dataView]="dataView" [listado]="usuarios"></miniatura> -->
+<app-card [dataView]="dataView" [listado]="usuarios"  [typeCard]="'productor'"></app-card> 
 </div>
-
-
-<miniatura [productor]="true" [dataView]="dataView" [listado]="usuarios"></miniatura>

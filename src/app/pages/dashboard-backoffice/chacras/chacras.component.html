@@ -1,45 +1,9 @@
-<app-titulo-container [titulo]="titulo"></app-titulo-container>
-<div class="field-container">
-  <mat-select class="field-input" placeholder="Filtrar por" (selectionChange)="aplicarFiltro($event)">
-    <mat-option value="localidad">Localidad</mat-option>
-    <mat-option value="productor">Productor</mat-option>
-    <mat-option value="nombreChacra">Nombre de Chacra</mat-option>
-    <mat-option value="hectareas">Hectáreas</mat-option>
-  </mat-select>
-
-  <!-- Input para rango de hectáreas -->
-  <ng-container *ngIf="placeholderText === 'Buscar por Hectáreas'">
-    <input class="field-input" matInput type="number" placeholder="Min" [(ngModel)]="minHectareas">
-    <input class="field-input" matInput type="number" placeholder="Max" [(ngModel)]="maxHectareas">
-  </ng-container>
-
-  <!-- Input para productor -->
-  <input *ngIf="placeholderText === 'Buscar por Productor'" class="field-input" matInput [placeholder]="placeholderText"
-    [(ngModel)]="nombreProductor">
-
-
-  <!-- Input para nombre de chacra -->
-  <input *ngIf="placeholderText === 'Buscar por Nombre de Chacra'" class="field-input" matInput
-    placeholder="{{ placeholderText }}" [(ngModel)]="nombreChacra">
-
-  <!-- Mat-select para seleccionar localidad -->
-  <mat-select *ngIf="placeholderText === 'Buscar por Localidad'" class="field-input" placeholder="Seleccionar Localidad"
-    [(ngModel)]="Buscar">
-    <mat-option *ngFor="let localidad of localidades" [value]="localidad.name">{{ localidad.name }}</mat-option>
-  </mat-select>
-
-  <!-- Botones para limpiar y filtrar -->
-  <button mat-raised-button class="clear-button" (click)="limpiarTexto()">Limpiar
-    <img src="assets/img/limpiar.svg" alt="IconoBorrar">
-  </button>
-
-  <button mat-raised-button class="active-button" (click)="activarFiltro()">Filtrar
-    <img src="assets/img/filtrar.svg" alt="IconoFiltrar">
-  </button>
-
-  <button mat-raised-button class="nuevaChacra-button" (click)="BtnNuevaChacra()">Volver al Inicio
-  </button>
+<div class="mainStructure">
+  <app-header-inner [title]="'Chacras'" [backButton]="true"></app-header-inner>
+  <app-searchbar  (filter)="onFilter($event)" (clearFilter)="clearFilter()" 
+  [options]="options" 
+  [localidadesOptions]="localidades"
+  [placeholder]="'Buscar por Localidad'"></app-searchbar> <!-- [btnAdd]="'campo'" -->
+<app-card [dataView]="dataView" [listado]="campos"  [typeCard]="'chacra'"></app-card> 
 </div>
 
-
-<miniatura [dataView]="dataView" [listado]="campos"></miniatura>

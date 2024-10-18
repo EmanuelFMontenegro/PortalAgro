@@ -1,0 +1,34 @@
+{
+    "homeItems": [
+      {
+        "icon": "servicio_b.svg",
+        "name": "Solicitudes y Servicios",
+        "route": "/dashboard-backoffice/servicios"
+      },
+      {
+        "icon": "usuario_b.svg",
+        "name": "Productores",
+        "route": "/dashboard-backoffice/productores"
+      },
+      {
+        "icon": "chacra_b.svg",
+        "name": "Chacras",
+        "route": "/dashboard-backoffice/chacras"
+      },
+      {
+        "icon": "calendario_b.svg",
+        "name": "Calendario",
+        "route": "/dashboard-backoffice/calendarios"
+      },
+      {
+        "icon": "planificacion_b.svg",
+        "name": "Planificaciones",
+        "route": "/dashboard-backoffice/planificaciones"
+      },
+      {
+        "icon": "informes_b.svg",
+        "name": "Informes",
+        "route": "/dashboard-backoffice/informes"
+      } 
+    ]
+  }

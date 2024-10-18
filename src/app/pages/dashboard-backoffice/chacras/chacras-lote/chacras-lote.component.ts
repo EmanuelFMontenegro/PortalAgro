@@ -15,7 +15,10 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { switchMap } from 'rxjs/operators';
 import { DialogComponent } from 'src/app/pages/dashboard/dialog/dialog.component';
-
+import {
+  TipoLabel,
+  DataView,
+} from 'src/app/shared/components/miniatura-listado/miniatura.model';
 interface Lote {
   id: number;
   name: string;
@@ -46,10 +49,9 @@ interface DatosUsuario {
 @Component({
   selector: 'app-chacras-lote',
   templateUrl: './chacras-lote.component.html',
-  styleUrls: ['./chacras-lote.component.sass'],
 })
 export class ChacrasLoteComponent {
-  @Output() chacraSeleccionadoCambio = new EventEmitter<any>();
+  @Output() chacraSeleccionadoCambio = new EventEmitter<any>(); 
   loteForm: FormGroup;
   nombre: string = '';
   apellido: string = '';
@@ -69,7 +71,7 @@ export class ChacrasLoteComponent {
   private userId: number = 0;
   private personId: number | any;
   public userEmail: string | null = null;
-
+  options: string[] = ['Localidad', 'Productor', 'Cultivos', 'Hectareas'];
   chacraData = {
     name: '',
     dimensions: '',
@@ -86,6 +88,23 @@ export class ChacrasLoteComponent {
   addressTouched = false;
   observationTouched = false;
   chacraSeleccionado: any = {};
+  dataView: DataView[] = [
+    { label: '', field: 'assets/img/Chacra_1.png', tipoLabel: TipoLabel.imagen },
+    { label: 'Nombre del Lote', field: 'name', tipoLabel: TipoLabel.span },
+    { label: 'Plantación', field: 'plant_name', tipoLabel: TipoLabel.span },
+    { label: 'Hectáreas', field: 'dimensions', tipoLabel: TipoLabel.span },
+    { label: 'Descripción', field: 'descriptions', tipoLabel: TipoLabel.span },
+    {
+      label: 'previousPlantation',
+      field: 'dashboard-backoffice/cargar-lotes',
+      tipoLabel: TipoLabel.botonEditar,
+    },
+    {
+      label: '',
+      field: '',
+      tipoLabel: TipoLabel.botonEliminar,
+    }
+  ];
 
   constructor(
     private authService: AuthService,
@@ -249,7 +268,11 @@ export class ChacrasLoteComponent {
       );
     }
   }
-
+  btnEliminar(e : any){
+    console.log(e)
+    this.confirmarBorrado(e);
+    
+  }
   confirmarBorrado(lote: any): void {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '400px',
@@ -349,4 +372,26 @@ export class ChacrasLoteComponent {
     localStorage.setItem('previousPlantation', lote.typeCrop.name);
     this.router.navigate(['dashboard-backoffice/cargar-lotes']);
   }
+
+ 
+  clearFilter() {
+    this.cargarLotes();
+  }
+
+  onFilter(filtro: any) {
+    /* switch (filtro.tipo) {
+      case 'Buscar por Localidad':
+        this.filtrarPorLocalidad(filtro.valor);
+        break;
+      case 'Buscar por Productor':
+        this.filtrarPorProductor(filtro.valor);
+        break;
+      case 'Buscar por Cultivos':
+        this.filtrarPorCultivo(filtro.valor);
+        break;
+      case 'Buscar por Hectáreas':
+        this.aplicarFiltroHectareas(filtro.min, filtro.max);
+        break;
+    }*/
+  } 
 }

@@ -12,11 +12,9 @@ import {
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from 'src/app/services/ApiService';
-import { AuthService } from 'src/app/services/AuthService';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { ActivatedRoute } from '@angular/router';
 
 interface Usuario {
   id: number;
@@ -28,15 +26,7 @@ interface Role {
   name: string;
 }
 
-interface User {
-  id: number;
-  username: string;
-  account_active: boolean;
-  accountNonLocked: boolean;
-  failedAttempts: number;
-  lockeTime: string | null;
-  role: Role;
-}
+ 
 interface Location {
   id: number;
   name: string;
@@ -56,36 +46,12 @@ interface Person {
   canEdit: boolean | null;
 }
 
-interface Chacras{
-  id: number;
-  name: string;
-  address: {
-    address: string,
-    observations:string
-    location:
-    {
-    id: number,
-    name: string,
-    department_id: number
-    }
-    dimensions:number
-
-  }
-}
-interface ApiResponse {
-  list: Person[][];
-  pageNo: number;
-  pageSize: number;
-  pageTotal: number;
-  itemsTotal: number;
-  pageLast: boolean;
-  canEdit: boolean;
-}
+ 
+ 
 
 @Component({
   selector: 'app-perfil-productor',
-  templateUrl: './perfil-productor.component.html',
-  styleUrls: ['./perfil-productor.component.sass'],
+  templateUrl: './perfil-productor.component.html'
 })
 export class PerfilProductorComponent implements OnInit, AfterViewInit {
   usuario: any;
@@ -122,12 +88,10 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private authService: AuthService,
     private apiService: ApiService,
     private toastr: ToastrService,
     private router: Router,
-    private route: ActivatedRoute,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
   ) {
     this.userDetailsForm = this.formBuilder.group({
       email: [''],
@@ -142,6 +106,8 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    //ver ancho de pantalla 
+    const width = window.innerWidth;
     this.obtenerLocalidades();
 
     const usuarioData = localStorage.getItem('selectedUser');

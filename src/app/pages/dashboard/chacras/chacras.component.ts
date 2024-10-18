@@ -299,5 +299,5 @@ export class ChacrasComponent implements OnInit {
 
     this.router.navigate(['dashboard/detalle-campo']);
   }
-}
+} 
 

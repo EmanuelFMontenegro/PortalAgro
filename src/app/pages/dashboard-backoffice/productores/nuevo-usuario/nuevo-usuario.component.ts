@@ -10,8 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-nuevo-usuario',
-  templateUrl: './nuevo-usuario.component.html',
-  styleUrls: ['./nuevo-usuario.component.sass'],
+  templateUrl: './nuevo-usuario.component.html'
 })
 export class NuevoUsuarioComponent implements OnInit, AfterViewInit {
   userDetailsForm: FormGroup;

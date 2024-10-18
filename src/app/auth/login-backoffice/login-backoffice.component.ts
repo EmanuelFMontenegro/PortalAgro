@@ -77,7 +77,7 @@ export class LoginBackofficeComponent implements OnInit {
 
   ngOnInit(): void {
     this.adjustCardSize(false);
-    this.themeService.setTheme('dashboard');
+    
   }
   togglePasswordVisibility(): void {
     this.passwordVisible = !this.passwordVisible;
@@ -101,7 +101,8 @@ export class LoginBackofficeComponent implements OnInit {
             ) {
               // Usuario autenticado correctamente
               sessionStorage.setItem('token', response.body.token); // Cambiado a sessionStorage
-
+              await this.permisoService.getPermisos();
+              this.themeService.setTheme('backoffice');
               // PARA DIRIGIR A dashboard-backoffice o dashboard
               this.router.navigate(['/dashboard-backoffice']);
 

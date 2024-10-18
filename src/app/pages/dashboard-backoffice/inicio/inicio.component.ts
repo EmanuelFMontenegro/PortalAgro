@@ -20,7 +20,7 @@ interface DecodedToken {
 @Component({
   selector: 'app-inicio',
   templateUrl: './inicio.component.html',
-  styleUrls: ['./inicio.component.sass'],
+  styleUrls: ['./inicio.component.scss'],
 })
 export class InicioComponent implements OnInit {
   currentYear: number = new Date().getFullYear();
@@ -57,6 +57,7 @@ export class InicioComponent implements OnInit {
   dimensionsTouched = false;
   observationTouched = false;
   campoSeleccionado: any;
+  homeItems: any[] = [];
   constructor(
     private authService: AuthService,
     private apiService: ApiService,
@@ -75,6 +76,7 @@ export class InicioComponent implements OnInit {
     // this.campoData.geolocation = '';
     // this.cargarCampos();
     this.DatosDeUsuarioAdmin();
+    this.loadMenu();
   }
 
   decodeToken(): void {
@@ -125,6 +127,13 @@ export class InicioComponent implements OnInit {
         // Manejo adicional si es necesario
       }
     }
+  }
+
+  loadMenu(): void {
+    this.http.get<any>('../../assets/json/home-dashboard-bo.json').subscribe(data => {
+      this.homeItems = data.homeItems;
+      console.log(this.homeItems);
+    });
   }
 }
 

@@ -1,0 +1,41 @@
+<div [ngClass]="getCardClass()">
+  <div *ngFor="let miniatura of listado" [ngClass]="getItemClass()">
+    <!-- Img -->
+    <div>
+      <ng-container *ngFor="let item of dataView">
+        <img [ngClass]="getImageClass()" [src]="item.field" *ngIf="item.tipoLabel == tipoImagen">
+      </ng-container>
+    </div>
+    <!-- Header -->
+    <div [ngClass]="getHeaderClass()">
+      <ng-container *ngFor="let item of dataView">
+        <h3 [ngClass]="'cardCustomized-header-title'" *ngIf="item.tipoLabel == tipoTitulo">{{getValue(miniatura, item.field)}}</h3>
+        
+        <!-- Diferenciamos campo observation del resto, por el scroll del campo -->
+        <div *ngIf="(item.field == 'observation'); else span_normal">
+          <p [ngClass]="'cardCustomized-header-subtitle scroll-y size-40'" *ngIf="item.tipoLabel == tipoSpan">
+            <span>{{item?.label}}:</span> {{getValue(miniatura, item.field) ?? ' --- '}}
+          </p>
+        </div>
+        <ng-template #span_normal>
+          <p [ngClass]="'cardCustomized-header-subtitle'" *ngIf="item.tipoLabel == tipoSpan">
+            <span>{{item?.label}}:</span> {{getValue(miniatura, item.field) ?? ' --- '}}
+          </p>
+        </ng-template>
+      </ng-container>
+    </div>
+    <!-- Buttons -->
+    <div [ngClass]="getButtonClass()">
+      <ng-container *ngFor="let item of dataView">
+        <button *ngIf="item.tipoLabel == tipoVerLote" mat-raised-button class="primary-button" (click)="verMas(miniatura, item?.label, item?.field)">Ver Lotes</button>
+        <button *ngIf="item.tipoLabel == tipoGeolocalizar" mat-raised-button class="secondary-button border-primary" (click)="verMas(miniatura, item?.label, item?.field)">Ver Geolocalización</button>
+        <button *ngIf="item.tipoLabel == tipoEditar" mat-button class="basic-blue grow-1 size-48"  (click)="Editar(miniatura, item?.label, item?.field)">Editar</button>
+        <button *ngIf="item.tipoLabel == tipoEditarDevolviendo" mat-raised-button (click)="EditarDelviendo(item)">Editar</button>
+        <button *ngIf="item.tipoLabel == tipoEliminar"  mat-button class="basic-warning grow-1 size-48" (click)="eliminar(getValue(miniatura, item.field))">Eliminar</button>
+        <button class="primary-button" *ngIf="item.tipoLabel == tipoVerMas" mat-raised-button (click)="verMasWithParams(miniatura, item?.label, item?.field)">
+          Ver Más
+        </button>
+      </ng-container>
+    </div>
+  </div>
+</div>

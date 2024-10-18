@@ -1,68 +1,9 @@
-<div class="container">
-  <div class="titulo-perfil">
-    <span class="titulo-perfil">¡Bienvenido, {{ nombre }} {{ apellido }}!</span>
-  </div>
-  <div class="titulo-welcome">
-    <p>
-      Acá podrás gestionar, supervisar y controlar todas las actividades de los usuarios de
-      <strong>
-        <img src="assets/img/logo_AGROtech.svg" alt="AGROTECH"
-          style="width: auto; height: 1.3em; vertical-align: bottom;">
-      </strong>.
-    </p>
-  </div>
-
-  <div class="row">
-    <div class="col-md-4" (click)="navigateTo('servicios')">
-      <div class="card">
-        <div class="card-body">
-          <img src="assets/menu-backoffice/servicio_b.svg" alt="Solicitud y Servicios" class="icono-card">
-          <h5 class="card-title">Solicitudes y Servicios</h5>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4" (click)="navigateTo('productores')">
-      <div class="card">
-        <div class="card-body">
-          <img src="assets/menu-backoffice/usuario_b.svg" alt="Productores" class="icono-card">
-          <h5 class="card-title">Productores</h5>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4" (click)="navigateTo('chacras')">
-      <div class="card">
-        <div class="card-body">
-          <img src="assets/menu-backoffice/chacra_b.svg" alt="Chacra" class="icono-card">
-          <h5 class="card-title">Chacras</h5>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-4" (click)="navigateTo('calendarios')">
-      <div class="card">
-        <div class="card-body">
-          <img src="assets/menu-backoffice/calendario_b.svg" alt="Calendario" class="icono-card">
-          <h5 class="card-title-down">Calendario</h5>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4" (click)="navigateTo('planificaciones')">
-      <div class="card">
-        <div class="card-body">
-          <img src="assets/menu-backoffice/planificacion_b.svg" alt="Planificacion" class="icono-card">
-          <h5 class="card-title-down">Planificaciones</h5>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4" (click)="navigateTo('informes')">
-      <div class="card">
-        <div class="card-body">
-          <img src="assets/menu-backoffice/informes_b.svg" alt="Informes" class="icono-card">
-          <h5 class="card-title-down">Informes</h5>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="mainStructure">
+  <app-header-inner [title]="'Inicio'" [backButton]="false"></app-header-inner>
+<div class="cardHome">
+  <div class="cardHome-content" *ngFor="let item of homeItems" [routerLink]="item.route">
+    <img  src="assets/menu-backoffice/{{ item.icon }}" alt="{{ item.name }}">
+    <h2>  {{item.name}} </h2>  
+</div>
+</div>
 </div>

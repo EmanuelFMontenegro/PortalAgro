@@ -1,0 +1,25 @@
+@import 'src/shared-styles/mixins.scss';
+
+/* Como  esta card solo se utilizara en esta vista, no agregamos en _components */
+.cardHome {
+    @include grid-center-autofill(350px, 1fr, 30px, 15px);
+    max-width: 1150px;
+    height: 100%;
+  
+    &-content {
+      @include flexbox(row, center, center);
+      @include custom-card(347px, 170px);
+  
+      img {
+        padding-left: 16px;
+        width: 68px;
+        height: 68px;
+      }
+  
+      h2 {
+        @include font(26px, 600);
+        text-align: center;
+        width: 100%;
+      }
+    }
+  }

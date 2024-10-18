@@ -26,6 +26,9 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { HeaderInnerComponent } from './components/header-inner/header-inner.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { CardComponent } from './components/card/card.component';
+import { SearchbarComponent } from './components/searchbar/searchbar.component';
+import { MatButton, MatButtonModule } from '@angular/material/button';
 import { CalendarComponent } from './components/calendar/calendar.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { CalendarPopupComponent } from './components/calendar-popup/calendar-popup.component';
@@ -46,17 +49,14 @@ export const IMPORTS_MATERIAL = [
   MatOptionModule,
   MatCheckboxModule,
   MatSelectModule,
-  MatIconModule,
   MatChipsModule,
   MatCheckboxModule,
-  MatDialogModule,
   MatPaginatorModule,
   MatTabsModule,
   MatTooltipModule,
-    MatDatepickerModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatNativeDateModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
+  MatButtonModule,
 ];
 
 export const IMPORT_CORE = [CommonModule, FormsModule, ReactiveFormsModule];
@@ -74,10 +74,11 @@ export const CALENDAR = [FullCalendarModule];
     FooterComponent,
     PaginadorComponent,
     FooterComponent,
-    HeaderInnerComponent
+    HeaderInnerComponent,
+    SearchbarComponent
 
   ],
-  imports: [IMPORT_CORE, IMPORTS_MATERIAL, CALENDAR],
+  imports: [IMPORT_CORE, IMPORTS_MATERIAL, CALENDAR, CardComponent],
   exports: [
     IMPORT_CORE,
     IMPORTS_MATERIAL,
@@ -90,7 +91,8 @@ export const CALENDAR = [FullCalendarModule];
     CalendarPopupComponent,
     ToolbarComponent,
     FooterComponent,
-    HeaderInnerComponent
+    HeaderInnerComponent,CardComponent,
+    SearchbarComponent,
   ],
 })
 export class SharedModule {}
