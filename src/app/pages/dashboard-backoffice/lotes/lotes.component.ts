@@ -183,11 +183,20 @@ export class LotesComponent implements OnInit {
     );
   }
 
-  filtrarPorLocalidad(idLocalidadSeleccionada : number) {
-    if (!idLocalidadSeleccionada) {
+  filtrarPorLocalidad(buscar : string) {
+    console.log('buscar', buscar);
+    if (!buscar) {
       this.toastr.error('Por favor selecciona una localidad.', 'Error');
       return;
     }
+    const localidadSeleccionada = this.localidades.find(
+      (loc) => loc.name === buscar
+    );
+    if (!localidadSeleccionada) {
+      console.error('Localidad no encontrada');
+      return;
+    }
+    const locationId = localidadSeleccionada.id;
 
     this.apiService
       .getAllPlotsAdmin(
@@ -200,8 +209,7 @@ export class LotesComponent implements OnInit {
         undefined,
         undefined,
         undefined,
-        idLocalidadSeleccionada
-      )
+        locationId      )
       .subscribe(
         (data: any) => {
           if (data && data.list && data.list.length > 0) {

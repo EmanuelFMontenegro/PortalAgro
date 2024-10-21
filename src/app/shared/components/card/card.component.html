@@ -30,8 +30,8 @@
         <button *ngIf="item.tipoLabel == tipoVerLote" mat-raised-button class="primary-button" (click)="verMas(miniatura, item?.label, item?.field)">Ver Lotes</button>
         <button *ngIf="item.tipoLabel == tipoGeolocalizar" mat-raised-button class="secondary-button border-primary" (click)="verMas(miniatura, item?.label, item?.field)">Ver Geolocalización</button>
         <button *ngIf="item.tipoLabel == tipoEditar" mat-button class="basic-blue grow-1 size-48"  (click)="Editar(miniatura, item?.label, item?.field)">Editar</button>
-        <button *ngIf="item.tipoLabel == tipoEditarDevolviendo" mat-raised-button (click)="EditarDelviendo(item)">Editar</button>
-        <button *ngIf="item.tipoLabel == tipoEliminar"  mat-button class="basic-warning grow-1 size-48" (click)="eliminar(getValue(miniatura, item.field))">Eliminar</button>
+        <button *ngIf="item.tipoLabel == tipoEditarDevolviendo" class="basic-blue grow-1 size-48" mat-button (click)="EditarDelviendo(miniatura)">Editar</button>
+        <button *ngIf="item.tipoLabel == tipoEliminar"  mat-button class="basic-warning grow-1 size-48" (click)="eliminar(miniatura)">Eliminar</button>
         <button class="primary-button" *ngIf="item.tipoLabel == tipoVerMas" mat-raised-button (click)="verMasWithParams(miniatura, item?.label, item?.field)">
           Ver Más
         </button>

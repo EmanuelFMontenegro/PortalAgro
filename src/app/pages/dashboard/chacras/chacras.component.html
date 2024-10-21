@@ -1,46 +1,9 @@
 <div class="mainStructure"> 
  <app-header-inner [title]="'Chacras'" [backButton]="true"></app-header-inner>
-  <div class="search-bar">
-    <div class="search-bar-picker grow-1">
-      <mat-form-field appearance="outline" style="width: 100%;">
-        <mat-label>Ejemplos</mat-label>
-        <mat-select>
-          <mat-option *ngFor="let option of options" [value]="option">{{ option }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div class="search-bar-input-text grow-3" style="border-radius: 8px !important;">
-      <mat-form-field appearance="outline" style="width: 100%;">
-        <mat-label>Texto...</mat-label>
-        <input class="mat-elevation-z0" matInput [(ngModel)]="searchText" (keyup.enter)="onSearch()">
-      </mat-form-field>
-    </div>
-    <div class="search-bar-buttons">
-      <button class="secondary-button-auto grow-1 size-48" mat-raised-button><mat-icon>clear</mat-icon>Limpiar</button>
-      <button class="secondary-button-auto grow-1 size-48"  mat-raised-button><mat-icon>filter_list</mat-icon>Filtrar</button>
-      <button class="primary-button-auto grow-1 size-48" mat-raised-button (click)="newRanch()">Registrar Chacras</button>
-    </div>
-  </div>
-    <div class="cardContainerNoCentered">
-      <div class="cardCustomized" *ngFor="let campo of campos">
-        <img class="cardCustomized-img"   src="assets/img/Chacra_{{ campo.id }}.png" alt="Chacra {{ campo.id }}"  >
-        <div class="cardCustomized-header">
-          <h3 class="cardCustomized-header-title">{{ campo.name }}</h3>
-          <p class="cardCustomized-header-subtitle">
-            <span>Localidad:</span> {{ campo.location }}
-            <img src="assets/img/location.svg" alt="Icono"  ></p>
-            <p class="cardCustomized-header-subtitle">
-              <span>Heactareas:</span> {{ campo.dimensions }}
-            </p>
-            <p class="cardCustomized-header-subtitle scroll-y size-40">
-              <span>Descripción:</span> {{ campo.observation }}
-            </p>
-        </div>
-        <div class="cardCustomized-buttons"> 
-          <button class="primary-button"  mat-raised-button appearance="outline"  (click)="verLotes(campo)">Ver Lotes</button>
-          <button class="secondary-button border-primary"  mat-raised-button appearance="outline"  (click)="verMas(campo)">Ver Geolocalización</button>
-        </div>
-    </div>
-  </div>  
+ <app-searchbar  (filter)="onFilter($event)" (clearFilter)="clearFilter()" 
+ [options]="options" 
+ [localidadesOptions]="localidades"
+ [placeholder]="'Buscar por Localidad'" [btnAdd]="'Chacras'"></app-searchbar> 
+ <app-card [dataView]="dataView" [listado]="campos"  [typeCard]="'chacra'"></app-card> 
 </div>
  

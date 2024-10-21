@@ -98,6 +98,8 @@ export class CargarLoteComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  
+ 
     const campoSeleccionadoParam = localStorage.getItem('campoSeleccionado');
     const campoSeleccionado = campoSeleccionadoParam
       ? JSON.parse(campoSeleccionadoParam)
@@ -339,6 +341,7 @@ export class CargarLoteComponent implements OnInit {
 
 
   volver() {
+     
     this.router.navigate(['dashboard/chacras']);
   }
 

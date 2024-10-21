@@ -6,6 +6,7 @@ import { AuthService } from 'src/app/services/AuthService';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 
+import { TipoLabel, DataView } from 'src/app/shared/components/miniatura-listado/miniatura.model';
 interface CustomJwtPayload {
   userId: number;
   sub: string;
@@ -28,22 +29,8 @@ interface Chacra{
 })
 
 export class ChacrasComponent implements OnInit {
-  chacras: Chacra[] = [
-    {value: 'steak-0', viewValue: 'Steak'},
-    {value: 'pizza-1', viewValue: 'Pizza'},
-    {value: 'tacos-2', viewValue: 'Tacos'},
-  ];
-  tempCampos = [
-    {'id': 1, 'name': 'Campo 1', 'location': 'Misiones', 'dimensions': '50 hectáreas', 'description': ' Este campo de 50 hectáreas Este campo de 50 hectáreas Este campo de 50 hectáreas Este campo de 50 hectáreas Este campo de 50 hectáreas Este campo de 50 hectáreas, ubicado en la pintoresca región de Misiones, ofrece suelos fértiles y un clima ideal para la agricultura. Con vistas panorámicas a las colinas circundantes, es un lugar perfecto para la tranquilidad y la productividad.'},
-    {'id': 2, 'name': 'Campo 2', 'location': 'Misiones', 'dimensions': '50 hectáreas', 'description': 'Este campo de 50 hectáreas, ubicado en la pintoresca región de Misiones, ofrece suelos fértiles y un clima ideal para la agricultura. Con vistas panorámicas a las colinas circundantes, es un lugar perfecto para la tranquilidad y la productividad.'},
-    {'id': 3, 'name': 'Campo 3', 'location': 'Misiones', 'dimensions': '50 hectáreas', 'description': 'Este campo de 50 hectáreas, ubicado en la pintoresca región de Misiones, ofrece suelos fértiles y un clima ideal para la agricultura. Con vistas panorámicas a las colinas circundantes, es un lugar perfecto para la tranquilidad y la productividad.'},
-    {'id': 4, 'name': 'Campo 4', 'location': 'Misiones', 'dimensions': '50 hectáreas', 'description': 'Este campo de 50 hectáreas, ubicado en la pintoresca región de Misiones, ofrece suelos fértiles y un clima ideal para la agricultura. Con vistas panorámicas a las colinas circundantes, es un lugar perfecto para la tranquilidad y la productividad.'},
-    {'id': 5, 'name': 'Campo 5', 'location': 'Misiones', 'dimensions': '50 hectáreas', 'description': ' es un lugar perfecto para la tranquilidad y la productividad.'},
-    {'id': 6, 'name': 'Campo 6', 'location': 'Misiones', 'dimensions': '50 hectáreas', 'description': 'Este campo de 50 hectáreas, ubicado en la pintoresca región de Misiones, ofrece suelos fértiles y un clima ideal para la agricultura. Con vistas panorámicas a las colinas circundantes, es un lugar perfecto para la tranquilidad y la productividad.'},
-  ]
-  description: string = 'Este campo de 50 hectáreas, ubicado en la pintoresca región de Misiones, ofrece suelos fértiles y un clima ideal para la agricultura. Con vistas panorámicas a las colinas circundantes, es un lugar perfecto para la tranquilidad y la productividad.';
   searchText: string = '';
-  options: string[] = ['Option 1', 'Option 2', 'Option 3'];
+  options: string[] = ['Localidad', 'Productor', 'Nombre', 'Hectareas'];
   userLogeed=this.authService.userLogeed;
   currentYear: number = new Date().getFullYear();
   nombre: string = '';
@@ -58,6 +45,16 @@ export class ChacrasComponent implements OnInit {
   nombreLocalidad: string = '';
   localidades: any[] = [];
   campos: any[] = [];
+  dataView: DataView[] = [
+    { label: '', field: 'assets/img/Chacra_1.png', tipoLabel: TipoLabel.imagen },
+    { label: '', field: 'name', tipoLabel: TipoLabel.titulo },
+    { label: 'Localidad', field: 'address.location.name', tipoLabel: TipoLabel.span },
+    { label: 'Hectarias', field: 'dimensions', tipoLabel: TipoLabel.span },
+    { label: 'Descripción', field: 'observation', tipoLabel: TipoLabel.span }, 
+    { label: 'campoSeleccionado', field: 'dashboard/lote', tipoLabel: TipoLabel.botonVerLote },
+    { label: 'campoSeleccionado', field: 'dashboard/detalle-campo', tipoLabel: TipoLabel.botonGeo },
+
+  ]
   campoData = {
     name: '',
     dimensions: '',
@@ -89,6 +86,7 @@ export class ChacrasComponent implements OnInit {
     this.campoData.geolocation = '';
     this.cargarCampos();
     this.cargarDatosDeUsuario();
+    this.obtenerLocalidades();
   }
 
   // decodeToken(): void {
@@ -298,6 +296,162 @@ export class ChacrasComponent implements OnInit {
     );
 
     this.router.navigate(['dashboard/detalle-campo']);
+  }
+
+  clearFilter() {
+    this.cargarCampos();
+  }
+
+  onFilter(filtro: any) {
+      switch (filtro.tipo) {
+      case 'Buscar por Localidad':
+        this.filtrarPorLocalidad(filtro.valor);
+        break;
+      case 'Buscar por Productor':
+        this.filtrarPorProductor(filtro.valor);
+        break;
+      case 'Buscar por Nombre de Chacra':
+        this.filtrarPorNombreDeChacra(filtro.valor);
+        break;
+      case 'Buscar por Hectáreas':
+        this.filtrarPorHectareas(filtro.min, filtro.max);
+        break;
+    }  
+  }
+  
+  filtrarPorLocalidad(buscar: string) {
+    if (!buscar) {
+      console.error('Debe seleccionar una localidad');
+      return;
+    }
+    const localidadSeleccionada = this.localidades.find(
+      (loc) => loc.name === buscar
+    );
+    if (!localidadSeleccionada) {
+      console.error('Localidad no encontrada');
+      return;
+    }
+    const locationId = localidadSeleccionada.id;
+    this.apiService
+      .getUsersFields(0, 5, 'id', 'desc', true, '', '', locationId)
+      .subscribe(
+        (response) => {
+          if (response.list && response.list.length > 0) {
+            this.campos = response.list[0];
+          } else {
+            this.toastr.info(
+              'No existen campos registrados con esta localidad',
+              'Información'
+            );
+            this.campos = [];
+          }
+        },
+        (error) => {
+          console.error('Error al obtener campos:', error);
+        }
+      );
+  }
+
+  filtrarPorNombreDeChacra(nombreChacra: string) {
+    if (!nombreChacra || nombreChacra.trim() === '') {
+      console.error('Debe ingresar un nombre de chacra');
+      return;
+    }
+    this.apiService
+      .getUsersFields(0, 5, 'id', 'desc', true, '', nombreChacra)
+      .subscribe(
+        (response) => {
+          if (response.list && response.list.length > 0) {
+            this.campos = response.list[0];
+          } else {
+            this.toastr.info(
+              'No existen campos registrados con este nombre de chacra',
+              'Información'
+            );
+            this.campos = [];
+          }
+        },
+        (error) => {
+          console.error('Error al obtener campos:', error);
+        }
+      );
+  }
+
+  filtrarPorHectareas(minHectareas: number, maxHectareas: number) {
+    if (minHectareas === undefined || maxHectareas === undefined || isNaN(minHectareas) || isNaN(maxHectareas)) {
+      console.error('Debe ingresar valores válidos para el rango de hectáreas');
+      return;
+    }
+    // Convertir las cadenas de texto a números
+    const minHectareasNum = minHectareas;
+    const maxHectareasNum = maxHectareas;
+    this.apiService
+      .getUsersFields(
+        0,
+        5,
+        'id',
+        'desc',
+        true,
+        '',
+        '',
+        null,
+        null,
+        minHectareasNum,
+        maxHectareasNum
+      ).subscribe(
+        (response) => {
+          if (response.list && response.list.length > 0) {
+            this.campos = response.list[0];
+          } else {
+            this.toastr.info(
+              'No existen campos registrados dentro de este rango de hectáreas',
+              'Información'
+            );
+            this.campos = [];
+          }
+        },
+        (error) => {
+          console.error('Error al obtener campos:', error);
+        }
+      );
+  }
+
+  filtrarPorProductor(nombreProductor: string) {
+    // Verificar si se ha ingresado un nombre de productor
+    if (!nombreProductor || nombreProductor.trim() === '') {
+      console.error('Debe ingresar un nombre de productor');
+      return;
+    }
+    this.apiService
+      .getUsersFields(
+        0, // pageNo
+        5, // pageSize
+        'id', // sortBy
+        'desc', // sortDir
+        true, // isActive
+        nombreProductor // producerNames
+        // '', // filedName
+        // null, // locationId
+        // null, // person_id
+        // null, // dimMin
+        // null // dimMax
+      )
+      .subscribe(
+        (response) => {
+          if (response.list && response.list.length > 0) {
+            this.campos = response.list[0];
+          } else {
+            this.toastr.info(
+              'No existen campos registrados con este productor',
+              'Información'
+            );
+            this.campos = [];
+          }
+        },
+        (error) => {
+          console.error('Error al obtener campos:', error);
+        }
+      );
   }
 } 
 

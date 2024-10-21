@@ -36,6 +36,7 @@
         <button class="secondary-button-auto grow-1 size-48" mat-raised-button (click)="limpiarTexto()"><mat-icon>clear</mat-icon>Limpiar</button>
         <button class="secondary-button-auto grow-1 size-48" mat-raised-button (click)="onFiltrar()"  ><mat-icon>filter_list</mat-icon>Filtrar</button>
        <button class="primary-button-auto grow-1 size-48" mat-raised-button  *ngIf="btnAdd === 'Chacras'"   (click)="addType('chacras')">Registrar Chacras</button>
+        <button class="primary-button-auto grow-1 size-48" mat-raised-button  *ngIf="btnAdd === 'Lotes'"   (click)="addType('Lotes')">Nuevo Lote</button>
          <button class="primary-button-auto grow-1 size-48" mat-raised-button  *ngIf="btnAdd === 'Productor'"   (click)="addType('Productor')">Nuevo Usuario</button> 
          <button class="primary-button-auto grow-1 size-48" mat-raised-button  *ngIf="btnAdd === 'Chacras-p'"   (click)="addType('Chacras-p')">Registrar Chacra</button> 
         </div>

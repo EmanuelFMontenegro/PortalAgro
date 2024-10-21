@@ -52,14 +52,22 @@ export class SearchbarComponent    {
     }
   }
   addType(route : string) {
-    if (this.btnAdd === 'Chacras') {
-      this.router.navigate(['/dashboard/' + this.btnAdd]);
-    }
-    if (this.btnAdd === 'Productor') {
-      this.router.navigate(['dashboard-backoffice/nuevo-usuario']);
-    }
-    if (this.btnAdd === 'Chacras-p') {
-      this.router.navigate(['dashboard-backoffice/cargar-chacras']);
+    switch (this.btnAdd) {
+      case 'Chacras':
+        this.router.navigate(['/dashboard/campo']);
+        break;
+      case 'Productor':
+        this.router.navigate(['dashboard-backoffice/nuevo-usuario']);
+        break;
+      case 'Chacras-p':
+        this.router.navigate(['dashboard-backoffice/cargar-chacras']);
+        break;
+      case 'Lotes':
+        this.router.navigate(['dashboard/cargar-lote'], {
+          state: { modoEdicion: false },
+        });
+        break; 
+         
     }
   }
 
