@@ -1,6 +1,6 @@
 <div class="tab-base shadow">
   <ng-container *ngIf="displayApp == display">
-    <div class="label-estado"><strong>Estado: </strong>{{this.datosApp?.status?.name}}</div>
+    <div class="label-estado" [ngClass]="{'service-backOffice': this.backOffice}"><strong>Estado: </strong>{{this.datosApp?.status?.name}}</div>
     <strong style="float: right;">Hectáreas totales: {{this.datosApp?.hectare}}</strong>
     <br>
     <br>
@@ -45,7 +45,7 @@
                 <p>{{this.datosApp?.dateOfVisit ?? 'No establecida'}} </p>
               </div>
               <div *ngIf="tareasDroneApp" class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 tx-center">
-                <button class="back-button2 btn-grande label2" (click)="this.tareasDrone()">Tareas del drone</button>
+                <button class="back-button2 btn-grande label2" [ngClass]="{'service-backOffice': this.backOffice}" (click)="this.tareasDrone()">Tareas del drone</button>
               </div>
             </div>
           </div>
@@ -60,11 +60,11 @@
           <textarea [formControl]="ctrlObservaciones" appearance="outline" floatLabel="always" placeholder="Observaciones" matInput class="observaciones h-100" ></textarea>
         </div>
         <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
-          <button class="back-button2 btn-grande label2" (click)="this.mostrarInsumos()">INSUMOS</button>
+          <button class="back-button2 btn-grande label2" [ngClass]="{'service-backOffice': this.backOffice}" (click)="this.mostrarInsumos()">INSUMOS</button>
           <br>
-          <button class="back-button2 btn-grande label2" (click)="this.mostrarImagenes()">IMÁGENES</button>
+          <button class="back-button2 btn-grande label2"  [ngClass]="{'service-backOffice': this.backOffice}" (click)="this.mostrarImagenes()">IMÁGENES</button>
           <br>
-          <button *ngIf="editarDatosApp" class="back-button2 btn-grande label2" (click)="this.editarDatos()">EDITAR DATOS</button>
+          <button *ngIf="editarDatosApp" class="back-button2 btn-grande label2" [ngClass]="{'service-backOffice': this.backOffice}" (click)="this.editarDatos()">EDITAR DATOS</button>
 
         </div>
       </div>

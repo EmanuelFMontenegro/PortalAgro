@@ -4,6 +4,7 @@ import moment from 'moment';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from 'src/app/services/ApiService';
 import { ServiciosService } from 'src/app/services/servicios.service';
+import { ServicioInterno } from '../../../servicios-interno.service';
 import { DetalleServicioService } from '../../detalle-servicio.service';
 import { TiposDisplayTecnico } from '../tab-datos-tecnicos.component';
 
@@ -22,6 +23,7 @@ export class EditarDatosComponent {
   listadoHorarios: any[] = this.getHoras()
   abastecimientoAgua: any[] = [{ descripcion: 'SI', value: true }, { descripcion: 'NO', value: false }]
   minDate = new Date()
+  backOffice = false;
   // controlName
   ctrl_typeCrop_id = 'typeCrop_id'
   ctrl_dateOfVisit = "dateOfVisit"
@@ -45,12 +47,14 @@ export class EditarDatosComponent {
   constructor(private toastr: ToastrService,
     private serviciosService: ServiciosService,
     private apiService: ApiService,
+    private servicioInterno : ServicioInterno,
     private detalleService: DetalleServicioService,) {
 
   }
 
   ngOnInit(): void {
     this.servicio = this.detalleService.servicio;
+    this.backOffice =  this.servicioInterno.backOffice?.value
     this.datosTecnico = this.detalleService.datosTecnico
     this.setFormDatosTecnicos()
     this.getTiposPlantacion()

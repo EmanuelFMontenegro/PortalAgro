@@ -8,6 +8,7 @@ import { ApiService } from 'src/app/services/ApiService';
 import { DronService } from 'src/app/services/dron.service';
 import { ServiciosService } from 'src/app/services/servicios.service';
 import { TipoLabel } from 'src/app/shared/components/miniatura-listado/miniatura.model';
+import { ServicioInterno } from '../../../servicios-interno.service';
 import { DetalleServicioService } from '../../detalle-servicio.service';
 import { TiposDisplayTecnico } from '../../tab-datos-tecnicos/tab-datos-tecnicos.component';
 import { TiposDisplayApp } from '../tab-datos-app.component';
@@ -18,6 +19,7 @@ import { TiposDisplayApp } from '../tab-datos-app.component';
   styleUrls: ['./tareas-del-drone.component.scss']
 })
 export class TareasDelDroneComponent {
+  @Output() btnVolver = new EventEmitter<any>();
 
   editar = false;
   servicio: any;
@@ -42,7 +44,9 @@ export class TareasDelDroneComponent {
   // controlName
   ctrl_droneAssigned = 'droneAssigned'
   ctrl_productInput = 'productInput'
+  ctrl_intDate = 'intDate'
   ctrl_intHour = 'intHour'
+  ctrl_endDate = 'endDate'
   ctrl_endHour = 'endHour'
   ctrl_hectare = 'hectare'
   ctrl_observation = 'observation'
@@ -50,22 +54,28 @@ export class TareasDelDroneComponent {
   public form: FormGroup = new FormGroup({
     [this.ctrl_droneAssigned]: new FormControl(null, Validators.required),
     [this.ctrl_productInput]: new FormControl(null, Validators.required),
+    [this.ctrl_intDate]: new FormControl(null, Validators.required),
     [this.ctrl_intHour]: new FormControl(null, Validators.required),
     [this.ctrl_hectare]: new FormControl(null, Validators.required),
+    [this.ctrl_endDate]: new FormControl(''),
     [this.ctrl_endHour]: new FormControl(''),
     [this.ctrl_observation]: new FormControl(''),
   })
-  @Output() btnVolver = new EventEmitter<any>();
+  backOffice = false;
+  horaInicio = '';
+  horaFin = '';
 
   constructor(private toastr: ToastrService,
     private serviciosService: ServiciosService,
     private dialog: MatDialog,
     private droneService:DronService,
+    private servicioInterno : ServicioInterno,
     private detalleService: DetalleServicioService){
       this.tareasDroneApp = this.detalleService.permisos?.jobOperator?.WRITE ?? false
     }
 
   ngOnInit(): void {
+    this.backOffice = this.servicioInterno.backOffice?.value
     this.servicio = this.detalleService.servicio;
     this.getDatosTask()
     this.setMiniaturas()
@@ -80,7 +90,6 @@ export class TareasDelDroneComponent {
     await this.getTaskDrone()
     this.getDrones()
     this.getInsumos()
-    this.setFormTareaDrone()
   }
 
   getHoras() {
@@ -95,8 +104,6 @@ export class TareasDelDroneComponent {
   }
 
   setFormTareaDrone() {
-  setTimeout(() => {
-    console.log("los datos de la app", this.tareasDrone)
     this.form.patchValue(
       {
         droneAssigned: this.tareasDrone?.droneAssigned?.id,
@@ -107,25 +114,36 @@ export class TareasDelDroneComponent {
         observation: this.tareasDrone?.observation
       }
     )
-  }, 2000);
-
     console.log(this.form.value)
- /*    this.form.disable() */
+  }
+
+  tareaSeleccionada(tarea:any){
+    console.log(tarea)
+    this.mostrarListado = false;
+
   }
 
   getTipoDate(fechaStr: string) {
-    const formato = 'DD/MM/YYYY HH:mm';
+    const formato = 'DD/MM/YYYY';
     const fechaMoment = moment(fechaStr, formato);
 
     return (!fechaMoment.isValid()) ? null : fechaMoment.toDate();
   }
 
-  cancelar() {
-    this.form.disable()
+  async cancelar() {
     this.mostrarListado = true;
+    this.editar = false;
+    this.form.disable()
+    await this.getTaskDrone()
+  }
+
+  editarTarea(){
+    this.form.enable()
+    this.editar = true;
   }
 
   volver() {
+    this.form.disable()
     this.btnVolver.emit(TiposDisplayApp.app)
   }
 
@@ -140,6 +158,7 @@ export class TareasDelDroneComponent {
 
   openABM() {
     this.mostrarListado = false;
+    this.setFormTareaDrone()
   }
 
   dialogConfirmacionEliminar(valor:any){
@@ -204,13 +223,26 @@ export class TareasDelDroneComponent {
     }
 
     let body = this.form.getRawValue();
+
+    // HORA DE INICIO
     if (!body.observation) body.observation = ''
-    body.intHour = moment(body.intHour).format('DD/MM/YYYY HH:mm');
-    if(body?.endHour){
-      body.endHour = moment(body.endHour).format('DD/MM/YYYY HH:mm')
+    let horaInicio = body.intHour
+    body.intHour = moment(body.intDate).format('DD/MM/YYYY') +' '+ horaInicio ;
+
+
+    // HORA DE FIN
+    if(body?.endHour && body.endDate){
+      let horaFin = body?.endHour;
+      body.endHour = moment(body.endDate).format('DD/MM/YYYY')+' '+ horaFin;
     }else{
       body.endHour = ''
     }
+
+
+    delete body.intDate
+    delete body.endDate
+
+    console.log(body)
 
     if(this.tareasDrone?.id){
       this.putDroneTask(body);

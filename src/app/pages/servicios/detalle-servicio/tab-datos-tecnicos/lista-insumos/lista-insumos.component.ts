@@ -7,6 +7,7 @@ import { DialogComponent } from 'src/app/pages/dashboard/dialog/dialog.component
 import { InsumoService } from 'src/app/services/insumo.service';
 import { ServiciosService } from 'src/app/services/servicios.service';
 import { TipoLabel } from 'src/app/shared/components/miniatura-listado/miniatura.model';
+import { ServicioInterno } from '../../../servicios-interno.service';
 import { DetalleServicioService } from '../../detalle-servicio.service';
 import { TiposDisplayTecnico } from '../tab-datos-tecnicos.component';
 
@@ -21,6 +22,7 @@ export class ListaInsumosComponent {
   listadoTiposInsumos: any;
   listadoInsumos:any;
   servicio: any;
+  backOffice = false;
 
   // controlName
   ctrlProducto = "productInput"
@@ -46,12 +48,14 @@ export class ListaInsumosComponent {
     private toastr: ToastrService,
     private serviciosService: ServiciosService,
     private dialog: MatDialog,
+    private servicioInterno : ServicioInterno,
     private detalleService: DetalleServicioService,
     private insumosService: InsumoService
   ){
   }
 
   ngOnInit(): void {
+    this.backOffice =  this.servicioInterno.backOffice?.value
     this.servicio = this.detalleService.servicio;
     this.setMiniaturas()
     this.getInsumos()
@@ -59,7 +63,7 @@ export class ListaInsumosComponent {
   }
 
   setMiniaturas(){
-   if(this.detalleService.permisos?.jobTechnical?.WRITE)
+   if(this.detalleService.permisos?.jobTechnical?.WRITE || this.detalleService.permisos?.jobTechnical?.WRITE_MY)
    this.dataView.push({label: 'Eliminar', field: 'id', tipoLabel: TipoLabel.botonEliminar})
   }
 

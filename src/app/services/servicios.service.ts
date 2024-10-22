@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
 import { environment } from "../../environments/environment";
 import { Piloto } from "../models/servicios.models";
+import { ServicioInterno } from "../pages/servicios/servicios-interno.service";
 
 @Injectable({
   providedIn: 'root',
@@ -10,28 +11,39 @@ import { Piloto } from "../models/servicios.models";
 export class ServiciosService {
   private empresaCotizar = new BehaviorSubject<any>(null);
   getEmprezaCotizar = this.empresaCotizar.asObservable();
+  urlBase = ''
+  backOffice = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,
+              private servicioInterno: ServicioInterno){
+                this.servicioInterno.backOffice$.subscribe(
+                  (value:any) => {
+                    this.backOffice = value
+                    this.urlBase = `${environment.apiUrl}${value ? '/dist': '/user'}`
+                  }
+                )
+              }
 
-    getServiciosByProductor(): Observable<any>{
-      let url =  `${environment.apiUrl}/user/service/all`;
-      return this.http.get(url);
-    }
+    // getServiciosByProductor(): Observable<any>{
+    //   let url =  `${this.urlBase}/service/all`;
+    //   return this.http.get(url);
+    // }
 
-    getServicioProductor(id:number): Observable<any>{
-      let url =  `${environment.apiUrl}/user/service/${id}`;
-      return this.http.get(url);
-    }
+    // getServicioProductor(id:number): Observable<any>{
+    //   let url =  `${this.urlBase}/service/${id}`;
+    //   return this.http.get(url);
+    // }
 
-    postServicioByProductor(body: any, productorId: number){
-      let url = `${environment.apiUrl}/user/service`
-      return this.http.post(url, body);
-    }
+    // postServicioByProductor(body: any, productorId: number){
+    //   let url = `${this.urlBase}/service`
+    //   return this.http.post(url, body);
+    // }
 
     // BACK OFFICE
 
+
     getAllStatus(): Observable<any> {
-      let url = `${environment.apiUrl}/status/all`;
+      let url = `${this.urlBase}/status/all`;
       return this.http.get(url, {
         params: {
           sortBy: 'id',
@@ -43,90 +55,91 @@ export class ServiciosService {
     }
 
     getStatusById(id: number): Observable<any> {
-      let url = `${environment.apiUrl}/status/${id}`;
+      let url = `${this.urlBase}/status/${id}`;
       return this.http.get(url);
     }
 
     getServicios(): Observable<any>{
-      let url =  `${environment.apiUrl}/dist/service/all`;
+      let url =  `${this.urlBase}/service/all`;
+      console.log(url)
       return this.http.get(url);
     }
 
     getServiciosFiltrados(pageSize: number): Observable<any>{
-      let url =  `${environment.apiUrl}/dist/service/all?sortBy=id&sortDir=DESC&pageSize=${pageSize}&pageNo=0&nickname=op&code=3&model=&brand=&isActive=true`;
+      let url =  `${this.urlBase}/service/all?sortBy=id&sortDir=DESC&pageSize=${pageSize}&pageNo=0&nickname=op&code=3&model=&brand=&isActive=true`;
       return this.http.get(url);
     }
 
     putAprovedService(body: any, serviceId: number): Observable<any> {
-      let url = `${environment.apiUrl}/dist/service/${serviceId}/approved`;
+      let url = `${this.urlBase}/service/${serviceId}/approved`;
       return this.http.put(url, body);
     }
 
 
     getServicio(id:number): Observable<any>{
-      let url =  `${environment.apiUrl}/dist/service/${id}`;
+      let url =  `${this.urlBase}/service/${id}`;
       return this.http.get(url);
     }
 
     postServicio(body: any){
-      let url = `${environment.apiUrl}/dist/service`
+      let url = `${this.urlBase}/service`
       return this.http.post(url, body);
     }
 
     putServicio(body: any , id: number){
-      let url = `${environment.apiUrl}/dist/service/${id}`
+      let url = `${this.urlBase}/service/${id}`
       return this.http.put(url, body);
     }
 
     // TECNICO
 
     getTecnico(idServicio: number){
-      let url =  `${environment.apiUrl}/dist/service/${idServicio}/jobtechnical`;
+      let url =  `${this.urlBase}/service/${idServicio}/jobtechnical`;
       return this.http.get(url);
     }
 
     putDatosTecnico(idServicio:number, body: any){
-      let url =  `${environment.apiUrl}/dist/service/${idServicio}/jobtechnical`;
+      let url =  `${this.urlBase}/service/${idServicio}/jobtechnical`;
       return this.http.put(url, body);
     }
 
     getDronesTask(idServicio:number){
-      let url =  `${environment.apiUrl}/dist/service/${idServicio}/joboperator/dronetask/all`;
+      let url =  `${this.urlBase}/service/${idServicio}/joboperator/dronetask/all`;
       return this.http.get(url);
     }
 
     postDroneTask(idServicio:number, body: any){
-      let url = `${environment.apiUrl}/dist/service/${idServicio}/joboperator/dronetask`;
+      let url = `${this.urlBase}/service/${idServicio}/joboperator/dronetask`;
       return this.http.post(url, body);
     }
 
     putDroneTask(idServicio:number, body: any, taskId: number){
-      let url = `${environment.apiUrl}/dist/service/${idServicio}/joboperator/dronetask/${taskId}`;
+      let url = `${this.urlBase}/service/${idServicio}/joboperator/dronetask/${taskId}`;
       return this.http.put(url, body);
     }
 
     getPriporidades(): Observable<any>{
-      let url =  `${environment.apiUrl}/priority/all`
+      let url =  `${this.urlBase}/priority/all`
       return this.http.get(url);
     }
 
     getInsumosTecnico(idServicio: number){
-      let url =  `${environment.apiUrl}/dist/service/${idServicio}/jobtechnical/application/all`;
+      let url =  `${this.urlBase}/service/${idServicio}/jobtechnical/application/all`;
       return this.http.get(url);
     }
 
     getImagenesTecnico(idServicio: number){
-      let url =  `${environment.apiUrl}/dist/service/${idServicio}/jobtechnical/images/all`;
+      let url =  `${this.urlBase}/service/${idServicio}/jobtechnical/images/all`;
       return this.http.get(url);
     }
 
     getImagenTecnicoById(idServicio: number, idImagen:number){
-      let url =  `${environment.apiUrl}/dist/service/${idServicio}/jobtechnical/images/${idImagen}/img`;
+      let url =  `${this.urlBase}/service/${idServicio}/jobtechnical/images/${idImagen}/img`;
       return this.http.get(url);
     }
 
     deleteImagenTecnico(idServicio: number , idInsumo: number){
-      let url =  `${environment.apiUrl}/dist/service/${idServicio}/jobtechnical/images/${idInsumo}`;
+      let url =  `${this.urlBase}/service/${idServicio}/jobtechnical/images/${idInsumo}`;
       return this.http.delete(url);
     }
 
@@ -136,44 +149,44 @@ export class ServiciosService {
       formData.append('description', file?.description);
       formData.append('imageJob', file?.imageJob);
 
-      let url = `${environment.apiUrl}/dist/service/${idServicio}/jobtechnical/images`;
+      let url = `${this.urlBase}/service/${idServicio}/jobtechnical/images`;
       return this.http.post(url, formData);
     }
 
 
     deleteInsumosTecnico(idServicio: number , idInsumo: number){
-      let url =  `${environment.apiUrl}/dist/service/${idServicio}/jobtechnical/application/${idInsumo}`;
+      let url =  `${this.urlBase}/service/${idServicio}/jobtechnical/application/${idInsumo}`;
       return this.http.delete(url);
     }
 
     postDatosTecnicos(servicioId: number, body: any){
-      let url = `${environment.apiUrl}/dist/service/${servicioId}/jobtechnical/application`
+      let url = `${this.urlBase}/service/${servicioId}/jobtechnical/application`
       return this.http.post(url, body);
     }
 
     putInsumosServicio(idServicio: number , idInsumo: number, insumo: any){
-      let url =  `${environment.apiUrl}/dist/service/${idServicio}/jobtechnical/application/${idInsumo}`;
+      let url =  `${this.urlBase}/service/${idServicio}/jobtechnical/application/${idInsumo}`;
       return this.http.put(url,insumo);
     }
 
     // PILOTO
     getApp(idServicio: number): Observable<Piloto>{
-      let url =  `${environment.apiUrl}/dist/service/${idServicio}/joboperator`;
+      let url =  `${this.urlBase}/service/${idServicio}/joboperator`;
       return this.http.get(url);
     }
 
     putDatosApp(idServicio:number, body: any){
-      let url =  `${environment.apiUrl}/dist/service/${idServicio}/joboperator`;
+      let url =  `${this.urlBase}/service/${idServicio}/joboperator`;
       return this.http.put(url, body);
     }
 
     putInsumoApp(idServicio: number , idInsumo: number, body: any){
-      let url =  `${environment.apiUrl}/dist/service/${idServicio}/joboperator/application/${idInsumo}/productinput`;
+      let url =  `${this.urlBase}/service/${idServicio}/joboperator/application/${idInsumo}/productinput`;
       return this.http.put(url, body);
     }
 
     deleteTareaDrone(idServicio: number , idTask: number){
-      let url =  `${environment.apiUrl}/dist/service/${idServicio}/joboperator/dronetask/${idTask}`;
+      let url =  `${this.urlBase}/service/${idServicio}/joboperator/dronetask/${idTask}`;
       return this.http.delete(url);
     }
 

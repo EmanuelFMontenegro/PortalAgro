@@ -1,6 +1,6 @@
 <div class="tab-base shadow">
   <ng-container *ngIf="displayTecnico == display">
-    <div class="label-estado"><strong>Estado: </strong>{{this.datosTecnico?.status?.name}}</div>
+    <div class="label-estado" [ngClass]="{'service-backOffice': this.backOffice}"><strong>Estado: </strong>{{this.datosTecnico?.status?.name}}</div>
     <strong style="float: right;">Hectáreas totales: {{this.datosTecnico?.hectare}}</strong>
     <br>
     <br>
@@ -53,11 +53,11 @@
           <textarea [formControl]="ctrlObservaciones" appearance="outline" floatLabel="always" placeholder="Observaciones" matInput class="observaciones h-100" ></textarea>
         </div>
         <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
-          <button class="back-button2 btn-grande label2" (click)="this.mostrarInsumos()">INSUMOS</button>
+          <button class="back-button2 btn-grande label2" (click)="this.mostrarInsumos()" [ngClass]="{'service-backOffice': this.backOffice}" >INSUMOS</button>
           <br>
-          <button class="back-button2 btn-grande label2" (click)="this.mostrarImagenes()">IMÁGENES</button>
+          <button class="back-button2 btn-grande label2" (click)="this.mostrarImagenes()" [ngClass]="{'service-backOffice': this.backOffice}">IMÁGENES</button>
           <br>
-          <button *ngIf="editarDatosTecnicos" class="back-button2 btn-grande label2" (click)="this.editarDatos()">EDITAR DATOS</button>
+          <button *ngIf="editarDatosTecnicos" class="back-button2 btn-grande label2" (click)="this.editarDatos()" [ngClass]="{'service-backOffice': this.backOffice}">EDITAR DATOS</button>
 
         </div>
       </div>

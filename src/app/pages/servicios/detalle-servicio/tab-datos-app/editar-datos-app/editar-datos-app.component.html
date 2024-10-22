@@ -1,7 +1,7 @@
 <div class="div-datos">
   <div class="title-datos">
     Editar Datos
-   <button *ngIf="!editar" class="back-button2 btn-cargar" (click)="editarDatos()"> Editar</button>
+   <button *ngIf="!editar" class="back-button2 btn-cargar" [ngClass]="{'service-backOffice': this.backOffice}"  (click)="editarDatos()"> Editar</button>
   </div>
   <div class="body-datos">
       <div class="formulario" [formGroup]="form">
@@ -23,10 +23,10 @@
  </div>
       </div>
 
-      <button  *ngIf="editar"   class="back-button2" (click)="cancelar()"> Cancelar</button>
-      <button  *ngIf="editar"   class="back-button2" (click)="aceptar()"> Cargar datos app</button>
+      <button  *ngIf="editar"   class="back-button2" [ngClass]="{'service-backOffice': this.backOffice}"  (click)="cancelar()"> Cancelar</button>
+      <button  *ngIf="editar"   class="back-button2" [ngClass]="{'service-backOffice': this.backOffice}"  (click)="aceptar()"> Cargar datos app</button>
 
   </div>
 
-  <button  *ngIf="!editar" class="back-button2" (click)="volver()">  Volver Atrás</button>
+  <button  *ngIf="!editar" class="back-button2" [ngClass]="{'service-backOffice': this.backOffice}"  (click)="volver()">  Volver Atrás</button>
 </div>

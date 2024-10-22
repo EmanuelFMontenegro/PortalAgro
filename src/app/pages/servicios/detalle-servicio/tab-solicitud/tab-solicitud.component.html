@@ -1,7 +1,7 @@
 <div class="tab-base">
   <div class="row">
     <div class="col-3" *ngIf=" display == tipoDisplay.solicitud">
-      <div class="label-estado">
+      <div class="label-estado" [ngClass]="{'service-backOffice': this.backOffice}">
         <strong>Estado: </strong>{{ this.servicio?.status?.name }}
       </div>
     </div>
@@ -39,14 +39,14 @@
                   <div class="mb-15"><strong>Técnico</strong></div>
                   <p>{{this.servicio?.jobTechnical ? this.servicio?.jobTechnical.employee?.lastname +' '+this.servicio?.jobTechnical.employee?.name  :'Sin asignar'}}</p>
                   <p>  <a href="tel:{{this.servicio?.jobTechnical?.employee?.telephone}}" *ngIf="this.servicio?.jobTechnical">{{this.servicio?.jobTechnical?.employee?.telephone}}</a></p>
-                  <button *ngIf="asigTecnico" class="back-button2" (click)="asignarTecnico()">Asignar</button>
+                  <button *ngIf="asigTecnico" class="back-button2" [ngClass]="{'service-backOffice': this.backOffice}" (click)="asignarTecnico()">Asignar</button>
               </div>
                 <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 tx-center">
                     <img class="container-icon" src="../../../../../assets/icons-servicio/carbon_drone.svg" alt="drone" >
                     <div class="mb-15"><strong>Piloto</strong> </div>
                     <p>{{this.servicio?.jobOperator ? this.servicio?.jobOperator.employee?.lastname +' '+this.servicio?.jobOperator.employee?.name  : 'Sin asignar'}}</p>
                     <p> <a href="tel:{{this.servicio?.jobOperator?.employee?.telephone}}" *ngIf="this.servicio?.jobOperator">{{this.servicio?.jobOperator?.employee?.telephone}}</a></p>
-                    <button *ngIf="asigPiloto" class="back-button2" (click)="asignarPiloto()">Asignar</button>
+                    <button *ngIf="asigPiloto" class="back-button2" [ngClass]="{'service-backOffice': this.backOffice}" (click)="asignarPiloto()">Asignar</button>
                 </div>
               </div>
             </div>
@@ -56,7 +56,7 @@
               <div class="mini-card h-100">
               <div class="en-linea titulo-mini-card mb-10">
                 <div class="titulo-subra">Detalles</div>
-                <button class="back-button2 btn-volver" (click)="verLotes()">Ver lotes</button>
+                <button class="back-button2 btn-volver" [ngClass]="{'service-backOffice': this.backOffice}" (click)="verLotes()">Ver lotes</button>
               </div>
                <br>
                <br>

@@ -1,13 +1,13 @@
 <div class="div-datos">
   <div class="title-datos">
     Tareas del drone
-    <button *ngIf="mostrarListado && tareasDroneApp" class="back-button2 btn-cargar" (click)="openABM()"> Cargar Tareas</button>
+    <button *ngIf="mostrarListado && tareasDroneApp" class="back-button2 btn-cargar" [ngClass]="{'service-backOffice': this.backOffice}" (click)="openABM()"> Cargar Tareas</button>
   </div>
   <div class="body-datos">
 
     <ng-container *ngIf="mostrarListado else abm">
       <ng-container *ngIf="this.tareasDrone?.length else listadoVacio">
-       <miniatura [dataView]="dataView" (btnEliminar)="dialogConfirmacionEliminar($event)" [listado]="this.tareasDrone"></miniatura>
+       <miniatura [dataView]="dataView" (btnEditarDevolverObjeto)="tareaSeleccionada($event)" (btnEliminar)="dialogConfirmacionEliminar($event)" [listado]="this.tareasDrone"></miniatura>
       </ng-container>
 
      <ng-template #listadoVacio>
@@ -19,6 +19,9 @@
 
  <ng-template #abm>
   <div class="formulario" [formGroup]="form">
+    <div class="title-datos">
+      <button *ngIf="tareasDroneApp" class="back-button2 btn-cargar" [ngClass]="{'service-backOffice': this.backOffice}" (click)="editarTarea()"> Editar Tarea</button>
+    </div>
     <div class="row">
       <div class="col-12">
         <div class="field-container">
@@ -54,24 +57,40 @@
         </div>
       </div>
 
-      <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-        <mat-label class="field-label">Hora de inicio</mat-label>
+      <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3">
+        <mat-label class="field-label">Fecha de inicio</mat-label>
         <mat-form-field class="width-full" appearance="outline">
-          <input placeholder="Seleccione una hora" matInput [min]="minDate" [matDatepicker]="dpDesde"
-            [formControlName]="ctrl_intHour" autocomplete="off">
+          <input placeholder="Seleccione una hora" id="input-task" matInput [min]="minDate" [matDatepicker]="dpDesde"
+            [formControlName]="ctrl_intDate" autocomplete="off">
           <mat-datepicker-toggle matPrefix [for]="dpDesde"></mat-datepicker-toggle>
           <mat-datepicker #dpDesde startView="multi-year"></mat-datepicker>
         </mat-form-field>
       </div>
 
-      <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-        <mat-label class="field-label">Hora de fin</mat-label>
+      <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3">
+        <mat-label class="field-label">Hora de inicio</mat-label>
         <mat-form-field class="width-full" appearance="outline">
-          <input placeholder="Seleccione una hora" matInput [min]="minDate" [matDatepicker]="dpHasta"
-            [formControlName]="ctrl_endHour" autocomplete="off">
+        <input matInput placeholder="Seleccione una hora" id="input-task" type="time" [formControlName]="ctrl_intHour">
+        <mat-icon matSuffix>access_time</mat-icon>
+      </mat-form-field>
+      </div>
+
+      <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3">
+        <mat-label class="field-label">Fecha de fin</mat-label>
+        <mat-form-field class="width-full" appearance="outline">
+          <input placeholder="Seleccione una fecha" id="input-task" matInput [min]="minDate" [matDatepicker]="dpHasta"
+            [formControlName]="ctrl_endDate" autocomplete="off">
           <mat-datepicker-toggle matPrefix [for]="dpHasta"></mat-datepicker-toggle>
           <mat-datepicker #dpHasta startView="multi-year"></mat-datepicker>
         </mat-form-field>
+      </div>
+
+      <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3">
+        <mat-label class="field-label">Hora de fin</mat-label>
+        <mat-form-field class="width-full" appearance="outline">
+        <input matInput placeholder="Seleccione una hora" id="input-task" type="time" [formControlName]="ctrl_endHour">
+        <mat-icon matSuffix>access_time</mat-icon>
+      </mat-form-field>
       </div>
 
       <div class="col-12">
@@ -81,10 +100,10 @@
       </div>
     </div>
   </div>
-  <button class="back-button2" (click)="cancelar()"> Cancelar</button>
-  <button class="back-button2" (click)="aceptar()"> Aceptar</button>
+  <button class="back-button2" (click)="cancelar()" [ngClass]="{'service-backOffice': this.backOffice}"> Cancelar</button>
+  <button class="back-button2" (click)="aceptar()" [ngClass]="{'service-backOffice': this.backOffice}"> Aceptar</button>
   </ng-template >
 
-  <button *ngIf="mostrarListado"  class="back-button2" (click)="volver()">  Volver Atrás</button>
+  <button *ngIf="mostrarListado"  class="back-button2" (click)="volver()" [ngClass]="{'service-backOffice': this.backOffice}">  Volver Atrás</button>
   </div>
 </div>

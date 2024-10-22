@@ -168,12 +168,8 @@ export class AddEditServicioComponent {
     }
 
     let solicitud:any = this.form.getRawValue();
-    // solicitud.dateOfService = "30/09/2024 15:38"
-    if(!this.backOffice){
-      this.postServicioByProductor(solicitud)
-    }else{
-      this.postServicio(solicitud)
-    }
+    this.postServicio(solicitud)
+
   }
 
   getChacrasProductor() {
@@ -232,17 +228,6 @@ export class AddEditServicioComponent {
 
   postServicio(servicio:any) {
     this.servicioService.postServicio(servicio).subscribe(
-      data => {
-        this.toastr.success('Solicitud agregada con éxito', 'Éxito');
-        this.volver()
-      }
-    )
-  }
-
-  postServicioByProductor(servicio:any) {
-    let productorId = servicio.productor_id;
-    delete servicio.productor_id
-    this.servicioService.postServicioByProductor(servicio,productorId).subscribe(
       data => {
         this.toastr.success('Solicitud agregada con éxito', 'Éxito');
         this.volver()

@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { UserToken } from 'src/app/models/auth.models';
 import { PermisosUsuario } from 'src/app/models/permisos.model';
 import { AuthService } from 'src/app/services/AuthService';
+import { ServicioInterno } from '../../servicios-interno.service';
 import { DetalleServicioService } from '../detalle-servicio.service';
 import { AsignarPilotoComponent } from './asignar-piloto/asignar-piloto.component';
 import { AsignarTecnicoComponent } from './asignar-tecnico/asignar-tecnico.component';
@@ -24,17 +25,19 @@ export class TabSolicitudComponent {
   tipoDisplay = TiposDisplaySolicitud
   asigPiloto = false;
   asigTecnico = false;
-
+  backOffice = false;
 
   constructor(  public detalleServicioService: DetalleServicioService,
     public authService: AuthService,
+    private servicioInterno : ServicioInterno,
     private dialog: MatDialog,){
     this.servicio = this.detalleServicioService.servicio;
   }
 
   ngOnInit(): void {
-    this.asigPiloto = this.detalleServicioService.permisos?.requestservice?.CREATE ?? false;
-    this.asigTecnico = this.detalleServicioService.permisos?.requestservice?.CREATE ?? false;
+    this.backOffice =  this.servicioInterno.backOffice?.value
+    this.asigPiloto = this.detalleServicioService.permisos?.jobOperator?.CREATE || this.detalleServicioService.permisos?.jobOperator?.CREATE_MY ? true : false;
+    this.asigTecnico = this.detalleServicioService.permisos?.jobTechnical?.CREATE || this.detalleServicioService.permisos?.jobTechnical?.CREATE_MY ? true : false;
   }
 
   asignarPiloto(){

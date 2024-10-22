@@ -1,7 +1,7 @@
 <div class="div-datos">
   <div class="title-datos">
     Insumos
-    <button *ngIf="mostrarListado" class="back-button2 btn-cargar" (click)="openABM()"> Cargar Insumos</button>
+    <button *ngIf="mostrarListado" class="back-button2 btn-cargar" [ngClass]="{'service-backOffice': this.backOffice}" (click)="openABM()"> Cargar Insumos</button>
   </div>
   <div class="body-datos">
 
@@ -46,12 +46,12 @@
         </div>
       </div>
 
-      <button  class="back-button2" (click)="cancelar()"> Cancelar</button>
-      <button  class="back-button2" (click)="aceptar()"> Aceptar</button>
+      <button  class="back-button2" (click)="cancelar()" [ngClass]="{'service-backOffice': this.backOffice}"> Cancelar</button>
+      <button  class="back-button2" (click)="aceptar()" [ngClass]="{'service-backOffice': this.backOffice}"> Aceptar</button>
     </ng-template>
 
 
   </div>
 
-  <button *ngIf="mostrarListado"  class="back-button2" (click)="volver()">  Volver Atrás</button>
+  <button *ngIf="mostrarListado"  class="back-button2" (click)="volver()" [ngClass]="{'service-backOffice': this.backOffice}">  Volver Atrás</button>
 </div>

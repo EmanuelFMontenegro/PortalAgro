@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { InsumoService } from 'src/app/services/insumo.service';
 import { ServiciosService } from 'src/app/services/servicios.service';
 import { TipoLabel } from 'src/app/shared/components/miniatura-listado/miniatura.model';
+import { ServicioInterno } from '../../../servicios-interno.service';
 import { DetalleServicioService } from '../../detalle-servicio.service';
 import { TiposDisplayApp } from '../tab-datos-app.component';
 import { DialogEditarInsumoComponent } from './dialog-editar-insumo/dialog-editar-insumo.component';
@@ -19,7 +20,7 @@ export class ListaInsumosAppComponent {
   listadoTiposInsumos: any;
   listadoInsumos:any;
   servicio: any;
-
+  backOffice = false;
   dataView = [
     {label: 'Nombre', field: 'productInput.name', tipoLabel: TipoLabel.span},
     {label: 'Dosis', field:'doseToBeApplied', tipoLabel: TipoLabel.span },
@@ -32,19 +33,21 @@ export class ListaInsumosAppComponent {
   constructor(
     private serviciosService: ServiciosService,
     private dialog: MatDialog,
+    private servicioInterno : ServicioInterno,
     private detalleService: DetalleServicioService,
   ){
 
   }
 
   ngOnInit(): void {
+    this.backOffice =  this.servicioInterno.backOffice?.value
     this.servicio = this.detalleService.servicio;
     this.getInsumos()
     this.setMiniaturas()
   }
 
   setMiniaturas(){
-    if(this.detalleService.permisos?.jobOperator?.CREATE){
+    if(this.detalleService.permisos?.jobOperator?.WRITE || this.detalleService.permisos?.jobOperator?.WRITE_MY){
      this.dataView.push({label: 'Editar', field: 'id', tipoLabel: TipoLabel.botonEditarDevolverObjeto})
     }
   }

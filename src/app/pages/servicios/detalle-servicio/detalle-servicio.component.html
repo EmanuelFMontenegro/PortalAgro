@@ -5,7 +5,7 @@
     <div class="col-12 mb-10">
       <div class="header-container2 en-linea">
       <h2 class="title2">Detalle de servicio</h2>
-      <button class="back-button2 r-button" (click)="volver()"> << Volver Atrás</button>
+      <button class="back-button2 r-button" [ngClass]="{'service-backOffice': this.backOffice}" (click)="volver()"> << Volver Atrás</button>
      </div>
     </div>
     <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">

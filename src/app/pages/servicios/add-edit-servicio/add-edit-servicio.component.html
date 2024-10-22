@@ -2,7 +2,7 @@
 
     <div class="header-container2 en-linea">
       <h2 class="title2">Solicitar Nuevos Servicios</h2>
-      <button class="back-button2 r-button" (click)="volver()"> << Volver Atrás</button>
+      <button class="back-button2 r-button" [ngClass]="{'service-backOffice': this.backOffice}" (click)="volver()"> << Volver Atrás</button>
     </div>
 
     <div class="subheader-container en-linea w-100">
@@ -13,7 +13,7 @@
       <mat-card class="main-card">
       <div class="card-uno">
         <div class="search-container button-seleccionar" *ngIf="this.form.controls[this.ctrlChacra].value !== null || (this.form.controls[this.ctrlProductor]?.value && this.backOffice)">
-          <button class="back-button2 register-button" (click)="limpiarSeleccion()"> Limpiar selección</button>
+          <button class="back-button2 register-button" [ngClass]="{'service-backOffice': this.backOffice}" (click)="limpiarSeleccion()"> Limpiar selección</button>
         </div>
         <div class="en-linea" *ngIf="this.backOffice">
           <div class="field-container w-100">
@@ -68,8 +68,8 @@
     </div>
 
       <div class="card-botones">
-        <button class="back-button2 cancel-button" (click)="cancelar()">Cancelar</button>
-        <button class="back-button2" style="font-size:14px;" (click)="solicitarServicio()">Solicitar Servicio</button>
+        <button class="back-button2 cancel-button" [ngClass]="{'service-backOffice': this.backOffice}" (click)="cancelar()">Cancelar</button>
+        <button class="back-button2" style="font-size:14px;" [ngClass]="{'service-backOffice': this.backOffice}" (click)="solicitarServicio()">Solicitar Servicio</button>
 
       </div>
     </mat-card>

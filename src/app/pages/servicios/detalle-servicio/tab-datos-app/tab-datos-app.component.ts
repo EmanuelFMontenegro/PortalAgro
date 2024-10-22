@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Piloto } from 'src/app/models/servicios.models';
+import { ServicioInterno } from '../../servicios-interno.service';
 import { DetalleServicioService } from '../detalle-servicio.service';
 
 export enum TiposDisplayApp{
@@ -14,7 +15,8 @@ export enum TiposDisplayApp{
 @Component({
   selector: 'app-tab-datos-app',
   templateUrl: './tab-datos-app.component.html',
-  styleUrls: ['./tab-datos-app.component.scss']
+  styleUrls: ['./tab-datos-app.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class TabDatosAppComponent {
 
@@ -27,16 +29,19 @@ export class TabDatosAppComponent {
   subscripcion = new Subscription()
   editarDatosApp = false;
   tareasDroneApp = false;
+  backOffice = false;
 
-  constructor( public detalleServicioService: DetalleServicioService,){
+  constructor( public detalleServicioService: DetalleServicioService,
+    private servicioInterno : ServicioInterno){
     this.detalleServicioService.getServicio();
     this.servicio = this.detalleServicioService.servicio;
   }
 
   ngOnInit(): void {
     this.recuperarDatosDeApp()
-    this.editarDatosApp = this.detalleServicioService.permisos?.jobOperator?.WRITE ?? false
-    this.tareasDroneApp = this.detalleServicioService.permisos?.jobOperator?.WRITE ?? false
+    this.backOffice =  this.servicioInterno.backOffice?.value
+    this.editarDatosApp = this.detalleServicioService.permisos?.jobOperator?.WRITE || this.detalleServicioService.permisos?.jobOperator?.WRITE_MY ? true : false
+    this.tareasDroneApp = this.detalleServicioService.permisos?.jobOperator?.WRITE || this.detalleServicioService.permisos?.jobOperator?.WRITE_MY ? true : false
   }
 
   async recuperarDatosDeApp(){

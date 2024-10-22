@@ -25,9 +25,12 @@ export class DetalleServicioComponent {
   tecnicoAsignado:any;
   pilotoAsignado:any;
   indiceTab = 0;
+  backOffice = false;
 
   ngOnInit(): void {
-    this.urlBase =  this.servicioInterno.backOffice.value ? 'dashboard-backoffice' : 'dashboard'
+    this.servicioInterno.comprobarUrlBackOffice()
+    this.backOffice =  this.servicioInterno.backOffice?.value
+    this.urlBase = this.backOffice ? 'dashboard-backoffice' : 'dashboard'
     this.detalleServicioService.getEstados()
     this.getDatosServicio();
     this.getUser()

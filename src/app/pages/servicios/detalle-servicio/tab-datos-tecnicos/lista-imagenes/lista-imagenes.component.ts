@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { InsumoService } from 'src/app/services/insumo.service';
 import { ServiciosService } from 'src/app/services/servicios.service';
 import { TipoLabel } from 'src/app/shared/components/miniatura-listado/miniatura.model';
+import { ServicioInterno } from '../../../servicios-interno.service';
 import { DetalleServicioService } from '../../detalle-servicio.service';
 import { TiposDisplayTecnico } from '../tab-datos-tecnicos.component';
 
@@ -18,6 +19,7 @@ export class ListaImagenesComponent {
   listadoTiposInsumos: any;
   listadoImagenes: any;
   servicio: any;
+  backOffice = false;
 
   // controlName
   ctrlTitle = "title"
@@ -42,12 +44,14 @@ export class ListaImagenesComponent {
     private toastr: ToastrService,
     private serviciosService: ServiciosService,
     private detalleService: DetalleServicioService,
+    private servicioInterno : ServicioInterno,
     private insumosService: InsumoService
   ) {
 
   }
 
   ngOnInit(): void {
+    this.backOffice =  this.servicioInterno.backOffice?.value
     this.servicio = this.detalleService.servicio;
     this.getImagenes()
     this.setMiniaturas();

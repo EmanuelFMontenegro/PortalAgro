@@ -1,18 +1,14 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { DashboardBackOfficeService } from '../dashboard-backoffice/dashboard-backoffice.service';
-import {
-  TipoLabel,
-  DataView,
-} from 'src/app/shared/components/miniatura-listado/miniatura.model';
+import {TipoLabel, DataView} from 'src/app/shared/components/miniatura-listado/miniatura.model';
 import { ServiciosService } from 'src/app/services/servicios.service';
 import { Router } from '@angular/router';
 import { ApiService } from 'src/app/services/ApiService';
 import { ToastrService } from 'ngx-toastr';
-import { map, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/AuthService';
 import { jwtDecode } from 'jwt-decode';
 import { ServicioInterno } from './servicios-interno.service';
-import { PermisosUsuario } from 'src/app/models/permisos.model';
 
 @Component({
   selector: 'app-servicios',
@@ -34,7 +30,6 @@ export class ServiciosComponent {
       titulo: 'Solicitudes y servicios',
       subTitulo: '',
     });
-    this.servicioInterno.comprobarUrlBackOffice()
   }
   urlBase = '';
   opcionSeleccionada: any;
@@ -49,9 +44,10 @@ export class ServiciosComponent {
   chacras: any[] = []; // ELIMINAR
 
   ngOnInit(): void {
+    this.servicioInterno.comprobarUrlBackOffice()
     this.isBackOffice()
     this.setUrlVerMas();
-    this.backOffice ? this.getServicios() : this.getServiciosByProductor();
+    this.getServicios();
     this.getUserConPermisos()
   }
 
@@ -61,7 +57,7 @@ export class ServiciosComponent {
 
   async getUserConPermisos(){
     await this.authService.getUserWithPermisos()
-    this.crearServicio = this.authService.userWithPermissions?.value?.permisos.requestservice.CREATE
+    this.crearServicio = this.authService.userWithPermissions?.value?.permisos?.requestservice?.CREATE || this.authService.userWithPermissions?.value?.permisos?.requestservice?.CREATE_MY
   }
 
   isBackOffice(){
@@ -108,23 +104,6 @@ export class ServiciosComponent {
     ];
 
     if(this.backOffice) this.dataView.splice(3, 0,  { label: 'Productor',  field: 'producer.lastname',  tipoLabel: TipoLabel.span});
-  }
-
-  getServiciosByProductor() {
-    this.serviciosService
-      .getServiciosByProductor()
-      .pipe(map((response: any) => this.convertirValores(response.list[0])))
-      .subscribe(
-        (data: any) => {
-          if (data?.length > 0) {
-            this.lotesOriginal = data;
-            this.listado = data;
-          }
-        },
-        (error) => {
-          console.error('Error al obtener servicios:', error);
-        }
-      );
   }
 
 

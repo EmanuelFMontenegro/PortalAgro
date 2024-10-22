@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Piloto } from 'src/app/models/servicios.models';
 import { ApiService } from 'src/app/services/ApiService';
 import { ServiciosService } from 'src/app/services/servicios.service';
+import { ServicioInterno } from '../../../servicios-interno.service';
 import { DetalleServicioService } from '../../detalle-servicio.service';
 import { TiposDisplayTecnico } from '../../tab-datos-tecnicos/tab-datos-tecnicos.component';
 
@@ -28,6 +29,7 @@ export class EditarDatosAppComponent {
   ctrl_dateOfVisit = "dateOfVisit"
   ctrl_hectare = "hectare"
   ctrl_observation = "observation"
+  backOffice = false;
 
   public form: FormGroup = new FormGroup({
     [this.ctrl_dateOfVisit]: new FormControl(null, Validators.required),
@@ -39,11 +41,13 @@ export class EditarDatosAppComponent {
   constructor(private toastr: ToastrService,
     private serviciosService: ServiciosService,
     private apiService: ApiService,
+    private servicioInterno : ServicioInterno,
     private detalleService: DetalleServicioService,) {
 
   }
 
   ngOnInit(): void {
+    this.backOffice =  this.servicioInterno.backOffice?.value
     this.servicio = this.detalleService.servicio;
     this.datosApp = this.detalleService.datosPiloto
     this.setFormDatosApp()

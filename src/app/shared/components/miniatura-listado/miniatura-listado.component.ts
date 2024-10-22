@@ -13,7 +13,8 @@ export class MiniaturaListadoComponent {
 
   constructor(private utilService: UtilsService,
               private router: Router){}
-
+  // Variables para paginación
+  page: number = 1; // Página inicial
 
   @Input() listado: any // Listado de items a mostrar
   @Input() dataView: DataView [] | undefined // configuracion para determinar que tipo de elemento mostrar por cada campo
