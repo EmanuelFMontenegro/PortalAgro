@@ -33,8 +33,7 @@ import { CalendarComponent } from './components/calendar/calendar.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { CalendarPopupComponent } from './components/calendar-popup/calendar-popup.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { PaginadorComponent } from './components/paginador/paginador.component';
-
+import { NgxPaginationModule } from 'ngx-pagination';
 export const IMPORTS_MATERIAL = [
   MatSidenavModule,
   MatListModule,
@@ -57,6 +56,8 @@ export const IMPORTS_MATERIAL = [
   MatDatepickerModule,
   MatNativeDateModule,
   MatButtonModule,
+  NgxPaginationModule,
+  MatPaginatorModule,
 ];
 
 export const IMPORT_CORE = [CommonModule, FormsModule, ReactiveFormsModule];
@@ -72,11 +73,8 @@ export const CALENDAR = [FullCalendarModule];
     CalendarPopupComponent,
     ToolbarComponent,
     FooterComponent,
-    PaginadorComponent,
-    FooterComponent,
     HeaderInnerComponent,
-    SearchbarComponent
-
+    SearchbarComponent,
   ],
   imports: [IMPORT_CORE, IMPORTS_MATERIAL, CALENDAR, CardComponent],
   exports: [
@@ -91,8 +89,10 @@ export const CALENDAR = [FullCalendarModule];
     CalendarPopupComponent,
     ToolbarComponent,
     FooterComponent,
-    HeaderInnerComponent,CardComponent,
+    HeaderInnerComponent,
+    CardComponent,
     SearchbarComponent,
+    
   ],
 })
 export class SharedModule {}
