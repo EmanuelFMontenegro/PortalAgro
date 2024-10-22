@@ -1,21 +1,10 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { ActivatedRoute, Router } from '@angular/router';
-import { jwtDecode } from 'jwt-decode';
+import { Router } from '@angular/router';
 import { ApiService } from 'src/app/services/ApiService';
-import { AuthService } from 'src/app/services/AuthService';
 import * as L from 'leaflet';
 
-interface CustomJwtPayload {
-  userId: number;
-  sub: string;
-}
 
-interface DecodedToken {
-  userId: number;
-  sub: string;
-  roles: string;
-}
 
 interface DatosUsuario {
   accept_license: boolean;
@@ -33,7 +22,7 @@ interface DatosUsuario {
 @Component({
   selector: 'app-detalle-chacra',
   templateUrl: './detalle-chacra.component.html',
-  styleUrls: ['./detalle-chacra.component.sass'],
+  styleUrls: ['./detalle-chacra.component.scss'],
 })
 export class DetalleChacraComponent implements OnInit, AfterViewInit {
   public userEmail: string | null = null;
@@ -47,13 +36,10 @@ export class DetalleChacraComponent implements OnInit, AfterViewInit {
   mostrarMapaPrincipal: boolean = false;
   mostrarImagenPrincipal: boolean = false;
 
-  constructor(
-    private authService: AuthService,
-    private apiService: ApiService,
+  constructor
+    (private apiService: ApiService,
     private toastr: ToastrService,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {}
+    private router: Router) {}
 
   ngOnInit(): void {
     const perfilDataChacra = localStorage.getItem('idPerfilProd');
@@ -87,20 +73,13 @@ export class DetalleChacraComponent implements OnInit, AfterViewInit {
     if (this.chacraSeleccionada.geolocation) {
       const mapElement = document.getElementById('map');
       if (mapElement) {
-        const geolocationData = this.chacraSeleccionada.geolocation
-          .split(',')
-          .map(parseFloat);
+        const geolocationData = this.chacraSeleccionada.geolocation.split(',').map(parseFloat);
         const latitude = geolocationData[0];
         const longitude = geolocationData[1];
-
         const map = L.map(mapElement).setView([latitude, longitude], 15);
-        L.tileLayer(
-          'https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-        ).addTo(map);
-        L.marker([latitude, longitude])
-          .addTo(map)
-          .bindPopup('Ubicación del campo')
-          .openPopup();
+        L.tileLayer('https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}').addTo(map);
+        L.marker([latitude, longitude]).addTo(map).bindPopup('Ubicación del campo').openPopup();
+
       }
     }
   }

@@ -79,7 +79,6 @@ interface DecodedToken {
 @Component({
   selector: 'app-chacras-geolocalizar',
   templateUrl: './chacras-geolocalizar.component.html',
-  styleUrls: ['./chacras-geolocalizar.component.sass'],
   encapsulation: ViewEncapsulation.None,
 })
 export class ChacrasGeolocalizarComponent implements AfterViewInit {

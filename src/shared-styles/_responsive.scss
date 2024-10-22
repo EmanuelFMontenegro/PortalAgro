@@ -6,6 +6,14 @@
       display: none;
     }
   }
+
+@include respond-max(1090px){
+  .profileContainer-personalData-content-item {
+    flex-basis: 100%;  
+    max-width: 100%;  
+  }
+}
+
 @include respond-max(1280px){
   .ContainerS {
       &__menu {
@@ -22,6 +30,9 @@
   }
 }
 @include respond-max(768px) {
+  .profileContainer-personalData-content-item {
+    min-width: 100%;  
+  }
   .ellipse_white {
     width: 100%;
     @include position(absolute, 0);
@@ -148,10 +159,10 @@
     }
     //Contenedor de Cards Chacras
     .cardContainerNoCentered {
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
     }
     .cardCustomized{
-      width: 280px;
+      width: 320px;
       padding: 10px;
           &-buttons{
               gap: 10px;

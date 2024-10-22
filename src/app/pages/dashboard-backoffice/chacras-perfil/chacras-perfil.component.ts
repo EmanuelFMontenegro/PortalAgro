@@ -4,6 +4,7 @@ import { ApiService } from 'src/app/services/ApiService';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/AuthService';
 import { Router } from '@angular/router';
+import { TipoLabel, DataView } from 'src/app/shared/components/miniatura-listado/miniatura.model';
 
 interface DatosUsuario {
   accept_license: boolean;
@@ -22,7 +23,6 @@ interface DatosUsuario {
 @Component({
   selector: 'app-chacras-perfil',
   templateUrl: './chacras-perfil.component.html',
-  styleUrls: ['./chacras-perfil.component.sass'],
 })
 export class ChacrasPerfilComponent implements OnInit {
   chacraSeleccionada: any;
@@ -34,7 +34,17 @@ export class ChacrasPerfilComponent implements OnInit {
   contacto: string | null = null;
   public userEmail: string | null = null;
   chacras: any[] = [];
+  options: string[] = [ 'Nombre', 'Hectareas'];
+  dataView: DataView[] = [
+    { label: '', field: 'assets/img/Chacra_1.png', tipoLabel: TipoLabel.imagen },
+    { label: '', field: 'name', tipoLabel: TipoLabel.titulo },
+    { label: 'Localidad', field: 'address.location.name', tipoLabel: TipoLabel.span },
+    { label: 'Hectarias', field: 'dimensions', tipoLabel: TipoLabel.span },
+    { label: 'Descripción', field: 'observation', tipoLabel: TipoLabel.span },
+    { label: 'chacraSeleccionada', field: '/dashboard-backoffice/chacras-lote', tipoLabel: TipoLabel.botonVerLote },
+    { label: 'chacraSeleccionada', field: '/dashboard-backoffice/detalle-chacra', tipoLabel: TipoLabel.botonGeo },
 
+  ]
   constructor(
     private authService: AuthService,
     private apiService: ApiService,
@@ -47,6 +57,7 @@ export class ChacrasPerfilComponent implements OnInit {
     const perfilDataChacra = localStorage.getItem('idPerfilProd');
     if (perfilDataChacra) {
       const userId = parseInt(perfilDataChacra);
+      this.userId = userId;
       this.cargarChacrasUsuario(userId);
       this.personId = userId;
       this.DatosUser(userId, this.personId);
@@ -113,5 +124,86 @@ export class ChacrasPerfilComponent implements OnInit {
 
   BtnCargarChacra(): void {
     this.router.navigate(['/dashboard-backoffice/cargar-chacras']);
+  }
+  
+  
+ 
+
+  clearFilter() {
+    this.cargarChacrasUsuario(this.userId);
+  }
+
+  onFilter(filtro: any) {
+    switch (filtro.tipo) {
+      case 'Buscar por Nombre de Chacra':
+        this.filtrarPorNombreDeChacra(filtro.valor);  
+        break;
+      case 'Buscar por Hectáreas':
+        this.filtrarPorHectareas(filtro.min, filtro.max);
+        break;
+    }
+  }
+  filtrarPorHectareas(minHectareas: number, maxHectareas: number) {
+     
+    if (minHectareas === undefined || maxHectareas === undefined || isNaN(minHectareas) || isNaN(maxHectareas)) {
+      console.error('Debe ingresar valores válidos para el rango de hectáreas');
+      return;
+    }
+    // Convertir las cadenas de texto a números
+    const minHectareasNum = minHectareas;
+    const maxHectareasNum = maxHectareas;
+    this.apiService
+      .getUsersFields(
+        0,
+        5,
+        'id',
+        'desc',
+        true,
+        '',
+        '',
+        null,
+        this.userId,
+        minHectareasNum,
+        maxHectareasNum
+      ).subscribe(
+        (response) => {
+          if (response.list && response.list.length > 0) {
+            this.chacras = response.list[0];
+          } else {
+            this.toastr.info(
+              'No existen campos registrados dentro de este rango de hectáreas',
+              'Información'
+            );
+            this.chacras = [];
+          }
+        },
+        (error) => {
+          console.error('Error al obtener campos:', error);
+        }
+      );
+  }
+  filtrarPorNombreDeChacra(nombreChacra: string) {
+    if (!nombreChacra || nombreChacra.trim() === '') {
+      console.error('Debe ingresar un nombre de chacra');
+      return;
+    }
+    this.apiService
+      .getUsersFields(0, 5, 'id', 'desc', true, '', nombreChacra, null,this.userId)
+      .subscribe(
+        (response) => {
+          if (response.list && response.list.length > 0) {
+            this.chacras = response.list[0];
+          } else {
+            this.toastr.info(
+              'No existen campos registrados con este nombre de chacra',
+              'Información'
+            );
+            this.chacras = [];
+          }
+        },
+        (error) => {
+          console.error('Error al obtener campos:', error);
+        }
+      );
   }
 }

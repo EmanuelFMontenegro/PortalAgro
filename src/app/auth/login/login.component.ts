@@ -72,7 +72,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.adjustCardSize(false);
-    this.themeService.setTheme('dashboard');
+    
   }
 
   togglePasswordVisibility(): void {
@@ -110,7 +110,7 @@ export class LoginComponent implements OnInit {
               'tokenExpiration',
               expirationTime.toString()
             ); // Save expiration time
-
+            this.themeService.setTheme('dashboard');
             const userId = decoded.userId;
             const personId = userId;
             console.log('datos del userId', userId);

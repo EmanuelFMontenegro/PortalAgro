@@ -1,59 +1,25 @@
-<div class="container">
-  <div class="titulo-bienvenida">
-    <span>¡Bienvenido!</span>
-  </div>
-
-  <!-- User Card -->
-  <div class="card user-card">
-    <div class="avatar">
-      <mat-icon>person</mat-icon>
+<div class="mainStructure">
+  <app-header-inner [title]="'Detalle de Chacra'" [backButton]="true"></app-header-inner>
+  <div class="ContainerLocation">
+    <div class="ContainerLocation-map">
+       <div id="map" *ngIf="mostrarMapaPrincipal"></div>
+      <div  *ngIf="mostrarImagenPrincipal">
+        <img src="/assets/img/imagen_no_geolocation.png" style="width: 400px;
+    height: 400px;">
     </div>
-    <div class="datos-perfil-user">
-      <p class="name">Nombre: {{ nombre }} {{ apellido }}</p>
-      <p class="email">Email: {{ email }}</p>
-      <p class="contacto">Contacto: {{ contacto }}</p>
-    </div>
-    <div class="volver-button" (click)="volver()">
-       <img src="/assets/img/keyboard_double_arrow_left_24dp_FILL0_wght400_GRAD0_opsz24.svg" alt="flecha doble" class="flecha-doble">
-      <span class="letra_btn_volver">VOLVER ATRAS</span>
+    <div>
     </div>
   </div>
-
-  <h4 class="titulo-detalle-campo">Chacras</h4>
-  <div class="card-campo-container">
-
-    <div class="campo-card">
-      <div id="map" class="campo-image-container" *ngIf="mostrarMapaPrincipal"></div>
-      <div class="campo-image-container" *ngIf="mostrarImagenPrincipal">
-        <img src="/assets/img/imagen_no_geolocation.png" alt="Campo Image" class="campo-image">
+  <div class="ContainerLocation-chacra">
+    <h4 class="ContainerLocation-chacra-h4">{{ chacraSeleccionada.name }}</h4>
+      <div class="ContainerLocation-chacra-details grow-1 ">
+        <p> <strong>Localidad :</strong> {{ chacraSeleccionada.address.location.name }}  <img src="assets/img/location.svg" alt="Icono" class="icono_location"></p>
+        <p> <strong>Dirección : </strong> {{ chacraSeleccionada.address.address }} </p>
+        <p> <strong>Hectáreas : </strong> {{ chacraSeleccionada.dimensions }} </p>
+        <p> <strong>Descripción : </strong>  {{ chacraSeleccionada.observation }} </p>
       </div>
-    </div>
-
-    <div class="campo-details-card">
-      <h4 class="title-campo-details">{{ chacraSeleccionada.name }}</h4>
-      <div class="details localidad">
-        <span class="localidad">Localidad:</span>
-        <span class="loc_details">{{ chacraSeleccionada.address.location.name }}</span>
-        <img src="assets/img/location.svg" alt="Icono" class="icono_location">
+        <div class="ContainerLocation-chacra-buttons">
+        <button class="primary-button-auto size-48 basis-300"  mat-raised-button (click)="geolocalizar()">Editar Geolocalización</button>
       </div>
-      <div class="details direccion">
-        <span>Dirección:</span>
-        <span class="direc_details">{{ chacraSeleccionada.address.address }}</span>
-      </div>
-      <div class="details hectareas">
-        <span>Hectáreas:</span>
-        <span class="hect_details">{{ chacraSeleccionada.dimensions }}</span>
-      </div>
-      <div class="details descripcion">
-        <span>Descripción:</span>
-        <span class="desc_details" >{{ chacraSeleccionada.observation }}</span>
-      </div>
-      <div class="campo-buttons">
-        <button class="geolocalizar" (click)="geolocalizar()">Geolocalizar <img src="assets/img/location.svg" alt="Icono" class="icono_location"></button>
-        <button (click)="verLotes()">Lotes</button>
-      </div>
-    </div>
-
   </div>
 </div>
-

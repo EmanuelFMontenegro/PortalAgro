@@ -1,197 +1,156 @@
-<!-- VISTA DEL PERFIL -->
-<div *ngIf="!modoEdicion">
-  <div class="container">
-    <div class="titulo-perfil">
-      <h2>Perfil</h2>
-    </div>
-    <mat-card class="main-card">
-      <div class="cards-container">
-        <div class="card user-card">
-          <div class="user-content">
-            <div class="avatar">
-              <div class="avatar-circle">
-                <mat-icon *ngIf="!selectedImage && !modoEdicion" class="avatar-icon">person</mat-icon>
-              </div>
-            </div>
-            <div class="titulo-perfil-avatar">
-              <div class="titulo-welcome">
-                <h2>Bienvenido, {{ nombre }} {{ apellido }}</h2>
-                <!-- <p class="email">Email: {{ email }}</p> -->
-                <p class="email">Ciudad: {{ location}}</p>
-              </div>
-            </div>
-          </div>
-          <div class="botones-container">
-            <div class="boton-editar">
-              <button mat-raised-button class="btn-editar" (click)="activarEdicion(true)">
-                <img src="assets/img/edit_square_FILL0_wght400_GRAD0_opsz24.svg" alt="Icon Edit" class="img-editar">
-                Editar
-              </button>
-            </div>
-            <div class="boton-chacra">
-              <button mat-raised-button class="btn-chacra" (click)="btnVerMas(userId)">
-                <img src="assets/menu-backoffice/chacra_b.svg" alt="Icon Chacra" class="img-chacra">
-                Ver Chacras
-              </button>
-            </div>
-          </div>
-
-        </div>
-        <mat-card class="user-details-card">
-          <mat-card-header>
-            <mat-card-title>Información Personal</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <div class="datos-users">
-              <div class="field-container">
-                <label class="title-input">Nombre</label>
-                <div class="field-value">{{ nombre }}</div>
-                <mat-divider></mat-divider>
-              </div>
-              <div class="field-container">
-                <label class="title-input">Apellido</label>
-                <div class="field-value">{{ apellido }}</div>
-                <mat-divider></mat-divider>
-              </div>
-              <div class="field-container">
-                <label class="title-input">Localidad</label>
-                <div class="field-value">{{ location }}</div>
-                <mat-divider></mat-divider>
-              </div>
-              <div class="field-container">
-                <label class="title-input">DNI</label>
-                <div class="field-value">{{ dni }}</div>
-                <mat-divider></mat-divider>
-              </div>
-
-              <div class="field-container">
-                <label class="title-input">Contacto</label>
-                <div class="field-value">{{ telefono }}</div>
-                <mat-divider></mat-divider>
-              </div>
-            </div>
-          </mat-card-content>
-        </mat-card>
-        <mat-card class="extended-card">
-          <mat-card-header>
-            <mat-card-title>Información Adicional</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <textarea rows="5" readonly class="texto-area">{{ descripcion }}</textarea>
-          </mat-card-content>
-        </mat-card>
-      </div>
-    </mat-card>
-  </div>
+<div class="mainStructure">
+  <app-header-inner [title]="'Perfil'" [backButton]="true"></app-header-inner>
 </div>
+
+
+
+ 
+
+<ng-container *ngIf="!modoEdicion">
+  <div class="profileContainer">
+    <div class="profileContainer-detail">
+      <div class="profileContainer-detail-avatar">
+         <img src="../../../../assets/img/profile_edit.png" alt="">
+      </div>
+      <div class="profileContainer-detail-info"> 
+        <div class="profileContainer-detail-info-name">
+          {{ nombre }} {{ apellido }}
+        </div> 
+        <div class="profileContainer-detail-info-mail"> 
+          {{ email }}
+           </div> 
+      </div>
+      <div class="profileContainer-detail-editar">
+        <button  class="profileContainer-detail-editar-button" (click)="activarEdicion(true)">
+          <img src="../../../../assets/img/edit_square_FILL0_wght400_GRAD0_opsz24.svg" alt="Icon Edit" class="profileContainer-detail-editar-button-icon">
+        </button>
+      </div>
+      <div class="profileContainer-detail-verChacraBottom">
+        
+        <button style="background-color: white;border-radius: 8px;" class="profileContainer-detail-editar-button" (click)="btnVerMas(userId)">
+          <img src="../../../../../assets/menu-backoffice/chacra_b.svg" alt="Icon Edit Ranch" class="profileContainer-detail-verChacraBottom-icon">
+         </button>
+      </div>
+    </div>
+    <div class="profileContainer-personalData">
+      <div class="profileContainer-personalData-title">Información Personal</div>
+      <div class="profileContainer-personalData-content">
+        <div class="profileContainer-personalData-content-item">
+          <div class="profileContainer-personalData-content-item-title">Usuario</div>
+          <div class="profileContainer-personalData-content-item-value">{{ email }}</div>
+        </div>
+        <div class="profileContainer-personalData-content-item">
+          <div class="profileContainer-personalData-content-item-title">Nombre</div>
+          <div class="profileContainer-personalData-content-item-value">{{ nombre }}</div>
+        </div>
+        <div class="profileContainer-personalData-content-item">
+          <div class="profileContainer-personalData-content-item-title">Apellido</div>
+          <div class="profileContainer-personalData-content-item-value">{{ apellido }}</div>
+        </div>
+        <div class="profileContainer-personalData-content-item">
+          <div class="profileContainer-personalData-content-item-title">Localidad</div>
+          <div class="profileContainer-personalData-content-item-value">{{ location }}</div>
+        </div>
+        <div class="profileContainer-personalData-content-item">
+          <div class="profileContainer-personalData-content-item-title">DNI</div>
+          <div class="profileContainer-personalData-content-item-value">{{ dni }}</div>
+        </div>
+        <div class="profileContainer-personalData-content-item">
+          <div class="profileContainer-personalData-content-item-title">Contacto</div>
+          <div class="profileContainer-personalData-content-item-value">{{ telefono }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="profileContainer-aditionalData">
+      <div class="profileContainer-aditionalData-title">Información Adicional</div>
+      <div class="profileContainer-aditionalData-content"> Lorem ipsum dolor sit amet consectetur, adipisicing elit. Consequuntur eveniet, illo assumenda, nihil nemo ad ab animi tenetur, dolorum nam quos quisquam. Commodi quidem a esse, amet minima ipsum iusto. </div>
+    </div>
+  </div>
+</ng-container>   
 
 <!-- VISTA PARA EDITAR EL PERFIL -->
-<div *ngIf="modoEdicion">
-  <div class="container">
-    <div class="titulo-perfil">
-      <h2>Perfil</h2>
-    </div>
-    <mat-card class="main-card">
-      <div class="cards-container">
-        <div class="card user-card-edit">
-          <div class="avatar">
-            <div class="avatar-circle">
-              <input type="file" id="file-input" style="display: none" (change)="onFileSelected($event)">
-              <label for="file-input" class="edit-avatar-button">
-                <mat-icon class="edit-icon">edit</mat-icon>
-              </label>
-              <img *ngIf="selectedImage" [src]="selectedImage" class="avatar-icon">
-              <mat-icon *ngIf="!selectedImage" class="avatar-icon">person</mat-icon>
+<ng-container *ngIf="modoEdicion">
+  <div class="profileContainer"> 
+    <div class="profileContainer-detail"> 
+      <div class="profileContainer-detail-avatar">
+         <img src="../../../../assets/img/profile_edit.png" alt="">
+      </div>
+      <div class="profileContainer-detail-info"> 
+        <div class="profileContainer-detail-info-name">
+          {{ nombre }} {{ apellido }}
+        </div> 
+        <div class="profileContainer-detail-info-mail"> 
+          {{ email }}
+           </div> 
+      </div>
+     
+    </div> 
+    <div class="profileContainer-personalData">
+      <div class="profileContainer-personalData-title">Información Personal</div>
+      <form class="FullForm" (ngSubmit)="actualizarPerfilUsuario()" [formGroup]="userDetailsForm">
+        <div class="profileContainer-personalData-content">
+          <div class="profileContainer-personalData-content-item margin-btm-0">
+            <div class="FullForm-control margin-btm-0">
+              <label class="FormLabel margin-btm-6" for="email">Usuario</label>
+              <input class="FormInput" matInput [placeholder]="email" formControlName="email" id="email">
             </div>
           </div>
-          <div class="titulo-perfil-avatar">
-            <h2>Bienvenido, {{ nombre }} {{ apellido }}</h2>
-            <!-- <p class="email">{{ username }}</p> -->
+          <div class="profileContainer-personalData-content-item margin-btm-0">
+            <div class="FullForm-control margin-btm-0">
+              <label class="FormLabel margin-btm-6" for="nombre">Nombre</label>
+              <input class="FormInput" matInput [placeholder]="nombre" formControlName="nombre" id="nombre">
+            </div>
+          </div>
+          <div class="profileContainer-personalData-content-item margin-btm-0">
+            <div class="FullForm-control margin-btm-0">
+              <label class="FormLabel margin-btm-6" for="apellido">Apellido</label>
+              <input class="FormInput" matInput [placeholder]="nombre" formControlName="apellido" id="apellido">
+            </div>
+          </div>
+          <div class="profileContainer-personalData-content-item margin-btm-0">
+            <div class="FullForm-control margin-btm-0">
+              <label class="FormLabel margin-btm-6" for="localidad">Localidad</label>
+              <mat-select style="height: 45px !important;"  class="FormInput"  formControlName="localidad" placeholder="{{ location ? location : 'Seleccionar Localidad' }}" (selectionChange)="onLocalidadSelectionChange($event.value)">
+                <mat-option *ngFor="let loc of localidades" [value]="loc.name">
+                  {{ loc.name }}
+                </mat-option>
+              </mat-select>
+            </div>
+          </div>
+          <div class="profileContainer-personalData-content-item margin-btm-0">
+            <div class="FullForm-control margin-btm-0">
+              <label class="FormLabel margin-btm-6" for="dni">DNI / CUIT</label>
+              <input class="FormInput" matInput [placeholder]="dni" formControlName="dni" id="dni">
+            </div>
+          </div>
+          <div class="profileContainer-personalData-content-item margin-btm-0">
+            <div class="FullForm-control margin-btm-0">
+              <label class="FormLabel margin-btm-6" for="contacto">Contacto</label>
+              <input class="FormInput" matInput [placeholder]="contacto" formControlName="contacto" id="contacto">
+            </div>
+          </div>
+          <div class="profileContainer-personalData-content-item margin-btm-0">
+            <div class="FullForm-control margin-btm-0">
+              <label class="FormLabel margin-btm-6" for="contrasenaActual">Contraseña</label>
+              <input  class="FormInput" matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'" id="password"
+                      autocomplete="new-password" [disabled]="isPasswordDisabled" (click)="showChangePasswordWarning()">
+            </div>
           </div>
         </div>
-
-        <mat-card class="user-details-card">
-          <mat-card-header>
-            <mat-card-title>Información Personal</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <form (ngSubmit)="actualizarPerfilUsuario()" [formGroup]="userDetailsForm">
-              <div class="datos-users">
-                <div class="field-container">
-                  <label class="title-input" for="usuario">Usuario</label>
-                  <input matInput placeholder="Email" formControlName="email" id="email">
-                </div>
-
-                <div class="field-container">
-                  <label class="title-input" for="contrasena">Contraseña</label>
-                  <div class="password-container">
-                    <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'" id="password"
-                      autocomplete="new-password" [disabled]="isPasswordDisabled" (click)="showChangePasswordWarning()">
-                    <mat-icon class="eye-icon" (click)="togglePasswordVisibility()"
-                      [style.pointer-events]="isPasswordDisabled ? 'none' : 'auto'">
-                      {{ hidePassword ? 'visibility_off' : 'visibility' }}
-                    </mat-icon>
-
-                  </div>
-                  <div class="password-warning" style="color:red" *ngIf="showPasswordWarning">Está por cambiar la
-                    contraseña</div>
-                </div>
-
-
-
-
-                <div class="field-container">
-                  <label class="title-input" for="nombre">Nombre</label>
-                  <input matInput placeholder="Nombre" formControlName="nombre" id="nombre">
-                </div>
-
-                <div class="field-container">
-                  <label class="title-input" for="apellido">Apellido</label>
-                  <input matInput placeholder="Apellido" formControlName="apellido" id="apellido">
-                </div>
-
-                <div class="field-container">
-                  <label class="title-input" for="localidad">Localidad</label>
-                  <mat-select formControlName="localidad"
-                    placeholder="{{ location ? location: 'Seleccionar Localidad' }}"
-                    (selectionChange)="onLocalidadSelectionChange($event.value)">
-                    <mat-option *ngFor="let loc of localidades" [value]="loc.name">
-                      {{ loc.name }}
-                    </mat-option>
-                  </mat-select>
-                </div>
-
-                <div class="field-container">
-                  <label class="title-input" for="dni">DNI</label>
-                  <input matInput placeholder="DNI" formControlName="dni" id="dni">
-                </div>
-
-                <div class="field-container">
-                  <label class="title-input" for="contacto">Contacto</label>
-                  <input matInput placeholder="Contacto" formControlName="contacto" id="contacto">
-                </div>
-              </div>
-            </form>
-          </mat-card-content>
-        </mat-card>
-
-        <form (ngSubmit)="actualizarPerfilUsuario()" [formGroup]="userDetailsForm">
-          <mat-card class="extended-card" *ngIf="modoEdicion">
-            <mat-card-header>
-              <mat-card-title>Informacion Adicional</mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-              <textarea matInput rows="5" placeholder="descripcion" formControlName="descripcion"></textarea>
-            </mat-card-content>
-          </mat-card>
-        </form>
-
-        <div class="botones-servicio">
-          <button mat-raised-button class="cancel-button" type="button"
-            (click)="activarEdicion(false)">Cancelar</button>
-          <button mat-raised-button class="register-button" (click)="actualizarPerfilUsuario()">Guardar Cambios</button>
+      </form>
+    </div>
+    <div class="profileContainer-aditionalData">
+      <div class="profileContainer-aditionalData-title">Información Adicional</div>
+      <form (ngSubmit)="actualizarPerfilUsuario()" [formGroup]="userDetailsForm">
+          <div class="FullForm-control margin-btm-0">
+          <textarea matInput class="FormTextarea"  [placeholder]="descriptions" formControlName="descripcion"></textarea>
         </div>
-      </div>
-    </mat-card>
+      </form>
+    </div>        
+    <div class="FullForm-buttonsToRight">
+      <button mat-button   class="secondary-button-custom size-48" type="button" (click)="activarEdicion(false)">Cancelar</button>
+      <button  mat-raised-button appearance="outline"  class="primary-button-custom size-48"  (click)="actualizarPerfilUsuario()">Guardar Cambios</button>
   </div>
-</div>
+
+  </div>
+</ng-container>

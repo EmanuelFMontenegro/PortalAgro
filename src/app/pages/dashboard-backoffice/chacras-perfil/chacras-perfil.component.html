@@ -1,42 +1,30 @@
-<div class="container">
-  <mat-card class="main-card">
-    <div class="card user-card">
-      <div class="user-content">
-        <div class="avatar">
-          <div class="avatar-circle">
-            <mat-icon class="avatar-icon">person</mat-icon>
-          </div>
-            <div class="datos-perfil-user">
-              <p class="name">Nombre: {{ nombre }} {{ apellido }}</p>
-              <p class="email">Email: {{ email }}</p>
-              <p class="contacto">Contacto: {{ contacto }}</p>
-           </div>
-
+ <div class="mainStructure">
+  <app-header-inner [title]="'Chacras'" [backButton]="true"></app-header-inner>
+<!--     <div class="profileContainer">
+      <div class="profileContainer-detail">
+        <div class="profileContainer-detail-avatar">
+           <img src="../../../../assets/img/profile_edit.png" alt="">
         </div>
-        <div class="botones-chacras">
-          <button mat-raised-button class="cargarChacra-button" (click)="BtnCargarChacra()">Cargar Chacra</button>
+        <div class="profileContainer-detail-info"> 
+          <div class="profileContainer-detail-info-name">
+            {{ nombre }} {{ apellido }}
+          </div> 
+          <div class="profileContainer-detail-info-mail"> 
+            {{ email }}
+             </div> 
         </div>
-
-      </div>
-
-      <h2 class="titulo-chacra">Chacras</h2>
-    </div>
-
-    <div class="card-campos-section">
-      <div class="campos-container">
-        <div class="campo-card" *ngFor="let chacra of chacras">
-          <img src="/assets/img/Chacra_{{ chacra.id }}.png" alt="Chacra {{ chacra.id }}">
-          <h3>{{ chacra.name }}</h3>
-          <p>
-            <span class="campo-variable">Localidad:</span> {{ chacra.address.location.name }}
-            <img src="assets/img/location.svg" alt="Icono" class="icono_location">
-          </p>
-          <p><span class="campo-variable">Dirección:</span> {{ chacra.address.address }}</p>
-          <p><span class="campo-variable">Hectáreas:</span> {{ chacra.dimensions }}</p>
-          <p><span class="campo-variable">Observaciones:</span> {{ chacra.observation }}</p>
-          <button mat-raised-button class="ver-mas-button" (click)="verMas(chacra)">Ver Más</button>
+        <div class="profileContainer-detail-editar">
+          <button  class="profileContainer-detail-editar-button" >
+            <img src="../../../../assets/img/edit_square_FILL0_wght400_GRAD0_opsz24.svg" alt="Icon Edit" (click)="BtnCargarChacra()" class="profileContainer-detail-editar-button-icon">
+          </button>
         </div>
       </div>
-    </div>
-  </mat-card>
+    </div> -->
+    <app-searchbar  (filter)="onFilter($event)" (clearFilter)="clearFilter()" 
+    [options]="options" 
+    [btnAdd]="'Chacras-p'"
+    [placeholder]="'Buscar por Nombre de Chacra'"></app-searchbar>
+    <app-card [dataView]="dataView" [listado]="chacras"  [typeCard]="'chacra'"></app-card> 
+
+
 </div>

@@ -1,26 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { ApiService } from 'src/app/services/ApiService';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/AuthService';
 import { jwtDecode } from 'jwt-decode';
-import { MatSelectChange } from '@angular/material/select';
-import {
-  startWith,
-  map,
-  debounceTime,
-  distinctUntilChanged,
-} from 'rxjs/operators';
-import { Observable } from 'rxjs';
-import { FormControl } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
 import { TipoLabel, DataView } from 'src/app/shared/components/miniatura-listado/miniatura.model';
 import { DashboardBackOfficeService } from '../dashboard-backoffice.service';
-
-interface CustomJwtPayload {
-  userId: number;
-  sub: string;
-}
 
 interface DecodedToken {
   userId: number;
@@ -32,50 +16,29 @@ interface DecodedToken {
 @Component({
   selector: 'app-chacras',
   templateUrl: './chacras.component.html',
-  styleUrls: ['./chacras.component.sass'],
 })
-export class ChacrasComponent implements OnInit {
+export class ChacrasComponent implements OnInit { 
   titulo: string = 'Chacras';
-  Buscar: string = '';
-  placeholderText: string = 'Buscar por . . .';
   private userId: number | any;
   public userEmail: string | null = null;
   private companyId: number | any;
   nombre: string = '';
   apellido: string = '';
-  campos: any[] = [];
   localidades: any[] = [];
-  chacra: any[] = [];
-  filteredLocalidades: Observable<any[]> = new Observable<any[]>();
-  filtroLocalidades: FormControl = new FormControl('');
-  mostrarInputNormal: boolean = true;
-  minHectareas: number | undefined;
-  maxHectareas: number | undefined;
-  hectareasOptions: number[] = [];
-  hectareasOption: string = 'min-max';
-  nombreChacra: string = '';
-  nombreProductor: string = '';
   userLogeed = this.authService.userLogeed;
+  campos: any[] = [];
+  options: string[] = ['Localidad', 'Productor', 'Nombre', 'Hectareas'];
+  dataView: DataView[] = [
+    { label: '', field: 'assets/img/Chacra_1.png', tipoLabel: TipoLabel.imagen },
+    { label: '', field: 'name', tipoLabel: TipoLabel.titulo },
+    { label: 'Localidad', field: 'address.location.name', tipoLabel: TipoLabel.span },
+    { label: 'Hectarias', field: 'dimensions', tipoLabel: TipoLabel.span },
+    { label: 'Descripción', field: 'observation', tipoLabel: TipoLabel.span },
+    //ver bien las rutas de ver geo y ver lote , trae siempre el mismo lote
+    { label: 'campoSeleccionado', field: '/dashboard-backoffice/chacras-lote', tipoLabel: TipoLabel.botonVerLote },
+    { label: 'selectedUser', field: 'url DEL BTN', tipoLabel: TipoLabel.botonGeo },
 
-  dataView: DataView [] = [
-
-    // IMAGEN
-    {label: '', field: 'assets/img/lote_1.svg', tipoLabel: TipoLabel.imagen},
-
-    // TITULO
-    {label: '', field: 'name', tipoLabel: TipoLabel.titulo},
-
-    // SPAN
-    {label: 'Localidad', field: 'address.location.name', tipoLabel: TipoLabel.span},
-    {label: 'Dirección', field:'address.address', tipoLabel: TipoLabel.span },
-    {label: 'Hectarias', field:'dimensions', tipoLabel: TipoLabel.span },
-    {label: 'Descripción', field: 'observation', tipoLabel: TipoLabel.span},
-
-    // BTN VER MAS
-    {label: 'selectedUser', field: 'url DEL BTN', tipoLabel: TipoLabel.botonVermas},
-
- ]
-
+  ]
   campoData = {
     name: '',
     dimensions: '',
@@ -90,14 +53,9 @@ export class ChacrasComponent implements OnInit {
     private authService: AuthService,
     private apiService: ApiService,
     private toastr: ToastrService,
-    private router: Router,
-    private http: HttpClient,
-    public dashboardBackOffice: DashboardBackOfficeService)
-   {
-    this.dashboardBackOffice.dataTitulo.next({ titulo: `¡Bienvenido!, Acá podrás gestionar, las chacras de los Productores` , subTitulo: ''})
-    for (let i = 1; i <= 100; i++) {
-      this.hectareasOptions.push(i);
-    }
+    public dashboardBackOffice: DashboardBackOfficeService) {
+    this.dashboardBackOffice.dataTitulo.next({ titulo: `¡Bienvenido!, Acá podrás gestionar, las chacras de los Productores`, subTitulo: '' })
+
   }
 
   ngOnInit(): void {
@@ -111,77 +69,41 @@ export class ChacrasComponent implements OnInit {
     const token = this.authService.getToken();
     if (token) {
       const decoded: any = jwtDecode(token);
-
       this.userId = decoded.userId;
       this.userEmail = decoded.sub;
       this.companyId = decoded.companyId;
-  } else {
-    this.userId = null;
-    this.userEmail = null;
-  }
-}
-
-  aplicarFiltro(event: MatSelectChange) {
-    const filtros: {
-      [key: string]: {
-        placeholder: string;
-        mostrarInputNormal: boolean;
-        limpiarInput: boolean;
-      };
-    } = {
-      localidad: {
-        placeholder: 'Buscar por Localidad',
-        mostrarInputNormal: false,
-        limpiarInput: false,
-      },
-      productor: {
-        placeholder: 'Buscar por Productor',
-        mostrarInputNormal: true,
-        limpiarInput: true,
-      },
-      nombreChacra: {
-        placeholder: 'Buscar por Nombre de Chacra',
-        mostrarInputNormal: false,
-        limpiarInput: true,
-      },
-      hectareas: {
-        placeholder: 'Buscar por Hectáreas',
-        mostrarInputNormal: false,
-        limpiarInput: true,
-      },
-    };
-
-    const filtroSeleccionado = filtros[event.value];
-    this.placeholderText = filtroSeleccionado.placeholder;
-    this.mostrarInputNormal = filtroSeleccionado.mostrarInputNormal;
-
-    if (filtroSeleccionado.limpiarInput) {
-      this.limpiarInputs();
+    } else {
+      this.userId = null;
+      this.userEmail = null;
     }
   }
 
-  limpiarInputs() {
-    this.nombreProductor = '';
-    this.nombreChacra = '';
-  }
-
-  validarMinHectareas() {
-    if (
-      this.minHectareas &&
-      this.maxHectareas &&
-      this.minHectareas > this.maxHectareas
-    ) {
-      this.minHectareas = this.maxHectareas;
+  onFilter(filtro: any) {
+    switch (filtro.tipo) {
+      case 'Buscar por Localidad':
+        this.filtrarPorLocalidad(filtro.valor);
+        break;
+      case 'Buscar por Productor':
+        this.filtrarPorProductor(filtro.valor);
+        break;
+      case 'Buscar por Nombre de Chacra':
+        this.filtrarPorNombreDeChacra(filtro.valor);
+        break;
+      case 'Buscar por Hectáreas':
+        this.filtrarPorHectareas(filtro.min, filtro.max);
+        break;
     }
   }
 
-  validarMaxHectareas() {
-    if (
-      this.minHectareas &&
-      this.maxHectareas &&
-      this.maxHectareas < this.minHectareas
-    ) {
-      this.maxHectareas = this.minHectareas;
+  validarMinHectareas(min: number, max: number) {
+    if (min && max && min > max) {
+      min = max;
+    }
+  }
+
+  validarMaxHectareas(min: number, max: number) {
+    if (min && max && max < min) {
+      max = min;
     }
   }
 
@@ -189,11 +111,10 @@ export class ChacrasComponent implements OnInit {
     const token = this.authService.getToken();
     if (token) {
       const decoded: DecodedToken = jwtDecode(token);
-      if (decoded.userId && decoded.companyId) { // Asegúrate de tener companyId en el token
+      if (decoded.userId && decoded.companyId) {
         this.userId = decoded.userId;
         this.companyId = decoded.companyId;
         this.userEmail = decoded.sub;
-
         this.apiService.findUserById(this.companyId, this.userId).subscribe(
           (data) => {
             this.nombre = data.name;
@@ -229,71 +150,26 @@ export class ChacrasComponent implements OnInit {
     this.apiService.getLocationMisiones('location').subscribe(
       (localidades) => {
         this.localidades = localidades;
-        this.filteredLocalidades = this.filtroLocalidades.valueChanges.pipe(
-          startWith(''),
-          map((value: string) => this.filtrarLocalidades(value || ''))
-        );
       },
       (error) => {
         console.error('Error al obtener las localidades', error);
       }
     );
+    console.log(this.localidades);
   }
 
-  private filtrarLocalidades(value: string): any[] {
-    const filterValue = value.toLowerCase();
-    return this.localidades.filter((loc) =>
-      loc.name.toLowerCase().includes(filterValue)
-    );
-  }
-
-  limpiarTexto() {
-    this.Buscar = '';
-    this.nombreChacra = '';
-    this.nombreProductor = '';
-    this.minHectareas = undefined;
-    this.maxHectareas = undefined;
-    this.cargarChacras();
-  }
-
-  activarFiltro() {
-    switch (this.placeholderText) {
-      case 'Buscar por Localidad':
-        this.filtrarPorLocalidad();
-        break;
-      case 'Buscar por Nombre de Chacra':
-        setTimeout(() => {
-          this.filtrarPorNombreDeChacra();
-        });
-        break;
-      case 'Buscar por Productor':
-        setTimeout(() => {
-          this.filtrarPorProductor();
-        });
-        break;
-      case 'Buscar por Hectáreas':
-        this.filtrarPorHectareas();
-        break;
-      default:
-        console.error('Tipo de filtro no reconocido:', this.placeholderText);
-        break;
-    }
-  }
-
-  filtrarPorLocalidad() {
-    if (!this.Buscar) {
+  filtrarPorLocalidad(buscar: string) {
+    if (!buscar) {
       console.error('Debe seleccionar una localidad');
       return;
     }
-
     const localidadSeleccionada = this.localidades.find(
-      (loc) => loc.name === this.Buscar
+      (loc) => loc.name === buscar
     );
     if (!localidadSeleccionada) {
       console.error('Localidad no encontrada');
       return;
     }
-
     const locationId = localidadSeleccionada.id;
     this.apiService
       .getUsersFields(0, 5, 'id', 'desc', true, '', '', locationId)
@@ -315,15 +191,13 @@ export class ChacrasComponent implements OnInit {
       );
   }
 
-  filtrarPorNombreDeChacra() {
-    if (!this.nombreChacra || this.nombreChacra.trim() === '') {
+  filtrarPorNombreDeChacra(nombreChacra: string) {
+    if (!nombreChacra || nombreChacra.trim() === '') {
       console.error('Debe ingresar un nombre de chacra');
       return;
     }
-
-    // Llamar al servicio con el nombre de chacra para filtrar
     this.apiService
-      .getUsersFields(0, 5, 'id', 'desc', true, '', this.nombreChacra)
+      .getUsersFields(0, 5, 'id', 'desc', true, '', nombreChacra)
       .subscribe(
         (response) => {
           if (response.list && response.list.length > 0) {
@@ -342,22 +216,14 @@ export class ChacrasComponent implements OnInit {
       );
   }
 
-  filtrarPorHectareas() {
-    if (
-      this.minHectareas === undefined ||
-      this.maxHectareas === undefined ||
-      isNaN(this.minHectareas) ||
-      isNaN(this.maxHectareas)
-    ) {
+  filtrarPorHectareas(minHectareas: number, maxHectareas: number) {
+    if (minHectareas === undefined || maxHectareas === undefined || isNaN(minHectareas) || isNaN(maxHectareas)) {
       console.error('Debe ingresar valores válidos para el rango de hectáreas');
       return;
     }
-
     // Convertir las cadenas de texto a números
-    const minHectareasNum = this.minHectareas;
-    const maxHectareasNum = this.maxHectareas;
-
-    // Llamar al servicio con el rango de hectáreas para filtrar
+    const minHectareasNum = minHectareas;
+    const maxHectareasNum = maxHectareas;
     this.apiService
       .getUsersFields(
         0,
@@ -371,8 +237,7 @@ export class ChacrasComponent implements OnInit {
         null,
         minHectareasNum,
         maxHectareasNum
-      )
-      .subscribe(
+      ).subscribe(
         (response) => {
           if (response.list && response.list.length > 0) {
             this.campos = response.list[0];
@@ -390,14 +255,12 @@ export class ChacrasComponent implements OnInit {
       );
   }
 
-  filtrarPorProductor() {
+  filtrarPorProductor(nombreProductor: string) {
     // Verificar si se ha ingresado un nombre de productor
-    if (!this.nombreProductor || this.nombreProductor.trim() === '') {
+    if (!nombreProductor || nombreProductor.trim() === '') {
       console.error('Debe ingresar un nombre de productor');
       return;
     }
-
-    // Llamar al servicio con el nombre del productor para filtrar
     this.apiService
       .getUsersFields(
         0, // pageNo
@@ -405,7 +268,7 @@ export class ChacrasComponent implements OnInit {
         'id', // sortBy
         'desc', // sortDir
         true, // isActive
-        this.nombreProductor // producerNames
+        nombreProductor // producerNames
         // '', // filedName
         // null, // locationId
         // null, // person_id
@@ -429,12 +292,10 @@ export class ChacrasComponent implements OnInit {
         }
       );
   }
-
-  BtnNuevaChacra() {
-    this.router.navigate(['dashboard-backoffice/inicio']);
+  
+  clearFilter() {
+    this.cargarChacras();
   }
 
-  verMas(campo: any) {
-    // Lógica para ver más detalles sobre un campo específico
-  }
+
 }

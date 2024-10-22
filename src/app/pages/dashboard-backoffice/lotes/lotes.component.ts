@@ -4,7 +4,6 @@ import { ApiService } from 'src/app/services/ApiService';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/AuthService';
 import { jwtDecode } from 'jwt-decode';
-import { MatSelectChange } from '@angular/material/select';
 import {
   FormControl,
   FormGroup,
@@ -15,7 +14,6 @@ import { startWith, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../../../shared/components/dialog/dialog.component';
-import { Router, ActivatedRoute } from '@angular/router';
 import {
   TipoLabel,
   DataView,
@@ -30,11 +28,6 @@ interface CustomJwtPayload {
   sub: string;
 }
 
-interface DecodedToken {
-  userId: number;
-  sub: string;
-  roles: string;
-}
 
 interface Lote {
   id: number;
@@ -57,9 +50,9 @@ interface Cultivo {
 @Component({
   selector: 'app-lotes',
   templateUrl: './lotes.component.html',
-  styleUrls: ['./lotes.component.sass'],
 })
 export class LotesComponent implements OnInit {
+  options: string[] = ['Localidad', 'Productor', 'Cultivos', 'Hectareas'];
   titulo: string = 'Lotes';
   mostrarMatSelectLocalidades: boolean = false;
   localidades: any[] = [];
@@ -99,16 +92,11 @@ export class LotesComponent implements OnInit {
   };
 
   dataView: DataView[] = [
-    // IMAGEN
-    { label: '', field: 'assets/img/lote_1.svg', tipoLabel: TipoLabel.imagen },
-
-    // SPAN
+    { label: '', field: 'assets/img/Chacra_1.png', tipoLabel: TipoLabel.imagen },
     { label: 'Nombre del Lote', field: 'name', tipoLabel: TipoLabel.span },
     { label: 'Plantación', field: 'plant_name', tipoLabel: TipoLabel.span },
     { label: 'Hectáreas', field: 'dimensions', tipoLabel: TipoLabel.span },
     { label: 'Descripción', field: 'descriptions', tipoLabel: TipoLabel.span },
-
-    // VER MAS
     {
       label: '',
       field: 'dashboard-backoffice/perfil-productor',
@@ -120,9 +108,7 @@ export class LotesComponent implements OnInit {
     private authService: AuthService,
     private apiService: ApiService,
     private toastr: ToastrService,
-    private http: HttpClient,
     private fb: FormBuilder,
-    private router: Router,
     private dialog: MatDialog,
     public dashboardBackOffice: DashboardBackOfficeService
   ) {
@@ -146,8 +132,8 @@ export class LotesComponent implements OnInit {
   ngOnInit(): void {
     this.decodeToken();
     this.obtenerLocalidades();
-    this.obtenerCultivos();
-    this.filtrarPorCultivo();
+    this.obtenerCultivos();/* 
+    this.filtrarPorCultivo(); */
     this.cargarLotes();
   }
 
@@ -182,9 +168,6 @@ export class LotesComponent implements OnInit {
     );
   }
 
-  obtenerIdLocalidadSeleccionada(): number | undefined {
-    return this.filtroLocalidades.value;
-  }
   obtenerCultivos() {
     this.apiService.getAllTypeCropOperador().subscribe(
       (typeCrops: any) => {
@@ -192,6 +175,7 @@ export class LotesComponent implements OnInit {
           id: crop.id,
           name: crop.name,
         }));
+        console.log('cultivos', this.cultivos);
       },
       (error) => {
         console.error('Error al cargar los tipos de cultivo:', error);
@@ -199,38 +183,20 @@ export class LotesComponent implements OnInit {
     );
   }
 
-  aplicarFiltro(event: MatSelectChange) {
-    const valorSeleccionado = event.value;
-
-    switch (valorSeleccionado) {
-      case 'localidad':
-        this.placeholderText = 'Buscar por localidad';
-        this.mostrarMatSelectLocalidades = true;
-        break;
-      case 'productor':
-        this.placeholderText = 'Buscar por productor';
-        this.mostrarMatSelectLocalidades = false;
-        break;
-      case 'cultivo':
-        this.placeholderText = 'Seleccionar cultivo';
-        this.mostrarMatSelectLocalidades = false;
-        break;
-      case 'hectareas':
-        this.placeholderText = 'Buscar por Hectáreas';
-        this.mostrarMatSelectLocalidades = false;
-        break;
-      default:
-        this.placeholderText = '';
-        this.mostrarMatSelectLocalidades = false;
-        break;
-    }
-  }
-
-  filtrarPorLocalidad() {
-    if (!this.idLocalidadSeleccionada) {
+  filtrarPorLocalidad(buscar : string) {
+    console.log('buscar', buscar);
+    if (!buscar) {
       this.toastr.error('Por favor selecciona una localidad.', 'Error');
       return;
     }
+    const localidadSeleccionada = this.localidades.find(
+      (loc) => loc.name === buscar
+    );
+    if (!localidadSeleccionada) {
+      console.error('Localidad no encontrada');
+      return;
+    }
+    const locationId = localidadSeleccionada.id;
 
     this.apiService
       .getAllPlotsAdmin(
@@ -243,8 +209,7 @@ export class LotesComponent implements OnInit {
         undefined,
         undefined,
         undefined,
-        this.idLocalidadSeleccionada
-      )
+        locationId      )
       .subscribe(
         (data: any) => {
           if (data && data.list && data.list.length > 0) {
@@ -308,16 +273,16 @@ export class LotesComponent implements OnInit {
         console.error('Error al cargar los tipos de cultivo:', error);
       }
     );
-  }
-  filtrarPorProductor() {
-    if (this.nombreProductor) {
+  } 
+  filtrarPorProductor( nombreProductor: string) {
+    if (nombreProductor) {
       this.apiService
         .getAllPlotsAdmin(
           undefined,
           undefined,
           undefined,
           undefined,
-          this.nombreProductor
+          nombreProductor
         )
         .subscribe(
           (data: any) => {
@@ -344,8 +309,9 @@ export class LotesComponent implements OnInit {
     }
   }
 
-  filtrarPorCultivo() {
-    if (this.cropId) {
+  filtrarPorCultivo(cropId: string | undefined = undefined) {
+    if (cropId) {
+       const cultivoId = (this.cultivos.find((cultivo) => cultivo.name === cropId)?.id)?.toString();
       this.apiService
         .getAllPlotsAdmin(
           undefined,
@@ -355,7 +321,7 @@ export class LotesComponent implements OnInit {
           undefined,
           undefined,
           undefined,
-          this.cropId
+          cultivoId
         )
         .subscribe(
           (data: any) => {
@@ -383,25 +349,7 @@ export class LotesComponent implements OnInit {
     }
   }
 
-  validarMinHectareas() {
-    if (this.minHectareas && isNaN(this.minHectareas)) {
-      this.toastr.warning(
-        'Por favor ingresa un valor numérico válido para el mínimo de hectáreas.',
-        'Advertencia'
-      );
-      this.minHectareas = undefined;
-    }
-  }
-
-  validarMaxHectareas() {
-    if (this.maxHectareas && isNaN(this.maxHectareas)) {
-      this.toastr.warning(
-        'Por favor ingresa un valor numérico válido para el máximo de hectáreas.',
-        'Advertencia'
-      );
-      this.maxHectareas = undefined;
-    }
-  }
+ 
 
   aplicarFiltroHectareas(minHectareas: number, maxHectareas: number) {
     if (!minHectareas || !maxHectareas) {
@@ -547,90 +495,24 @@ export class LotesComponent implements OnInit {
     });
   }
 
-  volver() {
-    this.router.navigate(['dashboard-backoffice/inicio']);
-  }
-
-  limpiarTexto() {
-    this.Buscar = '';
-    this.idLocalidadSeleccionada = undefined;
-    this.loteData = [];
-    this.nombreProductor = '';
-    this.cropId = '';
+  clearFilter() {
     this.cargarLotes();
   }
-
-  filtrar() {
-    if (!this.filtroSeleccionado) {
-      this.toastr.warning('Por favor selecciona un filtro.', 'Advertencia');
-      return;
-    }
-
-    switch (this.filtroSeleccionado) {
-      case 'localidad':
-        const localidadId = this.obtenerIdLocalidadSeleccionada();
-        // Verifica si localidadId es un número válido antes de realizar la comparación
-        if (
-          localidadId === null ||
-          localidadId === undefined ||
-          isNaN(localidadId)
-        ) {
-          this.toastr.error(
-            'Por favor selecciona una localidad válida.',
-            'Error'
-          );
-          return;
-        }
-        this.filtrarPorLocalidad();
+  onFilter(filtro: any) {
+    switch (filtro.tipo) {
+      case 'Buscar por Localidad':
+        this.filtrarPorLocalidad(filtro.valor);
         break;
-      case 'productor':
-        this.filtrarPorProductor();
+      case 'Buscar por Productor':
+        this.filtrarPorProductor(filtro.valor);
         break;
-      case 'cultivo':
-        this.filtrarPorCultivo();
+      case 'Buscar por Cultivos':
+        this.filtrarPorCultivo(filtro.valor);
         break;
-      case 'hectareas':
-        const minHectareasStr: string = this.minHectareas
-          ? this.minHectareas.toString()
-          : '';
-        const maxHectareasStr: string = this.maxHectareas
-          ? this.maxHectareas.toString()
-          : '';
-
-        const minHectareasNum = minHectareasStr
-          ? parseFloat(minHectareasStr)
-          : undefined;
-        const maxHectareasNum = maxHectareasStr
-          ? parseFloat(maxHectareasStr)
-          : undefined;
-        if (
-          minHectareasNum !== undefined &&
-          maxHectareasNum !== undefined &&
-          !isNaN(minHectareasNum) &&
-          !isNaN(maxHectareasNum)
-        ) {
-          this.aplicarFiltroHectareas(minHectareasNum, maxHectareasNum);
-        } else {
-          this.toastr.warning(
-            'Por favor ingresa valores numéricos válidos para las hectáreas.',
-            'Advertencia'
-          );
-        }
-        break;
-      default:
-        this.toastr.warning(
-          'Por favor selecciona un filtro válido.',
-          'Advertencia'
-        );
+      case 'Buscar por Hectáreas':
+        this.aplicarFiltroHectareas(filtro.min, filtro.max);
         break;
     }
   }
 
-  BtnNuevaChacra() {
-    this.router.navigate(['dashboard-backoffice/inicio']);
-  }
-
-  verMas(campo: any) {
-    this.router.navigate(['dashboard-backoffice/perfil-productor']);
-  }
 }

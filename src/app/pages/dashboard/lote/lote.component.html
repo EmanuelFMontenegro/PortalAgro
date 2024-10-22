@@ -1,43 +1,10 @@
 <div class="mainStructure">
   <app-header-inner [title]="'Lotes'" [backButton]="true"></app-header-inner>
-  <div class="search-bar">
-    <div class="search-bar-picker grow-1">
-      <mat-form-field appearance="outline" style="width: 100%;">
-        <mat-label>Ejemplos</mat-label>
-        <mat-select>
-          <mat-option *ngFor="let option of loteData" [value]="option.name">{{ option.name }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div class="search-bar-input-text grow-3" style="border-radius: 8px !important;">
-      <mat-form-field appearance="outline" style="width: 100%;">
-        <mat-label>Texto...</mat-label>
-        <input class="mat-elevation-z0" matInput   >
-      </mat-form-field>
-    </div>
-    <div class="search-bar-buttons">
-      <button class="secondary-button-auto grow-1 size-48" mat-raised-button><mat-icon>clear</mat-icon>Limpiar</button>
-      <button class="secondary-button-auto grow-1 size-48"  mat-raised-button><mat-icon>filter_list</mat-icon>Filtrar</button>
-      <button class="primary-button-auto grow-1 size-48" mat-raised-button (click)="cargarLotes()" >Registrar Lote</button>
-    </div>
-  </div>
-  <div class="cardContainerNoCenteredLote">
-    <div class="LoteCard" *ngFor="let lote of loteData; let i = index">
-      <img class="LoteCard-img" [src]="'assets/img/Lote_' + (i + 1) + '.png'" alt="Lote {{ lote.id }}"  >
-      <div class="LoteCard-header">
-        <p class="LoteCard-header-subtitle dot">
-          <span>Nombre del Lote:</span> {{ lote.name }}
-           </p>
-        <p class="LoteCard-header-subtitle dot">
-          <span>Cultivo:</span> {{ lote.typeCrop.name }}
-         </p>
-          <p class="LoteCard-header-subtitle dot">
-            <span>Hectáreas:</span> {{ lote.dimensions }}</p>
-            <p class="LoteCard-header-subtitle dot size-50 scroll-y">
-              <span>Descripción:</span> {{ lote.descriptions }}</p>
-      </div>
-  <div class="LoteCard-buttons">  
-    <button class="basic-warning grow-1 size-48"  (click)="confirmarBorrado(lote)" mat-button><mat-icon>delete</mat-icon>Eliminar</button> 
-    <button class="basic-blue grow-1 size-48" (click)="editarLote(lote)"  mat-button><mat-icon>edit</mat-icon>Editar </button>
-  </div>
+  <app-searchbar  (filter)="onFilter($event)" (clearFilter)="clearFilter()" 
+  [options]="options"
+  [localidadesOptions]="localidades"
+  [placeholder]="'Buscar por Localidad'"  [btnAdd]="'Lotes'"></app-searchbar>  
+  <app-card [dataView]="dataView" [listado]="loteData"  [typeCard]="'lote'"   (btnEliminar)="confirmarBorrado($event)"
+  (btnEditarDevolverObjeto)="editarLote($event)"></app-card> 
+ 
 </div>

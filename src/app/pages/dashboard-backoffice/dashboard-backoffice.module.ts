@@ -66,7 +66,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
     UsuariosFiltroComponent,
     RenderProvincesPipe,
     RenderDepartmentsPipe,
-    UsuariosActualizarComponent,
+    UsuariosActualizarComponent
   ],
   imports: [
     IMPORTS_MATERIAL,
@@ -87,7 +87,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatDividerModule,
     MatIconModule,
     MatTableModule,
-    MatExpansionModule
+    MatExpansionModule,
   ],
   providers: [RenderProvincesPipe, RenderDepartmentsPipe],
 })

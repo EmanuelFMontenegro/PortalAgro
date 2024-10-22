@@ -31,7 +31,6 @@ interface DatosUsuario {
 @Component({
   selector: 'app-cargar-chacras',
   templateUrl: './cargar-chacras.component.html',
-  styleUrls: ['./cargar-chacras.component.sass'],
 })
 export class CargarChacrasComponent implements OnInit {
   nombre: string = '';
