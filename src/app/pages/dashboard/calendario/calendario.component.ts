@@ -15,12 +15,7 @@ export class CalendarioComponent implements OnInit {
   constructor(
     private dashboardBackOffice: DashboardBackOfficeService,
     private apiService: ApiService
-  ) {
-    this.dashboardBackOffice.dataTitulo.next({
-      titulo: `¡Bienvenido!, Acá podrás ver tu calendario de trabajo`,
-      subTitulo: '',
-    });
-  }
+  ) {}
 
   ngOnInit(): void {
     this.ServiciosCalendario();
@@ -29,7 +24,6 @@ export class CalendarioComponent implements OnInit {
   ServiciosCalendario(): void {
     this.apiService.calendarProducer().subscribe(
       (response) => {
-        console.log('Respuesta del endpoint:', response); // Verifica la estructura de la respuesta
         if (response && Array.isArray(response.list)) {
           // Asegúrate de que 'list' contiene los datos esperados
           this.events = response.list.flat().map((event: any) => {
@@ -68,8 +62,8 @@ export class CalendarioComponent implements OnInit {
             return {
               id: event.id,
               title: event.title,
-              start: moment(event.dateEvent, "DD-MM-YYYY hh:mm:ss").toISOString(), // Asegúrate de usar 'dateOfService'
-              end: moment(event.dateEvent, "DD-MM-YYYY hh:mm:ss").add(1, 'hour').toISOString(), // Establece una duración por defecto
+              start: moment(event.dateEvent, "DD-MM-YYYY hh:mm:ss").toISOString(),  
+              end: moment(event.dateEvent, "DD-MM-YYYY hh:mm:ss").add(1, 'hour').toISOString(),  
               extendedProps: {
                 campoNombre,
                 tipoCultivo,
@@ -78,7 +72,6 @@ export class CalendarioComponent implements OnInit {
               },
             };
           });
-          console.log('Eventos mapeados:', this.events); // Verifica la estructura final de los eventos
         } else {
           console.warn('La lista de eventos está vacía');
         }

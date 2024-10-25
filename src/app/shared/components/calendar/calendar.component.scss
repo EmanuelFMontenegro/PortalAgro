@@ -21,6 +21,7 @@
   }
  
   .fc-daygrid-day {
+    min-width: 0 !important;
     min-height: 100px !important;
   }
 
@@ -43,7 +44,14 @@
     margin: 2px !important;
     padding: 2px 4px !important;
     font-size: 0.85em !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
     color: #666 !important;
+  }
+
+  .fc .fc-popover{
+    max-width: 95vw !important;
   }
    
   .fc-theme-standard {
@@ -80,6 +88,7 @@
       color: #14181F ;
       font-weight: 700 ;
       padding: 8px  ;
+      text-decoration: none;
     }
 
     .fc-toolbar-title {

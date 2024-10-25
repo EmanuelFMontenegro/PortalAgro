@@ -1,5 +1,5 @@
-<div class="container">
-    <div class='container-calendarContainer'>
+<div class="calendarContainer">
+    <div class='calendarContainer-calendarContainer'>
       <full-calendar [options]='calendarOptions'>
         <ng-template #eventContent let-arg>
           <p class="calendar-label">
@@ -8,8 +8,8 @@
         </ng-template>
       </full-calendar>
     </div>    
-    <div class="container-eventsContainer">
-      <div class="container-eventsContainer-header">
+    <div class="calendarContainer-eventsContainer">
+      <div class="calendarContainer-eventsContainer-header">
         <div class="header-title">
           <img src="../../../../assets/calendar/integrations.svg" alt="Calendar icon">
           <h2>Eventos</h2>
@@ -18,14 +18,13 @@
           <span class="tab active">Vista General</span>
         </div>
       </div>
-      
       <div class="events-section">
         <h3 class="section-title">
           <span class="title-dot"></span>
           Hoy
         </h3>
         <div class="events-list">
-          <div *ngFor="let event of todayEvents" 
+          <div *ngFor="let event of todayEvents " 
                class="event-card"
                [style.border-left-color]="event.color"
                (click)="openEventDialog(event)">

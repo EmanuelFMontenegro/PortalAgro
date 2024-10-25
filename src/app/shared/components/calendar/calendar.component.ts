@@ -36,13 +36,28 @@ interface EventDetails {
 }
 
 
-type EventStatus = 'Pendiente' | 'En Curso' | 'Aprobada' | 'Sin Estado';
+type EventStatus = 'Pendiente' | 'En Curso' | 'Aprobada' | 'Solicitud';
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss'],
 })
+
+/* Explicación de la funcionalidad del componente
+   Recibimos una lista de events del componente padre, usamos el metodo handleEventDidMount para cambiar el color de los eventos
+   segun su estado, para ello usamos el metodo getEventDetails():
+        Esta func utiliza determineEventStatus() y createEventDetails(). para cachear el titulo, color y estado del evento
+    En el Constructor : 
+      Se inicializa el calendario con las opciones y config necesarias
+      se llama a setupCalendarOptions() para configurar la altura del calendario segun el tamaño de la pantalla
+      Se crean datos de prueba con el metodo setupTestData()
+    
+    
+  
+
+     */
 export class CalendarComponent implements OnInit, OnChanges {
+  initialized = false;
   @Input() events!: EventInput[];
   calendarOptions: CalendarOptions;
   currentEvents: EventApi[] = [];
@@ -50,16 +65,16 @@ export class CalendarComponent implements OnInit, OnChanges {
   weekEvents: ProcessedCalendarEvent[] = [];
   testEvents: EventInput[] = [];
   readonly STATUS_COLORS = {
-    PENDIENTE: '#DB6E00',
-    EN_CURSO: '#FF0000',
-    APROBADA: '#00A81C',
+    PENDIENTE: '#F2994A',
+    EN_CURSO: '#2B78D4',
+    APROBADA: '#3BA549',
     DEFAULT: '#B6C1CA'
   } as const;
   readonly STATUS_MAP: Record<EventStatus, { color: string; text: string }> = {
     'Pendiente': { color: this.STATUS_COLORS.PENDIENTE, text: 'Pendiente' },
     'En Curso': { color: this.STATUS_COLORS.EN_CURSO, text: 'En Curso' },
     'Aprobada': { color: this.STATUS_COLORS.APROBADA, text: 'Aprobada' },
-    'Sin Estado': { color: this.STATUS_COLORS.DEFAULT, text: 'Sin Estado' }
+    'Solicitud': { color: this.STATUS_COLORS.DEFAULT, text: 'Solicitud' }
   } as const;
 
   private colorCache = new Map<string, EventDetails>();
@@ -79,20 +94,18 @@ export class CalendarComponent implements OnInit, OnChanges {
       eventDisplay: 'block',
     };
     
-    this.setupCalendarOptions(window.innerWidth);
     this.setupTestData();
+    this.setupCalendarOptions(window.innerWidth);
   }
 
   ngOnInit() {
-    const allEvents = [...this.testEvents, ...this.events];
-    this.events = allEvents;
-    this.filterEvents();
+    this.initialized = true;
   }
 
 
   private getEventDetails(title: string): EventDetails {
     if (!title) {
-      return this.createEventDetails('Sin Estado');
+      return this.createEventDetails('Solicitud');
     }
 
     const cached = this.colorCache.get(title);
@@ -110,7 +123,7 @@ export class CalendarComponent implements OnInit, OnChanges {
     if (title.includes('Pendiente')) return 'Pendiente';
     if (title.includes('En Curso')) return 'En Curso';
     if (title.includes('Aprobada')) return 'Aprobada';
-    return 'Sin Estado';
+    return 'Solicitud';
   }
 
   private createEventDetails(status: EventStatus): EventDetails {
@@ -130,53 +143,66 @@ export class CalendarComponent implements OnInit, OnChanges {
       status: details.status
     };
   }
-  
-  setupTestData() {
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
-    const dayAfterTomorrow = new Date(today);
-    dayAfterTomorrow.setDate(today.getDate() + 2);
+  private createEventDate(baseDate: Date, hours: number, minutes: number): Date {
+    return new Date(
+      baseDate.getFullYear(),
+      baseDate.getMonth(),
+      baseDate.getDate(),
+      hours,
+      minutes,
+      0
+    );
+  }
 
-   
-    this.testEvents = [
+
+  setupTestData(): void {
+    const baseDate = new Date();
+    baseDate.setHours(0, 0, 0, 0);
+
+    const tomorrow = new Date(baseDate);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    
+    const dayAfterTomorrow = new Date(baseDate);
+    dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 2);
+
+    /* this.testEvents = [
       {
         title: 'Servicio N° 001. Operador Juan Pérez. Pendiente',
-        start: new Date(today.setHours(9, 0, 0)),
-        end: new Date(today.setHours(10, 30, 0))
+        start: this.createEventDate(baseDate, 9, 0),
+        end: this.createEventDate(baseDate, 10, 30)
       },
       {
         title: 'Servicio N° 002. Operador María García. En Curso',
-        start: new Date(today.setHours(11, 0, 0)),
-        end: new Date(today.setHours(12, 30, 0))
+        start: this.createEventDate(baseDate, 11, 0),
+        end: this.createEventDate(baseDate, 12, 30)
       },
       {
         title: 'Servicio N° 003. Operador Carlos López. Aprobada',
-        start: new Date(today.setHours(14, 0, 0)),
-        end: new Date(today.setHours(15, 30, 0))
+        start: this.createEventDate(baseDate, 14, 0),
+        end: this.createEventDate(baseDate, 15, 30)
       },
-      
       {
         title: 'Servicio N° 004. Operador Ana Martínez. Pendiente',
-        start: new Date(tomorrow.setHours(10, 0, 0)),
-        end: new Date(tomorrow.setHours(11, 30, 0))
+        start: this.createEventDate(tomorrow, 10, 0),
+        end: this.createEventDate(tomorrow, 11, 30)
       },
       {
         title: 'Servicio N° 005. Operador Pedro Sánchez. En Curso',
-        start: new Date(tomorrow.setHours(15, 0, 0)),
-        end: new Date(tomorrow.setHours(16, 30, 0))
+        start: this.createEventDate(tomorrow, 15, 0),
+        end: this.createEventDate(tomorrow, 16, 30)
       },
-      
       {
         title: 'Servicio N° 006. Operador Laura Torres. Aprobada',
-        start: new Date(dayAfterTomorrow.setHours(9, 30, 0)),
-        end: new Date(dayAfterTomorrow.setHours(11, 0, 0))
+        start: this.createEventDate(dayAfterTomorrow, 9, 30),
+        end: this.createEventDate(dayAfterTomorrow, 11, 0)
       }
-    ];
-    
+    ]; */
   }
 
   ngOnChanges(changes: SimpleChanges) {
+     if (!this.initialized) {
+      return;
+    }
     if (changes['events']) {
       this.colorCache.clear();
       const allEvents = [...this.testEvents, ...changes['events'].currentValue];
@@ -243,7 +269,7 @@ export class CalendarComponent implements OnInit, OnChanges {
     };
   }
 
-  filterEvents() {
+  filterEvents() { 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     
@@ -258,10 +284,14 @@ export class CalendarComponent implements OnInit, OnChanges {
     this.todayEvents = validEvents.filter(event => 
       event.start.toDateString() === today.toDateString()
     );
+ 
 
     this.weekEvents = validEvents.filter(event => 
-      event.start > today && event.start < endOfWeek
+      event.start.toDateString() !== today.toDateString() &&  
+      event.start > today && 
+      event.start < endOfWeek
     ).sort((a, b) => a.start.getTime() - b.start.getTime());
+  
   }
 
   handleEventClick(clickInfo: EventClickArg) {
