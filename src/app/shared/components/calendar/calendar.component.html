@@ -1,9 +1,70 @@
-<div class='demo-app'>
-  <div class='demo-app-main'>
-    <full-calendar [options]='calendarOptions'>
-      <ng-template #eventContent let-arg>
-        <p class="calendar-label">{{ arg.event.title }}</p>
-      </ng-template>
-    </full-calendar>
+<div class="container">
+    <div class='container-calendarContainer'>
+      <full-calendar [options]='calendarOptions'>
+        <ng-template #eventContent let-arg>
+          <p class="calendar-label">
+            {{ arg.event.start | date:'HH:mm' }} - {{ arg.event.title }}
+          </p>
+        </ng-template>
+      </full-calendar>
+    </div>    
+    <div class="container-eventsContainer">
+      <div class="container-eventsContainer-header">
+        <div class="header-title">
+          <img src="../../../../assets/calendar/integrations.svg" alt="Calendar icon">
+          <h2>Eventos</h2>
+        </div>
+        <div class="header-tabs">
+          <span class="tab active">Vista General</span>
+        </div>
+      </div>
+      
+      <div class="events-section">
+        <h3 class="section-title">
+          <span class="title-dot"></span>
+          Hoy
+        </h3>
+        <div class="events-list">
+          <div *ngFor="let event of todayEvents" 
+               class="event-card"
+               [style.border-left-color]="event.color"
+               (click)="openEventDialog(event)">
+            <div class="event-content">
+              <div class="event-time">{{event.start | date:'HH:mm'}}</div>
+              <div class="event-title">{{event.title}}</div>
+            </div>
+            <div class="event-status" [style.background-color]="event.color">
+              {{event['status']}}
+            </div>
+          </div>
+          <div *ngIf="todayEvents.length === 0" class="no-events">
+            No hay eventos programados para hoy
+          </div>
+        </div>
+      </div>
+  <div class="events-section">
+    <h3 class="section-title">
+      <span class="title-dot"></span>
+      Esta Semana
+    </h3>
+    <div class="events-list">
+      <div *ngFor="let event of weekEvents" 
+           class="event-card"
+           [style.border-left-color]="event.color"
+           (click)="openEventDialog(event)">
+        <div class="event-content">
+          <div class="event-date">{{event.start | date:'dd/MM'}}</div>
+          <div class="event-time">{{event.start | date:'HH:mm'}}</div>
+          <div class="event-title">{{event.title}}</div>
+        </div>
+        <div class="event-status" [style.background-color]="event.color">
+          {{event['status']}}
+        </div>
+      </div>
+      <div *ngIf="weekEvents.length === 0" class="no-events">
+        No hay eventos programados para esta semana
+      </div>
+    </div>
   </div>
-</div>
+    </div>
+  </div>

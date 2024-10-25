@@ -1,0 +1,120 @@
+.popup-container {
+    width: 100%;
+    max-width: 500px;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .popup-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    border-bottom: 1px solid #E5E7EB;
+  
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      .header-icon {
+        width: 32px;
+        height: 32px;
+      }
+      h2 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+        color: #2B2E32;
+      }
+    }
+  
+    .close-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 24px;
+      color: #6B7280;
+      padding: 4px 8px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  
+      &:hover {
+        background-color: #F3F4F6;
+      }
+    }
+  }
+  
+  .popup-dialog-container {
+    padding: 24px;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+  
+  .popup-dialog-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .popup-dialog-content-title {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  
+    &-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #2B2E32;
+    }
+  
+    &-value {
+      font-size: 16px;
+      color: #111827;
+    }
+  }
+  
+  [mat-dialog-actions] {
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+    border-top: 1px solid #E5E7EB;
+    margin: 0;
+  
+    .continue-button {
+      background-color: #10B981;
+      color: white;
+      padding: 8px 24px;
+      border-radius: 6px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      max-width: 200px;
+      height: 40px;
+  
+      &:hover {
+        background-color: #059669;
+      }
+    }
+  }
+   
+  .popup-dialog-container {
+    scrollbar-width: thin;
+    scrollbar-color: #E5E7EB transparent;
+  
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+  
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+  
+    &::-webkit-scrollbar-thumb {
+      background-color: #E5E7EB;
+      border-radius: 3px;
+    }
+  }

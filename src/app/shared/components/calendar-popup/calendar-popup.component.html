@@ -1,38 +1,37 @@
-<div class="titulo-principal" style="padding-top: 20px; text-align: center;">
-  Detalles del evento
-</div>
-<div mat-dialog-content class="popup-dialog-container">
-  <div class="popup-dialog-content">
-    <div class="popup-dialog-content-title">
-      <div class="popup-dialog-content-title-label">Nombre del evento:</div>
-      <div class="popup-dialog-content-title-value">{{data.event?.title}}</div>
+<div class="popup-container">
+  <div class="popup-header">
+    <div class="header-content">
+      <img src="../../../../assets/calendar/integrations.svg" alt="Calendar icon" class="header-icon">
+      <h2>Detalles del evento</h2>
     </div>
-    <div class="popup-dialog-content-title">
-      <div class="popup-dialog-content-title-label">Fecha:</div>
-      <div class="popup-dialog-content-title-value">{{data.event?.start | date: 'dd/MM/yyyy'}}</div>
-    </div>
-    <div class="popup-dialog-content-title">
-      <div class="popup-dialog-content-title-label">Hora:</div>
-      <div class="popup-dialog-content-title-value">{{data.event?.start | date: 'HH:mm'}}</div>
-    </div>
-    <div class="popup-dialog-content-title">
-      <div class="popup-dialog-content-title-label">Campo Nombre:</div>
-      <div class="popup-dialog-content-title-value">{{data.event?.extendedProps.campoNombre}}</div>
-    </div>
-    <div class="popup-dialog-content-title">
-      <div class="popup-dialog-content-title-label">Tipo de Cultivo:</div>
-      <div class="popup-dialog-content-title-value">{{data.event?.extendedProps.tipoCultivo}}</div>
-    </div>
-    <div class="popup-dialog-content-title">
-      <div class="popup-dialog-content-title-label">Hectares:</div>
-      <div class="popup-dialog-content-title-value">{{data.event?.extendedProps.hectares}}</div>
-    </div>
-    <div class="popup-dialog-content-title">
-      <div class="popup-dialog-content-title-label">Lotes:</div>
-      <div class="popup-dialog-content-title-value">{{data.event?.extendedProps.lotes}}</div>
+    <button class="close-button" (click)="onCancel()">
+      <span>×</span>
+    </button>
+  </div>
+  <div mat-dialog-content class="popup-dialog-container">
+    <div class="popup-dialog-content">
+      <div class="popup-dialog-content-title">
+        <div class="popup-dialog-content-title-label">Nombre del evento:</div>
+        <div class="popup-dialog-content-title-value">{{data.event?.title}}</div>
+      </div>
+      <div class="popup-dialog-content-title">
+        <div class="popup-dialog-content-title-label">Fecha:</div>
+        <div class="popup-dialog-content-title-value">{{data.event?.start | date: 'dd/MM/yyyy'}}</div>
+      </div>
+      <div class="popup-dialog-content-title">
+        <div class="popup-dialog-content-title-label">Hora:</div>
+        <div class="popup-dialog-content-title-value">{{data.event?.start | date: 'HH:mm'}}hs</div>
+      </div>
+      <div class="popup-dialog-content-title">
+        <!-- Validacion por si acaso, no se envia descripcion por el momento en la api asi que hay que verlo -->
+        <div class="popup-dialog-content-title-label">Descripción:</div>
+        <div class="popup-dialog-content-title-value">{{data.event?.extendedProps?.description || 'Sin descripción'}}</div>
+      </div>
     </div>
   </div>
-</div>
-<div mat-dialog-actions class="botones-servicio center">
-  <button mat-button (click)="onCancel()" class="cancel-button">Salir</button>
+  <div mat-dialog-actions>
+    <button mat-button class="primary-button" (click)="onCancel()">
+      Continuar
+    </button>
+  </div>
 </div>

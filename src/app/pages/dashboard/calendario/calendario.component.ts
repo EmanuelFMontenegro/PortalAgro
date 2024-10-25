@@ -7,7 +7,6 @@ import { EventInput } from '@fullcalendar/core';
 @Component({
   selector: 'app-calendario',
   templateUrl: './calendario.component.html',
-  styleUrls: ['./calendario.component.sass'],
 })
 export class CalendarioComponent implements OnInit {
   @Output() eventClick = new EventEmitter<any>();
@@ -69,8 +68,8 @@ export class CalendarioComponent implements OnInit {
             return {
               id: event.id,
               title: event.title,
-              start: moment(event.dateOfService).toISOString(), // Asegúrate de usar 'dateOfService'
-              end: moment(event.dateOfService).add(1, 'hour').toISOString(), // Establece una duración por defecto
+              start: moment(event.dateEvent, "DD-MM-YYYY hh:mm:ss").toISOString(), // Asegúrate de usar 'dateOfService'
+              end: moment(event.dateEvent, "DD-MM-YYYY hh:mm:ss").add(1, 'hour').toISOString(), // Establece una duración por defecto
               extendedProps: {
                 campoNombre,
                 tipoCultivo,

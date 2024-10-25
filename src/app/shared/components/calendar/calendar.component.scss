@@ -1,0 +1,162 @@
+ 
+
+::ng-deep {
+  .calendar-label {
+    margin: 0 !important; 
+    padding: 0 3px !important;  
+    font-size: 1em !important; 
+    line-height: 1.2 !important;  
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    
+  }
+ 
+  .fc-direction-ltr .fc-daygrid-event.fc-event-end, 
+  .fc-direction-rtl .fc-daygrid-event.fc-event-start {
+    margin: 0 !important;
+  } 
+  .fc .fc-daygrid-day-bg .fc-highlight {
+    background-color: #4EAD5A !important;
+  }
+ 
+  .fc-daygrid-day {
+    min-height: 100px !important;
+  }
+
+  .fc-timeline-event {
+    overflow: hidden;
+  }
+   
+  .fc-event .fc-event-main {
+    overflow: hidden;
+    height: 100%;
+    padding-left: 2px;
+    color: white !important;
+  }
+
+  .fc .fc-daygrid-event-harness {
+    margin: 2px 0 !important;
+  }
+   
+  .fc-daygrid-more-link {
+    margin: 2px !important;
+    padding: 2px 4px !important;
+    font-size: 0.85em !important;
+    color: #666 !important;
+  }
+   
+  .fc-theme-standard {
+    th {
+      background-color: #F6F7F9 !important;
+      padding: 0 !important;
+    }
+
+    .fc-col-header-cell-cushion { 
+      padding: 10px !important;
+      display: block !important;
+      text-align: left !important;
+    }
+
+    .fc-col-header-cell {
+      border-bottom: 1px solid #DCE0E5 !important;
+    }
+  }
+ 
+  .fc-theme-standard td {
+    border-top-width: 0 !important;
+  }
+ 
+  .fc {
+    .fc-col-header-cell-cushion {
+      font-size: 14px !important;  
+      font-weight: 500 !important;
+      color: #6F7C8E !important;  
+      text-transform: uppercase !important; 
+    }
+
+    .fc-daygrid-day-number {
+      font-size: 15px ; 
+      color: #14181F ;
+      font-weight: 700 ;
+      padding: 8px  ;
+    }
+
+    .fc-toolbar-title {
+      color: #14181F;
+      font-size: 20px !important;
+    }
+ 
+    .fc-button-primary:not(:disabled) {
+      &.fc-button-active, 
+      &:active {
+        background-color: #FFFFFF;
+        font-size: 14px;
+        border-color: #B6C1CA; 
+        color: #000;
+      }
+    }
+ 
+    .fc-daygrid-event {
+      padding: 1px 2px !important;
+      margin-bottom: 0 !important;
+      border-radius: 2px !important; 
+       
+      .fc-event-main-frame {
+        display: flex !important;
+        align-items: center !important;
+      }
+    }
+ 
+    .fc-day-sat, 
+    .fc-day-sun {
+      background-color: #fafafa !important;  
+    }
+
+    .fc-day-today {
+      background-color: #95DD9E !important; 
+    }
+  }
+ 
+  .fc-direction-ltr .fc-button-group > .fc-button {
+    color: #525E6F;
+    border-color: #B6C1CA;
+    font-size: 14px;
+    background-color: #DCE0E5;
+  }
+ 
+  .fc-event-title,
+  .fc-event-time {
+    color: white !important;
+    font-size: 0.5em !important;  
+    padding: 0 2px !important;
+    line-height: 1.2 !important;  
+    white-space: nowrap !important;  
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;  
+  }
+ 
+  .fc-daygrid-day-events {
+    margin: 0 !important;
+    min-height: unset !important;
+  }
+ 
+  .fc-theme-standard {
+    .fc-scrollgrid {
+      border-color: #DCE0E5 !important;
+    }
+
+    td, th {
+      border-color: #DCE0E5 !important;
+    }
+  }
+  @media screen and (max-width: 1024px) {
+    .fc .fc-daygrid-day-number {
+      font-size: 12px !important;
+      padding: 4px !important;
+    }
+  }
+}
+  
+
+ 
