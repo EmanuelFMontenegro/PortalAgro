@@ -12,12 +12,13 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog'; 
-import { DialogComponent } from '../dialog/dialog.component'; 
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from '../dialog/dialog.component';
 import {
   TipoLabel,
   DataView,
 } from 'src/app/shared/components/miniatura-listado/miniatura.model';
+import { RemovePlotService } from 'src/app/services/remove-plot.service';
 interface CustomJwtPayload {
   userId: number;
   sub: string;
@@ -51,7 +52,9 @@ interface Lote {
 })
 export class LoteComponent {
   @Output() campoSeleccionadoCambio = new EventEmitter<any>();
-  options: string[] = ['Localidad', 'Productor', 'Cultivos', 'Hectareas'];
+  contador: number = 0;
+  mensaje: string = '';
+  options: string[] = ['Plantaciones'];
   loteForm: FormGroup;
   nombre: string = '';
   apellido: string = '';
@@ -88,7 +91,11 @@ export class LoteComponent {
   observationTouched = false;
   campoSeleccionado: any = {};
   dataView: DataView[] = [
-    { label: '', field: 'assets/img/Chacra_1.png', tipoLabel: TipoLabel.imagen },
+    {
+      label: '',
+      field: 'assets/img/Chacra_1.png',
+      tipoLabel: TipoLabel.imagen,
+    },
     { label: 'Nombre del Lote', field: 'name', tipoLabel: TipoLabel.span },
     { label: 'Plantación', field: 'plant_name', tipoLabel: TipoLabel.span },
     { label: 'Hectáreas', field: 'dimensions', tipoLabel: TipoLabel.span },
@@ -107,8 +114,9 @@ export class LoteComponent {
   constructor(
     private authService: AuthService,
     private apiService: ApiService,
-    private toastr: ToastrService, 
-    private router: Router, 
+    private removePlotService: RemovePlotService,
+    private toastr: ToastrService,
+    private router: Router,
     private fb: FormBuilder,
     private dialog: MatDialog
   ) {
@@ -133,6 +141,7 @@ export class LoteComponent {
     }
     this.decodeToken();
     this.cargarDatosDeUsuario();
+    this.removePlotService.resetPlotData();
   }
   decodeToken(): void {
     const token = this.authService.getToken();
@@ -215,23 +224,22 @@ export class LoteComponent {
           },
           observation: observationControl?.value,
         };
-
         this.apiService.addField(this.userId, campoData).subscribe(
           () => {
-            this.toastr.success('Campo registrado con éxito', 'Éxito');
+            this.toastr.success('Chacra registrado con éxito', 'Éxito');
             this.loteForm.reset();
             this.router.navigate(['dashboard/geolocalizacion']);
           },
           (error) => {
-            console.error('Error al registrar el campo:', error);
+            console.error('Error al registrar la Chacra:', error);
             if (error.error && error.error.message) {
               this.toastr.error(
-                'Ya Existe un campo registrado con este nombre.',
+                'Ya Existe una Chacra registrado con este nombre.',
                 'Atención'
               );
             } else {
               this.toastr.error(
-                'Error al registrar el campo. Detalles: ' + error.message,
+                'Error al registrar la Chacra. Detalles: ' + error.message,
                 'Error'
               );
             }
@@ -248,33 +256,34 @@ export class LoteComponent {
         'Error'
       );
     }
-  } 
-
+  }
   confirmarBorrado(lote: any): void {
-    const dialogRef = this.dialog.open(DialogComponent, { 
+    const dialogRef = this.dialog.open(DialogComponent, {
       width: '465px',
       data: {
         message: `¿Seguro quieres eliminar el ${lote.name}?`,
         value: lote,
         showCancel: true,
-        borderRadius : '16px',
-        borderTop : '#F33036',
-        borderTitle : '#FB6065',
-        cancelBtnColor : '#F33036',
-        cancelBtnBorder : '#F33036',
-        confirmBtnBackground : '#F33036',
-        confirmBtnColor : '#fff'
+        borderRadius: '16px',
+        borderTop: '#F33036',
+        borderTitle: '#FB6065',
+        cancelBtnColor: '#F33036',
+        cancelBtnBorder: '#F33036',
+        confirmBtnBackground: '#F33036',
+        confirmBtnColor: '#fff',
       },
     });
-
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.apiService.deleteLogicalPlotOperador(this.userId, this.FieldId, lote.id)
+        this.apiService
+          .deleteLogicalPlotOperador(this.userId, this.FieldId, lote.id)
           .subscribe(
             () => {
               this.toastr.success('El Lote ha sido borrado con éxito', 'Éxito');
               // Eliminar el lote de la lista
-              this.loteData = this.loteData.filter(item => item.id !== lote.id);
+              this.loteData = this.loteData.filter(
+                (item) => item.id !== lote.id
+              );
             },
             (error) => {
               this.toastr.error('Error al borrar el lote', 'Error');
@@ -283,43 +292,45 @@ export class LoteComponent {
       }
     });
   }
-
-
-
   loadDataLote(FieldId: number, userId: number): void {
     if (userId && FieldId) {
       this.apiService.getPlotsOperador(userId, FieldId).subscribe(
         (response: any) => {
           if (response?.list && response.list.length > 0) {
             const lotsArray: Lote[][] = response.list[0];
-            const data: Lote[] = lotsArray.reduce((acc, curr) => acc.concat(curr), []);
 
-            if (data.length > 0) {
+            this.loteData = lotsArray.reduce(
+              (acc, curr) => acc.concat(curr),
+              []
+            );
+
+            if (this.loteData.length > 0) {
               this.apiService.getAllTypeCropOperador().subscribe(
                 (typeCrops: any) => {
-                  const typeCropsMap = typeCrops.reduce((acc: any, curr: any) => {
-                    acc[curr.id] = curr.name;
-                    return acc;
-                  }, {});
+                  const typeCropsMap = typeCrops.reduce(
+                    (acc: any, curr: any) => {
+                      acc[curr.id] = curr.name;
+                      return acc;
+                    },
+                    {}
+                  );
 
-                  data.forEach((lote: Lote) => {
+                  this.loteData.forEach((lote: Lote) => {
                     lote.plant_name = lote.typeCrop ? lote.typeCrop.name : '';
                   });
-
-
-                  this.loteData = data;
                 },
                 (error) => {
                   console.error('Error al cargar los tipos de cultivo:', error);
                 }
               );
             } else {
-              this.toastr.info('Aún no has agregado ningún lote.', 'Información');
-
+              this.toastr.info(
+                'Aún no has agregado ningún lote.',
+                'Información'
+              );
             }
           } else {
             this.toastr.info('Aún no has agregado ningún lote.', 'Información');
-
           }
         },
         (error) => {
@@ -327,253 +338,125 @@ export class LoteComponent {
         }
       );
     } else {
-      console.warn('El userId o el FieldId son null o undefined, por lo que no se cargan los lotes.');
+      console.warn(
+        'El userId o el FieldId son null o undefined, por lo que no se cargan los lotes.'
+      );
     }
   }
-
-
-
-
-
   cargarLotes() {
+    this.removePlotService.resetPlotData();
     this.router.navigate(['dashboard/cargar-lote'], {
       state: { modoEdicion: this.modoEdicion },
     });
   }
-
   volver() {
     this.router.navigate(['dashboard/chacras']);
   }
-
   editarLote(lote: Lote): void {
     this.modoEdicion = true;
     localStorage.setItem('plotId', lote.id.toString());
     localStorage.setItem('plotData', JSON.stringify(lote));
     localStorage.setItem('previousPlantation', lote.typeCrop.name);
     this.router.navigate(['dashboard/cargar-lote']);
-}
+  }
+  clearFilter() {
+    this.removePlotService.resetPlotData();
 
-clearFilter() {
-  this.cargarLotes();
-}
-onFilter(filtro: any) {
+    this.loadDataLote(this.FieldId, this.userId);
+  }
+  onFilter(filtro: any) {
     switch (filtro.tipo) {
-    case 'Buscar por Localidad':
-      this.filtrarPorLocalidad(filtro.valor);
-      break;
-    case 'Buscar por Productor':
-      this.filtrarPorProductor(filtro.valor);
-      break;
-    case 'Buscar por Cultivos':
-      this.filtrarPorCultivo(filtro.valor);
-      break;
-    case 'Buscar por Hectáreas':
-      this.aplicarFiltroHectareas(filtro.min, filtro.max);
-      break;
-  }  
-}
-
-filtrarPorLocalidad(idLocalidadSeleccionada : number) {
-  if (!idLocalidadSeleccionada) {
-    this.toastr.error('Por favor selecciona una localidad.', 'Error');
-    return;
+      case 'Buscar por Plantaciones':
+        this.filtrarPorPlantacion(filtro.valor);
+        break;
+    }
   }
+  processLoteData(data: Lote[]): void {
+    this.apiService.getAllTypeCropOperador().subscribe(
+      (typeCrops: any) => {
+        const typeCropsMap = typeCrops.reduce((acc: any, curr: any) => {
+          acc[curr.id] = curr.name;
+          return acc;
+        }, {});
 
-  this.apiService
-    .getAllPlotsAdmin(
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      idLocalidadSeleccionada
-    )
-    .subscribe(
-      (data: any) => {
-        if (data && data.list && data.list.length > 0) {
-          const lotsArray: Lote[][] = data.list[0];
-          const lotes: Lote[] = lotsArray.reduce(
-            (acc, curr) => acc.concat(curr),
-            []
-          );
-          this.processLoteData(lotes);
-        } else {
-          this.loteData = [];
-          this.toastr.info('Aún no se han agregado lotes.', 'Información');
-        }
+        data.forEach((lote: Lote) => {
+          if (lote.typeCrop && lote.typeCrop.id !== undefined) {
+            lote.plant_name = typeCropsMap[lote.typeCrop.id] || '';
+          } else {
+            lote.plant_name = '';
+          }
+        });
+
+        this.loteData = data;
       },
       (error) => {
-        console.error('Error al cargar los lotes:', error);
-        this.toastr.error('Error al cargar los lotes');
+        console.error('Error al cargar los tipos de cultivo:', error);
       }
     );
-}
-processLoteData(data: Lote[]): void {
-  this.apiService.getAllTypeCropOperador().subscribe(
-    (typeCrops: any) => {
-      const typeCropsMap = typeCrops.reduce((acc: any, curr: any) => {
-        acc[curr.id] = curr.name;
-        return acc;
-      }, {});
-
-      data.forEach((lote: Lote) => {
-        if (lote.typeCrop && lote.typeCrop.id !== undefined) {
-          lote.plant_name = typeCropsMap[lote.typeCrop.id] || '';
-        } else {
-          lote.plant_name = '';
-        }
-      });
-
-      this.loteData = data;
-    },
-    (error) => {
-      console.error('Error al cargar los tipos de cultivo:', error);
-    }
-  );
-} 
-filtrarPorProductor( nombreProductor: string) {
-  if (nombreProductor) {
-    this.apiService
-      .getAllPlotsAdmin(
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        nombreProductor
-      )
-      .subscribe(
-        (data: any) => {
-          if (data && data.list && data.list.length > 0) {
-            const lotsArray: Lote[][] = data.list[0];
-            const lotes: Lote[] = lotsArray.reduce(
-              (acc, curr) => acc.concat(curr),
-              []
-            );
-            this.processLoteData(lotes);
-          } else {
-            this.toastr.info(
-              'No se encontraron lotes para el productor especificado.',
-              'Información'
-            );
-            this.loteData = [];
-          }
-        },
-        (error) => {
-          console.error('Error al filtrar los lotes por productor:', error);
-          this.toastr.error('Error al filtrar los lotes por productor');
-        }
-      );
   }
-}
-obtenerCultivos() {
-  this.apiService.getAllTypeCropOperador().subscribe(
-    (typeCrops: any) => {
-      this.cultivos = typeCrops.map((crop: any) => ({
-        id: crop.id,
-        name: crop.name,
-      }));
-      console.log('cultivos', this.cultivos);
-    },
-    (error) => {
-      console.error('Error al cargar los tipos de cultivo:', error);
-    }
-  );
-}
-filtrarPorCultivo(cropId: string | undefined = undefined) {
-  if (cropId) {
-     const cultivoId = (this.cultivos.find((cultivo) => cultivo.name === cropId)?.id)?.toString();
-    this.apiService
-      .getAllPlotsAdmin(
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        cultivoId
-      )
-      .subscribe(
-        (data: any) => {
-          console.log('los que trae el enpoint cultivos', data);
-          if (data && data.list && data.list.length > 0) {
-            const lotsArray: Lote[][] = data.list[0];
-            const lotes: Lote[] = lotsArray.reduce(
-              (acc, curr) => acc.concat(curr),
-              []
-            );
-            this.processLoteData(lotes);
-          } else {
-            this.toastr.info(
-              'No se encontraron lotes para el cultivo buscado.',
-              'Información'
-            );
-            this.loteData = [];
-          }
-        },
-        (error) => {
-          console.error('Error al filtrar los lotes por cultivo:', error);
-          this.toastr.error('Error al filtrar los lotes por cultivo');
-        }
-      );
-  }
-}
-
-
-
-aplicarFiltroHectareas(minHectareas: number, maxHectareas: number) {
-  if (!minHectareas || !maxHectareas) {
-    this.toastr.warning(
-      'Por favor ingresa los valores mínimo y máximo de hectáreas.',
-      'Advertencia'
-    );
-    return;
-  }
-
-  this.apiService
-    .getAllPlotsAdmin(
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      minHectareas.toString(),
-      maxHectareas.toString()
-    )
-    .subscribe(
-      (data: any) => {
-        if (data && data.list && data.list.length > 0) {
-          const lotsArray: Lote[][] = data.list[0];
-          const lotes: Lote[] = lotsArray.reduce(
-            (acc, curr) => acc.concat(curr),
-            []
-          );
-          this.processLoteData(lotes);
-        } else {
-          this.toastr.info(
-            'No se encontraron lotes dentro del rango de hectáreas especificado.',
-            'Información'
-          );
-          this.loteData = [];
-        }
+  obtenerCultivos() {
+    this.apiService.getAllTypeCropOperador().subscribe(
+      (typeCrops: any) => {
+        this.cultivos = typeCrops.map((crop: any) => ({
+          id: crop.id,
+          name: crop.name,
+        }));
+        console.log('cultivos', this.cultivos);
       },
       (error) => {
-        console.error(
-          'Error al filtrar los lotes por rango de hectáreas:',
-          error
-        );
-        this.toastr.error(
-          'El valor mínimo de hectáreas no puede ser mayor que el valor máximo.',
-          'Error al intentar filtrar'
-        );
+        console.error('Error al cargar los tipos de cultivo:', error);
       }
     );
-}
+  }
+  // Función para normalizar texto: convierte a minúsculas y elimina acentos
+  normalizeText(text: string): string {
+    return text
+      .toLowerCase() // Convierte a minúsculas
+      .normalize('NFD') // Normaliza el texto
+      .replace(/[\u0300-\u036f]/g, ''); // Elimina los acentos
+  }
 
+  filtrarPorPlantacion(cropName: string | undefined = undefined) {
+    if (!cropName || cropName.trim() === '') {
+      this.toastr.error('Debe ingresar un nombre de plantación', 'Error');
+      return;
+    }
 
+    const palabrasClave = cropName.trim().toLowerCase().split(/\s+/);
 
+    if (!this.loteData || this.loteData.length === 0) {
+      this.toastr.error('No hay lotes disponibles para buscar', 'Error');
+      return;
+    }
+
+    const lotesFiltrados = this.loteData.filter((lote) => {
+      const loteNombre = this.normalizeText(
+        lote.typeCrop?.name || ''
+      ).toLowerCase();
+      return palabrasClave.every((palabra) => loteNombre.includes(palabra));
+    });
+
+    if (lotesFiltrados.length > 0) {
+      this.processLoteData(lotesFiltrados);
+    } else {
+      this.toastr.info(
+        'No se encontraron lotes para el cultivo buscado',
+        'Información'
+      );
+      this.clearLoteData();
+    }
+  }
+
+  clearLoteData() {
+    this.loteData = [];
+    this.contador = 3;
+
+    const intervalo = setInterval(() => {
+      this.contador--;
+      if (this.contador <= 0) {
+        clearInterval(intervalo);
+        this.clearFilter();
+      }
+    }, 1000);
+  }
 }

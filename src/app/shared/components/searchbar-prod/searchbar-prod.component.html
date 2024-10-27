@@ -1,0 +1,38 @@
+<!-- <div class="searchbar-prod">
+  <div class="search-bar-picker2 grow-1">
+    <mat-select class="FormInput size-48" [value]="selectedValue" (selectionChange)="aplicarFiltro($event)">
+      <mat-option *ngFor="let option of options" [value]="option">{{ option }}</mat-option>
+    </mat-select>
+  </div>
+
+  <div class="search-bar-input2 grow-2">
+    <div *ngIf="placeholderText === 'Buscar por Localidad'" class="search-bar-picker">
+      <mat-select class="FormInput size-48" placeholder="Seleccionar Localidad" [(ngModel)]="Buscar">
+        <mat-option *ngFor="let localidad of localidadesOptions" [value]="localidad.name">{{ localidad.name
+          }}</mat-option>
+      </mat-select>
+    </div>
+
+    <ng-container *ngIf="placeholderText === 'Buscar por Plantación'">
+      <input class="FormInput grow-1 size-48" style="width: 100%;" matInput [placeholder]="placeholderText"
+        [(ngModel)]="cultivos">
+    </ng-container>
+  </div>
+
+  <div class="search-bar-buttons">
+    <button class="secondary-button-auto grow-1 size-48" mat-raised-button (click)="limpiarTexto()">
+      <mat-icon>clear</mat-icon>Limpiar
+    </button>
+    <button class="secondary-button-auto grow-1 size-48" mat-raised-button (click)="onFiltrar()">
+      <mat-icon>filter_list</mat-icon>Filtrar
+    </button>
+    <button class="primary-button-auto grow-1 size-48" mat-raised-button *ngIf="btnAdd === 'Chacras'"
+      (click)="addType('chacras')">
+      Registrar Chacras
+    </button>
+    <button class="primary-button-auto grow-1 size-48" mat-raised-button *ngIf="btnAdd === 'Lotes'"
+      (click)="addType('Lotes')">
+      Nuevo Lote
+    </button>
+  </div>
+</div> -->

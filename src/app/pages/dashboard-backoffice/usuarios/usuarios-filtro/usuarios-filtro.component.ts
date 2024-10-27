@@ -67,7 +67,6 @@ export class UsuariosFiltroComponent implements OnInit {
   showPageSizeOptions = true;
   showFirstLastButtons = true;
   disabled = false;
-
   pageEvent: PageEvent | undefined;
 
   userFilterOptions = [

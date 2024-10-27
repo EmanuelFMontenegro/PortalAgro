@@ -4,9 +4,10 @@ import { ApiService } from 'src/app/services/ApiService';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/AuthService';
 import { Router } from '@angular/router';
-import { jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { startWith, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { RemovePlotService } from '../../../services/remove-plot.service';
 import {
   FormControl,
   FormGroup,
@@ -41,7 +42,7 @@ interface Lote {
 
 @Component({
   selector: 'app-cargar-lote',
-  templateUrl: './cargar-lote.component.html'
+  templateUrl: './cargar-lote.component.html',
 })
 export class CargarLoteComponent implements OnInit {
   currentPlotId: number | null = null;
@@ -80,7 +81,8 @@ export class CargarLoteComponent implements OnInit {
     private toastr: ToastrService,
     private http: HttpClient,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private removePloteService: RemovePlotService
   ) {
     this.loteForm = this.fb.group({
       dimensions: ['', [Validators.min(1)]],
@@ -98,8 +100,6 @@ export class CargarLoteComponent implements OnInit {
   }
 
   ngOnInit(): void {
-  
- 
     const campoSeleccionadoParam = localStorage.getItem('campoSeleccionado');
     const campoSeleccionado = campoSeleccionadoParam
       ? JSON.parse(campoSeleccionadoParam)
@@ -140,6 +140,7 @@ export class CargarLoteComponent implements OnInit {
       this.buttonText = 'Actualizar Lote';
     }
   }
+ 
 
   decodeToken(): void {
     const token = this.authService.getToken();
@@ -189,7 +190,6 @@ export class CargarLoteComponent implements OnInit {
     if ('userId' in decoded && 'sub' in decoded && 'roles' in decoded) {
       this.userId = decoded.userId;
       this.userEmail = decoded.sub;
-
       this.personId = this.userId;
 
       if (this.userId !== null && this.personId !== null) {
@@ -338,14 +338,8 @@ export class CargarLoteComponent implements OnInit {
         }
       );
   }
-
-
-  volver() {
-     
-    this.router.navigate(['dashboard/chacras']);
-  }
-
   cancelar() {
-    this.router.navigate(['dashboard/chacras']);
+    this.removePloteService.resetPlotData();
+    this.router.navigate(['dashboard/lote']);
   }
 }

@@ -577,9 +577,11 @@ export class ApiService {
     return this.http.get<any>(`${this.baseURL}/${location}`);
   }
 
-  getLocationMisionesParams(name: string, sortDir: string): Observable<any> {
-    const params = { name: name, sortDir: sortDir };
-    return this.http.get<any>(this.baseURL, { params: params });
+  getLocationMisionesParams(name: string): Observable<any> {
+    const params = { name: name }; // Solo pasamos el nombre
+    return this.http.get<any>(`${this.baseURL}/location`, {
+      params: params,
+    });
   }
 
   addPullLocationMisiones(locations: any[]): Observable<any> {
@@ -595,7 +597,7 @@ export class ApiService {
   }
 
   getLocationID(id: number): Observable<any> {
-    return this.http.get<any>(`${this.baseURL}/${id}`);
+    return this.http.get<any>(`${this.baseURL}/location/${id}`);
   }
 
   // METODOS PARA DEPARTAMENTOS

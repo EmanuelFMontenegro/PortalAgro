@@ -28,7 +28,6 @@ interface CustomJwtPayload {
   sub: string;
 }
 
-
 interface Lote {
   id: number;
   name: string;
@@ -92,7 +91,11 @@ export class LotesComponent implements OnInit {
   };
 
   dataView: DataView[] = [
-    { label: '', field: 'assets/img/Chacra_1.png', tipoLabel: TipoLabel.imagen },
+    {
+      label: '',
+      field: 'assets/img/Chacra_1.png',
+      tipoLabel: TipoLabel.imagen,
+    },
     { label: 'Nombre del Lote', field: 'name', tipoLabel: TipoLabel.span },
     { label: 'Plantación', field: 'plant_name', tipoLabel: TipoLabel.span },
     { label: 'Hectáreas', field: 'dimensions', tipoLabel: TipoLabel.span },
@@ -132,7 +135,7 @@ export class LotesComponent implements OnInit {
   ngOnInit(): void {
     this.decodeToken();
     this.obtenerLocalidades();
-    this.obtenerCultivos();/* 
+    this.obtenerCultivos(); /*
     this.filtrarPorCultivo(); */
     this.cargarLotes();
   }
@@ -183,7 +186,7 @@ export class LotesComponent implements OnInit {
     );
   }
 
-  filtrarPorLocalidad(buscar : string) {
+  filtrarPorLocalidad(buscar: string) {
     console.log('buscar', buscar);
     if (!buscar) {
       this.toastr.error('Por favor selecciona una localidad.', 'Error');
@@ -209,7 +212,8 @@ export class LotesComponent implements OnInit {
         undefined,
         undefined,
         undefined,
-        locationId      )
+        locationId
+      )
       .subscribe(
         (data: any) => {
           if (data && data.list && data.list.length > 0) {
@@ -273,8 +277,8 @@ export class LotesComponent implements OnInit {
         console.error('Error al cargar los tipos de cultivo:', error);
       }
     );
-  } 
-  filtrarPorProductor( nombreProductor: string) {
+  }
+  filtrarPorProductor(nombreProductor: string) {
     if (nombreProductor) {
       this.apiService
         .getAllPlotsAdmin(
@@ -311,7 +315,9 @@ export class LotesComponent implements OnInit {
 
   filtrarPorCultivo(cropId: string | undefined = undefined) {
     if (cropId) {
-       const cultivoId = (this.cultivos.find((cultivo) => cultivo.name === cropId)?.id)?.toString();
+      const cultivoId = this.cultivos
+        .find((cultivo) => cultivo.name === cropId)
+        ?.id?.toString();
       this.apiService
         .getAllPlotsAdmin(
           undefined,
@@ -348,8 +354,6 @@ export class LotesComponent implements OnInit {
         );
     }
   }
-
- 
 
   aplicarFiltroHectareas(minHectareas: number, maxHectareas: number) {
     if (!minHectareas || !maxHectareas) {
@@ -514,5 +518,4 @@ export class LotesComponent implements OnInit {
         break;
     }
   }
-
 }

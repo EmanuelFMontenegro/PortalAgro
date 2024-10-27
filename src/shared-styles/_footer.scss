@@ -8,7 +8,7 @@
       @include position(relative);
       @include flexbox(row, space-between);
     }
-  
+
     &__logo {
       padding-top: 20px;
       align-self: center;
@@ -17,7 +17,7 @@
         width: 230px;
       }
     }
-  
+
     &__contact,
     &__social {
       padding-top: 20px;
@@ -27,7 +27,7 @@
         margin-bottom: 13px;
       }
     }
-   
+
     &__contact {
       @include flexbox(column, flex-start,flex-start);
       ul {
@@ -48,7 +48,7 @@
         }
       }
     }
-  
+
     &__social {
       text-align: center;
       &--links {
@@ -61,7 +61,7 @@
         }
       }
     }
-  
+
     &__bottom {
       margin-top: -24px;
       @include position(relative);
@@ -71,12 +71,13 @@
         p {
           text-align: center;
           @include font(12px, 400, #fff);
-          align-content: center;
-          padding-top: 5px;
+          position: relative;
+          top: 1.2em;
+          right: 5.5em;
         }
       }
     }
-  
+
     &__developed {
       @include flexbox(row, center, center);
       margin-top: 10px;
@@ -89,15 +90,15 @@
       }
     }
   }
-  
+
   .ellipse_white {
     @include position(absolute, $left: 0);
   }
-  
+
   .ellipse_green {
     @include position(absolute, $right: 0);
   }
-  
+
   .agrotech_logo {
     @include position(absolute, $left: 50%);
     align-content: center;
@@ -105,7 +106,7 @@
     transform: translateX(-50%);
     pointer-events: none;
   }
-  
+
   .qr_logo {
     @include position(absolute, $top: 22px, $right: 22px);
   }

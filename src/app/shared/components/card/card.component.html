@@ -29,9 +29,9 @@
     <div [ngClass]="getButtonClass()">
       <ng-container *ngFor="let item of dataView">
         <button *ngIf="item.tipoLabel == tipoVerLote" mat-raised-button class="primary-button"
-          (click)="verMas(miniatura, item?.label, item?.field)">Ver Lotes</button>
+          (click)="verMas(miniatura, item?.label, item?.field)">Lista de Lotes</button>
         <button *ngIf="item.tipoLabel == tipoGeolocalizar" mat-raised-button class="secondary-button border-primary"
-          (click)="verMas(miniatura, item?.label, item?.field)">Ver Geolocalización</button>
+          (click)="verMas(miniatura, item?.label, item?.field)">Detalle y Geolocalización</button>
         <button *ngIf="item.tipoLabel == tipoEditar" mat-button class="basic-blue grow-1 size-48"
           (click)="Editar(miniatura, item?.label, item?.field)">Editar</button>
         <button *ngIf="item.tipoLabel == tipoEditarDevolviendo" class="basic-blue grow-1 size-48" mat-button

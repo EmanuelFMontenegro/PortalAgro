@@ -1,27 +1,27 @@
 <footer class="footer"   [ngStyle]="{'background-color': background}">
      <div class="ellipse_white">
       <img [src]="isMobile ? ellipses.top : ellipses.left">
-  </div>    
+  </div>
   <div class="ellipse_green">
     <img [src]="isMobile ? ellipses.bottom : ellipses.right">
   </div>
     <div class="agrotech_logo">
     <img style="width: 100%;"   [src]="isMobile ? 'assets/img/footer/logo_AGROtech_blanco.svg' : 'assets/img/footer/logo_AGROtech_blanco_mobile.svg'">
-  </div> 
+  </div>
     <div class="qr_logo">
     <img src="assets/img/afip.png"/>
-  </div>   
+  </div>
   <div class="footer__content">
       <div class="footer__logo">
       <img *ngIf="!whiteLogo"  [src]="isMobile ? 'assets/img/footer/logo_sustentable_mobile.svg' : 'assets/img/footer/logo_sustentable_mobile.svg'">
       <img *ngIf="whiteLogo"  src="assets/img/logo_agro_white.png">
-    </div> 
+    </div>
     <div class="footer__contact">
       <h2>Contacto</h2>
       <ul>
         <li>
           <img src="assets/img/Envelope.svg" alt="Email">
-          <span>Mail: info@agro-sustentable.com</span>
+          <span>E-Mail: info&#64;agro-sustentable.com</span>
         </li>
         <li>
           <img src="assets/img/Location_b.svg" alt="Location">
@@ -53,5 +53,5 @@
         <img src="assets/img/silicon.png">
       </a>
     </div>
-  </div>     
+  </div>
 </footer>

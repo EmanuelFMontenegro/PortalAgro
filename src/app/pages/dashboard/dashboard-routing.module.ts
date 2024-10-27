@@ -21,14 +21,13 @@ const routes: Routes = [
     path: 'dashboard',
     component: DashboardComponent,
     canActivate: [AuthGuard],
-
     children: [
-      { path: 'bienvenida', component: BienvenidaComponent},
-      { path: 'geolocalizacion', component: GeolocalizacionComponent},
-      { path: 'inicio', component:InicioComponent},
-      { path: 'detalle-campo', component: DetalleCampoComponent},
-      { path: 'lote', component: LoteComponent},
-      { path :'cargar-lote', component: CargarLoteComponent},
+      { path: 'bienvenida', component: BienvenidaComponent },
+      { path: 'geolocalizacion', component: GeolocalizacionComponent },
+      { path: 'inicio', component: InicioComponent },
+      { path: 'detalle-campo', component: DetalleCampoComponent },
+      { path: 'lote', component: LoteComponent },
+      { path: 'cargar-lote', component: CargarLoteComponent },
       {
         path: 'servicios',
         canActivate: [AuthGuard],
@@ -37,23 +36,22 @@ const routes: Routes = [
             (x) => x.ServiciosModule
           ),
       },
-      { path: 'campo', component: CampoComponent},
-      { path: 'configuracion', component: ConfiguracionComponent},
-      { path: 'perfil', component: PerfilComponent},
+      { path: 'campo', component: CampoComponent },
+      { path: 'configuracion', component: ConfiguracionComponent },
+      { path: 'perfil', component: PerfilComponent },
       { path: '', redirectTo: 'inicio', pathMatch: 'full' },
       { path: 'informes', component: InformesComponent },
       { path: 'calendario', component: CalendarioComponent },
       { path: 'chacras', component: ChacrasComponent },
       { path: 'notificaciones', component: NotificacionesComponent },
-
-    ]
+    ],
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-
+  { path: '**', redirectTo: '/login', pathMatch: 'full' }, // Ruta comodín
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class DashboardRoutingModule { }
+export class DashboardRoutingModule {}
