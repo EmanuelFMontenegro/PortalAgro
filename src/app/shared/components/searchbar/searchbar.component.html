@@ -28,9 +28,17 @@
         [(ngModel)]="apellidoProductor">
     </ng-container>
     <ng-container *ngIf="placeholderText === 'Buscar por Plantaciones'">
-      <input type="text" class="FormInput grow-1 size-48" style="width: 100%;" matInput [placeholder]="placeholderText"
-        [(ngModel)]="plantaciones">
+      <mat-select class="FormInput grow-1 size-48" style="width: 100%;" [placeholder]="placeholderText"
+        [(ngModel)]="selectedPlantacion">
+        <mat-option *ngFor="let plantacion of plantaciones" [value]="plantacion.id">
+          {{ plantacion.name }}
+        </mat-option>
+      </mat-select>
     </ng-container>
+
+
+
+
     <ng-container *ngIf="placeholderText === 'Buscar por Hectáreas'">
       <div style="width: 100%;display: flex;flex-wrap: wrap;gap:10px">
         <input class="formInputNumber grow-1 size-48" matInput type="number" placeholder="Min"

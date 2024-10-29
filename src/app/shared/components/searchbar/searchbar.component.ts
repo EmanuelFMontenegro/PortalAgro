@@ -4,9 +4,13 @@ import { Router } from '@angular/router';
 
 interface Filtro {
   tipo: string;
-  valor?: string;
+  valor?: string | number | null;
   min?: number;
   max?: number;
+}
+interface Plantacion {
+  id: number; // Cambiado a number para coincidir con cultivos
+  name: string; // Cambiado a 'name' en lugar de 'nombre'
 }
 
 @Component({
@@ -20,6 +24,8 @@ export class SearchbarComponent {
   @Input() options?: string[] = [];
   @Input() localidadesOptions: any[] = [];
   @Input() placeholder?: string;
+  @Input() plantaciones: Plantacion[] = [];
+  selectedPlantacion: number | null = null;
   Buscar: string = '';
   placeholderText: string = 'Buscar por . . .';
   selectedValue: string | undefined;
@@ -29,7 +35,7 @@ export class SearchbarComponent {
   nombreChacra: string = '';
   nombreProductor: string = '';
   apellidoProductor: string = '';
-  plantaciones: string = '';
+
   constructor(private router: Router) {}
 
   ngOnInit(): void {
@@ -110,7 +116,7 @@ export class SearchbarComponent {
       },
       Plantaciones: {
         placeholder: 'Buscar por Plantaciones',
-        mostrarInputNormal: true,
+        mostrarInputNormal: false,
         limpiarInput: true,
       },
     };
@@ -146,7 +152,7 @@ export class SearchbarComponent {
         filtro['max'] = this.maxHectareas;
         break;
       case 'Buscar por Plantaciones':
-        filtro['valor'] = this.plantaciones;
+        filtro['valor'] = this.selectedPlantacion;
         break;
     }
 
@@ -163,7 +169,7 @@ export class SearchbarComponent {
     this.nombreChacra = '';
     this.nombreProductor = '';
     this.apellidoProductor = '';
-    this.plantaciones = '';
+    this.selectedPlantacion = null;
     this.minHectareas = undefined;
     this.maxHectareas = undefined;
     this.clearFilter.emit();

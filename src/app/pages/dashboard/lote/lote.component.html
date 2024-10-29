@@ -1,8 +1,17 @@
 <div class="mainStructure">
   <app-header-inner [title]="'Lotes'" [backButton]="true"></app-header-inner>
+
+  <!-- Añade esta línea para pasar los cultivos al componente -->
   <app-searchbar (filter)="onFilter($event)" (clearFilter)="clearFilter()" [options]="options"
-    [placeholder]="'Buscar por Plantaciones'" [btnAdd]="'Lotes'"></app-searchbar>
+    [placeholder]="'Buscar por Plantaciones'" [btnAdd]="'Lotes'" [plantaciones]="cultivos">
+  </app-searchbar>
+
+
+
   <app-card [dataView]="dataView" [listado]="loteData" [typeCard]="'lote'" (btnEliminar)="confirmarBorrado($event)"
-    (btnEditarDevolverObjeto)="editarLote($event)"></app-card>
-  <app-card-contador [contador]="contador" [mensaje]="mensaje"></app-card-contador>
+    (btnEditarDevolverObjeto)="editarLote($event)">
+  </app-card>
+
+  <app-card-contador [contador]="contador" [mensaje]="mensaje">
+  </app-card-contador>
 </div>

@@ -53,6 +53,8 @@ interface Lote {
 export class LoteComponent {
   @Output() campoSeleccionadoCambio = new EventEmitter<any>();
   contador: number = 0;
+  loteData: Lote[] = []; // Lista actual de lotes (posiblemente filtrada)
+  originalLoteData: Lote[] = [];
   mensaje: string = '';
   options: string[] = ['Plantaciones'];
   loteForm: FormGroup;
@@ -66,7 +68,6 @@ export class LoteComponent {
   persona: any = {};
   FieldId: number = 0;
   localidades: any[] = [];
-  loteData: Lote[] = [];
   camposlect: any;
   filteredLocalidades: Observable<any[]> = new Observable<any[]>();
   filtroLocalidades = new FormControl('');
@@ -142,6 +143,7 @@ export class LoteComponent {
     this.decodeToken();
     this.cargarDatosDeUsuario();
     this.removePlotService.resetPlotData();
+    this.obtenerCultivos();
   }
   decodeToken(): void {
     const token = this.authService.getToken();
@@ -303,6 +305,7 @@ export class LoteComponent {
               (acc, curr) => acc.concat(curr),
               []
             );
+            this.originalLoteData = [...this.loteData];
 
             if (this.loteData.length > 0) {
               this.apiService.getAllTypeCropOperador().subscribe(
@@ -361,7 +364,6 @@ export class LoteComponent {
   }
   clearFilter() {
     this.removePlotService.resetPlotData();
-
     this.loadDataLote(this.FieldId, this.userId);
   }
   onFilter(filtro: any) {
@@ -401,46 +403,33 @@ export class LoteComponent {
           id: crop.id,
           name: crop.name,
         }));
-        console.log('cultivos', this.cultivos);
       },
       (error) => {
         console.error('Error al cargar los tipos de cultivo:', error);
       }
     );
   }
-  // Función para normalizar texto: convierte a minúsculas y elimina acentos
-  normalizeText(text: string): string {
-    return text
-      .toLowerCase() // Convierte a minúsculas
-      .normalize('NFD') // Normaliza el texto
-      .replace(/[\u0300-\u036f]/g, ''); // Elimina los acentos
-  }
 
-  filtrarPorPlantacion(cropName: string | undefined = undefined) {
-    if (!cropName || cropName.trim() === '') {
-      this.toastr.error('Debe ingresar un nombre de plantación', 'Error');
+  filtrarPorPlantacion(cropId: number | null = null) {
+    if (!cropId) {
+      this.toastr.error('Debe seleccionar un cultivo', 'Error');
       return;
     }
 
-    const palabrasClave = cropName.trim().toLowerCase().split(/\s+/);
-
-    if (!this.loteData || this.loteData.length === 0) {
+    if (!this.originalLoteData || this.originalLoteData.length === 0) {
       this.toastr.error('No hay lotes disponibles para buscar', 'Error');
       return;
     }
 
-    const lotesFiltrados = this.loteData.filter((lote) => {
-      const loteNombre = this.normalizeText(
-        lote.typeCrop?.name || ''
-      ).toLowerCase();
-      return palabrasClave.every((palabra) => loteNombre.includes(palabra));
-    });
+    const lotesFiltrados = this.originalLoteData.filter(
+      (lote) => lote.typeCrop?.id === cropId
+    );
 
     if (lotesFiltrados.length > 0) {
       this.processLoteData(lotesFiltrados);
     } else {
       this.toastr.info(
-        'No se encontraron lotes para el cultivo buscado',
+        'No se encontraron lotes para el cultivo seleccionado',
         'Información'
       );
       this.clearLoteData();
