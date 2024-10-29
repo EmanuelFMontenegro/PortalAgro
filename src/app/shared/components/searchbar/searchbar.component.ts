@@ -4,54 +4,60 @@ import { Router } from '@angular/router';
 
 interface Filtro {
   tipo: string;
-  valor?: string;
+  valor?: string | number | null;
   min?: number;
   max?: number;
+}
+interface Plantacion {
+  id: number; // Cambiado a number para coincidir con cultivos
+  name: string; // Cambiado a 'name' en lugar de 'nombre'
 }
 
 @Component({
   selector: 'app-searchbar',
-  templateUrl: './searchbar.component.html'
+  templateUrl: './searchbar.component.html',
 })
-export class SearchbarComponent    {
+export class SearchbarComponent {
   @Output() clearFilter = new EventEmitter<any>();
   @Output() filter = new EventEmitter<any>();
-  @Input() btnAdd?: string; 
+  @Input() btnAdd?: string;
   @Input() options?: string[] = [];
   @Input() localidadesOptions: any[] = [];
-  @Input() placeholder? : string;
+  @Input() placeholder?: string;
+  @Input() plantaciones: Plantacion[] = [];
+  selectedPlantacion: number | null = null;
   Buscar: string = '';
   placeholderText: string = 'Buscar por . . .';
-  selectedValue: string  | undefined;
+  selectedValue: string | undefined;
   mostrarInputNormal: boolean = true;
   minHectareas: number | undefined;
   maxHectareas: number | undefined;
   nombreChacra: string = '';
   nombreProductor: string = '';
   apellidoProductor: string = '';
-  cultivos: string = '';
-  constructor(private router: Router) { }
 
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
     //falta hacer dinamico el placeholder
-    
-    this.placeholderText =  this.placeholder ? this.placeholder :  'Buscar por Productor'; 
-    this.setOpcionPredeterminada();
 
+    this.placeholderText = this.placeholder
+      ? this.placeholder
+      : 'Buscar por Productor';
+    this.setOpcionPredeterminada();
   }
 
   setOpcionPredeterminada() {
     if (this.options && this.options.length > 0) {
       this.selectedValue = this.options[0];
-      this.placeholderText
+      this.placeholderText;
     } else {
       // Manejo del caso cuando no hay opciones disponibles
       this.selectedValue = undefined;
       console.warn('No hay opciones disponibles para seleccionar.');
     }
   }
-  addType(route : string) {
+  addType(route: string) {
     switch (this.btnAdd) {
       case 'Chacras':
         this.router.navigate(['/dashboard/campo']);
@@ -66,8 +72,7 @@ export class SearchbarComponent    {
         this.router.navigate(['dashboard/cargar-lote'], {
           state: { modoEdicion: false },
         });
-        break; 
-         
+        break;
     }
   }
 
@@ -89,9 +94,9 @@ export class SearchbarComponent    {
         mostrarInputNormal: true,
         limpiarInput: true,
       },
-      Nombre: {
+      'Nombre de Chacra': {
         placeholder: 'Buscar por Nombre de Chacra',
-        mostrarInputNormal: false,
+        mostrarInputNormal: true,
         limpiarInput: true,
       },
       NombreProductor: {
@@ -109,11 +114,11 @@ export class SearchbarComponent    {
         mostrarInputNormal: false,
         limpiarInput: true,
       },
-      Cultivos: {
-        placeholder: 'Buscar por Cultivos',
+      Plantaciones: {
+        placeholder: 'Buscar por Plantaciones',
         mostrarInputNormal: false,
         limpiarInput: true,
-      }
+      },
     };
     const filtroSeleccionado = filtros[event.value];
     this.placeholderText = filtroSeleccionado.placeholder;
@@ -146,8 +151,8 @@ export class SearchbarComponent    {
         filtro['min'] = this.minHectareas;
         filtro['max'] = this.maxHectareas;
         break;
-      case 'Buscar por Cultivos':
-        filtro['valor'] = this.cultivos;
+      case 'Buscar por Plantaciones':
+        filtro['valor'] = this.selectedPlantacion;
         break;
     }
 
@@ -164,7 +169,7 @@ export class SearchbarComponent    {
     this.nombreChacra = '';
     this.nombreProductor = '';
     this.apellidoProductor = '';
-    this.cultivos = '';
+    this.selectedPlantacion = null;
     this.minHectareas = undefined;
     this.maxHectareas = undefined;
     this.clearFilter.emit();

@@ -21,12 +21,6 @@
         "route": "/dashboard/calendario"
       },
       {
-        "icon": "notificaciones.svg",
-        "name": "Notificaciones",
-        "route": "/dashboard/notificaciones"
-
-      },
-      {
         "icon": "informes.svg",
         "name": "Informes",
         "route": "/dashboard/informes"

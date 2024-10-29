@@ -154,8 +154,8 @@
 }
 
 
-.size-40 {
-  height: 40px !important;
+.size-50 {
+  height: 50px !important;
 }
 
 .size-50{
@@ -168,7 +168,7 @@
 .basis{
   flex-basis: 0;
 }
- 
+
 .basis-300{
   flex-basis: 300px;
 }
@@ -211,17 +211,17 @@
 
 .secondary-button-auto {
   @include button(var(--primary), #fff, auto);
-  background-color: #fff !important;
+  background-color: #ffffff !important;
   border:none;
 }
 
 .primary-button-240 {
-  @include button(#fff, var(--primary), 240px);
+  @include button(#ffffff, var(--primary), 240px);
 
 }
 .secondary-button-240 {
   @include button(--primary, #fff, 240px,#3CA749);
-  background-color: #fff !important;
+  background-color: #ffffff !important;
   border:none;
 }
 
@@ -255,23 +255,54 @@
   }
   &-input2{
     flex-basis:360px;
- 
+
   }
-  &-input-text { 
+  &-input-text {
     border-radius: 8px;
     mat-form-field {
       width: 100%;
     }
   }
   &-buttons {
-    @include flex-wrap(10px,1); 
+    @include flex-wrap(10px,1);
   }
   &-buttons2{
-    @include flex-wrap(10px,1); 
+    @include flex-wrap(10px,1);
   }
 }
 
+.search-bar-prod {
+  font-size: 14px;
+  @include flex-wrap(10px,1);
+  padding-bottom: 20px;
+  &-picker {
+    mat-form-field {
+      width: 100%;
+    }
+  }
+  &-picker2 {
+    flex-basis: 260px;
+    mat-form-field {
+      width: 100%;
+    }
+  }
+  &-input2{
+    flex-basis:360px;
 
+  }
+  &-input-text {
+    border-radius: 8px;
+    mat-form-field {
+      width: 100%;
+    }
+  }
+  &-buttons {
+    @include flex-wrap(10px,1);
+  }
+  &-buttons2{
+    @include flex-wrap(10px,1);
+  }
+}
 
 
 // ==============================================================  Chacra =========================================================
@@ -326,7 +357,7 @@
     flex-direction: column;
     gap: 20px;
     width: 100%;
-    
+
   }
 
   // END Contenedor para Card de Chacras
@@ -358,8 +389,8 @@
     }
 
     &-subtitle {
-      margin:9px 0px; 
-      overflow-y: scroll; 
+      margin:9px 0px;
+      overflow-y: scroll;
       @include font(1rem, 500,#232323);
       >span {
         @include font(1rem, 600);
@@ -372,7 +403,7 @@
     flex-direction: column;
     gap: 20px;
     width: 100%;
-    
+
   }
 }
 
@@ -444,12 +475,12 @@
 }
 //inputs de formularios
 .FormInput {
-  @include FormInput(100%, 0.5rem, 1px solid #ccc, 8px, 12px, 4px 4px 6px 0px rgba(0, 0, 0, 0.25), #45454580);
-  
+  @include FormInput(100%, 0.5rem, 1px solid #ccc, 8px, 14px, 4px 4px 6px 0px rgba(0, 0, 0, 0.25), #45454580);
+
 }
 
 .formInputNumber{
-  @include FormInput(auto, 0.5rem, 1px solid #ccc, 8px, 12px, 4px 4px 6px 0px rgba(0, 0, 0, 0.25), #45454580);
+  @include FormInput(auto, 0.5rem, 1px solid #ccc, 8px, 14px, 4px 4px 6px 0px rgba(0, 0, 0, 0.25), #45454580);
 }
 
 
@@ -470,7 +501,7 @@
       padding-left: 24px;
       &-details {
           > p {
-              font-size: 12px;
+              font-size: 18px;
           }
       }
       &-buttons {
@@ -553,8 +584,8 @@
         height: 105px;
       }
     }
-    &-info{ 
-      @include flexbox(column, start, start); 
+    &-info{
+      @include flexbox(column, start, start);
       margin-right: 24px;
        &-name, &-mail {
         flex-shrink: 1;
@@ -620,13 +651,13 @@
 
 /* @media screen and (max-width: 1090px) {
   .profileContainer-personalData-content-item {
-    flex-basis: 100%;  
-    max-width: 100%;  
+    flex-basis: 100%;
+    max-width: 100%;
   }
 } */
 /* @media screen and (max-width: 600px) {
   .profileContainer-personalData-content-item {
-    min-width: 100%;  
+    min-width: 100%;
   }
 } */
 

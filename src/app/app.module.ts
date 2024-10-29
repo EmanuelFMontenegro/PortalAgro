@@ -11,9 +11,10 @@ import { ToastrModule } from 'ngx-toastr';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Interceptor } from 'src/app/services/Interceptor';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { NgxSpinnerModule } from "ngx-spinner";
+import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from './shared/shared.module';
 import { CommonModule } from '@angular/common';
+import { NgxPaginationModule } from 'ngx-pagination';
 const routes: Routes = [];
 
 @NgModule({
@@ -21,7 +22,8 @@ const routes: Routes = [];
   imports: [
     CommonModule,
     BrowserModule,
-    NgxSpinnerModule.forRoot (),
+    NgxSpinnerModule.forRoot(),
+    NgxPaginationModule,
     RouterModule.forRoot(routes),
     ToastrModule.forRoot(),
     BrowserAnimationsModule,
@@ -40,6 +42,5 @@ const routes: Routes = [];
     { provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true },
   ],
   bootstrap: [AppComponent],
-  
 })
 export class AppModule {}

@@ -1,5 +1,5 @@
 <div [ngClass]="getCardClass()">
-  <div *ngFor="let miniatura of listado" [ngClass]="getItemClass()">
+  <div *ngFor="let miniatura of listado | paginate: { itemsPerPage: 6, currentPage: page }" [ngClass]="getItemClass()">
     <!-- Img -->
     <div>
       <ng-container *ngFor="let item of dataView">
@@ -9,8 +9,9 @@
     <!-- Header -->
     <div [ngClass]="getHeaderClass()">
       <ng-container *ngFor="let item of dataView">
-        <h3 [ngClass]="'cardCustomized-header-title'" *ngIf="item.tipoLabel == tipoTitulo">{{getValue(miniatura, item.field)}}</h3>
-        
+        <h3 [ngClass]="'cardCustomized-header-title'" *ngIf="item.tipoLabel == tipoTitulo">{{getValue(miniatura,
+          item.field)}}</h3>
+
         <!-- Diferenciamos campo observation del resto, por el scroll del campo -->
         <div *ngIf="(item.field == 'observation'); else span_normal">
           <p [ngClass]="'cardCustomized-header-subtitle scroll-y size-40'" *ngIf="item.tipoLabel == tipoSpan">
@@ -27,15 +28,28 @@
     <!-- Buttons -->
     <div [ngClass]="getButtonClass()">
       <ng-container *ngFor="let item of dataView">
-        <button *ngIf="item.tipoLabel == tipoVerLote" mat-raised-button class="primary-button" (click)="verMas(miniatura, item?.label, item?.field)">Ver Lotes</button>
-        <button *ngIf="item.tipoLabel == tipoGeolocalizar" mat-raised-button class="secondary-button border-primary" (click)="verMas(miniatura, item?.label, item?.field)">Ver Geolocalización</button>
-        <button *ngIf="item.tipoLabel == tipoEditar" mat-button class="basic-blue grow-1 size-48"  (click)="Editar(miniatura, item?.label, item?.field)">Editar</button>
-        <button *ngIf="item.tipoLabel == tipoEditarDevolviendo" class="basic-blue grow-1 size-48" mat-button (click)="EditarDelviendo(miniatura)">Editar</button>
-        <button *ngIf="item.tipoLabel == tipoEliminar"  mat-button class="basic-warning grow-1 size-48" (click)="eliminar(miniatura)">Eliminar</button>
-        <button class="primary-button" *ngIf="item.tipoLabel == tipoVerMas" mat-raised-button (click)="verMasWithParams(miniatura, item?.label, item?.field)">
+        <button *ngIf="item.tipoLabel == tipoVerLote" mat-raised-button class="primary-button"
+          (click)="verMas(miniatura, item?.label, item?.field)">Lista de Lotes</button>
+        <button *ngIf="item.tipoLabel == tipoGeolocalizar" mat-raised-button class="secondary-button border-primary"
+          (click)="verMas(miniatura, item?.label, item?.field)">Detalle y Geolocalización</button>
+        <button *ngIf="item.tipoLabel == tipoEditar" mat-button class="basic-blue grow-1 size-48"
+          (click)="Editar(miniatura, item?.label, item?.field)">Editar</button>
+        <button *ngIf="item.tipoLabel == tipoEditarDevolviendo" class="basic-blue grow-1 size-48" mat-button
+          (click)="EditarDelviendo(miniatura)">Editar</button>
+        <button *ngIf="item.tipoLabel == tipoEliminar" mat-button class="basic-warning grow-1 size-48"
+          (click)="eliminar(miniatura)">Eliminar</button>
+        <button class="primary-button" *ngIf="item.tipoLabel == tipoVerMas" mat-raised-button
+          (click)="verMasWithParams(miniatura, item?.label, item?.field)">
           Ver Más
         </button>
       </ng-container>
     </div>
   </div>
 </div>
+
+<!-- Controles de paginación -->
+<div style="display: flex; justify-content: center; align-items: center; position: relative; top: 2em;">
+  <pagination-controls (pageChange)="onPageChange($event)" previousLabel="Anterior"
+    nextLabel="Siguiente"></pagination-controls>
+</div>
+

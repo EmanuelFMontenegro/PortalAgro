@@ -1,43 +1,65 @@
 <div class="search-bar">
-    <div class="search-bar-picker2 grow-1">
-        <mat-select class="FormInput size-48"   [value]="selectedValue"  (selectionChange)="aplicarFiltro($event)">
-            <mat-option *ngFor="let option of options" [value]="option">{{ option }}</mat-option>
-        </mat-select>
+  <div class="search-bar-picker2 grow-1">
+    <mat-select class="FormInput size-48" [value]="selectedValue" (selectionChange)="aplicarFiltro($event)">
+      <mat-option *ngFor="let option of options" [value]="option">{{ option }}</mat-option>
+    </mat-select>
+  </div>
+  <div class="search-bar-input2  grow-2">
+    <div *ngIf="placeholderText === 'Buscar por Localidad'" class="search-bar-picker">
+      <mat-select class="FormInput size-48" placeholder="Seleccionar Localidad" [(ngModel)]="Buscar">
+        <mat-option *ngFor="let localidad of localidadesOptions" [value]="localidad.name">{{ localidad.name
+          }}</mat-option>
+      </mat-select>
     </div>
-    <div class="search-bar-input2  grow-2">
-        <div *ngIf="placeholderText === 'Buscar por Localidad'" class="search-bar-picker">
-            <mat-select class="FormInput size-48" placeholder="Seleccionar Localidad" [(ngModel)]="Buscar">
-                <mat-option *ngFor="let localidad of localidadesOptions" [value]="localidad.name">{{ localidad.name }}</mat-option>
-            </mat-select>
-        </div>
-        <ng-container *ngIf="placeholderText === 'Buscar por Nombre de Chacra'">
-            <input class="FormInput grow-1 size-48" style="width: 100%;" matInput placeholder="{{ placeholderText }}" [(ngModel)]="nombreChacra">
-        </ng-container>
-        <ng-container *ngIf="placeholderText === 'Buscar por Productor'">
-            <input class="FormInput grow-1 size-48" style="width: 100%;" matInput [placeholder]="placeholderText" [(ngModel)]="nombreProductor">
-        </ng-container>
-        <ng-container *ngIf="placeholderText === 'Buscar por Nombre'">
-            <input class="FormInput grow-1 size-48" style="width: 100%;" matInput [placeholder]="placeholderText" [(ngModel)]="nombreProductor">
-        </ng-container>
-        <ng-container *ngIf="placeholderText === 'Buscar por Apellido'">
-            <input class="FormInput grow-1 size-48" style="width: 100%;" matInput [placeholder]="placeholderText" [(ngModel)]="apellidoProductor">
-        </ng-container>
-        <ng-container *ngIf="placeholderText === 'Buscar por Cultivos'">
-            <input class="FormInput grow-1 size-48" style="width: 100%;" matInput [placeholder]="placeholderText" [(ngModel)]="cultivos">
-        </ng-container>
-        <ng-container *ngIf="placeholderText === 'Buscar por Hectáreas'">
-            <div style="width: 100%;display: flex;flex-wrap: wrap;gap:10px">
-                <input class="formInputNumber grow-1 size-48" matInput type="number" placeholder="Min" [(ngModel)]="minHectareas">
-                <input class="formInputNumber grow-1 size-48" matInput type="number" placeholder="Max" [(ngModel)]="maxHectareas">
-            </div>
-        </ng-container>
+    <div *ngIf="placeholderText === 'Buscar por Nombre de Chacra'">
+      <input class="FormInput grow-1 size-48" style="width: 100%;" matInput placeholder="Ingrese nombre de la chacra"
+        [(ngModel)]="nombreChacra">
     </div>
-    <div class="search-bar-buttons">
-        <button class="secondary-button-auto grow-1 size-48" mat-raised-button (click)="limpiarTexto()"><mat-icon>clear</mat-icon>Limpiar</button>
-        <button class="secondary-button-auto grow-1 size-48" mat-raised-button (click)="onFiltrar()"  ><mat-icon>filter_list</mat-icon>Filtrar</button>
-       <button class="primary-button-auto grow-1 size-48" mat-raised-button  *ngIf="btnAdd === 'Chacras'"   (click)="addType('chacras')">Registrar Chacras</button>
-        <button class="primary-button-auto grow-1 size-48" mat-raised-button  *ngIf="btnAdd === 'Lotes'"   (click)="addType('Lotes')">Nuevo Lote</button>
-         <button class="primary-button-auto grow-1 size-48" mat-raised-button  *ngIf="btnAdd === 'Productor'"   (click)="addType('Productor')">Nuevo Usuario</button> 
-         <button class="primary-button-auto grow-1 size-48" mat-raised-button  *ngIf="btnAdd === 'Chacras-p'"   (click)="addType('Chacras-p')">Registrar Chacra</button> 
-        </div>
+    <ng-container *ngIf="placeholderText === 'Buscar por Productor'">
+      <input class="FormInput grow-1 size-48" style="width: 100%;" matInput [placeholder]="placeholderText"
+        [(ngModel)]="nombreProductor">
+    </ng-container>
+    <ng-container *ngIf="placeholderText === 'Buscar por Nombre'">
+      <input class="FormInput grow-1 size-48" style="width: 100%;" matInput [placeholder]="placeholderText"
+        [(ngModel)]="nombreProductor">
+    </ng-container>
+    <ng-container *ngIf="placeholderText === 'Buscar por Apellido'">
+      <input class="FormInput grow-1 size-48" style="width: 100%;" matInput [placeholder]="placeholderText"
+        [(ngModel)]="apellidoProductor">
+    </ng-container>
+    <ng-container *ngIf="placeholderText === 'Buscar por Plantaciones'">
+      <mat-select class="FormInput grow-1 size-48" style="width: 100%;" [placeholder]="placeholderText"
+        [(ngModel)]="selectedPlantacion">
+        <mat-option *ngFor="let plantacion of plantaciones" [value]="plantacion.id">
+          {{ plantacion.name }}
+        </mat-option>
+      </mat-select>
+    </ng-container>
+
+
+
+
+    <ng-container *ngIf="placeholderText === 'Buscar por Hectáreas'">
+      <div style="width: 100%;display: flex;flex-wrap: wrap;gap:10px">
+        <input class="formInputNumber grow-1 size-48" matInput type="number" placeholder="Min"
+          [(ngModel)]="minHectareas">
+        <input class="formInputNumber grow-1 size-48" matInput type="number" placeholder="Max"
+          [(ngModel)]="maxHectareas">
+      </div>
+    </ng-container>
+  </div>
+  <div class="search-bar-buttons">
+    <button class="secondary-button-auto grow-1 size-48" mat-raised-button
+      (click)="limpiarTexto()"><mat-icon>clear</mat-icon>Limpiar</button>
+    <button class="secondary-button-auto grow-1 size-48" mat-raised-button
+      (click)="onFiltrar()"><mat-icon>filter_list</mat-icon>Filtrar</button>
+    <button class="primary-button-auto grow-1 size-48" mat-raised-button *ngIf="btnAdd === 'Chacras'"
+      (click)="addType('chacras')">Registrar Chacras</button>
+    <button class="primary-button-auto grow-1 size-48" mat-raised-button *ngIf="btnAdd === 'Lotes'"
+      (click)="addType('Lotes')">Nuevo Lote</button>
+    <button class="primary-button-auto grow-1 size-48" mat-raised-button *ngIf="btnAdd === 'Productor'"
+      (click)="addType('Productor')">Nuevo Usuario</button>
+    <button class="primary-button-auto grow-1 size-48" mat-raised-button *ngIf="btnAdd === 'Chacras-p'"
+      (click)="addType('Chacras-p')">Registrar Chacra</button>
+  </div>
 </div>

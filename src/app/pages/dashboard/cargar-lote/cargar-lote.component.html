@@ -1,5 +1,7 @@
 <div class="mainStructure">
-  <app-header-inner [title]="'Cargar Lote'" [backButton]="true"></app-header-inner>
+  <app-header-inner [title]="'Cargar Lote'" [backButton]="true">
+  </app-header-inner>
+
   <form class="FullForm" [formGroup]="loteForm">
     <div class="FullForm-control">
       <label class="FormLabel" for="plantacion">Plantación</label>
@@ -7,7 +9,7 @@
         <option *ngFor="let planta of plantations" [value]="planta.id">
           {{ planta.name }}
         </option>
-      </select> 
+      </select>
     </div>
     <div class="FullForm-control">
       <label class="FormLabel">Dimensiones (Hectáreas)</label>
@@ -19,8 +21,10 @@
       <textarea matInput class="FormTextarea" formControlName="observation"></textarea>
     </div>
     <div class="FullForm-buttonsToRight">
-      <button mat-button   class="secondary-button-custom size-48" type="button" (click)="cancelar()">Cancelar</button>
-      <button  mat-raised-button appearance="outline"  class="primary-button-custom size-48"  type="submit" [disabled]="!loteForm.valid" (click)="currentPlotId ? actualizarLote() : cargarLotes()">{{ buttonText }}</button>
-  </div> 
+      <button mat-button class="secondary-button-custom size-48" type="button" (click)="cancelar()">Cancelar</button>
+      <button mat-raised-button appearance="outline" class="primary-button-custom size-48" type="submit"
+        [disabled]="!loteForm.valid" (click)="currentPlotId ? actualizarLote() : cargarLotes()">{{ buttonText
+        }}</button>
+    </div>
   </form>
 </div>

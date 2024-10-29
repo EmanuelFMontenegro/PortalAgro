@@ -11,11 +11,11 @@
 
 .ContainerS {
     @include flexbox(column);
-    
+
     height: calc(100vh - 80px);
     min-height: calc(100vh - 80px);
     &__menu {
-        width: 262px;
+        width: 280px;
         @include box-shadow(1px, 0);
         &__logo {
             @include position(relative, null, null, 10px);
@@ -34,7 +34,7 @@
             flex-direction: column !important;
             &--item {
 
-                
+
                 &:hover {
                     cursor: pointer;
 
@@ -52,11 +52,11 @@
     }
     &__content {
         @include flexbox(row);
-        
+
         background-color: $default;
         &__card {
-            width: calc(100% - 5rem); 
-            margin-left: 2rem; 
+            width: calc(100% - 5rem);
+            margin-left: 2rem;
             padding: 1rem;
         }
     }
