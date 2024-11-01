@@ -72,7 +72,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.adjustCardSize(false);
-    
+
   }
 
   togglePasswordVisibility(): void {
@@ -113,8 +113,6 @@ export class LoginComponent implements OnInit {
             this.themeService.setTheme('dashboard');
             const userId = decoded.userId;
             const personId = userId;
-            console.log('datos del userId', userId);
-            console.log('person id', personId);
             this.apiService.getPersonByIdProductor(userId, personId).subscribe(
               (userData) => {
                 if (userData && userData.name) {

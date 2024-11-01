@@ -80,9 +80,11 @@ const routes: Routes = [
       },
 
       { path: '', redirectTo: 'inicio', pathMatch: 'full' },
+
     ],
   },
   { path: '', redirectTo: '/login-backoffice', pathMatch: 'full' },
+  { path: '**', redirectTo: '/login-backoffice' }
 ];
 
 @NgModule({
