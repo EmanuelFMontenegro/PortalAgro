@@ -54,6 +54,7 @@ export const IMPORTS_MATERIAL = [
   MatCheckboxModule,
   MatSelectModule,
   MatChipsModule,
+  MatTableModule,
   MatCheckboxModule,
   MatPaginatorModule,
   MatTabsModule,
