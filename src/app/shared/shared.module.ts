@@ -33,9 +33,13 @@ import { CalendarComponent } from './components/calendar/calendar.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { CalendarPopupComponent } from './components/calendar-popup/calendar-popup.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { NgxPaginationModule } from 'ngx-pagination';
+import { PaginadorComponent } from './components/paginador/paginador.component';
+import { TableComponent } from './components/table/table.component';
+import { WidgetComponent } from './components/widget/widget.component';
 import { CardContadorComponent } from './components/card-contador/card-contador.component';
-// import { SearchbarProdComponent } from './components/searchbar-prod/searchbar-prod.component';
+import { MatTableModule } from '@angular/material/table';
+import { NgxPaginationModule } from 'ngx-pagination';
+
 export const IMPORTS_MATERIAL = [
   MatSidenavModule,
   MatListModule,
@@ -58,8 +62,9 @@ export const IMPORTS_MATERIAL = [
   MatDatepickerModule,
   MatNativeDateModule,
   MatButtonModule,
+  MatTableModule,
   NgxPaginationModule,
-  MatPaginatorModule,
+  MatPaginatorModule
 ];
 
 export const IMPORT_CORE = [CommonModule, FormsModule, ReactiveFormsModule];
@@ -77,9 +82,9 @@ export const CALENDAR = [FullCalendarModule];
     FooterComponent,
     HeaderInnerComponent,
     SearchbarComponent,
-    CardContadorComponent,
-
-    // SearchbarProdComponent,
+    WidgetComponent,
+    TableComponent,
+    CardContadorComponent
   ],
   imports: [IMPORT_CORE, IMPORTS_MATERIAL, CALENDAR, CardComponent],
   exports: [
@@ -97,8 +102,6 @@ export const CALENDAR = [FullCalendarModule];
     HeaderInnerComponent,
     CardComponent,
     SearchbarComponent,
-    CardContadorComponent,
-    // SearchbarProdComponent,
   ],
 })
 export class SharedModule {}

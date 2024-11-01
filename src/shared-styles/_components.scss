@@ -534,7 +534,8 @@
 
 // ==============================================================  Dialog =============================================
 .cdk-overlay-pane {
-  border-radius: 16px ;
+  box-shadow: none !important;
+  border-radius: 12px ;
   overflow: hidden ;
   padding: 0;
 }
@@ -649,6 +650,139 @@
   }
 }
 
+
+.dashboardContainer{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;  
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+  }
+  &-card{
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 450px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    @media (max-width: 768px) {
+      height: 350px;
+  }
+  app-table { 
+    @include flex-column();
+    height: 100%;
+    width: 100%;
+  }
+  &-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #E5E7EB;
+    flex-shrink: 0;
+    &-title__section {
+      > h3 {
+        color: #111827;
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin: 0;
+        margin-bottom: 0.25rem;
+      }
+
+      &-subtitle {
+        color: #6B7280;
+        font-size: 0.875rem;
+      }
+    }
+    &-total-count {
+      &-number {
+        color: #111827;
+        font-size: 2rem;
+        font-weight: 600;
+        line-height: 1;
+      }
+    }
+    &-filter-button {
+      @include clean-btn(#374151, #F3F4F6, 100px);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+    }
+
+  }
+  &-chart{
+      flex: 1;
+      position: relative;
+      height: calc(100% - 370px);
+      canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100% !important;
+        height: 100% !important;
+      }
+    }
+
+    &-data {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      margin: 0 -1.5rem;
+      overflow: hidden;
+ 
+      
+ 
+      &-footer {
+        padding: 8px;
+        border-top: 1px solid #E5E7EB;
+ 
+        .load-more-button {
+          @include font(0.875rem, 500, #015E83);
+ 
+          &:hover {
+            background-color: #F3F4F6;
+          }
+        }
+      }
+ 
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+ 
+      ::-webkit-scrollbar-track {
+        background: #F3F4F6;
+      }
+ 
+      ::-webkit-scrollbar-thumb {
+        background-color: #D1D5DB;
+        border-radius: 4px;
+      }
+      //sin datos
+      &-empty {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center; 
+        text-align: center; 
+        border-radius: 8px;  
+        min-height: 278px;
+        @media (max-width: 768px) {
+          min-height: 178px;
+        }
+      
+        &-icon {
+          width: 150px;
+          height: 150px; 
+          color: #9CA3AF;
+        }
+      }
+    }
+  
+}
+}
 /* @media screen and (max-width: 1090px) {
   .profileContainer-personalData-content-item {
     flex-basis: 100%;

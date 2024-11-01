@@ -1,0 +1,80 @@
+@import 'src/shared-styles/_mixins.scss';
+.informes {
+    .page-header {
+      @include flexbox(row,flex-end); 
+      .producer-selector {
+        .producer-button { 
+          border-radius: 8px;
+          padding: 1.21rem 1rem;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  
+          border: 1px solid #E5E7EB;
+          &:hover {
+            background-color: #F9FAFB;
+          }
+          .producer-info {
+            @include flexbox(row,center,center); 
+            gap: 0.5rem; 
+            .label {
+              @include font(0.875rem,500, #6B7280); 
+            }
+            .value {
+              @include font(1rem, 400 , #111827); 
+            }
+          }
+          mat-icon {
+            color: #6B7280;
+            margin-left: 0.5rem;
+          }
+        }
+      }
+    }
+      .cards-container {
+        @include grid-autofit(200px, 1fr, 1.5rem, 1.5rem);  
+        margin: 1rem 0;
+      }
+        
+  }
+
+
+  /* ESto es para el select del productor,vere despues de moverlo o crear algo aparte  */
+  ::ng-deep {
+    .producer-menu {
+      min-width: 300px !important;
+      max-height: 400px !important;
+      padding: 0 !important;
+      box-shadow: inherit !important; 
+      border: 1px solid #E5E7EB;
+      .menu-header {
+        padding: 1rem;
+        border-bottom: 1px solid #E5E7EB;
+        background-color: #F6F7F9;
+        h4 {
+          margin: 0;
+          color: #111827;
+          font-size: 1rem;
+          font-weight: 500;
+        }
+      }
+      mat-form-field {
+        width: calc(100% - 2rem);
+        margin: 1rem;
+        margin-bottom: 0;
+  
+        .mat-form-field-wrapper {
+          margin-bottom: -1.25em;
+        }
+      }
+      mat-selection-list {
+        padding-top: 0;
+        mat-list-option {
+          height: 48px;
+          &:hover {
+            background-color: #F9FAFB;
+          }
+          &.mat-list-option-selected {
+            background-color: #E5F0F5;
+          }
+        }
+      }
+    }
+  }

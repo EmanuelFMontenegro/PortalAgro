@@ -6,9 +6,21 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { BaseChartDirective } from 'ng2-charts';
 import { MatTableDataSource } from '@angular/material/table';
 import { catchError, forkJoin, Observable, of, tap } from 'rxjs';
-import { BreakpointObserver } from '@angular/cdk/layout';
+import { WidgetConfig } from '../../../models/widget.models';
 
 Chart.register(...registerables, ChartDataLabels);
+
+
+
+/* 
+lo que seria diseño esta finalizado.
+Quedo pendiente separar la logica de los charts en un servicio y crear un componente para el renderizado
+Widget y Table se separaron en componentes para reutilizarlos.
+Se puede customizar mas aun el widget : en proximo update  sacare el selectedbuttonId y se usara la interface del mismo. 
+
+*/
+
+
 interface DataChacras{
   id: number;
   name: string;
@@ -61,20 +73,18 @@ interface LotePieChart {
 @Component({
   selector: 'app-informes',
   templateUrl: './informes.component.html',
-  styleUrls: ['./informes.component.sass']
+  styleUrls: ['./informes.component.scss']
 })
 export class InformesComponent implements OnInit {
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
-
+  selectedProductorName = '';
   // Variables de estado
-  isScreenSmall = false;
   buttonsDisabled: boolean = true;
   selectedButtonId: number = 0;
   datasetIndex: any = 0
   datasetIndexPie: any = 0
 
   // Datos para tablas
-  displayedColumns: string[] = ['name', 'typeCropName', 'dimensions'];
   dataSource: MatTableDataSource<DataLotes> = new MatTableDataSource<DataLotes>([]);
   dataSourcePie: MatTableDataSource<ChacraPieChart> = new MatTableDataSource<ChacraPieChart>([]);
 
@@ -93,7 +103,7 @@ export class InformesComponent implements OnInit {
   chacrasLength: number = 0
   plantacionesLength: number = 0
   totalDimensionSum: number = 0
-
+  widgetIds = [1, 2, 3];
   usuarios: any[] = [];
   campos: any[] = [];
   loteData: any[] = [];
@@ -196,14 +206,15 @@ export class InformesComponent implements OnInit {
   // grafico de barras
   public barChartData: ChartConfiguration<'bar'>['data'] = {
     labels: [ 'Hectareas' ],
-    datasets:[{data:[], backgroundColor: this.colors, label:'hectáreas '}]
+    datasets:[{data:[], backgroundColor: '#015E83', label:'hectáreas ',borderColor: '#015E83'}]
   };
   
-
   public barChartOptions: ChartConfiguration<'bar'>['options'] = {
     responsive: true,
     maintainAspectRatio: false,
     aspectRatio: 1 / 2,
+    //bar width
+    
     plugins: {
       legend: {
         labels: {
@@ -238,7 +249,6 @@ export class InformesComponent implements OnInit {
   };
 
   constructor(
-    private breakpointObserver: BreakpointObserver,
     public dashboardBackOffice: DashboardBackOfficeService,
     private apiService: ApiService,
     private cdr: ChangeDetectorRef
@@ -248,39 +258,11 @@ export class InformesComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUsers();
+    /* solo para test, asignamos el numero 18 */
+    this.selectedProductorId = 19;
+    this.onProductorChange(this.selectedProductorId);
   }
 
-  ngAfterViewInit(): void {
-    this.breakpointObserver
-      .observe(['(max-width: 720px)'])
-      .subscribe((result) => {
-        this.isScreenSmall = result.matches;
-      });
-  }
-
-  getUsers(locationId?: number): void {
-    this.apiService.getPeopleAdmin(locationId).subscribe(
-      (data: any) => {
-        if (data.list && data.list.length > 0) {
-          this.usuarios = data.list.flat().map((usuario: any) => ({
-            id: usuario.id,
-            name: usuario.name,
-            lastName: usuario.lastname,
-          }));
-        }
-      },
-      (error) => console.error('Error al obtener los usuarios:', error)
-    );
-  }
-
-  // seleccion de productor
-  onProductorChange(productorId: number): void {
-    this.resetData()
-    this.selectedProductorId = productorId;
-    if (productorId) {
-      this.cargarCampos();
-    }
-  }
 
   cargarCampos() {
     this.chacras = [];
@@ -298,7 +280,9 @@ export class InformesComponent implements OnInit {
               lotes: []
             })
             loteObservables.push(this.cargarDataLote(campo.id, this.selectedProductorId, i));           
+            
           })
+          
           forkJoin(loteObservables).subscribe(() => {
             this.cargarDatosBarChart();
             this.cargarDatosPieChart();
@@ -313,8 +297,7 @@ export class InformesComponent implements OnInit {
         console.error('Error al obtener campos:', error);
       }
     );
-  }
-
+  } 
   cargarDataLote(FieldId: number, selectedProductorId: number, chacraArray: number): Observable<any> {
     if (!selectedProductorId || !FieldId) {
       console.warn('El userId o el FieldId son null o undefined, por lo que no se cargan los lotes.');
@@ -333,7 +316,7 @@ export class InformesComponent implements OnInit {
               id: e.typeCrop.id,
               name: e.typeCrop.name
             }
-          }));
+          })); 
         }
       }),
       catchError((error) => {
@@ -385,6 +368,8 @@ export class InformesComponent implements OnInit {
     this.chacras.forEach((e) => {
       this.barChartData.labels?.push(e.name);
       this.barChartData.datasets[0].data.push(e.dimension);
+      this.barChartData.datasets[0].barThickness = 50;
+      this.barChartData.datasets[0].maxBarThickness = 50; 
     });
   }
   
@@ -406,7 +391,8 @@ export class InformesComponent implements OnInit {
       datasets: [{ 
         data: this.objetoPlantaciones.map(item => item.chacra.reduce((total, chacra) => total + chacra.lote.size, 0)), 
         backgroundColor: this.colors, 
-        label:'Hectáreas ' 
+        label:'Hectáreas ',
+
       }]
     };
   }
@@ -417,18 +403,6 @@ export class InformesComponent implements OnInit {
     this.dataSourcePie.data = data;
     this.selectedPlantationNameHectarea = this.objetoPlantaciones[this.datasetIndexPie]?.name;
     this.cdr.detectChanges();
-  }
-
-  // botones superiores
-  onButtonClick(arg: number): void {
-    this.selectedButtonId = arg;
-
-    if (this.selectedButtonId === 1) {
-      this.displayedColumns = ['name', 'typeCropName', 'dimensions'];
-    }
-    if (this.selectedButtonId === 2 || this.selectedButtonId === 3) {
-      this.displayedColumns = ['chacra', 'lote', 'hectárea'];
-    } 
   }
 
   // seleccion del grafico
@@ -458,8 +432,81 @@ export class InformesComponent implements OnInit {
     (nativeEvent.target as HTMLElement).style.cursor = chartElement.length ? 'pointer' : 'default';
   }
 
+  
+
+
+/* Funciones de carga y seleccion de usuarios */
+
+getUsers(locationId?: number): void {
+  this.apiService.getPeopleAdmin(locationId).subscribe(
+    (data: any) => {
+      if (data.list && data.list.length > 0) {
+        this.usuarios = data.list.flat().map((usuario: any) => ({
+          id: usuario.id,
+          name: usuario.name,
+          lastName: usuario.lastname,
+        }));
+      }
+    },
+    (error) => console.error('Error al obtener los usuarios:', error)
+  );
+}
+ 
+onProductorChange(productorId: number): void {
+  this.resetData()
+  this.selectedProductorId = productorId;
+  this.selectedProductorName = this.usuarios.find((usuario) => usuario.id === productorId)?.name || '';
+  if (productorId) {
+    this.cargarCampos();
+  }
+}
+
+
+/* Funciones para El componente de widget
+   Cada caso es un widget, que tiene sus datos preseteados 
+   cada vez que se hace click en algun widget, hace un toggle en las props baseconfig*/
+  getWidgetConfig(widgetId: number): WidgetConfig {
+    const baseConfig = {
+      widgetId,
+      isSelected: this.selectedButtonId === widgetId,
+      isDisabled: this.buttonsDisabled
+    };
+
+    switch (widgetId) {
+      case 1:
+        return {
+          ...baseConfig,
+          title: 'Chacras',
+          value: this.chacrasLength,
+          iconSrc: 'assets/img/img-chacra-azul.svg'
+        };
+      case 2:
+        return {
+          ...baseConfig,
+          title: 'Plantaciones',
+          value: this.plantacionesLength,
+          iconSrc: 'assets/img/img-plantaciones.svg'
+        };
+      case 3:
+        return {
+          ...baseConfig,
+          title: 'Hectáreas',
+          value: this.totalDimensionSum,
+          iconSrc: 'assets/img/img-chacra-azul.svg'
+        };
+      default:
+        throw new Error('Widget no válido');
+    }
+  }
+  
+ 
+  onButtonClick(widgetId: any): void {
+    this.selectedButtonId = widgetId;
+  }
+
+
+  /* Reset data general */
   resetData(): void {
-    this.displayedColumns = ['name', 'typeCropName', 'dimensions'];
     this.selectedButtonId = 0
     this.chacrasLength = 0
     this.plantacionesLength = 0
@@ -481,4 +528,6 @@ export class InformesComponent implements OnInit {
       datasets: [{ data: [] }]
     }
   }
+
+
 }

@@ -1,0 +1,71 @@
+@import 'src/shared-styles/_mixins';
+thead {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+
+    tr {
+      width: 100%;
+      display: table;
+      table-layout: fixed;
+    }
+  }
+
+  tbody {
+    display: block;
+    overflow-y: auto;
+    height: calc(100% - 50px);
+
+    tr {
+      display: table;
+      width: 100%;
+      table-layout: fixed;
+    }
+  }
+
+  table {
+    width: 100%;
+    height: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+
+    th {
+      @include font(0.875rem, 500, #667085);
+      background-color: #EAECF0;
+      border-bottom: 1px solid #E5E7EB;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    td {
+      @include font(0.875rem, 400, #374151);
+      border-bottom: 1px solid #E5E7EB;
+      white-space: nowrap;
+      overflow: hidden;
+      /* text-overflow: ellipsis; */
+    }
+
+    tr:hover td {
+      background-color: #F9FAFB;
+    }
+
+    th,
+    td {
+      padding: 0.75rem 1.5rem;
+      text-align: left;
+      width: 33.33%;
+
+      &:first-child {
+        padding-left: 1.5rem;
+      }
+
+      &:last-child {
+        padding-right: 1.5rem;
+      }
+    }
+
+    tr:hover td {
+      background-color: #F9FAFB;
+    }
+  }
