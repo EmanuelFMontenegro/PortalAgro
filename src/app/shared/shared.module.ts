@@ -33,7 +33,6 @@ import { CalendarComponent } from './components/calendar/calendar.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { CalendarPopupComponent } from './components/calendar-popup/calendar-popup.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { PaginadorComponent } from './components/paginador/paginador.component';
 import { TableComponent } from './components/table/table.component';
 import { WidgetComponent } from './components/widget/widget.component';
 import { CardContadorComponent } from './components/card-contador/card-contador.component';
@@ -102,6 +101,9 @@ export const CALENDAR = [FullCalendarModule];
     HeaderInnerComponent,
     CardComponent,
     SearchbarComponent,
+    WidgetComponent,
+    TableComponent,
+    CardContadorComponent
   ],
 })
 export class SharedModule {}

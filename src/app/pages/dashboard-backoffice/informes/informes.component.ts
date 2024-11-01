@@ -258,9 +258,7 @@ export class InformesComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUsers();
-    /* solo para test, asignamos el numero 18 */
-    this.selectedProductorId = 19;
-    this.onProductorChange(this.selectedProductorId);
+     
   }
 
 
@@ -446,6 +444,10 @@ getUsers(locationId?: number): void {
           name: usuario.name,
           lastName: usuario.lastname,
         }));
+        //seteamos por default 1 user
+        this.selectedProductorId = this.usuarios[0]?.id;
+        this.selectedProductorName = this.usuarios[0]?.name;
+        this.onProductorChange(this.selectedProductorId);
       }
     },
     (error) => console.error('Error al obtener los usuarios:', error)
