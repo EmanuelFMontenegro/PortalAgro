@@ -1,0 +1,38 @@
+<div class="dashboardContainer-card-header">
+    <div class="dashboardContainer-card-header-title__section">
+      <h3>Información</h3>
+      <div class="dashboardContainer-card-header-title__section-subtitle">
+        {{ subtitle }}
+      </div>
+    </div>
+      <button mat-button class="dashboardContainer-card-header-filter-button">Filtros<mat-icon>tune</mat-icon></button>
+   </div>
+   <div class="dashboardContainer-card-data">
+    <table *ngIf="data?.length; else emptyState">
+      <thead>
+        <tr>
+          <ng-container *ngTemplateOutlet="headers || defaultHeaderTemplate;context: { $implicit: data }"></ng-container>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of data">
+          <ng-container *ngTemplateOutlet="rows || defaultRowTemplate;context: { $implicit: row }"></ng-container>
+        </tr>
+      </tbody>
+    </table>
+    <ng-template #emptyState>
+      <div class="dashboardContainer-card-data-empty">
+        <img class="dashboardContainer-card-data-empty-icon"  src="../../../../assets/img/empty.svg">
+      </div>
+    </ng-template>
+    <div class="dashboardContainer-card-data-footer">
+      <button mat-button class="load-more-button">Cargar más<mat-icon>expand_more</mat-icon></button>
+    </div>
+  </div>  
+<!-- plantillas defaults, no creo que las usemos pero las dejo por las dudas -->
+<ng-template #defaultHeaderTemplate let-data>
+  <th *ngFor="let header of data[0] | keyvalue">{{ header.key }}</th>
+</ng-template>
+<ng-template #defaultRowTemplate let-row>
+  <td *ngFor="let cell of row | keyvalue">{{ cell.value }}</td>
+</ng-template>

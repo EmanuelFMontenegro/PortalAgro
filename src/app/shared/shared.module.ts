@@ -34,7 +34,9 @@ import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { CalendarPopupComponent } from './components/calendar-popup/calendar-popup.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { PaginadorComponent } from './components/paginador/paginador.component';
-
+import { WidgetComponent } from './components/widget/widget.component';
+import { TableComponent } from './components/table/table.component';
+import { MatTableModule } from '@angular/material/table';
 export const IMPORTS_MATERIAL = [
   MatSidenavModule,
   MatListModule,
@@ -57,6 +59,7 @@ export const IMPORTS_MATERIAL = [
   MatDatepickerModule,
   MatNativeDateModule,
   MatButtonModule,
+  MatTableModule,
 ];
 
 export const IMPORT_CORE = [CommonModule, FormsModule, ReactiveFormsModule];
@@ -75,7 +78,9 @@ export const CALENDAR = [FullCalendarModule];
     PaginadorComponent,
     FooterComponent,
     HeaderInnerComponent,
-    SearchbarComponent
+    SearchbarComponent,
+    WidgetComponent,
+    TableComponent
 
   ],
   imports: [IMPORT_CORE, IMPORTS_MATERIAL, CALENDAR, CardComponent],
@@ -93,6 +98,8 @@ export const CALENDAR = [FullCalendarModule];
     FooterComponent,
     HeaderInnerComponent,CardComponent,
     SearchbarComponent,
+    WidgetComponent,
+    TableComponent,
   ],
 })
 export class SharedModule {}
