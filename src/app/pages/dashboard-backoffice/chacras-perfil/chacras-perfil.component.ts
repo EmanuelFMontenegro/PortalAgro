@@ -55,9 +55,11 @@ export class ChacrasPerfilComponent implements OnInit {
 
   ngOnInit(): void {
     const perfilDataChacra = localStorage.getItem('idPerfilProd');
+    console.log("id del prod",perfilDataChacra)
     if (perfilDataChacra) {
       const userId = parseInt(perfilDataChacra);
       this.userId = userId;
+      console.log("datos parsados",userId)
       this.cargarChacrasUsuario(userId);
       this.personId = userId;
       this.DatosUser(userId, this.personId);
@@ -65,9 +67,11 @@ export class ChacrasPerfilComponent implements OnInit {
   }
 
   DatosUser(userId: number, personId: number) {
+    console.log('Llamando a DatosUser con:', { userId, personId });
     this.apiService.getPersonByIdProductor(userId, personId).subscribe(
       (response: DatosUsuario) => {
         if (response) {
+          console.log("datos del usario obtenido de idProd",response)
           this.nombre = response.name;
           this.apellido = response.lastname;
           this.email = response.username;
@@ -91,7 +95,7 @@ export class ChacrasPerfilComponent implements OnInit {
         if (response && response.list && response.list.length > 0) {
           const listaChacras = response.list[0];
           this.chacras = listaChacras;
-      
+
         } else {
           console.warn(
             'No se encontraron datos de chacras en la respuesta:',
@@ -125,9 +129,9 @@ export class ChacrasPerfilComponent implements OnInit {
   BtnCargarChacra(): void {
     this.router.navigate(['/dashboard-backoffice/cargar-chacras']);
   }
-  
-  
- 
+
+
+
 
   clearFilter() {
     this.cargarChacrasUsuario(this.userId);
@@ -136,7 +140,7 @@ export class ChacrasPerfilComponent implements OnInit {
   onFilter(filtro: any) {
     switch (filtro.tipo) {
       case 'Buscar por Nombre de Chacra':
-        this.filtrarPorNombreDeChacra(filtro.valor);  
+        this.filtrarPorNombreDeChacra(filtro.valor);
         break;
       case 'Buscar por Hectáreas':
         this.filtrarPorHectareas(filtro.min, filtro.max);
@@ -144,7 +148,7 @@ export class ChacrasPerfilComponent implements OnInit {
     }
   }
   filtrarPorHectareas(minHectareas: number, maxHectareas: number) {
-     
+
     if (minHectareas === undefined || maxHectareas === undefined || isNaN(minHectareas) || isNaN(maxHectareas)) {
       console.error('Debe ingresar valores válidos para el rango de hectáreas');
       return;

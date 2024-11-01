@@ -26,7 +26,7 @@ interface Role {
   name: string;
 }
 
- 
+
 interface Location {
   id: number;
   name: string;
@@ -46,8 +46,8 @@ interface Person {
   canEdit: boolean | null;
 }
 
- 
- 
+
+
 
 @Component({
   selector: 'app-perfil-productor',
@@ -106,7 +106,7 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    //ver ancho de pantalla 
+    //ver ancho de pantalla
     const width = window.innerWidth;
     this.obtenerLocalidades();
 
@@ -379,8 +379,12 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
   }
 
   btnVerMas(userId: number) {
-    localStorage.setItem('idPerfilProd', userId.toString());
-    this.router.navigate(['dashboard-backoffice/chacras-perfil']);
+    if (userId) {
+      localStorage.setItem('idPerfilProd', userId.toString());
+      this.router.navigate(['dashboard-backoffice/chacras-perfil']);
+    } else {
+      console.error('El userId es inválido:', userId);
+    }
   }
 
 

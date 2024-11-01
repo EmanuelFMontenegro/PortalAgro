@@ -19,7 +19,7 @@ interface DecodedToken {
 @Component({
   selector: 'app-inicio',
   templateUrl: './inicio.component.html',
-  styleUrls: ['./inicio.component.scss']
+  styleUrls: ['./inicio.component.scss'],
 })
 export class InicioComponent implements OnInit {
   currentYear: number = new Date().getFullYear();
@@ -71,12 +71,11 @@ export class InicioComponent implements OnInit {
     }
   }
 
-
   navigateTo(pageName: string): void {
     this.router.navigateByUrl('/dashboard/' + pageName);
   }
 
-   cargarDatosDeUsuario() {
+  cargarDatosDeUsuario() {
     const decoded: DecodedToken = jwtDecode(this.authService.getToken() || '');
     if ('userId' in decoded && 'sub' in decoded && 'roles' in decoded) {
       this.userId = decoded.userId;
@@ -125,11 +124,11 @@ export class InicioComponent implements OnInit {
     }
   }
 
-
   loadMenu(): void {
-    this.http.get<any>('../../assets/json/home-dashboard.json').subscribe(data => {
-      this.homeItems = data.homeItems;
-      console.log(this.homeItems);
-    });
+    this.http
+      .get<any>('../../assets/json/home-dashboard.json')
+      .subscribe((data) => {
+        this.homeItems = data.homeItems;
+      });
   }
 }
