@@ -1,0 +1,6 @@
+<div class="mrg-btn-subir-archivo">
+  <input type="file" (change)="onFileSelected($event)" style="display: none;" #fileInput>
+<button class="back-button2 mrg-left" (click)="fileInput.click()">{{nombreBoton}}</button>
+<p *ngIf="fileName"><strong>Archivo seleccionado: </strong> {{ fileName }}       <mat-icon matTooltip="Quitar archivo" class="quitar-archivos" (click)="quitarArchivo()" >close</mat-icon></p>
+</div>
+

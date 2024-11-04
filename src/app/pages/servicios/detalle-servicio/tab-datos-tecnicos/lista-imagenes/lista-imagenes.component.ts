@@ -35,10 +35,11 @@ export class ListaImagenesComponent {
   dataView = [
     { label: 'Titulo', field: 'title', tipoLabel: TipoLabel.span },
     { label: 'Descripción', field: 'description', tipoLabel: TipoLabel.span },
-    { label: 'Ver Imágenes', field: 'dashboard-backoffice/configuracion/insumo', tipoLabel: TipoLabel.botonVermas },
+    // { label: 'Ver Imágenes', field: 'dashboard-backoffice/configuracion/insumo', tipoLabel: TipoLabel.botonVermas },
   ]
 
   @Output() btnVolver = new EventEmitter<any>();
+  puedeSubirImagenes = false
 
   constructor(
     private toastr: ToastrService,
@@ -58,20 +59,19 @@ export class ListaImagenesComponent {
   }
 
   setMiniaturas(){
-    if(this.detalleService.permisos?.jobTechnical?.WRITE)
-    this.dataView.push({ label: 'Eliminar', field: 'id', tipoLabel: TipoLabel.botonEliminar })
+    if(this.detalleService.permisos?.jobTechnical?.WRITE || this.detalleService.permisos?.jobTechnical?.WRITE_MY){
+      this.puedeSubirImagenes = true;
+      this.dataView.push({ label: 'Eliminar', field: 'id', tipoLabel: TipoLabel.botonEliminar })
+    }
    }
 
   disabledUpload(){
 
   }
 
-  onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length) {
-      const file = input.files[0];
+  recibirArchivo(file: any): void {
+    console.log(file)
       this.form.controls[this.ctrlimageJob].setValue(file)
-    }
   }
 
   getImagenes() {
@@ -87,7 +87,7 @@ export class ListaImagenesComponent {
 
   eliminarImagen(valor: any) {
 
-    this.serviciosService.deleteInsumosTecnico(this.servicio.id, valor).subscribe(
+    this.serviciosService.deleteImagenTecnico(this.servicio.id, valor).subscribe(
       (data: any) => {
         this.toastr.info(data?.message ?? 'Imagen eliminada exitosamente', 'Éxito');
         this.getImagenes()

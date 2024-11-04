@@ -38,7 +38,7 @@ import { WidgetComponent } from './components/widget/widget.component';
 import { CardContadorComponent } from './components/card-contador/card-contador.component';
 import { MatTableModule } from '@angular/material/table';
 import { NgxPaginationModule } from 'ngx-pagination';
-
+import { SubirArchivosComponent } from './components/subir-archivos/subir-archivos.component';
 export const IMPORTS_MATERIAL = [
   MatSidenavModule,
   MatListModule,
@@ -84,7 +84,8 @@ export const CALENDAR = [FullCalendarModule];
     SearchbarComponent,
     WidgetComponent,
     TableComponent,
-    CardContadorComponent
+    CardContadorComponent,
+    SubirArchivosComponent
   ],
   imports: [IMPORT_CORE, IMPORTS_MATERIAL, CALENDAR, CardComponent],
   exports: [
@@ -104,7 +105,8 @@ export const CALENDAR = [FullCalendarModule];
     SearchbarComponent,
     WidgetComponent,
     TableComponent,
-    CardContadorComponent
+    CardContadorComponent,
+    SubirArchivosComponent
   ],
 })
 export class SharedModule {}

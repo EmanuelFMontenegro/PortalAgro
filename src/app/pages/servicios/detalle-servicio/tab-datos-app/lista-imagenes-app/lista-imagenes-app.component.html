@@ -1,1 +1,47 @@
-<p>lista-imagenes-app works!</p>
+<div class="div-datos">
+  <div class="title-datos">
+    Imágenes
+   <button *ngIf="mostrarListado && puedeSubirImagenes" class="back-button2 btn-cargar" [ngClass]="{'service-backOffice': this.backOffice}" (click)="openABM()"> Cargar Imágenes</button>
+  </div>
+  <div class="body-datos">
+
+    <ng-container *ngIf="mostrarListado else abm">
+         <ng-container *ngIf="this.listadoImagenes?.length else listadoVacio">
+          <miniatura [dataView]="dataView" (btnEliminar)="eliminarImagen($event)" [listado]="listadoImagenes"></miniatura>
+         </ng-container>
+
+        <ng-template #listadoVacio>
+           <div class="listadoVacio">
+            No contiene elementos
+           </div>
+        </ng-template>
+
+    </ng-container>
+
+    <ng-template #abm>
+
+      <div class="formulario" [formGroup]="form">
+
+        <div class="field-container w-100">
+          <mat-label class="field-label">Título</mat-label>
+          <input type="text" [formControlName]="this.ctrlTitle" class="field-input" name="titulo" placeholder="Título">
+          <mat-error *ngIf="form.controls[this.ctrlTitle]?.invalid && form.controls[this.ctrlTitle]?.touched" >* Campo requerido</mat-error>
+        </div>
+
+        <div class="col-12 col-sm-12 col-md-6 col-lg-8 col-xl-8">
+          <mat-label class="field-label">Descripción</mat-label>
+          <textarea  [formControlName]="this.ctrlDescription"  placeholder="Descripción"  matInput class="observaciones" ></textarea>
+        </div>
+
+         <app-subir-archivos (uploadFile)="recibirArchivo($event)"></app-subir-archivos>
+      </div>
+
+      <button  class="back-button2" (click)="cancelar()" [ngClass]="{'service-backOffice': this.backOffice}"> Cancelar</button>
+      <button  class="back-button2" (click)="aceptar()" [ngClass]="{'service-backOffice': this.backOffice}"> Aceptar</button>
+    </ng-template>
+
+
+  </div>
+
+  <button *ngIf="mostrarListado"  class="back-button2" (click)="volver()" [ngClass]="{'service-backOffice': this.backOffice}">  Volver Atrás</button>
+</div>

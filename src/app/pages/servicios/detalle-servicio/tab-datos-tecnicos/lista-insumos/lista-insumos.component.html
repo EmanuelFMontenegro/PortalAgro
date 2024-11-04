@@ -1,7 +1,7 @@
 <div class="div-datos">
   <div class="title-datos">
     Insumos
-    <button *ngIf="mostrarListado" class="back-button2 btn-cargar" [ngClass]="{'service-backOffice': this.backOffice}" (click)="openABM()"> Cargar Insumos</button>
+    <button *ngIf="mostrarListado && puedeCargarInsumos" class="back-button2 btn-cargar" [ngClass]="{'service-backOffice': this.backOffice}" (click)="openABM()"> Cargar Insumos</button>
   </div>
   <div class="body-datos">
 

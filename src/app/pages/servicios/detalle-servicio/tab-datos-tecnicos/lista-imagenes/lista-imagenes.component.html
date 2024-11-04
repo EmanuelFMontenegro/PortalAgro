@@ -1,7 +1,7 @@
 <div class="div-datos">
   <div class="title-datos">
     Imágenes
-   <button *ngIf="mostrarListado" class="back-button2 btn-cargar" [ngClass]="{'service-backOffice': this.backOffice}" (click)="openABM()"> Cargar Imágenes</button>
+   <button *ngIf="mostrarListado && puedeSubirImagenes" class="back-button2 btn-cargar" [ngClass]="{'service-backOffice': this.backOffice}" (click)="openABM()"> Cargar Imágenes</button>
   </div>
   <div class="body-datos">
 
@@ -33,12 +33,7 @@
           <textarea  [formControlName]="this.ctrlDescription"  placeholder="Descripción"  matInput class="observaciones" ></textarea>
         </div>
 
-        <button *ngIf="mostrarListado"  class="back-button2" (click)="adjuntarImagen()">  Subir Archivo</button>
-
-        <input type="file" (change)="onFileSelected($event)" #fileInput style="display: none;" />
-
-        <!-- Botón para activar el input de archivo -->
-        <button (click)="fileInput.click()">Subir Archivo</button>
+         <app-subir-archivos (uploadFile)="recibirArchivo($event)"></app-subir-archivos>
       </div>
 
       <button  class="back-button2" (click)="cancelar()" [ngClass]="{'service-backOffice': this.backOffice}"> Cancelar</button>

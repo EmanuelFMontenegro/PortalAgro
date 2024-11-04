@@ -1,0 +1,27 @@
+<div class="borderDialog">
+  <div class="miniBar">
+   <strong> {{this.titulo}}</strong>
+  </div>
+  <div class="body-dialog">
+    <div class="formulario" [formGroup]="form">
+
+      <div class="field-container w-100">
+        <mat-label class="field-label">Título</mat-label>
+        <input type="text" [formControlName]="this.ctrlTitle" class="field-input" name="titulo" placeholder="Título">
+        <mat-error *ngIf="form.controls[this.ctrlTitle]?.invalid && form.controls[this.ctrlTitle]?.touched" >* Campo requerido</mat-error>
+      </div>
+
+      <div class="col-12 col-sm-12 col-md-6 col-lg-8 col-xl-8">
+        <mat-label class="field-label">Descripción</mat-label>
+        <textarea  [formControlName]="this.ctrlDescription"  placeholder="Descripción"  matInput class="observaciones" ></textarea>
+      </div>
+      <app-subir-archivos (uploadFile)="recibirArchivo($event)"></app-subir-archivos>
+    </div>
+    <br><br>
+
+
+    <button  class="back-button2" (click)="cancelar()" > Cancelar</button>
+    <button  class="back-button2" (click)="subir()" > Subir</button>
+
+  </div>
+</div>

@@ -15,6 +15,8 @@ export class DetalleServicioService {
   piloto$: any;
   tecnico = new BehaviorSubject<any>(null);
   tecnico$: any;
+  estado = new BehaviorSubject<any>(null);
+  estado$: any;
 
   datosTecnico:any;
   datosPiloto:any;
@@ -30,6 +32,7 @@ export class DetalleServicioService {
     private serviciosService:ServiciosService){
       this.tecnico$ = this.tecnico.asObservable();
       this.piloto$ = this.piloto.asObservable();
+      this.estado$ = this.estado.asObservable();
     }
 
   cleanVariable(){
@@ -37,6 +40,8 @@ export class DetalleServicioService {
     this.servicioId = null;
     this.tecnico.next(null);
     this.piloto.next(null);
+    this.estado.next(null);
+    this.estados = null
   }
 
   async getServicio(){
@@ -78,19 +83,12 @@ export class DetalleServicioService {
   }
 
   getEstados(){
-
     if(!this.estados){
-      this.estadoService.getAll_backOffice().subscribe(
-        data=> {
-          this.estados = data.list[0]
-        },
-        error =>{
-
-        }
+      this.serviciosService.getStatusByService(this.servicioId).subscribe(
+        data=> this.estados = data,
+        error =>{}
       )
     }
-
-
     return this.estados
   }
 

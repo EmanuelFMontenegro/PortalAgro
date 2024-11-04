@@ -31,7 +31,23 @@ export class DetalleServicioComponent {
     this.servicioInterno.comprobarUrlBackOffice()
     this.backOffice =  this.servicioInterno.backOffice?.value
     this.urlBase = this.backOffice ? 'dashboard-backoffice' : 'dashboard'
-    this.detalleServicioService.getEstados()
+    this.recuperarDatos()
+    this.detectarCambiosEstado();
+  }
+
+  /** Si llega a cambiar los datos, se vuelve a obtener los datos para el servicio, para asegurar la integridad de los datos
+   *  y el correcto funcionamiento de lso TABS segun estad */
+  detectarCambiosEstado(){
+    this.subscription.add(
+      this.detalleServicioService.estado$?.subscribe(
+        (data:any) =>{
+           if(data) this.recuperarDatos()
+        }
+      )
+    )
+  }
+
+  recuperarDatos(){
     this.getDatosServicio();
     this.getUser()
   }
@@ -43,6 +59,7 @@ export class DetalleServicioComponent {
   async getDatosServicio(){
    await this.detalleServicioService.getServicio()
    this.servicio = this.detalleServicioService.servicio;
+   this.detalleServicioService.getEstados()
    this.subscribirPiloto();
    this.subscribirTecnico();
   }
@@ -70,7 +87,6 @@ export class DetalleServicioComponent {
   }
 
   volver() {
-    console.log(this.urlBase+ "LA NASE ESSSSSSSSSS")
     this.router.navigate([this.urlBase + '/servicios']);
   }
 

@@ -22,6 +22,8 @@ import { ListaImagenesAppComponent } from './detalle-servicio/tab-datos-app/list
 import { ListaInsumosAppComponent } from './detalle-servicio/tab-datos-app/lista-insumos-app/lista-insumos-app.component';
 import { TareasDelDroneComponent } from './detalle-servicio/tab-datos-app/tareas-del-drone/tareas-del-drone.component';
 import { DialogEditarInsumoComponent } from './detalle-servicio/tab-datos-app/lista-insumos-app/dialog-editar-insumo/dialog-editar-insumo.component';
+import { CambiarEstadoComponent } from './detalle-servicio/tab-solicitud/cambiar-estado/cambiar-estado.component';
+import { DialogSubirArchivoComponent } from './detalle-servicio/tab-informes/dialog-subir-archivo/dialog-subir-archivo.component';
 
 
 @NgModule({
@@ -45,6 +47,8 @@ import { DialogEditarInsumoComponent } from './detalle-servicio/tab-datos-app/li
     ListaInsumosAppComponent,
     TareasDelDroneComponent,
     DialogEditarInsumoComponent,
+    CambiarEstadoComponent,
+    DialogSubirArchivoComponent,
   ],
   imports: [
     CommonModule,

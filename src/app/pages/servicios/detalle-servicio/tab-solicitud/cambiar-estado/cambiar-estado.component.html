@@ -1,0 +1,6 @@
+<div class="field-container w-100" >
+  <mat-label>Cambiar estado</mat-label>
+  <mat-select *ngIf="this.mostrarSelector" (selectionChange)="dialogConfirmacionCambiarEstado($event)" placeholder="Seleccionar estado" class="field-input" name="productor">
+    <mat-option *ngFor="let estado of detalleServicioService.estados" [value]="estado">{{ estado?.name }}</mat-option>
+  </mat-select>
+</div>

@@ -26,6 +26,7 @@ export class TabSolicitudComponent {
   asigPiloto = false;
   asigTecnico = false;
   backOffice = false;
+  cambiarEstado = false;
 
   constructor(  public detalleServicioService: DetalleServicioService,
     public authService: AuthService,
@@ -36,6 +37,7 @@ export class TabSolicitudComponent {
 
   ngOnInit(): void {
     this.backOffice =  this.servicioInterno.backOffice?.value
+    this.cambiarEstado = this.detalleServicioService.permisos?.requestservice?.CREATE ||  this.detalleServicioService.permisos?.requestservice?.CREATE_MY ? true : false;
     this.asigPiloto = this.detalleServicioService.permisos?.jobOperator?.CREATE || this.detalleServicioService.permisos?.jobOperator?.CREATE_MY ? true : false;
     this.asigTecnico = this.detalleServicioService.permisos?.jobTechnical?.CREATE || this.detalleServicioService.permisos?.jobTechnical?.CREATE_MY ? true : false;
   }

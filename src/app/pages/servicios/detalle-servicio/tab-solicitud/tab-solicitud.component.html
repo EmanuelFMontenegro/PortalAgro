@@ -1,6 +1,6 @@
 <div class="tab-base">
   <div class="row">
-    <div class="col-3" *ngIf=" display == tipoDisplay.solicitud">
+    <div class="col-5" *ngIf=" display == tipoDisplay.solicitud">
       <div class="label-estado" [ngClass]="{'service-backOffice': this.backOffice}">
         <strong>Estado: </strong>{{ this.servicio?.status?.name }}
       </div>
@@ -10,12 +10,8 @@
 
       <ng-container *ngSwitchCase="tipoDisplay.solicitud">
 
-        <div class="col-4">
-          <div class="field-container w-100">
-            <mat-select placeholder="Cambiar estado" class="field-input" name="productor">
-              <mat-option *ngFor="let estado of detalleServicioService.estados" [value]="estado.id">{{ estado?.name }}</mat-option>
-            </mat-select>
-          </div>
+        <div class="col-4" *ngIf="cambiarEstado">
+         <app-cambiar-estado></app-cambiar-estado>
         </div>
 
         <div class="col-12 border-base">

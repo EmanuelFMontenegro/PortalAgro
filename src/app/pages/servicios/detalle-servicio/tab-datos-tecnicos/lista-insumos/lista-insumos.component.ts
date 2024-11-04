@@ -19,6 +19,7 @@ import { TiposDisplayTecnico } from '../tab-datos-tecnicos.component';
 export class ListaInsumosComponent {
 
   mostrarListado = true;
+  puedeCargarInsumos = false;
   listadoTiposInsumos: any;
   listadoInsumos:any;
   servicio: any;
@@ -63,8 +64,10 @@ export class ListaInsumosComponent {
   }
 
   setMiniaturas(){
-   if(this.detalleService.permisos?.jobTechnical?.WRITE || this.detalleService.permisos?.jobTechnical?.WRITE_MY)
-   this.dataView.push({label: 'Eliminar', field: 'id', tipoLabel: TipoLabel.botonEliminar})
+   if(this.detalleService.permisos?.jobTechnical?.WRITE || this.detalleService.permisos?.jobTechnical?.WRITE_MY){
+    this.puedeCargarInsumos = true;
+    this.dataView.push({label: 'Eliminar', field: 'id', tipoLabel: TipoLabel.botonEliminar})
+   }
   }
 
   getInsumos(){

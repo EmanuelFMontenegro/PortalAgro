@@ -1,0 +1,17 @@
+.no-subido{
+  color: #c2bbbb;
+}
+
+.subido{
+  color: rgb(10, 10, 203);
+  cursor: pointer;
+  &:hover {
+    color: rgb(23, 23, 247);;
+  }
+}
+
+.borde-tabla{
+  margin-top: 20px;
+  border: 2px solid #b2afaf;
+  border-radius: 2px;
+}

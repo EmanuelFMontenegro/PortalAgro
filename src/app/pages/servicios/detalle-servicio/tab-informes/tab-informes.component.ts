@@ -3,12 +3,14 @@ import { MatTableDataSource } from '@angular/material/table';
 import { DetalleServicioService } from '../detalle-servicio.service';
 import { AuthService } from 'src/app/services/AuthService';
 import { ServiciosService } from 'src/app/services/servicios.service';
+import { DialogSubirArchivoComponent } from './dialog-subir-archivo/dialog-subir-archivo.component';
+import { MatDialog } from '@angular/material/dialog';
 
 export enum Infome {
-  ORDEN_SERVICIO = 1,
-  TECNICO = 2,
-  APP = 3,
-  FINAL = 4,
+  ORDEN_SERVICIO = 'Orden de Servicio',
+  TECNICO = 'Informe Técnico',
+  APP = 'Informe de App',
+  FINAL = 'Informe Final',
 }
 
 
@@ -19,15 +21,26 @@ export enum Infome {
 })
 export class TabInformesComponent {
 
-  dataSource: any;
-  displayedColumns = ['detalle', 'acciones']
-  puedeSubirArchivo = false;
-
+  dataSource = new MatTableDataSource<any>();
+  displayedColumns = ['detalle', 'nombre', 'descripcion', 'acciones']
+  puedeSubirArchivoOrden = false;
+  puedeSubirArchivoTecnico = false;
+  puedeSubirArchivoApp = false;
+  puedeSubirArchivoFinal = false;
   constructor(
+    private detalleServicioService: DetalleServicioService,
     public servicioService: ServiciosService,
-    public authService: AuthService) {}
+    private dialog: MatDialog,
+    public authService: AuthService) { }
 
   ngOnInit(): void {
+
+    this.puedeSubirArchivoOrden = this.detalleServicioService.permisos?.requestservice?.WRITE || this.detalleServicioService.permisos?.requestservice?.WRITE_MY ? true : false;
+    this.puedeSubirArchivoTecnico = this.detalleServicioService.permisos?.jobTechnical?.WRITE || this.detalleServicioService.permisos?.jobTechnical?.WRITE_MY ? true : false;
+    this.puedeSubirArchivoApp = this.detalleServicioService.permisos?.jobOperator?.WRITE || this.detalleServicioService.permisos?.jobOperator?.WRITE_MY ? true : false;
+    this.puedeSubirArchivoFinal = this.detalleServicioService.permisos?.requestservice?.WRITE || this.detalleServicioService.permisos?.requestservice?.WRITE_MY ? true : false;
+
+    this.recuperarArchivos()
 
     this.dataSource.data = [
       {
@@ -49,8 +62,51 @@ export class TabInformesComponent {
     ]
   }
 
+  recuperarArchivos() {
+
+    // llamar a servicio que encapsule los 4 archivos y setear en el listado
+
+  }
+
+  puedeSubirArchivo(tipo: Infome) {
+    switch (tipo) {
+      case Infome.ORDEN_SERVICIO:
+         return this.puedeSubirArchivoOrden
+        break;
+      case Infome.TECNICO:
+        return  this.puedeSubirArchivoTecnico
+        break;
+      case Infome.APP:
+        return  this.puedeSubirArchivoApp
+        break;
+      case Infome.FINAL:
+         return this.puedeSubirArchivoFinal
+        break;
+      default:
+        return false;
+        break;
+    }
+  }
 
   subirInforme(tipo: Infome) {
+    const dialogRef = this.dialog.open(DialogSubirArchivoComponent, {
+      width: '400px',
+      data: {
+        tipo: tipo,
+        showCancel: true,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(async (result:any) => {
+      if(result){ // si devuelve TRUE refrescar el listado de archivos
+
+      }
+    });
+
+
+  }
+
+  descargarInforme(tipo: Infome) {
     // switch (tipo) {
     //   case Infome.APP:
     //     this.servicioService.
@@ -59,24 +115,6 @@ export class TabInformesComponent {
     //   default:
     //     break;
     // }
-
-  }
-
-  descargarInforme(tipo: Infome) {
-
-  // switch (tipo) {
-    //   case Infome.APP:
-    //     this.servicioService.
-    //     break;
-
-    //   default:
-    //     break;
-    // }
-
-  }
-
-  verInforme(tipo: Infome) {
-
   }
 
 }

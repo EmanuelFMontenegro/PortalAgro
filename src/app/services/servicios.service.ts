@@ -54,6 +54,16 @@ export class ServiciosService {
       });
     }
 
+    getStatusByService(serviceId:number){
+      let url = `${this.urlBase}/service/${serviceId}/status/edit`;
+      return this.http.get(url);
+    }
+
+    putStatusByService(serviceId:number, statusId: number){
+      let url = `${this.urlBase}/service/${serviceId}/status/${statusId}`;
+      return this.http.put(url, null);
+    }
+
     getStatusById(id: number): Observable<any> {
       let url = `${this.urlBase}/status/${id}`;
       return this.http.get(url);
@@ -188,6 +198,91 @@ export class ServiciosService {
     deleteTareaDrone(idServicio: number , idTask: number){
       let url =  `${this.urlBase}/service/${idServicio}/joboperator/dronetask/${idTask}`;
       return this.http.delete(url);
+    }
+
+
+    getImagenesPiloto(idServicio: number){
+      let url =  `${this.urlBase}/service/${idServicio}/joboperator/images/all`;
+      return this.http.get(url);
+    }
+
+    getImagenPilotoById(idServicio: number, idImagen:number){
+      let url =  `${this.urlBase}/service/${idServicio}/joboperator/images/${idImagen}/img`;
+      return this.http.get(url);
+    }
+
+
+    deleteImagenPiloto(idServicio: number , idInsumo: number){
+      let url =  `${this.urlBase}/service/${idServicio}/joboperator/images/${idInsumo}`;
+      return this.http.delete(url);
+    }
+
+    postImagenPiloto(idServicio: number, file:any){
+      const formData = new FormData();
+      formData.append('title', file?.title);
+      formData.append('description', file?.description);
+      formData.append('imageJob', file?.imageJob);
+
+      let url = `${this.urlBase}/service/${idServicio}/joboperator/images`;
+      return this.http.post(url, formData);
+    }
+
+
+    // INFORMES
+    getInformeOrdeServicio(idServicio: number): Observable<any>{
+      let url =  `${this.urlBase}/service/${idServicio}/order`;
+      return this.http.get(url);
+    }
+    postInformeOrdeServicio(idServicio: number, body:any): Observable<any>{
+      const formData = new FormData();
+      formData.append('title', body?.title);
+      formData.append('description', body?.description);
+      formData.append('document', body?.document);
+
+      let url =  `${this.urlBase}/service/${idServicio}/order`;
+      return this.http.post(url, formData);
+    }
+
+    getInformeTecnico(idServicio: number): Observable<any>{
+      let url =  `${this.urlBase}/service/${idServicio}/jobtechnical/report`;
+      return this.http.get(url);
+    }
+    postInformeTecnico(idServicio: number, body:any): Observable<any>{
+      const formData = new FormData();
+      formData.append('title', body?.title);
+      formData.append('description', body?.description);
+      formData.append('document', body?.document);
+
+      let url =  `${this.urlBase}/service/${idServicio}/jobtechnical/report`;
+      return this.http.post(url, formData);
+    }
+
+    getInformeApp(idServicio: number): Observable<any>{
+      let url =  `${this.urlBase}/service/${idServicio}/joboperator/report`;
+      return this.http.get(url);
+    }
+    postInformeApp(idServicio: number, body:any): Observable<any>{
+      const formData = new FormData();
+      formData.append('title', body?.title);
+      formData.append('description', body?.description);
+      formData.append('document', body?.document);
+
+      let url =  `${this.urlBase}/service/${idServicio}/joboperator/report`;
+      return this.http.post(url, formData);
+    }
+
+    getInformeFinal(idServicio: number): Observable<any>{
+      let url =  `${this.urlBase}/service/${idServicio}/report`;
+      return this.http.get(url);
+    }
+    postInformeFinal(idServicio: number, body:any): Observable<any>{
+      const formData = new FormData();
+      formData.append('title', body?.title);
+      formData.append('description', body?.description);
+      formData.append('document', body?.document);
+
+      let url =  `${this.urlBase}/service/${idServicio}/report`;
+      return this.http.post(url, formData);
     }
 
   }
