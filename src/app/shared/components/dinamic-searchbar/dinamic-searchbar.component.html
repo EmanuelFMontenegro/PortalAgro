@@ -1,0 +1,89 @@
+<div class="search-bar" *ngIf="!hideSearchBar()">
+      <div class="search-bar-picker2 grow-1">
+    <mat-select 
+      class="FormInput size-48" 
+      [value]="selectedFilter.type"
+      (selectionChange)="onFilterTypeChange($event)">
+      <mat-option 
+        *ngFor="let config of filterConfigs" 
+        [value]="config.type">
+        {{ config.type }}
+      </mat-option>
+    </mat-select>
+  </div>
+    <div class="search-bar-input2 grow-2" *ngIf="selectedFilter && selectedFilter.inputType !== 'action'"> 
+      <ng-container *ngIf="selectedFilter.inputType === 'text'">
+        <input 
+          class="FormInput grow-1 size-48" 
+          style="width: 100%;" 
+          matInput 
+          [placeholder]="selectedFilter.placeholder"
+          [(ngModel)]="filterValue.text">
+      </ng-container>
+      <ng-container *ngIf="selectedFilter.inputType === 'select-options'">
+        <mat-select 
+          class="FormInput size-48" 
+          [placeholder]="selectedFilter.placeholder"
+          [(ngModel)]="filterValue.select">
+          <mat-option 
+            *ngFor="let option of selectedFilter.options" 
+            [value]="option[selectedFilter.property || 'name']">
+            {{ option[selectedFilter.property || 'name'] }}
+          </mat-option>
+        </mat-select>
+      </ng-container> 
+      <ng-container *ngIf="selectedFilter.inputType === 'select'">
+        <mat-select 
+          class="FormInput grow-1 size-48" 
+          style="width: 100%;" 
+          [placeholder]="selectedFilter.placeholder"
+          [(ngModel)]="filterValue.select">
+          <mat-option 
+            *ngFor="let option of selectedFilter.options" 
+            [value]="option.id">
+            {{ option[selectedFilter.property || 'name'] }}
+          </mat-option>
+        </mat-select>
+      </ng-container> 
+      <ng-container *ngIf="selectedFilter.inputType === 'double-number'">
+        <div style="width: 100%; display: flex; flex-wrap: wrap; gap:10px">
+          <input 
+            class="formInputNumber grow-1 size-48" 
+            matInput 
+            type="number" 
+            placeholder="Min"
+            [(ngModel)]="filterValue.min">
+          <input 
+            class="formInputNumber grow-1 size-48" 
+            matInput 
+            type="number" 
+            placeholder="Max"
+            [(ngModel)]="filterValue.max">
+        </div>
+      </ng-container>
+    </div>
+    <div class="search-bar-buttons">
+      <button 
+        class="secondary-button-auto grow-1 size-48" 
+        mat-raised-button
+        (click)="limpiarTexto()">
+        <mat-icon>clear</mat-icon>Limpiar
+      </button>
+      <button 
+      *ngIf="selectedFilter.inputType !== 'action'"
+      class="secondary-button-auto grow-1 size-48" 
+      mat-raised-button
+      (click)="onFiltrar()">
+      <mat-icon>filter_list</mat-icon>Filtrar
+    </button>
+      <ng-container *ngFor="let btn of buttonConfigs">
+        <button 
+          [class]="btn.class + ' grow-1 size-48'"
+          mat-raised-button
+          (click)="onAddClick(btn)">
+          <mat-icon *ngIf="btn.icon">{{btn.icon}}</mat-icon>
+          {{btn.label}}
+        </button>
+      </ng-container>
+    </div>
+  </div>

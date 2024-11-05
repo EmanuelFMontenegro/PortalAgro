@@ -1,25 +1,16 @@
-import { Component, OnInit, Output } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, Output } from '@angular/core'; 
 import { ApiService } from 'src/app/services/ApiService';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/AuthService';
-import { Router } from '@angular/router';
-import { jwtDecode } from 'jwt-decode';
+import { Router } from '@angular/router'; 
+import { FilterConfig, ButtonConfig } from 'src/app/models/searchbar.model';
+import { TipoLabel, DataView } from 'src/app/shared/components/miniatura-listado/miniatura.model';
+import { selectButtons, selectFilters } from 'src/app/shared/components/dinamic-searchbar/dinamic-searchbar.config';
+export type FilterInputType = 'text' | 'select' | 'double-number' | 'select-options';
 
-import {
-  TipoLabel,
-  DataView,
-} from 'src/app/shared/components/miniatura-listado/miniatura.model';
-interface CustomJwtPayload {
-  userId: number;
-  sub: string;
-}
-interface DecodedToken {
-  userId: number;
-  sub: string;
-  roles: string;
-  companyId: number;
-}
+ 
+ 
+ 
 
 interface Chacra {
   value: string;
@@ -30,11 +21,11 @@ interface Chacra {
   templateUrl: './chacras.component.html',
 })
 export class ChacrasComponent implements OnInit {
-  @Output() mensaje = 'No Existen este filtro';
-  searchText: string = '';
-  options: string[] = ['Localidad', 'Nombre de Chacra'];
+  @Output() mensaje = 'No Existen este filtro'; 
   userLogeed = this.authService.userLogeed;
   currentYear: number = new Date().getFullYear();
+  filterConfigs: FilterConfig[] = [];
+  buttonConfigs: ButtonConfig[] = [];
   nombre: string = '';
   apellido: string = '';
   descripcion: string = '';
@@ -81,40 +72,32 @@ export class ChacrasComponent implements OnInit {
       address: '',
       location: '',
     },
-  };
-
-  addressTouched = false;
-  locationTouched = false;
-  nameTouched = false;
-  dimensionsTouched = false;
-  observationTouched = false;
+  }; 
   campoSeleccionado: any;
   contador: number = 0;
   constructor(
     private authService: AuthService,
     private apiService: ApiService,
-    private toastr: ToastrService,
-    private http: HttpClient,
+    private toastr: ToastrService, 
     private router: Router
   ) {}
 
   ngOnInit(): void {
     this.campoData.geolocation = '';
+    //aca pasamos los filtros y los botones, para que el componente dinamico los renderice
+    // selectFilters y selectButton buscan esos filtros y los devuelven en un array
+    this.filterConfigs = selectFilters([
+      'LOCALIDAD',
+      'NOMBRE_CHACRA',
+      'FILTRO_SIN_INPUT_EJEMPLO' // este es para mostrarte como seria un ejemplo sin input, borra nomas despues
+    ]);
+
+    this.buttonConfigs = selectButtons([
+      'REGISTRAR_CHACRAS', 
+    ]);
     this.cargarCampos();
     this.cargarDatosDeUsuario();
     this.obtenerLocalidades();
-  }
-
-  onSearch() {
-
-  }
-
-  clearFilters() {
-
-  }
-
-  applyFilters() {
-
   }
 
   newRanch() {
@@ -292,18 +275,22 @@ export class ChacrasComponent implements OnInit {
     this.cargarCampos();
   }
 
-  onFilter(filtro: any) {
-    switch (filtro.tipo) {
-      case 'Buscar por Localidad':
-        this.filtrarPorLocalidad(filtro.valor);
-        break;
-      case 'Buscar por Nombre de Chacra':
-        this.filtrarPorNombreDeChacra(filtro.valor);
-        break;
+  onFilter(filtro: any) { 
+    const filterHandlers: { [key: string]: (value: any) => void } = {
+      'Buscar por Localidad': (value) => this.filtrarPorLocalidad(value),
+      'Buscar por Nombre de Chacra': (value) => this.filtrarPorNombreDeChacra(value),
+      'Filtro sin input ejemplo': (value) => this.filtrarPorLocalidad(value), 
+    };
+    const handler = filterHandlers[filtro.type];
+    
+    if (handler) {
+      handler(filtro.value);
+    } else {
+      console.warn(`No se encontró un manejador para el filtro tipo: ${filtro.type}`);
     }
   }
 
-  filtrarPorLocalidad(buscar: string) {
+  filtrarPorLocalidad(buscar: string) { 
     if (!buscar || typeof buscar !== 'string') {
       this.toastr.error('Debe seleccionar una localidad', 'Error');
       return;
@@ -342,6 +329,7 @@ export class ChacrasComponent implements OnInit {
   }
 
   filtrarPorNombreDeChacra(nombreChacra: string) {
+    this.clearCampos();
     if (!nombreChacra || nombreChacra.trim() === '') {
       this.toastr.error('Debe ingresar un nombre de chacra', 'Error');
       return;

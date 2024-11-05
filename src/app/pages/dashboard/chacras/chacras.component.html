@@ -1,9 +1,13 @@
 <div class="mainStructure">
   <app-header-inner [title]="'Chacras'" [backButton]="true"></app-header-inner>
-  <app-searchbar (filter)="onFilter($event)" (clearFilter)="clearFilter()" [options]="options"
-    [localidadesOptions]="localidades" [placeholder]="'Buscar por Localidad'" [btnAdd]="'Chacras'">
-  </app-searchbar>
+  <app-dinamic-searchbar
+  [filterConfigs]="filterConfigs"
+  [buttonConfigs]="buttonConfigs"
+  [localidadesOptions]="localidades" 
+  (filter)="onFilter($event)"
+  (clearFilter)="clearFilter()">
+  ></app-dinamic-searchbar>
   <app-card [dataView]="dataView" [listado]="campos" [typeCard]="'chacra'">
   </app-card>
- <app-card-contador [contador]= "contador" [mensaje]="mensaje"></app-card-contador>
+ <!-- <app-card-contador [contador]= "contador" [mensaje]="mensaje"></app-card-contador> -->
 </div>

@@ -39,6 +39,7 @@ import { CardContadorComponent } from './components/card-contador/card-contador.
 import { MatTableModule } from '@angular/material/table';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { SubirArchivosComponent } from './components/subir-archivos/subir-archivos.component';
+import { DinamicSearchbarComponent } from './components/dinamic-searchbar/dinamic-searchbar.component';
 export const IMPORTS_MATERIAL = [
   MatSidenavModule,
   MatListModule,
@@ -85,7 +86,8 @@ export const CALENDAR = [FullCalendarModule];
     WidgetComponent,
     TableComponent,
     CardContadorComponent,
-    SubirArchivosComponent
+    SubirArchivosComponent,
+    DinamicSearchbarComponent
   ],
   imports: [IMPORT_CORE, IMPORTS_MATERIAL, CALENDAR, CardComponent],
   exports: [
@@ -106,7 +108,8 @@ export const CALENDAR = [FullCalendarModule];
     WidgetComponent,
     TableComponent,
     CardContadorComponent,
-    SubirArchivosComponent
+    SubirArchivosComponent,
+    DinamicSearchbarComponent
   ],
 })
 export class SharedModule {}
