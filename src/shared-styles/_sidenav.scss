@@ -17,16 +17,6 @@
     &__menu {
         width: 280px;
         @include box-shadow(1px, 0);
-        &__logo {
-            @include position(relative, null, null, 10px);
-            width: 100%;
-            text-align: center;
-            img {
-                width: 70px;
-                height: 90px;
-            }
-        }
-
         &__list {
             flex: 1;
             gap: 15px 0px !important;
