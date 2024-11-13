@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
+import { MAT_DATE_FORMATS,DateAdapter,  MatNativeDateModule, MatOptionModule, NativeDateAdapter } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -111,5 +111,6 @@ export const CALENDAR = [FullCalendarModule];
     SubirArchivosComponent,
     DinamicSearchbarComponent
   ],
+
 })
 export class SharedModule {}

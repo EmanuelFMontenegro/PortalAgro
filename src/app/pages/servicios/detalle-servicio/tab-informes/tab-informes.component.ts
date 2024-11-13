@@ -27,6 +27,8 @@ export class TabInformesComponent {
   puedeSubirArchivoTecnico = false;
   puedeSubirArchivoApp = false;
   puedeSubirArchivoFinal = false;
+  informes: any;
+
   constructor(
     private detalleServicioService: DetalleServicioService,
     public servicioService: ServiciosService,
@@ -34,53 +36,86 @@ export class TabInformesComponent {
     public authService: AuthService) { }
 
   ngOnInit(): void {
-
-    this.puedeSubirArchivoOrden = this.detalleServicioService.permisos?.requestservice?.WRITE || this.detalleServicioService.permisos?.requestservice?.WRITE_MY ? true : false;
-    this.puedeSubirArchivoTecnico = this.detalleServicioService.permisos?.jobTechnical?.WRITE || this.detalleServicioService.permisos?.jobTechnical?.WRITE_MY ? true : false;
-    this.puedeSubirArchivoApp = this.detalleServicioService.permisos?.jobOperator?.WRITE || this.detalleServicioService.permisos?.jobOperator?.WRITE_MY ? true : false;
-    this.puedeSubirArchivoFinal = this.detalleServicioService.permisos?.requestservice?.WRITE || this.detalleServicioService.permisos?.requestservice?.WRITE_MY ? true : false;
-
     this.recuperarArchivos()
-
-    this.dataSource.data = [
-      {
-        detalle: 'Orden de Servicio',
-        tipo: Infome.ORDEN_SERVICIO
-      },
-      {
-        detalle: 'Informe Técnico',
-        tipo: Infome.TECNICO
-      },
-      {
-        detalle: 'Informe de App',
-        tipo: Infome.APP
-      },
-      {
-        detalle: 'Informe Final',
-        tipo: Infome.FINAL
-      }
-    ]
   }
 
   recuperarArchivos() {
+
+    let idServicio = this.detalleServicioService.servicio.id
+    this.servicioService.getInformes(idServicio).subscribe(
+      data => {
+        this.informes = data;
+        this.generarTabla()
+      },
+      error => {
+
+      }
+    )
 
     // llamar a servicio que encapsule los 4 archivos y setear en el listado
 
   }
 
+  generarTabla() {
+
+    let datosTabla: any [] = [];
+
+    if (this.informes?.orden?.read) {
+      datosTabla.push(
+        {
+          detalle: 'Orden de Servicio',
+          tipo: Infome.ORDEN_SERVICIO,
+          data: this.informes.orden
+        }
+      )
+    }
+
+    if (this.informes?.tecnico?.read) {
+      datosTabla.push(
+        {
+          detalle: 'Informe Técnico',
+          tipo: Infome.ORDEN_SERVICIO,
+          data: this.informes.tecnico
+        }
+      )
+    }
+
+    if (this.informes?.operador?.read) {
+      datosTabla.push(
+        {
+          detalle: 'Informe de App',
+          tipo: Infome.ORDEN_SERVICIO,
+          data: this.informes.operador
+        }
+      )
+    }
+
+    if (this.informes?.finalD?.read) {
+      datosTabla.push(
+        {
+          detalle: 'Informe Final',
+          tipo: Infome.ORDEN_SERVICIO,
+          data: this.informes.finalD
+        }
+      )
+    }
+
+    this.dataSource.data = datosTabla;
+  }
+
   puedeSubirArchivo(tipo: Infome) {
     switch (tipo) {
       case Infome.ORDEN_SERVICIO:
-         return this.puedeSubirArchivoOrden
+        return this.puedeSubirArchivoOrden
         break;
       case Infome.TECNICO:
-        return  this.puedeSubirArchivoTecnico
+        return this.puedeSubirArchivoTecnico
         break;
       case Infome.APP:
-        return  this.puedeSubirArchivoApp
+        return this.puedeSubirArchivoApp
         break;
       case Infome.FINAL:
-         return this.puedeSubirArchivoFinal
+        return this.puedeSubirArchivoFinal
         break;
       default:
         return false;
@@ -97,8 +132,8 @@ export class TabInformesComponent {
       },
     });
 
-    dialogRef.afterClosed().subscribe(async (result:any) => {
-      if(result){ // si devuelve TRUE refrescar el listado de archivos
+    dialogRef.afterClosed().subscribe(async (result: any) => {
+      if (result) { // si devuelve TRUE refrescar el listado de archivos
 
       }
     });

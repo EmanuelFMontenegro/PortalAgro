@@ -50,6 +50,10 @@ export class DialogEditarInsumoComponent {
     this.btnVolver.emit(TiposDisplayApp.app)
   }
 
+  cancelar(){
+    this.dialogRef.close()
+  }
+
   editarInsumo(){
 
 

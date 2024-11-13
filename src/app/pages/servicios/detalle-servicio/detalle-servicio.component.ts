@@ -26,6 +26,7 @@ export class DetalleServicioComponent {
   pilotoAsignado:any;
   indiceTab = 0;
   backOffice = false;
+  estadoOK = true;
 
   ngOnInit(): void {
     this.servicioInterno.comprobarUrlBackOffice()
@@ -41,7 +42,9 @@ export class DetalleServicioComponent {
     this.subscription.add(
       this.detalleServicioService.estado$?.subscribe(
         (data:any) =>{
-           if(data) this.recuperarDatos()
+           if(data){
+            this.recuperarDatos();
+           }
         }
       )
     )
@@ -57,11 +60,13 @@ export class DetalleServicioComponent {
   }
 
   async getDatosServicio(){
+   this.estadoOK = false;
    await this.detalleServicioService.getServicio()
    this.servicio = this.detalleServicioService.servicio;
    this.detalleServicioService.getEstados()
    this.subscribirPiloto();
    this.subscribirTecnico();
+   this.estadoOK = true;
   }
 
   subscribirTecnico(){

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DetalleServicioService } from '../../detalle-servicio.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from 'src/app/pages/dashboard/dialog/dialog.component';
@@ -12,12 +12,18 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class CambiarEstadoComponent {
   mostrarSelector = true;
+  @Input() selectorEstados = true;
+  estadoSolicitudBajaServicio = false;
 
   constructor(public detalleServicioService: DetalleServicioService,
     private servicioService: ServiciosService,
     private toastr: ToastrService,
     private dialog: MatDialog,
   ){}
+
+  ngOnInit(): void {
+    this.estadoSolicitudBajaServicio = this.detalleServicioService.servicio.status.name == "SOLICITUD_BAJA"
+  }
 
 
   cambioEstado(idEstado:number){
@@ -51,4 +57,24 @@ export class CambiarEstadoComponent {
         }
     });
   }
+
+  dialogConfirmacionSolicitudBaja(){
+    this.mostrarSelector = false;
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: '400px',
+      data: {
+        titulo: 'Solicitar baja del servicio',
+        message: `¿Desea solicitar la baja del servicio?`,
+        showCancel: true,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+      this.mostrarSelector = true;
+      if (result){
+         this.cambioEstado(6) // solicitud baja del servicio
+        }
+    });
+  }
+
 }

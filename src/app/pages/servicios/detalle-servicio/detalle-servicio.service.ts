@@ -83,12 +83,10 @@ export class DetalleServicioService {
   }
 
   getEstados(){
-    if(!this.estados){
       this.serviciosService.getStatusByService(this.servicioId).subscribe(
         data=> this.estados = data,
         error =>{}
       )
-    }
     return this.estados
   }
 

@@ -1,6 +1,5 @@
 <div class="titulo-principal">
   {{titulo}}
-  <button mat-raised-button class="cancel-button flotar" type="button" (click)="volver()">{{'Volver'}}</button>
 </div>
 
 <form class="formulario-global"  [formGroup]="form">
@@ -33,8 +32,7 @@
 </div>
 
 <div class="botones-servicio">
-  <button mat-raised-button class="cancel-button" type="button" (click)="this.mostrarEditar() ?  confirmarEliminar() : cancelar()">{{this.mostrarEditar() ? 'Eliminar' : 'Cancelar'}}</button>
-  <button mat-raised-button class="register-button" type="submit" (click)="this.mostrarEditar() ? habilitarEdicion(): addEdit()">{{this.mostrarEditar() ? 'Editar' : 'Guardar cambios' }}</button>
+  <button mat-raised-button class="cancel-button" type="button" (click)="cancelar()">{{'Volver'}}</button>
 </div>
 </div>
 </form>

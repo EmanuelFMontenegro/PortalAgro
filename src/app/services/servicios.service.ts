@@ -51,7 +51,7 @@ export class ServiciosService {
           pageSize: '10',
           pageNo: '0',
         },
-      });
+      })
     }
 
     getStatusByService(serviceId:number){
@@ -60,6 +60,7 @@ export class ServiciosService {
     }
 
     putStatusByService(serviceId:number, statusId: number){
+      // let url = `${environment.apiUrl}/dist/service/${serviceId}/status/${statusId}`;
       let url = `${this.urlBase}/service/${serviceId}/status/${statusId}`;
       return this.http.put(url, null);
     }
@@ -229,6 +230,11 @@ export class ServiciosService {
 
 
     // INFORMES
+    getInformes(idServicio: number): Observable<any>{
+      let url =  `${environment.apiUrl}/service/${idServicio}/info`;
+      return this.http.get(url);
+    }
+
     getInformeOrdeServicio(idServicio: number): Observable<any>{
       let url =  `${this.urlBase}/service/${idServicio}/order`;
       return this.http.get(url);

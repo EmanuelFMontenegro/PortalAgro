@@ -7,6 +7,8 @@ import { Insumo } from 'src/app/models/insumo.model';
 import { InsumoService } from 'src/app/services/insumo.service';
 import { DashboardBackOfficeService } from '../../dashboard-backoffice.service';
 import { DialogComponent } from '../../../../shared/components/dialog/dialog.component';
+import { Location } from '@angular/common';
+
 
 @Component({
   selector: 'app-add-edit-insumos',
@@ -19,6 +21,7 @@ export class AddEditInsumosComponent {
     private insumoService: InsumoService,
     private router: Router,
     private dialog: MatDialog,
+    private location: Location,
     private activeRoute: ActivatedRoute,
     public dashboardBackOffice: DashboardBackOfficeService
   ) {
@@ -107,6 +110,10 @@ export class AddEditInsumosComponent {
     } else {
       this.router.navigate([this.rutaBase]);
     }
+  }
+
+  volver(){
+    this.location.back();
   }
 
   addEdit() {

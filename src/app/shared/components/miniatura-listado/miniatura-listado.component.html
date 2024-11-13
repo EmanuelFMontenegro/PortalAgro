@@ -1,13 +1,13 @@
-<!-- 
+<!--
 <div class="cardContainerNoCentered">
     <div class="cardCustomized" *ngFor="let miniatura of listado">
     <ng-container *ngFor="let item of dataView">
       <img src="{{ item.field }}" class="cardCustomized-img" alt="" *ngIf="item.tipoLabel == tipoImagen" />
     </ng-container>
- 
+
     <div class="cardCustomized-header">
       <ng-container *ngFor="let item of dataView">
-  
+
         <h3 class="cardCustomized-header-title" *ngIf="item.tipoLabel == tipoTitulo">
           {{ this.getValue(miniatura, item.field) }}
         </h3>
@@ -57,7 +57,7 @@
       <div class="cardCustomized-header">
         <h3 class="cardCustomized-header-title"> QWEQWE</h3>
         <p class="cardCustomized-header-subtitle">
-          <span>Localidad:</span> 
+          <span>Localidad:</span>
           <img src="assets/img/location.svg" alt="Icono"  ></p>
           <p class="cardCustomized-header-subtitle">
             <span>Heactareas:</span>25
@@ -66,20 +66,20 @@
             <span>Descripción:</span> Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloribus, maxime minima? Placeat dolores reiciendis nulla, odio iure suscipit provident amet eaque debitis officiis, deleniti fugit sapiente quis voluptatum quos modi?R
           </p>
       </div>
-      <div class="cardCustomized-buttons"> 
+      <div class="cardCustomized-buttons">
         <button class="primary-button "  mat-raised-button appearance="outline"   >Ver Lotes</button>
         <button class="secondary-button border-primary "  mat-raised-button appearance="outline"  >Ver Geolocalización</button>
       </div>
   </div>
 </div>    -->
-  
+
 <div class="miniatura-container-general">
   <div class="miniatura-container" >
     <div class="miniatura" *ngFor="let miniatura of listado" [ngClass]="{'estilo-productor': this.productor }">
       <ng-container *ngFor="let item of dataView" >
- 
+
         <img src="{{item.field}}" [ngClass]="{'img-miniatura': !this.productor, 'img-productor': this.productor }" alt="" *ngIf="item.tipoLabel == tipoImagen" >
- 
+
         <h3 style="text-align:center;" *ngIf="item.tipoLabel == tipoTitulo">{{this.getValue(miniatura,item.field)}}</h3>
 
         <!-- SUBTITULO -->
@@ -90,7 +90,7 @@
           <span  class="campo-variable" > {{item?.label}}: </span> {{ this.getValue(miniatura,item.field) ?? ' --- '}}
         </p>
 
-        <button *ngIf="item.tipoLabel == tipoVerMas" mat-raised-button class="ver-mas-button" (click)="verMas(miniatura, item?.label, item?.field )">Ver Más</button>
+        <!-- <button *ngIf="item.tipoLabel == tipoVerMas" mat-raised-button class="ver-mas-button" (click)="verMas(miniatura, item?.label, item?.field )">Ver Más</button> -->
         <button *ngIf="item.tipoLabel == tipoEditar" mat-raised-button class="editar-button" (click)="Editar(miniatura, item?.label, item?.field )">Editar</button>
         <button *ngIf="item.tipoLabel == tipoEditarDevolviendo" mat-raised-button class="editar-button" (click)="EditarDelviendo(miniatura)">Editar</button>
         <div *ngIf="item.tipoLabel == tipoEliminar" class="btn-eliminar" (click)="eliminar(this.getValue(miniatura,item.field))">Eliminar</div>

@@ -8,7 +8,7 @@
     <ng-container *ngIf="mostrarListado else abm">
 
       <ng-container *ngIf="this.listadoInsumos?.length else listadoVacio">
-       <miniatura [dataView]="dataView" (btnEliminar)="dialogConfirmacionEliminar($event)" [listado]="listadoInsumos"></miniatura>
+       <miniatura (btnVerMasAccion)="verInsumo($event)" [dataView]="dataView" (btnEliminar)="dialogConfirmacionEliminar($event)" [listado]="listadoInsumos"></miniatura>
       </ng-container>
 
          <ng-template #listadoVacio>

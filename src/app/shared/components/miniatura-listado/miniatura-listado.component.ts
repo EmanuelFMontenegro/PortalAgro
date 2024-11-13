@@ -6,7 +6,7 @@ import { TipoLabel, DataView } from './miniatura.model';
 
 @Component({
   selector: 'miniatura',
-  templateUrl: './miniatura-listado.component.html', 
+  templateUrl: './miniatura-listado.component.html',
   styleUrls: ['./miniatura-listado.component.sass'],
 })
 export class MiniaturaListadoComponent {
@@ -21,7 +21,7 @@ export class MiniaturaListadoComponent {
   @Input() productor = false; // cambia el estilo de la miniatura si es productor
   @Output() btnEliminar = new EventEmitter<any>();
   @Output() btnEditarDevolverObjeto = new EventEmitter<any>();
-
+  @Output() btnVerMasAccion = new EventEmitter<any>();
 
   tipoImagen = TipoLabel.imagen
   tipoTitulo = TipoLabel.titulo
@@ -49,7 +49,11 @@ export class MiniaturaListadoComponent {
 
     // Navegar al componente perfil-productor
     if(ruta) this.router.navigate([`${ruta}/${data?.id}`]);
+
+    // Envia una señal de que el boton fue pulsado y desde el front se pueda realizar una accion
+    this.btnVerMasAccion.emit(data)
   }
+
 
   Editar(data: any, key?: any, ruta?: any){
     // Guardar los datos del usuario en localStorage

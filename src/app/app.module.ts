@@ -15,7 +15,19 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from './shared/shared.module';
 import { CommonModule } from '@angular/common';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { DateAdapter, MAT_DATE_FORMATS, NativeDateAdapter } from '@angular/material/core';
 const routes: Routes = [];
+const MY_DATE_FORMATS = {
+  parse: {
+    dateInput: 'DD/MM/YYYY',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthDayA11yLabel: 'D MMMM',
+  },
+};
 
 @NgModule({
   declarations: [AppComponent],
@@ -40,6 +52,14 @@ const routes: Routes = [];
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true },
+    {
+      provide: MAT_DATE_FORMATS,
+      useValue: MY_DATE_FORMATS,
+    },
+    {
+      provide: DateAdapter,
+      useClass: NativeDateAdapter,
+    },
   ],
   bootstrap: [AppComponent],
 })

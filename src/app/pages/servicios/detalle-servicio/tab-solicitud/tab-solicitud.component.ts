@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { UserToken } from 'src/app/models/auth.models';
 import { PermisosUsuario } from 'src/app/models/permisos.model';
@@ -37,7 +37,7 @@ export class TabSolicitudComponent {
 
   ngOnInit(): void {
     this.backOffice =  this.servicioInterno.backOffice?.value
-    this.cambiarEstado = this.detalleServicioService.permisos?.requestservice?.CREATE ||  this.detalleServicioService.permisos?.requestservice?.CREATE_MY ? true : false;
+    this.cambiarEstado = this.detalleServicioService.permisos?.requestservice?.CREATE ? true : false;
     this.asigPiloto = this.detalleServicioService.permisos?.jobOperator?.CREATE || this.detalleServicioService.permisos?.jobOperator?.CREATE_MY ? true : false;
     this.asigTecnico = this.detalleServicioService.permisos?.jobTechnical?.CREATE || this.detalleServicioService.permisos?.jobTechnical?.CREATE_MY ? true : false;
   }

@@ -23,6 +23,11 @@ import { environment } from "../../environments/environment";
       return this.http.get(url);
     }
 
+    getUser(id:number): Observable<any>{
+      let url =  `${environment.apiUrl}/user/supplies/${id}`;
+      return this.http.get(url);
+    }
+
     getFiltrados(pageSize: number): Observable<any>{
       let url =  `${environment.apiUrl}/dist/supplies/all?sortBy=id&sortDir=DESC&pageSize=${pageSize}&pageNo=0&nickname=op&code=3&model=&brand=&isActive=true`;
       return this.http.get(url);

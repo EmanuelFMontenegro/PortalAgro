@@ -31,14 +31,16 @@ export class TareasDelDroneComponent {
   minDate = new Date()
   tareasDroneApp = false;
   mostrarListado = true;
+  errorFechas = false;
+  tareasOriginales: any[] = []
 
-  dataView = [
+  dataView: any = [
     {label: 'Insumo', field: 'productInput.name', tipoLabel: TipoLabel.span},
     {label: 'Hectareas', field:'hectare', tipoLabel: TipoLabel.span },
     {label: 'Hora de incio', field:'intHour', tipoLabel: TipoLabel.span },
     {label: 'Hora de fin', field:'endHour', tipoLabel: TipoLabel.span },
     {label: 'Observaciones', field:'observation', tipoLabel: TipoLabel.span },
-    {label: 'Ver insumos', field: 'dashboard-backoffice/configuracion/insumo', tipoLabel: TipoLabel.botonVermas},
+    {label: null, field: null, tipoLabel: TipoLabel.botonVermas},
   ]
 
   // controlName
@@ -78,7 +80,15 @@ export class TareasDelDroneComponent {
     this.backOffice = this.servicioInterno.backOffice?.value
     this.servicio = this.detalleService.servicio;
     this.getDatosTask()
+    this.getDrones
     this.setMiniaturas()
+    this.controlarFechas()
+  }
+
+  controlarFechas(){
+   this.form.valueChanges.subscribe(
+    data => this.fechaFinalMayor()
+   )
   }
 
   setMiniaturas(){
@@ -120,7 +130,7 @@ export class TareasDelDroneComponent {
   tareaSeleccionada(tarea:any){
     console.log(tarea)
     this.mostrarListado = false;
-
+    this.form.disable()
   }
 
   getTipoDate(fechaStr: string) {
@@ -194,8 +204,11 @@ export class TareasDelDroneComponent {
     return new Promise<any>((resolve)=>{
       this.serviciosService.getDronesTask(this.servicio.id).subscribe(
         ( drones: any) => {
-          console.log("la tarea del dron",drones)
-          if(drones.list.length) this.tareasDrone = drones.list[0]
+          if(drones.list.length){
+            this.tareasOriginales = drones.list[0]
+            this.tareasDrone = drones.list[0]
+          }
+          console.log("la tarea del dron",this.tareasDrone)
           resolve(true)
         },
         (error) => {
@@ -212,6 +225,12 @@ export class TareasDelDroneComponent {
       data =>{
         if(data.list.length) this.listadoDrones = data.list[0]
       })
+  }
+
+  dialogoSeleccionarDrone(drone:any){
+
+
+
   }
 
   aceptar() {
@@ -275,5 +294,24 @@ export class TareasDelDroneComponent {
         this.toastr.info(error.error.message ?? 'Error editando datos', 'Información');
       }
     )
+  }
+
+  /** Controla que la fecha de fin no sea mayor a la fecha de inicio */
+  fechaFinalMayor(){
+    let fechaInicio = this.form.controls[this.ctrl_intDate]?.value;
+    let fechaFin = this.form.controls[this.ctrl_endDate]?.value;
+    let horaInicio = this.form.controls[this.ctrl_intHour]?.value;
+    let horaFin = this.form.controls[this.ctrl_endHour]?.value;
+
+    this.errorFechas = false;
+    if(fechaFin && fechaInicio && horaFin && horaInicio){
+      let inicia = moment(fechaInicio).format('DD/MM/YYYY') +' '+ horaInicio ;
+      let termina = moment(fechaFin).format('DD/MM/YYYY')+' '+ horaFin;
+
+      let esMayor = moment(termina ).diff(inicia , 'days')
+
+      this.errorFechas = esMayor < 0 ? false : true;
+    }
+
   }
 }

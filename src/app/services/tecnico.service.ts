@@ -16,6 +16,11 @@ export class TecnicoService {
     return this.http.get(url);
   }
 
+  getAll_backOfficeByLocation(idLocation: number): Observable<any>{
+    let url =  `${environment.apiUrl}/dist/user/technical/all?locationId=${idLocation}`;
+    return this.http.get(url);
+  }
+
   asignarTecnico(idServicio: number, idTecnico: number): Observable<any>{
     let url =  `${environment.apiUrl}/dist/service/${idServicio}/jobtechnical/assigned/${idTecnico}`;
     return this.http.post(url, null);

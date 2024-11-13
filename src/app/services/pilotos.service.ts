@@ -16,6 +16,11 @@ export class PilotosService {
     return this.http.get(url);
   }
 
+  getAll_backOfficeByLocation(locationId: number): Observable<any>{
+    let url =  `${environment.apiUrl}/dist/user/operator/all?locationId=${locationId}`;
+    return this.http.get(url);
+  }
+
   asignarPiloto(idServicio: number, idPiloto: number): Observable<any>{
     let url =  `${environment.apiUrl}/dist/service/${idServicio}/joboperator/assigned/${idPiloto}`;
     return this.http.post(url, null);

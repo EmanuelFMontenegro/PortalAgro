@@ -3,20 +3,23 @@
   <table mat-table [dataSource]="dataSource">
     <ng-container matColumnDef="detalle" >
       <th mat-header-cell *matHeaderCellDef mat-sort-header > Detalles</th>
-      <td mat-cell *matCellDef="let row"> {{row.detalle}} </td>
+      <td mat-cell *matCellDef="let row"><strong> {{row.detalle}}</strong> </td>
     </ng-container>
     <ng-container matColumnDef="nombre" >
       <th mat-header-cell *matHeaderCellDef mat-sort-header > Nombre</th>
-      <td mat-cell *matCellDef="let row" [ngClass]="{'no-subido': !row?.nombre, 'subido': row?.nombre}"> {{row?.nombre ?? 'No subido'}} </td>
+      <td mat-cell *matCellDef="let row" [ngClass]="{'no-subido': row?.data.title !== 'Sin datos', 'subido': row?.data.title}"> {{row?.data?.title ?? 'No subido'}} </td>
     </ng-container>
     <ng-container matColumnDef="descripcion" >
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripción</th>
-      <td mat-cell *matCellDef="let row" [ngClass]="{'no-subido': !row?.descripcion}"> {{row?.descripcion ?? '-'}} </td>
+      <td mat-cell *matCellDef="let row" [ngClass]="{'no-subido': row?.data?.description !== 'Sin datos'}"> {{row?.data?.description ?? '-'}} </td>
     </ng-container>
     <ng-container matColumnDef="acciones">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Acciones</th>
       <td mat-cell *matCellDef="let row">
-        <button [matTooltip]="'Subir'" mat-icon-button color="accent" *ngIf="puedeSubirArchivo(row.tipo)"  (click)="subirInforme(row.tipo)">
+        <button [matTooltip]="'Descargar'" mat-icon-button color="accent"  (click)="descargarInforme(row.tipo)">
+          <mat-icon mat-icon aria-label="cerrarCaso">download</mat-icon>
+        </button>
+        <button [matTooltip]="'Subir'" mat-icon-button color="accent" *ngIf="row?.data?.write"  (click)="subirInforme(row.tipo)">
           <mat-icon mat-icon aria-label="cerrarCaso">upload</mat-icon>
         </button>
       </td>

@@ -10,6 +10,7 @@ import { TipoLabel } from 'src/app/shared/components/miniatura-listado/miniatura
 import { ServicioInterno } from '../../../servicios-interno.service';
 import { DetalleServicioService } from '../../detalle-servicio.service';
 import { TiposDisplayTecnico } from '../tab-datos-tecnicos.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-lista-insumos',
@@ -36,12 +37,7 @@ export class ListaInsumosComponent {
     [this.ctrlHectarea]: new FormControl(null, Validators.required),
   })
 
-  dataView = [
-    {label: 'Nombre', field: 'productInput.name', tipoLabel: TipoLabel.span},
-    {label: 'Dosis', field:'doseToBeApplied', tipoLabel: TipoLabel.span },
-    {label: 'Litros por hectárea', field:'hectaresPerLiter', tipoLabel: TipoLabel.span },
-    {label: 'Ver insumos', field: 'dashboard-backoffice/configuracion/insumo', tipoLabel: TipoLabel.botonVermas},
-  ]
+  dataView:any [] = [];
 
   @Output() btnVolver = new EventEmitter<any>();
 
@@ -49,6 +45,7 @@ export class ListaInsumosComponent {
     private toastr: ToastrService,
     private serviciosService: ServiciosService,
     private dialog: MatDialog,
+    private router: Router,
     private servicioInterno : ServicioInterno,
     private detalleService: DetalleServicioService,
     private insumosService: InsumoService
@@ -64,10 +61,32 @@ export class ListaInsumosComponent {
   }
 
   setMiniaturas(){
+
+    this.dataView = [
+      {label: 'Nombre', field: 'productInput.name', tipoLabel: TipoLabel.span},
+      {label: 'Dosis', field:'doseToBeApplied', tipoLabel: TipoLabel.span },
+      {label: 'Litros por hectárea', field:'hectaresPerLiter', tipoLabel: TipoLabel.span },
+    ]
+
+   if(this.backOffice){ // ver insumo con posibilidad de editar
+      this.dataView.push({label: 'Ver insumos', field: 'dashboard-backoffice/configuracion/insumo', tipoLabel: TipoLabel.botonVermas},)
+   }else{
+     // ver insumo solo con posiblidad de detalle
+     this.dataView.push({label: null , field: null, tipoLabel: TipoLabel.botonVermas},)
+   }
+
    if(this.detalleService.permisos?.jobTechnical?.WRITE || this.detalleService.permisos?.jobTechnical?.WRITE_MY){
     this.puedeCargarInsumos = true;
     this.dataView.push({label: 'Eliminar', field: 'id', tipoLabel: TipoLabel.botonEliminar})
    }
+  }
+
+  verInsumo(data:any){
+    if(!this.backOffice){
+      let urlVerMas = `dashboard/servicios/${this.servicio.id}/insumo/${data.id}`
+      sessionStorage.setItem('insumo', JSON.stringify(data))
+      this.router.navigate([urlVerMas])
+    }
   }
 
   getInsumos(){

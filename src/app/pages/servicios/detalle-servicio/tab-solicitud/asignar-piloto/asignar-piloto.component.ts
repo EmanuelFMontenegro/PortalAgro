@@ -31,12 +31,16 @@ export class AsignarPilotoComponent {
     }
 
     getPilotos() {
-      this.pilotosService.getAll_backOffice().subscribe(
+      this.pilotosService.getAll_backOfficeByLocation(this.data.servicio.location.id).subscribe(
         data => {
           this.listadoPilotos = data.list[0]
         },
         error => {}
       )
+    }
+
+    cencelar(){
+      this.dialogRef.close()
     }
 
     asignarPiloto() {
