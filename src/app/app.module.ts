@@ -16,6 +16,8 @@ import { SharedModule } from './shared/shared.module';
 import { CommonModule, registerLocaleData } from '@angular/common';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { DateAdapter, MAT_DATE_FORMATS, NativeDateAdapter } from '@angular/material/core';
+import localeEsAr from '@angular/common/locales/es-AR';
+registerLocaleData(localeEsAr, 'es-Ar');
 const routes: Routes = [];
 
 const MY_DATE_FORMATS = {
@@ -29,7 +31,6 @@ const MY_DATE_FORMATS = {
     monthDayA11yLabel: 'D MMMM',
   },
 };
-import localeEsAr from '@angular/common/locales/es-AR';
 
 @NgModule({
   declarations: [AppComponent],
