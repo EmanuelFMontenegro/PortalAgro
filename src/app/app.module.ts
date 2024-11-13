@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, isDevMode } from '@angular/core';
+import { LOCALE_ID, NgModule, isDevMode } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
@@ -13,10 +13,11 @@ import { Interceptor } from 'src/app/services/Interceptor';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from './shared/shared.module';
-import { CommonModule } from '@angular/common';
+import { CommonModule, registerLocaleData } from '@angular/common';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { DateAdapter, MAT_DATE_FORMATS, NativeDateAdapter } from '@angular/material/core';
 const routes: Routes = [];
+
 const MY_DATE_FORMATS = {
   parse: {
     dateInput: 'DD/MM/YYYY',
@@ -28,6 +29,7 @@ const MY_DATE_FORMATS = {
     monthDayA11yLabel: 'D MMMM',
   },
 };
+import localeEsAr from '@angular/common/locales/es-AR';
 
 @NgModule({
   declarations: [AppComponent],
@@ -60,6 +62,7 @@ const MY_DATE_FORMATS = {
       provide: DateAdapter,
       useClass: NativeDateAdapter,
     },
+    { provide: LOCALE_ID, useValue: 'es-Ar' }
   ],
   bootstrap: [AppComponent],
 })

@@ -25,9 +25,7 @@ export class CalendarioComponent implements OnInit {
     this.apiService.calendarProducer().subscribe(
       (response) => {
         if (response && Array.isArray(response.list)) {
-          // Asegúrate de que 'list' contiene los datos esperados
           this.events = response.list.flat().map((event: any) => {
-            // Usa flat() si 'list' es un array de arrays
             let campoNombre = '';
             let tipoCultivo = '';
             let hectares = '';

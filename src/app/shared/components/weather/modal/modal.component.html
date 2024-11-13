@@ -1,0 +1,51 @@
+<div class="weather-dialog">
+ 
+    <button mat-icon-button class="close-button" (click)="dialogRef.close()">
+      <mat-icon>close</mat-icon>
+    </button>
+    <div mat-dialog-content class="weather-card">
+      <div class="weather-header">
+        <img [src]="data.day.condition.icon" [alt]="data.day.condition.text">
+        <h2>{{ data.day.condition.text }}</h2>
+        <p class="date">{{ data.date | date:'fullDate' }}</p>
+      </div>
+      <div class="weather-info">
+        <div class="temp-section">
+          <div class="temp-item">
+            <span class="label">Máxima</span>
+            <span class="value">{{ data.day.maxtemp_c }}°C</span>
+          </div>
+          <div class="temp-item">
+            <span class="label">Mínima</span>
+            <span class="value">{{ data.day.mintemp_c }}°C</span>
+          </div>
+          <div class="temp-item">
+            <span class="label">Promedio</span>
+            <span class="value">{{ data.day.avgtemp_c }}°C</span>
+          </div>
+        </div>
+        <div class="details-grid">
+          <div class="detail-item mat-elevation-z1">
+            <span class="label">Viento</span>
+            <span class="value">{{ data.day.maxwind_kph }} km/h</span>
+          </div>
+          <div class="detail-item mat-elevation-z1">
+            <span class="label">Precipitación</span>
+            <span class="value">{{ data.day.totalprecip_mm }} mm</span>
+          </div>
+          <div class="detail-item mat-elevation-z1">
+            <span class="label">Visibilidad</span>
+            <span class="value">{{ data.day.avgvis_km }} km</span>
+          </div>
+          <div class="detail-item mat-elevation-z1">
+            <span class="label">Humedad</span>
+            <span class="value">{{ data.day.avghumidity }}%</span>
+          </div>
+          <div class="detail-item mat-elevation-z1">
+            <span class="label">Índice UV</span>
+            <span class="value">{{ data.day.uv }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -1,19 +1,13 @@
+<div class="mainStructure">
+  <app-header-inner [title]="title" [backButton]="true"></app-header-inner>
+  <app-dinamic-searchbar
+  [filterConfigs]="filterConfigs"
+  [buttonConfigs]="buttonConfigs"
+  (filter)="onFilter($event)">
+  </app-dinamic-searchbar>
 
-  <div class="titulo-principal">
-     {{opcionSeleccionada}}
-  </div>
-
-  <div class="field-container">
-    <mat-select class="field-input" placeholder="Seleccione un listado" (selectionChange)="cambiarConfig($event)" [(value)]="opcionSeleccionada">
-      <mat-option [value]="drones" de>Lista de Drones</mat-option>
-      <mat-option [value]="insumos">Lista de Insumos</mat-option>
-    </mat-select>
-
-    <button mat-raised-button class="nuevoUsuario-button" (click)="nuevo()" *ngIf="this.permisosComponente.WRITE">
-      Agregar<mat-icon style="font-size: 20px; position: relative; top: 1px; right: 3px;">add</mat-icon>
-    </button>
-  </div>
-
-  <miniatura [dataView]="dataView" [listado]="listado"></miniatura>
+  <app-card [dataView]="dataView" [listado]="listado" [typeCard]="'lote'">
+  </app-card> 
+</div>
 
 

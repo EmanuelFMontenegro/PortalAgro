@@ -1,0 +1,91 @@
+{
+    "location": {
+        "name": "Posadas",
+        "region": "Misiones",
+        "country": "Argentina",
+        "lat": -27.383,
+        "lon": -55.883,
+        "tz_id": "America/Argentina/Cordoba",
+        "localtime": "2024-11-07 17:16"
+    },
+    "current": {
+        "last_updated_epoch": 0,
+        "last_updated": "2024-11-07 17:15",
+        "temp_c": 29.6,
+        "is_day": 1,
+        "condition": {
+            "text": "Parcialmente nublado",
+            "icon": "//cdn.weatherapi.com/weather/64x64/day/116.png",
+            "code": 1003
+        },
+        "wind_kph": 15.5,
+        "pressure_mb": 1007.0,
+        "precip_mm": 0.0,
+        "humidity": 52,
+        "feelslike_c": 31.1,
+        "heatindex_c": 31.1,
+        "dewpoint_c": 18.7,
+        "gust_kph": 17.9
+    },
+    "forecast": {
+        "forecastday": [
+            {
+                "date": "2024-11-07",
+                "date_epoch": 0,
+                "day": {
+                    "maxtemp_c": 30.9,
+                    "mintemp_c": 20.3,
+                    "avgtemp_c": 25.0,
+                    "maxwind_kph": 17.6,
+                    "totalprecip_mm": 3.26,
+                    "avgvis_km": 7.9,
+                    "avghumidity": 77,
+                    "condition": {
+                        "text": "Lluvia  moderada a intervalos",
+                        "icon": "//cdn.weatherapi.com/weather/64x64/day/176.png",
+                        "code": 1063
+                    },
+                    "uv": 0.2
+                }
+            },
+            {
+                "date": "2024-11-08",
+                "date_epoch": 0,
+                "day": {
+                    "maxtemp_c": 31.2,
+                    "mintemp_c": 19.1,
+                    "avgtemp_c": 23.8,
+                    "maxwind_kph": 18.7,
+                    "totalprecip_mm": 0.04,
+                    "avgvis_km": 10.0,
+                    "avghumidity": 63,
+                    "condition": {
+                        "text": "Parcialmente nublado",
+                        "icon": "//cdn.weatherapi.com/weather/64x64/day/116.png",
+                        "code": 1003
+                    },
+                    "uv": 7.0
+                }
+            },
+            {
+                "date": "2024-11-09",
+                "date_epoch": 0,
+                "day": {
+                    "maxtemp_c": 34.2,
+                    "mintemp_c": 14.0,
+                    "avgtemp_c": 23.5,
+                    "maxwind_kph": 11.9,
+                    "totalprecip_mm": 0.0,
+                    "avgvis_km": 10.0,
+                    "avghumidity": 54,
+                    "condition": {
+                        "text": "Soleado",
+                        "icon": "//cdn.weatherapi.com/weather/64x64/day/113.png",
+                        "code": 1000
+                    },
+                    "uv": 7.0
+                }
+            }
+        ]
+    }
+}

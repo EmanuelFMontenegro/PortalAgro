@@ -1,4 +1,3 @@
-import { MatPaginatorModule } from '@angular/material/paginator';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { UtilsService } from '../../utils/utils.service';
@@ -32,11 +31,18 @@ export class CardComponent {
   tipoSpan = TipoLabel.span;
   tipoIcon = TipoLabel.icon;
   tipoVerMas = TipoLabel.botonVermas;
+  tipoVerMasWithoutParam = TipoLabel.botonVermasWithoutParam;
+  tipoEditarWithParams = TipoLabel.botonEditarWithParams;
   tipoEditar = TipoLabel.botonEditar;
   tipoGeolocalizar = TipoLabel.botonGeo;
   tipoVerLote = TipoLabel.botonVerLote;
   tipoEditarDevolviendo = TipoLabel.botonEditarDevolverObjeto; // en lugar de redirigir devuelve el objeto
   tipoEliminar = TipoLabel.botonEliminar;
+
+
+  ngOnInit(){
+    console.log(this.dataView);
+  }
 
   loadItems() {
     this.totalItems = this.listado.length; // Actualiza el total de elementos
@@ -52,14 +58,15 @@ export class CardComponent {
   EditarDelviendo(objeto: any) {
     this.btnEditarDevolverObjeto.emit(objeto);
   }
-
-  verMas(data: any, key?: any, ruta?: any) {
+  verMas(data: any, key?: any, ruta?: any){
+    console.log(data);
     // Guardar los datos del usuario en localStorage
-    if (key) localStorage.setItem(key, JSON.stringify(data));
+    if(key) localStorage.setItem(key, JSON.stringify(data));
 
-    // Navegar al componente perfil-productor /${data?.id}
-    if (ruta) this.router.navigate([`${ruta}`]);
+    // Navegar al componente perfil-productor
+    if(ruta) this.router.navigate([`${ruta}/${data?.id}`]);
   }
+
 
   verMasWithParams(data: any, key?: any, ruta?: any) {
     // Guardar los datos del usuario en localStorage
@@ -76,6 +83,15 @@ export class CardComponent {
     // Navegar al componente perfil-productor
     if (ruta) this.router.navigate([`${ruta}`]);
   }
+
+  EditarWithParams(data: any, key?: any, ruta?: any) {
+     // Guardar los datos del usuario en localStorage
+     if(key) localStorage.setItem(key, JSON.stringify(data));
+
+     // Navegar al componente perfil-productor
+     if(ruta) this.router.navigate([`${ruta}/${data?.id}`]);
+  }
+
 
   editarDevolviendoObjeto(datoEditar: any) {
     this.btnEliminar.emit(datoEditar);

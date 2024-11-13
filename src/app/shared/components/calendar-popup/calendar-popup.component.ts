@@ -8,11 +8,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 export class CalendarPopupComponent {
   constructor(public dialogRef: MatDialogRef<CalendarPopupComponent>, @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
 
-  }
-  onCancel(): void {
-    this.dialogRef.close();
-  }
-
+  } 
   
 
 }

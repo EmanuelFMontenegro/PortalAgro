@@ -89,6 +89,11 @@
 
 }
 
+@mixin text-ellipsis() {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 @mixin respond-between($min, $max) {
   @media (min-width: $min) and (max-width: $max) {

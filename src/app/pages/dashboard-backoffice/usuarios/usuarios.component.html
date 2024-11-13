@@ -1,40 +1,58 @@
-<app-header-user></app-header-user>
+<div class="mainStructure">
+  <app-header-inner [title]="'Nuevo Usuario'" [backButton]="true"></app-header-inner>
+  
+  <div class="profileContainer">
+    <!-- Selector de tipo de usuario -->
+    <div class="profileContainer-personalData">
+      <div class="profileContainer-personalData-title">Tipo de Usuario</div>
+      <div class="profileContainer-personalData-content">
+        <div class="profileContainer-personalData-content-item margin-btm-0">
+          <div class="FullForm-control margin-btm-0">
+            <label class="FormLabel margin-btm-6" for="formType">Seleccionar el Usuario:</label>
+            <select class="FormInput" 
+                    id="formType" 
+                    [(ngModel)]="selectedForm" 
+                    (change)="seleccionoTipo()">
+              <option [value]="opcion" *ngFor="let opcion of opciones">{{ opcion }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
 
-<div class="form-section">
-  <!-- Selector de tipo de usuario -->
-  <div class="field-container">
-    <label for="formType" class="field-label">Seleccionar el Usuario:</label>
-    <select class="field-input" id="formType" [(ngModel)]="selectedForm" (change)="seleccionoTipo()">
-      <option [value]="opcion" *ngFor="let opcion of opciones">{{ opcion }}</option>
-    </select>
-  </div>
+    <!-- Spinner -->
+    <div *ngIf="activarSpinner" class="overlay">
+      <div class="lds-ellipsis">
+        Cargando...
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
 
-  <!-- Componente dinámico Spinner -->
-  <div *ngIf="activarSpinner" class="overlay">
-    <div class="lds-ellipsis">
-      Cargando...
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
+    <!-- Componente de formulario dinámico -->
+    <app-formulario 
+      [formType]="selectedForm" 
+      [titulo]="selectedForm" 
+      [dataForm]="dataForm"
+      (formSubmitted)="onFormSubmitted($event)">
+    </app-formulario>
+
+    <!-- Botones del formulario -->
+    <div class="FullForm-buttonsToRight">
+      <button mat-button 
+              class="secondary-button-custom size-48" 
+              type="button" 
+              (click)="cancelar()">
+        Cancelar
+      </button>
+      <button mat-raised-button 
+              appearance="outline" 
+              class="primary-button-custom size-48" 
+              (click)="enviarFormulario()">
+        Crear usuario
+      </button>
     </div>
   </div>
-
-
-
-
-  <!-- Componente de formulario dinámico -->
-  <app-formulario [formType]="selectedForm" [titulo]="selectedForm" [dataForm]="dataForm"
-    (formSubmitted)="onFormSubmitted($event)">
-  </app-formulario>
 </div>
-
-
-
-  <!-- Botones del formulario -->
-  <div class="botones-form">
-    <button mat-raised-button class="crear-button" (click)="enviarFormulario()">Crear usuario</button>
-    <button mat-raised-button class="cancelar-button" (click)="cancelar()">Cancelar</button>
-  </div>
-
-

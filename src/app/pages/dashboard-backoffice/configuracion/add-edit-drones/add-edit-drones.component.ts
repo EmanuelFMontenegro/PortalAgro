@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,13 +8,14 @@ import { DronService } from 'src/app/services/dron.service';
 import { PermisoService } from 'src/app/services/permisos.service';
 import { DashboardBackOfficeService } from '../../dashboard-backoffice.service';
 import { DialogComponent } from '../../../../shared/components/dialog/dialog.component';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-add-edit-drones',
   templateUrl: './add-edit-drones.component.html',
-  styleUrls: ['./add-edit-drones.component.sass'],
 })
-export class AddEditDronesComponent {
+export class AddEditDronesComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
   constructor(
     private toastr: ToastrService,
     private dronService: DronService,
@@ -47,6 +48,7 @@ export class AddEditDronesComponent {
   public ctrlPoliza = 'poliza';
   public ctrlFuncion = 'function';
   public ctrlDescripcion = 'description';
+  public ctrInitialFlightTime = 'initialFlightTime';
   public form: FormGroup = new FormGroup({
     [this.ctrlCode]: new FormControl(null, Validators.required),
     [this.ctrlName]: new FormControl(null, Validators.required),
@@ -57,10 +59,15 @@ export class AddEditDronesComponent {
     [this.ctrlPoliza]: new FormControl(null, Validators.required),
     [this.ctrlFuncion]: new FormControl(null, Validators.required),
     [this.ctrlDescripcion]: new FormControl(null, Validators.required),
+    [this.ctrInitialFlightTime]: new FormControl(null, Validators.required),
   });
 
   ngOnInit(): void {
     this.getDetalle();
+  }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   getDetalle() {
@@ -68,16 +75,19 @@ export class AddEditDronesComponent {
 
     if (this.id) {
       this.id = parseInt(this.id);
-      this.dronService.get(this.id).subscribe(
-        (data) => {
-          this.objetoOriginal = data;
-          this.form.patchValue(this.objetoOriginal);
-          this.form.disable();
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+      this.dronService.get(this.id)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (data) => {
+            this.objetoOriginal = data;
+            this.form.patchValue(this.objetoOriginal);
+            this.form.disable();
+          },
+          error: (error) => {
+            console.log(error);
+            this.toastr.error('Error al cargar los datos', 'Error');
+          }
+        });
     } else {
       this.titulo = `Nuevo ${this.objeto} `;
     }
@@ -87,6 +97,7 @@ export class AddEditDronesComponent {
     this.edicion = true;
     this.titulo = `Editar ${this.objeto} `;
     this.form.enable();
+    console.log('Form status after enable:', this.form.valid); 
   }
 
   mostrarEditar() {
@@ -98,22 +109,25 @@ export class AddEditDronesComponent {
   }
 
   eliminar() {
-    this.dronService.delete(this.id).subscribe(
-      (data) => {
-        console.log(data);
-        this.toastr.success('Eliminado con éxito', 'Éxito');
-        this.router.navigate([this.rutaBase]);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+    this.dronService.delete(this.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.toastr.success('Eliminado con éxito', 'Éxito');
+          this.router.navigate([this.rutaBase]);
+        },
+        error: (error) => {
+          console.log(error);
+          this.toastr.error('Error al eliminar', 'Error');
+        }
+      });
   }
 
   cancelar() {
     if (this.id) {
       this.edicion = false;
       this.form.patchValue(this.objetoOriginal);
+      this.form.disable(); 
       this.titulo = `Detalle ${this.objeto} `;
     } else {
       this.router.navigate([this.rutaBase]);
@@ -125,43 +139,46 @@ export class AddEditDronesComponent {
       let body = this.form.getRawValue();
 
       if (this.id) {
-        // PUT
         this.put(body, this.id);
       } else {
-        // POST
         this.post(body);
       }
     } else {
       this.form.markAllAsTouched();
-      this.toastr.warning('Falntan completar datos requeridos', 'Atencion');
+      this.toastr.warning('Faltan completar datos requeridos', 'Atención');
     }
   }
 
   post(body: any) {
-    this.dronService.post(body).subscribe(
-      (data) => {
-        console.log(data);
-        this.toastr.success('Editado con éxito', 'Éxito');
-        this.router.navigate([this.rutaBase]);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+    this.dronService.post(body)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.toastr.success('Creado con éxito', 'Éxito');
+          this.router.navigate([this.rutaBase]);
+        },
+        error: (error) => {
+          console.log(error);
+          this.toastr.error('Error al crear', 'Error');
+        }
+      });
   }
 
   put(body: any, id: number) {
-    this.dronService.put(body, id).subscribe(
-      (data) => {
-        console.log(data);
-        this.toastr.success('Creado con éxito', 'Éxito');
-        this.router.navigate([this.rutaBase]);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+    this.dronService.put(body, id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.toastr.success('Editado con éxito', 'Éxito');
+          this.router.navigate([this.rutaBase]);
+        },
+        error: (error) => {
+          console.log(error);
+          this.toastr.error('Error al editar', 'Error');
+        }
+      });
   }
+
 
   confirmarEliminar(): void {
     const dialogRef = this.dialog.open(DialogComponent, {
@@ -172,8 +189,10 @@ export class AddEditDronesComponent {
       },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) this.eliminar();
-    });
+    dialogRef.afterClosed()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(result => {
+        if (result) this.eliminar();
+      });
   }
 }

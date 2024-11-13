@@ -4,7 +4,7 @@
       <img src="../../../../assets/calendar/integrations.svg" alt="Calendar icon" class="header-icon">
       <h2>Detalles del evento</h2>
     </div>
-    <button class="close-button" (click)="onCancel()">
+    <button class="close-button" (click)="dialogRef.close()">
       <span>×</span>
     </button>
   </div>
@@ -30,7 +30,7 @@
     </div>
   </div>
   <div mat-dialog-actions>
-    <button mat-button class="primary-button" (click)="onCancel()">
+    <button mat-button class="primary-button" (click)="dialogRef.close()">
       Continuar
     </button>
   </div>

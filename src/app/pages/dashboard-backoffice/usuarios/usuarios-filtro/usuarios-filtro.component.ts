@@ -1,17 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DashboardBackOfficeService } from '../../dashboard-backoffice.service';
-import {
-  TipoLabel,
-  DataView,
-} from 'src/app/shared/components/miniatura-listado/miniatura.model';
+import { TipoLabel, DataView } from 'src/app/shared/components/miniatura-listado/miniatura.model';
 import { ApiService } from 'src/app/services/ApiService';
-import { PageEvent, MatPaginatorModule } from '@angular/material/paginator';
-import { JsonPipe } from '@angular/common';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { FormsModule } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { PageEvent } from '@angular/material/paginator';
+import { selectButtons, selectFilters } from 'src/app/shared/components/dinamic-searchbar/dinamic-searchbar.config';
 interface User {
   id: number;
   name: string;
@@ -59,6 +52,7 @@ export class UsuariosFiltroComponent implements OnInit {
   titulo: string = 'Usuarios';
   usuarios: User[] = [];
   usuariosGenerales: User[] = [];
+  templateUsers: User[]= [];
   length = 0;
   pageSizeLabel: string = 'Items por página:';
   pageSize = 12;
@@ -68,7 +62,8 @@ export class UsuariosFiltroComponent implements OnInit {
   showFirstLastButtons = true;
   disabled = false;
   pageEvent: PageEvent | undefined;
-
+  filterConfigs: any;
+  buttonConfigs: any;
   userFilterOptions = [
     { value: 'gerenteGeneral', label: 'Gerente General' },
     { value: 'tecnicoGeneral', label: 'Técnico General' },
@@ -114,16 +109,10 @@ export class UsuariosFiltroComponent implements OnInit {
     {
       label: 'UserType',
       field: 'dashboard-backoffice/usuarios-actualizar',
-      tipoLabel: TipoLabel.botonEditar,
-    },
-    // **BTN VER MÁS
-    {
-      label: 'UserType',
-      field: 'dashboard-backoffice/usuarios-filtro',
-      tipoLabel: TipoLabel.botonVermas,
+      tipoLabel: TipoLabel.botonEditarWithParams,
     },
   ];
-
+  
   constructor(
     private router: Router,
     private apiService: ApiService,
@@ -136,35 +125,20 @@ export class UsuariosFiltroComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.restorePaginationState();
+    this.filterConfigs = selectFilters([
+      'ADMINISTRATOR',
+     /*  'SUPERUSER', descomentar si se necesita superuser*/
+      'GERENTE',
+      'MANAGEMENT',
+      'TECHNICAL',
+      'OPERATOR',
+      'COOPERATIVE',]);
+  
+    this.buttonConfigs = selectButtons([
+      'NUEVO_USUARIO_ROLE', 
+    ]);
+    
     this.traerUsuariosGenerales(this.pageIndex, this.pageSize);
-  }
-
-  handlePageEvent(e: PageEvent) {
-    console.log('Page Event:', e);
-    this.pageEvent = e;
-    this.length = e.length;
-    this.pageSize = e.pageSize;
-    this.pageIndex = e.pageIndex;
-    console.log('Length:', this.length);
-    console.log('Page Size:', this.pageSize);
-    console.log('Page Index:', this.pageIndex);
-    this.savePaginationState();
-    this.traerUsuariosGenerales(this.pageIndex, this.pageSize);
-  }
-
-  handlePageSizeChange() {
-    this.pageIndex = 0;
-    this.savePaginationState();
-    this.traerUsuariosGenerales(this.pageIndex, this.pageSize);
-  }
-
-  setPageSizeOptions(setPageSizeOptionsInput: string) {
-    if (setPageSizeOptionsInput) {
-      this.pageSizeOptions = setPageSizeOptionsInput
-        .split(',')
-        .map((str) => +str);
-    }
   }
 
   traerUsuariosGenerales(pageIndex: number, pageSize: number) {
@@ -173,8 +147,8 @@ export class UsuariosFiltroComponent implements OnInit {
       .subscribe(
         (response) => {
           if (response && response.list && response.list.length > 0) {
-            this.usuarios = response.list[0]; // Asume que `response.list` es un array de arrays, ajusta si es necesario
-            this.length = response.totalCount || 0; // Asegúrate de que `totalCount` sea correcto o inicializa a 0
+            this.usuarios = response.list[0];
+            this.length = response.totalCount || 0;
 
             this.usuarios.forEach((usuario) => {
               usuario.provinciasAsignadas = usuario.company.provinces
@@ -187,11 +161,13 @@ export class UsuariosFiltroComponent implements OnInit {
                 .join(', ');
 
               usuario.typeUser = this.mapTypeUser(usuario.typeUser);
-              usuario.color = this.getColorForUserType(usuario.typeUser);
-            });
+               });
+               /* es una solucion temp ya que no se usa services ni persistencia,
+                hacemos un shadow copy de la variable principal */
+            this.templateUsers = [...this.usuarios];
           } else {
-            this.usuarios = []; // Asegúrate de que `usuarios` esté vacío si no hay datos
-            this.length = 0; // Asegúrate de que `length` esté en 0 si no hay datos
+            this.usuarios = [];
+            this.length = 0;
             console.error(
               'La respuesta del servidor no contiene datos válidos.'
             );
@@ -205,22 +181,7 @@ export class UsuariosFiltroComponent implements OnInit {
       );
   }
 
-  getColorForUserType(typeUser: string): string {
-    switch (typeUser) {
-      case 'Super Admin':
-        return '$super-administrador'; // Reemplaza con la variable SCSS correcta si es necesario
-      case 'Admin':
-        return '$administrador';
-      case 'Técnico':
-        return '$tecnico';
-      case 'Piloto':
-        return '$piloto';
-      case 'Cooperativa':
-        return '$cooperativa';
-      default:
-        return '';
-    }
-  }
+ 
   // BLOQUE de codigo para setear nombre de perfiles a español !!!
   mapTypeUser(typeUser: string): string {
     const typeMapping: { [key: string]: string } = {
@@ -233,26 +194,27 @@ export class UsuariosFiltroComponent implements OnInit {
     };
     return typeMapping[typeUser] || typeUser;
   }
-  aplicarFiltro(filtroSeleccionado: string) {}
+  aplicarFiltro(filtroSeleccionado: string) {
+    var temp = this.usuarios.filter((usuario) =>{
+      return usuario.typeUser === filtroSeleccionado});
+      this.templateUsers = temp;
+  }
 
   BtnCrearUsuarios() {
-    localStorage.setItem('pageIndex', this.pageIndex.toString());
-    localStorage.setItem('pageSize', this.pageSize.toString());
-
     this.router.navigate(['dashboard-backoffice/usuarios']);
   }
-  private savePaginationState() {
-    localStorage.setItem('pageIndex', this.pageIndex.toString());
-    localStorage.setItem('pageSize', this.pageSize.toString());
+ 
+  clearFilter() { 
+    this.templateUsers = [...this.usuarios];
+  }
+  
+  onFilter(filtro: any) { 
+    if(filtro){
+      this.aplicarFiltro(filtro.value);
+    }
+     else {
+      console.warn(`No se encontró un manejador para el filtro tipo: ${filtro.type}`);
+    }  
   }
 
-  private restorePaginationState() {
-    const savedPageIndex = localStorage.getItem('pageIndex');
-    const savedPageSize = localStorage.getItem('pageSize');
-    this.pageIndex = savedPageIndex ? parseInt(savedPageIndex, 10) : 0;
-    this.pageSize = savedPageSize ? parseInt(savedPageSize, 10) : 12;
-  }
-  checkPaginationState() {
-    alert(`PageIndex: ${this.pageIndex}, PageSize: ${this.pageSize}`);
-  }
 }

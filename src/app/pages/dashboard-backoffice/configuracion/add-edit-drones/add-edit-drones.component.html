@@ -1,75 +1,130 @@
+<div class="mainStructure">
+  <app-header-inner [title]="titulo" [backButton]="true"></app-header-inner>
+  <div class="profileContainer">
+    <div class="profileContainer-personalData">
+      <div class="profileContainer-personalData-title">Información del Dron</div>
+      <form class="FullForm" [formGroup]="form">
+        <div class="profileContainer-personalData-content">
+          <div class="profileContainer-personalData-content-item margin-btm-0">
+            <div class="FullForm-control margin-btm-0">
+              <label class="FormLabel margin-btm-6" for="nickname">Nombre</label>
+              <input class="FormInput" matInput [formControlName]="this.ctrlName" id="nickname" placeholder="Nombre del dron">
+              <span *ngIf="form.get(this.ctrlName)?.hasError('required') && form.controls[this.ctrlName].touched" class="error-message">
+                Este campo es requerido
+              </span>
+            </div>
+          </div>
 
-  <div class="titulo-principal">
-    {{titulo}}
- </div>
+          <div class="profileContainer-personalData-content-item margin-btm-0">
+            <div class="FullForm-control margin-btm-0">
+              <label class="FormLabel margin-btm-6" for="funcion">Función</label>
+              <input class="FormInput" matInput [formControlName]="this.ctrlFuncion" id="funcion" placeholder="Función del dron">
+              <span *ngIf="form.get(this.ctrlFuncion)?.hasError('required') && form.controls[this.ctrlFuncion].touched" class="error-message">
+                Este campo es requerido
+              </span>
+            </div>
+          </div>
 
- <form class="formulario-global"  [formGroup]="form">
-  <div class="grupos" >
-  <div class="field-container">
-    <label class="field-label">Nombre</label>
-    <input matInput [formControlName]="this.ctrlName" placeholder="" required>
-    <span *ngIf="form.get(this.ctrlName)?.hasError('required') && form.controls[this.ctrlName]?.touched" class="error-message">
-      Este campo es requerido</span>
-  </div>
+          <div class="profileContainer-personalData-content-item margin-btm-0">
+            <div class="FullForm-control margin-btm-0">
+              <label class="FormLabel margin-btm-6" for="brand">Marca</label>
+              <input class="FormInput" matInput [formControlName]="this.ctrlMarca" id="brand" placeholder="Marca del dron">
+              <span *ngIf="form.get(this.ctrlMarca)?.hasError('required') && form.controls[this.ctrlMarca].touched" class="error-message">
+                Este campo es requerido
+              </span>
+            </div>
+          </div>
 
-  <div class="field-container">
-    <label class="field-label">Función</label>
-    <input matInput [formControlName]="this.ctrlFuncion" placeholder="" required>
-    <span *ngIf="form.get(this.ctrlFuncion)?.hasError('required') && form.controls[this.ctrlFuncion]?.touched" class="error-message">
-      Este campo es requerido</span>
-  </div>
+          <div class="profileContainer-personalData-content-item margin-btm-0">
+            <div class="FullForm-control margin-btm-0">
+              <label class="FormLabel margin-btm-6" for="model">Modelo</label>
+              <input class="FormInput" matInput [formControlName]="this.ctrlModel" id="model" placeholder="Modelo del dron">
+              <span *ngIf="form.get(this.ctrlModel)?.hasError('required') && form.controls[this.ctrlModel].touched" class="error-message">
+                Este campo es requerido
+              </span>
+            </div>
+          </div>
 
-  <div class="field-container">
-    <label class="field-label">Marca</label>
-    <input matInput [formControlName]="this.ctrlMarca" placeholder="" required>
-    <span *ngIf="form.get(this.ctrlMarca)?.hasError('required') && form.controls[this.ctrlMarca]?.touched" class="error-message">
-      Este campo es requerido</span>
-  </div>
+          <div class="profileContainer-personalData-content-item margin-btm-0">
+            <div class="FullForm-control margin-btm-0">
+              <label class="FormLabel margin-btm-6" for="serie">Nro de serie</label>
+              <input class="FormInput" matInput [formControlName]="this.ctrlSerie" id="serie" placeholder="Número de serie">
+              <span *ngIf="form.get(this.ctrlSerie)?.hasError('required') && form.controls[this.ctrlSerie].touched" class="error-message">
+                Este campo es requerido
+              </span>
+            </div>
+          </div>
 
-  <div class="field-container">
-    <label class="field-label">Modelo</label>
-    <input matInput [formControlName]="this.ctrlModel" placeholder="" required>
-    <span *ngIf="form.get(this.ctrlModel)?.hasError('required') && form.controls[this.ctrlModel]?.touched" class="error-message">
-      Este campo es requerido</span>
-  </div>
+          <div class="profileContainer-personalData-content-item margin-btm-0">
+            <div class="FullForm-control margin-btm-0">
+              <label class="FormLabel margin-btm-6" for="matricula">Matrícula Anac</label>
+              <input class="FormInput" matInput [formControlName]="this.ctrlMatricula" id="matricula" placeholder="Matrícula Anac">
+              <span *ngIf="form.get(this.ctrlMatricula)?.hasError('required') && form.controls[this.ctrlMatricula].touched" class="error-message">
+                Este campo es requerido
+              </span>
+            </div>
+          </div>
 
-  <div class="field-container">
-    <label class="field-label">Nro de serie</label>
-    <input matInput [formControlName]="this.ctrlSerie" placeholder="" required>
-    <span *ngIf="form.get(this.ctrlSerie)?.hasError('required') && form.controls[this.ctrlSerie]?.touched" class="error-message">
-      Este campo es requerido</span>
-  </div>
+          <div class="profileContainer-personalData-content-item margin-btm-0">
+            <div class="FullForm-control margin-btm-0">
+              <label class="FormLabel margin-btm-6" for="poliza">Poliza</label>
+              <input class="FormInput" matInput [formControlName]="this.ctrlPoliza" id="poliza" placeholder="Número de póliza">
+              <span *ngIf="form.get(this.ctrlPoliza)?.hasError('required') && form.controls[this.ctrlPoliza].touched" class="error-message">
+                Este campo es requerido
+              </span>
+            </div>
+          </div>
 
-  <div class="field-container">
-    <label class="field-label">Matrícula Anac</label>
-    <input matInput [formControlName]="this.ctrlMatricula" placeholder="" required>
-    <span *ngIf="form.get(this.ctrlMatricula)?.hasError('required') && form.controls[this.ctrlMatricula]?.touched" class="error-message">
-      Este campo es requerido</span>
-  </div>
+          <div class="profileContainer-personalData-content-item margin-btm-0">
+            <div class="FullForm-control margin-btm-0">
+              <label class="FormLabel margin-btm-6" for="code">Código</label>
+              <input class="FormInput" matInput [formControlName]="this.ctrlCode" id="code" placeholder="Código del dron">
+              <span *ngIf="form.get(this.ctrlCode)?.hasError('required') && form.controls[this.ctrlCode].touched" class="error-message">
+                Este campo es requerido
+              </span>
+            </div>
+          </div>
 
-  <div class="field-container">
-    <label class="field-label">Poliza</label>
-    <input matInput [formControlName]="this.ctrlPoliza" placeholder="" required>
-    <span *ngIf="form.get(this.ctrlPoliza)?.hasError('required') && form.controls[this.ctrlPoliza]?.touched" class="error-message">
-      Este campo es requerido</span>
-  </div>
 
-  <div class="field-container">
-    <label class="field-label">Código</label>
-    <input matInput [formControlName]="this.ctrlCode" placeholder="" required>
-    <span *ngIf="form.get(this.ctrlCode)?.hasError('required') && form.controls[this.ctrlCode]?.touched" class="error-message">
-      Este campo es requerido</span>
-  </div>
+          <div class="profileContainer-personalData-content-item margin-btm-0">
+            <div class="FullForm-control margin-btm-0">
+              <label class="FormLabel margin-btm-6" for="formato">Tiempo de Vuelo inicial</label>
+              <input class="FormInput" matInput [formControlName]="this.ctrInitialFlightTime" id="initialFlightTime" placeholder="Tiempo de Vuelo inicial">
+              <span *ngIf="form.get(this.ctrInitialFlightTime)?.hasError('required') && form.controls[this.ctrInitialFlightTime]?.touched" class="error-message">
+                Este campo es requerido
+              </span>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
 
-  <div class="field-container-observaciones">
-    <label class="field-label">Descripción</label>
-    <textarea matInput class="field-input-obs" [formControlName]="this.ctrlDescripcion"></textarea>
-  </div>
+    <div class="profileContainer-aditionalData">
+      <div class="profileContainer-aditionalData-title">Descripción</div>
+      <form [formGroup]="form">
+        <div class="FullForm-control margin-btm-0">
+          <textarea matInput class="FormTextarea" [formControlName]="this.ctrlDescripcion" placeholder="Descripción"></textarea>
+          <span *ngIf="form.get(this.ctrlDescripcion)?.hasError('required') && form.controls[this.ctrlDescripcion].touched" class="error-message">
+            Este campo es requerido
+          </span>
+        </div>
+      </form>
+    </div>
 
-  <div class="botones-servicio">
-    <button mat-raised-button class="cancel-button" type="button" (click)="this.mostrarEditar() ? confirmarEliminar() : cancelar()">{{this.mostrarEditar() ? 'Eliminar' : 'Cancelar'}}</button>
-    <button mat-raised-button class="register-button" type="submit" (click)="this.mostrarEditar() ? habilitarEdicion(): addEdit()">{{this.mostrarEditar() ? 'Editar' : 'Guardar cambios' }}</button>
+    <div class="FullForm-buttonsToRight">
+      <button mat-raised-button 
+              class="secondary-button-custom size-48" 
+              type="button" 
+              (click)="this.mostrarEditar() ? confirmarEliminar() : cancelar()">
+        {{this.mostrarEditar() ? 'Eliminar' : 'Cancelar'}}
+      </button>
+      <button mat-raised-button 
+        class="primary-button-custom size-48"
+        type="submit"
+        [disabled]="!form.valid && !this.mostrarEditar()"
+        (click)="this.mostrarEditar() ? habilitarEdicion() : addEdit()">
+  {{this.mostrarEditar() ? 'Editar' : 'Guardar cambios'}}
+</button>
+    </div>
   </div>
 </div>
-
- </form>

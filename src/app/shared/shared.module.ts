@@ -40,6 +40,9 @@ import { MatTableModule } from '@angular/material/table';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { SubirArchivosComponent } from './components/subir-archivos/subir-archivos.component';
 import { DinamicSearchbarComponent } from './components/dinamic-searchbar/dinamic-searchbar.component';
+import { WeatherComponent } from './components/weather/weather.component';
+import { WeatherWidgetComponent } from './components/weather/widget/widget.component'; 
+import { WeatherModalComponent } from './components/weather/modal/modal.component';
 export const IMPORTS_MATERIAL = [
   MatSidenavModule,
   MatListModule,
@@ -87,7 +90,10 @@ export const CALENDAR = [FullCalendarModule];
     TableComponent,
     CardContadorComponent,
     SubirArchivosComponent,
-    DinamicSearchbarComponent
+    DinamicSearchbarComponent,
+    WeatherComponent,
+    WeatherWidgetComponent,
+    WeatherModalComponent, 
   ],
   imports: [IMPORT_CORE, IMPORTS_MATERIAL, CALENDAR, CardComponent],
   exports: [
@@ -109,7 +115,10 @@ export const CALENDAR = [FullCalendarModule];
     TableComponent,
     CardContadorComponent,
     SubirArchivosComponent,
-    DinamicSearchbarComponent
+    DinamicSearchbarComponent,
+    WeatherComponent,
+    WeatherWidgetComponent,
+    WeatherModalComponent
   ],
 
 })

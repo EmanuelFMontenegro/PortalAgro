@@ -36,16 +36,6 @@
         "route": "/dashboard-backoffice/calendarios"
       },
       {
-        "icon": "notificaciones_b.svg",
-        "name": "Notificaciones",
-        "route": "/dashboard-backoffice/notificacion"
-      },
-      {
-        "icon": "planificacion_b.svg",
-        "name": "Planificaciones",
-        "route": "/dashboard-backoffice/planificaciones"
-      },
-      {
         "icon": "informes_b.svg",
         "name": "Informes",
         "route": "/dashboard-backoffice/informes"

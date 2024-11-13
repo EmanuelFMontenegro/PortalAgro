@@ -1,0 +1,19 @@
+<div class="widgetContainer" (click)="open(day)">
+  <div class="widgetContainer-icon">
+      <img [src]="type === 'today' ? day.condition.icon : day.day.condition.icon" alt="weather icon">
+    </div>
+    <div class="widgetContainer-contentInfo">
+      <div class="widgetContainer-contentInfo-title">
+        <span *ngIf="type === 'today'">{{location?.name}}, {{location?.region}}</span>
+        <span *ngIf="type === 'next'">{{dayName}}</span>
+      </div>
+      <div class="widgetContainer-contentInfo-subtitle">
+        {{type === 'today' ? day.condition.text : day.day.condition.text}}
+      </div>
+    </div>
+    <div class="widgetContainer-weatherInfo">
+        <div class="label">Clima</div>
+      <div class="main-value">{{type === 'today' ? day.temp_c : day.day.avgtemp_c}}°</div>
+        <div class="sub-value">{{type === 'today' ? day.wind_kph : day.day.avgvis_km}} km/h</div>
+   </div>
+</div>

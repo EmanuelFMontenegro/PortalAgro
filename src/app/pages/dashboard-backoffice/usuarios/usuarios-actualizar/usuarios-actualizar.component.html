@@ -1,209 +1,279 @@
-<app-header-user [selectedName]="userForm.get('name')?.value || null"
-  [selectedLastName]="userForm.get('lastname')?.value || null" [selectedEmail]="userForm.get('username')?.value || null"
-  [selectedRole]="userType ? getRoleIdByName(userType) : null">
-</app-header-user>
-<h2 class="titulo-perfil" *ngIf="userType">{{ userType | titlecase }}</h2>
+<div class="mainStructure">
+  <app-header-inner [title]="'Actualizar Usuario'" [backButton]="true"></app-header-inner>
+  <div class="profileContainer">
+    <div class="profileContainer-personalData">
+      <div class="profileContainer-personalData-title">Información Personal</div>
+      <form [formGroup]="userForm" autocomplete="off">
+        <div class="profileContainer-personalData-content">
+          <!-- Campos básicos -->
+          <div class="profileContainer-personalData-content-item margin-btm-0">
+            <div class="FullForm-control margin-btm-0">
+              <label class="FormLabel margin-btm-6">Email</label>
+              <input class="FormInput" matInput placeholder="Email" formControlName="username" autocomplete="new-email">
+            </div>
+          </div>
 
+          <div class="profileContainer-personalData-content-item margin-btm-0">
+            <div class="FullForm-control margin-btm-0">
+              <label class="FormLabel margin-btm-6">Nombre</label>
+              <input class="FormInput" matInput placeholder="Nombre" formControlName="name" autocomplete="new-name">
+            </div>
+          </div>
 
+          <div class="profileContainer-personalData-content-item margin-btm-0">
+            <div class="FullForm-control margin-btm-0">
+              <label class="FormLabel margin-btm-6">Apellido</label>
+              <input class="FormInput" matInput placeholder="Apellido" formControlName="lastname" autocomplete="new-lastname">
+            </div>
+          </div>
 
-<div class="form-container">
-  <form [formGroup]="userForm" autocomplete="off">
-    <div class="field-container">
-      <div class="field-group">
-        <label class="field-label">Email</label>
-        <input type="email" placeholder="Email" formControlName="username" class="field-input" autocomplete="new-email">
-      </div>
-      <div class="field-group">
-        <label class="field-label">Nombre</label>
-        <input type="text" placeholder="Nombre" formControlName="name" class="field-input" autocomplete="new-name">
-      </div>
-      <div class="field-group">
-        <label class="field-label">Apellido</label>
-        <input type="text" placeholder="Apellido" formControlName="lastname" class="field-input"
-          autocomplete="new-lastname">
-      </div>
-      <div class="field-group">
-        <label class="field-label">DNI</label>
-        <input type="text" placeholder="DNI" formControlName="dni" class="field-input" autocomplete="new-dni">
-      </div>
-      <div class="field-group">
-        <label class="field-label">CONTACTO</label>
-        <input type="text" placeholder="Teléfono" formControlName="telephone" class="field-input"
-          autocomplete="new-tel">
-      </div>
-      <div class="field-group">
-        <label class="field-label">Contraseña</label>
-        <input type="password" placeholder="Contraseña" formControlName="password" class="field-input"
-          autocomplete="new-password">
-      </div>
-      <div class="field-group">
-        <label class="field-label">Confirmar Contraseña</label>
-        <input type="password" placeholder="Confirmar Contraseña" formControlName="confirmPassword" class="field-input"
-          autocomplete="new-password-confirm">
-      </div>
+          <div class="profileContainer-personalData-content-item margin-btm-0">
+            <div class="FullForm-control margin-btm-0">
+              <label class="FormLabel margin-btm-6">DNI</label>
+              <input class="FormInput" matInput placeholder="DNI" formControlName="dni" autocomplete="new-dni">
+            </div>
+          </div>
 
-      <div *ngIf="userType === 'cooperative'">
-        <div class="field-group">
-          <label class="field-label">Departamentos Asignados</label>
-          <mat-form-field class="list-chip-grid">
-            <mat-label>Departamentos</mat-label>
-            <mat-chip-grid #chipGrid>
-              <mat-chip-row *ngFor="let department of departamentosSeleccionados"
-                (removed)="removeDepartment(department)">
+          <div class="profileContainer-personalData-content-item margin-btm-0">
+            <div class="FullForm-control margin-btm-0">
+              <label class="FormLabel margin-btm-6">CONTACTO</label>
+              <input class="FormInput" matInput placeholder="Teléfono" formControlName="telephone" autocomplete="new-tel">
+            </div>
+          </div>
+
+          <div class="profileContainer-personalData-content-item margin-btm-0">
+            <div class="FullForm-control margin-btm-0">
+              <label class="FormLabel margin-btm-6">Contraseña</label>
+              <input class="FormInput" matInput type="password" placeholder="Contraseña" formControlName="password" autocomplete="new-password">
+            </div>
+          </div>
+
+          <div class="profileContainer-personalData-content-item margin-btm-0">
+            <div class="FullForm-control margin-btm-0">
+              <label class="FormLabel margin-btm-6">Confirmar Contraseña</label>
+              <input class="FormInput" matInput type="password" placeholder="Confirmar Contraseña" formControlName="confirmPassword" autocomplete="new-password-confirm">
+            </div>
+          </div>
+
+        </div>
+      </form>
+    </div>
+    <!-- Sección Technical -->
+<div class="profileContainer-aditionalData" *ngIf="userType === 'technical'">
+  <div class="profileContainer-aditionalData-title">Información de Técnico</div>
+  <form [formGroup]="userForm">
+    <div class="profileContainer-personalData-content">
+ 
+          <label class="FormLabel margin-btm-6">Departamentos Asignados</label>
+          <div class="FormInput" style="height: 100px;max-height: 100px;">
+            <mat-chip-grid #chipGrid style="max-height: 68px !important;
+            height: 68px !important;
+            overflow: auto;scrollbar-width: thin;">
+              <mat-chip-row *ngFor="let department of departamentosSeleccionados" (removed)="removeDepartment(department)">
                 {{ department.name }}
                 <button matChipRemove>
                   <mat-icon>cancel</mat-icon>
                 </button>
               </mat-chip-row>
-            </mat-chip-grid>
-            <input #departmentInput [formControl]="departmentCtrl" [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
-              [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="addDepartment($event)"
-              autocomplete="new-department">
-            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-              <mat-option *ngFor="let department of filteredDepartments | async" [value]="department">
-                {{ department.name }}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-          <label class="field-label">Asignar Nuevos Departamentos</label>
-          <mat-select class="field-input" placeholder="Aquí podrás agregar departamentos" [formControl]="departmentCtrl"
-            (selectionChange)="onDepartmentsSelectionChange($event)" multiple autocomplete="new-departments">
+            </mat-chip-grid> 
+          </div> 
+
+      <div class="profileContainer-personalData-content-item margin-btm-0">
+        <div class="FullForm-control margin-btm-0">
+          <label class="FormLabel margin-btm-6">Asignar Nuevos Departamentos</label>
+          <mat-select class="FormInput" style="height: 45px !important;"
+                     placeholder="Aquí podrás agregar departamentos" 
+                     [formControl]="departmentCtrl"
+                     (selectionChange)="onDepartmentsSelectionChange($event)" 
+                     multiple>
             <mat-option *ngFor="let dept of getDepartamentosNoSeleccionados()" [value]="dept">
               {{ dept.name }}
             </mat-option>
           </mat-select>
-        </div>
-
-        <div class="field-group">
-          <label class="field-label">Función</label>
-          <input type="text" placeholder="Función" formControlName="function" class="field-input"
-            autocomplete="new-function">
-        </div>
-        <div class="field-group">
-          <label class="field-label">Razón Social</label>
-          <input type="text" placeholder="Razón Social" formControlName="razonSocial" class="field-input"
-            autocomplete="new-razon-social">
-        </div>
-        <div class="field-group">
-          <label class="field-label">Dirección</label>
-          <input type="text" placeholder="Dirección" formControlName="address" class="field-input"
-            autocomplete="new-address">
-        </div>
-        <div class="field-group">
-          <label class="field-label">CUIT</label>
-          <input type="text" placeholder="CUIT" formControlName="cuit" class="field-input" autocomplete="new-cuit">
         </div>
       </div>
 
-      <div *ngIf="userType === 'technical'">
-        <div class="field-group">
-          <label class="field-label">Departamentos Asignados</label>
-          <mat-form-field class="list-chip-grid">
-            <mat-label>Departamentos</mat-label>
-            <mat-chip-grid #chipGrid>
-              <mat-chip-row *ngFor="let department of departamentosSeleccionados"
-                (removed)="removeDepartment(department)">
-                {{ department.name }}
-                <button matChipRemove>
-                  <mat-icon>cancel</mat-icon>
-                </button>
-              </mat-chip-row>
-            </mat-chip-grid>
-            <input #departmentInput [formControl]="departmentCtrl" [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
-              [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="addDepartment($event)"
-              autocomplete="new-department">
-            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-              <mat-option *ngFor="let department of filteredDepartments | async" [value]="department">
-                {{ department.name }}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-
-          <label class="field-label">Asignar Nuevos Departamentos</label>
-          <mat-select class="field-input" placeholder="Aquí podrás agregar departamentos" [formControl]="departmentCtrl"
-            (selectionChange)="onDepartmentsSelectionChange($event)" multiple autocomplete="new-departments">
-            <mat-option *ngFor="let dept of getDepartamentosNoSeleccionados()" [value]="dept">
-              {{ dept.name }}
-            </mat-option>
-          </mat-select>
-        </div>
-        <div class="field-group">
-          <label class="field-label">Función</label>
-          <input type="text" placeholder="Función" formControlName="function" class="field-input"
-            autocomplete="new-function">
-        </div>
-        <div class="field-group">
-          <label class="field-label">Especialidad</label>
-          <input type="text" placeholder="Especialidad" formControlName="specialty" class="field-input"
-            autocomplete="new-specialty">
-        </div>
-        <div class="field-group">
-          <label class="field-label">Matrícula</label>
-          <input type="text" placeholder="Matrícula" formControlName="matricula" class="field-input"
-            autocomplete="new-matricula">
-        </div>
-        <div class="field-group">
-          <label class="field-label">Licencia</label>
-          <input type="text" placeholder="Licencia" formControlName="license" class="field-input"
-            autocomplete="new-license">
+      <div class="profileContainer-personalData-content-item margin-btm-0">
+        <div class="FullForm-control margin-btm-0">
+          <label class="FormLabel margin-btm-6">Función</label>
+          <input class="FormInput" matInput placeholder="Función" formControlName="function">
         </div>
       </div>
-      <div *ngIf="userType === 'operator'">
-        <div class="field-group">
-          <label class="field-label">Departamentos Asignados</label>
-          <mat-form-field class="list-chip-grid">
-            <mat-label>Departamentos</mat-label>
-            <mat-chip-grid #chipGrid>
-              <mat-chip-row *ngFor="let department of departamentosSeleccionados"
-                (removed)="removeDepartment(department)">
-                {{ department.name }}
-                <button matChipRemove>
-                  <mat-icon>cancel</mat-icon>
-                </button>
-              </mat-chip-row>
-            </mat-chip-grid>
-            <input #departmentInput [formControl]="departmentCtrl" [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
-              [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="addDepartment($event)"
-              autocomplete="new-department">
-            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-              <mat-option *ngFor="let department of filteredDepartments | async" [value]="department">
-                {{ department.name }}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-          <label class="field-label">Asignar Nuevos Departamentos</label>
-          <mat-select class="field-input" placeholder="Aquí podrás agregar departamentos" [formControl]="departmentCtrl"
-            (selectionChange)="onDepartmentsSelectionChange($event)" multiple autocomplete="new-departments">
-            <mat-option *ngFor="let dept of getDepartamentosNoSeleccionados()" [value]="dept">
-              {{ dept.name }}
-            </mat-option>
-          </mat-select>
+
+      <div class="profileContainer-personalData-content-item margin-btm-0">
+        <div class="FullForm-control margin-btm-0">
+          <label class="FormLabel margin-btm-6">Especialidad</label>
+          <input class="FormInput" matInput placeholder="Especialidad" formControlName="specialty">
         </div>
-        <div class="field-group">
-          <label class="field-label">Función</label>
-          <input type="text" placeholder="Función" formControlName="function" class="field-input"
-            autocomplete="new-function">
+      </div>
+
+      <div class="profileContainer-personalData-content-item margin-btm-0">
+        <div class="FullForm-control margin-btm-0">
+          <label class="FormLabel margin-btm-6">Matrícula</label>
+          <input class="FormInput" matInput placeholder="Matrícula" formControlName="matricula">
         </div>
-        <div class="field-group">
-          <label class="field-label">Especialidad</label>
-          <input type="text" placeholder="Especialidad" formControlName="specialty" class="field-input"
-            autocomplete="new-specialty">
-        </div>
-        <div class="field-group">
-          <label class="field-label">Matrícula</label>
-          <input type="text" placeholder="Matrícula" formControlName="matricula" class="field-input"
-            autocomplete="new-matricula">
-        </div>
-        <div class="field-group">
-          <label class="field-label">Licencia</label>
-          <input type="text" placeholder="Licencia" formControlName="license" class="field-input"
-            autocomplete="new-license">
+      </div>
+
+      <div class="profileContainer-personalData-content-item margin-btm-0">
+        <div class="FullForm-control margin-btm-0">
+          <label class="FormLabel margin-btm-6">Licencia</label>
+          <input class="FormInput" matInput placeholder="Licencia" formControlName="license">
         </div>
       </div>
     </div>
   </form>
 </div>
-<div class="botones-form">
-  <button mat-raised-button class="crear-button" (click)="updateAllUsers()">Actualizar usuario</button>
-  <button mat-raised-button class="cancelar-button" (click)="cancelar()">Cancelar</button>
+
+<!-- Sección Operador -->
+<div class="profileContainer-aditionalData" *ngIf="userType === 'operator'">
+  <div class="profileContainer-aditionalData-title">Información de Operador</div>
+  <form [formGroup]="userForm">
+    <div class="profileContainer-personalData-content">
+    
+          <label class="FormLabel margin-btm-6">Departamentos Asignados</label>
+          <div class="FormInput" style="height: 100px;max-height: 100px;">
+            <mat-chip-grid #chipGrid style="max-height: 68px !important;
+            height: 68px !important;
+            overflow: auto;scrollbar-width: thin;">
+              <mat-chip-row *ngFor="let department of departamentosSeleccionados" (removed)="removeDepartment(department)">
+                {{ department.name }}
+                <button matChipRemove>
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </mat-chip-row>
+            </mat-chip-grid>
+          
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+              <mat-option *ngFor="let department of filteredDepartments | async" [value]="department">
+                {{ department.name }}
+              </mat-option>
+            </mat-autocomplete> 
+      </div>
+
+      <div class="profileContainer-personalData-content-item margin-btm-0">
+        <div class="FullForm-control margin-btm-0">
+          <label class="FormLabel margin-btm-6">Asignar Nuevos Departamentos</label>
+          <mat-select class="FormInput" style="height: 45px !important;"
+                     placeholder="Aquí podrás agregar departamentos" 
+                     [formControl]="departmentCtrl"
+                     (selectionChange)="onDepartmentsSelectionChange($event)" 
+                     multiple>
+            <mat-option *ngFor="let dept of getDepartamentosNoSeleccionados()" [value]="dept">
+              {{ dept.name }}
+            </mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <div class="profileContainer-personalData-content-item margin-btm-0">
+        <div class="FullForm-control margin-btm-0">
+          <label class="FormLabel margin-btm-6">Función</label>
+          <input class="FormInput" matInput placeholder="Función" formControlName="function">
+        </div>
+      </div>
+
+      <div class="profileContainer-personalData-content-item margin-btm-0">
+        <div class="FullForm-control margin-btm-0">
+          <label class="FormLabel margin-btm-6">Especialidad</label>
+          <input class="FormInput" matInput placeholder="Especialidad" formControlName="specialty">
+        </div>
+      </div>
+
+      <div class="profileContainer-personalData-content-item margin-btm-0">
+        <div class="FullForm-control margin-btm-0">
+          <label class="FormLabel margin-btm-6">Matrícula</label>
+          <input class="FormInput" matInput placeholder="Matrícula" formControlName="matricula">
+        </div>
+      </div>
+
+      <div class="profileContainer-personalData-content-item margin-btm-0">
+        <div class="FullForm-control margin-btm-0">
+          <label class="FormLabel margin-btm-6">Licencia</label>
+          <input class="FormInput" matInput placeholder="Licencia" formControlName="license">
+        </div>
+      </div>
+    </div>
+  </form>
+</div> 
+
+<!-- Sección Cooperativa -->
+<div class="profileContainer-aditionalData" *ngIf="userType === 'cooperative'">
+  <div class="profileContainer-aditionalData-title">Información de Cooperativa</div>
+  <form [formGroup]="userForm">
+    <div class="profileContainer-personalData-content">
+          <label class="FormLabel margin-btm-6">Departamentos Asignados</label>
+          <div class="FormInput" style="height: 100px;max-height: 100px;">
+            <mat-label>Departamentos</mat-label>
+            <mat-chip-grid #chipGrid style="max-height: 68px !important;
+            height: 68px !important;
+            overflow: auto;scrollbar-width: thin;">
+              <mat-chip-row *ngFor="let department of departamentosSeleccionados" (removed)="removeDepartment(department)">
+                {{ department.name }}
+                <button matChipRemove>
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </mat-chip-row>
+            </mat-chip-grid>
+             
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+              <mat-option *ngFor="let department of filteredDepartments | async" [value]="department">
+                {{ department.name }}
+              </mat-option>
+            </mat-autocomplete>
+          </div>
+
+      <div class="profileContainer-personalData-content-item margin-btm-0">
+        <div class="FullForm-control margin-btm-0">
+          <label class="FormLabel margin-btm-6">Asignar Nuevos Departamentos</label>
+          <mat-select class="FormInput" style="height: 45px !important;"
+                     placeholder="Aquí podrás agregar departamentos" 
+                     [formControl]="departmentCtrl"
+                     (selectionChange)="onDepartmentsSelectionChange($event)" 
+                     multiple>
+            <mat-option *ngFor="let dept of getDepartamentosNoSeleccionados()" [value]="dept">
+              {{ dept.name }}
+            </mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <div class="profileContainer-personalData-content-item margin-btm-0">
+        <div class="FullForm-control margin-btm-0">
+          <label class="FormLabel margin-btm-6">Función</label>
+          <input class="FormInput" matInput placeholder="Función" formControlName="function">
+        </div>
+      </div>
+
+      <div class="profileContainer-personalData-content-item margin-btm-0">
+        <div class="FullForm-control margin-btm-0">
+          <label class="FormLabel margin-btm-6">Razón Social</label>
+          <input class="FormInput" matInput placeholder="Razón Social" formControlName="razonSocial">
+        </div>
+      </div>
+
+      <div class="profileContainer-personalData-content-item margin-btm-0">
+        <div class="FullForm-control margin-btm-0">
+          <label class="FormLabel margin-btm-6">Dirección</label>
+          <input class="FormInput" matInput placeholder="Dirección" formControlName="address">
+        </div>
+      </div>
+
+      <div class="profileContainer-personalData-content-item margin-btm-0">
+        <div class="FullForm-control margin-btm-0">
+          <label class="FormLabel margin-btm-6">CUIT</label>
+          <input class="FormInput" matInput placeholder="CUIT" formControlName="cuit">
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+    <div class="FullForm-buttonsToRight">
+      <button mat-button class="secondary-button-custom size-48" type="button" (click)="cancelar()">
+        Cancelar
+      </button>
+      <button mat-raised-button appearance="outline" class="primary-button-custom size-48" (click)="updateAllUsers()">
+        Actualizar usuario
+      </button>
+    </div>
+  </div>
 </div>

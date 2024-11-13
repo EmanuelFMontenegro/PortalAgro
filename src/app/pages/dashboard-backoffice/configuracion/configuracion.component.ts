@@ -11,8 +11,9 @@ import {
 } from 'src/app/shared/components/miniatura-listado/miniatura.model';
 import {
   DashboardBackOfficeService,
-  Titulo,
 } from '../dashboard-backoffice.service';
+import { ButtonConfig, FilterConfig } from 'src/app/models/searchbar.model';
+import { selectButtons, selectFilters } from 'src/app/shared/components/dinamic-searchbar/dinamic-searchbar.config';
 
 export enum TiposConfiguraciones {
   insumos = 'Insumos',
@@ -30,13 +31,7 @@ export class ConfiguracionComponent {
     private insumoService: InsumoService,
     private router: Router,
     private permisoService: PermisoService,
-    public dashboardBackOffice: DashboardBackOfficeService
-  ) {
-    this.dashboardBackOffice.dataTitulo.next({
-      titulo: 'Configuración',
-      subTitulo: '',
-    });
-  }
+    public dashboardBackOffice: DashboardBackOfficeService) {}
 
   listado: any[] = [];
   dataView: DataView[] = [];
@@ -45,19 +40,31 @@ export class ConfiguracionComponent {
   insumos = TiposConfiguraciones.insumos;
   permisosComponente: PermisoBasico = {};
   alta: any;
-
+  buttonConfigs: ButtonConfig[] = [];
+  filterConfigs: FilterConfig[]= [];
+  title: string= '';
   ngOnInit(): void {
+    this.filterConfigs = selectFilters([
+      'LISTA_DRONES',
+      'LISTA_INSUMOS',
+    ]);
+
+    this.buttonConfigs = selectButtons([
+      'AGREGAR_DRON', 
+      'AGREGAR_INSUMO'
+    ]);
     this.configDrones();
   }
 
   configDrones() {
+    this.title = 'Drones';
     this.alta = TiposConfiguraciones.drones;
     if (this.permisoService.permisoUsuario?.value?.drone)
       this.permisosComponente = this.permisoService.permisoUsuario?.value.drone;
     this.dataView = [
       {
         label: '',
-        field: 'assets/img/lote_1.svg',
+        field: 'assets/img/Chacra_1.png',
         tipoLabel: TipoLabel.imagen,
       },
       { label: 'Nombre', field: 'nickname', tipoLabel: TipoLabel.span },
@@ -79,7 +86,22 @@ export class ConfiguracionComponent {
     });
   }
 
+  onFilter(filtro: any) { 
+    const filterHandlers: { [key: string]: (value: any) => void } = {
+      'Filtro para lista de drones': (value) => this.configDrones(),
+      'Filtro para lista de insumos': (value) => this.configInsumos(),
+    };
+    const handler = filterHandlers[filtro.type];
+    
+    if (handler) {
+      handler(filtro.value);
+    } else {
+      console.warn(`No se encontró un manejador para el filtro tipo: ${filtro.type}`);
+    }
+  }
+
   configInsumos() {
+    this.title = 'Insumos';
     this.alta = TiposConfiguraciones.insumos;
     if (this.permisoService.permisoUsuario?.value?.supplies)
       this.permisosComponente =
@@ -87,7 +109,7 @@ export class ConfiguracionComponent {
     this.dataView = [
       {
         label: '',
-        field: 'assets/img/lote_3.svg',
+        field: 'assets/img/Chacra_1.png',
         tipoLabel: TipoLabel.imagen,
       },
       { label: 'Nombre', field: 'name', tipoLabel: TipoLabel.span },
@@ -124,16 +146,5 @@ export class ConfiguracionComponent {
     }
   }
 
-  nuevo() {
-    switch (this.alta) {
-      case TiposConfiguraciones.drones:
-        this.router.navigate(['dashboard-backoffice/configuracion/dron']);
-        break;
-      case TiposConfiguraciones.insumos:
-        this.router.navigate(['dashboard-backoffice/configuracion/insumo']);
-        break;
-      default:
-        break;
-    }
-  }
+   
 }

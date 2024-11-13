@@ -1,0 +1,9 @@
+<div class="weatherContainer" *ngIf="weather && !loading">
+
+  <w-widget type="today" [location]="location" [day]="forecastToday">
+  </w-widget>
+
+  <w-widget *ngFor="let forecast of weather.forecast.forecastday | slice:1; let i = index" type="next"
+    [day]="forecast" [dayName]="i === 0 ? 'Mañana' : 'Pasado'">
+  </w-widget>
+</div>

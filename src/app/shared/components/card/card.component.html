@@ -34,6 +34,8 @@
           (click)="verMas(miniatura, item?.label, item?.field)">Detalle y Geolocalización</button>
         <button *ngIf="item.tipoLabel == tipoEditar" mat-button class="basic-blue grow-1 size-48"
           (click)="Editar(miniatura, item?.label, item?.field)">Editar</button>
+          <button *ngIf="item.tipoLabel == tipoEditarWithParams" mat-button class="primary-button"
+          (click)="EditarWithParams(miniatura, item?.label, item?.field)">Editar</button> 
         <button *ngIf="item.tipoLabel == tipoEditarDevolviendo" class="basic-blue grow-1 size-48" mat-button
           (click)="EditarDelviendo(miniatura)">Editar</button>
         <button *ngIf="item.tipoLabel == tipoEliminar" mat-button class="basic-warning grow-1 size-48"

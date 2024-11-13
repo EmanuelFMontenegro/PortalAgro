@@ -15,6 +15,7 @@ import listPlugin from '@fullcalendar/list';
 import esLocale from '@fullcalendar/core/locales/es';
 import { MatDialog } from '@angular/material/dialog';
 import { CalendarPopupComponent } from 'src/app/shared/components/calendar-popup/calendar-popup.component';
+import { WeatherService } from 'src/app/services/weather.service';
 interface CalendarEvent extends EventInput {
   title: string;
   start: Date;
@@ -64,6 +65,7 @@ export class CalendarComponent implements OnInit, OnChanges {
   todayEvents: ProcessedCalendarEvent[] = [];
   weekEvents: ProcessedCalendarEvent[] = [];
   testEvents: EventInput[] = [];
+  weather : any;
   readonly STATUS_COLORS = {
     PENDIENTE: '#F2994A',
     EN_CURSO: '#2B78D4',
@@ -78,7 +80,7 @@ export class CalendarComponent implements OnInit, OnChanges {
   } as const;
 
   private colorCache = new Map<string, EventDetails>();
-  constructor(public dialogRef: MatDialog) {
+  constructor(public dialogRef: MatDialog, public weatherService: WeatherService) {
     this.calendarOptions = {
       plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin],
       initialView: 'dayGridMonth',
@@ -93,17 +95,29 @@ export class CalendarComponent implements OnInit, OnChanges {
       eventDidMount: this.handleEventDidMount.bind(this),
       eventDisplay: 'block',
     };
-    
-    this.setupTestData();
+    /* 
+    this.setupTestData(); */
     this.setupCalendarOptions(window.innerWidth);
   }
 
   ngOnInit() {
     this.initialized = true;
+    this.getWeather()
+    
   }
 
 
+  parseData(){}
+
+  getWeather() {
+    
+    this.weatherService.getWeather().subscribe((response) => {
+      this.weather = {...response.forecast, ...response.location}; 
+    });
+  }
+
   private getEventDetails(title: string): EventDetails {
+    
     if (!title) {
       return this.createEventDetails('Solicitud');
     }
@@ -165,7 +179,7 @@ export class CalendarComponent implements OnInit, OnChanges {
     const dayAfterTomorrow = new Date(baseDate);
     dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 2);
 
-    /* this.testEvents = [
+     this.testEvents = [
       {
         title: 'Servicio N° 001. Operador Juan Pérez. Pendiente',
         start: this.createEventDate(baseDate, 9, 0),
@@ -196,7 +210,7 @@ export class CalendarComponent implements OnInit, OnChanges {
         start: this.createEventDate(dayAfterTomorrow, 9, 30),
         end: this.createEventDate(dayAfterTomorrow, 11, 0)
       }
-    ]; */
+    ];  
   }
 
   ngOnChanges(changes: SimpleChanges) {
