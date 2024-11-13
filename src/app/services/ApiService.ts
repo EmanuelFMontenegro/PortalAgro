@@ -178,6 +178,12 @@ export class ApiService {
     return this.http.get<any>(url);
   }
 
+  calendarBackoffice(): Observable<any> {
+    const url = `${this.baseURL}/dist/service/calendar/all`;
+    return this.http.get<any>(url);
+  }
+
+
   // MANAGER FOR ID
 
   getManagerById(id: number): Observable<any> {

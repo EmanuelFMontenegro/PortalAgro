@@ -5,6 +5,7 @@ import { AuthService } from 'src/app/services/AuthService';
 import { jwtDecode } from 'jwt-decode';
 import { TipoLabel, DataView } from 'src/app/shared/components/miniatura-listado/miniatura.model';
 import { DashboardBackOfficeService } from '../dashboard-backoffice.service';
+import { selectButtons, selectFilters } from 'src/app/shared/components/dinamic-searchbar/dinamic-searchbar.config';
 
 interface DecodedToken {
   userId: number;
@@ -17,13 +18,8 @@ interface DecodedToken {
   selector: 'app-chacras',
   templateUrl: './chacras.component.html',
 })
-export class ChacrasComponent implements OnInit { 
-  titulo: string = 'Chacras';
-  private userId: number | any;
+export class ChacrasComponent implements OnInit {  
   public userEmail: string | null = null;
-  private companyId: number | any;
-  nombre: string = '';
-  apellido: string = '';
   localidades: any[] = [];
   userLogeed = this.authService.userLogeed;
   campos: any[] = [];
@@ -49,6 +45,8 @@ export class ChacrasComponent implements OnInit {
       location: '',
     },
   };
+  filterConfigs: any;
+  buttonConfigs: any;
   constructor(
     private authService: AuthService,
     private apiService: ApiService,
@@ -59,41 +57,40 @@ export class ChacrasComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.decodeToken();
-    this.cargarDatosDeUsuario();
+    this.filterConfigs = selectFilters([
+      'LOCALIDAD',
+      'PRODUCTOR',
+      'NOMBRE_CHACRA',
+      'HECTAREAS'
+    ]);
+
+    this.buttonConfigs = selectButtons([
+      'NUEVO_LOTE', 
+    ]); 
     this.cargarChacras();
     this.obtenerLocalidades();
   }
+ 
 
-  decodeToken(): void {
-    const token = this.authService.getToken();
-    if (token) {
-      const decoded: any = jwtDecode(token);
-      this.userId = decoded.userId;
-      this.userEmail = decoded.sub;
-      this.companyId = decoded.companyId;
+
+  onFilter(filtro: any) { 
+    console.log('filtro', filtro);
+    const filterHandlers: { [key: string]: (value: any) => void } = {
+      'Buscar por Localidad': (value) => this.filtrarPorLocalidad(value),
+      'Buscar por Productor': (value) => this.filtrarPorProductor(value),
+      'Buscar por Nombre de Chacra': (value) => this.filtrarPorNombreDeChacra(value),
+      'Buscar por Hectáreas': (value) => this.filtrarPorHectareas(filtro.min , filtro.max),
+    };
+    const handler = filterHandlers[filtro.type];
+    
+    if (handler) {
+      handler(filtro.value);
     } else {
-      this.userId = null;
-      this.userEmail = null;
+      console.warn(`No se encontró un manejador para el filtro tipo: ${filtro.type}`);
     }
   }
 
-  onFilter(filtro: any) {
-    switch (filtro.tipo) {
-      case 'Buscar por Localidad':
-        this.filtrarPorLocalidad(filtro.valor);
-        break;
-      case 'Buscar por Productor':
-        this.filtrarPorProductor(filtro.valor);
-        break;
-      case 'Buscar por Nombre de Chacra':
-        this.filtrarPorNombreDeChacra(filtro.valor);
-        break;
-      case 'Buscar por Hectáreas':
-        this.filtrarPorHectareas(filtro.min, filtro.max);
-        break;
-    }
-  }
+  
 
   validarMinHectareas(min: number, max: number) {
     if (min && max && min > max) {
@@ -107,29 +104,7 @@ export class ChacrasComponent implements OnInit {
     }
   }
 
-  cargarDatosDeUsuario() {
-    const token = this.authService.getToken();
-    if (token) {
-      const decoded: DecodedToken = jwtDecode(token);
-      if (decoded.userId && decoded.companyId) {
-        this.userId = decoded.userId;
-        this.companyId = decoded.companyId;
-        this.userEmail = decoded.sub;
-        this.apiService.findUserById(this.companyId, this.userId).subscribe(
-          (data) => {
-            this.nombre = data.name;
-            this.apellido = data.lastname;
-          },
-          (error) => {
-            console.error('Error al obtener el nombre del usuario:', error);
-          }
-        );
-      } else {
-        this.userId = null;
-        this.userEmail = null;
-      }
-    }
-  }
+   
 
   cargarChacras() {
     this.apiService.getUsersFields(0, 10, 'id', 'desc').subscribe(
@@ -216,14 +191,11 @@ export class ChacrasComponent implements OnInit {
       );
   }
 
-  filtrarPorHectareas(minHectareas: number, maxHectareas: number) {
-    if (minHectareas === undefined || maxHectareas === undefined || isNaN(minHectareas) || isNaN(maxHectareas)) {
+  filtrarPorHectareas(min: number, max: number) {
+    if (min === undefined || max === undefined || isNaN(min) || isNaN(max)) {
       console.error('Debe ingresar valores válidos para el rango de hectáreas');
       return;
     }
-    // Convertir las cadenas de texto a números
-    const minHectareasNum = minHectareas;
-    const maxHectareasNum = maxHectareas;
     this.apiService
       .getUsersFields(
         0,
@@ -235,8 +207,8 @@ export class ChacrasComponent implements OnInit {
         '',
         null,
         null,
-        minHectareasNum,
-        maxHectareasNum
+        min,
+        max
       ).subscribe(
         (response) => {
           if (response.list && response.list.length > 0) {

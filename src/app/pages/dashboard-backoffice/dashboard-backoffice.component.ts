@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Router } from '@angular/router';
@@ -34,7 +34,8 @@ export class DashboardBackofficeComponents implements AfterViewInit {
     private router: Router,
     private http: HttpClient,
     private authService: AuthService,
-    private sidenavService: SidenavService
+    private sidenavService: SidenavService,
+    private cdref: ChangeDetectorRef
   ) {
     this.authService.getUserLogeed();
     this.loadMenu();
@@ -45,11 +46,12 @@ export class DashboardBackofficeComponents implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.breakpointObserver
-      .observe(['(max-width: 720px)'])
+      .observe(['(max-width: 768px)'])
       .subscribe((result) => {
         this.isScreenSmall = result.matches;
         this.sidenav.mode = this.isScreenSmall ? 'over' : 'side';
       });
+      this.cdref.detectChanges();
   }
 
   toggleSidenav() {

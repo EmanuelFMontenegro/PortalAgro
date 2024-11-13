@@ -7,6 +7,19 @@
     }
   }
 
+@include respond-between(769px, 1120px) {
+  .profileContainer {
+    &-personalData {
+      &-content {
+        &-item{
+          flex-basis: 100% !important;
+          min-width: 200px;
+        }
+      }
+    }
+  }
+    
+  }
 @include respond-max(1090px){
   .profileContainer-personalData-content-item {
     flex-basis: 100%;  
@@ -198,7 +211,7 @@
     &-personalData {
       &-content {
         &-item{
-          flex-basis: 100%;
+          flex-basis: 100% !important;
           min-width: 200px;
         }
       }

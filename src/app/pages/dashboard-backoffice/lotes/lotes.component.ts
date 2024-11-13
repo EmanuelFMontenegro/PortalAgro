@@ -22,6 +22,8 @@ import {
   DashboardBackOfficeService,
   Titulo,
 } from '../dashboard-backoffice.service';
+import { ButtonConfig, FilterConfig } from 'src/app/models/searchbar.model';
+import { selectButtons, selectFilters } from 'src/app/shared/components/dinamic-searchbar/dinamic-searchbar.config';
 
 interface CustomJwtPayload {
   userId: number;
@@ -53,6 +55,8 @@ interface Cultivo {
 export class LotesComponent implements OnInit {
   options: string[] = ['Localidad', 'Productor', 'Cultivos', 'Hectareas'];
   titulo: string = 'Lotes';
+  filterConfigs: FilterConfig[] = [];
+  buttonConfigs: ButtonConfig[] = [];
   mostrarMatSelectLocalidades: boolean = false;
   localidades: any[] = [];
   cropId: string | undefined;
@@ -133,6 +137,17 @@ export class LotesComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.filterConfigs = selectFilters([
+      'LOCALIDAD',
+      'PRODUCTOR',
+      'CULTIVO',
+      'HECTAREAS'
+    ]);
+
+    this.buttonConfigs = selectButtons([
+      'NUEVO_LOTE', 
+    ]);
+   
     this.decodeToken();
     this.obtenerLocalidades();
     this.obtenerCultivos(); /*
@@ -315,9 +330,6 @@ export class LotesComponent implements OnInit {
 
   filtrarPorCultivo(cropId: string | undefined = undefined) {
     if (cropId) {
-      const cultivoId = this.cultivos
-        .find((cultivo) => cultivo.name === cropId)
-        ?.id?.toString();
       this.apiService
         .getAllPlotsAdmin(
           undefined,
@@ -327,7 +339,7 @@ export class LotesComponent implements OnInit {
           undefined,
           undefined,
           undefined,
-          cultivoId
+          cropId
         )
         .subscribe(
           (data: any) => {
@@ -355,14 +367,14 @@ export class LotesComponent implements OnInit {
     }
   }
 
-  aplicarFiltroHectareas(minHectareas: number, maxHectareas: number) {
-    if (!minHectareas || !maxHectareas) {
+  aplicarFiltroHectareas(min: number, max:number) { 
+     if (!min || !max) {
       this.toastr.warning(
         'Por favor ingresa los valores mínimo y máximo de hectáreas.',
         'Advertencia'
       );
       return;
-    }
+    }  
 
     this.apiService
       .getAllPlotsAdmin(
@@ -371,8 +383,8 @@ export class LotesComponent implements OnInit {
         undefined,
         undefined,
         undefined,
-        minHectareas.toString(),
-        maxHectareas.toString()
+        min.toString(),
+        max.toString()
       )
       .subscribe(
         (data: any) => {
@@ -502,20 +514,23 @@ export class LotesComponent implements OnInit {
   clearFilter() {
     this.cargarLotes();
   }
-  onFilter(filtro: any) {
-    switch (filtro.tipo) {
-      case 'Buscar por Localidad':
-        this.filtrarPorLocalidad(filtro.valor);
-        break;
-      case 'Buscar por Productor':
-        this.filtrarPorProductor(filtro.valor);
-        break;
-      case 'Buscar por Cultivos':
-        this.filtrarPorCultivo(filtro.valor);
-        break;
-      case 'Buscar por Hectáreas':
-        this.aplicarFiltroHectareas(filtro.min, filtro.max);
-        break;
+
+  onFilter(filtro: any) { 
+    console.log('filtro', filtro);
+    const filterHandlers: { [key: string]: (value: any) => void } = {
+      'Buscar por Localidad': (value) => this.filtrarPorLocalidad(value),
+      'Buscar por Productor': (value) => this.filtrarPorProductor(value),
+      'Buscar por Cultivo': (value) => this.filtrarPorCultivo(value),
+      'Buscar por Hectáreas': (value) => this.aplicarFiltroHectareas(filtro.min , filtro.max),
+    };
+    const handler = filterHandlers[filtro.type];
+    
+    if (handler) {
+      handler(filtro.value);
+    } else {
+      console.warn(`No se encontró un manejador para el filtro tipo: ${filtro.type}`);
     }
   }
+
+ 
 }

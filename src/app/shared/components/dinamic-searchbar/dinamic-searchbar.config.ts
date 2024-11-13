@@ -33,9 +33,9 @@ export const FILTER_CONFIGS: { [key: string]: FilterConfig } = {
       placeholder: 'Buscar por Hectáreas',
       inputType: 'double-number'
     },
-    PLANTACIONES: {
-      type: 'Plantaciones',
-      placeholder: 'Buscar por Plantaciones',
+    CULTIVO: {
+      type: 'Cultivos',
+      placeholder: 'Buscar por Cultivo',
       inputType: 'select',
       options: [],
       property: 'name'
@@ -47,6 +47,55 @@ export const FILTER_CONFIGS: { [key: string]: FilterConfig } = {
         placeholder: 'Filtro sin input ejemplo',
         inputType: 'action',
         actionValue: 'Colonia Alberdi'
+      },
+      LISTA_DRONES: {
+        type: 'Lista de drones',
+        placeholder: 'Filtro para lista de drones',
+        inputType: 'action',
+        actionValue: 'Drones'
+      }, 
+      LISTA_INSUMOS: {
+        type: 'Lista de insumos',
+        placeholder: 'Filtro para lista de insumos',
+        inputType: 'action',
+        actionValue: 'Insumos'
+      },
+      /* Para usuarios sin input */
+      GERENTE: {
+        type: 'Gerente',
+        placeholder: 'Filtro para lista de gerentes',
+        inputType: 'action',
+        actionValue: 'Gerente General'
+      },
+      TECHNICAL: {
+        type: 'Técnico',
+        placeholder: 'Filtro para lista de técnicos',
+        inputType: 'action',
+        actionValue: 'Técnico'
+      },
+      SUPERUSER:{
+        type: 'Super Admin',
+        placeholder: 'Filtro para lista de super admins',
+        inputType: 'action',
+        actionValue: 'Super Admin'
+      },
+      ADMINISTRATOR: {
+        type: 'Administrador',
+        placeholder: 'Filtro para lista de técnicos generales',
+        inputType: 'action',
+        actionValue: 'Administrador'
+      },
+      OPERATOR: {
+        type: 'Piloto',
+        placeholder: 'Filtro para lista de pilotos',
+        inputType: 'action',
+        actionValue: 'Piloto'
+      },
+      COOPERATIVE: {
+        type: 'Cooperativa',
+        placeholder: 'Filtro para lista de cooperativas',
+        inputType: 'action',
+        actionValue: 'Cooperativa'
       },
   };
   export const BUTTON_CONFIGS: { [key: string]: ButtonConfig } = {
@@ -60,6 +109,12 @@ export const FILTER_CONFIGS: { [key: string]: FilterConfig } = {
     NUEVO_LOTE: {
       label: 'Agregar Lote',
       route: '/dashboard/cargar-lote',
+      icon: 'add',
+      class: 'primary-button-auto'
+    },
+    NUEVO_USUARIO_ROLE:{
+      label: 'Nuevo Usuario',
+      route: 'dashboard-backoffice/usuarios',
       icon: 'add',
       class: 'primary-button-auto'
     },
@@ -78,6 +133,18 @@ export const FILTER_CONFIGS: { [key: string]: FilterConfig } = {
     AGREGAR_PRODUCTOR: {
         label: 'Agregar Productor',
         route: 'dashboard-backoffice/agregar-productor',
+        icon: 'add',
+        class: 'primary-button-auto'
+    },
+    AGREGAR_DRON: {
+        label: 'Agregar Dron',
+        route: 'dashboard-backoffice/configuracion/dron',
+        icon: 'add',
+        class: 'primary-button-auto'
+    },
+    AGREGAR_INSUMO: {
+        label: 'Agregar Insumo',
+        route: 'dashboard-backoffice/configuracion/insumo',
         icon: 'add',
         class: 'primary-button-auto'
     }

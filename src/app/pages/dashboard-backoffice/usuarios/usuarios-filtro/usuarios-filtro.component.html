@@ -1,8 +1,14 @@
-<app-titulo-container [titulo]="titulo"></app-titulo-container>
-<app-filtros-container [options]="userFilterOptions" [crearUsuariosRuta]="'dashboard-backoffice/usuarios'"
-  (selectionChange)="aplicarFiltro($event)">
-</app-filtros-container>
-<miniatura [productor]="true" [dataView]="dataView" [listado]="usuarios"></miniatura>
-
+<div class="mainStructure">
+  <app-header-inner [title]="'Usuarios'" [backButton]="true"></app-header-inner>
+  <app-dinamic-searchbar
+  [filterConfigs]="filterConfigs"
+  [buttonConfigs]="buttonConfigs"
+  (filter)="onFilter($event)"
+  (clearFilter)="clearFilter()">
+  </app-dinamic-searchbar>
+<app-card  [typeCard]="'productor'" [dataView]="dataView" [listado]="templateUsers"></app-card>
+ 
+</div>
+ 
 
 

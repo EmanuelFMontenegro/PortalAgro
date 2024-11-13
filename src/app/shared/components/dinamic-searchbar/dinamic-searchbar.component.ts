@@ -33,9 +33,9 @@ export class DinamicSearchbarComponent {
     }
   }
 
-  @Input() set plantaciones(value: any[]) {
+  @Input() set cultivosOptions(value: any[]) {
     if (value) {
-      this.updateFilterOptions('Plantaciones', value);
+      this.updateFilterOptions('Cultivos', value);
     }
   }
 
@@ -100,7 +100,7 @@ export class DinamicSearchbarComponent {
         filter.value = this.selectedFilter.actionValue;
         break;
     }
- 
+    console.log(filter)
 
     this.filter.emit(filter);
   }

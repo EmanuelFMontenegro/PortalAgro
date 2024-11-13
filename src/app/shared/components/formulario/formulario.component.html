@@ -1,63 +1,98 @@
-<div class="form-container">
-  <h2>{{ titulo }}</h2>
-  <form class="form" (ngSubmit)="updateFormData()">
-    <div class="form-group" *ngFor="let item of dataForm">
-      <label class="field-label" [for]="item.ngModel">{{ item.placeholder }}</label>
+<div class="profileContainer-personalData">
+  <div class="profileContainer-personalData-title">Información Personal</div>
+  <form class="FullForm" (ngSubmit)="updateFormData()">
+    <div class="profileContainer-personalData-content">
+      <div class="profileContainer-personalData-content-item margin-btm-0" *ngFor="let item of dataForm"
+      [style.flex-basis]="item.type === 'select' ? '100%' : 'calc(50% - 33px)'">
+        <div class="FullForm-control margin-btm-0">
+          <label class="FormLabel margin-btm-6" [for]="item.ngModel">{{ item.placeholder }}</label>
 
-      <!-- Campo de texto o contraseña -->
-      <input *ngIf="item.type === 'text' || item.type === 'password'" [type]="item.type"
-        [placeholder]="item.placeholder" [(ngModel)]="formData[item.ngModel]" [name]="item.name"
-        [readonly]="item.readonly || false" [id]="item.ngModel" class="input" autocomplete="new-password"
-        (change)="updateFormData()">
+          <!-- Input texto/password -->
+          <input *ngIf="item.type === 'text' || item.type === 'password'" 
+                 [type]="item.type"
+                 class="FormInput"
+                 [placeholder]="item.placeholder" 
+                 [(ngModel)]="formData[item.ngModel]" 
+                 [name]="item.name"
+                 [readonly]="item.readonly || false" 
+                 [id]="item.ngModel" 
+                 autocomplete="new-password"
+                 (change)="updateFormData()">
 
-      <!-- Campo de archivo IMAGEN -->
-      <div class="botones-imagen">
-        <div *ngIf="item.type === 'file'">
-          <label class="custom-file-upload">
-            <input type="file" (change)="onFileChange($event, item.ngModel)" [name]="item.name" [id]="item.ngModel"
-              accept="image/*">
-            Subir Imagen
-          </label>
-          <mat-card *ngIf="formData[item.ngModel]" class="image-upload-card">
-            <mat-card-content>
-              <img [src]="formData[item.ngModel]" alt="Imagen cargada" class="uploaded-image" />
-            </mat-card-content>
-          </mat-card>
+          <!-- Campo de archivo IMAGEN -->
+          <div class="botones-imagen" *ngIf="item.type === 'file'">
+            <label class="custom-file-upload FormInput">
+              <input type="file" 
+                     (change)="onFileChange($event, item.ngModel)" 
+                     [name]="item.name" 
+                     [id]="item.ngModel"
+                     accept="image/*">
+              Subir Imagen
+            </label>
+            <mat-card *ngIf="formData[item.ngModel]" class="image-upload-card">
+              <mat-card-content>
+                <img [src]="formData[item.ngModel]" alt="Imagen cargada" class="uploaded-image" />
+              </mat-card-content>
+            </mat-card>
+          </div>
+
+          <!-- Campo de texto multilínea -->
+          <textarea *ngIf="item.type === 'textarea'" 
+                    class="FormInput"
+                    [placeholder]="item.placeholder" 
+                    [(ngModel)]="formData[item.ngModel]"
+                    [name]="item.name" 
+                    [readonly]="item.readonly || false" 
+                    [id]="item.ngModel"
+                    (change)="updateFormData()">
+          </textarea>
+
+          <!-- Campo de selección usando mat-select -->
+          <ng-container *ngIf="item.type === 'select'"> 
+            
+            <mat-select class="FormInput" 
+                        style="height: 45px !important;"
+                        placeholder="Seleccione departamento" 
+                        [(ngModel)]="formData[item.ngModel]" 
+                        [name]="item.name"
+                        [id]="item.ngModel" 
+                        (selectionChange)="updateFormData()" 
+                        [multiple]="item.multiple || false">
+              <mat-option *ngFor="let option of item.options" [value]="option.value">
+                {{ option.text }}
+              </mat-option>
+            </mat-select>
+          
+            <div class="FormInput" style="height: 100px; max-height: 100px;margin-top: 20px;">
+              <mat-chip-grid #chipGrid style="max-height: 68px !important;
+                                             height: 68px !important;
+                                             overflow: auto;
+                                             scrollbar-width: thin;">
+                <mat-chip-row *ngFor="let department of formData[item.ngModel]"
+                              (removed)="removeDepartment(department, item.ngModel)">
+                  {{ getDescripcionDepartament(department, item.options) }}
+                  <button matChipRemove [attr.aria-label]="'remove ' + department">
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                </mat-chip-row>
+                <input [matChipInputFor]="chipGrid" 
+                       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                       (matChipInputTokenEnd)="addDepartment($event, item.ngModel)" />
+              </mat-chip-grid>
+            </div>
+          </ng-container>
+
+          <!-- Campo de checkbox -->
+          <input *ngIf="item.type === 'checkbox'" 
+                 type="checkbox" 
+                 [(ngModel)]="formData[item.ngModel]" 
+                 [name]="item.name"
+                 [readonly]="item.readonly || false" 
+                 [id]="item.ngModel" 
+                 class="FormInput" 
+                 (change)="updateFormData()">
         </div>
       </div>
-
-
-
-      <!-- Campo de texto multilínea -->
-      <textarea *ngIf="item.type === 'textarea'" [placeholder]="item.placeholder" [(ngModel)]="formData[item.ngModel]"
-        [name]="item.name" [readonly]="item.readonly || false" [id]="item.ngModel" class="input"
-        (change)="updateFormData()"></textarea>
-
-      <!-- Campo de selección usando mat-select -->
-      <ng-container *ngIf="item.type === 'select'">
-        <mat-select placeholder="Seleccione departamento" [(ngModel)]="formData[item.ngModel]" [name]="item.name"
-          [id]="item.ngModel" (selectionChange)="updateFormData()" [multiple]="item.multiple || false"
-          class="full-width">
-          <mat-option *ngFor="let option of item.options" [value]="option.value">
-            {{ option.text }}
-          </mat-option>
-        </mat-select>
-        <mat-chip-grid #chipGrid>
-          <mat-chip-row *ngFor="let department of formData[item.ngModel]"
-            (removed)="removeDepartment(department, item.ngModel)">
-            {{ getDescripcionDepartament(department, item.options) }}
-            <button matChipRemove [attr.aria-label]="'remove ' + department">
-              <mat-icon>cancel</mat-icon>
-            </button>
-          </mat-chip-row>
-          <input [matChipInputFor]="chipGrid" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-            (matChipInputTokenEnd)="addDepartment($event, item.ngModel)" />
-        </mat-chip-grid>
-      </ng-container>
-
-      <!-- Campo de checkbox -->
-      <input *ngIf="item.type === 'checkbox'" type="checkbox" [(ngModel)]="formData[item.ngModel]" [name]="item.name"
-        [readonly]="item.readonly || false" [id]="item.ngModel" class="input" (change)="updateFormData()">
     </div>
   </form>
 </div>

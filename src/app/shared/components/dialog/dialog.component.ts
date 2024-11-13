@@ -24,7 +24,7 @@ export class DialogComponent {
       this.showCancel = data.showCancel !== undefined ? data.showCancel : true;
     } 
     
-  }
+  } 
 
   aceptarClick() {
     this.dialogRef.close(true);
