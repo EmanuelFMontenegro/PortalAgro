@@ -28,8 +28,16 @@ export class NuevoUsuarioComponent implements OnInit, AfterViewInit {
     private dialog: MatDialog
   ) {
     this.userDetailsForm = this.formBuilder.group({
-      usuario: ['', Validators.required],
-      password: ['', Validators.required],
+      usuario: ['', [
+        Validators.required,
+        Validators.email
+      ]],
+      password: ['', [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.maxLength(30),
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,30}$/)
+      ]],
       nombre: [
         '',
         [
@@ -47,15 +55,12 @@ export class NuevoUsuarioComponent implements OnInit, AfterViewInit {
         ],
       ],
       localidad: [null, Validators.required],
-      dni: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(8),
-          Validators.maxLength(11),
-          Validators.pattern('^[0-9]+$'),
-        ],
-      ],
+      dni: ['', [
+        Validators.required,
+        Validators.minLength(7),
+        Validators.maxLength(8),
+        Validators.pattern('^[0-9]{7,8}$') 
+      ]],
       contacto: [
         '',
         [
@@ -112,6 +117,8 @@ export class NuevoUsuarioComponent implements OnInit, AfterViewInit {
   }
 
   cargarNuevoUsuario() {
+    console.log('Formulario:', this.userDetailsForm.value);
+    console.log('Formulario:', this.userDetailsForm.valid);
     if (this.userDetailsForm.valid) {
       const formValues = this.userDetailsForm.value;
 

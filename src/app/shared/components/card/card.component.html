@@ -13,7 +13,7 @@
           item.field)}}</h3>
 
         <!-- Diferenciamos campo observation del resto, por el scroll del campo -->
-        <div *ngIf="(item.field == 'observation'); else span_normal">
+        <div *ngIf="(item.field == 'observation' || item.field == 'observations' ); else span_normal">
           <p [ngClass]="'cardCustomized-header-subtitle scroll-y size-40'" *ngIf="item.tipoLabel == tipoSpan">
             <span>{{item?.label}}:</span> {{getValue(miniatura, item.field) ?? ' --- '}}
           </p>
@@ -29,9 +29,9 @@
     <div [ngClass]="getButtonClass()">
       <ng-container *ngFor="let item of dataView">
         <button *ngIf="item.tipoLabel == tipoVerLote" mat-raised-button class="primary-button"
-          (click)="verMas(miniatura, item?.label, item?.field)">Lista de Lotes</button>
+          (click)="verMasWithoutParams(miniatura, item?.label, item?.field)">Lista de Lotes</button>
         <button *ngIf="item.tipoLabel == tipoGeolocalizar" mat-raised-button class="secondary-button border-primary"
-          (click)="verMas(miniatura, item?.label, item?.field)">Detalle y Geolocalización</button>
+          (click)="verMasWithoutParams(miniatura, item?.label, item?.field)">Detalle y Geolocalización</button>
         <button *ngIf="item.tipoLabel == tipoEditar" mat-button class="basic-blue grow-1 size-48"
           (click)="Editar(miniatura, item?.label, item?.field)">Editar</button>
           <button *ngIf="item.tipoLabel == tipoEditarWithParams" mat-button class="primary-button"

@@ -103,6 +103,7 @@ export class CalendarComponent implements OnInit, OnChanges {
   ngOnInit() {
     this.initialized = true;
     this.getWeather()
+    console.log(this.events)
     
   }
 
@@ -221,6 +222,7 @@ export class CalendarComponent implements OnInit, OnChanges {
       this.colorCache.clear();
       const allEvents = [...this.testEvents, ...changes['events'].currentValue];
       this.events = allEvents;
+      console.log(this.events)
       this.filterEvents();
       this.calendarOptions.events = this.events;
     }

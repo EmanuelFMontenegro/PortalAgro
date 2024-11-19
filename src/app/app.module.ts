@@ -13,7 +13,7 @@ import { Interceptor } from 'src/app/services/Interceptor';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from './shared/shared.module';
-import { CommonModule, registerLocaleData } from '@angular/common';
+import { CommonModule, DATE_PIPE_DEFAULT_OPTIONS, registerLocaleData } from '@angular/common';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { DateAdapter, MAT_DATE_FORMATS, NativeDateAdapter } from '@angular/material/core';
 import localeEsAr from '@angular/common/locales/es-AR';
@@ -63,7 +63,14 @@ const MY_DATE_FORMATS = {
       provide: DateAdapter,
       useClass: NativeDateAdapter,
     },
-    { provide: LOCALE_ID, useValue: 'es-Ar' }
+    { provide: LOCALE_ID, useValue: 'es-Ar' },
+     {
+      provide: DATE_PIPE_DEFAULT_OPTIONS,
+      useValue: {
+        timezone: 'America/Buenos_Aires',
+        locale: 'es-AR'
+      }
+    }
   ],
   bootstrap: [AppComponent],
 })

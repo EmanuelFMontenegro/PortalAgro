@@ -174,12 +174,12 @@ export class ApiService {
 
   // CALENDAR PRODUCER
   calendarProducer(): Observable<any> {
-    const url = `${this.baseURL}/user/service/calendar/all`;
+    const url = `${this.baseURL}/user/service/calendar/all?pageSize=500`;
     return this.http.get<any>(url);
   }
 
   calendarBackoffice(): Observable<any> {
-    const url = `${this.baseURL}/dist/service/calendar/all`;
+    const url = `${this.baseURL}/dist/service/calendar/all?pageSize=500`;
     return this.http.get<any>(url);
   }
 

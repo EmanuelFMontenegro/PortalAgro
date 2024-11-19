@@ -8,30 +8,6 @@
 
 <ng-container *ngIf="!modoEdicion">
   <div class="profileContainer">
-    <div class="profileContainer-detail">
-      <div class="profileContainer-detail-avatar">
-         <img src="../../../../assets/img/profile_edit.png" alt="">
-      </div>
-      <div class="profileContainer-detail-info"> 
-        <div class="profileContainer-detail-info-name">
-          {{ nombre }} {{ apellido }}
-        </div> 
-        <div class="profileContainer-detail-info-mail"> 
-          {{ email }}
-           </div> 
-      </div>
-      <div class="profileContainer-detail-editar">
-        <button  class="profileContainer-detail-editar-button" (click)="activarEdicion(true)">
-          <img src="../../../../assets/img/edit_square_FILL0_wght400_GRAD0_opsz24.svg" alt="Icon Edit" class="profileContainer-detail-editar-button-icon">
-        </button>
-      </div>
-      <div class="profileContainer-detail-verChacraBottom">
-        
-        <button style="background-color: white;border-radius: 8px;" class="profileContainer-detail-editar-button" (click)="btnVerMas(userId)">
-          <img src="../../../../../assets/menu-backoffice/chacra_b.svg" alt="Icon Edit Ranch" class="profileContainer-detail-verChacraBottom-icon">
-         </button>
-      </div>
-    </div>
     <div class="profileContainer-personalData">
       <div class="profileContainer-personalData-title">Información Personal</div>
       <div class="profileContainer-personalData-content">
@@ -65,26 +41,16 @@
       <div class="profileContainer-aditionalData-title">Información Adicional</div>
       <div class="profileContainer-aditionalData-content"> Lorem ipsum dolor sit amet consectetur, adipisicing elit. Consequuntur eveniet, illo assumenda, nihil nemo ad ab animi tenetur, dolorum nam quos quisquam. Commodi quidem a esse, amet minima ipsum iusto. </div>
     </div>
+    <div class="FullForm-buttonsToRight">
+      <button mat-button   class="secondary-button-custom size-48" type="button" (click)="activarEdicion(true)">Editar</button>
+      <button  mat-raised-button appearance="outline"  class="primary-button-custom size-48"  (click)="btnVerMas(userId)">Ver Chacras</button>
+  </div>
   </div>
 </ng-container>   
 
 <!-- VISTA PARA EDITAR EL PERFIL -->
 <ng-container *ngIf="modoEdicion">
   <div class="profileContainer"> 
-    <div class="profileContainer-detail"> 
-      <div class="profileContainer-detail-avatar">
-         <img src="../../../../assets/img/profile_edit.png" alt="">
-      </div>
-      <div class="profileContainer-detail-info"> 
-        <div class="profileContainer-detail-info-name">
-          {{ nombre }} {{ apellido }}
-        </div> 
-        <div class="profileContainer-detail-info-mail"> 
-          {{ email }}
-           </div> 
-      </div>
-     
-    </div> 
     <div class="profileContainer-personalData">
       <div class="profileContainer-personalData-title">Información Personal</div>
       <form class="FullForm" (ngSubmit)="actualizarPerfilUsuario()" [formGroup]="userDetailsForm">

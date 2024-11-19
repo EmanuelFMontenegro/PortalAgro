@@ -6,8 +6,7 @@
   [localidadesOptions]="localidades" 
   (filter)="onFilter($event)"
   (clearFilter)="clearFilter()">
-  ></app-dinamic-searchbar>
-  <app-card [dataView]="dataView" [listado]="campos" [typeCard]="'chacra'">
+  </app-dinamic-searchbar>
+  <app-card [dataView]="dataView" [listado]="campos" [typeCard]="'chacra'" (btnVerMasAccion)="verLotes($event)">
   </app-card>
- <!-- <app-card-contador [contador]= "contador" [mensaje]="mensaje"></app-card-contador> -->
 </div>

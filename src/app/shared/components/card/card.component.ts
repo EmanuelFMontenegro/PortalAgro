@@ -40,15 +40,13 @@ export class CardComponent {
   tipoEliminar = TipoLabel.botonEliminar;
 
 
-  ngOnInit(){
-    console.log(this.dataView);
+  ngOnInit(){ 
   }
 
   loadItems() {
     this.totalItems = this.listado.length; // Actualiza el total de elementos
   }
-  eliminar(datoEliminar: any) {
-    console.log(datoEliminar);
+  eliminar(datoEliminar: any) { 
     this.btnEliminar.emit(datoEliminar);
   }
   onPageChange(page: number) {
@@ -68,8 +66,21 @@ export class CardComponent {
   }
 
 
+  //NUEVAS FUNC
+
+  verMasWithoutParams(data: any, key?: any, ruta?: any) {
+    // Guardar los datos del usuario en localStorage
+    const PersonId = data?.person_id;
+    if (PersonId){ localStorage.setItem('idPerfilProd', JSON.stringify(PersonId));}
+    if(key) localStorage.setItem(key, JSON.stringify(data));
+    if(ruta) this.router.navigate([ruta]);
+  }
+
+
+  
   verMasWithParams(data: any, key?: any, ruta?: any) {
     // Guardar los datos del usuario en localStorage
+   
     if (key) localStorage.setItem(key, JSON.stringify(data));
     if (ruta) {
       this.router.navigate([`${ruta}/${data?.id}`]);
@@ -79,7 +90,7 @@ export class CardComponent {
   Editar(data: any, key?: any, ruta?: any) {
     // Guardar los datos del usuario en localStorage
     if (key) localStorage.setItem(key, JSON.stringify(data));
-
+   
     // Navegar al componente perfil-productor
     if (ruta) this.router.navigate([`${ruta}`]);
   }

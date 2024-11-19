@@ -1,10 +1,8 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { DashboardBackOfficeService } from '../dashboard-backoffice.service';
-import { INITIAL_EVENTS } from './event-utils';
 import { EventInput } from '@fullcalendar/core';
 import moment from 'moment';
-import { ApiService } from 'src/app/services/ApiService';
-
+import { ApiService } from 'src/app/services/ApiService'; 
 @Component({
   selector: 'app-calendarios',
   templateUrl: './calendarios.component.html',
@@ -13,13 +11,13 @@ import { ApiService } from 'src/app/services/ApiService';
 export class CalendariosComponent {
   @Output() eventClick = new EventEmitter<any>();
   events: EventInput[] = [];
-  constructor(private dashboardBackOffice: DashboardBackOfficeService, private apiService: ApiService) {
+  constructor(private apiService: ApiService) {
   }
 
-  ngOnInit(): void {
-    this.ServiciosCalendario();
+  async ngOnInit(){
+    await this.ServiciosCalendario();
   }
-  ServiciosCalendario(): void {
+  async ServiciosCalendario() {
     this.apiService.calendarBackoffice().subscribe(
       (response) => {
         if (response && Array.isArray(response.list)) {
@@ -54,12 +52,17 @@ export class CalendariosComponent {
                   ?.replace('Lotes:', '')
                   .trim() || '';
             }
-
             return {
               id: event.id,
               title: event.title,
-              start: moment(event.dateEvent, "DD-MM-YYYY hh:mm:ss").toISOString(),  
-              end: moment(event.dateEvent, "DD-MM-YYYY hh:mm:ss").add(1, 'hour').toISOString(),  
+              start: moment(moment(event.dateEvent, "DD-MM-YYYY HH:mm:ss")
+              .utcOffset('-03:00', true) 
+              .toISOString(true))
+              .toISOString(),  
+              end: moment(moment(event.dateEvent, "DD-MM-YYYY HH:mm:ss").add(30, 'minutes')
+              .utcOffset('-03:00', true) 
+              .toISOString(true))
+              .toISOString(),  
               extendedProps: {
                 campoNombre,
                 tipoCultivo,
@@ -76,6 +79,7 @@ export class CalendariosComponent {
         console.error('Error al obtener eventos del calendario:', error);
       }
     );
+    console.log(this.events);
   }
 
   onDateClick(event: any): void {

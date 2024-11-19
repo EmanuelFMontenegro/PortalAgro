@@ -13,7 +13,6 @@ export class CalendarioComponent implements OnInit {
   events: EventInput[] = [];
 
   constructor(
-    private dashboardBackOffice: DashboardBackOfficeService,
     private apiService: ApiService
   ) {}
 
@@ -60,8 +59,14 @@ export class CalendarioComponent implements OnInit {
             return {
               id: event.id,
               title: event.title,
-              start: moment(event.dateEvent, "DD-MM-YYYY hh:mm:ss").toISOString(),  
-              end: moment(event.dateEvent, "DD-MM-YYYY hh:mm:ss").add(1, 'hour').toISOString(),  
+              start: moment(moment(event.dateEvent, "DD-MM-YYYY HH:mm:ss")
+              .utcOffset('-03:00', true)
+              .toISOString(true))
+              .toISOString(),  
+              end: moment(moment(event.dateEvent, "DD-MM-YYYY HH:mm:ss").add(30, 'minutes')
+              .utcOffset('-03:00', true)  
+              .toISOString(true))
+              .toISOString(),
               extendedProps: {
                 campoNombre,
                 tipoCultivo,

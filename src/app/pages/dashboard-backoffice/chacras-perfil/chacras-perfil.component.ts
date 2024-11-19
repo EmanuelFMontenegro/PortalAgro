@@ -105,8 +105,7 @@ export class ChacrasPerfilComponent implements OnInit {
           this.toastr.info(
             'El productor seleccionado no cuenta con chacras asociadas',
             'Atención !!!'
-          );
-          this.router.navigate(['dashboard-backoffice/cargar-chacras']);
+          ); 
         }
       },
       (error) => {
@@ -159,7 +158,7 @@ export class ChacrasPerfilComponent implements OnInit {
     this.apiService
       .getUsersFields(
         0,
-        5,
+        500,
         'id',
         'desc',
         true,
@@ -192,7 +191,7 @@ export class ChacrasPerfilComponent implements OnInit {
       return;
     }
     this.apiService
-      .getUsersFields(0, 5, 'id', 'desc', true, '', nombreChacra, null,this.userId)
+      .getUsersFields(0, 500, 'id', 'desc', true, '', nombreChacra, null,this.userId)
       .subscribe(
         (response) => {
           if (response.list && response.list.length > 0) {

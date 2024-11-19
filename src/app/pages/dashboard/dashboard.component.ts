@@ -49,7 +49,7 @@ export class DashboardComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.breakpointObserver
-      .observe(['(max-width: 720px)'])
+      .observe(['(max-width: 768px)'])
       .subscribe((result) => {
         this.isScreenSmall = result.matches;
         this.sidenav.mode = this.isScreenSmall ? 'over' : 'side';

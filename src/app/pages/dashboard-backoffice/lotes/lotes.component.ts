@@ -104,11 +104,11 @@ export class LotesComponent implements OnInit {
     { label: 'Plantación', field: 'plant_name', tipoLabel: TipoLabel.span },
     { label: 'Hectáreas', field: 'dimensions', tipoLabel: TipoLabel.span },
     { label: 'Descripción', field: 'descriptions', tipoLabel: TipoLabel.span },
-    {
+ /*    {
       label: '',
       field: 'dashboard-backoffice/perfil-productor',
       tipoLabel: TipoLabel.botonVermas,
-    },
+    }, */
   ];
 
   constructor(
@@ -145,7 +145,7 @@ export class LotesComponent implements OnInit {
     ]);
 
     this.buttonConfigs = selectButtons([
-      'NUEVO_LOTE', 
+      'NUEVO_LOTE_P', 
     ]);
    
     this.decodeToken();
@@ -192,8 +192,7 @@ export class LotesComponent implements OnInit {
         this.cultivos = typeCrops.map((crop: any) => ({
           id: crop.id,
           name: crop.name,
-        }));
-        console.log('cultivos', this.cultivos);
+        })); 
       },
       (error) => {
         console.error('Error al cargar los tipos de cultivo:', error);
@@ -201,8 +200,7 @@ export class LotesComponent implements OnInit {
     );
   }
 
-  filtrarPorLocalidad(buscar: string) {
-    console.log('buscar', buscar);
+  filtrarPorLocalidad(buscar: string) { 
     if (!buscar) {
       this.toastr.error('Por favor selecciona una localidad.', 'Error');
       return;
@@ -251,7 +249,7 @@ export class LotesComponent implements OnInit {
   }
 
   cargarLotes() {
-    this.apiService.getAllPlotsAdmin().subscribe(
+    this.apiService.getAllPlotsAdmin(500).subscribe(
       (data: any) => {
         if (data && data.list && data.list.length > 0) {
           const lotsArray: Lote[][] = data.list[0];
@@ -343,7 +341,6 @@ export class LotesComponent implements OnInit {
         )
         .subscribe(
           (data: any) => {
-            console.log('los que trae el enpoint cultivos', data);
             if (data && data.list && data.list.length > 0) {
               const lotsArray: Lote[][] = data.list[0];
               const lotes: Lote[] = lotsArray.reduce(
@@ -515,8 +512,7 @@ export class LotesComponent implements OnInit {
     this.cargarLotes();
   }
 
-  onFilter(filtro: any) { 
-    console.log('filtro', filtro);
+  onFilter(filtro: any) {  
     const filterHandlers: { [key: string]: (value: any) => void } = {
       'Buscar por Localidad': (value) => this.filtrarPorLocalidad(value),
       'Buscar por Productor': (value) => this.filtrarPorProductor(value),

@@ -1,26 +1,5 @@
 <div class="mainStructure">
   <app-header-inner [title]="'Chacras'" [backButton]="true"></app-header-inner>
-  <div class="profileContainer">
-    <div class="profileContainer-detail">
-      <div class="profileContainer-detail-avatar">
-        <img src="../../../../assets/img/profile_edit.png" alt="">
-      </div>
-      <div class="profileContainer-detail-info">
-        <div class="profileContainer-detail-info-name">
-          {{ nombre }} {{ apellido }}
-        </div>
-        <div class="profileContainer-detail-info-mail">
-          {{ email }}
-        </div>
-      </div>
-      <div class="profileContainer-detail-editar">
-        <button class="profileContainer-detail-editar-button">
-          <img src="../../../../assets/img/edit_square_FILL0_wght400_GRAD0_opsz24.svg" alt="Icon Edit"
-            (click)="BtnCargarChacra()" class="profileContainer-detail-editar-button-icon">
-        </button>
-      </div>
-    </div>
-  </div>
   <app-searchbar (filter)="onFilter($event)" (clearFilter)="clearFilter()" [options]="options" [btnAdd]="'Chacras-p'"
     [placeholder]="'Buscar por Nombre de Chacra'"></app-searchbar>
   <app-card [dataView]="dataView" [listado]="chacras" [typeCard]="'chacra'"></app-card>

@@ -30,9 +30,8 @@ export class ChacrasComponent implements OnInit {
     { label: 'Localidad', field: 'address.location.name', tipoLabel: TipoLabel.span },
     { label: 'Hectarias', field: 'dimensions', tipoLabel: TipoLabel.span },
     { label: 'Descripción', field: 'observation', tipoLabel: TipoLabel.span },
-    //ver bien las rutas de ver geo y ver lote , trae siempre el mismo lote
-    { label: 'campoSeleccionado', field: '/dashboard-backoffice/chacras-lote', tipoLabel: TipoLabel.botonVerLote },
-    { label: 'selectedUser', field: 'url DEL BTN', tipoLabel: TipoLabel.botonGeo },
+    { label: 'chacraSeleccionada', field: '/dashboard-backoffice/chacras-lote', tipoLabel: TipoLabel.botonVerLote },
+    { label: 'chacraSeleccionada', field: '/dashboard-backoffice/chacras-geolocalizar', tipoLabel: TipoLabel.botonGeo },
 
   ]
   campoData = {
@@ -65,7 +64,7 @@ export class ChacrasComponent implements OnInit {
     ]);
 
     this.buttonConfigs = selectButtons([
-      'NUEVO_LOTE', 
+      'REGISTRAR_CHACRA_P', 
     ]); 
     this.cargarChacras();
     this.obtenerLocalidades();
@@ -73,8 +72,7 @@ export class ChacrasComponent implements OnInit {
  
 
 
-  onFilter(filtro: any) { 
-    console.log('filtro', filtro);
+  onFilter(filtro: any) {  
     const filterHandlers: { [key: string]: (value: any) => void } = {
       'Buscar por Localidad': (value) => this.filtrarPorLocalidad(value),
       'Buscar por Productor': (value) => this.filtrarPorProductor(value),
@@ -107,7 +105,7 @@ export class ChacrasComponent implements OnInit {
    
 
   cargarChacras() {
-    this.apiService.getUsersFields(0, 10, 'id', 'desc').subscribe(
+    this.apiService.getUsersFields(0, 500, 'id', 'desc').subscribe(
       (response) => {
         if (response.list && response.list.length > 0) {
           this.campos = response.list[0];
@@ -129,8 +127,7 @@ export class ChacrasComponent implements OnInit {
       (error) => {
         console.error('Error al obtener las localidades', error);
       }
-    );
-    console.log(this.localidades);
+    ); 
   }
 
   filtrarPorLocalidad(buscar: string) {
@@ -147,7 +144,7 @@ export class ChacrasComponent implements OnInit {
     }
     const locationId = localidadSeleccionada.id;
     this.apiService
-      .getUsersFields(0, 5, 'id', 'desc', true, '', '', locationId)
+      .getUsersFields(0, 500, 'id', 'desc', true, '', '', locationId)
       .subscribe(
         (response) => {
           if (response.list && response.list.length > 0) {
@@ -172,7 +169,7 @@ export class ChacrasComponent implements OnInit {
       return;
     }
     this.apiService
-      .getUsersFields(0, 5, 'id', 'desc', true, '', nombreChacra)
+      .getUsersFields(0, 500, 'id', 'desc', true, '', nombreChacra)
       .subscribe(
         (response) => {
           if (response.list && response.list.length > 0) {
@@ -199,7 +196,7 @@ export class ChacrasComponent implements OnInit {
     this.apiService
       .getUsersFields(
         0,
-        5,
+        500,
         'id',
         'desc',
         true,
@@ -236,7 +233,7 @@ export class ChacrasComponent implements OnInit {
     this.apiService
       .getUsersFields(
         0, // pageNo
-        5, // pageSize
+        500, // pageSize
         'id', // sortBy
         'desc', // sortDir
         true, // isActive

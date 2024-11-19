@@ -55,7 +55,7 @@ export class UsuariosFiltroComponent implements OnInit {
   templateUsers: User[]= [];
   length = 0;
   pageSizeLabel: string = 'Items por página:';
-  pageSize = 12;
+  pageSize = 500;
   pageIndex = 0;
   pageSizeOptions = [6, 12, 24, 36];
   showPageSizeOptions = true;

@@ -1,10 +1,7 @@
-import { Component, ViewChild, Output, EventEmitter } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { ApiService } from 'src/app/services/ApiService';
 import { ToastrService } from 'ngx-toastr';
-import { AuthService } from 'src/app/services/AuthService';
-import { Router, ActivatedRoute } from '@angular/router';
-import { jwtDecode } from 'jwt-decode';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import {
   FormControl,
@@ -13,12 +10,13 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { switchMap } from 'rxjs/operators';
 import { DialogComponent } from 'src/app/pages/dashboard/dialog/dialog.component';
 import {
   TipoLabel,
   DataView,
 } from 'src/app/shared/components/miniatura-listado/miniatura.model';
+import { selectButtons, selectFilters } from 'src/app/shared/components/dinamic-searchbar/dinamic-searchbar.config';
+import { ButtonConfig, FilterConfig } from 'src/app/models/searchbar.model';
 interface Lote {
   id: number;
   name: string;
@@ -33,62 +31,19 @@ interface Lote {
   type_crop_id?: number;
 }
 
-interface DatosUsuario {
-  accept_license: boolean;
-  account_active: boolean;
-  canEdit: boolean | null;
-  descriptions: string;
-  dni: string;
-  id: number;
-  lastname: string;
-  location: { id: number; name: string; department_id: number };
-  name: string;
-  telephone: string;
-  username: string;
-}
+ 
 @Component({
   selector: 'app-chacras-lote',
   templateUrl: './chacras-lote.component.html',
 })
 export class ChacrasLoteComponent {
   @Output() chacraSeleccionadoCambio = new EventEmitter<any>(); 
-  loteForm: FormGroup;
-  nombre: string = '';
-  apellido: string = '';
-  dni: string = '';
-  cultivos: any[] = [];
-  descriptions: string = '';
-  locationId: number | null = null;
-  telephone: string = '';
-  modoEdicion: boolean = false;
-  persona: any = {};
-  FieldId: number = 0;
-  localidades: any[] = [];
+  cultivos: any[] = []; 
+  locationId: number | null = null;  
+  FieldId: number = 0; 
   loteData: Lote[] = [];
-  filteredLocalidades: Observable<any[]> = new Observable<any[]>();
-  filtroLocalidades = new FormControl('');
-  email: string | null = null;
-  contacto: string | null = null;
+  loteTemplate : Lote[] = [];  
   private userId: number = 0;
-  private personId: number | any;
-  public userEmail: string | null = null;
-  options: string[] = ['Localidad', 'Productor', 'Cultivos', 'Hectareas'];
-  chacraData = {
-    name: '',
-    dimensions: '',
-    geolocation: '',
-    address: {
-      address: '',
-      location: '',
-    },
-  };
-  nameTouched = false;
-  dimensionsTouched = false;
-  geolocationTouched = false;
-  locationTouched = false;
-  addressTouched = false;
-  observationTouched = false;
-  chacraSeleccionado: any = {};
   dataView: DataView[] = [
     { label: '', field: 'assets/img/Chacra_1.png', tipoLabel: TipoLabel.imagen },
     { label: 'Nombre del Lote', field: 'name', tipoLabel: TipoLabel.span },
@@ -98,7 +53,7 @@ export class ChacrasLoteComponent {
     {
       label: 'previousPlantation',
       field: 'dashboard-backoffice/cargar-lotes',
-      tipoLabel: TipoLabel.botonEditar,
+      tipoLabel: TipoLabel.botonEditarDevolverObjeto,
     },
     {
       label: '',
@@ -106,174 +61,56 @@ export class ChacrasLoteComponent {
       tipoLabel: TipoLabel.botonEliminar,
     }
   ];
+  filterConfigs: FilterConfig[] = [];
+  buttonConfigs: ButtonConfig[] = [];
 
   constructor(
-    private authService: AuthService,
     private apiService: ApiService,
     private toastr: ToastrService,
-    private http: HttpClient,
     private router: Router,
-    private route: ActivatedRoute,
     private fb: FormBuilder,
     private dialog: MatDialog
-  ) {
-    this.loteForm = this.fb.group({
-      nombre: ['', Validators.required],
-      plantación: ['', Validators.required],
-      dimensions: ['', [Validators.required, Validators.min(0)]],
-      observation: [''],
-    });
-  }
+  ) {}
 
   ngOnInit(): void {
-    const perfilDataChacra = localStorage.getItem('idPerfilProd');
-    if (perfilDataChacra) {
-      const userId = parseInt(perfilDataChacra);
-      this.personId = userId;
-      this.DatosUser(userId, this.personId);
-    }
-    const userId = localStorage.getItem('idPerfilProd');
     const chacraSeleccionadaString = localStorage.getItem('chacraSeleccionada');
-
     if (chacraSeleccionadaString !== null) {
       const chacraSeleccionada = JSON.parse(chacraSeleccionadaString);
       this.FieldId = chacraSeleccionada.id;
+      this.userId = chacraSeleccionada.person_id;
     } else {
       console.error(
         'No se encontró la chacra seleccionada en el localStorage.'
       );
-    }
-
-    this.userId = userId ? parseInt(userId, 10) : 0;
-    this.cargarDatosDeUsuario();
+    } 
+    this.obtenerCultivos()
     this.loadDataLote(this.FieldId, this.userId);
+    this.filterConfigs = selectFilters([
+      'CULTIVO',
+      'HECTAREAS'
+       ]);
+
+    this.buttonConfigs = selectButtons([
+      'NUEVO_LOTE_P', 
+    ]);
   }
 
-  ngOnChanges(): void {
-    this.loadDataLote(this.FieldId, this.userId);
-  }
-
-  cargarDatosDeUsuario() {
-    this.personId = this.userId;
-    if (this.userId !== 0 && this.personId !== null) {
-      this.apiService
-        .getPersonByIdProductor(this.userId, this.personId)
-        .subscribe(
-          (data) => {
-            this.nombre = data.name;
-            this.apellido = data.lastname;
-            this.dni = data.dni;
-            this.descriptions = data.descriptions;
-            this.telephone = data.telephone;
-            const localidad = this.localidades.find(
-              (loc) => loc.id === data.location_id
-            );
-            this.locationId = localidad ? localidad.name.toString() : '';
-
-            if (this.userId !== 0) {
-              this.loadDataLote(this.FieldId, this.userId);
-            }
-          },
-          (error) => {
-            console.error(
-              'Error al obtener nombre y apellido del usuario:',
-              error
-            );
-          }
-        );
-    }
-  }
-  DatosUser(userId: number, personId: number) {
-    this.apiService.getPersonByIdProductor(userId, personId).subscribe(
-      (response: DatosUsuario) => {
-        // Verificar si la respuesta contiene datos
-        if (response) {
-          this.nombre = response.name;
-          this.apellido = response.lastname;
-          this.email = response.username;
-          this.contacto = response.telephone;
-        } else {
-          console.warn(
-            'No se encontraron datos de la persona en la respuesta:',
-            response
-          );
-        }
+ 
+ 
+  obtenerCultivos() {
+    this.apiService.getAllTypeCropOperador().subscribe(
+      (typeCrops: any) => {
+        this.cultivos = typeCrops.map((crop: any) => ({
+          id: crop.id,
+          name: crop.name,
+        })); 
       },
       (error) => {
-        console.error('Error al obtener los datos de la persona:', error);
+        console.error('Error al cargar los tipos de cultivo:', error);
       }
     );
   }
-  registrarLote(): void {
-    if (!this.userId) {
-      this.toastr.error('Error: No se ha identificado al usuario.', 'Error');
-      return;
-    }
-
-    if (this.loteForm.valid) {
-      const nameControl = this.loteForm.get('name');
-      const dimensionsControl = this.loteForm.get('dimensions');
-      const addressControl = this.loteForm.get('address');
-      const localidadControl = this.loteForm.get('localidad');
-      const observationControl = this.loteForm.get('observation');
-
-      if (
-        nameControl &&
-        dimensionsControl &&
-        addressControl &&
-        localidadControl &&
-        observationControl
-      ) {
-        const fixedGeolocation = "10°38'26'' - 10°38'26''";
-        const chacraData: any = {
-          name: nameControl.value,
-          dimensions: dimensionsControl.value,
-          geolocation: fixedGeolocation,
-          address: {
-            address: this.loteForm.get('address')?.value,
-            location_id: this.loteForm.get('localidad')?.value,
-          },
-          observation: observationControl?.value,
-        };
-
-        this.apiService.addField(this.userId, chacraData).subscribe(
-          () => {
-            this.toastr.success('chacra registrado con éxito', 'Éxito');
-            this.loteForm.reset();
-            this.router.navigate(['dashboard-backoffice/datalle-chacra']);
-          },
-          (error) => {
-            console.error('Error al registrar el chacra:', error);
-            if (error.error && error.error.message) {
-              this.toastr.error(
-                'Ya Existe un chacra registrado con este nombre.',
-                'Atención'
-              );
-            } else {
-              this.toastr.error(
-                'Error al registrar el chacra. Detalles: ' + error.message,
-                'Error'
-              );
-            }
-          }
-        );
-      } else {
-        console.error(
-          'Error: Al menos uno de los controles del formulario es nulo.'
-        );
-      }
-    } else {
-      this.toastr.error(
-        'Por favor, completa todos los chacras requeridos',
-        'Error'
-      );
-    }
-  }
-  btnEliminar(e : any){
-    console.log(e)
-    this.confirmarBorrado(e);
-    
-  }
+ 
   confirmarBorrado(lote: any): void {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '400px',
@@ -283,7 +120,6 @@ export class ChacrasLoteComponent {
         showCancel: true,
       },
     });
-
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.apiService
@@ -294,6 +130,7 @@ export class ChacrasLoteComponent {
               this.loteData = this.loteData.filter(
                 (item) => item.id !== lote.id
               );
+              this.loteTemplate = [...this.loteData];
             },
             (error) => {
               this.toastr.error('Error al borrar el lote', 'Error');
@@ -303,7 +140,7 @@ export class ChacrasLoteComponent {
     });
   }
 
-  loadDataLote(FieldId: number, userId: number): void {
+  loadDataLote(FieldId: number, userId: number): void { 
      if (userId && FieldId) {
       this.apiService.getPlotsOperador(userId, FieldId).subscribe(
         (response: any) => {
@@ -313,7 +150,6 @@ export class ChacrasLoteComponent {
               (acc, curr) => acc.concat(curr),
               []
             );
-
             if (data.length > 0) {
               this.apiService.getAllTypeCropOperador().subscribe(
                 (typeCrops: any) => {
@@ -324,12 +160,12 @@ export class ChacrasLoteComponent {
                     },
                     {}
                   );
-
                   data.forEach((lote: Lote) => {
                     lote.plant_name = lote.typeCrop ? lote.typeCrop.name : '';
                   });
 
                   this.loteData = data;
+                  this.loteTemplate = [...this.loteData];
                 },
                 (error) => {
                   console.error('Error al cargar los tipos de cultivo:', error);
@@ -355,15 +191,8 @@ export class ChacrasLoteComponent {
       );
     }
   }
- 
-  volver() {
-    this.router.navigate(['dashboard-backoffice/detalle-chacra']).then(() => {
-      this.loadDataLote(this.FieldId, this.userId);
-    });
-  }
 
   editarLote(lote: Lote): void {
-    this.modoEdicion = true;
     localStorage.setItem('plotId', lote.id.toString());
     localStorage.setItem('plotData', JSON.stringify(lote));
     localStorage.setItem('previousPlantation', lote.typeCrop.name);
@@ -372,231 +201,44 @@ export class ChacrasLoteComponent {
 
  
   clearFilter() {
-    this.cargarLotes();
+     this.loteTemplate = [... this.loteData]
   }
 
-  onFilter(filtro: any) {
-      switch (filtro.tipo) {
-      case 'Buscar por Localidad':
-        this.filtrarPorLocalidad(filtro.valor);
-        break;
-      case 'Buscar por Productor':
-        this.filtrarPorProductor(filtro.valor);
-        break;
-      case 'Buscar por Cultivos':
-        this.filtrarPorCultivo(filtro.valor);
-        break;
-      case 'Buscar por Hectáreas':
-        this.aplicarFiltroHectareas(filtro.min, filtro.max);
-        break;
-    } 
-  } 
-  filtrarPorLocalidad(idLocalidadSeleccionada : number) {
-    if (!idLocalidadSeleccionada) {
-      this.toastr.error('Por favor selecciona una localidad.', 'Error');
-      return;
-    }
-
-    this.apiService
-      .getAllPlotsAdmin(
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        idLocalidadSeleccionada
-      )
-      .subscribe(
-        (data: any) => {
-          if (data && data.list && data.list.length > 0) {
-            const lotsArray: Lote[][] = data.list[0];
-            const lotes: Lote[] = lotsArray.reduce(
-              (acc, curr) => acc.concat(curr),
-              []
-            );
-            this.processLoteData(lotes);
-          } else {
-            this.loteData = [];
-            this.toastr.info('Aún no se han agregado lotes.', 'Información');
-          }
-        },
-        (error) => {
-          console.error('Error al cargar los lotes:', error);
-          this.toastr.error('Error al cargar los lotes');
-        }
-      );
-  }
-
-  cargarLotes() {
-    this.apiService.getAllPlotsAdmin().subscribe(
-      (data: any) => {
-        if (data && data.list && data.list.length > 0) {
-          const lotsArray: Lote[][] = data.list[0];
-          const lotes: Lote[] = lotsArray.reduce(
-            (acc, curr) => acc.concat(curr),
-            []
-          );
-          this.processLoteData(lotes);
-        } else {
-          this.toastr.info('Aún no se han agregado lotes.', 'Información');
-        }
-      },
-      (error) => {
-        console.error('Error al cargar los lotes:', error);
-        this.toastr.error('Error al cargar los lotes');
-      }
-    );
-  }
-  processLoteData(data: Lote[]): void {
-    this.apiService.getAllTypeCropOperador().subscribe(
-      (typeCrops: any) => {
-        const typeCropsMap = typeCrops.reduce((acc: any, curr: any) => {
-          acc[curr.id] = curr.name;
-          return acc;
-        }, {});
-
-        data.forEach((lote: Lote) => {
-          if (lote.typeCrop && lote.typeCrop.id !== undefined) {
-            lote.plant_name = typeCropsMap[lote.typeCrop.id] || '';
-          } else {
-            lote.plant_name = '';
-          }
-        });
-
-        this.loteData = data;
-      },
-      (error) => {
-        console.error('Error al cargar los tipos de cultivo:', error);
-      }
-    );
-  } 
-  filtrarPorProductor( nombreProductor: string) {
-    if (nombreProductor) {
-      this.apiService
-        .getAllPlotsAdmin(
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          nombreProductor
-        )
-        .subscribe(
-          (data: any) => {
-            if (data && data.list && data.list.length > 0) {
-              const lotsArray: Lote[][] = data.list[0];
-              const lotes: Lote[] = lotsArray.reduce(
-                (acc, curr) => acc.concat(curr),
-                []
-              );
-              this.processLoteData(lotes);
-            } else {
-              this.toastr.info(
-                'No se encontraron lotes para el productor especificado.',
-                'Información'
-              );
-              this.loteData = [];
-            }
-          },
-          (error) => {
-            console.error('Error al filtrar los lotes por productor:', error);
-            this.toastr.error('Error al filtrar los lotes por productor');
-          }
-        );
+  onFilter(filtro: any) { 
+    const filterHandlers: { [key: string]: (value: any) => void } = {
+      'Buscar por Cultivo': (value) => this.filtrarPorCultivo(value),
+      'Buscar por Hectáreas': (value) => this.aplicarFiltroHectareas(filtro.min,filtro.max), 
+    };
+    const handler = filterHandlers[filtro.type];
+    
+    if (handler) {
+      handler(filtro.value);
+    } else {
+      console.warn(`No se encontró un manejador para el filtro tipo: ${filtro.type}`);
     }
   }
-
-  filtrarPorCultivo(cropId: string | undefined = undefined) {
-    if (cropId) {
-       const cultivoId = (this.cultivos.find((cultivo) => cultivo.name === cropId)?.id)?.toString();
-      this.apiService
-        .getAllPlotsAdmin(
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          cultivoId
-        )
-        .subscribe(
-          (data: any) => {
-            console.log('los que trae el enpoint cultivos', data);
-            if (data && data.list && data.list.length > 0) {
-              const lotsArray: Lote[][] = data.list[0];
-              const lotes: Lote[] = lotsArray.reduce(
-                (acc, curr) => acc.concat(curr),
-                []
-              );
-              this.processLoteData(lotes);
-            } else {
-              this.toastr.info(
-                'No se encontraron lotes para el cultivo buscado.',
-                'Información'
-              );
-              this.loteData = [];
-            }
-          },
-          (error) => {
-            console.error('Error al filtrar los lotes por cultivo:', error);
-            this.toastr.error('Error al filtrar los lotes por cultivo');
-          }
-        );
-    }
-  }
-
  
+  filtrarPorCultivo(cropId: number | undefined = undefined) {   
+    if (cropId) {
+      this.loteTemplate = this.loteData.filter( (lote) => {
+      return (lote.typeCrop.id === cropId)
+    }); 
+    this.loteTemplate ? this.toastr.info('No se encontraron lotes para el cultivo buscado.', 'Información') : this.loteTemplate = [];
+    }
+  }
+
 
   aplicarFiltroHectareas(minHectareas: number, maxHectareas: number) {
-    if (!minHectareas || !maxHectareas) {
+   if (!minHectareas || !maxHectareas) {
       this.toastr.warning(
         'Por favor ingresa los valores mínimo y máximo de hectáreas.',
         'Advertencia'
       );
       return;
     }
-
-    this.apiService
-      .getAllPlotsAdmin(
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        minHectareas.toString(),
-        maxHectareas.toString()
-      )
-      .subscribe(
-        (data: any) => {
-          if (data && data.list && data.list.length > 0) {
-            const lotsArray: Lote[][] = data.list[0];
-            const lotes: Lote[] = lotsArray.reduce(
-              (acc, curr) => acc.concat(curr),
-              []
-            );
-            this.processLoteData(lotes);
-          } else {
-            this.toastr.info(
-              'No se encontraron lotes dentro del rango de hectáreas especificado.',
-              'Información'
-            );
-            this.loteData = [];
-          }
-        },
-        (error) => {
-          console.error(
-            'Error al filtrar los lotes por rango de hectáreas:',
-            error
-          );
-          this.toastr.error(
-            'El valor mínimo de hectáreas no puede ser mayor que el valor máximo.',
-            'Error al intentar filtrar'
-          );
-        }
-      );
+    this.loteTemplate = this.loteData.filter( (lote) => {
+      return (lote.dimensions >= minHectareas && lote.dimensions <= maxHectareas)
+    });
+    this.loteTemplate ? this.toastr.info('No se encontraron lotes dentro del rango de hectáreas especificado.', 'Información') : this.loteTemplate = [];
   }
 }

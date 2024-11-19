@@ -112,6 +112,12 @@ export const FILTER_CONFIGS: { [key: string]: FilterConfig } = {
       icon: 'add',
       class: 'primary-button-auto'
     },
+    NUEVO_LOTE_P: {
+      label: 'Agregar Lote',
+      route: '/dashboard-backoffice/cargar-lotes',
+      icon: 'add',
+      class: 'primary-button-auto'
+    },
     NUEVO_USUARIO_ROLE:{
       label: 'Nuevo Usuario',
       route: 'dashboard-backoffice/usuarios',
@@ -147,6 +153,18 @@ export const FILTER_CONFIGS: { [key: string]: FilterConfig } = {
         route: 'dashboard-backoffice/configuracion/insumo',
         icon: 'add',
         class: 'primary-button-auto'
+    },
+    NUEVO_SERVICIO: {
+      label: 'Nuevo Servicio',
+      route: '/dashboard/servicios/nuevo',
+      icon: 'add',
+      class: 'primary-button-auto'
+    },
+    NUEVO_SERVICIO_BACKOFFICE: {
+      label: 'Nuevo Servicio',
+      route: '/dashboard-backoffice/servicios/nuevo',
+      icon: 'add',
+      class: 'primary-button-auto'
     }
   };
   

@@ -257,7 +257,7 @@ export class CargarLotesComponent implements OnInit {
           localStorage.removeItem('plotId');
           localStorage.removeItem('plotData');
           localStorage.removeItem('previousPlantation');
-          this.router.navigate(['dashboard-backoffice/chacras-lote']);
+          window.history.back();
         },
         (error) => {
           console.error('Error al actualizar el lote:', error);
@@ -270,6 +270,6 @@ export class CargarLotesComponent implements OnInit {
   }
 
   cancelar() {
-    this.router.navigate(['dashboard-backoffice/chacras-lote']);
+    window.history.back();
   }
 }

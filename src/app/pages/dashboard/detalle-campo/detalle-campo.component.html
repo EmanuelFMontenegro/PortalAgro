@@ -1,25 +1,56 @@
+<!-- detalle-campo.component.html -->
 <div class="mainStructure">
   <app-header-inner [title]="'Detalle de Chacra'" [backButton]="true"></app-header-inner>
   <div class="ContainerLocation">
     <div class="ContainerLocation-map">
-      <div id="map" *ngIf="mostrarMapaPrincipal"></div>
-      <div  *ngIf="mostrarImagenPrincipal">
-        <img src="/assets/img/imagen_no_geolocation.png" style="width: 400px;
-    height: 400px;">
+      <div #map class="location-map" style="height: 400px; width: 100%;"></div>
     </div>
-    <div>
-    </div>
-  </div>
-  <div class="ContainerLocation-chacra">
-    <h4 class="ContainerLocation-chacra-h4">{{ campoSeleccionado.name }}</h4>
-      <div class="ContainerLocation-chacra-details grow-1 ">
-        <p> <strong>Localidad :</strong> {{ campoSeleccionado.address.location.name }}  <img src="assets/img/location.svg" alt="Icono" class="icono_location"></p>
-        <p> <strong>Dirección : </strong> {{ campoSeleccionado.address.address }} </p>
-        <p> <strong>Hectáreas : </strong> {{ campoSeleccionado.dimensions }} </p>
-        <p> <strong>Descripción : </strong>  {{ campoSeleccionado.observation }} </p>
-      </div>
+    <div class="ContainerLocation-chacra">
+      <ng-container *ngIf="campoSeleccionado?.name; else noCampo">
+        <div class="ContainerLocation-chacra-details grow-1">
+          <h4 class="ContainerLocation-chacra-h4">{{ campoSeleccionado.name }}</h4>
+          <p class="font-16 margin-block-12 relative dot">
+            <strong class="margin-inline-12">Localidad:</strong> 
+            {{ campoSeleccionado.address?.location?.name }}
+            <img src="assets/img/location.svg" alt="Icono" class="icono_location">
+          </p>
+          <p class="font-16 margin-block-12 relative dot">
+            <strong class="margin-inline-12">Dirección:</strong> 
+            {{ campoSeleccionado.address?.address }}
+          </p>
+          <p class="font-16 margin-block-12 relative dot">
+            <strong class="margin-inline-12">Hectáreas:</strong> 
+            {{ campoSeleccionado.dimensions }} m2
+          </p>
+          <p class="font-16 margin-block-12 relative dot">
+            <strong class="margin-inline-12">Descripción:</strong> 
+            {{ campoSeleccionado.observation || 'Sin descripción' }}
+          </p>
+        </div>
+
         <div class="ContainerLocation-chacra-buttons">
-        <button class="primary-button-auto size-48 basis-300"  mat-raised-button (click)="geolocalizar()">Editar Geolocalización</button>
-      </div>
+          <button mat-raised-button 
+                  class="primary-button-auto size-48 basis-300" 
+                  (click)="geolocalizar()">
+            Editar Geolocalización
+          </button>
+        </div>
+      </ng-container>
+
+      <ng-template #noCampo>
+        <div class="alert alert-warning">
+          <div class="alert-content">
+            <mat-icon>warning</mat-icon>
+            <span>No hay campo seleccionado. Por favor, seleccione un campo primero.</span>
+          </div>
+        </div> 
+        <button mat-raised-button 
+                class="primary-button-auto size-48"
+                color="primary" 
+                (click)="volver()">
+          Volver
+        </button> 
+      </ng-template>
+    </div>
   </div>
 </div>

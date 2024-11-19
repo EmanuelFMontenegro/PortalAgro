@@ -2,81 +2,154 @@
   <app-header-inner [title]="'Nuevo Usuario'" [backButton]="true"></app-header-inner>
   <div class="profileContainer">
     <div class="profileContainer-personalData">
-      <div class="profileContainer-personalData-title"> Información Personal </div>
-    <form class="FullForm" [formGroup]="userDetailsForm">
-      <div class="profileContainer-personalData-content">
-        <div class="profileContainer-personalData-content-item margin-btm-0">
-          <div class="FullForm-control margin-btm-0">
-            <label class="FormLabel margin-btm-6" for="usuario">Usuario</label>
-            <input class="FormInput" matInput  formControlName="usuario" id="usuario" autocomplete="new-username">
+      <div class="profileContainer-personalData-title">Información Personal</div>
+      <form class="FullForm" [formGroup]="userDetailsForm">
+        <div class="profileContainer-personalData-content">
+          <!-- Usuario -->
+          <div class="profileContainer-personalData-content-item margin-btm-0">
+            <div class="FullForm-control margin-btm-0">
+              <label class="FormLabel margin-btm-6" for="usuario">Usuario</label>
+              <input class="FormInput" matInput formControlName="usuario" id="usuario" autocomplete="new-username">
+              <mat-error *ngIf="userDetailsForm.get('usuario')?.touched && userDetailsForm.get('usuario')?.errors">
+                <span *ngIf="userDetailsForm.get('usuario')?.hasError('required')">
+                  El correo electrónico es requerido
+                </span>
+                <span *ngIf="userDetailsForm.get('usuario')?.hasError('email')">
+                  Debe ser una dirección de correo electrónico válida
+                </span>
+              </mat-error>
+            </div>
           </div>
-        </div>
-        <div class="profileContainer-personalData-content-item margin-btm-0">
-          <div class="FullForm-control margin-btm-0">
-            <label class="FormLabel margin-btm-6" for="password">Contraseña</label>
-            <input  class="FormInput" matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'" id="password"
-                  autocomplete="new-password" (click)="togglePasswordVisibility()">
-          </div>
-        </div>  
-        <div class="profileContainer-personalData-content-item margin-btm-0">
-          <div class="FullForm-control margin-btm-0">
-            <label class="FormLabel margin-btm-6" for="nombre">Nombre</label>
-            <input class="FormInput" matInput  formControlName="nombre" id="nombre">
-          </div>
-        </div>
-        <div class="profileContainer-personalData-content-item margin-btm-0">
-          <div class="FullForm-control margin-btm-0">
-            <label class="FormLabel margin-btm-6" for="apellido">Apellido</label>
-            <input class="FormInput" matInput  formControlName="apellido" id="apellido">
-          </div>
-        </div>
-        <div class="profileContainer-personalData-content-item margin-btm-0">
-          <div class="FullForm-control margin-btm-0">
-            <label class="FormLabel margin-btm-6" for="localidad">Localidad</label>
-            <mat-select style="height: 45px !important;" placeholder="Seleccionar localidad" class="FormInput"  formControlName="localidad" >
-              <mat-option *ngFor="let loc of filteredLocalidades | async" [value]="loc.name">
-                {{ loc.name }}
-              </mat-option>
-            </mat-select>
-          </div>
-        </div>
-        <div class="profileContainer-personalData-content-item margin-btm-0">
-          <div class="FullForm-control margin-btm-0">
-            <label class="FormLabel margin-btm-6" for="dni">DNI / CUIT</label>
-          <input class="FormInput" matInput  formControlName="dni" id="dni">
-        </div>
-      </div>
-        <div class="profileContainer-personalData-content-item margin-btm-0">
-          <div class="FullForm-control margin-btm-0">
-            <label class="FormLabel margin-btm-6" for="contacto">Contacto</label>
-            <input class="FormInput" matInput  formControlName="contacto" id="contacto">
-          </div>
-        </div>
-        <div style="width: 100%;flex-direction: row;
-        gap: 8px;
-        align-items: center;display:flex;padding-top: 10px;">
-           
-          <mat-checkbox formControlName="isPreAcceptTherms"></mat-checkbox>
-          <label class="field-label" for="isPreAcceptTherms">Aceptar términos</label>
-    
-          <mat-checkbox formControlName="isPreActivate"></mat-checkbox>
-          <label class="field-label" for="isPreActivate">Activar cuenta</label>
-        </div> 
-      </div>
-    </form>
-  </div>
-  <div class="profileContainer-aditionalData">
-    <div class="profileContainer-aditionalData-title">Información Adicional</div>
-    <form   [formGroup]="userDetailsForm">
-        <div class="FullForm-control margin-btm-0">
-        <textarea matInput class="FormTextarea"  formControlName="descripcion"></textarea>
-      </div>
-    </form>
-  </div>  
 
-  <div class="FullForm-buttonsToRight">
-    <button mat-button   class="secondary-button-custom size-48" type="button" (click)="cancelar()">Cancelar</button>
-    <button  mat-raised-button appearance="outline"  class="primary-button-custom size-48"  (click)="cargarNuevoUsuario()">Guardar Cambios</button>
-</div>
+          <!-- Contraseña -->
+          <div class="profileContainer-personalData-content-item margin-btm-0">
+            <div class="FullForm-control margin-btm-0">
+              <label class="FormLabel margin-btm-6" for="password">Contraseña</label>
+              <input class="FormInput" matInput formControlName="password" type="text" 
+                     id="password" autocomplete="new-password" (click)="togglePasswordVisibility()">
+                     <mat-error *ngIf="userDetailsForm.get('password')?.touched && userDetailsForm.get('password')?.errors">
+                      <span *ngIf="userDetailsForm.get('password')?.hasError('required')">
+                        La contraseña es requerida
+                      </span>
+                      <span *ngIf="userDetailsForm.get('password')?.hasError('minlength')">
+                        La contraseña debe tener al menos 8 caracteres
+                      </span>
+                      <span *ngIf="userDetailsForm.get('password')?.hasError('maxlength')">
+                        La contraseña no debe exceder los 30 caracteres
+                      </span>
+                      <span *ngIf="userDetailsForm.get('password')?.hasError('pattern')">
+                        La contraseña debe contener al menos una minúscula, una mayúscula y un número
+                      </span>
+                    </mat-error>
+            </div>
+          </div>
+
+          <!-- Nombre -->
+          <div class="profileContainer-personalData-content-item margin-btm-0">
+            <div class="FullForm-control margin-btm-0">
+              <label class="FormLabel margin-btm-6" for="nombre">Nombre</label>
+              <input class="FormInput" matInput formControlName="nombre" id="nombre">
+              <mat-error *ngIf="userDetailsForm.get('nombre')?.touched && userDetailsForm.get('nombre')?.errors">
+                <span *ngIf="userDetailsForm.get('nombre')?.hasError('required')">El nombre es requerido</span>
+                <span *ngIf="userDetailsForm.get('nombre')?.hasError('maxlength')">Máximo 20 caracteres</span>
+                <span *ngIf="userDetailsForm.get('nombre')?.hasError('pattern')">Solo se permiten letras</span>
+              </mat-error>
+            </div>
+          </div>
+
+          <!-- Apellido -->
+          <div class="profileContainer-personalData-content-item margin-btm-0">
+            <div class="FullForm-control margin-btm-0">
+              <label class="FormLabel margin-btm-6" for="apellido">Apellido</label>
+              <input class="FormInput" matInput formControlName="apellido" id="apellido">
+              <mat-error *ngIf="userDetailsForm.get('apellido')?.touched && userDetailsForm.get('apellido')?.errors">
+                <span *ngIf="userDetailsForm.get('apellido')?.hasError('required')">El apellido es requerido</span>
+                <span *ngIf="userDetailsForm.get('apellido')?.hasError('maxlength')">Máximo 20 caracteres</span>
+                <span *ngIf="userDetailsForm.get('apellido')?.hasError('pattern')">Solo se permiten letras</span>
+              </mat-error>
+            </div>
+          </div>
+
+          <!-- Localidad -->
+          <div class="profileContainer-personalData-content-item margin-btm-0">
+            <div class="FullForm-control margin-btm-0">
+              <label class="FormLabel margin-btm-6" for="localidad">Localidad</label>
+              <mat-select style="height: 45px !important;" placeholder="Seleccionar localidad" 
+                         class="FormInput" formControlName="localidad">
+                <mat-option *ngFor="let loc of filteredLocalidades | async" [value]="loc.id">
+                  {{ loc.name }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="userDetailsForm.get('localidad')?.touched && userDetailsForm.get('localidad')?.hasError('required')">
+                La localidad es requerida
+              </mat-error>
+            </div>
+          </div>
+
+          <!-- DNI/CUIT -->
+          <div class="profileContainer-personalData-content-item margin-btm-0">
+            <div class="FullForm-control margin-btm-0">
+              <label class="FormLabel margin-btm-6" for="dni">DNI / CUIT</label>
+              <input class="FormInput" matInput formControlName="dni" id="dni">
+              <mat-error *ngIf="userDetailsForm.get('dni')?.touched && userDetailsForm.get('dni')?.errors">
+                <span *ngIf="userDetailsForm.get('dni')?.hasError('required')">
+                  El DNI es requerido
+                </span>
+                <span *ngIf="userDetailsForm.get('dni')?.hasError('pattern') || 
+                             userDetailsForm.get('dni')?.hasError('minlength') || 
+                             userDetailsForm.get('dni')?.hasError('maxlength')">
+                  El DNI debe contener solo números, sin puntos, entre 7 y 8 caracteres
+                </span>
+              </mat-error>
+            </div>
+          </div>
+
+          <!-- Contacto -->
+          <div class="profileContainer-personalData-content-item margin-btm-0">
+            <div class="FullForm-control margin-btm-0">
+              <label class="FormLabel margin-btm-6" for="contacto">Contacto</label>
+              <input class="FormInput" matInput formControlName="contacto" id="contacto">
+              <mat-error *ngIf="userDetailsForm.get('contacto')?.touched && userDetailsForm.get('contacto')?.errors">
+                <span *ngIf="userDetailsForm.get('contacto')?.hasError('required')">El contacto es requerido</span>
+                <span *ngIf="userDetailsForm.get('contacto')?.hasError('minlength')">Mínimo 10 números</span>
+                <span *ngIf="userDetailsForm.get('contacto')?.hasError('maxlength')">Máximo 12 números</span>
+                <span *ngIf="userDetailsForm.get('contacto')?.hasError('pattern')">Solo se permiten números</span>
+              </mat-error>
+            </div>
+          </div>
+
+          <!-- Checkboxes -->
+          <div style="width: 100%;flex-direction: row; gap: 8px; align-items: center;display:flex;padding-top: 10px;">
+            <mat-checkbox formControlName="isPreAcceptTherms"></mat-checkbox>
+            <label class="FormLabel" for="isPreAcceptTherms">Aceptar términos</label>
+
+            <mat-checkbox formControlName="isPreActivate"></mat-checkbox>
+            <label class="FormLabel" for="isPreActivate">Activar cuenta</label>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Información Adicional -->
+    <div class="profileContainer-aditionalData">
+      <div class="profileContainer-aditionalData-title">Información Adicional</div>
+      <form [formGroup]="userDetailsForm">
+        <div class="FullForm-control margin-btm-0">
+          <textarea matInput class="FormTextarea" formControlName="descripcion"></textarea>
+        </div>
+      </form>
+    </div>
+
+    <!-- Botones -->
+    <div class="FullForm-buttonsToRight">
+      <button mat-button class="secondary-button-custom size-48" type="button" (click)="cancelar()">
+        Cancelar
+      </button>
+      <button mat-raised-button appearance="outline" class="primary-button-custom size-48" 
+              [disabled]="!userDetailsForm.valid"
+              (click)="cargarNuevoUsuario()">
+        Guardar Cambios
+      </button>
+    </div>
   </div>
 </div>

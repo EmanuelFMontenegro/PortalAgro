@@ -219,10 +219,10 @@ export class CargarChacrasComponent implements OnInit {
   }
 
   volver() {
-    this.router.navigate(['dashboard-backoffice/perfil-productor']);
+    window.history.back()
   }
 
   cancelar() {
-    this.router.navigate(['dashboard-backoffice/chacras-perfil']);
+    window.history.back()
   }
 }

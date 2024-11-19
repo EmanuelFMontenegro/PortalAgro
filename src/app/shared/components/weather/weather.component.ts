@@ -34,8 +34,7 @@ export class WeatherComponent implements OnInit {
       takeUntil(this.destroy$)).subscribe((response: any) => {
       this.weather = response;
       this.location = this.weather.location;
-      this.forecastToday = {...this.weather.forecast.forecastday[0], ...this.weather.current}; 
-      console.log(this.forecastToday);
+      this.forecastToday = {...this.weather.forecast.forecastday[0], ...this.weather.current};  
 
     });
   }

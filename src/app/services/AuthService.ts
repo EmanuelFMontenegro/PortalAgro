@@ -67,7 +67,7 @@ export class AuthService {
     try {
       // si falla la decodificación
       const decoded: any = jwtDecode(token);
-      this.userLogeed = decoded;
+      this.userLogeed = decoded; 
       return this.userLogeed;
     } catch (error) {
       console.error('Error al decodificar el token:', error);

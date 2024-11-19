@@ -25,10 +25,7 @@ export class AddEditServicioComponent {
     private dialog: MatDialog,
     private toastr: ToastrService,
     private servicioInterno: ServicioInterno,
-    private authService: AuthService,
-    public dashboardBackOffice: DashboardBackOfficeService) {
-    this.dashboardBackOffice.dataTitulo.next({ titulo: this.edit ? 'Editar servicio' : 'Nuevo servicio', subTitulo: '' })
-  }
+    private authService: AuthService) {}
 
   // controlNames
   ctrlProductor = 'producer_id';
@@ -160,6 +157,7 @@ export class AddEditServicioComponent {
   }
 
   solicitarServicio() {
+    console.log(this.form)
 
     if(this.form.invalid){
       this.toastr.info('Faltan campos requeridos', 'Información');

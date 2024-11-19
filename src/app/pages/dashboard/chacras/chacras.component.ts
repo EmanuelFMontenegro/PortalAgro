@@ -254,6 +254,7 @@ export class ChacrasComponent implements OnInit {
     this.router.navigate(['dashboard/inicio']);
   }
   verLotes(campo: any): void {
+    console.log(campo);
     this.campoSeleccionado = campo;
     localStorage.setItem(
       'campoSeleccionado',

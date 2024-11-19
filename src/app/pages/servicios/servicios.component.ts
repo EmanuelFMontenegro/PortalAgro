@@ -9,6 +9,8 @@ import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/AuthService';
 import { jwtDecode } from 'jwt-decode';
 import { ServicioInterno } from './servicios-interno.service';
+import { selectButtons, selectFilters } from 'src/app/shared/components/dinamic-searchbar/dinamic-searchbar.config';
+import { ButtonConfig, FilterConfig } from 'src/app/models/searchbar.model';
 
 @Component({
   selector: 'app-servicios',
@@ -17,6 +19,8 @@ import { ServicioInterno } from './servicios-interno.service';
   encapsulation: ViewEncapsulation.None
 })
 export class ServiciosComponent {
+  buttonConfigs: ButtonConfig[] = [];
+  filterConfigs: FilterConfig[] = [];
   constructor(
     public serviciosService: ServiciosService,
     private apiService: ApiService,
@@ -44,11 +48,20 @@ export class ServiciosComponent {
   chacras: any[] = []; // ELIMINAR
 
   ngOnInit(): void {
+   
     this.servicioInterno.comprobarUrlBackOffice()
     this.isBackOffice()
     this.setUrlVerMas();
     this.getServicios();
     this.getUserConPermisos()
+    this.filterConfigs = selectFilters([
+      'CULTIVO' // este es para mostrarte como seria un ejemplo sin input, borra nomas despues
+    ]);
+    let btnType = this.backOffice ? 'NUEVO_SERVICIO_BACKOFFICE' : 'NUEVO_SERVICIO';
+    console.log(btnType)
+    this.buttonConfigs = selectButtons([
+      btnType, 
+    ]);
   }
 
   ngOnDestroy(): void {
@@ -96,6 +109,7 @@ export class ServiciosComponent {
         field: 'jobOperator.employee.name',
         tipoLabel: TipoLabel.span,
       },
+      
       {
         label: 'servicio',
         field: this.urlBase + '/servicios/',
@@ -165,14 +179,16 @@ export class ServiciosComponent {
     );
   }
 
-  filtrar() {
-    if (!this.opcionSeleccionada) {
+ 
+  onFilter(filtro: any){
+    if (!filtro.value) {
       this.toastr.info('Selecione un tipo de cultivo.', 'Información');
     } else {
-      let crop_id: number = this.opcionSeleccionada;
+      let crop_id: number = filtro.value;
       this.listado = this.lotesOriginal.filter((x) => x.typeCrop.id== crop_id);
     }
   }
+   
 
   limpiarSeleccion(){
     this.listado = this.lotesOriginal;
@@ -181,10 +197,7 @@ export class ServiciosComponent {
     }, 50);
   }
 
-  nuevo() {
-    this.router.navigate([this.urlBase + '/servicios/nuevo']);
-  }
-
+ 
   getCultivos() {
     this.apiService.getAllTypeCropOperador().subscribe(
       (typeCrops: any) => {

@@ -1,35 +1,16 @@
 
-<div class="container card-normal">
+<div class="mainStructure">
+  <app-header-inner [title]="'Solicitudes y Servicios'" [backButton]="true"></app-header-inner>
+  <app-dinamic-searchbar
+  [filterConfigs]="filterConfigs"
+  [buttonConfigs]="buttonConfigs"
+  [cultivosOptions]="cultivos"
+  (filter)="onFilter($event)"
+  (clearFilter)="limpiarSeleccion()">
+  </app-dinamic-searchbar>
 
-  <div class="header-container2 en-linea">
-    <h2 class="title2">Solicitudes y servicios</h2>
-  </div>
-  <br>
-  <div class="field-container" >
-    <div class="en-linea">
-      <div class="field-container w-50">
-        <mat-select class="field-input" placeholder="Seleccione un tipo de plantación" (selectionChange)="filtrar()" [(value)]="opcionSeleccionada">
-          <mat-option *ngFor="let cultivo of cultivos" [value]="cultivo.id">
-            <mat-icon matTooltip="Limpiar" (click)="limpiarSeleccion()" *ngIf="cultivo.id === opcionSeleccionada" class="limpiarSeleccion" (click)="limpiarSeleccion()">
-             close
-            </mat-icon>
-            {{ cultivo.name }}
-          </mat-option>
-        </mat-select>
-      </div>
-      <div class="field-container text-c">
-        <!-- <button mat-raised-button class="back-button2" (click)="filtrar()" >Filtrar
-          </button> -->
-        <button *ngIf="crearServicio" mat-raised-button class="back-button2" [ngClass]="{'service-backOffice': this.backOffice}" (click)="nuevo()" >Solicitar
-          </button>
-      </div>
-    </div>
-  </div>
-
-  <strong *ngIf="this.listado.length"> Resultados encontrados ({{this.listado.length}})</strong>
-
-  <ng-container *ngIf="this.listado.length else listadoVacio">
-    <miniatura [dataView]="dataView" [listado]="listado"></miniatura>
+  <ng-container *ngIf="this.listado.length else listadoVacio"> 
+     <app-card [dataView]="dataView" [listado]="listado" [typeCard]="'lote'"></app-card>
   </ng-container>
 
   <ng-template #listadoVacio>

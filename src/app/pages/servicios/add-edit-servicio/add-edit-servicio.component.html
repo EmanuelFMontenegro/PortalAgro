@@ -1,77 +1,119 @@
-<div class="container card-normal">
-
-    <div class="header-container2 en-linea">
-      <h2 class="title2">Solicitar Nuevos Servicios</h2>
-      <button class="back-button2 r-button" [ngClass]="{'service-backOffice': this.backOffice}" (click)="volver()"> << Volver Atrás</button>
-    </div>
-
-    <div class="subheader-container en-linea w-100">
-      <h4 class="subtitle">Para comenzar seleccionar una chacra</h4>
-    </div>
-    <br>
-    <form [formGroup]="form" *ngIf="form">
-      <mat-card class="main-card">
-      <div class="card-uno">
-        <div class="search-container button-seleccionar" *ngIf="this.form.controls[this.ctrlChacra].value !== null || (this.form.controls[this.ctrlProductor]?.value && this.backOffice)">
-          <button class="back-button2 register-button" [ngClass]="{'service-backOffice': this.backOffice}" (click)="limpiarSeleccion()"> Limpiar selección</button>
-        </div>
-        <div class="en-linea" *ngIf="this.backOffice">
-          <div class="field-container w-100">
-            <mat-label class="field-label">Productor</mat-label>
-            <mat-select class="field-input" [formControlName]="this.ctrlProductor" placeholder="Seleccionar un productor" name="productor" (selectionChange)="seleccionarProductor()">
-              <mat-option *ngFor="let productor of productores" [value]="productor.id">{{ productor?.name + ' ' + productor?.lastname }}</mat-option>
-            </mat-select>
-          <mat-error *ngIf="form.controls[this.ctrlProductor]?.invalid && form.controls[this.ctrlProductor]?.touched">* Campo requerido</mat-error>
-          </div>
-        </div>
-        <div class="en-linea" *ngIf="this.form.controls[this.ctrlProductor]?.value || !this.backOffice">
-          <div class="field-container w-100">
-            <mat-label class="field-label">Chacra</mat-label>
-            <mat-select class="field-input" [formControlName]="this.ctrlChacra" placeholder="Seleccionar una chacra" name="chacra" (selectionChange)="seleccionarChacra()">
-              <mat-option *ngFor="let chacra of chacras" [value]="chacra.id">{{ chacra?.name }}</mat-option>
-            </mat-select>
-          <mat-error *ngIf="form.controls[this.ctrlChacra]?.invalid && form.controls[this.ctrlChacra]?.touched">* Campo requerido</mat-error>
-          </div>
-        </div>
-        <div class="en-linea" *ngIf="this.form.controls[this.ctrlChacra]?.value && this.lotesOriginales?.length">
-        <div class="field-container w-100" >
-          <mat-label class="field-label">Cultivo</mat-label>
-          <mat-select class="field-input"  [formControlName]="this.ctrlCultivo"  placeholder="Seleccione un cultivo" name="cultivo" (selectionChange)="seleccionarCultivo()">
-            <mat-option *ngFor="let cultivo of cultivos" [value]="cultivo.id">{{ cultivo.name }}</mat-option>
-          </mat-select>
-          <mat-error  *ngIf="form.controls[this.ctrlCultivo]?.invalid && form.controls[this.ctrlCultivo]?.touched" >* Campo requerido</mat-error>
-        </div>
-       </div>
-        <div class="field-container" *ngIf="this.form.controls[this.ctrlCultivo]?.value && this.lotes?.length">
-          <mat-label class="field-label">Lotes</mat-label>
-          <mat-select [multiple]="true"  class="field-input"  [formControlName]="this.ctrlLote"  placeholder="Seleccione los lotes" name="lote">
-            <mat-option *ngFor="let lote of lotes" [value]="lote.id">{{ lote?.name }}</mat-option>
-          </mat-select>
-          <mat-error *ngIf="form.controls[this.ctrlLote]?.invalid && form.controls[this.ctrlLote]?.touched" >* Campo requerido</mat-error>
-        </div>
+<div class="mainStructure">
+  <app-header-inner [title]="'Solicitar nuevo Servicio'" [backButton]="true"></app-header-inner>
+    <app-weather></app-weather>
+    <form class="FullForm" [formGroup]="form" *ngIf="form">
+      <!-- Botón Limpiar -->
+      <div class="FullForm-buttonsToRight" *ngIf="this.form.controls[this.ctrlChacra].value !== null || (this.form.controls[this.ctrlProductor]?.value && this.backOffice)">
+        <button class="primary-button-custom size-48" mat-raised-button 
+        appearance="outline" (click)="limpiarSeleccion()">
+          Limpiar selección
+        </button>
       </div>
-
-      <div class="en-linea">
-      <div class="field-container w-50">
-        <mat-label class="field-label">Hectáreas</mat-label>
-        <input type="number" [formControlName]="this.ctrlHectareas"  class="field-input" name="hectareas"
-        placeholder="Hectáreas" min="1" max="999999" >
+    
+      <!-- Selector de Productor -->
+      <div class="FullForm-control" *ngIf="this.backOffice">
+        <label class="FormLabel">Productor</label>
+        <mat-select class="FormInput" 
+                   [formControlName]="this.ctrlProductor" 
+                   placeholder="Seleccionar un productor"
+                   (selectionChange)="seleccionarProductor()">
+          <mat-option *ngFor="let productor of productores" [value]="productor.id">
+            {{ productor?.name + ' ' + productor?.lastname }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.controls[this.ctrlProductor]?.invalid && form.controls[this.ctrlProductor]?.touched">
+          * Campo requerido
+        </mat-error>
       </div>
-      <div class="field-container  w-50">
-        <mat-checkbox [formControlName]="this.ctrlConAgua">Abastecimiento de agua</mat-checkbox>
+    
+      <!-- Selector de Chacra -->
+      <div class="FullForm-control" *ngIf="this.form.controls[this.ctrlProductor]?.value || !this.backOffice">
+        <label class="FormLabel">Chacra</label>
+        <mat-select class="FormInput" 
+                   [formControlName]="this.ctrlChacra" 
+                   placeholder="Seleccionar una chacra"
+                   (selectionChange)="seleccionarChacra()">
+          <mat-option *ngFor="let chacra of chacras" [value]="chacra.id">
+            {{ chacra?.name }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.controls[this.ctrlChacra]?.invalid && form.controls[this.ctrlChacra]?.touched">
+          * Campo requerido
+        </mat-error>
       </div>
-
-    </div>
-    <div class="field-container w-100">
-      <mat-label class="field-label">Observaciones</mat-label>
-      <textarea [formControlName]="this.ctrlObservaciones" class="w-100"  name="observaciones"></textarea>
-    </div>
-
-      <div class="card-botones">
-        <button class="back-button2 cancel-button" [ngClass]="{'service-backOffice': this.backOffice}" (click)="cancelar()">Cancelar</button>
-        <button class="back-button2" style="font-size:14px;" [ngClass]="{'service-backOffice': this.backOffice}" (click)="solicitarServicio()">Solicitar Servicio</button>
-
+    
+      <!-- Selector de Cultivo -->
+      <div class="FullForm-control" *ngIf="this.form.controls[this.ctrlChacra]?.value && this.lotesOriginales?.length">
+        <label class="FormLabel">Cultivo</label>
+        <mat-select class="FormInput" 
+                   [formControlName]="this.ctrlCultivo" 
+                   placeholder="Seleccione un cultivo"
+                   (selectionChange)="seleccionarCultivo()">
+          <mat-option *ngFor="let cultivo of cultivos" [value]="cultivo.id">
+            {{ cultivo.name }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.controls[this.ctrlCultivo]?.invalid && form.controls[this.ctrlCultivo]?.touched">
+          * Campo requerido
+        </mat-error>
       </div>
-    </mat-card>
-   </form>
+    
+      <!-- Selector de Lotes -->
+      <div class="FullForm-control" *ngIf="this.form.controls[this.ctrlCultivo]?.value && this.lotes?.length">
+        <label class="FormLabel">Lotes</label>
+        <mat-select class="FormInput" 
+                   [formControlName]="this.ctrlLote" 
+                   [multiple]="true"
+                   placeholder="Seleccione los lotes">
+          <mat-option *ngFor="let lote of lotes" [value]="lote.id">
+            {{ lote?.name }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.controls[this.ctrlLote]?.invalid && form.controls[this.ctrlLote]?.touched">
+          * Campo requerido
+        </mat-error>
+      </div>
+    
+      <!-- Hectáreas -->
+      <div class="FullForm-control">
+        <label class="FormLabel">Hectáreas</label>
+        <input class="FormInput"
+               type="number"
+               [formControlName]="this.ctrlHectareas"
+               placeholder="Hectáreas"
+               min="1"
+               max="999999">
+      </div>
+    
+      <!-- Checkbox Agua -->
+      <div class="FullForm-control">
+        <mat-checkbox [formControlName]="this.ctrlConAgua">
+          Abastecimiento de agua
+        </mat-checkbox>
+      </div>
+    
+      <!-- Observaciones -->
+      <div class="FullForm-control">
+        <label class="FormLabel">Observaciones</label>
+        <textarea class="FormTextarea"
+                  [formControlName]="this.ctrlObservaciones">
+        </textarea>
+      </div>
+    
+      <!-- Botones -->
+      <div class="FullForm-buttonsToRight">
+        <button mat-button 
+                class="secondary-button-custom size-48" 
+                type="button"
+                (click)="cancelar()">
+          Cancelar
+        </button>
+        <button mat-raised-button 
+                appearance="outline"
+                class="primary-button-custom size-48"
+                (click)="solicitarServicio()">
+          Solicitar Servicio
+        </button>
+      </div>
+    </form>
   </div>

@@ -1,4 +1,4 @@
-<div class="weatherContainer" *ngIf="weather && !loading">
+<div class="weatherContainer" *ngIf="weather && !loading else empty">
 
   <w-widget type="today" [location]="location" [day]="forecastToday">
   </w-widget>
@@ -7,3 +7,10 @@
     [day]="forecast" [dayName]="i === 0 ? 'Mañana' : 'Pasado'">
   </w-widget>
 </div>
+<ng-template #empty>
+  <div class="weatherContainer">
+    <w-widget></w-widget>
+    <w-widget></w-widget>
+    <w-widget></w-widget>
+  </div>
+</ng-template>

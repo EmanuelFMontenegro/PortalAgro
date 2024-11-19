@@ -1,5 +1,6 @@
-<div class="widgetContainer" (click)="open(day)">
-  <div class="widgetContainer-icon">
+<ng-container *ngIf="day; else empty">
+  <div class="widgetContainer" (click)="open(day)">
+    <div class="widgetContainer-icon">
       <img [src]="type === 'today' ? day.condition.icon : day.day.condition.icon" alt="weather icon">
     </div>
     <div class="widgetContainer-contentInfo">
@@ -12,8 +13,25 @@
       </div>
     </div>
     <div class="widgetContainer-weatherInfo">
-        <div class="label">Clima</div>
+      <div class="label-title">Clima</div>
       <div class="main-value">{{type === 'today' ? day.temp_c : day.day.avgtemp_c}}°</div>
-        <div class="sub-value">{{type === 'today' ? day.wind_kph : day.day.avgvis_km}} km/h</div>
-   </div>
-</div>
+      <div class="sub-value">{{type === 'today' ? day.wind_kph : day.day.avgvis_km}} km/h</div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #empty>
+  <div class="widgetContainer">
+    <div class="widgetContainer-icon">
+    </div>
+    <div class="widgetContainer-contentInfo">
+      <div class="widgetContainer-contentInfo-title">No hay información</div>
+      <div class="widgetContainer-contentInfo-subtitle">No hay información</div>
+    </div>
+    <div class="widgetContainer-weatherInfo">
+      <div class="label-title">Clima</div>
+      <div class="main-value">--</div>
+    </div>
+  </div>
+</ng-template>
+

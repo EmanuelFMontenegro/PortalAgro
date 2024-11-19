@@ -1,10 +1,16 @@
 <div class="mainStructure">
   <app-header-inner [title]="'Lotes'" [backButton]="true"></app-header-inner>
-  <app-searchbar  (filter)="onFilter($event)" (clearFilter)="clearFilter()" 
-  [options]="options"
-  [localidadesOptions]="localidades"
-  [placeholder]="'Buscar por Localidad'"></app-searchbar>
-  <app-card [dataView]="dataView" [listado]="loteData"  [typeCard]="'lote'" (btnEliminar)="btnEliminar($event)"  ></app-card> 
+  <app-dinamic-searchbar
+  [filterConfigs]="filterConfigs"
+  [buttonConfigs]="buttonConfigs"
+  [cultivosOptions]="cultivos"
+  (filter)="onFilter($event)"
+  (clearFilter)="clearFilter()"></app-dinamic-searchbar>
+
+
+  <app-card [dataView]="dataView" [listado]="loteTemplate"  [typeCard]="'lote'" 
+  (btnEliminar)="confirmarBorrado($event)"
+  (btnEditarDevolverObjeto)="editarLote($event)"></app-card> 
 </div> 
 <!--   <div class="LoteCard-buttons">  
     <button class="basic-warning grow-1 size-48"  (click)="confirmarBorrado(lote)" mat-button><mat-icon>delete</mat-icon>Eliminar</button> 
