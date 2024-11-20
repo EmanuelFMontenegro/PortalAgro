@@ -65,7 +65,7 @@ export class DialogEditarInsumoComponent {
 
       let bodyInsumos = this.form.getRawValue()
 
-      this.serviciosService.putInsumoApp(this.servicio.id,this.insumo.id, bodyInsumos).subscribe(
+      this.serviciosService.putInsumoApp(this.servicio.id,this.insumo.productInput.id, bodyInsumos).subscribe(
         (data: any) => {
           this.toastr.success(data?.message ?? 'Insumo editado exitosamente', 'Éxito');
           this.dialogRef.close(true)
