@@ -11,7 +11,7 @@ import { TiposDisplayApp } from '../tab-datos-app.component';
 @Component({
   selector: 'app-lista-imagenes-app',
   templateUrl: './lista-imagenes-app.component.html',
-  styleUrls: ['./lista-imagenes-app.component.sass']
+  styleUrls: ['./lista-imagenes-app.component.scss']
 })
 export class ListaImagenesAppComponent {
 

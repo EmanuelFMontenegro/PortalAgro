@@ -35,6 +35,13 @@ export class AuthGuard implements CanActivate {
         '/dashboard-backoffice/usuarios'
       );
 
+      // SET ADMINISTRADOR
+      if(isAdmin){
+       this.authService.admin = true;
+      }else{
+        this.authService.admin = false;
+      }
+
       if (!isAdmin && isUsuariosRoute) {
         console.log(
           'Acceso denegado a usuarios para usuarios no administradores.'

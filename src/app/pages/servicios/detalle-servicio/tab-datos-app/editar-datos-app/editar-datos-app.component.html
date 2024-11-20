@@ -15,6 +15,13 @@
              <mat-datepicker #dpDesde startView="multi-year"></mat-datepicker>
             </mat-form-field>
         </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+          <mat-label class="field-label">Hora de visita</mat-label>
+          <mat-form-field class="width-full" appearance="outline" >
+          <input matInput placeholder="Seleccione una hora" id="input-task" type="time" [formControlName]="ctrl_hourOfVisit">
+          <mat-icon matSuffix>access_time</mat-icon>
+        </mat-form-field>
+        </div>
 
        <div class="col-12">
           <mat-label class="field-label">Observaciones</mat-label>

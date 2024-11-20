@@ -5,12 +5,12 @@
   </div>
   <div class="body-datos">
 
-    <mat-select *ngIf="mostrarListado" (selectionChange)="dialogoSeleccionarDrone($event)" placeholder="Seleccionar Drone" class="field-input" name="productor">
+    <!-- <mat-select *ngIf="mostrarListado" (selectionChange)="dialogoSeleccionarDrone($event)" placeholder="Seleccionar Drone" class="field-input" name="productor">
       <mat-option *ngFor="let drone of listadoDrones" [value]="drone">{{ drone?.nickname }}</mat-option>
-    </mat-select>
+    </mat-select> -->
     <ng-container *ngIf="mostrarListado else abm">
       <ng-container *ngIf="this.tareasDrone?.length else listadoVacio">
-       <miniatura  (btnVerMasAccion)="tareaSeleccionada($event)" [dataView]="dataView" (btnEditarDevolverObjeto)="tareaSeleccionada($event)" (btnEliminar)="dialogConfirmacionEliminar($event)" [listado]="this.tareasDrone"></miniatura>
+       <miniatura  (btnVerMasAccion)="seleccionTarea($event)" [dataView]="dataView" (btnEditarDevolverObjeto)="seleccionTarea($event)" (btnEliminar)="dialogConfirmacionEliminar($event)" [listado]="this.tareasDrone"></miniatura>
       </ng-container>
 
      <ng-template #listadoVacio>
@@ -23,18 +23,23 @@
  <ng-template #abm>
   <div class="formulario" [formGroup]="form">
     <div class="title-datos">
-      <button *ngIf="tareasDroneApp" class="back-button2 btn-cargar" [ngClass]="{'service-backOffice': this.backOffice}" (click)="editarTarea()"> Editar Tarea</button>
+      <button *ngIf="tareasDroneApp && !this.editar" class="back-button2 btn-cargar" [ngClass]="{'service-backOffice': this.backOffice}" (click)="editarTarea()"> Editar Tarea</button>
     </div>
     <div class="row">
       <div class="col-12">
         <div class="field-container">
           <mat-label class="field-label">Drone</mat-label>
-          <mat-select class="field-input" [formControlName]="ctrl_droneAssigned" placeholder="Seleccionar drone"
+          <ng-container *ngIf="this.tareasDroneApp else droneProductor">
+            <mat-select class="field-input" [formControlName]="ctrl_droneAssigned" placeholder="Seleccionar drone"
             name="drone">
             <mat-option *ngFor="let cultivo of listadoDrones" [value]="cultivo.id">{{ cultivo.nickname }}</mat-option>
           </mat-select>
           <mat-error *ngIf="form.controls[ctrl_droneAssigned]?.invalid && form.controls[ctrl_droneAssigned]?.touched">
             * Campo requerido</mat-error>
+          </ng-container>
+          <ng-template #droneProductor>
+            {{this.form.controls[this.ctrl_droneAssigned].value}}
+          </ng-template>
         </div>
       </div>
       <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
@@ -106,10 +111,10 @@
       </div>
     </div>
   </div>
-  <button class="back-button2" (click)="cancelar()" [ngClass]="{'service-backOffice': this.backOffice}"> Cancelar</button>
-  <button class="back-button2" (click)="aceptar()" [ngClass]="{'service-backOffice': this.backOffice}"> Aceptar</button>
+  <button class="back-button2" *ngIf="tareasDroneApp && this.editar" (click)="cancelar()" [ngClass]="{'service-backOffice': this.backOffice}"> Cancelar</button>
+  <button class="back-button2" *ngIf="tareasDroneApp && this.editar" (click)="aceptar()" [ngClass]="{'service-backOffice': this.backOffice}"> Aceptar</button>
   </ng-template >
 
-  <button *ngIf="mostrarListado"  class="back-button2" (click)="volver()" [ngClass]="{'service-backOffice': this.backOffice}">  Volver Atrás</button>
+  <button *ngIf="(mostrarListado || !tareasDroneApp) || !this.editar"  class="back-button2" (click)="volver()" [ngClass]="{'service-backOffice': this.backOffice}">  Volver Atrás</button>
   </div>
 </div>

@@ -44,7 +44,7 @@
                 <div class="mb-15"><strong>Visita técnica</strong></div>
                 <p>{{this.datosApp?.dateOfVisit ?? 'No establecida'}} </p>
               </div>
-              <div *ngIf="tareasDroneApp" class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 tx-center">
+              <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 tx-center">
                 <button class="back-button2 btn-grande label2" [ngClass]="{'service-backOffice': this.backOffice}" (click)="this.tareasDrone()">Tareas del drone</button>
               </div>
             </div>

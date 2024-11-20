@@ -27,6 +27,7 @@ export class EditarDatosComponent {
   // controlName
   ctrl_typeCrop_id = 'typeCrop_id'
   ctrl_dateOfVisit = "dateOfVisit"
+  ctrl_hourOfVisit = 'hourOfVisit'
   ctrl_withWater = "withWater"
   ctrl_hectare = "hectare"
   ctrl_priority = "priority"
@@ -36,6 +37,7 @@ export class EditarDatosComponent {
   public form: FormGroup = new FormGroup({
     [this.ctrl_typeCrop_id]: new FormControl(null, Validators.required),
     [this.ctrl_dateOfVisit]: new FormControl(null, Validators.required),
+    [this.ctrl_hourOfVisit]: new FormControl(null, Validators.required),
     [this.ctrl_withWater]: new FormControl(null, Validators.required),
     [this.ctrl_hectare]: new FormControl(null, Validators.required),
     [this.ctrl_priority]: new FormControl(null, Validators.required),
@@ -96,6 +98,10 @@ export class EditarDatosComponent {
     const formato = 'DD/MM/YYYY HH:mm';
     const fechaMoment = moment(fechaStr, formato);
 
+    let horaYMinutos = fechaMoment.format('HH:mm');
+     if(horaYMinutos){
+      this.form.controls[this.ctrl_hourOfVisit].setValue(horaYMinutos)
+     }
     return (!fechaMoment.isValid()) ? null : fechaMoment.toDate();
   }
 
@@ -141,7 +147,11 @@ export class EditarDatosComponent {
 
 
     let body = this.form.getRawValue();
-    body.dateOfVisit = moment(body.dateOfVisit).format('DD/MM/YYYY HH:mm');
+
+    // HORA DE VISITA
+    if(body?.hourOfVisit && body.dateOfVisit){
+      body.dateOfVisit = moment(body.dateOfVisit).format('DD/MM/YYYY')+' '+ body?.hourOfVisit;
+    }
 
     this.serviciosService.putDatosTecnico(this.servicio.id, body).subscribe(
       async (data: any) => {

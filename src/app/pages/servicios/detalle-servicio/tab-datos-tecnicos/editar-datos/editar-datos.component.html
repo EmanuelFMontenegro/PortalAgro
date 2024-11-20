@@ -55,14 +55,21 @@
           </div>
         </div>
 
-        <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+        <div class="col-12 col-sm-12 col-md-3 col-lg-2 col-xl-2">
           <mat-label class="field-label">Fecha de visita</mat-label>
-          <mat-form-field class="width-full" appearance="outline">
+          <mat-form-field class="width-full" >
           <input placeholder="Seleccione una fecha" matInput  [min]="minDate" [matDatepicker]="dpDesde"
                 [formControlName]="ctrl_dateOfVisit" autocomplete="off">
              <mat-datepicker-toggle matPrefix [for]="dpDesde"></mat-datepicker-toggle>
              <mat-datepicker #dpDesde startView="multi-year"></mat-datepicker>
             </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-3 col-lg-2 col-xl-2">
+          <mat-label class="field-label">Hora de visita</mat-label>
+          <mat-form-field class="width-full" >
+          <input matInput placeholder="Seleccione una hora" id="input-task" type="time" [formControlName]="ctrl_hourOfVisit">
+          <mat-icon matSuffix>access_time</mat-icon>
+        </mat-form-field>
         </div>
 
        <div class="col-12">

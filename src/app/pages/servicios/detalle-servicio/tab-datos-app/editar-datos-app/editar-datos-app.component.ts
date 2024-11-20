@@ -27,12 +27,14 @@ export class EditarDatosAppComponent {
   minDate = new Date()
   // controlName
   ctrl_dateOfVisit = "dateOfVisit"
+  ctrl_hourOfVisit = 'hourOfVisit'
   ctrl_hectare = "hectare"
   ctrl_observation = "observation"
   backOffice = false;
 
   public form: FormGroup = new FormGroup({
     [this.ctrl_dateOfVisit]: new FormControl(null, Validators.required),
+    [this.ctrl_hourOfVisit]: new FormControl(null, Validators.required),
     [this.ctrl_hectare]: new FormControl(null, Validators.required),
     [this.ctrl_observation]: new FormControl(null, Validators.required),
   })
@@ -84,6 +86,11 @@ export class EditarDatosAppComponent {
     const formato = 'DD/MM/YYYY HH:mm';
     const fechaMoment = moment(fechaStr, formato);
 
+    let horaYMinutos = fechaMoment.format('HH:mm');
+    if(horaYMinutos){
+     this.form.controls[this.ctrl_hourOfVisit].setValue(horaYMinutos)
+    }
+
     return (!fechaMoment.isValid()) ? null : fechaMoment.toDate();
   }
 
@@ -106,7 +113,12 @@ export class EditarDatosAppComponent {
 
 
     let body = this.form.getRawValue();
-    body.dateOfVisit = moment(body.dateOfVisit).format('DD/MM/YYYY HH:mm');
+
+    // HORA DE VISITA
+    if(body?.hourOfVisit && body.dateOfVisit){
+       body.dateOfVisit = moment(body.dateOfVisit).format('DD/MM/YYYY')+' '+ body?.hourOfVisit;
+    }
+
 
     this.serviciosService.putDatosApp(this.servicio.id, body).subscribe(
       async (data: any) => {

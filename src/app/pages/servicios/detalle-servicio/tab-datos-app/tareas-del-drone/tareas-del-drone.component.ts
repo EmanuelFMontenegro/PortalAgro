@@ -33,14 +33,15 @@ export class TareasDelDroneComponent {
   mostrarListado = true;
   errorFechas = false;
   tareasOriginales: any[] = []
+  tareaSeleccionada: any;
 
   dataView: any = [
-    {label: 'Insumo', field: 'productInput.name', tipoLabel: TipoLabel.span},
-    {label: 'Hectareas', field:'hectare', tipoLabel: TipoLabel.span },
-    {label: 'Hora de incio', field:'intHour', tipoLabel: TipoLabel.span },
-    {label: 'Hora de fin', field:'endHour', tipoLabel: TipoLabel.span },
-    {label: 'Observaciones', field:'observation', tipoLabel: TipoLabel.span },
-    {label: null, field: null, tipoLabel: TipoLabel.botonVermas},
+    { label: 'Insumo', field: 'productInput.name', tipoLabel: TipoLabel.span },
+    { label: 'Hectareas', field: 'hectare', tipoLabel: TipoLabel.span },
+    { label: 'Hora de incio', field: 'intHour', tipoLabel: TipoLabel.span },
+    { label: 'Hora de fin', field: 'endHour', tipoLabel: TipoLabel.span },
+    { label: 'Observaciones', field: 'observation', tipoLabel: TipoLabel.span },
+    { label: null, field: null, tipoLabel: TipoLabel.botonVermas },
   ]
 
   // controlName
@@ -70,35 +71,34 @@ export class TareasDelDroneComponent {
   constructor(private toastr: ToastrService,
     private serviciosService: ServiciosService,
     private dialog: MatDialog,
-    private droneService:DronService,
-    private servicioInterno : ServicioInterno,
-    private detalleService: DetalleServicioService){
-      this.tareasDroneApp = this.detalleService.permisos?.jobOperator?.WRITE ?? false
-    }
+    private droneService: DronService,
+    private servicioInterno: ServicioInterno,
+    private detalleService: DetalleServicioService) {
+    this.tareasDroneApp = this.detalleService.permisos?.jobOperator?.WRITE || this.detalleService.permisos?.jobOperator?.WRITE_MY ? true : false;
+  }
 
   ngOnInit(): void {
     this.backOffice = this.servicioInterno.backOffice?.value
     this.servicio = this.detalleService.servicio;
     this.getDatosTask()
-    this.getDrones
     this.setMiniaturas()
     this.controlarFechas()
   }
 
-  controlarFechas(){
-   this.form.valueChanges.subscribe(
-    data => this.fechaFinalMayor()
-   )
+  controlarFechas() {
+    this.form.valueChanges.subscribe(
+      data => this.fechaFinalMayor()
+    )
   }
 
-  setMiniaturas(){
-    if(this.detalleService.permisos?.jobTechnical?.WRITE)
-    this.dataView.push({label: 'Eliminar', field: 'id', tipoLabel: TipoLabel.botonEliminar})
-   }
+  setMiniaturas() {
+    if (this.detalleService.permisos?.jobTechnical?.WRITE)
+      this.dataView.push({ label: 'Eliminar', field: 'id', tipoLabel: TipoLabel.botonEliminar })
+  }
 
-  async getDatosTask(){
+  async getDatosTask() {
     await this.getTaskDrone()
-    this.getDrones()
+    if (this.tareasDroneApp) this.getDrones()
     this.getInsumos()
   }
 
@@ -116,26 +116,36 @@ export class TareasDelDroneComponent {
   setFormTareaDrone() {
     this.form.patchValue(
       {
-        droneAssigned: this.tareasDrone?.droneAssigned?.id,
-        productInput: this.tareasDrone?.productInput?.id,
-        intHour: this.getTipoDate(this.tareasDrone?.intHourt),
-        endHour: this.tareasDrone?.endHour ? this.getTipoDate(this.tareasDrone?.endHour): '' ,
-        hectare: this.tareasDrone?.hectare,
-        observation: this.tareasDrone?.observation
+        droneAssigned: this.tareasDroneApp ? this.tareaSeleccionada?.droneAssigned?.id : this.tareaSeleccionada?.droneAssigned?.nickname,
+        productInput: this.tareaSeleccionada?.productInput?.id,
+        hectare: this.tareaSeleccionada?.hectare,
+        observation: this.tareaSeleccionada?.observation
       }
     )
-    console.log(this.form.value)
+
+    this.form.controls[this.ctrl_intDate].setValue(this.getTipoDate(this.tareaSeleccionada?.intHour, this.ctrl_intHour))
+    this.form.controls[this.ctrl_endDate].setValue(this.tareaSeleccionada?.endHour ? this.getTipoDate(this.tareaSeleccionada?.endHour, this.ctrl_endHour) : '',)
+
   }
 
-  tareaSeleccionada(tarea:any){
+  seleccionTarea(tarea: any) {
     console.log(tarea)
+    this.tareaSeleccionada = tarea;
     this.mostrarListado = false;
+    this.setFormTareaDrone();
     this.form.disable()
   }
 
-  getTipoDate(fechaStr: string) {
-    const formato = 'DD/MM/YYYY';
+  getTipoDate(fechaStr: string, ctrl_hora: any) {
+    const formato = 'DD/MM/YYYY HH:mm';
     const fechaMoment = moment(fechaStr, formato);
+
+    let horaYMinutos = fechaMoment.format('HH:mm');
+    if (horaYMinutos !== 'Invalid date' && ctrl_hora) {
+      this.form.controls[ctrl_hora].setValue(horaYMinutos)
+    }
+
+    fechaMoment.toDate()
 
     return (!fechaMoment.isValid()) ? null : fechaMoment.toDate();
   }
@@ -147,8 +157,9 @@ export class TareasDelDroneComponent {
     await this.getTaskDrone()
   }
 
-  editarTarea(){
+  editarTarea() {
     this.form.enable()
+    this.setFormTareaDrone()
     this.editar = true;
   }
 
@@ -160,18 +171,20 @@ export class TareasDelDroneComponent {
   getInsumos() {
     this.serviciosService.getInsumosTecnico(this.servicio.id).subscribe(
       (data: any) => {
-        console.log("lños insumos",data.list[0])
+        console.log("lños insumos", data.list[0])
         this.listaInsumos = data.list[0];
       }
     )
   }
 
   openABM() {
+    this.tareaSeleccionada = null
     this.mostrarListado = false;
+    this.editar = true;
     this.setFormTareaDrone()
   }
 
-  dialogConfirmacionEliminar(valor:any){
+  dialogConfirmacionEliminar(valor: any) {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '400px',
       data: {
@@ -186,13 +199,13 @@ export class TareasDelDroneComponent {
     });
   }
 
-  eliminarInsumo(valor:any){
+  eliminarInsumo(valor: any) {
     this.serviciosService.deleteTareaDrone(this.servicio.id, valor).subscribe(
-      (data:any )=>{
+      async (data: any) => {
         this.toastr.info(data?.message ?? 'tarea eliminada exitosamente', 'Éxito');
-        this.getInsumos()
+        await this.getTaskDrone()
       },
-      error =>{
+      error => {
         this.toastr.info(error.error?.message ?? 'Error eliminando tarea', 'Información');
         console.log("ERROR ELIMINADO TAREA", error)
       }
@@ -201,14 +214,14 @@ export class TareasDelDroneComponent {
 
 
   getTaskDrone() {
-    return new Promise<any>((resolve)=>{
+    return new Promise<any>((resolve) => {
       this.serviciosService.getDronesTask(this.servicio.id).subscribe(
-        ( drones: any) => {
-          if(drones.list.length){
+        (drones: any) => {
+          if (drones.list.length) {
             this.tareasOriginales = drones.list[0]
             this.tareasDrone = drones.list[0]
           }
-          console.log("la tarea del dron",this.tareasDrone)
+          console.log("la tarea del dron", this.tareasDrone)
           resolve(true)
         },
         (error) => {
@@ -220,14 +233,14 @@ export class TareasDelDroneComponent {
 
   }
 
-  getDrones(){
+  getDrones() {
     this.droneService.getAll().subscribe(
-      data =>{
-        if(data.list.length) this.listadoDrones = data.list[0]
+      data => {
+        if (data.list.length) { this.listadoDrones = data.list[0] }
       })
   }
 
-  dialogoSeleccionarDrone(drone:any){
+  dialogoSeleccionarDrone(drone: any) {
 
 
 
@@ -235,7 +248,7 @@ export class TareasDelDroneComponent {
 
   aceptar() {
 
-    if (this.form.invalid) {
+    if (this.form.invalid || this.errorFechas) {
       this.toastr.info('Faltan campos requeridos', 'Información');
       this.form.markAllAsTouched()
       return;
@@ -246,14 +259,14 @@ export class TareasDelDroneComponent {
     // HORA DE INICIO
     if (!body.observation) body.observation = ''
     let horaInicio = body.intHour
-    body.intHour = moment(body.intDate).format('DD/MM/YYYY') +' '+ horaInicio ;
+    body.intHour = moment(body.intDate).format('DD/MM/YYYY') + ' ' + horaInicio;
 
 
     // HORA DE FIN
-    if(body?.endHour && body.endDate){
+    if (body?.endHour && body.endDate) {
       let horaFin = body?.endHour;
-      body.endHour = moment(body.endDate).format('DD/MM/YYYY')+' '+ horaFin;
-    }else{
+      body.endHour = moment(body.endDate).format('DD/MM/YYYY') + ' ' + horaFin;
+    } else {
       body.endHour = ''
     }
 
@@ -263,14 +276,14 @@ export class TareasDelDroneComponent {
 
     console.log(body)
 
-    if(this.tareasDrone?.id){
+    if (this.tareaSeleccionada?.id) {
       this.putDroneTask(body);
-    }else{
+    } else {
       this.postDroneTask(body);
     }
   }
 
-  postDroneTask(body: any){
+  postDroneTask(body: any) {
     this.serviciosService.postDroneTask(this.servicio.id, body).subscribe(
       async (data: any) => {
         this.toastr.info(data?.message ?? 'Datos cargados exitosamente', 'Éxito');
@@ -283,7 +296,7 @@ export class TareasDelDroneComponent {
     )
   }
 
-  putDroneTask(body:any){
+  putDroneTask(body: any) {
     this.serviciosService.putDroneTask(this.servicio.id, body, this.tareasDrone.id).subscribe(
       async (data: any) => {
         this.toastr.info(data?.message ?? 'Datos editados exitosamente', 'Éxito');
@@ -297,20 +310,27 @@ export class TareasDelDroneComponent {
   }
 
   /** Controla que la fecha de fin no sea mayor a la fecha de inicio */
-  fechaFinalMayor(){
+  fechaFinalMayor() {
     let fechaInicio = this.form.controls[this.ctrl_intDate]?.value;
     let fechaFin = this.form.controls[this.ctrl_endDate]?.value;
     let horaInicio = this.form.controls[this.ctrl_intHour]?.value;
     let horaFin = this.form.controls[this.ctrl_endHour]?.value;
 
     this.errorFechas = false;
-    if(fechaFin && fechaInicio && horaFin && horaInicio){
-      let inicia = moment(fechaInicio).format('DD/MM/YYYY') +' '+ horaInicio ;
-      let termina = moment(fechaFin).format('DD/MM/YYYY')+' '+ horaFin;
+    if (fechaFin && fechaInicio && horaFin && horaInicio) {
+      let inicia = moment(fechaInicio).format('DD/MM/YYYY') + ' ' + horaInicio;
+      let termina = moment(fechaFin).format('DD/MM/YYYY') + ' ' + horaFin;
 
-      let esMayor = moment(termina ).diff(inicia , 'days')
+      // Usar moment para comparar las fechas completas
+      let fechaIniciaMoment = moment(inicia, 'DD/MM/YYYY HH:mm');
+      let fechaTerminaMoment = moment(termina, 'DD/MM/YYYY HH:mm');
 
-      this.errorFechas = esMayor < 0 ? false : true;
+      // Comparar las fechas
+      if (fechaIniciaMoment.isBefore(fechaTerminaMoment)) {
+        this.errorFechas = false;  // La fecha de inicio es antes que la de fin
+      } else {
+        this.errorFechas = true;  // La fecha de inicio es después de la fecha de fin
+      }
     }
 
   }

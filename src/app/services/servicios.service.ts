@@ -70,6 +70,11 @@ export class ServiciosService {
       return this.http.get(url);
     }
 
+    bajaServicio(id: number): Observable<any> {
+      let url = `${this.urlBase}/service/${id}/disable`;
+      return this.http.delete(url);
+    }
+
     getServicios(): Observable<any>{
       let url =  `${this.urlBase}/service/all`;
       console.log(url)
@@ -130,7 +135,7 @@ export class ServiciosService {
     }
 
     getPriporidades(): Observable<any>{
-      let url =  `${this.urlBase}/priority/all`
+      let url =  `${environment.apiUrl}/priority/all`
       return this.http.get(url);
     }
 

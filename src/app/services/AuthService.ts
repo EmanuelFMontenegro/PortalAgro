@@ -18,6 +18,7 @@ interface DecodedToken {
   providedIn: 'root',
 })
 export class AuthService {
+  public admin = false;
   public userLogeed: UserToken | null = null;;
   private userEmail: string = '';
   private userId: number | null = null;
@@ -67,7 +68,7 @@ export class AuthService {
     try {
       // si falla la decodificación
       const decoded: any = jwtDecode(token);
-      this.userLogeed = decoded; 
+      this.userLogeed = decoded;
       return this.userLogeed;
     } catch (error) {
       console.error('Error al decodificar el token:', error);
@@ -83,6 +84,11 @@ export class AuthService {
     if(user) user.permisos = permisos
 
     this.userWithPermissions.next(user)
+  }
+
+  // Método para obtener el admin
+  getAdmin(): boolean {
+    return this.admin;
   }
 
   // Método para obtener el email del usuario

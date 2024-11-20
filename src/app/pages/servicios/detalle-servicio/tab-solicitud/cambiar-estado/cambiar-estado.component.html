@@ -1,11 +1,11 @@
-<div class="field-container w-100" *ngIf="selectorEstados" >
+<div class="ancho-estado" *ngIf="selectorEstados && this.admin" >
   <mat-label>Cambiar estado</mat-label>
   <mat-select *ngIf="this.mostrarSelector" (selectionChange)="dialogConfirmacionCambiarEstado($event)" placeholder="Seleccionar estado" class="field-input" name="productor">
     <mat-option *ngFor="let estado of detalleServicioService.estados" [value]="estado">{{ estado?.name }}</mat-option>
   </mat-select>
 </div>
 
-<div class="field-container w-100" *ngIf="!selectorEstados && !estadoSolicitudBajaServicio" >
+<div class="ancho-estado" *ngIf="!selectorEstados && !estadoSolicitudBajaServicio" >
   <mat-label>Baja del servicio</mat-label>
   <button class="back-button2" (click)="dialogConfirmacionSolicitudBaja()">Solicitar</button>
 </div>
