@@ -16,13 +16,9 @@ export class CardComponent {
   totalItems: number = 0; // Total de elementos
   itemsPerPage: number = 6; // Elementos por página
   page: number = 1; // Página actual
-
-  constructor(private utilService: UtilsService, private router: Router) {}
-
   @Input() typeCard: string = 'chacra'; // Tipo de tarjeta
   @Input() listado: any; // Listado de items a mostrar
   @Input() dataView: DataView[] | undefined; // configuracion para determinar que tipo de elemento mostrar por cada campo
-  @Input() productor = false; // cambia el estilo de la miniatura si es productor
   @Output() btnEliminar = new EventEmitter<any>();
   @Output() btnEditarDevolverObjeto = new EventEmitter<any>();
   tipoImagen = TipoLabel.imagen;
@@ -40,8 +36,10 @@ export class CardComponent {
   tipoEliminar = TipoLabel.botonEliminar;
 
 
-  ngOnInit(){ 
-  }
+  constructor(private utilService: UtilsService, private router: Router) {}
+
+  ngOnInit(){  
+    } 
 
   loadItems() {
     this.totalItems = this.listado.length; // Actualiza el total de elementos
@@ -181,5 +179,17 @@ export class CardComponent {
       default:
         return 'cardCustomized-buttons';
     }
+  }
+
+
+  getTextContainerClass(field: string): string {
+    const baseClass = 'cardCustomized-header-subtitle';
+    return this.isScrollableField(field) 
+      ? `${baseClass} scroll-y size-48`
+      : baseClass;
+  }
+
+  private isScrollableField(field: string): boolean {
+    return field === 'observation' || field === 'observations';
   }
 }

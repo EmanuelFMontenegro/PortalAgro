@@ -7,15 +7,6 @@ import { FilterConfig, ButtonConfig } from 'src/app/models/searchbar.model';
 import { TipoLabel, DataView } from 'src/app/shared/components/miniatura-listado/miniatura.model';
 import { selectButtons, selectFilters } from 'src/app/shared/components/dinamic-searchbar/dinamic-searchbar.config';
 export type FilterInputType = 'text' | 'select' | 'double-number' | 'select-options';
-
- 
- 
- 
-
-interface Chacra {
-  value: string;
-  viewValue: string;
-}
 @Component({
   selector: 'app-chacras',
   templateUrl: './chacras.component.html',
@@ -26,18 +17,9 @@ export class ChacrasComponent implements OnInit {
   currentYear: number = new Date().getFullYear();
   filterConfigs: FilterConfig[] = [];
   buttonConfigs: ButtonConfig[] = [];
-  nombre: string = '';
-  apellido: string = '';
-  descripcion: string = '';
-  dniCuit: string = '';
-  descriptions: string = '';
-  location: number | null = null;
-  telephone: string = '';
-  nombreCampo: string = '';
-  localidad: string = '';
-  nombreLocalidad: string = '';
   localidades: any[] = [];
   campos: any[] = [];
+  camposTemplate: any[] = [];
   dataView: DataView[] = [
     {
       label: '',
@@ -63,18 +45,6 @@ export class ChacrasComponent implements OnInit {
       tipoLabel: TipoLabel.botonGeo,
     },
   ];
-  campoData = {
-    name: '',
-    dimensions: '',
-    geolocation: '',
-    observation: '',
-    address: {
-      address: '',
-      location: '',
-    },
-  }; 
-  campoSeleccionado: any;
-  contador: number = 0;
   constructor(
     private authService: AuthService,
     private apiService: ApiService,
@@ -83,20 +53,18 @@ export class ChacrasComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.campoData.geolocation = '';
     //aca pasamos los filtros y los botones, para que el componente dinamico los renderice
     // selectFilters y selectButton buscan esos filtros y los devuelven en un array
     this.filterConfigs = selectFilters([
       'LOCALIDAD',
       'NOMBRE_CHACRA',
-      'FILTRO_SIN_INPUT_EJEMPLO' // este es para mostrarte como seria un ejemplo sin input, borra nomas despues
+      'HECTAREAS' // este es para mostrarte como seria un ejemplo sin input, borra nomas despues
     ]);
 
     this.buttonConfigs = selectButtons([
       'REGISTRAR_CHACRAS', 
     ]);
     this.cargarCampos();
-    this.cargarDatosDeUsuario();
     this.obtenerLocalidades();
   }
 
@@ -118,7 +86,7 @@ export class ChacrasComponent implements OnInit {
       (response) => {
         if (response.list && response.list.length > 0) {
           this.campos = response.list[0];
-
+          this.camposTemplate = this.campos;
         } else {
           console.error('La lista de campos está vacía o no está definida');
         }
@@ -127,101 +95,9 @@ export class ChacrasComponent implements OnInit {
         console.error('Error al obtener campos:', error);
       }
     );
-  }
-  cargarDatosDeUsuario() {
-    if (this.userLogeed!.userId == null) {
-      this.apiService.getLocationMisiones('location').subscribe(
-        (localidades) => {
-          this.localidades = localidades;
-          let nombreLocalidad: string = '';
-          this.apiService
-            .getPersonByIdProductor(
-              this.userLogeed!.userId,
-              this.userLogeed!.userId
-            )
-            .subscribe(
-              (data) => {
-                const localidad = this.localidades.find(
-                  (loc) => loc.id === data.location.id
-                );
-                this.location = localidad ? localidad.name : null;
-                this.nombreLocalidad = nombreLocalidad;
-                this.nombre = data.name;
-                this.apellido = data.lastname;
-                this.dniCuit = data.dniCuit;
-                this.descriptions = data.descriptions;
-                this.telephone = data.telephone;
-              },
-              (error) => {
-                console.error(
-                  'Error al obtener nombre y apellido del usuario:',
-                  error
-                );
-              }
-            );
-        },
-        (error) => {
-          console.error('Error al obtener las localidades', error);
-        }
-      );
-    }
-  }
+  } 
 
-  geolocalizar() {
-    if (this.campoSeleccionado) {
-      this.router.navigate(['dashboard/geolocalizacion'], {
-        state: { campoSeleccionado: this.campoSeleccionado },
-      });
-    } else {
-      this.toastr.warning('No se ha seleccionado ningún campo', 'Advertencia');
-    }
-  }
-
-  registrarCampo(): void {
-    if (!this.userLogeed?.userId) {
-      this.toastr.error('Error: No se ha identificado al usuario.', 'Error');
-      return;
-    }
-    if (this.isValidForm()) {
-      this.apiService
-        .addField(this.userLogeed?.userId, this.campoData)
-        .subscribe(
-          () => {
-            this.toastr.success('Campo registrado con éxito', 'Éxito');
-            this.campoData = {
-              name: '',
-              dimensions: '',
-              geolocation: '',
-              observation: '',
-              address: {
-                address: '',
-                location: '',
-              },
-            };
-            this.router.navigate(['dashboard/geolocalizacion']);
-          },
-          (error) => {
-            console.error('Error al registrar el campo:', error);
-            if (error.error && error.error.message) {
-              this.toastr.error(
-                'Ya Existe un campo registrado con este nombre.',
-                'Atención'
-              );
-            } else {
-              this.toastr.error(
-                'Error al registrar el campo. Detalles: ' + error.message,
-                'Error'
-              );
-            }
-          }
-        );
-    } else {
-      this.toastr.error(
-        'Por favor, completa todos los campos requeridos',
-        'Error'
-      );
-    }
-  }
+  
   obtenerLocalidades() {
     this.apiService.getLocationMisiones('location').subscribe(
       (localidades) => {
@@ -233,45 +109,18 @@ export class ChacrasComponent implements OnInit {
       }
     );
   }
-
-  isValidForm(): boolean {
-    const dimensions = Number(this.campoData.dimensions);
-    const isAddressValid = this.campoData.address.address.trim() !== '';
-    const isLocationValid = this.campoData.address.location.trim() !== '';
-    const isNameValid = this.campoData.name.trim() !== '';
-    const isObservationValid = this.campoData.observation.trim() !== '';
-    const areDimensionsValid = !isNaN(dimensions) && dimensions > 0;
-
-    return (
-      isAddressValid &&
-      isLocationValid &&
-      isNameValid &&
-      areDimensionsValid &&
-      isObservationValid
-    );
-  }
+ 
   volver() {
     this.router.navigate(['dashboard/inicio']);
   }
   verLotes(campo: any): void {
-    console.log(campo);
-    this.campoSeleccionado = campo;
     localStorage.setItem(
       'campoSeleccionado',
-      JSON.stringify(this.campoSeleccionado)
+      JSON.stringify(campo)
     );
     this.router.navigate(['dashboard/lote']);
   }
-  verMas(campo: any): void {
-    this.campoSeleccionado = campo;
-    localStorage.setItem(
-      'campoSeleccionado',
-      JSON.stringify(this.campoSeleccionado)
-    );
-
-    this.router.navigate(['dashboard/detalle-campo']);
-  }
-
+/* Ver si es necesario consultar a la api, sino podemos reasignar this.camposTemplate con this.campos */
   clearFilter() {
     this.cargarCampos();
   }
@@ -280,7 +129,7 @@ export class ChacrasComponent implements OnInit {
     const filterHandlers: { [key: string]: (value: any) => void } = {
       'Buscar por Localidad': (value) => this.filtrarPorLocalidad(value),
       'Buscar por Nombre de Chacra': (value) => this.filtrarPorNombreDeChacra(value),
-      'Filtro sin input ejemplo': (value) => this.filtrarPorLocalidad(value), 
+      'Buscar por Hectáreas': (value) => this.filtrarPorHectareas(filtro.min, filtro.max), 
     };
     const handler = filterHandlers[filtro.type];
     
@@ -289,6 +138,30 @@ export class ChacrasComponent implements OnInit {
     } else {
       console.warn(`No se encontró un manejador para el filtro tipo: ${filtro.type}`);
     }
+  }
+
+  filtrarPorHectareas(min: number, max: number) {
+    if (min == null || max == null) {
+      this.toastr.error('Debe ingresar un valor mínimo y máximo de hectáreas', 'Error');
+      return;
+    }
+    if (min > max) {
+      this.toastr.error('El valor mínimo no puede ser mayor al valor máximo', 'Error');
+      return;
+    }
+    const camposFiltrados = this.campos.filter(
+      (campo) => campo.dimensions >= min && campo.dimensions <= max
+    );
+    if (camposFiltrados.length > 0) {
+      this.camposTemplate = camposFiltrados;
+    } else {
+      this.toastr.info(
+        'No se encontraron chacras con las hectáreas ingresadas',
+        'Información'
+      );
+      this.camposTemplate = this.campos;
+    }
+
   }
 
   filtrarPorLocalidad(buscar: string) { 
@@ -309,28 +182,25 @@ export class ChacrasComponent implements OnInit {
       return;
     }
     const locationId = localidadSeleccionada.id;
-
     const camposFiltrados = this.campos.filter(
       (campo) =>
         campo.address &&
         campo.address.location &&
         campo.address.location.id === locationId
     );
-
     if (camposFiltrados.length > 0) {
 
-      this.campos = camposFiltrados;
+      this.camposTemplate = camposFiltrados;
     } else {
       this.toastr.info(
         'No se encontraron chacras con la localidad seleccionada',
         'Información'
       );
-      this.clearCampos();
+      this.camposTemplate = this.campos;
     }
   }
 
-  filtrarPorNombreDeChacra(nombreChacra: string) {
-    this.clearCampos();
+  filtrarPorNombreDeChacra(nombreChacra: string) { 
     if (!nombreChacra || nombreChacra.trim() === '') {
       this.toastr.error('Debe ingresar un nombre de chacra', 'Error');
       return;
@@ -347,25 +217,17 @@ export class ChacrasComponent implements OnInit {
     });
     if (camposFiltrados.length > 0) {
       
-      this.campos = camposFiltrados;
+      this.camposTemplate = camposFiltrados;
     } else {
       this.toastr.info(
         'No se encontraron chacras con el nombre ingresado',
         'Información'
       );
-      this.clearCampos();
+      this.camposTemplate = this.campos;
     }
   }
 
   clearCampos() {
-    this.campos = [];
-    this.contador = 3;
-    const intervalo = setInterval(() => {
-      this.contador--;
-      if (this.contador <= 0) {
-        clearInterval(intervalo);
-        this.clearFilter();
-      }
-    }, 1000);
+      this.clearFilter();
   }
 }

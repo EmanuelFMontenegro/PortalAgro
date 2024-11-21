@@ -13,16 +13,11 @@
           item.field)}}</h3>
 
         <!-- Diferenciamos campo observation del resto, por el scroll del campo -->
-        <div *ngIf="(item.field == 'observation' || item.field == 'observations' ); else span_normal">
-          <p [ngClass]="'cardCustomized-header-subtitle scroll-y size-40'" *ngIf="item.tipoLabel == tipoSpan">
-            <span>{{item?.label}}:</span> {{getValue(miniatura, item.field) ?? ' --- '}}
-          </p>
-        </div>
-        <ng-template #span_normal>
-          <p [ngClass]="'cardCustomized-header-subtitle'" *ngIf="item.tipoLabel == tipoSpan">
-            <span>{{item?.label}}:</span> {{getValue(miniatura, item.field) ?? ' --- '}}
-          </p>
-        </ng-template>
+        <p *ngIf="item.tipoLabel === tipoSpan"
+        [ngClass]="getTextContainerClass(item.field)">
+       <span>{{item?.label}}:</span>
+       {{getValue(miniatura, item.field) ?? ' --- '}}
+     </p>
       </ng-container>
     </div>
     <!-- Buttons -->

@@ -343,8 +343,7 @@
     }
 
     &-subtitle {
-      margin:9px 0px;
-      overflow-y: scroll;
+      margin:9px 0px; 
       @include font(1rem, 500,#232323);
       >span {
         @include font(1rem, 600);
