@@ -41,6 +41,11 @@
         "route": "/dashboard-backoffice/informes"
       },
       {
+        "icon": "planificacion_b.svg",
+        "name": "Planificaciones",
+        "route": "/dashboard-backoffice/planificaciones"
+      },
+      {
         "icon": "configuracion_b.svg",
         "name": "Configuración",
         "route": "/dashboard-backoffice/configuracion"

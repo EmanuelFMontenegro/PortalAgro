@@ -1,60 +1,36 @@
-@import '../../../../assets/variables'
-
-/* Estilos generales del contenedor */
 .container
   margin: 0 auto
   padding: 20px
+  display: flex
+  flex-direction: column
+  gap: 20px
 
-.button_crear
-  background-color: $new_color_blue
-  width: 100%
-  color: white
-  cursor: pointer
-  padding: 12px 18px
-  border: 1px solid transparent
-  border-radius: 12px
-  transition: background-color 0.3s, border-color 0.3s
-  font-size: 0.7em
-  font-family: "Montserrat", sans-serif
+h2
   font-weight: bold
-  position: relative
-  top: 8em
 
-/* Contenedor para el mapa y la tabla */
 .map-table-container
   display: flex
   height: 80vh
   gap: 16px
 
-/* Estilos para la tabla */
-.table-container
-  flex: 1
+.menu-container
+  flex: 2
+  display: flex
+  flex-direction: column
+  gap: 20px
 
-/* Estilos para la tabla */
-table
-  width: 100%
-  border-collapse: collapse
-
-th.mat-header-cell
-  background-color: #f5f5f5
-  color: #000
-  font-weight: bold
-  text-align: left
-
-td.mat-cell
-  padding: 8px
-  border-bottom: 1px solid #ddd
-
-tr.mat-row:nth-child(even)
-  background-color: #f9f9f9
-
-tr.mat-row:hover
-  background-color: #e0e0e0
-
-/* Estilos para el mapa */
 .map
-  flex: 1
-  height: 100%
-  width: 100%
-  border: 2px solid $new_color_blue
-/* Estilos para el botón de crear ruta */
+  height: 500px
+  width: 50%
+  border: 1px solid #ccc
+  border-radius: 8px
+
+.buttons
+  display: flex
+  justify-content: space-between
+  gap: 10px
+
+.button_crear
+  background-color: #015E85
+  color: white
+  font-weight: bold
