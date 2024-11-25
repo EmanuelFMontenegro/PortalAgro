@@ -31,16 +31,13 @@ export class AuthGuard implements CanActivate {
         decodedToken.roles?.map((role: any) => role.authority) || []; // Obtener los roles del usuario
 
       const isAdmin = roles.includes('ROLE_ADMIN');
+      const isProductor = roles.includes('ROLE_PRODUCER');
       const isUsuariosRoute = state.url.includes(
         '/dashboard-backoffice/usuarios'
       );
 
-      // SET ADMINISTRADOR
-      if(isAdmin){
-       this.authService.admin = true;
-      }else{
-        this.authService.admin = false;
-      }
+      this.authService.admin = isAdmin;
+      this.authService.productor = isProductor;
 
       if (!isAdmin && isUsuariosRoute) {
         console.log(

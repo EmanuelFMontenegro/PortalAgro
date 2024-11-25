@@ -16,7 +16,7 @@ export class CambiarEstadoComponent {
   @Input() selectorEstados = true;
   estadoSolicitudBajaServicio = false;
   admin = false;
-
+  productor = false;
   constructor(public detalleServicioService: DetalleServicioService,
     private servicioService: ServiciosService,
     private toastr: ToastrService,
@@ -26,6 +26,7 @@ export class CambiarEstadoComponent {
 
   ngOnInit(): void {
     this.admin = this.authService.admin
+    this.productor = this.authService.productor
     this.estadoSolicitudBajaServicio = this.detalleServicioService.servicio.status.name == "SOLICITUD_BAJA"
   }
 

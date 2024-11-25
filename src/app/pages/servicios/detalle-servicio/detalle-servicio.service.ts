@@ -18,44 +18,48 @@ export class DetalleServicioService {
   estado = new BehaviorSubject<any>(null);
   estado$: any;
 
-  datosTecnico:any;
-  datosPiloto:any;
-  servicio:any;
+  datosTecnico: any;
+  datosPiloto: any;
+  informes: any;
+  servicio: any;
   servicioId: any;
-  estados:any;
+  estados: any;
   prioridades: any;
   permisos: PermisosUsuario | null = null
 
   constructor(
-    private estadoService:EstadosService,
+    private estadoService: EstadosService,
     private authService: AuthService,
-    private serviciosService:ServiciosService){
-      this.tecnico$ = this.tecnico.asObservable();
-      this.piloto$ = this.piloto.asObservable();
-      this.estado$ = this.estado.asObservable();
-    }
+    private serviciosService: ServiciosService) {
+    this.tecnico$ = this.tecnico.asObservable();
+    this.piloto$ = this.piloto.asObservable();
+    this.estado$ = this.estado.asObservable();
+  }
 
-  cleanVariable(){
+  cleanVariable() {
     this.servicio = null;
     this.servicioId = null;
+    this.datosTecnico = null;
+    this.datosPiloto = null;
+    this.informes = null;
     this.tecnico.next(null);
     this.piloto.next(null);
     this.estado.next(null);
     this.estados = null
   }
 
-  async getServicio(){
-      await this.getIdLocal();
-      await this.actualizarDatosServicio()
-      localStorage.setItem('servicio', JSON.stringify(this.servicio) )
-      this.setPiloto(this.servicio?.jobOperator)
-      this.setTecnico(this.servicio?.jobTechnical)
+  async getServicio() {
+    await this.getIdLocal();
+    await this.actualizarDatosServicio()
+    localStorage.setItem('servicio', JSON.stringify(this.servicio))
+    this.setPiloto(this.servicio?.jobOperator)
+    this.setTecnico(this.servicio?.jobTechnical)
   }
 
-  getIdLocal(){
-    return new Promise<any>((resolve)=>{
-      let servicio =  localStorage.getItem('servicio');
-      if(servicio){
+  getIdLocal() {
+    return new Promise<any>((resolve) => {
+      let servicio = localStorage.getItem('servicio');
+      if (servicio) {
         let servicioCache = JSON.parse(servicio)
         this.servicioId = servicioCache.id
       }
@@ -63,66 +67,79 @@ export class DetalleServicioService {
     })
   }
 
-  async getUserConPermisos(){
+  async getUserConPermisos() {
     await this.authService.getUserWithPermisos()
     this.permisos = this.authService.userWithPermissions?.value?.permisos
   }
 
-  actualizarDatosServicio(){
-    return new Promise<any>((resolve)=>{
+  actualizarDatosServicio() {
+    return new Promise<any>((resolve) => {
       this.serviciosService.getServicio(this.servicioId).subscribe(
-        data =>{
+        data => {
           this.servicio = data;
           resolve(this.servicio)
         },
-        error =>{
-            resolve(null)
+        error => {
+          resolve(null)
         }
       )
     })
   }
 
-  getEstados(){
-      this.serviciosService.getStatusByService(this.servicioId).subscribe(
-        data=> this.estados = data,
-        error =>{}
-      )
+  getEstados() {
+    this.serviciosService.getStatusByService(this.servicioId).subscribe(
+      data => this.estados = data,
+      error => { }
+    )
     return this.estados
   }
 
-  setPiloto(piloto: any){
-    if(piloto) this.piloto.next(piloto)
+  setPiloto(piloto: any) {
+    if (piloto) this.piloto.next(piloto)
   }
 
-  setTecnico(tecnico: any){
-    if(tecnico) this.tecnico.next(tecnico)
+  setTecnico(tecnico: any) {
+    if (tecnico) this.tecnico.next(tecnico)
   }
 
   // DATOS TECNICO
-  getDatosTecnico(){
-    return new Promise<any>((resolve)=>{
+  getDatosTecnico() {
+    return new Promise<any>((resolve) => {
       this.serviciosService.getTecnico(this.servicio.id).subscribe(
-        data=> {
+        data => {
           this.datosTecnico = data
           resolve(this.datosTecnico)
         },
-        error => { resolve(null)}
+        error => { resolve(null) }
       )
     })
   }
 
 
-// DATOS PILOTO
- getDatosApp(){
-  return new Promise<any>((resolve)=>{
-    this.serviciosService.getApp(this.servicio.id).subscribe(
-      data=> {
-        this.datosPiloto = data
-        resolve(this.datosPiloto)
-      },
-      error => { resolve(null)}
-    )
-  })
-}
+  // DATOS PILOTO
+  getDatosApp() {
+    return new Promise<any>((resolve) => {
+      this.serviciosService.getApp(this.servicio.id).subscribe(
+        data => {
+          this.datosPiloto = data
+          resolve(this.datosPiloto)
+        },
+        error => { resolve(null) }
+      )
+    })
+  }
+
+  // INFORMES
+  getInformes() {
+    return new Promise<any>((resolve) => {
+      this.serviciosService.getInformes(this.servicio.id).subscribe(
+        data => {
+          this.informes = data;
+          resolve(this.informes)
+        },
+        error => { resolve(null) }
+      )
+    })
+  }
 
 }

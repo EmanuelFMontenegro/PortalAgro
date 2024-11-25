@@ -39,21 +39,9 @@ export class TabInformesComponent {
     this.recuperarArchivos()
   }
 
-  recuperarArchivos() {
-
-    let idServicio = this.detalleServicioService.servicio.id
-    this.servicioService.getInformes(idServicio).subscribe(
-      data => {
-        this.informes = data;
-        this.generarTabla()
-      },
-      error => {
-
-      }
-    )
-
-    // llamar a servicio que encapsule los 4 archivos y setear en el listado
-
+  async recuperarArchivos() {
+     this.informes = this.detalleServicioService.informes;
+     this.generarTabla()
   }
 
   generarTabla() {

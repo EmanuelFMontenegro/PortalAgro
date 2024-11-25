@@ -28,7 +28,6 @@ export class TareasDelDroneComponent {
   listaInsumos: any[] = []
   listadoHorarios: any[] = this.getHoras()
   abastecimientoAgua: any[] = [{ descripcion: 'SI', value: true }, { descripcion: 'NO', value: false }]
-  minDate = new Date()
   tareasDroneApp = false;
   mostrarListado = true;
   errorFechas = false;

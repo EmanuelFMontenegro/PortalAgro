@@ -22,7 +22,6 @@ export class EditarDatosComponent {
   listaPrioridades: any[] = []
   listadoHorarios: any[] = this.getHoras()
   abastecimientoAgua: any[] = [{ descripcion: 'SI', value: true }, { descripcion: 'NO', value: false }]
-  minDate = new Date()
   backOffice = false;
   // controlName
   ctrl_typeCrop_id = 'typeCrop_id'

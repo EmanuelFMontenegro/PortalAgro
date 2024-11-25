@@ -19,6 +19,7 @@ interface DecodedToken {
 })
 export class AuthService {
   public admin = false;
+  public productor = false;
   public userLogeed: UserToken | null = null;;
   private userEmail: string = '';
   private userId: number | null = null;
@@ -91,6 +92,10 @@ export class AuthService {
     return this.admin;
   }
 
+  // Método para obtener el admin
+  getProductor(): boolean {
+    return this.productor;
+  }
   // Método para obtener el email del usuario
   getUserEmail(): string {
     return this.userEmail;
@@ -128,5 +133,7 @@ export class AuthService {
     this.userEmail = '';
     this.userId = null;
     this.field = null;
+    this.admin = false;
+    this.productor = false;
   }
 }

@@ -24,6 +24,9 @@ export class DetalleServicioComponent {
   servicio: any
   tecnicoAsignado:any;
   pilotoAsignado:any;
+  puedeVerDatosTecnicos: any;
+  puedeVerDatosPiloto: any;
+  puedeVerInformes: any;
   indiceTab = 0;
   backOffice = false;
   estadoOK = true;
@@ -66,6 +69,13 @@ export class DetalleServicioComponent {
    this.detalleServicioService.getEstados()
    this.subscribirPiloto();
    this.subscribirTecnico();
+
+   this.puedeVerDatosTecnicos = await this.detalleServicioService.getDatosTecnico()
+   this.puedeVerDatosPiloto = await this.detalleServicioService.getDatosApp()
+   this.puedeVerInformes = await this.detalleServicioService.getInformes()
+
+   console.log(this.puedeVerDatosPiloto, this.puedeVerDatosTecnicos, this.puedeVerInformes)
+
    this.estadoOK = true;
   }
 

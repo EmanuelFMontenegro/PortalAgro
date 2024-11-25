@@ -68,7 +68,7 @@
       <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3">
         <mat-label class="field-label">Fecha de inicio</mat-label>
         <mat-form-field class="width-full" appearance="outline">
-          <input placeholder="Seleccione una fecha" id="input-task" matInput [min]="minDate" [matDatepicker]="dpDesde"
+          <input placeholder="Seleccione una fecha" id="input-task" matInput  [matDatepicker]="dpDesde"
             [formControlName]="ctrl_intDate" autocomplete="off">
           <mat-datepicker-toggle matPrefix [for]="dpDesde"></mat-datepicker-toggle>
           <mat-datepicker #dpDesde startView="multi-year"></mat-datepicker>
@@ -86,7 +86,7 @@
       <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3">
         <mat-label class="field-label">Fecha de fin</mat-label>
         <mat-form-field class="width-full" appearance="outline">
-          <input placeholder="Seleccione una fecha" id="input-task" matInput [min]="minDate" [matDatepicker]="dpHasta"
+          <input placeholder="Seleccione una fecha" id="input-task" matInput  [matDatepicker]="dpHasta"
             [formControlName]="ctrl_endDate" autocomplete="off">
           <mat-datepicker-toggle matPrefix [for]="dpHasta"></mat-datepicker-toggle>
           <mat-datepicker #dpHasta startView="multi-year"></mat-datepicker>
