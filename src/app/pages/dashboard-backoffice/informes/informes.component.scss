@@ -15,7 +15,7 @@
           .producer-info {
             @include flexbox(row,center,center); 
             gap: 0.5rem; 
-            .label {
+            .labelInfo {
               @include font(0.875rem,500, #6B7280); 
             }
             .value {

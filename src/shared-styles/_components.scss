@@ -345,6 +345,7 @@
 
   &-header {
     &-title {
+      @include text-ellipsis();
       margin-top: 12px;
       margin-bottom: 3px;
       color: #232323;
@@ -352,6 +353,7 @@
     }
 
     &-subtitle {
+      @include text-ellipsis();
       margin:9px 0px; 
       @include font(0.8rem, 500,#232323);
       >span {
