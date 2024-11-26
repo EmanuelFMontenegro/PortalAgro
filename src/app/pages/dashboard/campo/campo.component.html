@@ -1,11 +1,23 @@
 <div class="mainStructure">
   <app-header-inner [title]="'Registrar Chacra'" [backButton]="true"></app-header-inner>
-    <form class="FullForm" [formGroup]="campoForm" (ngSubmit)="registrarCampo()">
+  <app-dynamic-form
+  [fields]="formConfig.fields"
+  submitButtonText="Registrar Chacra"
+  (onSubmit)="onFormSubmit($event)"
+  (onCancel)="onCancel()">
+</app-dynamic-form>
+  <!--   <form class="FullForm" [formGroup]="campoForm" (ngSubmit)="registrarCampo()">
       <div class="FullForm-control">
         <label class="FormLabel" for="name">Nombre</label>
-        <input class="FormInput"   type="text" formControlName="name" placeholder="Nombre de la chacra" required>
-        <span *ngIf="campoForm.get('name')?.hasError('required') && nameTouched" class="error-message">Este campo es
-          requerido</span>
+          <input class="FormInput" maxlength="30" type="text" formControlName="name" placeholder="Nombre de la chacra" required>
+        <mat-error *ngIf="(campoForm.get('name')?.hasError('required')  || campoForm.get('name')?.hasError('maxlength')) && campoForm.get('name')?.touched">
+          <span  *ngIf="campoForm.get('name')?.hasError('required')" class="error-message">
+            Este campo es requerido.
+          </span>
+          <span  *ngIf="campoForm.get('name')?.hasError('maxlength')" class="error-message">
+            El nombre no puede superar los 30 caracteres.
+          </span>
+        </mat-error>
       </div> 
       <div class="FullForm-control">
         <label class="FormLabel" for="localidad">Localidad</label>
@@ -15,26 +27,46 @@
     </div>
       <div class="FullForm-control">
         <label class="FormLabel" for="address">Dirección</label>
-        <input class="FormInput" type="text" formControlName="address" placeholder="Dirección de la chacra" required>
-        <span *ngIf="campoForm.get('address')?.hasError('required') && addressTouched" class="error-message">Este
-          campo es requerido</span>
+        <input class="FormInput" maxlength="255" type="text" formControlName="address" placeholder="Dirección de la chacra" required>
+          <mat-error *ngIf="(campoForm.get('address')?.hasError('required')  || campoForm.get('address')?.hasError('maxlength')) && campoForm.get('address')?.touched">
+            <span  *ngIf="campoForm.get('address')?.hasError('required')" class="error-message">
+              Este campo es requerido.
+            </span>
+            <span  *ngIf="campoForm.get('address')?.hasError('maxlength')" class="error-message">
+              La dirección no puede superar los 255 caracteres.
+            </span>
+          </mat-error>
       </div>
       <div class="FullForm-control">
         <label class="FormLabel" for="dimensions">Dimensiones (Hectáreas)</label>
-        <input class="FormInput" type="number" formControlName="dimensions" placeholder="Ingresar valores en hectáreas"
-          required [min]="1" (blur)="dimensionsTouched = true">
-        <span *ngIf="campoForm.get('dimensions')?.hasError('required') && dimensionsTouched"
-          class="error-message">Este campo es requerido</span>
-        <span *ngIf="campoForm.get('dimensions')?.hasError('min') && dimensionsTouched" class="error-message">El
-          valor debe ser mayor a 0</span>
+        <input class="FormInput" type="number" formControlName="dimensions" placeholder="Ingresar valores en hectáreas" required>
+        <mat-error *ngIf="(campoForm.get('dimensions')?.hasError('required')  || campoForm.get('dimensions')?.hasError('max') || campoForm.get('dimensions')?.hasError('min') ) && campoForm.get('dimensions')?.touched">
+          <span  *ngIf="campoForm.get('dimensions')?.hasError('required')" class="error-message">
+            Este campo es requerido.
+          </span>
+          <span  *ngIf="campoForm.get('dimensions')?.hasError('max')" class="error-message">
+            La dimension no puede superar las 1000000 hectáreas.
+          </span>
+          <span  *ngIf="campoForm.get('dimensions')?.hasError('min')" class="error-message">
+            La dimension no puede ser menor a 1 hectáreas.
+          </span>
+        </mat-error>
       </div>
       <div class="FullForm-control">
         <label class="FormLabel" for="observation">Descripción</label>
-        <textarea class="FormTextarea" formControlName="observation" placeholder="Descripción"></textarea>
+        <textarea class="FormTextarea" maxlength="255" formControlName="observation" placeholder="Descripción"></textarea>
+        <mat-error *ngIf="(campoForm.get('observation')?.hasError('required')  || campoForm.get('observation')?.hasError('maxlength')) && campoForm.get('observation')?.touched">
+          <span  *ngIf="campoForm.get('observation')?.hasError('required')" class="error-message">
+            Este campo es requerido.
+          </span>
+          <span  *ngIf="campoForm.get('observation')?.hasError('maxlength')" class="error-message">
+            La descripción no puede superar los 255 caracteres.
+          </span>
+        </mat-error>
       </div>
     <div class="FullForm-buttonsToRight">
       <button mat-button   class="secondary-button-custom size-48" type="button" (click)="cancelar()">Cancelar</button>
       <button  mat-raised-button appearance="outline"  class="primary-button-custom size-48"  type="submit" [disabled]="!campoForm.valid">Registrar Chacra</button>
   </div> 
-</form> 
+</form>  -->
 </div>

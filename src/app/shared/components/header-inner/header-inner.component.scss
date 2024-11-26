@@ -1,14 +1,15 @@
 @import 'src/shared-styles/mixins.scss';
 
 .mainStructure-title {
-      padding-bottom: 10px;
+      min-height: 46px;
+      padding-bottom: 6px;
       @include flexbox(row, space-between, center);
        h2 {
-        @include font(20px, 600, #454545);  
+        @include font(16px, 600, #454545);  
       }  
       button {
         @include flexbox(row, center, center);
-        @include font(14px, 600, var(--primary));
+        @include font(12px, 600, var(--primary));
       }
       button:hover{
         background-color: var(--primary)  !important;

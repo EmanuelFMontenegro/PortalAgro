@@ -5,7 +5,7 @@
     <div class="producer-selector">
       <button mat-button class="producer-button" [matMenuTriggerFor]="producerMenu">
         <div class="producer-info">
-          <span class="label">Productor:</span>
+          <span class="labelInfo">Productor:</span>
           <span class="value">{{selectedProductorName || 'Seleccionar'}}</span>
         </div>
         <mat-icon>expand_more</mat-icon>
@@ -84,10 +84,6 @@
     <td>{{row.plantacion.name}}</td>
     <td>{{row.dimension}}</td>
   </ng-template>
-  <div emptyState>
-    <img src="empty-state.svg">
-    <p>No hay datos disponibles</p>
-  </div>
 </app-table>
 <app-table *ngIf="selectedButtonId === 2 || selectedButtonId === 3"
           [data]="dataSourcePie.data"
@@ -102,10 +98,6 @@
     <td>{{row.lote.name}}</td>
     <td>{{row.lote.size}}</td>
   </ng-template>
-  <div #emptyState>
-    <img src="empty-state.svg">
-    <p>No hay datos disponibles</p>
-  </div>
 </app-table>
     </div>
   </div>

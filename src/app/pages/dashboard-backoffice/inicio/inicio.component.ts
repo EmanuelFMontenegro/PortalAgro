@@ -131,8 +131,7 @@ export class InicioComponent implements OnInit {
 
   loadMenu(): void {
     this.http.get<any>('../../assets/json/home-dashboard-bo.json').subscribe(data => {
-      this.homeItems = data.homeItems;
-      console.log(this.homeItems);
+      this.homeItems = data.homeItems; 
     });
   }
 }

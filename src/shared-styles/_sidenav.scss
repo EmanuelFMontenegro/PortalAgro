@@ -12,14 +12,14 @@
 .ContainerS {
     @include flexbox(column);
 
-    height: calc(100vh - 80px);
-    min-height: calc(100vh - 80px);
+    height: calc(100vh - 56px);
+    min-height: calc(100vh - 56px);
     &__menu {
-        width: 280px;
+        width: 260px;
         @include box-shadow(1px, 0);
         &__list {
             flex: 1;
-            gap: 15px 0px !important;
+            gap: 10px 0px !important;
             display: flex !important;
             flex-direction: column !important;
             &--item {
@@ -31,7 +31,7 @@
                 }
                 &__container {
                     @include flexbox(row, flex-start, center);
-                    @include font(18px, 600,#454545);
+                    @include font(14px, 600,#454545);
                     &-icon {
                         margin-right: 5px;
                         width: 25px;
@@ -45,9 +45,9 @@
 
         background-color: $default;
         &__card {
-            width: calc(100% - 5rem);
+            width: calc(100% - 4rem);
             margin-left: 2rem;
-            padding: 1rem;
+            padding: 0.5rem;
         }
     }
 

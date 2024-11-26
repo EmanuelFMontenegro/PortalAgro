@@ -6,6 +6,7 @@ export enum TipoLabel {
   span = 'span',
   icon = 'icon',
   botonVermas = 'vermas',
+  botonVermasProductor = 'vermasProductor',
   botonVermasWithoutParam='vermasWithoutParam',
   botonEditar = 'editar',
   botonEditarWithParams = 'editarWithParams',

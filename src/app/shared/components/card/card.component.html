@@ -39,6 +39,10 @@
           (click)="verMasWithParams(miniatura, item?.label, item?.field)">
           Ver Más
         </button>
+        <button class="primary-button" *ngIf="item.tipoLabel == tipoVerMasProductor" mat-raised-button
+        (click)="verMasProductor(miniatura, item?.label, item?.field)">
+        Ver Más 
+      </button>
       </ng-container>
     </div>
   </div>

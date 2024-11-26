@@ -43,6 +43,8 @@ import { DinamicSearchbarComponent } from './components/dinamic-searchbar/dinami
 import { WeatherComponent } from './components/weather/weather.component';
 import { WeatherWidgetComponent } from './components/weather/widget/widget.component'; 
 import { WeatherModalComponent } from './components/weather/modal/modal.component';
+import { DynamicFormFieldComponent } from './components/dynamic-form-field/dynamic-form-field.component';
+import { DynamicFormComponent } from './components/dynamic-form/dynamic-form.component';
 export const IMPORTS_MATERIAL = [
   MatSidenavModule,
   MatListModule,
@@ -93,7 +95,9 @@ export const CALENDAR = [FullCalendarModule];
     DinamicSearchbarComponent,
     WeatherComponent,
     WeatherWidgetComponent,
-    WeatherModalComponent, 
+    WeatherModalComponent,
+    DynamicFormFieldComponent,
+    DynamicFormComponent, 
   ],
   imports: [IMPORT_CORE, IMPORTS_MATERIAL, CALENDAR, CardComponent],
   exports: [
@@ -118,7 +122,9 @@ export const CALENDAR = [FullCalendarModule];
     DinamicSearchbarComponent,
     WeatherComponent,
     WeatherWidgetComponent,
-    WeatherModalComponent
+    WeatherModalComponent, 
+    DynamicFormComponent,
+    DynamicFormFieldComponent
   ],
 
 })

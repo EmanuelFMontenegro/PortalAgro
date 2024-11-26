@@ -150,7 +150,7 @@
   flex-grow: 3;
 }
 .size-48 {
-  height: 48px !important;
+  height: 40px !important;
 }
 
 
@@ -186,6 +186,10 @@
 .width-50{
   width: 50%;
 }
+
+.ellipsis{
+  @include text-ellipsis();
+}
 // ==============================================================        Botones        =========================================================
 
 .primary-button {
@@ -203,6 +207,10 @@
 .secondary-button-custom{
   @include button(var(--primary), #fff, 290px,#3CA749);
 
+}
+
+.secondary-button-custom:disabled{
+    opacity: 0.3;
 }
 
 .primary-button-auto {
@@ -241,7 +249,7 @@
 .search-bar {
   font-size: 14px;
   @include flex-wrap(10px,1);
-  padding-bottom: 20px;
+  padding-bottom: 12px;
   &-picker {
     mat-form-field {
       width: 100%;
@@ -310,7 +318,7 @@
 // Layout principal de contenedor de chacras,servicios adicionales,lotes
 // proporciona un grid modulable usando la funcion grid-center-autofill de mixins.scss
 .cardContainerNoCentered {
-  @include grid-center-autofill(350px, 1fr, 25px, 15px);
+  @include grid-center-autofill(300px, 1fr, 16px, 16px);
 }
 .cardContainerNoCenteredProductor{
   @include grid-center-autofill(270px, 1fr, 25px, 15px);
@@ -320,7 +328,7 @@
 
 .cardCustomized {
   @include flexbox(column, center, left);
-  @include custom-card(340px, 490px, 10px);
+  @include custom-card(300px, 400px, 10px);
   border: 1px solid #929497;
 
   // Contenedor para Card de Chacras
@@ -329,24 +337,27 @@
   //                 [ CONTENT ]
   //                 [ BUTTONS ]
   &-img {
-    height: 205px !important;
+    height: 140px !important;
+    width: 100%;
     max-width: 100%;
     border-radius: 16px;
   }
 
   &-header {
     &-title {
+      @include text-ellipsis();
       margin-top: 12px;
       margin-bottom: 3px;
       color: #232323;
-      font-size: 20px;
+      font-size: 1rem;
     }
 
     &-subtitle {
+      @include text-ellipsis();
       margin:9px 0px; 
-      @include font(1rem, 500,#232323);
+      @include font(0.8rem, 500,#232323);
       >span {
-        @include font(1rem, 600);
+        @include font(0.9rem, 600);
       }
     }
   }
@@ -354,7 +365,7 @@
     margin-top: auto;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 10px;
     width: 100%;
 
   }
@@ -474,7 +485,7 @@
 }
 //inputs de formularios
 .FormInput {
-  @include FormInput(100%, 0.5rem, 1px solid #ccc, 8px, 14px, 4px 4px 6px 0px rgba(0, 0, 0, 0.25), #45454580);
+  @include FormInput(100%, 0.5rem, 1px solid #ccc, 8px, 12px !important, 4px 4px 6px 0px rgba(0, 0, 0, 0.25), #45454580);
 
 }
 
@@ -533,8 +544,8 @@
 
 // ==============================================================  Dialog =============================================
 .cdk-overlay-pane {
-  box-shadow: none !important;
-  border-radius: 12px ;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25); 
+  border-radius: 12px;
   overflow: hidden ;
   padding: 0;
 }
@@ -654,6 +665,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;  
+  margin-top: 16px;
   @media (max-width: 1024px) {
     grid-template-columns: 1fr;
   }
@@ -787,7 +799,7 @@
 /* Weather : widget card y modal */
 .weatherContainer {
   @include grid-autofit(240px, 1fr, 1.5rem, 1.5rem);
-  margin: 1rem 0;
+  margin-bottom: 16px;
  
 }
 
