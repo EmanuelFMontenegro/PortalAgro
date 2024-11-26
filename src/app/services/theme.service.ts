@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ThemeService {
   private readonly themeKey = 'app-theme';
-
   constructor() { }
 
   setTheme(theme: 'dashboard' | 'backoffice') {

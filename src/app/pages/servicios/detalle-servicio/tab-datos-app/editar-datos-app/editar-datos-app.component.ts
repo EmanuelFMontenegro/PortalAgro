@@ -24,7 +24,6 @@ export class EditarDatosAppComponent {
   listaPrioridades: any[] = []
   listadoHorarios: any[] = this.getHoras()
   abastecimientoAgua: any[] = [{ descripcion: 'SI', value: true }, { descripcion: 'NO', value: false }]
-  minDate = new Date()
   // controlName
   ctrl_dateOfVisit = "dateOfVisit"
   ctrl_hourOfVisit = 'hourOfVisit'

@@ -5,7 +5,7 @@
   </mat-select>
 </div>
 
-<div class="ancho-estado" *ngIf="!selectorEstados && !estadoSolicitudBajaServicio" >
+<div class="ancho-estado" *ngIf="this.productor && !estadoSolicitudBajaServicio" >
   <mat-label>Baja del servicio</mat-label>
   <button class="back-button2" (click)="dialogConfirmacionSolicitudBaja()">Solicitar</button>
 </div>

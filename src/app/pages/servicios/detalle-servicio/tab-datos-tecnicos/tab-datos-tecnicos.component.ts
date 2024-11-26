@@ -44,7 +44,6 @@ export class TabDatosTecnicosComponent {
   }
 
   async recuperarDatosDelTecnico(){
-   await this.detalleServicioService.getDatosTecnico()
      this.datosTecnico = this.detalleServicioService?.datosTecnico
      this.ctrlObservaciones.setValue(this.datosTecnico?.recommendObservation)
      this.ctrlObservaciones.disable()

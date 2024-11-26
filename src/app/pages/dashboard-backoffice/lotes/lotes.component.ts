@@ -104,11 +104,11 @@ export class LotesComponent implements OnInit {
     { label: 'Plantación', field: 'plant_name', tipoLabel: TipoLabel.span },
     { label: 'Hectáreas', field: 'dimensions', tipoLabel: TipoLabel.span },
     { label: 'Descripción', field: 'descriptions', tipoLabel: TipoLabel.span },
- /*    {
-      label: '',
+    {
+      label: 'producerId',
       field: 'dashboard-backoffice/perfil-productor',
-      tipoLabel: TipoLabel.botonVermas,
-    }, */
+      tipoLabel: TipoLabel.botonVermasProductor,
+    },  
   ];
 
   constructor(

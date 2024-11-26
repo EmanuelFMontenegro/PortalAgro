@@ -27,6 +27,7 @@ export class CardComponent {
   tipoSpan = TipoLabel.span;
   tipoIcon = TipoLabel.icon;
   tipoVerMas = TipoLabel.botonVermas;
+  tipoVerMasProductor = TipoLabel.botonVermasProductor;
   tipoVerMasWithoutParam = TipoLabel.botonVermasWithoutParam;
   tipoEditarWithParams = TipoLabel.botonEditarWithParams;
   tipoEditar = TipoLabel.botonEditar;
@@ -74,7 +75,20 @@ export class CardComponent {
     if(ruta) this.router.navigate([ruta]);
   }
 
+  verMasProductor(data: any, key?: any, ruta?: any) {
+    if (data.producerId){ 
+      localStorage.setItem(key, JSON.stringify(data.producerId))
+      localStorage.setItem('fromLotes', true.toString());
+      
 
+    };
+    console.log(data.producerId);
+    if (ruta) {
+      this.router.navigate([`${ruta}/${data.producerId}`]);
+    }
+    
+  
+  }
   
   verMasWithParams(data: any, key?: any, ruta?: any) {
     // Guardar los datos del usuario en localStorage
@@ -185,7 +199,7 @@ export class CardComponent {
   getTextContainerClass(field: string): string {
     const baseClass = 'cardCustomized-header-subtitle';
     return this.isScrollableField(field) 
-      ? `${baseClass} scroll-y size-48`
+      ? `${baseClass} ellipsis`
       : baseClass;
   }
 
