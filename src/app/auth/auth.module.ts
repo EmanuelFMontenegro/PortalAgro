@@ -22,7 +22,8 @@ import { RecuperContrasenaBackofficeComponent } from './recuper-contrasena-backo
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NuevaContrasenaBackofficeComponent } from './nueva-contrasena-backoffice/nueva-contrasena-backoffice.component';
-import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatCheckboxModule } from '@angular/material/checkbox'; 
+import { SharedModule } from '../shared/shared.module';
 @NgModule({
   declarations: [
     LoginComponent,
@@ -33,7 +34,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     PrimerRegistroComponent,
     LoginBackofficeComponent,
     RecuperContrasenaBackofficeComponent,
-    NuevaContrasenaBackofficeComponent,
+    NuevaContrasenaBackofficeComponent, 
   ],
   imports: [
     AuthRoutingModule,
@@ -51,6 +52,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     NgxSpinnerModule.forRoot(),
     MatProgressSpinnerModule,
     ToastrModule.forRoot(),
+    SharedModule
   ],
 })
 export class AuthModule {}

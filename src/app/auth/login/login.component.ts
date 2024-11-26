@@ -26,12 +26,27 @@ interface DecodedToken {
   roles: string;
   exp: number;
 }
+interface Ellipses {
+  left: string;
+  top: string;
+  right: string;
+  bottom: string;
+}
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.sass'],
 })
 export class LoginComponent implements OnInit {
+  svgPath = 'menu'
+  ellipses: Ellipses = {
+    left: 'assets/img/footer/ellipse_white.svg',
+    top: 'assets/img/footer/ellipse_white_mobile.svg',
+    right: 'assets/img/footer/ellipse_green.svg',
+    bottom: 'assets/img/footer/ellipse_green_mobile.svg'
+  }
+  background = '#3BA549'
   hasErrors: boolean = false;
   hidePassword: boolean = true;
   login: FormGroup;

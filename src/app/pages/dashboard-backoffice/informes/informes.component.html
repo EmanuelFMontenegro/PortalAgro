@@ -84,10 +84,6 @@
     <td>{{row.plantacion.name}}</td>
     <td>{{row.dimension}}</td>
   </ng-template>
-  <div emptyState>
-    <img src="empty-state.svg">
-    <p>No hay datos disponibles</p>
-  </div>
 </app-table>
 <app-table *ngIf="selectedButtonId === 2 || selectedButtonId === 3"
           [data]="dataSourcePie.data"
@@ -102,10 +98,6 @@
     <td>{{row.lote.name}}</td>
     <td>{{row.lote.size}}</td>
   </ng-template>
-  <div #emptyState>
-    <img src="empty-state.svg">
-    <p>No hay datos disponibles</p>
-  </div>
 </app-table>
     </div>
   </div>

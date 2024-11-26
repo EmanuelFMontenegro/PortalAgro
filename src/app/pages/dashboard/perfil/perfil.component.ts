@@ -76,11 +76,11 @@ private componenteInicializado: boolean = false;
     this.userDetailsForm = this.formBuilder.group({
       nombre: [
         '',
-        [Validators.maxLength(20), Validators.pattern('^[a-zA-Z]+$')],
+        [Validators.maxLength(20), Validators.pattern('^[a-zA-Z0-9]+$')],
       ],
       apellido: [
         '',
-        [Validators.maxLength(20), Validators.pattern('^[a-zA-Z]+$')],
+        [Validators.maxLength(20), Validators.pattern('^[a-zA-Z0-9]+$')],
       ],
       localidad: [null], // Eliminamos Validators.required
       dni: [
@@ -100,8 +100,8 @@ private componenteInicializado: boolean = false;
         ],
       ],
       descripcion: [''],
-      contrasenaActual: [''],
-      contrasenaNueva: [''],
+        contrasenaActual: [''],
+      contrasenaNueva: [''],  
     });
   }
 
@@ -275,6 +275,8 @@ private componenteInicializado: boolean = false;
   }
 
   guardarCambios() {
+    console.log(this.userDetailsForm.value);
+    console.log(this.userDetailsForm.valid)
     if (this.userDetailsForm.dirty || this.avatarFile) {
       if (this.validarFormulario()) {
         const formData = this.userDetailsForm.value;

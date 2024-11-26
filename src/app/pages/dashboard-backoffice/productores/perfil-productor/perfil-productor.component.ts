@@ -109,18 +109,33 @@ export class PerfilProductorComponent implements OnInit, AfterViewInit {
     //ver ancho de pantalla
     const width = window.innerWidth;
     this.obtenerLocalidades();
-
-    const usuarioData = localStorage.getItem('selectedUser');
-    if (usuarioData) {
-      const usuario: Usuario = JSON.parse(usuarioData);
-      this.userId = usuario.id;
-      this.personId = usuario.id;
-      this.UsuarioPerfil(this.userId, this.personId);
-
-    } else {
-      console.error('No se encontraron datos del usuario en localStorage.');
-      this.router.navigate(['dashboard-backoffice']);
+    /* Temporalmente lo manejo con bandera, tengo que reestructurar el componente  */
+    const fromLotes = localStorage.getItem('fromLotes');
+    if(Boolean(fromLotes)){
+      const producerId = localStorage.getItem('producerId');
+      if (producerId) {
+        console.log('producerId:', producerId);
+        this.userId = parseInt(producerId);
+        this.personId = parseInt(producerId);
+        this.UsuarioPerfil(this.userId, this.personId);
+      }
+      localStorage.removeItem('fromLotes');
     }
+    else {
+      const usuarioData = localStorage.getItem('selectedUser');
+      if (usuarioData) {
+        const usuario: Usuario = JSON.parse(usuarioData);
+        this.userId = usuario.id;
+        this.personId = usuario.id;
+        this.UsuarioPerfil(this.userId, this.personId);
+  
+      } 
+    }
+     /*  elseif {
+        console.error('No se encontraron datos del usuario en localStorage.');
+        this.router.navigate(['dashboard-backoffice']);
+      } */
+   
 
 
     this.enablePasswordField();

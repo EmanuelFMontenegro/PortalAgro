@@ -13,7 +13,7 @@ import { ActiveElement, ChartConfiguration, ChartData, ChartEvent, ChartOptions,
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { MatTableDataSource } from '@angular/material/table';
 import { BreakpointObserver } from '@angular/cdk/layout';
-
+import { WidgetConfig } from '../../../models/widget.models';
 Chart.register(...registerables, ChartDataLabels);
  
 interface DecodedToken {
@@ -76,10 +76,16 @@ interface LotePieChart {
 @Component({
   selector: 'app-informes',
   templateUrl: './informes.component.html',
-  styleUrls: ['./informes.component.sass']
+  styleUrls: ['./informes.component.scss']
 })
 export class InformesComponent {
-
+  selectedFieldName: string = ""
+  selectedPlantationName: string = ""
+  selectedPlantationNameHectarea: string = "";
+  chacrasLength = 0
+  plantacionesLength = 0
+  totalDimensionSum = 0
+  widgetIds = [1, 2, 3];
   private userId: number | any;
   loteData: Lote[] = [];
   campoData = {
@@ -451,6 +457,41 @@ export class InformesComponent {
       }
     },
   };
+
+
+  getWidgetConfig(widgetId: number): WidgetConfig {
+    const baseConfig = {
+      widgetId,
+      isSelected: this.selectedButtonId === widgetId,
+      isDisabled: this.buttonsDisabled
+    };
+
+    switch (widgetId) {
+      case 1:
+        return {
+          ...baseConfig,
+          title: 'Chacras',
+          value: this.chacras.length,
+          iconSrc: 'assets/img/img-chacra-azul.svg'
+        };
+      case 2:
+        return {
+          ...baseConfig,
+          title: 'Plantaciones',
+          value: this.objetoPlantaciones.length,
+          iconSrc: 'assets/img/img-plantaciones.svg'
+        };
+      case 3:
+        return {
+          ...baseConfig,
+          title: 'Hectáreas',
+          value: this.hectareasTotal,
+          iconSrc: 'assets/img/img-chacra-azul.svg'
+        };
+      default:
+        throw new Error('Widget no válido');
+    }
+  }
 
   volver() {
     this.router.navigate(['dashboard/inicio']);

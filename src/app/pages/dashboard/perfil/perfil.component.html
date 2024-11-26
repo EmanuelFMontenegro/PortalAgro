@@ -51,7 +51,7 @@
     </div>
     <div class="profileContainer-aditionalData">
       <div class="profileContainer-aditionalData-title">Información Adicional</div>
-      <div class="profileContainer-aditionalData-content"> Lorem ipsum dolor sit amet consectetur, adipisicing elit. Consequuntur eveniet, illo assumenda, nihil nemo ad ab animi tenetur, dolorum nam quos quisquam. Commodi quidem a esse, amet minima ipsum iusto. </div>
+      <div class="profileContainer-aditionalData-content"> {{descriptions}}</div>
     </div>
   </div>
 </ng-container>  
@@ -114,7 +114,7 @@
             <input class="FormInput" matInput [placeholder]="telephone" formControlName="contacto" id="contacto">
           </div>
         </div>
-        <div class="profileContainer-personalData-content-item margin-btm-0">
+          <div class="profileContainer-personalData-content-item margin-btm-0">
           <div class="FullForm-control margin-btm-0">
             <label class="FormLabel margin-btm-6" for="contrasenaActual">Contraseña Actual</label>
             <input class="FormInput" matInput type="password" placeholder="contraseña actual" formControlName="contrasenaActual"
@@ -127,7 +127,7 @@
             <input class="FormInput" matInput type="password" placeholder="contraseña nueva" formControlName="contrasenaNueva"
               id="contrasenaNueva">
           </div>
-        </div>
+        </div>  
       </div>
     </form>
     </div>
@@ -141,7 +141,7 @@
     </div>
     <div class="FullForm-buttonsToRight">
       <button mat-button   class="secondary-button-custom size-48" type="button" (click)="activarEdicion(false)">Cancelar</button>
-      <button  mat-raised-button appearance="outline"  class="primary-button-custom size-48"  (click)="guardarCambios()">Guardar Cambios</button>
+      <button  mat-raised-button appearance="outline"  [disabled]="!this.userDetailsForm.valid"  class="primary-button-custom size-48"  (click)="guardarCambios()">Guardar Cambios</button>
   </div> 
   </div>
 </ng-container>  

@@ -8,14 +8,14 @@
       </button>
     </div>
       <div *ngIf="isScreenSmall" class="logo-mobile">
-        <img src="assets/img/LogoAgroBYTECH_M.svg" alt="Logo" class="dashboard-logo">
+        <img src="assets/img/LogoAgroBYTECH_M.svg" alt="Logo">
       </div>
       <div class="profile">
-            <img (click)="toDashboard()" src="assets/img/Icon _notif_orange.svg" alt="Foto de perfil">
-            <img src="assets/img/profile.png" alt="Foto de perfil" [matMenuTriggerFor]="menu">
+            <!-- <img (click)="toDashboard()" src="assets/img/Icon _notif_orange.svg" alt="Foto de perfil">
+             --><img src="assets/img/profile.png" alt="Foto de perfil" [matMenuTriggerFor]="menu">
     </div>
       <mat-menu #menu="matMenu">
-        <button mat-menu-item routerLink="/dashboard/perfil">Perfil</button> 
+        <button mat-menu-item (click)="toPerfil()">Perfil</button> 
         <button mat-menu-item (click)="cerrarSesion()">Cerrar Sesión</button>
       </mat-menu>
     </mat-toolbar>

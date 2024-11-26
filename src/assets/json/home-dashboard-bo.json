@@ -19,12 +19,7 @@
         "icon": "calendario_b.svg",
         "name": "Calendario",
         "route": "/dashboard-backoffice/calendarios"
-      },
-      {
-        "icon": "planificacion_b.svg",
-        "name": "Planificaciones",
-        "route": "/dashboard-backoffice/planificaciones"
-      },
+      }, 
       {
         "icon": "informes_b.svg",
         "name": "Informes",

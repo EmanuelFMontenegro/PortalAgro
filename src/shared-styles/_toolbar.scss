@@ -2,11 +2,6 @@
 @import 'src/shared-styles/mixins.scss';
 
 .Toolbar{ 
-    mat-toolbar{
-        padding: 12px;
-        height: 80px;
-        background-color: $default;
-    }
     position: relative;
     z-index: 5;
     @include flexbox(row, space-between, center);
@@ -21,18 +16,24 @@
     
     }
     .logo-mobile{
-        max-height: 40px
+        > img {
+            width: 100px;
+            height: 40px;
+        } 
     }
     .profile{
         @include flex-row;
         gap: 16px;
         justify-content: center;
+        > img {
+            width: 42px;
+            height: 42px; 
+        }
     }
 
     &__logo-desktop {
         > img{
-            width: 201px;
-            height: 63px;
+            width: 125px;
         }
        
     }

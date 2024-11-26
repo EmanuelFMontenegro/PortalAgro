@@ -28,13 +28,26 @@ interface DecodedToken {
   sub: string;
   roles: string;
 }
-
+interface Ellipses {
+  left: string;
+  top: string;
+  right: string;
+  bottom: string;
+}
 @Component({
   selector: 'app-login-backoffice',
   templateUrl: './login-backoffice.component.html',
   styleUrls: ['./login-backoffice.component.sass'],
 })
 export class LoginBackofficeComponent implements OnInit {
+  svgPath = 'menu';
+  ellipses: Ellipses = {
+    left: 'assets/img/footer/ellipse_white.svg',
+    top: 'assets/img/footer/ellipse_white_mobile.svg',
+    right: 'assets/img/footer/ellipse_blue.svg',
+    bottom: 'assets/img/footer/ellipse_blue_mobile.svg',
+  };
+  background = '#015E83';
   hasErrors: boolean = false;
   hidePassword: boolean = true;
   login: FormGroup;
