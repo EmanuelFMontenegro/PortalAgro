@@ -1,54 +1,131 @@
 <div class="container">
-  <h2>Planificación de Rutas</h2>
+  <h5>Planificación de Rutas</h5>
 
   <div class="map-table-container">
-    <!-- Columna izquierda: Menús desplegables -->
+    <!-- Columna izquierda: Tabla de servicios -->
     <div class="menu-container">
-      <!-- Menú desplegable para la lista de servicios -->
-      <mat-accordion>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>Lista de Servicios</mat-panel-title>
-          </mat-expansion-panel-header>
-          <table mat-table [dataSource]="servicios" class="mat-elevation-z8" *ngIf="servicios.length > 0">
-            <!-- Columnas de la tabla -->
-            <ng-container matColumnDef="nro">
-              <th mat-header-cell *matHeaderCellDef>#</th>
-              <td mat-cell *matCellDef="let servicio">{{ servicio.nro }}</td>
-            </ng-container>
-            <ng-container matColumnDef="productor">
-              <th mat-header-cell *matHeaderCellDef>Productor</th>
-              <td mat-cell *matCellDef="let servicio">{{ servicio.productor }}</td>
-            </ng-container>
-            <ng-container matColumnDef="localidad">
-              <th mat-header-cell *matHeaderCellDef>Localidad</th>
-              <td mat-cell *matCellDef="let servicio">{{ servicio.localidad }}</td>
-            </ng-container>
-            <ng-container matColumnDef="seleccionar">
-              <th mat-header-cell *matHeaderCellDef>Seleccionar</th>
-              <td mat-cell *matCellDef="let servicio">
-                <mat-checkbox (change)="seleccionarServicio($event, servicio)">
-                </mat-checkbox>
-              </td>
-            </ng-container>
-            <!-- Filas de la tabla -->
-            <tr mat-header-row *matHeaderRowDef="['nro', 'productor', 'localidad', 'seleccionar']"></tr>
-            <tr mat-row *matRowDef="let row; columns: ['nro', 'productor', 'localidad', 'seleccionar'];">
-            </tr>
-          </table>
-          <p *ngIf="servicios.length === 0">No hay localidades disponibles para mostrar.</p>
-        </mat-expansion-panel>
-      </mat-accordion>
+      <h5>Lista de Servicios</h5>
+      <table mat-table [dataSource]="servicios | paginate: { itemsPerPage: itemsPerPage, currentPage: page }"
+        class="mat-elevation-z8">
+        <ng-container matColumnDef="productor">
+          <th mat-header-cell *matHeaderCellDef>Productor</th>
+          <td mat-cell *matCellDef="let servicio">{{ servicio.productor }}</td>
+        </ng-container>
+        <ng-container matColumnDef="localidad">
+          <th mat-header-cell *matHeaderCellDef>Localidad</th>
+          <td mat-cell *matCellDef="let servicio">{{ servicio.localidad }}</td>
+        </ng-container>
+        <ng-container matColumnDef="cultivo">
+          <th mat-header-cell *matHeaderCellDef>Cultivo</th>
+          <td mat-cell *matCellDef="let servicio">{{ servicio.cultivo }}</td>
+        </ng-container>
+        <ng-container matColumnDef="estado">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let servicio">{{ servicio.estado }}</td>
+        </ng-container>
+        <ng-container matColumnDef="seleccionar">
+          <th mat-header-cell *matHeaderCellDef>Seleccionar</th>
+          <td mat-cell *matCellDef="let servicio">
+            <mat-checkbox [(ngModel)]="servicio.selected"
+              (change)="seleccionarServicio($event, servicio)"></mat-checkbox>
+          </td>
+        </ng-container>
 
-      <!-- Botones -->
-      <div class="buttons">
-        <button mat-raised-button color="primary" class="button_crear" (click)="crearRuta()">
-          Crear Ruta
-        </button>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        <!-- Pie de tabla con paginador -->
+        <tfoot>
+          <tr>
+            <td colspan="5" class="pagination-container">
+              <pagination-controls (pageChange)="onPageChange($event)" previousLabel="Anterior"
+                nextLabel="Siguiente"></pagination-controls>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+
+
+
+
+      <!-- Controles de paginación -->
+      <div style="display: flex; justify-content: center; margin-top: 1em;">
+        <pagination-controls (pageChange)="onPageChange($event)" previousLabel="Anterior" nextLabel="Siguiente">
+        </pagination-controls>
       </div>
+
+      <p *ngIf="dataSource.data.length === 0">No hay servicios disponibles para mostrar.</p>
     </div>
 
     <!-- Columna derecha: Mapa -->
-    <div id="map" class="map"></div>
+    <div class="map-container">
+      <div id="map" class="map"></div>
+    </div>
   </div>
-</div>
+
+  <!-- Botones -->
+  <div class="buttons">
+    <button mat-raised-button color="primary" class="primary-button" (click)="crearRuta()">
+      Crear Ruta
+    </button>
+    <button mat-raised-button color="warn" class="secondary-button" (click)="limpiarSeleccion()">
+      Limpiar Selección
+    </button>
+  </div>
+
+  <!-- Acordeones -->
+  <div class="accordion-row">
+    <!-- Acordeón de Insumos Totales -->
+    <mat-accordion class="accordion">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>Insumos Totales</mat-panel-title>
+        </mat-expansion-panel-header>
+        <ng-container *ngIf="insumosTotales.length > 0; else noInsumos">
+          <ul>
+            <li *ngFor="let insumo of insumosTotales">
+              {{ insumo.name }} - {{ insumo.quantity }} unidades
+            </li>
+          </ul>
+        </ng-container>
+        <ng-template #noInsumos>
+          <p style="color: red;">No existen insumos para totalizar.</p>
+        </ng-template>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <!-- Acordeones de Detalle de Ruta -->
+    <!-- Acordeón Padre -->
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>Detalle de Ruta</mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <ng-container *ngIf="detallesRuta.length > 0; else noDetalles">
+          <mat-accordion>
+            <mat-expansion-panel *ngFor="let detalle of detallesRuta">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Chacra: {{ detalle.chacra }} - Productor: {{ detalle.productor }}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <ul>
+                <li><strong>Productor:</strong> {{ detalle.productor }}</li>
+                <li><strong>Chacra:</strong> {{ detalle.chacra }}</li>
+                <li><strong>Localidad:</strong> {{ detalle.localidad }}</li>
+                <li><strong>Ubicación:</strong> {{ detalle.ubicacion }}</li>
+                <li><strong>Agua:</strong> {{ detalle.agua ? 'Sí' : 'No' }}</li>
+              </ul>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </ng-container>
+
+        <ng-template #noDetalles>
+          <p style="color: red;">No existen detalles para mostrar.</p>
+        </ng-template>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+
+  </div>

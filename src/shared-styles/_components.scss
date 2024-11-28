@@ -354,7 +354,7 @@
 
     &-subtitle {
       @include text-ellipsis();
-      margin:9px 0px; 
+      margin:9px 0px;
       @include font(0.8rem, 500,#232323);
       >span {
         @include font(0.9rem, 600);
@@ -544,7 +544,7 @@
 
 // ==============================================================  Dialog =============================================
 .cdk-overlay-pane {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25); 
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   border-radius: 12px;
   overflow: hidden ;
   padding: 0;
@@ -664,7 +664,7 @@
 .dashboardContainer{
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;  
+  gap: 1rem;
   margin-top: 16px;
   @media (max-width: 1024px) {
     grid-template-columns: 1fr;
@@ -681,7 +681,7 @@
     @media (max-width: 768px) {
       height: 350px;
   }
-  app-table { 
+  app-table {
     @include flex-column();
     height: 100%;
     width: 100%;
@@ -743,30 +743,30 @@
       flex-direction: column;
       margin: 0 -1.5rem;
       overflow: hidden;
- 
-      
- 
+
+
+
       &-footer {
         padding: 8px;
         border-top: 1px solid #E5E7EB;
- 
+
         .load-more-button {
           @include font(0.875rem, 500, #015E83);
- 
+
           &:hover {
             background-color: #F3F4F6;
           }
         }
       }
- 
+
       ::-webkit-scrollbar {
         width: 8px;
       }
- 
+
       ::-webkit-scrollbar-track {
         background: #F3F4F6;
       }
- 
+
       ::-webkit-scrollbar-thumb {
         background-color: #D1D5DB;
         border-radius: 4px;
@@ -776,22 +776,22 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center; 
-        text-align: center; 
-        border-radius: 8px;  
+        justify-content: center;
+        text-align: center;
+        border-radius: 8px;
         min-height: 278px;
         @media (max-width: 768px) {
           min-height: 178px;
         }
-      
+
         &-icon {
           width: 150px;
-          height: 150px; 
+          height: 150px;
           color: #9CA3AF;
         }
       }
     }
-  
+
 }
 }
 
@@ -800,15 +800,15 @@
 .weatherContainer {
   @include grid-autofit(240px, 1fr, 1.5rem, 1.5rem);
   margin-bottom: 16px;
- 
+
 }
 
 .widgetContainer {
   border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1); 
-  @include flexbox(row); 
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  @include flexbox(row);
   height: 95px;
   &:hover {
     transform: translateY(-2px);
@@ -818,10 +818,10 @@
     height: 75px;
   }
   &-icon {
-    padding: 0 8px;  
+    padding: 0 8px;
     > img {
       width: 60px;
-      height: 60px; 
+      height: 60px;
       background: #6666661c;
       border-radius: 50%;
       padding: 5px;
@@ -834,7 +834,7 @@
   &-contentInfo {
     flex: 1;
     padding-left: 12px;
-    @include flex-column(); 
+    @include flex-column();
     min-width: 0;
     &-title {
       font-size: 1rem;
@@ -869,14 +869,14 @@
         font-size: 0.8rem;
       }
     }
-  
+
     .label-title {
       font-size: 0.875rem;
       @media (max-width: 768px) {
         font-size: 0.75rem;
       }
     }
-  
+
     .sub-value {
       font-size: 0.75rem;
       @media (max-width: 768px) {
@@ -884,8 +884,30 @@
       }
     }
   }
+  // ==============================================================  Planificaciones =============================================
+  // Mixin para Flexbox
+  
+@mixin flexbox($direction: row, $align: center, $justify: center, $gap: 0) {
+  display: flex;
+  flex-direction: $direction;
+  align-items: $align;
+  justify-content: $justify;
+  gap: $gap;
 }
- 
+
+// Mixin para media queries
+@mixin respond($breakpoint) {
+  @if $breakpoint == mobile {
+    @media (max-width: 600px) { @content; }
+  } @else if $breakpoint == tablet {
+    @media (max-width: 1024px) { @content; }
+  } @else if $breakpoint == desktop {
+    @media (min-width: 1025px) { @content; }
+  }
+}
+
+}
+
 
 
 

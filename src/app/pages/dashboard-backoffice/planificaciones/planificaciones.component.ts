@@ -1,16 +1,38 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+  ChangeDetectorRef,
+} from '@angular/core';
+import { MatAccordion } from '@angular/material/expansion';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { TravelService } from './travelService.service';
 import { ToastrService } from 'ngx-toastr';
-import * as L from 'leaflet';
-import 'leaflet-routing-machine';
 
 interface Servicio {
   nro: number;
   id: number;
   productor: string;
   localidad: string;
-  lat: number;
-  lng: number;
+  cultivo: string;
+  estado: string;
+  selected?: boolean;
+  geolocation?: string;
+  withWater?: boolean;
+}
+interface DetalleRuta {
+  productor: string;
+  chacra: number;
+  localidad: string;
+  ubicacion: string;
+  agua: string;
+}
+
+interface Insumo {
+  name: string;
+  quantity: number;
 }
 
 @Component({
@@ -18,59 +40,41 @@ interface Servicio {
   templateUrl: './planificaciones.component.html',
   styleUrls: ['./planificaciones.component.sass'],
 })
-export class PlanificacionesComponent implements OnInit {
+export class PlanificacionesComponent implements OnInit, AfterViewInit {
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatAccordion) accordion!: MatAccordion;
+  itemsPerPage: number = 6;
+  page: number = 1;
   servicios: Servicio[] = [];
   serviciosSeleccionados: Servicio[] = [];
-  map: L.Map | undefined;
-  routingControl: L.Routing.Control | undefined;
-  ubicacionActual: { lat: number; lng: number } | undefined;
+  insumosTotales: Insumo[] = [];
+  detallesRuta: DetalleRuta[] = [];
+  displayedColumns: string[] = [
+    'productor',
+    'localidad',
+    'cultivo',
+    'estado',
+    'seleccionar',
+  ];
+  dataSource = new MatTableDataSource<Servicio>(this.servicios);
 
   constructor(
     private travelService: TravelService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.initMap();
-    this.obtenerUbicacionActual();
     this.cargarServicios();
   }
 
-  // Inicializar el mapa con un zoom adecuado
-  initMap(): void {
-    this.map = L.map('map').setView([-27.4697707, -55.8239036], 13); // Ubicación inicial en Misiones
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors',
-    }).addTo(this.map);
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+  }
+  onPageChange(page: number): void {
+    this.page = page;
   }
 
-  // Obtener la ubicación actual
-  obtenerUbicacionActual(): void {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          this.ubicacionActual = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          };
-          L.marker([this.ubicacionActual.lat, this.ubicacionActual.lng])
-            .addTo(this.map!)
-            .bindPopup('<b>Ubicación Actual</b>')
-            .openPopup();
-        },
-        () => {
-          this.toastr.error('No se pudo obtener la ubicación actual.', 'Error');
-        }
-      );
-    } else {
-      this.toastr.warning(
-        'La geolocalización no está soportada en este navegador.',
-        'Aviso'
-      );
-    }
-  }
-
-  // Cargar servicios
   cargarServicios(): void {
     this.travelService.getServicesForTravel('id', 'DESC', 10, 0).subscribe(
       (response) => {
@@ -79,18 +83,19 @@ export class PlanificacionesComponent implements OnInit {
             (servicio: any, index: number) => ({
               nro: index + 1,
               id: servicio.id,
-              productor: servicio.producer
-                ? `${servicio.producer.name} ${servicio.producer.lastname}`
-                : 'No definido',
+              productor: servicio.producer.lastname || 'No definido',
               localidad: servicio.location?.name || 'No definido',
-              lat: servicio.field?.geolocation
-                ? parseFloat(servicio.field.geolocation.split(',')[0])
-                : 0,
-              lng: servicio.field?.geolocation
-                ? parseFloat(servicio.field.geolocation.split(',')[1])
-                : 0,
+              cultivo: servicio.jobTechnical?.typeCrop?.name || 'No definido',
+              estado: servicio.status?.name || 'No definido',
+              geolocation: servicio.field?.geolocation || 'No definido',
+              withWater: servicio.jobTechnical?.withWater || false,
+              selected: false,
             })
           );
+          this.dataSource.data = this.servicios;
+        } else {
+          this.servicios = [];
+          this.dataSource.data = [];
         }
       },
       () => {
@@ -99,64 +104,109 @@ export class PlanificacionesComponent implements OnInit {
     );
   }
 
-  // Seleccionar un servicio
   seleccionarServicio(event: any, servicio: Servicio): void {
-    if (event.checked) {
-      this.serviciosSeleccionados.push(servicio);
-    } else {
-      this.serviciosSeleccionados = this.serviciosSeleccionados.filter(
-        (s) => s.id !== servicio.id
-      );
+    const index = this.servicios.findIndex((s) => s.id === servicio.id);
+    if (index !== -1) {
+      this.servicios[index].selected = event.checked;
+      if (event.checked) {
+        this.serviciosSeleccionados.push(servicio);
+
+        // Agregar detalles reales al acordeón
+        const existe = this.detallesRuta.some(
+          (detalle) => detalle.chacra === servicio.id
+        );
+        if (!existe) {
+          this.detallesRuta.push({
+            productor: servicio.productor,
+            chacra: servicio.id,
+            localidad: servicio.localidad,
+            ubicacion: servicio.geolocation || 'No definido',
+            agua: servicio.withWater ? 'Sí' : 'No',
+          });
+        }
+      } else {
+        this.serviciosSeleccionados = this.serviciosSeleccionados.filter(
+          (s) => s.id !== servicio.id
+        );
+        this.detallesRuta = this.detallesRuta.filter(
+          (detalle) => detalle.chacra !== servicio.id
+        );
+      }
     }
   }
 
-  // Crear ruta con Leaflet Routing Machine
-  crearRuta(): void {
-    if (!this.ubicacionActual) {
-      this.toastr.error('No se pudo obtener la ubicación actual.', 'Error');
+  actualizarInsumosTotales(): void {
+    const serviceIds = this.serviciosSeleccionados.map((s) => s.id).join(',');
+    if (!serviceIds) {
+      this.insumosTotales = [];
+      this.cdr.detectChanges();
       return;
     }
 
-    if (this.serviciosSeleccionados.length < 1) {
-      this.toastr.warning(
-        'Debe seleccionar al menos un servicio para crear una ruta.',
-        'Aviso'
-      );
-      return;
-    }
-
-    const waypoints = [
-      L.latLng(this.ubicacionActual.lat, this.ubicacionActual.lng),
-      ...this.serviciosSeleccionados.map((s) => L.latLng(s.lat, s.lng)),
-    ];
-
-    // Eliminar control de enrutamiento previo
-    if (this.routingControl) {
-      this.map?.removeControl(this.routingControl);
-    }
-
-    // Crear nueva ruta con Leaflet Routing Machine
-    this.routingControl = L.Routing.control({
-      waypoints: waypoints,
-      router: new L.Routing.OSRMv1({
-        serviceUrl: 'https://router.project-osrm.org/route/v1',
-      }),
-      routeWhileDragging: true,
-      show: false, // No mostrar el panel de itinerario
-      lineOptions: {
-        styles: [{ color: 'blue', weight: 4 }],
-        extendToWaypoints: true,
-        missingRouteTolerance: 0,
+    this.travelService.getSuppliesForServices(serviceIds).subscribe(
+      (response) => {
+        if (
+          response?.totalProductInput &&
+          Object.keys(response.totalProductInput).length > 0
+        ) {
+          this.insumosTotales = Object.entries(response.totalProductInput).map(
+            ([name, quantity]) => ({
+              name,
+              quantity: Number(quantity),
+            })
+          );
+        } else {
+          this.insumosTotales = [];
+        }
+        this.cdr.detectChanges();
       },
-    }).addTo(this.map!);
+      () => {
+        this.toastr.error('Error al obtener los insumos', 'Error');
+      }
+    );
+  }
 
-    // Mostrar distancia total
-    this.routingControl.on('routesfound', (e: any) => {
-      const distance = e.routes[0].summary.totalDistance / 1000; // Convertir metros a kilómetros
-      this.toastr.success(
-        `Distancia total: ${distance.toFixed(2)} km.`,
-        'Ruta creada'
-      );
+  crearRuta(): void {
+    this.actualizarInsumosTotales();
+    this.detalleRuta();
+  }
+
+  limpiarSeleccion(): void {
+    this.serviciosSeleccionados = [];
+    this.insumosTotales = [];
+    this.servicios.forEach((servicio) => {
+      servicio.selected = false;
     });
+
+    this.detallesRuta = [];
+
+    this.cdr.detectChanges();
+  }
+
+  detalleRuta(): void {
+    if (this.serviciosSeleccionados.length === 0) {
+      this.toastr.warning(
+        'No hay servicios seleccionados para crear la ruta',
+        'Advertencia'
+      );
+      return;
+    }
+
+    this.serviciosSeleccionados.forEach((servicio) => {
+      const existe = this.detallesRuta.some(
+        (detalle) => detalle.chacra === servicio.id
+      );
+      if (!existe) {
+        this.detallesRuta.push({
+          productor: servicio.productor,
+          chacra: servicio.id,
+          localidad: servicio.localidad,
+          ubicacion: 'Coordenadas no disponibles',
+          agua: Math.random() > 0.5 ? 'Sí' : 'No',
+        });
+      }
+    });
+
+    this.toastr.info('Detalles de la ruta generados', 'Info');
   }
 }
